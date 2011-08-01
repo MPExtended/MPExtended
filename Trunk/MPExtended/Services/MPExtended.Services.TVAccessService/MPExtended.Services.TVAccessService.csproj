@@ -35,17 +35,78 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gentle.Common">
+      <HintPath>..\..\Libraries\Database\Gentle.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Gentle.Framework">
+      <HintPath>..\..\Libraries\Database\Gentle.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Gentle.Provider.MySQL">
+      <HintPath>..\..\Libraries\Database\Gentle.Provider.MySQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Gentle.Provider.SQLServer">
+      <HintPath>..\..\Libraries\Database\Gentle.Provider.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libraries\Logging\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\Libraries\Database\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TvBusinessLayer">
+      <HintPath>..\..\Libraries\TVEngine3\TvBusinessLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="TvControl">
+      <HintPath>..\..\Libraries\TVEngine3\TvControl.dll</HintPath>
+    </Reference>
+    <Reference Include="TVDatabase">
+      <HintPath>..\..\Libraries\TVEngine3\TVDatabase.dll</HintPath>
+    </Reference>
+    <Reference Include="TVLibrary">
+      <HintPath>..\..\Libraries\TVEngine3\TVLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TvLibrary.Interfaces">
+      <HintPath>..\..\Libraries\TVEngine3\TvLibrary.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="TvLibrary.Utils">
+      <HintPath>..\..\Libraries\TVEngine3\TvLibrary.Utils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="TVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="WcfUsernameValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NLog.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

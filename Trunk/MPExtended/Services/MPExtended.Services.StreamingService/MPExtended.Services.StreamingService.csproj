@@ -35,17 +35,67 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="Code\ConvertExtensionMethods.cs" />
+    <Compile Include="Code\Images.cs" />
+    <Compile Include="Code\Pipeline.cs" />
+    <Compile Include="Code\Profiles.cs" />
+    <Compile Include="Code\Services.cs" />
+    <Compile Include="Code\Streaming.cs" />
+    <Compile Include="MediaInfo\MediaInfo.cs" />
+    <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
+    <Compile Include="StreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\Encoder.cs" />
+    <Compile Include="Units\FFMpegLogParsing.cs" />
+    <Compile Include="Units\IBlockingProcessingUnit.cs" />
+    <Compile Include="Units\ILogProcessingUnit.cs" />
+    <Compile Include="Units\Input.cs" />
+    <Compile Include="Units\IProcessingUnit.cs" />
+    <Compile Include="Units\Passthrough.cs" />
+    <Compile Include="Units\StreamCopy.cs" />
+    <Compile Include="Util\Config.cs" />
+    <Compile Include="Util\Log.cs" />
+    <Compile Include="Util\NamedPipe.cs" />
+    <Compile Include="Util\OutputParsing.cs" />
+    <Compile Include="Util\Reference.cs" />
+    <Compile Include="Util\Resolution.cs" />
+    <Compile Include="Util\StreamCopy.cs" />
+    <Compile Include="Util\TsBuffer.cs" />
+    <Compile Include="Util\WcfUsernameValidator.cs" />
+    <Compile Include="Util\WebHttpWithCustomExceptionHandling.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
+      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

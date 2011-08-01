@@ -37,6 +37,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,8 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="ITVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebCard.cs" />
+    <Compile Include="WebChannelBasic.cs" />
+    <Compile Include="WebChannelDetailed.cs" />
+    <Compile Include="WebChannelGroup.cs" />
+    <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
+    <Compile Include="WebProgramBasic.cs" />
+    <Compile Include="WebProgramDetailed.cs" />
+    <Compile Include="WebRecording.cs" />
+    <Compile Include="WebRtspClient.cs" />
+    <Compile Include="WebSchedule.cs" />
+    <Compile Include="WebUser.cs" />
+    <Compile Include="WebVirtualCard.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

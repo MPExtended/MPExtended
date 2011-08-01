@@ -65,6 +65,45 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestTools", "TestTools", "{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E8ECBC04-8B62-454E-A671-8A33BDB35F4F}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Database\Gentle.Common.dll = Libraries\Database\Gentle.Common.dll
+		Libraries\Database\Gentle.Framework.dll = Libraries\Database\Gentle.Framework.dll
+		Libraries\Database\Gentle.Provider.MySQL.dll = Libraries\Database\Gentle.Provider.MySQL.dll
+		Libraries\Database\Gentle.Provider.SQLServer.dll = Libraries\Database\Gentle.Provider.SQLServer.dll
+		Libraries\Database\MySql.Data.dll = Libraries\Database\MySql.Data.dll
+		Libraries\Database\System.Data.SQLite.dll = Libraries\Database\System.Data.SQLite.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Streaming", "Streaming", "{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Streaming\ffmpeg.exe = Libraries\Streaming\ffmpeg.exe
+		Libraries\Streaming\MediaInfo.dll = Libraries\Streaming\MediaInfo.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TVEngine3", "TVEngine3", "{B17C433D-85CA-4FEC-8ECB-A31FC057C139}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\TVEngine3\TvBusinessLayer.dll = Libraries\TVEngine3\TvBusinessLayer.dll
+		Libraries\TVEngine3\TvControl.dll = Libraries\TVEngine3\TvControl.dll
+		Libraries\TVEngine3\TVDatabase.dll = Libraries\TVEngine3\TVDatabase.dll
+		Libraries\TVEngine3\TVLibrary.dll = Libraries\TVEngine3\TVLibrary.dll
+		Libraries\TVEngine3\TvLibrary.Interfaces.dll = Libraries\TVEngine3\TvLibrary.Interfaces.dll
+		Libraries\TVEngine3\TvLibrary.Utils.dll = Libraries\TVEngine3\TvLibrary.Utils.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{7B88E985-6F2F-4194-9480-12D8C1D09F8D}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Logging\log4net.dll = Libraries\Logging\log4net.dll
+		Libraries\Logging\NLog.dll = Libraries\Logging\NLog.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A5C6C0B-85A5-4B95-9359-96C98476229F}"
+	ProjectSection(SolutionItems) = preProject
+		GlobalVersion.cs = GlobalVersion.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 20
@@ -380,5 +419,9 @@ Global
 		{1629DBC9-C748-4997-B848-82EC269FA81A} = {C7D8D066-D3AA-481C-B188-592FC95692BA}
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
+		{E8ECBC04-8B62-454E-A671-8A33BDB35F4F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{B17C433D-85CA-4FEC-8ECB-A31FC057C139} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{7B88E985-6F2F-4194-9480-12D8C1D09F8D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 	EndGlobalSection
 EndGlobal

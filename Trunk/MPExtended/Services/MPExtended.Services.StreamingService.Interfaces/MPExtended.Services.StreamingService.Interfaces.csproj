@@ -37,15 +37,27 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="IStreamingService.cs" />
+    <Compile Include="IWebStreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebMediaInfo.cs" />
+    <Compile Include="WebMediaType.cs" />
+    <Compile Include="WebResolution.cs" />
+    <Compile Include="WebStreamingSession.cs" />
+    <Compile Include="WebTranscoderProfile.cs" />
+    <Compile Include="WebTranscodingInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
