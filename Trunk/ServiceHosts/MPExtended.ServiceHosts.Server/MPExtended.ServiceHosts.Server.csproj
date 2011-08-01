@@ -64,6 +64,9 @@
     <None Include="..\MPExtended.ServiceHosts.Console.Server\App.config">
       <Link>App.config</Link>
     </None>
+    <None Include="..\MPExtended.ServiceHosts.Console.Server\NLog.config">
+      <Link>NLog.config</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">

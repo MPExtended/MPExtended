@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using System.ServiceModel.Description;
-using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
-namespace MPExtended.ServiceHosts.CH.TVAccessService
+namespace MPExtended.ServiceHosts.Console.Client
 {
     static class Program
     {
@@ -15,21 +14,26 @@ namespace MPExtended.ServiceHosts.CH.TVAccessService
         /// </summary>
         static void Main()
         {
-            Console.WriteLine("TV4Home.Server.CoreService.ConsoleHost starting....");
-            Console.WriteLine();
+            Log.Debug("MPExtended.ServiceHosts.Console.Server starting...");
 
-            Console.WriteLine("Opening service host...");
-            ServiceHost serviceHost = new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService));
-            ServiceHost serviceHost2 = new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService));
+            ServiceHost host1 = new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService));
+            ServiceHost host2 = new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService));
+            Log.Debug("Opening ServiceHost...");
 
+            host1.Open();
+            host2.Open();
+            Log.Debug("Host opened");
 
-            serviceHost.Open();
-            serviceHost2.Open();
-            Console.WriteLine();
-            Console.WriteLine("Finished. Press any key to exit.");
-            Console.ReadLine();
-            serviceHost.Close();
-            serviceHost2.Close();
+            Log.Info("MPExtended.ServiceHosts.Console.Server started...");
+            NLog.LogManager.Flush();
+
+            System.Console.WriteLine("Press ENTER to close");
+            System.Console.ReadLine();
+
+            host1.Close();
+            host2.Close();
+
+            Log.Info("MPExtended.ServiceHosts.Console.Server closed...");
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
-using System.ServiceModel;
+using System.Linq;
 using System.Net;
+using System.Text;
 
-namespace MPExtended.Services.MediaAccessService
+namespace MPExtended.Libraries.ServiceLib
 {
-    class WcfUsernameValidator : UserNamePasswordValidator
+    public class WcfUsernameValidator : UserNamePasswordValidator
     {
         public static String UserName { get; set; }
         public static String Password { get; set; }

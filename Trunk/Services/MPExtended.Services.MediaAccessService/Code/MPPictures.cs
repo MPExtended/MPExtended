@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Media.Imaging;
-using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code.Helper;
-using System.IO;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {

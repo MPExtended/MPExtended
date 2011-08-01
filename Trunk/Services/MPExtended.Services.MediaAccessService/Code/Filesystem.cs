@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using System.IO;
-using MPExtended.Services.MediaAccessService.Interfaces;
-using System.ServiceModel.Description;
-using System.ServiceModel.Channels;
-using MPExtended.Services.MediaAccessService.Code;
-using MPExtended.Services.MediaAccessService.Code.Helper;
-using System.Xml;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Media.Imaging;
+using System.IO;
+using System.ServiceModel.Web;
+using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {

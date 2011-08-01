@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.SQLite;
 using System.Xml;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Code.Helper;
 

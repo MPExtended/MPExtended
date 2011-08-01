@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
-using System.ServiceModel.Web;
-using System.Text;
 using System.ServiceModel.Dispatcher;
+using System.Text;
 
-namespace MPExtended.Services.MediaAccessService
+namespace MPExtended.Libraries.ServiceLib
 {
     public class WebHttpWithCustomExceptionHandling : WebHttpBehavior, IErrorHandler
     {

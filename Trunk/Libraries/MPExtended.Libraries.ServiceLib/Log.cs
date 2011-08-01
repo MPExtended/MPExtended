@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 
-namespace MPExtended.Services.TVAccessService
+namespace MPExtended.Libraries.ServiceLib
 {
     public static class Log
     {
@@ -23,9 +23,20 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Trace
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Trace(String _msg, Exception ex)
         {
-            logger.Trace(_msg, ex);
+            logger.TraceException(_msg, ex);
+        }
+
+        /// <summary>
+        /// Log with level Trace
+        /// </summary>
+        /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Values for the message</param>
+        public static void Trace(String _msg, params object[] args)
+        {
+            logger.Trace(_msg, args);
         }
 
         /// <summary>
@@ -41,11 +52,21 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Debug
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Debug(String _msg, Exception ex)
         {
-            logger.Debug(_msg, ex);
+            logger.DebugException(_msg, ex);
         }
 
+        /// <summary>
+        /// Log with level Debug
+        /// </summary>
+        /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Values for the message</param>
+        public static void Debug(String _msg, params object[] args)
+        {
+            logger.Debug(_msg, args);
+        }
 
         /// <summary>
         /// Log with level Info
@@ -60,9 +81,20 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Info
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Info(String _msg, Exception ex)
         {
-            logger.Info(_msg, ex);
+            logger.InfoException(_msg, ex);
+        }
+
+        /// <summary>
+        /// Log with level Info
+        /// </summary>
+        /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Values for the message</param>
+        public static void Info(String _msg, params object[] args)
+        {
+            logger.Info(_msg, args);
         }
 
         /// <summary>
@@ -78,9 +110,20 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Warn
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Warn(String _msg, Exception ex)
         {
-            logger.Warn(_msg, ex);
+            logger.WarnException(_msg, ex);
+        }
+
+        /// <summary>
+        /// Log with level Warn
+        /// </summary>
+        /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Values for the message</param>
+        public static void Warn(String _msg, params object[] args)
+        {
+            logger.Warn(_msg, args);
         }
 
         /// <summary>
@@ -96,9 +139,19 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Error
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Error(String _msg, Exception ex)
         {
-            logger.Error(_msg, ex);
+            logger.ErrorException(_msg, ex);
+        }
+
+        /// <summary>
+        /// Log with level Error
+        /// </summary>
+        /// <param name="_msg">Message that will be logged</param>
+        public static void Error(String _msg, params object[] arg)
+        {
+            logger.Error(_msg, arg);
         }
 
         /// <summary>
@@ -114,38 +167,20 @@ namespace MPExtended.Services.TVAccessService
         /// Log with level Fatal
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
+        /// <param name="ex">Exception that will be logged</param>
         public static void Fatal(String _msg, Exception ex)
         {
-            logger.Fatal(_msg, ex);
+            logger.FatalException(_msg, ex);
         }
 
         /// <summary>
-        /// Log callback for MPWebStream logs
+        /// Log with level Fatal
         /// </summary>
         /// <param name="_msg">Message that will be logged</param>
-        public static void MPWebStreamCallback(int _logLevel, String _msg)
+        /// <param name="ex">Values for the message</param>
+        public static void Fatal(String _msg, params object[] args)
         {
-            switch (_logLevel)
-            {
-                case 0:
-                    Trace("MPWebStream: " + _msg);
-                    break;
-                case 1:
-                    Debug("MPWebStream: " + _msg);
-                    break;
-                case 2:
-                    Info("MPWebStream: " + _msg);
-                    break;
-                case 3:
-                    Warn("MPWebStream: " + _msg);
-                    break;
-                case 4:
-                    Error("MPWebStream: " + _msg);
-                    break;
-                case 5:
-                    Fatal("MPWebStream: " + _msg);
-                    break;
-            }
+            logger.Trace(_msg, args);
         }
 
         /// <summary>
@@ -155,6 +190,5 @@ namespace MPExtended.Services.TVAccessService
         {
             get { return logger; }
         }
-
     }
 }

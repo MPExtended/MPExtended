@@ -64,6 +64,9 @@
     <None Include="..\MPExtended.ServiceHosts.Console.Client\App.config">
       <Link>App.config</Link>
     </None>
+    <None Include="..\MPExtended.ServiceHosts.Console.Client\NLog.config">
+      <Link>NLog.config</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">

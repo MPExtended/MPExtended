@@ -94,9 +94,11 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.WebMediaPortal", "Applications\MPExtended.Applications.WebMediaPortal\MPExtended.Applications.WebMediaPortal.csproj", "{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.ServiceLib", "Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj", "{CEA12075-6DD2-442D-96F8-88A77EDCC16D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -168,6 +170,10 @@ Global
 		SccProjectTopLevelParentUniqueName17 = MPExtended.sln
 		SccProjectName17 = Applications/MPExtended.Applications.WebMediaPortal
 		SccLocalPath17 = Applications\\MPExtended.Applications.WebMediaPortal
+		SccProjectUniqueName18 = Libraries\\MPExtended.Libraries.ServiceLib\\MPExtended.Libraries.ServiceLib.csproj
+		SccProjectTopLevelParentUniqueName18 = MPExtended.sln
+		SccProjectName18 = Libraries/MPExtended.Libraries.ServiceLib
+		SccLocalPath18 = Libraries\\MPExtended.Libraries.ServiceLib
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -348,6 +354,16 @@ Global
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -380,5 +396,6 @@ Global
 		{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{B17C433D-85CA-4FEC-8ECB-A31FC057C139} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{7B88E985-6F2F-4194-9480-12D8C1D09F8D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{CEA12075-6DD2-442D-96F8-88A77EDCC16D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 	EndGlobalSection
 EndGlobal

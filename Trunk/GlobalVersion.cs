@@ -3,8 +3,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Author information
-[assembly: AssemblyCompany("gmawebservice.codeplex.com")]
-[assembly: AssemblyCopyright("Copyright © 2011 GMAWebService")]
+[assembly: AssemblyCompany("mpextended.codeplex.com")]
+[assembly: AssemblyCopyright("Copyright © 2011 MPExtended")]
 [assembly: AssemblyTrademark("")]
 
 // BUild type

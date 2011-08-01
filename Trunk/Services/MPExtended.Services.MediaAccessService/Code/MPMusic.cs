@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code.Helper;
 using MPExtended.Services.MediaAccessService.Interfaces;
 

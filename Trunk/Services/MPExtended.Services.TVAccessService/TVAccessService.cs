@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
-using System.Text;
-using System.Xml;
-using TvControl;
-using TvDatabase;
+using System.ServiceModel.Web;
 using Gentle.Provider.MySQL;
 using Gentle.Provider.SQLServer;
-using System.IO;
-using System.Xml.Serialization;
-using System.ServiceModel.Web;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.TVAccessService.Interfaces;
+using TvControl;
+using TvDatabase;
 
 namespace MPExtended.Services.TVAccessService
 {
