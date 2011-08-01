@@ -19,20 +19,17 @@ namespace MPExtended.ServiceHosts.CH.TVAccessService
             Console.WriteLine();
 
             Console.WriteLine("Opening service host...");
-            ServiceHost serviceHost = new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService));
+            ServiceHost serviceHost = new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService));
+            ServiceHost serviceHost2 = new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService));
 
-            foreach (ServiceEndpoint se in serviceHost.Description.Endpoints)
-            {
-                if (se.Name == "JsonEndpoint" || se.Name == "StreamEndpoint")
-                    se.Behaviors.Add(new WebHttpWithCustomExceptionHandling());
-
-            }
 
             serviceHost.Open();
-
+            serviceHost2.Open();
             Console.WriteLine();
             Console.WriteLine("Finished. Press any key to exit.");
             Console.ReadLine();
+            serviceHost.Close();
+            serviceHost2.Close();
         }
     }
 }

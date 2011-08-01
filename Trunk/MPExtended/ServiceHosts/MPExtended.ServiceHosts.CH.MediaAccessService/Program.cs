@@ -17,8 +17,11 @@ namespace MPExtended.ServiceHosts.CH.MediaAccessService
             Log.Debug("GmaWebService ConsoleHost starting....");
 
             ServiceHost host = new ServiceHost(typeof(MPExtended.Services.MediaAccessService.MediaAccessService));
+
+            ServiceHost host2 = new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService));
             Log.Debug("Opening ServiceHost...");
             host.Open();
+            host2.Open();
             Log.Debug("Host opened");
 
             Log.Info("GmaWebService ConsoleHost started....");
@@ -27,7 +30,7 @@ namespace MPExtended.ServiceHosts.CH.MediaAccessService
             Console.WriteLine("Press ENTER to close");
             Console.ReadLine();
             host.Close();
-
+            host2.Close();
             Log.Debug("GmaWebService ConsoleHost closed...");
       
         }

@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3B1CE041-0FA3-4D71-9AA3-C6655B526259}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{245E9751-BDD9-4E94-A114-1D6832CE26DD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.ServiceHosts.CH.MediaAccessService</RootNamespace>
-    <AssemblyName>MPExtended.ServiceHosts.CH.MediaAccessService</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.SingleSeat</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.SingleSeat</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -38,56 +37,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CoreService.Designer.cs">
+      <DependentUpon>CoreService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
+    <None Include="..\MPExtended.ServiceHosts.CH.SingleSeat\app.config">
+      <Link>app.config</Link>
     </None>
-    <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
-      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
-      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
-      <Project>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</Project>
-      <Name>MPExtended.Services.MediaAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
-      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
-      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
-      <Project>{DA449FFD-88D4-42FE-A83A-166C7097D825}</Project>
-      <Name>MPExtended.Services.StreamingService</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
