@@ -14,6 +14,7 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
+    <Name>MPExtended.ServiceSetups.SingleSeat</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -26,6 +27,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.SingleSeat\MPExtended.ServiceHosts.SingleSeat.csproj">
+      <Name>MPExtended.ServiceHosts.SingleSeat</Name>
+      <Project>{245e9751-bdd9-4e94-a114-1d6832ce26dd}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixFirewallExtension">
+      <HintPath>$(WixExtDir)\WixFirewallExtension.dll</HintPath>
+      <Name>WixFirewallExtension</Name>
+    </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

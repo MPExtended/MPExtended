@@ -50,11 +50,6 @@ namespace WebMediaPortal.Controllers
                     return View(fullMovie);
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-           
-            
-            }
             catch (Exception ex)
             {
                 Log.Error("Exception in MovieLibrary.Details", ex);

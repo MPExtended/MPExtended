@@ -20,7 +20,7 @@ namespace MPExtended.ServiceHosts.Server
         public CoreService()
         {
             InitializeComponent();
-            this.ServiceName = "MPExtended Server Services";
+            this.ServiceName = "MPExtended Server Service";
         }
 
         protected override void OnStart(string[] args)

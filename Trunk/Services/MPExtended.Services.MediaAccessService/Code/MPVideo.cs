@@ -47,7 +47,6 @@ namespace MPExtended.Services.MediaAccessService.Code
                 {
                     int id = DatabaseHelperMethods.SafeInt32(reader, 0);
                     string title = DatabaseHelperMethods.SafeStr(reader, 3);
-                    string fullpath = DatabaseHelperMethods.SafeStr(reader, 2) + DatabaseHelperMethods.SafeStr(reader, 1);
                     return new WebMovie()
                     {
                         Id = id,

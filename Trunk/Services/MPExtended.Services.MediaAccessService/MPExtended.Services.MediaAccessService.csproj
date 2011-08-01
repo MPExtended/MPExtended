@@ -69,7 +69,6 @@
     <Compile Include="Code\Helper\Query.cs" />
     <Compile Include="Code\Helper\ShareUtils.cs" />
     <Compile Include="Code\Helper\Utils.cs" />
-    <Compile Include="Code\MediaInfo.cs" />
     <Compile Include="Code\MovingPictures.cs" />
     <Compile Include="Code\MPMusic.cs" />
     <Compile Include="Code\MPPictures.cs" />
@@ -89,7 +88,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.xml" />
+    <Content Include="MediaAccess.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

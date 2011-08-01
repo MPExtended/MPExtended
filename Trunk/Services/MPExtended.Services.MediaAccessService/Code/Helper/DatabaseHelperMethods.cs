@@ -36,7 +36,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
                     int intString = SafeInt32(reader, idx);
                     return intString.ToString();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return "";
                 }
@@ -85,7 +85,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
                         return DateTime.Parse(s);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return new DateTime(1970, 1, 1);
                 }

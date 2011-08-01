@@ -27,51 +27,13 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
         private static Dictionary<String, WebBannerPath> CachedWebBannerPaths = null;
         private static String CachedMPLocation;
         private static DBLocations CachedDbLocation;
-        private static String CachedUser;
-        private static String CachedPassword;
-
-        public static void GetLogin(out string uid, out string pwd, bool overwriteCached)
-        {
-            if (overwriteCached || CachedUser == null || CachedPassword == null)
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
-                XmlNode userNode = doc.SelectSingleNode("/appconfig/config/username");
-                XmlNode passNode = doc.SelectSingleNode("/appconfig/config/password");
-                CachedUser = userNode.InnerText;
-                CachedPassword = passNode.InnerText;
-            }
-            uid = CachedUser;
-            pwd = CachedPassword;
-        }
-
-        public static bool SetLogin(string uid, string pwd)
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
-                XmlNode userNode = doc.SelectSingleNode("/appconfig/config/username");
-                userNode.InnerText = uid;
-
-                XmlNode passNode = doc.SelectSingleNode("/appconfig/config/password");
-                passNode.InnerText = pwd;
-
-                doc.Save(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
 
         public static String GetMpConfigPath()
         {
             if (CachedMPLocation == null)
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+                doc.Load(Configuration.GetPath("MediaAccess.xml"));
                 XmlNode gNode = doc.SelectSingleNode("/appconfig/config/mpconfig");
                 CachedMPLocation = gNode.InnerText;
             }
@@ -85,7 +47,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             {
                 DBLocations dbLocations = new DBLocations();
                 XmlDocument doc = new XmlDocument();
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+                doc.Load(Configuration.GetPath("MediaAccess.xml"));
                 XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
 
                 Log.Debug("Reading database paths");
@@ -125,7 +87,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
         public static void ChangeDbLocation(String _db, String _newPath)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+            doc.Load(Configuration.GetPath("MediaAccess.xml"));
             XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
 
             Log.Debug("Reading database paths");
@@ -149,7 +111,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             if (Utils.CachedWebBannerPaths == null)
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+                doc.Load(Configuration.GetPath("MediaAccess.xml"));
                 XmlNodeList dbNodes = doc.SelectNodes("/appconfig/thumbpaths/thumb");
                 Dictionary<String, WebBannerPath> retList = new Dictionary<String, WebBannerPath>();
                 foreach (XmlNode node in dbNodes)

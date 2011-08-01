@@ -253,8 +253,6 @@ namespace MPExtended.Services.MediaAccessService.Code
             WebEpisodeFull episode = null;
             ReadList<int>(sql, delegate(SQLiteDataReader reader)
             {
-                String compositeId = DatabaseHelperMethods.SafeStr(reader, 0);
-
                 if (episode == null)
                 {
                     // we don't have an entry for this episode yet -> add it

@@ -90,8 +90,8 @@ namespace WebMediaPortal.Controllers
                 return File(image, "image/jpg");
             }
             catch (Exception ex)
-            { 
-            
+            {
+                Log.Error("Exception in MusicLibrary.Image", ex);
             }
             return null;
         }

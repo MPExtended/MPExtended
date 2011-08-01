@@ -11,7 +11,8 @@
     <RootNamespace>MPExtended.ServiceHosts.SingleSeat</RootNamespace>
     <AssemblyName>MPExtended.ServiceHosts.SingleSeat</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>

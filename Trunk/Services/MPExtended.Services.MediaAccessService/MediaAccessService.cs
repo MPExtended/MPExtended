@@ -13,7 +13,7 @@ namespace MPExtended.Services.MediaAccessService
     public class MediaAccessService : IMediaAccessService
     {
 
-        #region api constants
+        #region API Constants
         private const int VIDEO_API = 1;
         private const int MUSIC_API = 1;
         private const int PICTURES_API = 1;
@@ -22,10 +22,7 @@ namespace MPExtended.Services.MediaAccessService
         private const int STREAMING_API = 1;
         #endregion
 
-
         #region MediaPortal Attributes
-
-        private static bool m_isDBConnected = false;
         public string m_gentleConfig;
         public string m_connStr;
         public Dictionary<String, WebBannerPath> m_thumbPaths;
@@ -33,15 +30,7 @@ namespace MPExtended.Services.MediaAccessService
         private MPTvSeries m_mptvseries;
         private MPMusic m_music;
         private MPVideo m_video;
-
-
         #endregion
-
-        static MediaAccessService()
-        {
-            //   we don't have MPWebStream logging here ATM, but this code is deprecated and going to be replaced soon anyway, so no problem
-            //   MPWebStream.MediaTranscoding.Log.RegisterWriter(Log.MPWebStreamCallback);
-        }
 
         public MediaAccessService()
         {
@@ -50,14 +39,8 @@ namespace MPExtended.Services.MediaAccessService
             m_mptvseries = new MPTvSeries();
             m_music = new MPMusic();
             m_video = new MPVideo();
-           
 
-            String user = null;
-            String pass = null;
-            Utils.GetLogin(out user, out pass, false);
-
-            WcfUsernameValidator.UserName = user;
-            WcfUsernameValidator.Password = pass;
+            WcfUsernameValidator.Init();
         }
 
         #region MediaPortal
@@ -445,9 +428,9 @@ namespace MPExtended.Services.MediaAccessService
         }
 
 
-        public List<WebEpisode> GetEpisodesForSeason(int seriesId, int seasonNumber, int startIndex, int endIndex, SortBy sort = SortBy.EpisodeNumber, OrderBy order = OrderBy.Asc)
+        public List<WebEpisode> GetEpisodesForSeason(int seriesId, int seasonId, int startIndex, int endIndex, SortBy sort = SortBy.EpisodeNumber, OrderBy order = OrderBy.Asc)
         {
-            return SortWebEpisodeList(m_mptvseries.GetAllEpisodesForSeason(seriesId, seasonNumber), sort, order).GetRange(startIndex, endIndex - startIndex);
+            return SortWebEpisodeList(m_mptvseries.GetAllEpisodesForSeason(seriesId, seasonId), sort, order).GetRange(startIndex, endIndex - startIndex);
         }
 
 
@@ -533,9 +516,9 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystem.GetDirectoryListByPath(path);
         }
 
-        public List<WebFileInfo> GetFilesFromDirectory(string path)
+        public List<WebFileInfo> GetFilesFromDirectory(string filepath)
         {
-            return FileSystem.GetFilesFromDirectory(path);
+            return FileSystem.GetFilesFromDirectory(filepath);
         }
 
         public WebFileInfo GetFileInfo(MediaItemType type, string itemId)

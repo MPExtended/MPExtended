@@ -8,8 +8,8 @@
     <ProjectGuid>{D77D182C-D095-43B5-8564-1FF9E4967838}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.ServiceHosts.MS.MediaAccessService</RootNamespace>
-    <AssemblyName>MPExtended.ServiceHosts.MS.MediaAccessService</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.Client</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -85,6 +85,11 @@
       <Project>{DA449FFD-88D4-42FE-A83A-166C7097D825}</Project>
       <Name>MPExtended.Services.StreamingService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CoreService.resx">
+      <DependentUpon>CoreService.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

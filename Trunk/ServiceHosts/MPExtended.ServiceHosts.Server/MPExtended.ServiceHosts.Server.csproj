@@ -8,8 +8,8 @@
     <ProjectGuid>{D1B78750-D906-4621-8C2F-50E2C19124A1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.ServiceHosts.MS.TVAccessService</RootNamespace>
-    <AssemblyName>MPExtended.ServiceHosts.MS.TVAccessService</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.Server</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

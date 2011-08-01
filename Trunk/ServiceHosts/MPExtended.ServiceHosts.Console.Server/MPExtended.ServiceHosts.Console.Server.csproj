@@ -8,8 +8,8 @@
     <ProjectGuid>{2FB38DB7-155E-4BA8-A292-2022DE08105A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.ServiceHosts.CH.TVAccessService</RootNamespace>
-    <AssemblyName>MPExtended.ServiceHosts.CH.TVAccessService</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.Console.Server</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.Console.Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

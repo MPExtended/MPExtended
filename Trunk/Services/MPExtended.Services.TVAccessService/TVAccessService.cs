@@ -20,31 +20,17 @@ namespace MPExtended.Services.TVAccessService
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
         private Dictionary<string, User> _tvUsers;
-      
         #endregion
 
         #region Constructor
-        static TVAccessService()
-        {
-     
-        }
-
         public TVAccessService()
         {
             _tvUsers = new Dictionary<string, User>();
             _tvBusiness = new TvBusinessLayer();
-           
+            WcfUsernameValidator.Init();
 
             // try to initialize Gentle and TVE API
             InitializeGentleAndTVE();
-
-            String user = null;
-            String pass = null;
-
-            Utils.GetLogin(out user, out pass, false);
-
-            WcfUsernameValidator.UserName = user;
-            WcfUsernameValidator.Password = pass;
         }
         #endregion
 
@@ -474,6 +460,7 @@ namespace MPExtended.Services.TVAccessService
             catch (Exception ex)
             {
                 // TODO: log the exception
+                Log.Error("Failed to connect to TVEngine", ex);
             }
         }
 

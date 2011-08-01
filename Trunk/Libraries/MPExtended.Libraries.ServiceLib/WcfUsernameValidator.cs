@@ -13,6 +13,15 @@ namespace MPExtended.Libraries.ServiceLib
         public static String UserName { get; set; }
         public static String Password { get; set; }
 
+        public static void Init()
+        {
+            string username;
+            string password;
+            Configuration.GetCredentials(out username, out password, false);
+            UserName = username;
+            Password = password;
+        }
+
         public override void Validate(string userName, string password)
         {
             // This isn't secure, though

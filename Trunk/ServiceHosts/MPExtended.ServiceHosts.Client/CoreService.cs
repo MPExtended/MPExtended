@@ -19,7 +19,7 @@ namespace MPExtended.ServiceHosts.Client
         public CoreService()
         {
             InitializeComponent();
-            this.ServiceName = "MPExtended Client Services";
+            this.ServiceName = "MPExtended Client Service";
         }
 
         protected override void OnStart(string[] args)

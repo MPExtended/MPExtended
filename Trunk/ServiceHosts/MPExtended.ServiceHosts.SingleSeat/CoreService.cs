@@ -22,7 +22,7 @@ namespace MPExtended.ServiceHosts.SingleSeat
         public CoreService()
         {
             InitializeComponent();
-            this.ServiceName = "MPExtended SingleSeat Services";
+            this.ServiceName = "MPExtended SingleSeat Service";
         }
 
         protected override void OnStart(string[] args)

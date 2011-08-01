@@ -8,8 +8,8 @@
     <ProjectGuid>{C3392739-1A84-4864-BB0C-F7CE02203B23}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.ServiceHosts.CH.SingleSeat</RootNamespace>
-    <AssemblyName>MPExtended.ServiceHosts.CH.SingleSeat</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.Console.SingleSeat</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.Console.SingleSeat</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
