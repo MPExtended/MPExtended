@@ -28,11 +28,11 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public List<WebSeries> GetSeries(int? start, int? end)
         {
-            string sql = "Select series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
-                         "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre " +
-                         "from online_series as series " +
-                         "left join local_series as local on series.ID = local.ID " + 
-                         "where series.ID <> 0 and series.HasLocalFiles = 1 and local.Hidden = 0";
+            string sql = "SELECT DISTINCT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
+                            "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre " +
+                         "FROM online_series AS series " +
+                         "INNER JOIN local_series AS local ON series.ID = local.ID AND local.Hidden = 0 " + 
+                         "WHERE series.ID != 0 AND series.HasLocalFiles = 1";
             return ReadList<WebSeries>(sql, delegate(SQLiteDataReader reader)
             {
                 WebSeries series = new WebSeries();
@@ -63,14 +63,14 @@ namespace MPExtended.Services.MediaAccessService.Code
         public WebSeriesFull GetFullSeries(int _seriesId)
         {
             string sql =
-                  "Select series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
-                  "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, " +
-                  "series.origName, series.Status, series.SortName, series.BannerFileNames, series.Actors,series.PosterFileNames, " +
-                  "series.ContentRating, series.Network, series.Summary, series.AirsDay, series.AirsTime, " +
-                  "series.EpisodesUnWatched, series.Runtime, series.FirstAired, series.choosenOrder " +
-                  "from online_series as series " +
-                  "left join local_series as local on series.ID = local.ID " +
-                  "where local.Hidden = 0 AND series.HasLocalFiles = 1 AND series.ID=" + _seriesId;
+                  "SELECT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
+                    "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, " +
+                    "series.origName, series.Status, series.SortName, series.BannerFileNames, series.Actors,series.PosterFileNames, " +
+                    "series.ContentRating, series.Network, series.Summary, series.AirsDay, series.AirsTime, " +
+                    "series.EpisodesUnWatched, series.Runtime, series.FirstAired, series.choosenOrder " +
+                  "FROM online_series AS series " +
+                  "INNER JOIN local_series AS local ON series.ID = local.ID AND local.Hidden = 0 " + 
+                  "WHERE series.HasLocalFiles = 1 AND series.ID = " + _seriesId;
             return ReadRow<WebSeriesFull>(sql, delegate(SQLiteDataReader reader)
             {
                 WebSeriesFull series = new WebSeriesFull();
