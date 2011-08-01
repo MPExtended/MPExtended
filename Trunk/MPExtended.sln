@@ -76,11 +76,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.SingleSeat", "ServiceHosts\MPExtended.ServiceHosts.SingleSeat\MPExtended.ServiceHosts.SingleSeat.csproj", "{245E9751-BDD9-4E94-A114-1D6832CE26DD}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.SingleSeatServices", "ServiceSetups\MPExtended.ServiceSetups.SingleSeatService\MPExtended.ServiceSetups.SingleSeatServices.wixproj", "{B00DAA89-C862-4575-9557-F8ACA77E2603}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Client", "ServiceSetups\MPExtended.ServiceSetups.Client\MPExtended.ServiceSetups.Client.wixproj", "{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.ClientService", "ServiceSetups\MPExtended.ServiceSetups.Client\MPExtended.ServiceSetups.ClientService.wixproj", "{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.ServerService", "ServiceSetups\MPExtended.ServiceSetups.Server\MPExtended.ServiceSetups.ServerService.wixproj", "{DFB26301-070B-4C7E-8CEA-62BD95C820AD}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Server", "ServiceSetups\MPExtended.ServiceSetups.Server\MPExtended.ServiceSetups.Server.wixproj", "{DFB26301-070B-4C7E-8CEA-62BD95C820AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Console.Client", "ServiceHosts\MPExtended.ServiceHosts.Console.Client\MPExtended.ServiceHosts.Console.Client.csproj", "{3B1CE041-0FA3-4D71-9AA3-C6655B526259}"
 EndProject
@@ -91,6 +89,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Client", "ServiceHosts\MPExtended.ServiceHosts.Client\MPExtended.ServiceHosts.Client.csproj", "{D77D182C-D095-43B5-8564-1FF9E4967838}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Server", "ServiceHosts\MPExtended.ServiceHosts.Server\MPExtended.ServiceHosts.Server.csproj", "{D1B78750-D906-4621-8C2F-50E2C19124A1}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.SingleSeat", "ServiceSetups\MPExtended.ServiceSetups.SingleSeat\MPExtended.ServiceSetups.SingleSeat.wixproj", "{B00DAA89-C862-4575-9557-F8ACA77E2603}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -130,38 +130,38 @@ Global
 		SccProjectTopLevelParentUniqueName8 = MPExtended.sln
 		SccProjectName8 = ServiceHosts/MPExtended.ServiceHosts.SingleSeat
 		SccLocalPath8 = ServiceHosts\\MPExtended.ServiceHosts.SingleSeat
-		SccProjectUniqueName9 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeatService\\MPExtended.ServiceSetups.SingleSeatServices.wixproj
+		SccProjectUniqueName9 = ServiceHosts\\MPExtended.ServiceHosts.Console.Server\\MPExtended.ServiceHosts.Console.Server.csproj
 		SccProjectTopLevelParentUniqueName9 = MPExtended.sln
-		SccProjectName9 = ServiceSetups/MPExtended.ServiceSetups.SingleSeatService
-		SccLocalPath9 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeatService
-		SccProjectUniqueName10 = ServiceSetups\\MPExtended.ServiceSetups.Client\\MPExtended.ServiceSetups.ClientService.wixproj
+		SccProjectName9 = ServiceHosts/MPExtended.ServiceHosts.Console.Server
+		SccLocalPath9 = ServiceHosts\\MPExtended.ServiceHosts.Console.Server
+		SccProjectUniqueName10 = ServiceHosts\\MPExtended.ServiceHosts.Console.Client\\MPExtended.ServiceHosts.Console.Client.csproj
 		SccProjectTopLevelParentUniqueName10 = MPExtended.sln
-		SccProjectName10 = ServiceSetups/MPExtended.ServiceSetups.Client
-		SccLocalPath10 = ServiceSetups\\MPExtended.ServiceSetups.Client
-		SccProjectUniqueName11 = ServiceSetups\\MPExtended.ServiceSetups.Server\\MPExtended.ServiceSetups.ServerService.wixproj
+		SccProjectName10 = ServiceHosts/MPExtended.ServiceHosts.Console.Client
+		SccLocalPath10 = ServiceHosts\\MPExtended.ServiceHosts.Console.Client
+		SccProjectUniqueName11 = ServiceHosts\\MPExtended.ServiceHosts.Console.SingleSeat\\MPExtended.ServiceHosts.Console.SingleSeat.csproj
 		SccProjectTopLevelParentUniqueName11 = MPExtended.sln
-		SccProjectName11 = ServiceSetups/MPExtended.ServiceSetups.Server
-		SccLocalPath11 = ServiceSetups\\MPExtended.ServiceSetups.Server
-		SccProjectUniqueName12 = ServiceHosts\\MPExtended.ServiceHosts.Console.Server\\MPExtended.ServiceHosts.Console.Server.csproj
+		SccProjectName11 = ServiceHosts/MPExtended.ServiceHosts.Console.SingleSeat
+		SccLocalPath11 = ServiceHosts\\MPExtended.ServiceHosts.Console.SingleSeat
+		SccProjectUniqueName12 = ServiceHosts\\MPExtended.ServiceHosts.Client\\MPExtended.ServiceHosts.Client.csproj
 		SccProjectTopLevelParentUniqueName12 = MPExtended.sln
-		SccProjectName12 = ServiceHosts/MPExtended.ServiceHosts.Console.Server
-		SccLocalPath12 = ServiceHosts\\MPExtended.ServiceHosts.Console.Server
-		SccProjectUniqueName13 = ServiceHosts\\MPExtended.ServiceHosts.Console.Client\\MPExtended.ServiceHosts.Console.Client.csproj
+		SccProjectName12 = ServiceHosts/MPExtended.ServiceHosts.Client
+		SccLocalPath12 = ServiceHosts\\MPExtended.ServiceHosts.Client
+		SccProjectUniqueName13 = ServiceHosts\\MPExtended.ServiceHosts.Server\\MPExtended.ServiceHosts.Server.csproj
 		SccProjectTopLevelParentUniqueName13 = MPExtended.sln
-		SccProjectName13 = ServiceHosts/MPExtended.ServiceHosts.Console.Client
-		SccLocalPath13 = ServiceHosts\\MPExtended.ServiceHosts.Console.Client
-		SccProjectUniqueName14 = ServiceHosts\\MPExtended.ServiceHosts.Console.SingleSeat\\MPExtended.ServiceHosts.Console.SingleSeat.csproj
+		SccProjectName13 = ServiceHosts/MPExtended.ServiceHosts.Server
+		SccLocalPath13 = ServiceHosts\\MPExtended.ServiceHosts.Server
+		SccProjectUniqueName14 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeat\\MPExtended.ServiceSetups.SingleSeat.wixproj
 		SccProjectTopLevelParentUniqueName14 = MPExtended.sln
-		SccProjectName14 = ServiceHosts/MPExtended.ServiceHosts.Console.SingleSeat
-		SccLocalPath14 = ServiceHosts\\MPExtended.ServiceHosts.Console.SingleSeat
-		SccProjectUniqueName15 = ServiceHosts\\MPExtended.ServiceHosts.Client\\MPExtended.ServiceHosts.Client.csproj
+		SccProjectName14 = ServiceSetups/MPExtended.ServiceSetups.SingleSeat
+		SccLocalPath14 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeat
+		SccProjectUniqueName15 = ServiceSetups\\MPExtended.ServiceSetups.Server\\MPExtended.ServiceSetups.Server.wixproj
 		SccProjectTopLevelParentUniqueName15 = MPExtended.sln
-		SccProjectName15 = ServiceHosts/MPExtended.ServiceHosts.Client
-		SccLocalPath15 = ServiceHosts\\MPExtended.ServiceHosts.Client
-		SccProjectUniqueName16 = ServiceHosts\\MPExtended.ServiceHosts.Server\\MPExtended.ServiceHosts.Server.csproj
+		SccProjectName15 = ServiceSetups/MPExtended.ServiceSetups.Server
+		SccLocalPath15 = ServiceSetups\\MPExtended.ServiceSetups.Server
+		SccProjectUniqueName16 = ServiceSetups\\MPExtended.ServiceSetups.Client\\MPExtended.ServiceSetups.Client.wixproj
 		SccProjectTopLevelParentUniqueName16 = MPExtended.sln
-		SccProjectName16 = ServiceHosts/MPExtended.ServiceHosts.Server
-		SccLocalPath16 = ServiceHosts\\MPExtended.ServiceHosts.Server
+		SccProjectName16 = ServiceSetups/MPExtended.ServiceSetups.Client
+		SccLocalPath16 = ServiceSetups\\MPExtended.ServiceSetups.Client
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,16 +252,6 @@ Global
 		{245E9751-BDD9-4E94-A114-1D6832CE26DD}.Release|Mixed Platforms.Build.0 = Release|x86
 		{245E9751-BDD9-4E94-A114-1D6832CE26DD}.Release|x86.ActiveCfg = Release|x86
 		{245E9751-BDD9-4E94-A114-1D6832CE26DD}.Release|x86.Build.0 = Release|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|x86.ActiveCfg = Debug|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|x86.Build.0 = Debug|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Any CPU.ActiveCfg = Release|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Mixed Platforms.Build.0 = Release|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.ActiveCfg = Release|x86
-		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.Build.0 = Release|x86
 		{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -332,6 +322,16 @@ Global
 		{D1B78750-D906-4621-8C2F-50E2C19124A1}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D1B78750-D906-4621-8C2F-50E2C19124A1}.Release|x86.ActiveCfg = Release|x86
 		{D1B78750-D906-4621-8C2F-50E2C19124A1}.Release|x86.Build.0 = Release|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|x86.ActiveCfg = Debug|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Debug|x86.Build.0 = Debug|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Any CPU.ActiveCfg = Release|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.ActiveCfg = Release|x86
+		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,9 +354,9 @@ Global
 		{245E9751-BDD9-4E94-A114-1D6832CE26DD} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
 		{D77D182C-D095-43B5-8564-1FF9E4967838} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
 		{D1B78750-D906-4621-8C2F-50E2C19124A1} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
-		{B00DAA89-C862-4575-9557-F8ACA77E2603} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
 		{8CF51F45-7F45-4473-920D-F0DC12CB6BF8} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
 		{DFB26301-070B-4C7E-8CEA-62BD95C820AD} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
+		{B00DAA89-C862-4575-9557-F8ACA77E2603} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{E8ECBC04-8B62-454E-A671-8A33BDB35F4F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
