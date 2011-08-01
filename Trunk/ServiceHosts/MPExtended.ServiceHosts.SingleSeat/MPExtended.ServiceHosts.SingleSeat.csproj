@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,32 @@
     <None Include="..\MPExtended.ServiceHosts.Console.SingleSeat\App.config">
       <Link>App.config</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
+      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
+      <Project>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</Project>
+      <Name>MPExtended.Services.MediaAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
+      <Project>{DA449FFD-88D4-42FE-A83A-166C7097D825}</Project>
+      <Name>MPExtended.Services.StreamingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
+      <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
+      <Name>MPExtended.Services.TVAccessService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

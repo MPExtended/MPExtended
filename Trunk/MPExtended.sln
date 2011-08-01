@@ -92,9 +92,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Ser
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.SingleSeat", "ServiceSetups\MPExtended.ServiceSetups.SingleSeat\MPExtended.ServiceSetups.SingleSeat.wixproj", "{B00DAA89-C862-4575-9557-F8ACA77E2603}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.WebMediaPortal", "Applications\MPExtended.Applications.WebMediaPortal\MPExtended.Applications.WebMediaPortal.csproj", "{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -162,6 +164,10 @@ Global
 		SccProjectTopLevelParentUniqueName16 = MPExtended.sln
 		SccProjectName16 = ServiceSetups/MPExtended.ServiceSetups.Client
 		SccLocalPath16 = ServiceSetups\\MPExtended.ServiceSetups.Client
+		SccProjectUniqueName17 = Applications\\MPExtended.Applications.WebMediaPortal\\MPExtended.Applications.WebMediaPortal.csproj
+		SccProjectTopLevelParentUniqueName17 = MPExtended.sln
+		SccProjectName17 = Applications/MPExtended.Applications.WebMediaPortal
+		SccLocalPath17 = Applications\\MPExtended.Applications.WebMediaPortal
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -332,6 +338,16 @@ Global
 		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|Mixed Platforms.Build.0 = Release|x86
 		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.ActiveCfg = Release|x86
 		{B00DAA89-C862-4575-9557-F8ACA77E2603}.Release|x86.Build.0 = Release|x86
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -359,6 +375,7 @@ Global
 		{B00DAA89-C862-4575-9557-F8ACA77E2603} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
+		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{E8ECBC04-8B62-454E-A671-8A33BDB35F4F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{B17C433D-85CA-4FEC-8ECB-A31FC057C139} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
