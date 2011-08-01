@@ -11,9 +11,7 @@ namespace MPExtended.Services.MediaAccessService.Code
     {
         public static WebPicture ToWebPicture(this WebFileInfo info)
         {
-            if (info == null)
-                return null;
-            return MPPictures.readFile(info.FullName);
+            return MPPictures.ReadFile(info.FullName);
         }
     }
 

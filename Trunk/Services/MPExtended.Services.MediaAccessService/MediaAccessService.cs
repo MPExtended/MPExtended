@@ -506,6 +506,28 @@ namespace MPExtended.Services.MediaAccessService
             return MPPictures.GetPictureDirectory(path);
         }
 
+        /// <summary>
+        /// Returns the image object of the given path or null if the image doesn't exists
+        /// </summary>
+        /// <param name="path">Path to image</param>
+        /// <returns>Stream of image or null</returns>
+        public Stream GetImage(string path)
+        {
+            return MPPictures.GetImage(path);
+        }
+
+        /// <summary>
+        /// Returns the image object of the given path, resized to fit the maxWidth and maxHeight
+        /// parameters, or null if the image doesn't exists
+        /// </summary>
+        /// <param name="path">Path to image</param>
+        /// <param name="maxWidth">Maximum width of image</param>
+        /// <param name="maxHeight">Maximum height of image</param>
+        /// <returns>Stream of image or null</returns>
+        public Stream GetImageResized(string path, int maxWidth, int maxHeight)
+        {
+            return MPPictures.GetImageResized(path, maxWidth, maxHeight);
+        }
         #endregion
 
         #endregion
@@ -576,29 +598,6 @@ namespace MPExtended.Services.MediaAccessService
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Returns the image object of the given path or null if the image doesn't exists
-        /// </summary>
-        /// <param name="path">Path to image</param>
-        /// <returns>Stream of image or null</returns>
-        public Stream GetImage(string path)
-        {
-            return MPPictures.GetImage(path);
-        }
-
-        /// <summary>
-        /// Returns the image object of the given path, resized to fit the maxWidth and maxHeight
-        /// parameters, or null if the image doesn't exists
-        /// </summary>
-        /// <param name="path">Path to image</param>
-        /// <param name="maxWidth">Maximum width of image</param>
-        /// <param name="maxHeight">Maximum height of image</param>
-        /// <returns>Stream of image or null</returns>
-        public Stream GetImageResized(string path, int maxWidth, int maxHeight)
-        {
-            return MPPictures.GetImageResized(path, maxWidth, maxHeight);
         }
 
         /// <summary>

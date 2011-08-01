@@ -92,8 +92,14 @@ namespace MPExtended.Services.MediaAccessService.Code
             return GetImageTrusted(cachedPath);
         }
 
-        public static WebPicture readFile(string filename)
+        public static WebPicture ReadFile(string filename)
         {
+            if (!Shares.IsAllowedPath(filename))
+            {
+                Log.Warn("Tried to GetImage non-allowed or non-existent file {0}", filename);
+                return null;
+            }
+
             WebPicture pic = new WebPicture();
             BitmapSource img = BitmapFrame.Create(new Uri(filename));
 
