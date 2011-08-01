@@ -1,0 +1,17 @@
+﻿@model IEnumerable<GmaWebService.Interfaces.WebMusicAlbum>
+
+@{
+    ViewBag.Title = "Albums";
+}
+
+<h3>Browse Albums</h3>
+
+<ul>
+    @foreach (var album in Model)
+    {
+          <li> @Html.ActionLink(album.Title, "Tracks", new { album = album.Title, artist = album.ShortedAlbumArtist }) </li>     
+    }
+</ul>
+
+
+

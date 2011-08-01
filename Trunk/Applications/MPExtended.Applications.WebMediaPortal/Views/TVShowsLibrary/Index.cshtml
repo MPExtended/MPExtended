@@ -1,0 +1,16 @@
+﻿
+@model IEnumerable<GmaWebService.Interfaces.WebSeries>
+@{
+    ViewBag.Title = "TV Series";
+}
+
+<h2>Your tv series</h2>
+<div class="column">
+<ul>
+    @foreach (var serie in Model)
+    {
+        <li>@Html.ActionLink(serie.PrettyName , "Seasons", new { serie = serie.Id })</li>       
+    }
+</ul>
+</div>
+

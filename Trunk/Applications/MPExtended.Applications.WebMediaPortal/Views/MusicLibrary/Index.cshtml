@@ -1,0 +1,29 @@
+﻿@model IEnumerable<GmaWebService.Interfaces.WebMusicArtist>
+@{
+    ViewBag.Title = "Music Library";
+}
+<style type="text/css">
+    .artistList
+    {
+        overflow: hidden;
+        min-width: 1000px;
+    }
+    
+    .artistList li
+    {
+        width: 250px;
+        float: left;
+        margin: 15px;
+    }
+</style>
+<h2>
+    Artists</h2>
+<ul class="artistList">
+    @{if (@Model != null)
+      {
+          foreach (var artist in Model)
+          {
+        <li>@Html.ActionLink(artist.Title, "Albums", new { artist = Html.Encode(artist.Title) })</li>
+          }
+      } }
+</ul>

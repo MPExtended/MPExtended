@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TV4Home.Server.TVEInteractionLibrary.Interfaces.WebSchedule>
+@{
+    ViewBag.Title = "CurrentSchedules";
+
+}
+
+
+@{
+    if (@Model != null && @Model.Count(p => p.ProgramName != "") > 0)
+    {
+    <h2>
+        Current Schedules</h2>
+    <div>
+        <ul>
+            @foreach (var schedule in Model)
+            {
+                <li><a href="@Url.Action("ScheduleDetails", "Television", new { scheduleId = @schedule.IdChannel })"> @schedule.ProgramName - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</a></li>       
+            }
+        </ul>
+    </div>
+    }
+    
+}

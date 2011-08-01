@@ -1,0 +1,33 @@
+﻿@model WebMediaPortal.Models.SettingsViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<h2>
+    Index</h2>
+@using (Html.BeginForm("Update", "Settings"))
+{
+    <div>
+    <table>
+        <tr>
+            <td>
+                Default group
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedGroup, new SelectList(Model.Groups, "Value", "Text"), @Model.Settings.DefaultGroup)
+                @Html.ValidationMessageFor(x => x.SelectedGroup)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Default transcoding profile
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedProfile, new SelectList(Model.Profiles, "Value", "Text"), @Model.Settings.TranscodingProfile)
+                @Html.ValidationMessageFor(x => x.SelectedProfile)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Save" />
+    </div>
+
+}

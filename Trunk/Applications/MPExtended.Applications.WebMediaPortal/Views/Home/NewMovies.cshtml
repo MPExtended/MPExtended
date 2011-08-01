@@ -1,0 +1,26 @@
+﻿@model IEnumerable<GmaWebService.Interfaces.WebMovieFull>
+@{
+    ViewBag.Title = "NewMovies";
+}
+
+@{
+    
+    if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+    {
+    <h2>
+        Latest Movies</h2>
+    <div>
+        @foreach (var movie in Model)
+        {
+            <div class="column">
+                <div class="row">
+                    @Html.ActionLink(movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
+                </div>
+                <div class="row">
+                    <img class="img" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id })" alt="" />
+                </div>
+            </div>
+        }
+    </div>
+    }
+}

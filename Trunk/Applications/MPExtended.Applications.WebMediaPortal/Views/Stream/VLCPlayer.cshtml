@@ -1,0 +1,47 @@
+﻿@model WebMediaPortal.Models.StreamModel
+<script type="text/javascript">
+    function getVlcPlayer(vlc_id) {
+        if (document.all) vlc_id += '_ie';
+        return document.getElementById(vlc_id);
+    }
+
+    function init() {
+        var vlc = getVlcPlayer('vlcplayer');
+        vlc.playlist.add("@Html.Raw(@Model.URL)");
+        vlc.playlist.play();
+    }
+
+    function enableDeinterlace(type) {
+        var vlc = getVlcPlayer('vlcplayer');
+        if (typeof (vlc.video.deinterlace) !== "undefined") {
+            vlc.video.deinterlace.enable(type);
+        } else {
+            alert("Your VLC version is too old to support deinterlacing in the browser. Update to version 1.1.0 or higher; but then you loose fullscreen support.");
+        }
+    }
+
+    function goFullscreen() {
+        // yes, version checking is bad but otherwise we end up with loads of bug reports
+        var version = getVlcPlayer('vlcplayer').versionInfo();
+        if (version.substr(0, 4) == '1.1.') {
+            alert("Fullscreen does not work with your VLC version. Downgrade to VLC 1.0.x if you want fullscreen; but then you loose deinterlace support.");
+        } else {
+            getVlcPlayer('vlcplayer').video.fullscreen = true;
+        }
+    }
+</script>
+
+<input type="button" value="play" onclick="getVlcPlayer('vlcplayer').playlist.play();" /> 
+<input type="button" value="pause" onclick="getVlcPlayer('vlcplayer').playlist.togglePause();" />
+<input type="button" value="stop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
+<input type="button" value="switch fullscreen" onclick="goFullscreen();" />
+<input type="button" value="enable deinterlacing" onclick="enableDeinterlace('linear');" /> 
+<hr style="border: solid 1px black" />
+
+<object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Width" height="@Model.Height" events="True">
+   <param name="ShowDisplay" value="false" ></param>
+   <param name="AutoLoop" value="no"></param>
+   <param name="AutoPlay" value="no"></param>
+   <embed id="vlcplayer" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" autoplay="no" loop="no" width="@Model.Width" height="@Model.Height">
+   </embed>
+</object>

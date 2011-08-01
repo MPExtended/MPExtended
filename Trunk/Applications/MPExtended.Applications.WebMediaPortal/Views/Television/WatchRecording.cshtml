@@ -1,0 +1,17 @@
+﻿@model TV4Home.Server.TVEInteractionLibrary.Interfaces.WebRecording
+
+@{
+    ViewBag.Title = "Recording";
+}
+
+<div>
+    You are watching: <strong>@Model.Name</strong>
+</div>
+
+<div>
+@{Html.RenderAction("Player", "Stream", new
+  {
+      type = WebMediaPortal.Models.StreamMedia.Recording,
+      itemId = @Model.IdRecording
+  });}
+</div>

@@ -1,0 +1,12 @@
+﻿@model Tuple<GmaWebService.Interfaces.WebEpisodeFull, GmaWebService.Interfaces.WebSeriesFull>
+@{
+    ViewBag.Title = "Play";
+}
+<h2>Play</h2>
+You are watching <strong>@Model.Item2.PrettyName - Season @Model.Item1.SeasonNumber Episode @Model.Item1.EpisodeNumber - @Model.Item1.Name</strong>
+@{Html.RenderAction("Player", "Stream", new
+  {
+      type = WebMediaPortal.Models.StreamMedia.Serie,
+      itemId = @Model.Item1.Id
+  });
+}

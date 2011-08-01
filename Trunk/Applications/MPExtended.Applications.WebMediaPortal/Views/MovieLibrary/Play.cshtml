@@ -1,0 +1,11 @@
+﻿@model GmaWebService.Interfaces.WebMovieFull
+@{
+    ViewBag.Title = "Play";
+}
+<h2>Play</h2>
+You are watching <strong>@Model.Title</strong>
+@{Html.RenderAction("Player", "Stream", new
+  {
+      type = WebMediaPortal.Models.StreamMedia.Movie,
+      itemId = @Model.Id
+  });}

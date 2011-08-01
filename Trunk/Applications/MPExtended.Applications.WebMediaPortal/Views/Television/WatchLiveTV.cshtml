@@ -1,0 +1,20 @@
+﻿@using TV4Home.Server.TVEInteractionLibrary.Interfaces;
+@model WebChannelDetailed
+@{
+    ViewBag.Title = "Live TV";
+    var CurrentProgram = "No Title";
+}
+@{Html.RenderAction("Menu", "Television");}
+
+<div>
+    You are watching: <strong>@{if(Model.CurrentProgram != null){ @Model.CurrentProgram.Title}
+                                else {@CurrentProgram}}</strong> on <strong>@Model.DisplayName</strong>
+</div>
+
+<div>
+@{Html.RenderAction("Player", "Stream", new
+  {
+      type = WebMediaPortal.Models.StreamMedia.TV,
+      itemId = @Model.IdChannel
+  });}
+</div>

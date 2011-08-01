@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebMediaPortal</RootNamespace>
+    <AssemblyName>WebMediaPortal</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+    <PublishDatabases>false</PublishDatabases>
+    <DeployIisAppPath>Default Web Site</DeployIisAppPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="Code\ExtensionMethods.cs" />
+    <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\Util.cs" />
+    <Compile Include="Code\Log.cs" />
+    <Compile Include="Code\XMLMembershipProvider.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MovieLibraryController.cs" />
+    <Compile Include="Controllers\MusicLibraryController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\PictureController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\StreamController.cs" />
+    <Compile Include="Controllers\TelevisionController.cs" />
+    <Compile Include="Controllers\TVShowsLibraryController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
+    <Compile Include="Models\SettingsViewModel.cs" />
+    <Compile Include="Models\SingleTVProgramModel.cs" />
+    <Compile Include="Models\StreamModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\WebServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.users.xml" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\placeholder.gif" />
+    <Content Include="Content\Images\TVGuide\Calendar.gif" />
+    <Content Include="Content\Images\TVGuide\ChannelNameBG.png" />
+    <Content Include="Content\Images\TVGuide\ConnectWin7Search.png" />
+    <Content Include="Content\Images\TVGuide\Program.png" />
+    <Content Include="Content\Images\TVGuide\ProgramInfoDialogClose.png" />
+    <Content Include="Content\Images\TVGuide\ProgramLeftSeperator.png" />
+    <Content Include="Content\Images\TVGuide\ProgramOnAir.png" />
+    <Content Include="Content\Images\TVGuide\ProgramOnScheduled.png" />
+    <Content Include="Content\Images\TVGuide\ProgramRightSeperator.png" />
+    <Content Include="Content\Images\TVGuide\ProgramShortInfoBackground.png" />
+    <Content Include="Content\Images\TVGuide\Search.png" />
+    <Content Include="Content\TVGuide.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\Themes\base\jquery-ui.css" />
+    <Content Include="Content\Themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\Themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\Themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\Themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\Themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\Themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Play.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Albums.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Tracks.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MovieLibrary\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MovieLibrary\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVShowsLibrary\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVShowsLibrary\Seasons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVShowsLibrary\Episodes.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\Menu.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\LogOn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\Register.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Picture\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Picture\Browse.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\TVGuide.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\ProgramData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Stream\FlashPlayer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Stream\VLCPlayer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MovieLibrary\Play.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVShowsLibrary\Play.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVShowsLibrary\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\NewMovies.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\NewRecordings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\CurrentSchedules.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\ProgramDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\ScheduleDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\WatchLiveTV.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\Recordings.cshtml" />
+    <Content Include="Views\Television\WatchRecording.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
+      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj">
+      <Project>{EDD71CEF-C318-4229-9427-DD822C6EDEB1}</Project>
+      <Name>MPExtended.Applications.ServiceConfigurator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2923</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

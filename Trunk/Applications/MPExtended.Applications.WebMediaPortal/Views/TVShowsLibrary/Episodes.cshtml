@@ -1,0 +1,32 @@
+﻿@model IEnumerable<GmaWebService.Interfaces.WebEpisode>
+@{
+    ViewBag.Title = "Episodes";
+}
+<style type="text/css">
+    .column
+    {
+        float: left;
+        margin-right: 10px;
+    }
+    .img
+    {
+        max-width: 300px;
+    }
+</style>
+<h2>
+    Episodes</h2>
+<div class="column">
+    <img class="img" src="@Url.Action("Image", new { serie = @Model.ElementAt(0).IdSerie, season = @Model.ElementAt(0).SeasonNumber })" alt="" />
+</div>
+<div class="column">
+    <ul>
+        @foreach (var episode in Model)
+        {
+           
+            <li>@Html.ActionLink("Episode " + episode.EpisodeNumber + " - " + episode.Name, "Details", new { episode = episode.Id })
+            </li>
+            
+        }
+    </ul>
+</div>
+

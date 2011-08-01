@@ -1,0 +1,13 @@
+﻿@model TV4Home.Server.TVEInteractionLibrary.Interfaces.WebSchedule
+
+@{
+    ViewBag.Title = "ScheduleDetails";
+}
+<h2>@Model.ProgramName </h2>
+
+
+
+    <div class="TVProgramSchedule">
+        <a href="@Url.Action("DeleteScheduleById", "Television", new { scheduleId = @Model.IdSchedule })">
+        Cancel</a>
+    </div>

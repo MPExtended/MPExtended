@@ -1,0 +1,36 @@
+﻿@model IEnumerable<GmaWebService.Interfaces.WebMusicTrack>
+
+@{
+    ViewBag.Title = "Tracks";
+}
+<style type="text/css">
+    .column
+    {
+        float: left;
+        margin-right: 10px;
+        
+    }
+    .img
+    {
+        max-width: 300px
+        }
+</style>
+
+<h3>Browse Tracks</h3>
+<div class="column">
+<img class="img" src="@Url.Action("Image", new { album = @Model.ElementAt(0).Album, artist = @Model.ElementAt(0).ShortedAlbumArtist })" alt="" />
+</div>
+<div class="column">
+    <ul>
+    @foreach (var track in Model)
+    {
+        <li>@Html.ActionLink(@track.Title, "Play", new { track = @track.TrackId })</li>      
+    }
+    </ul>
+</div>
+<div class="column">
+Need video control/streaming tool to get everything done
+</div>
+
+
+
