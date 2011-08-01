@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceProcess;
 using System.Text;
+using System.ServiceModel;
+using MPExtended.Services.MediaAccessService.Code;
 
 namespace MPExtended.ServiceHosts.CH.MediaAccessService
 {
@@ -13,12 +14,22 @@ namespace MPExtended.ServiceHosts.CH.MediaAccessService
         /// </summary>
         static void Main()
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-			{ 
-				new Service1() 
-			};
-            ServiceBase.Run(ServicesToRun);
+            Log.Debug("GmaWebService ConsoleHost starting....");
+
+            ServiceHost host = new ServiceHost(typeof(MPExtended.Services.MediaAccessService.MediaAccessService));
+            Log.Debug("Opening ServiceHost...");
+            host.Open();
+            Log.Debug("Host opened");
+
+            Log.Info("GmaWebService ConsoleHost started....");
+            NLog.LogManager.Flush();
+
+            Console.WriteLine("Press ENTER to close");
+            Console.ReadLine();
+            host.Close();
+
+            Log.Debug("GmaWebService ConsoleHost closed...");
+      
         }
     }
 }

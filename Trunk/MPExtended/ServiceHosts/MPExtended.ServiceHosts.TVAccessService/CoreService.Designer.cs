@@ -1,6 +1,6 @@
 ﻿namespace MPExtended.ServiceHosts.TVAccessService
 {
-    partial class Service1
+    partial class CoreService
     {
         /// <summary> 
         /// Required designer variable.

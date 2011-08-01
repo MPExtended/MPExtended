@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Services.TVAccessService")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("MPExtended.Services.TVAccessService")]
 [assembly: AssemblyCulture("")]
 

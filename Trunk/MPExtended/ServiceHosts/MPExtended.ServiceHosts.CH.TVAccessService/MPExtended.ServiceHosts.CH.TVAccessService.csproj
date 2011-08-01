@@ -11,7 +11,8 @@
     <RootNamespace>MPExtended.ServiceHosts.CH.TVAccessService</RootNamespace>
     <AssemblyName>MPExtended.ServiceHosts.CH.TVAccessService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -40,22 +41,31 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service1.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Service1.Designer.cs">
-      <DependentUpon>Service1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
+      <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
+      <Name>MPExtended.Services.TVAccessService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

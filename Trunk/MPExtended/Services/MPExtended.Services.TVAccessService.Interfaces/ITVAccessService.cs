@@ -202,9 +202,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         void WriteSettingToDatabase(string tagName, string value);
 
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool SwitchTVServerToChannelAndInitStream(string userName, int channelId, string profile);      
+   
 
     }
 }
