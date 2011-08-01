@@ -46,7 +46,6 @@
 
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\NLog.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MediaInfo.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\System.Data.SQLite.dll" />
 
               <!-- TODO: Do we want to install debugging information? -->
 
@@ -66,7 +65,7 @@
               <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MPExtended Server Service" Wait="yes" />
 
               <!-- Add firewall exception -->
-              <fire:FirewallException IgnoreFailure="yes" Id="FirewallException" Name="MPExtended SingleSeat Service" Scope="localSubnet" Protocol="tcp" Program="[#MainService]"/>
+              <fire:FirewallException IgnoreFailure="yes" Id="FirewallException" Name="MPExtended Server Service" Scope="localSubnet" Protocol="tcp" Program="[#MainService]"/>
             </Component>
           </Directory>
         </Directory>
@@ -75,13 +74,13 @@
       <Directory Id="CommonAppDataFolder">
         <Directory Id="OurAppDataFolder" Name="MPExtended">
           <Component Id="AppDataConfig" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
-            <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Services.xml" />
+            <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Services.xml" />
           </Component>
         </Directory>
       </Directory>
     </Directory>
 
-    <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.MultiSeat.ClientService" Level="1">
+    <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.Server" Level="1">
       <ComponentRef Id="ServiceBinaries" />
       <ComponentRef Id="FFMpegBinaries" />
       <ComponentRef Id="AppDataConfig" />

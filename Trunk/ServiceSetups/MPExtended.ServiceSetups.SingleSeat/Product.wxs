@@ -81,10 +81,10 @@
       </Directory>
     </Directory>
 
-    <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.MultiSeat.ClientService" Level="1">
+    <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.SingleSeat" Level="1">
       <ComponentRef Id="ServiceBinaries" />
       <ComponentRef Id="FFMpegBinaries" />
-      <ComponentRef Id="AppDataConfig "/>
+      <ComponentRef Id="AppDataConfig" />
     </Feature>
   </Product>
 </Wix>
