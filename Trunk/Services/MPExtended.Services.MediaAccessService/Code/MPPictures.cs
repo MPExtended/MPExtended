@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.ServiceModel.Web;
 using System.Windows.Media.Imaging;
+using System.Linq;
 using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.MediaAccessService.Code.Helper;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Code
@@ -12,18 +15,83 @@ namespace MPExtended.Services.MediaAccessService.Code
     {
         public static WebPictureDirectory GetPictureDirectory(string path)
         {
-          
-
-            WebPictureDirectory dir = new WebPictureDirectory();
-            if (GetAllShares().Select(p => path.Contains(p.Path)) != null)
+            if (!Shares.IsAllowedPath(path))
             {
-                dir.SubDirectories = FileSystem.GetDirectoryListByPath(path);
-
-                dir.Pictures = FileSystem.GetFilesFromDirectory(path).Where(p => (p.Extension.ToLowerInvariant() == ".png") || (p.Extension.ToLowerInvariant() == ".jpg") || (p.Extension.ToLowerInvariant() == ".bmp")).Select(p => p.ToWebPicture()).ToList();
+                Log.Warn("Tried to GetPictureDirectory on non-allowed or non-existent directory {0}", path);
+                return null;
             }
-            return dir;
+
+            string[] extensions = Shares.GetAllShares(Shares.ShareType.Picture).First().Extensions;
+            return new WebPictureDirectory() {
+                SubDirectories = Shares.GetDirectoryListByPath(path),
+                Pictures = Shares.GetFileListByPath(path).Where(p => extensions.Contains(p.Extension.ToLowerInvariant())).Select(p => p.ToWebPicture()).ToList()
+            };
         }
-        
+
+        public static Stream GetImage(string path)
+        {
+            if (!Shares.IsAllowedPath(path))
+            {
+                Log.Warn("Tried to GetImage on non-allowed or non-existent file {0}", path);
+                return null;
+            }
+
+            return GetImageTrusted(path);
+        }
+
+        public static Stream GetImageTrusted(string path) 
+        {
+            Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
+                { "jpeg", "image/jpeg" },
+                { "jpg", "image/jpeg" },
+                { "png", "image/png" },
+                { "gif", "image/gif" },
+                { "bmp", "image/x-ms-bmp" },
+            };
+            WebFileInfo info = Shares.GetFileInfo(path);
+            string mime = commonMimeTypes.ContainsKey(info.Extension) ? commonMimeTypes[info.Extension] : "application/octet-stream";
+            
+            FileStream fs = File.OpenRead(path);
+            WebOperationContext.Current.OutgoingResponse.ContentType = mime;
+            return fs;
+        }
+
+        /// <summary>
+        /// Returns the image object of the given path, resized to fit the maxWidth and maxHeight
+        /// parameters, or null if the image doesn't exists
+        /// </summary>
+        /// <param name="path">Path to image</param>
+        /// <param name="maxWidth">Maximum width of image</param>
+        /// <param name="maxHeight">Maximum height of image</param>
+        /// <returns>Stream of image or null</returns>
+        public static Stream GetImageResized(string path, int maxWidth, int maxHeight)
+        {
+            if (!Shares.IsAllowedPath(path))
+            {
+                Log.Warn("Tried to GetImage non-allowed or non-existent file {0}", path);
+                return null;
+            }
+
+            FileInfo imageFile = new FileInfo(path);
+            string imagePathHash = imageFile.Directory.ToString().GetHashCode().ToString();
+
+            // string tmpDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "imagecache")
+            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended.Services.MediaAccessService.MPPictures");
+            if(!Directory.Exists(tmpDir)) 
+                Directory.CreateDirectory(tmpDir);
+
+            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}.{3}", Path.GetFileNameWithoutExtension(imageFile.Name), maxWidth, maxHeight, "png"));
+            if(!File.Exists(cachedPath)) 
+            {
+                if(!ResizeImage(path, cachedPath, maxWidth, maxHeight)) 
+                {
+                    return null;
+                }
+            }
+
+            return GetImageTrusted(cachedPath);
+        }
+
         public static WebPicture readFile(string filename)
         {
             WebPicture pic = new WebPicture();
@@ -55,11 +123,56 @@ namespace MPExtended.Services.MediaAccessService.Code
             pic.Filename = filename;
             return pic;
         }
-        public static List<WebShare> GetAllShares()
+
+        /// <summary>
+        /// Resizes the given image and saves the new file to a new location
+        /// </summary>
+        /// <param name="origFile">Original file</param>
+        /// <param name="newFile">Target file</param>
+        /// <param name="maxWidth">Maximum width of the image</param>
+        /// <param name="maxHeight">Maximum height of the image</param>
+        /// <returns>True if resizing succeeded, false otherwise</returns>
+        private static bool ResizeImage(string origFile, string newFile, int maxWidth, int maxHeight)
         {
-            return ShareUtils.GetAllShares("pictures");
+            try
+            {
+                Image origImage = System.Drawing.Image.FromFile(origFile);
+
+                int sourceWidth = origImage.Width;
+                int sourceHeight = origImage.Height;
+
+                float nPercent = 0;
+                float nPercentW = 0;
+                float nPercentH = 0;
+
+                nPercentW = ((float)maxWidth / (float)sourceWidth);
+                nPercentH = ((float)maxHeight / (float)sourceHeight);
+
+                if (nPercentH < nPercentW)
+                    nPercent = nPercentH;
+                else
+                    nPercent = nPercentW;
+
+                int destWidth = (int)(sourceWidth * nPercent);
+                int destHeight = (int)(sourceHeight * nPercent);
+
+                Bitmap newImage = new Bitmap(destWidth, destHeight);
+
+                Graphics g = Graphics.FromImage((Image)newImage);
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+                g.DrawImage(origImage, 0, 0, destWidth, destHeight);
+                g.Dispose();
+
+                // Save resized picture
+                newImage.Save(newFile);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Couldn't resize image " + origFile, ex);
+            }
+            return false;
         }
-
-
     }
 }

@@ -18,20 +18,6 @@ namespace MPExtended.Services.MediaAccessService.Code
         {
         }
 
-        #region Video Shares
-        /// <summary>
-        /// Gets a list of all video shares from MediaPortal.xml
-        /// 
-        /// Why they are stored there and in such a retarded way is beyond me... ^^
-        /// </summary>
-        /// <returns>List of all shares containing video</returns>
-        public List<WebShare> GetAllShares()
-        {
-            return ShareUtils.GetAllShares("movies");
-        }
-
-        #endregion
-
         #region Video DB
         public List<WebMovie> GetAllVideos()
         {
@@ -126,42 +112,6 @@ namespace MPExtended.Services.MediaAccessService.Code
         #endregion
 
         #region Video Path
-        /// <summary>
-        /// Check if the path is valid, which means
-        /// a) path within one of the shares and
-        /// b) path extension is valid in share
-        /// </summary>
-        /// <param name="path">Path to a share item</param>
-        /// <returns>true if path is valid, false otherwise</returns>
-        internal bool CheckPathValid(string path)
-        {
-            try
-            {
-                if (path == null) return false;
-                List<WebShare> shares = GetAllShares();
-                foreach (WebShare s in shares)
-                {
-                    if (path.StartsWith(s.Path, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        String ext = path.Substring(path.LastIndexOf("."));
-                        foreach (string e in s.Extensions)
-                        {
-                            if (ext.Equals(e, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Error checking video path " + path, ex);
-            }
-            return false;
-        }
-
-
         /// <summary>
         /// Gets the path to a media item
         /// </summary>

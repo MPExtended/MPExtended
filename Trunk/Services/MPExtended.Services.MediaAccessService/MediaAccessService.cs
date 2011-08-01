@@ -67,7 +67,7 @@ namespace MPExtended.Services.MediaAccessService
         #region Music
         public List<WebShare> GetAllMusicShares()
         {
-            return m_music.GetAllMusicShares();
+            return Shares.GetAllShares(Shares.ShareType.Music);
         }
 
         public WebMusicTrack GetMusicTrack(int trackId)
@@ -214,7 +214,7 @@ namespace MPExtended.Services.MediaAccessService
         #region videos
         public List<WebShare> GetVideoShares()
         {
-            return m_video.GetAllShares();
+            return Shares.GetAllShares(Shares.ShareType.Video);
         }
 
         public int GetVideosCount()
@@ -498,7 +498,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public List<WebShare> GetPictureRootShares()
         {
-            return MPPictures.GetAllShares();
+            return Shares.GetAllShares(Shares.ShareType.Picture);
         }
 
         public WebPictureDirectory GetPictureDirectory(string path)
@@ -513,25 +513,22 @@ namespace MPExtended.Services.MediaAccessService
         #region FileSystemAccess
         public List<String> GetDirectoryListByPath(string path)
         {
-            return FileSystem.GetDirectoryListByPath(path);
+            return Shares.GetDirectoryListByPath(path);
         }
 
         public List<WebFileInfo> GetFilesFromDirectory(string filepath)
         {
-            return FileSystem.GetFilesFromDirectory(filepath);
+            return Shares.GetFileListByPath(filepath);
         }
-
-        public WebFileInfo GetFileInfo(MediaItemType type, string itemId)
-        {
-            string path = GetPath(type, itemId);
-            Log.Debug("GetFileInfo: type=" + type + ", id=" + itemId + ", path=" + path);
-            return FileSystem.GetFileInfo(path);
-        }
-
 
         public byte[] GetFile(string path)
         {
-            return FileSystem.GetFile(path);
+            if (!Shares.IsAllowedPath(path))
+            {
+                Log.Warn("Called GetFile() for non-existent or non-allowed file {0}", path);
+                return null;
+            }
+            return Filesystem.GetFile(path);
         }
         #endregion
 
@@ -553,11 +550,11 @@ namespace MPExtended.Services.MediaAccessService
             switch (type)
             {
                 case MediaItemType.MusicShareItem:
-                    if (m_music.CheckPathValid(itemId))
+                    if (Shares.IsAllowedPath(itemId, Shares.ShareType.Music))
                         return itemId;
                     break;
                 case MediaItemType.VideoShareItem:
-                    if (m_video.CheckPathValid(itemId))
+                    if (Shares.IsAllowedPath(itemId, Shares.ShareType.Video))
                         return itemId;
                     break;
                 case MediaItemType.VideoDatabaseItem:
@@ -588,7 +585,7 @@ namespace MPExtended.Services.MediaAccessService
         /// <returns>Stream of image or null</returns>
         public Stream GetImage(string path)
         {
-            return FileSystem.GetImage(path);
+            return MPPictures.GetImage(path);
         }
 
         /// <summary>
@@ -601,7 +598,7 @@ namespace MPExtended.Services.MediaAccessService
         /// <returns>Stream of image or null</returns>
         public Stream GetImageResized(string path, int maxWidth, int maxHeight)
         {
-            return FileSystem.GetImageResized(path, maxWidth, maxHeight);
+            return MPPictures.GetImageResized(path, maxWidth, maxHeight);
         }
 
         /// <summary>
@@ -612,9 +609,12 @@ namespace MPExtended.Services.MediaAccessService
         /// <returns>Stream of file or null if file not found</returns>
         public Stream GetMediaItem(MediaItemType type, string itemId)
         {
-            string path = GetPath(type, itemId);
-            Log.Info("GetMediaItem: type=" + type + ", id=" + itemId + ", path=" + path);
-            return FileSystem.GetMediaItem(path);
+            return Filesystem.GetFileStream(GetPath(type, itemId));
+        }
+
+        public WebFileInfo GetFileInfo(MediaItemType type, string itemId)
+        {
+            return Shares.GetFileInfo(GetPath(type, itemId));
         }
         #endregion 
       
