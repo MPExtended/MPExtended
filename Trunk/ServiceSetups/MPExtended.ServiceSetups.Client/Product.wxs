@@ -77,6 +77,7 @@
           <Component Id="AppDataConfig" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
             <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\Services.xml" />
             <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MediaAccess.xml" />
+            <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\Streaming.xml" />
           </Component>
         </Directory>
       </Directory>

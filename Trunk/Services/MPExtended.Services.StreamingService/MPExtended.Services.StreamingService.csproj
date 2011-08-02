@@ -72,16 +72,12 @@
     <Compile Include="Units\IProcessingUnit.cs" />
     <Compile Include="Units\Passthrough.cs" />
     <Compile Include="Units\StreamCopy.cs" />
-    <Compile Include="Util\Config.cs" />
-    <Compile Include="Util\Log.cs" />
     <Compile Include="Util\NamedPipe.cs" />
     <Compile Include="Util\OutputParsing.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="Util\Resolution.cs" />
     <Compile Include="Util\StreamCopy.cs" />
     <Compile Include="Util\TsBuffer.cs" />
-    <Compile Include="Util\WcfUsernameValidator.cs" />
-    <Compile Include="Util\WebHttpWithCustomExceptionHandling.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
@@ -104,6 +100,9 @@
   <ItemGroup>
     <Content Include="..\..\Libraries\Streaming\MediaInfo.dll">
       <Link>MediaInfo.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Streaming.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

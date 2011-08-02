@@ -25,6 +25,7 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Util {
     internal class NamedPipe : Stream {

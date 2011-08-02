@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<appconfig>
+  <transcoders>
+    <transcoder>
+      <name>Android HQ</name>
+      <description>A high quality profile for fast connections and fast CPUs</description>
+      <bandwidth>1400</bandwidth>
+      <target>android</target>
+      <useTranscoding>true</useTranscoding>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <mime>video/MP2T</mime>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 1024k -profile baseline -preset fast -acodec aac -ab 256k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Android Better</name>
+      <description>A high quality profile for fast connections.</description>
+      <bandwidth>1300</bandwidth>
+      <target>android</target>
+      <useTranscoding>true</useTranscoding>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <mime>video/MP2T</mime>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 768k -profile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Android Medium</name>
+      <description>A profile that balances quality and bandwidth. For fast network data connections or slow wifi.</description>
+      <bandwidth>800</bandwidth>
+      <target>android</target>
+      <useTranscoding>true</useTranscoding>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <mime>video/MP2T</mime>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 512k -profile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -threads 2 -async 1 -f mpegts</codecParameters>
+      <maxOutputWidth>600</maxOutputWidth>
+      <maxOutputHeight>400</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Android LQ</name>
+      <description>A low-quality profile for Android devices with very slow connections</description>
+      <bandwidth>380</bandwidth>
+      <target>android</target>
+      <useTranscoding>true</useTranscoding>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <mime>video/MP2T</mime>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 256k -profile baseline -preset veryfast -acodec aac -ab 64k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+      <maxOutputWidth>400</maxOutputWidth>
+      <maxOutputHeight>300</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Flash LQ</name>
+      <description>Profile for LQ streaming in WebMediaPortal</description>
+      <bandwidth>3800</bandwidth>
+      <target>pc-flash-video</target>
+      <useTranscoding>true</useTranscoding>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 3500k -preset ultrafast -profile baseline -acodec aac -strict experimental -ab 128k -threads 4 -async 1 -f flv</codecParameters>
+      <mime>video/x-flv</mime>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <maxOutputWidth>854</maxOutputWidth>
+      <maxOutputHeight>450</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Flash HQ</name>
+      <description>Profile for HQ streaming in WebMediaPortal</description>
+      <bandwidth>6500</bandwidth>
+      <target>pc-flash-video</target>
+      <useTranscoding>true</useTranscoding>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vcodec libx264 -b 6000k -preset ultrafast -profile baseline -acodec aac -strict experimental -ab 256k -threads 4 -async 1 -f flv</codecParameters>
+      <mime>video/x-flv</mime>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <maxOutputWidth>1280</maxOutputWidth>
+      <maxOutputHeight>720</maxOutputHeight>
+      <videoStream>true</videoStream>
+    </transcoder>
+    <transcoder>
+      <name>Flash Audio</name>
+      <description>Profile for audio streaming in WebMediaPortal</description>
+      <bandwidth>250</bandwidth>
+      <target>pc-flash-audio</target>
+      <useTranscoding>true</useTranscoding>
+      <transcoder>FFMpeg\ffmpeg.exe</transcoder>
+      <codecParameters>-vn -acodec aac -strict experimental -ab 256k -f flv</codecParameters>
+      <mime>video/x-flv</mime>
+      <inputMethod>Path</inputMethod>
+      <outputMethod>Path</outputMethod>
+      <maxOutputWidth>0</maxOutputWidth>
+      <maxOutputHeight>0</maxOutputHeight>
+      <videoStream>false</videoStream>
+    </transcoder>
+  </transcoders>
+</appconfig>

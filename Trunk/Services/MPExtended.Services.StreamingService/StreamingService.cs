@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Util;
@@ -16,13 +17,7 @@ namespace MPExtended.Services.StreamingService
         public StreamingService()
         {
             _stream = new Streaming();
-
-            // login
-            string user = null;
-            string pass = null;
-            Config.GetLogin(out user, out pass, false);
-            WcfUsernameValidator.UserName = user;
-            WcfUsernameValidator.Password = pass;
+            WcfUsernameValidator.Init();
         }
 
         private string ResolvePath(WebMediaType type, string itemId)

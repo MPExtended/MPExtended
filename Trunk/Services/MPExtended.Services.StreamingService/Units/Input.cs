@@ -22,6 +22,7 @@
 
 using System;
 using System.IO;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Units {
@@ -42,10 +43,10 @@ namespace MPExtended.Services.StreamingService.Units {
         public bool Setup() {
             try {
                 if (source.IndexOf(".ts.tsbuffer") != -1) {
-                    Log.Write("Using TsBuffer to read input");
+                    Log.Info("Using TsBuffer to read input");
                     DataOutputStream = new TsBuffer(this.source);
                 } else {
-                    Log.Write("Using FileStream to read input");
+                    Log.Info("Using FileStream to read input");
                     DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             } catch (Exception e) {

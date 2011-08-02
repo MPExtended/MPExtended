@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.StreamingService.Util;
 
@@ -92,15 +93,15 @@ namespace MPExtended.Services.StreamingService.Code {
             dataUnits[dataUnits.Keys.Max()].IsDataStreamConnected = true;
 
             // dump out the pipeline for debugging
-            Log.Write("Assembling following pipeline:");
+            Log.Info("Assembling following pipeline:");
             foreach (int i in dataUnits.Keys.OrderBy(k => k))
-                Log.Write("   data {0}: {1} (input {2}, data {3}, log {4})", i, dataUnits[i].ToString(), dataUnits[i].IsInputStreamConnected, dataUnits[i].IsDataStreamConnected, dataUnits[i].IsLogStreamConnected);
+                Log.Info("   data {0}: {1} (input {2}, data {3}, log {4})", i, dataUnits[i].ToString(), dataUnits[i].IsInputStreamConnected, dataUnits[i].IsDataStreamConnected, dataUnits[i].IsLogStreamConnected);
             foreach (KeyValuePair<int, int> conn in dataConnections)
-                Log.Write("   dataconn {0} -> {1}", conn.Key, conn.Value);
+                Log.Info("   dataconn {0} -> {1}", conn.Key, conn.Value);
             foreach (int i in logUnits.Keys.OrderBy(k => k))
-                Log.Write("   log  {0}: {1}", i, logUnits[i].ToString());
+                Log.Info("   log  {0}: {1}", i, logUnits[i].ToString());
             foreach (KeyValuePair<int, int> conn in logConnections)
-                Log.Write("   logconn {0} -> {1}", conn.Value, conn.Key);
+                Log.Info("   logconn {0} -> {1}", conn.Value, conn.Key);
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k)) {
                 if (!dataUnits[i].Setup()) {
@@ -118,7 +119,7 @@ namespace MPExtended.Services.StreamingService.Code {
                     logUnits[i].InputStream = dataUnits[logConnections[i]].LogOutputStream;
             }
 
-            Log.Write("Pipeline assembled");
+            Log.Info("Pipeline assembled");
             return true;
         }
 
@@ -128,14 +129,14 @@ namespace MPExtended.Services.StreamingService.Code {
             IsStarted = true;
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k)) {
-                Log.Write("Starting data unit {0}", i);
+                Log.Info("Starting data unit {0}", i);
                 if (!dataUnits[i].Start()) {
                     Log.Error("Starting data unit {0} failed", i);
                     Stop();
                     return false;
                 }
             }
-            Log.Write("All data units started!");
+            Log.Info("All data units started!");
             foreach (int i in logUnits.Keys.OrderBy(k => k))
                 logUnits[i].Start();
 
@@ -149,7 +150,7 @@ namespace MPExtended.Services.StreamingService.Code {
                 Start();
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k)) {
-                Log.Write("Stopping data unit {0}", i);
+                Log.Info("Stopping data unit {0}", i);
                 dataUnits[i].Stop();
             }
             foreach (int i in logUnits.Keys.OrderBy(k => k))

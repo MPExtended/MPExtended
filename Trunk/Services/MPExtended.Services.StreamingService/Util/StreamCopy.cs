@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Util {
     internal class StreamCopy {
@@ -53,11 +54,11 @@ namespace MPExtended.Services.StreamingService.Util {
 
                 TsBuffer stream = (TsBuffer)source;
                 Log.Error(string.Format("StreamCopy {0}: NotSupportedException when trying to read from TsBuffer", log), e);
-                Log.Write("StreamCopy {0}: TsBuffer dump: CanRead {1}, CanWrite {2}", log, stream.CanRead, stream.CanWrite);
-                Log.Write("StreamCopy {0}:\r\n{1}", log, stream.DumpStatus());
+                Log.Info("StreamCopy {0}: TsBuffer dump: CanRead {1}, CanWrite {2}", log, stream.CanRead, stream.CanWrite);
+                Log.Info("StreamCopy {0}:\r\n{1}", log, stream.DumpStatus());
                 if (retry) {
                     Thread.Sleep(500);
-                    Log.Write("StreamCopy {0}: Trying to recover", log);
+                    Log.Info("StreamCopy {0}: Trying to recover", log);
                     CopyStream(false);
                 }
             }
@@ -74,7 +75,7 @@ namespace MPExtended.Services.StreamingService.Util {
                     return;
 
                 // write it to the destination
-                //Log.Write("StreamCopy {0}: writing {1} bytes", log, read);
+                //Log.Info("StreamCopy {0}: writing {1} bytes", log, read);
                 destination.BeginWrite(buffer, 0, read, writeResult => {
                     try {
                         destination.EndWrite(writeResult);
@@ -95,7 +96,7 @@ namespace MPExtended.Services.StreamingService.Util {
         private void HandleException(Exception e, string type) {
             if (e is IOException) {
                 // end of pipe etc
-                Log.Write("StreamCopy {0}: IOException in {1} stream copy, is usually ok: {2}", log, type, e.Message);
+                Log.Info("StreamCopy {0}: IOException in {1} stream copy, is usually ok: {2}", log, type, e.Message);
             } else {
                 Log.Error(string.Format("StreamCopy {0}: Failure in {1} stream copy", log, type), e);
             }

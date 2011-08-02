@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
@@ -82,7 +83,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             List<TranscoderProfile> list = new List<TranscoderProfile>();
             XmlDocument doc = new XmlDocument();
-            doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+            doc.Load(Configuration.GetPath("Streaming.xml"));
             XmlNodeList nodes = doc.SelectNodes("/appconfig/transcoders/transcoder");
             foreach (XmlNode node in nodes)
             {

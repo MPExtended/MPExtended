@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Util
 {
