@@ -127,7 +127,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
         {
             XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
             XElement res =
-                root.Elements("thumbpaths").First().Elements("thumb").Where(x => x.Name == name).First();
+                root.Elements("thumbpaths").First().Elements("thumb").Where(x => (string)x.Attribute("name") == name).First();
             return (string)res.Attribute("path");
         }
 

@@ -28,18 +28,29 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public List<WebSeries> GetSeries(int? start, int? end)
         {
+            // Please contact me if you've a better way to do this, this just sucks. I could use a GROUP BY but SQLite gets really slow in the long version
+            // below, plus i'd have to use group_concat and string splitting, which also sucks.
             string sql = "SELECT DISTINCT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
-                            "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre " +
+                            "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, local.Parsed_Name " +
                          "FROM online_series AS series " +
                          "INNER JOIN local_series AS local ON series.ID = local.ID AND local.Hidden = 0 " + 
                          "WHERE series.ID != 0 AND series.HasLocalFiles = 1";
+            List<int> alreadyDoneList = new List<int>();
             return ReadList<WebSeries>(sql, delegate(SQLiteDataReader reader)
             {
+                // we might have duplicate results due to the local.Parsed_Name thing
                 WebSeries series = new WebSeries();
                 series.Id = DatabaseHelperMethods.SafeInt32(reader, 0);
-                if (series.Id == 0) return null;
+                if (alreadyDoneList.Contains(series.Id))
+                    return null;
+                alreadyDoneList.Add(series.Id);
 
+                // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
+                // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
                 series.PrettyName = DatabaseHelperMethods.SafeStr(reader, 1);
+                if (String.IsNullOrEmpty(series.PrettyName))
+                    series.PrettyName = DatabaseHelperMethods.SafeStr(reader, 10).Split('|').FirstOrDefault(); // let's hope noone adds a pipe to his series' name
+
                 series.EpisodeCount = DatabaseHelperMethods.SafeInt32(reader, 2);
                 series.ImdbId = DatabaseHelperMethods.SafeStr(reader, 3);
                 series.Rating = DatabaseHelperMethods.SafeFloat(reader, 4);
@@ -63,11 +74,11 @@ namespace MPExtended.Services.MediaAccessService.Code
         public WebSeriesFull GetFullSeries(int _seriesId)
         {
             string sql =
-                  "SELECT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
+                  "SELECT DISTINCT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
                     "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, " +
                     "series.origName, series.Status, series.SortName, series.BannerFileNames, series.Actors,series.PosterFileNames, " +
                     "series.ContentRating, series.Network, series.Summary, series.AirsDay, series.AirsTime, " +
-                    "series.EpisodesUnWatched, series.Runtime, series.FirstAired, series.choosenOrder " +
+                    "series.EpisodesUnWatched, series.Runtime, series.FirstAired, series.choosenOrder, local.Parsed_Name " +
                   "FROM online_series AS series " +
                   "INNER JOIN local_series AS local ON series.ID = local.ID AND local.Hidden = 0 " + 
                   "WHERE series.HasLocalFiles = 1 AND series.ID = " + _seriesId;
@@ -75,7 +86,13 @@ namespace MPExtended.Services.MediaAccessService.Code
             {
                 WebSeriesFull series = new WebSeriesFull();
                 series.Id = DatabaseHelperMethods.SafeInt32(reader, 0);
+
+                // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
+                // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
                 series.PrettyName = DatabaseHelperMethods.SafeStr(reader, 1);
+                if (String.IsNullOrEmpty(series.PrettyName))
+                    series.PrettyName = DatabaseHelperMethods.SafeStr(reader, 25).Split('|').FirstOrDefault();
+
                 series.EpisodeCount = DatabaseHelperMethods.SafeInt32(reader, 2);
                 series.ImdbId = DatabaseHelperMethods.SafeStr(reader, 3);
                 series.Rating = DatabaseHelperMethods.SafeFloat(reader, 4);

@@ -123,6 +123,7 @@ namespace MPExtended.Services.StreamingService.Units {
 
         private bool SpawnTranscoder(string input, string output, bool needsStdin, bool needsStdout) {
             string args = arguments.Replace("#IN#", input).Replace("#OUT#", output);
+            Log.Info("Encoding: Starting ffmpeg now with arguments {0}", args);
             ProcessStartInfo start = new ProcessStartInfo(transcoderPath, args);
             start.UseShellExecute = DebugOutput && !IsLogStreamConnected && !needsStdin && !needsStdout;
             start.RedirectStandardInput = needsStdin;
