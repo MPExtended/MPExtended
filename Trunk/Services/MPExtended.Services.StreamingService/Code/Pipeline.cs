@@ -107,7 +107,7 @@ namespace MPExtended.Services.StreamingService.Code {
                 if (!dataUnits[i].Setup()) {
                     // it failed, stop and break out
                     Log.Error("Setup of data unit {0} failed", i);
-                    Stop();
+                    Stop(true);
                     return false;
                 }   
                 if(dataConnections.ContainsKey(i))
@@ -132,7 +132,7 @@ namespace MPExtended.Services.StreamingService.Code {
                 Log.Info("Starting data unit {0}", i);
                 if (!dataUnits[i].Start()) {
                     Log.Error("Starting data unit {0} failed", i);
-                    Stop();
+                    Stop(true);
                     return false;
                 }
             }
@@ -143,10 +143,10 @@ namespace MPExtended.Services.StreamingService.Code {
             return true;
         }
 
-        public bool Stop() {
+        public bool Stop(bool force) {
             if (IsStopped)
                 return true;
-            if (!IsStarted)
+            if (!IsStarted && !force)
                 Start();
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k)) {
@@ -159,6 +159,11 @@ namespace MPExtended.Services.StreamingService.Code {
             Log.Debug("Pipeline stopped");
             IsStopped = true;
             return true;
+        }
+
+        public bool Stop()
+        {
+            return Stop(false);
         }
 
         public Stream GetFinalStream() {

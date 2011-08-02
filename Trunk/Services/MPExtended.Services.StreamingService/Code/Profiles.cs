@@ -48,28 +48,6 @@ namespace MPExtended.Services.StreamingService.Code
                 HasVideoStream = this.HasVideoStream
             };
         }
-
-        public static TranscoderProfile CreateFromXmlNode(XmlNode node)
-        {
-            TranscoderProfile transcoder = new TranscoderProfile();
-            foreach (XmlNode child in node.ChildNodes)
-            {
-                if (child.Name == "name") transcoder.Name = child.InnerText;
-                if (child.Name == "useTranscoding") transcoder.UseTranscoding = child.InnerText == "true";
-                if (child.Name == "inputMethod") transcoder.InputMethod = (TransportMethod)Enum.Parse(typeof(TransportMethod), child.InnerText, true);
-                if (child.Name == "outputMethod") transcoder.OutputMethod = (TransportMethod)Enum.Parse(typeof(TransportMethod), child.InnerText, true);
-                if (child.Name == "transcoder") transcoder.Transcoder = child.InnerText;
-                if (child.Name == "mime") transcoder.MIME = child.InnerText;
-                if (child.Name == "maxOutputWidth") transcoder.MaxOutputWidth = Int32.Parse(child.InnerText);
-                if (child.Name == "maxOutputHeight") transcoder.MaxOutputHeight = Int32.Parse(child.InnerText);
-                if (child.Name == "description") transcoder.Description = child.InnerText;
-                if (child.Name == "codecParameters") transcoder.CodecParameters = child.InnerText;
-                if (child.Name == "target") transcoder.Target = child.InnerText;
-                if (child.Name == "bandwidth") transcoder.Bandwidth = child.InnerText;
-                if (child.Name == "videoStream") transcoder.HasVideoStream = child.InnerText == "true";
-            }
-            return transcoder;
-        }
     }
 
     internal static class Profiles
@@ -102,6 +80,7 @@ namespace MPExtended.Services.StreamingService.Code
                     if (child.Name == "codecParameters") transcoder.CodecParameters = child.InnerText;
                     if (child.Name == "target") transcoder.Target = child.InnerText;
                     if (child.Name == "bandwidth") transcoder.Bandwidth = child.InnerText;
+                    if (child.Name == "videoStream") transcoder.HasVideoStream = child.InnerText == "true";
                 }
 
                 list.Add(transcoder);

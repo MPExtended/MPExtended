@@ -58,7 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // TODO: this should be done better
             byte[] buffer = new byte[65536];
             int read;
-            string url = "http://localhost:4321/WebStreamingService/StreamingService/stream/RetrieveStream?identifier=" + identifier;
+            string url = "http://localhost:4322/MPExtended/StreamingService/stream/RetrieveStream?identifier=" + identifier;
             Stream inputStream = WebRequest.Create(url).GetResponse().GetResponseStream();
 
             // set headers and diisable buffer

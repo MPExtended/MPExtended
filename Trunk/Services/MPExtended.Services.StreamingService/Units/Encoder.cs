@@ -169,13 +169,13 @@ namespace MPExtended.Services.StreamingService.Units {
             CloseStream(transcoderInputStream, "transcoder input");
             CloseStream(DataOutputStream, "transcoder output");
 
-            if (transcoderApplication != null && !transcoderApplication.HasExited) {
-                Log.Debug("Encoding: Killing transcoder");
-                try {
+            try  {
+                if (transcoderApplication != null && !transcoderApplication.HasExited) {
+                    Log.Debug("Encoding: Killing transcoder");
                     transcoderApplication.Kill();
-                } catch (Exception e) {
-                    Log.Error("Encoding: Failed to kill transcoder", e);
                 }
+            } catch (Exception e) {
+                Log.Error("Encoding: Failed to kill transcoder", e);
             }
 
             return true;
