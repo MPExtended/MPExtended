@@ -63,8 +63,8 @@
     <None Include="..\MPExtended.ServiceHosts.Console.SingleSeat\App.config">
       <Link>App.config</Link>
     </None>
-    <None Include="..\MPExtended.ServiceHosts.Console.SingleSeat\NLog.config">
-      <Link>NLog.config</Link>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
