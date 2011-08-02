@@ -1,4 +1,21 @@
-﻿using System;
+﻿#region Copyright (C) 2011 MPExtended
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MediaPortal. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -55,8 +72,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Exception in Television.WatchLiveTV", ex);
             }
             return View("Error");
-
         }
+
         public ActionResult WatchRecording(int recordingId)
         {
             try
@@ -72,8 +89,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Exception in Television.WatchRecording", ex);
             }
             return View("Error");
-
         }
+
         public ActionResult Recordings()
         {
             try
@@ -90,9 +107,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             return View("Error");
         }
-
-
-
 
         public ActionResult Menu()
         {
@@ -125,14 +139,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Exception in Television.ProgramDetails", ex);
             }
             return View("Error");
-
         }
+
         public ActionResult AddSchedule(int programId)
         {
             var program = WebServices.TVService.GetProgramDetailedById(programId);
             WebServices.TVService.AddScheduleDetailed(program.IdChannel, program.Title, program.StartTime, program.EndTime, 0, 10, 15, "", 0);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
+
         public ActionResult DeleteSchedule(int programId)
         {
             var program = WebServices.TVService.GetProgramDetailedById(programId);
@@ -147,8 +162,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             WebServices.TVService.DeleteSchedule(scheduleId);
             return RedirectToAction("TVGuide", "Television");
         }
-
-
 
         public ActionResult ScheduleDetails(int scheduleId)
         {
@@ -165,8 +178,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Exception in Television.ScheduleDetails", ex);
             }
             return View("Error");
-
         }
-
     }
 }

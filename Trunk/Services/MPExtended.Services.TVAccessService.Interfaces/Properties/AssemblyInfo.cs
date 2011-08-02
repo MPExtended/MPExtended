@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Services.TVAccessService.Interfaces")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Services.TVAccessService.Interfaces")]
+[assembly: AssemblyProduct("MPExtended TVAccessService")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

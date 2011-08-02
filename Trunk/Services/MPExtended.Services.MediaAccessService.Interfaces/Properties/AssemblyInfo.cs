@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Services.MediaAccessService.Interfaces")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Services.MediaAccessService.Interfaces")]
+[assembly: AssemblyProduct("MPExtended MediaAccessService")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Services.StreamingService")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Services.StreamingService")]
+[assembly: AssemblyProduct("MPExtended StreamingService")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

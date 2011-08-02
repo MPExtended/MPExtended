@@ -1,4 +1,21 @@
-﻿using System;
+﻿#region Copyright (C) 2011 MPExtended
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MediaPortal. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +27,6 @@ using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
-
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [Authorize]
@@ -18,9 +34,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         //
         // GET: /MovieLibrary/
-
-
-
         public ActionResult Index()
         {
 
@@ -57,8 +70,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             }
             return View("Error");
-
         }
+
         public ActionResult Play(int movie)
         {
 
@@ -75,7 +88,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Exception in MovieLibrary.Details", ex);
             }
             return View("Error");
-
         }
 
         public ActionResult Image(int movie)
