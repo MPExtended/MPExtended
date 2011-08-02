@@ -24,7 +24,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (_media == null)
                     _media = ChannelFactory<IMediaAccessService>.CreateChannel(
                         new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 },
-                        new EndpointAddress("net.pipe://localhost/GmaWebService/MediaAccessService")
+                        new EndpointAddress("net.pipe://localhost/MPExtended/MediaAccessService")
                     );
                 return _media;
             }
@@ -37,7 +37,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (_tv == null)
                     _tv = ChannelFactory<ITVAccessService>.CreateChannel(
                         new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 },
-                        new EndpointAddress("net.pipe://localhost/TV4Home.Server.CoreService/TVEInteractionService")
+                        new EndpointAddress("net.pipe://localhost/MPExtended/TVAccessService")
                     );
                 return _tv;
             }
