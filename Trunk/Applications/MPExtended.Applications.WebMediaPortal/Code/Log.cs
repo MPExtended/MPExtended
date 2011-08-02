@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 
-namespace WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Log
     {

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Models;
 using System.Xml.Serialization;
 using System.IO;
-using WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Services;
 
-namespace WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Settings
     {

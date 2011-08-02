@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.ServiceModel;
-using WebMediaPortal.Services;
-using WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.TVAccessService.Interfaces;
 
-namespace WebMediaPortal.Controllers
+namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
 
     [Authorize]

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using MPExtended.Services.TVAccessService.Interfaces;
 
-namespace WebMediaPortal.Models
+namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class SingleTVProgramModel
     {

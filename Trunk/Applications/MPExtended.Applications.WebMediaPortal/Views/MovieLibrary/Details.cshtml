@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-@model GmaWebService.Interfaces.WebMovieFull
+@model MPExtended.Services.MediaAccessService.Interfaces.WebMovieFull
 @{
     ViewBag.Title = "Details";
 }
@@ -28,7 +28,7 @@
     <ul>
         <li>@Model.Title</li>
         <li>@Model.Year</li>
-        <li>@WebMediaPortal.Code.Util.FormatDataString(@Model.Genre)</li>
+        <li>@MPExtended.Applications.WebMediaPortal.Code.Util.FormatDataString(@Model.Genre)</li>
         <li>@Html.ActionLink("Play", "Play", new { movie = @Model.Id })</li>
     </ul>
 </div>

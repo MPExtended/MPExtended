@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.WebPages.Html;
-using WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Services;
 
-namespace WebMediaPortal.Models
+namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class SettingsViewModel
     {

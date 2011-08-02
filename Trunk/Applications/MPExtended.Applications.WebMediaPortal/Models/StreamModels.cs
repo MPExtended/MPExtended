@@ -6,7 +6,7 @@ using System.Xml;
 using MPExtended.Services.StreamingService.Interfaces;
 
 
-namespace WebMediaPortal.Models
+namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class StreamModel
     {

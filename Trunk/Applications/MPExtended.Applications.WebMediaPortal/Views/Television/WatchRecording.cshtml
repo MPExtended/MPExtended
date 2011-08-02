@@ -1,4 +1,4 @@
-﻿@model TV4Home.Server.TVEInteractionLibrary.Interfaces.WebRecording
+﻿@model MPExtended.Services.TVAccessService.Interfaces.WebRecording
 
 @{
     ViewBag.Title = "Recording";
@@ -11,7 +11,7 @@
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = WebMediaPortal.Models.StreamMedia.Recording,
+      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Recording,
       itemId = @Model.IdRecording
   });}
 </div>

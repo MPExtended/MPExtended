@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Util
     {

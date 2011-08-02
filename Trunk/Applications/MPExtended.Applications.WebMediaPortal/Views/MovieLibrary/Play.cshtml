@@ -1,4 +1,4 @@
-﻿@model GmaWebService.Interfaces.WebMovieFull
+﻿@model MPExtended.Services.MediaAccessService.Interfaces.WebMovieFull
 @{
     ViewBag.Title = "Play";
 }
@@ -6,6 +6,6 @@
 You are watching <strong>@Model.Title</strong>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = WebMediaPortal.Models.StreamMedia.Movie,
+      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Movie,
       itemId = @Model.Id
   });}

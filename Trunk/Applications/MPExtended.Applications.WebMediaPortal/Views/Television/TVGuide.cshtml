@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TV4Home.Server.TVEInteractionLibrary.Interfaces.WebChannelBasic>
+﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebChannelBasic>
 @{
     ViewBag.Title = "TV Guide";
 }
@@ -7,7 +7,7 @@
 <div id="TVGuidePrograms">
     @{ if (@Model != null)
        {
-           foreach (TV4Home.Server.TVEInteractionLibrary.Interfaces.WebChannelBasic channel in @Model)
+           foreach (MPExtended.Services.TVAccessService.Interfaces.WebChannelBasic channel in @Model)
            {
         <div class="TVGuideRow">
             <div class="TVGuideCellChannel">

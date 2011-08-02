@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class ExtensionMethods
     {

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ServiceModel;
-using WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 
 
-namespace WebMediaPortal.Services
+namespace MPExtended.Applications.WebMediaPortal.Services
 {
     public static class WebServices
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.ServiceModel;
-using WebMediaPortal.Code;
-using WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
-namespace WebMediaPortal.Controllers
+namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [Authorize]
     public class TVShowsLibraryController : Controller

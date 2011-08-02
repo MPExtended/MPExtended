@@ -7,7 +7,7 @@ using System.Web.Security;
 using System.Xml;
 using System.Security.Cryptography;
 
-namespace WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public class XMLMembershipProvider : MembershipProvider
     {

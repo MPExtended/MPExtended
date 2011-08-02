@@ -5,12 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.Routing;
-using WebMediaPortal.Code;
-using WebMediaPortal.Models;
-using WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Services.StreamingService.Interfaces;
 
-namespace WebMediaPortal.Controllers
+namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : Controller
     {

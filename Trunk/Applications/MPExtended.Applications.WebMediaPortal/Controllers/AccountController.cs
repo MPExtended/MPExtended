@@ -7,8 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using WebMediaPortal.Models;
-namespace WebMediaPortal.Controllers
+using MPExtended.Applications.WebMediaPortal.Models;
+namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class AccountController : Controller
     {

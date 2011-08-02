@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebMediaPortal.Models;
-using WebMediaPortal.Services;
-using WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Services;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-namespace WebMediaPortal.Controllers
+namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class HomeController : Controller
     {
