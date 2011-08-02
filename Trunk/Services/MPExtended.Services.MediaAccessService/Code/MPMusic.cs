@@ -148,7 +148,7 @@ namespace MPExtended.Services.MediaAccessService.Code
             return ret.Select(kp => new WebMusicAlbum() { 
                 AlbumArtists = kp.Value.AlbumArtists.Distinct().ToArray(),
                 Artists = kp.Value.Artists.Distinct().ToArray(),
-                CoverPathL = Utils.GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title),
+                CoverPathL = GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title),
                 Genre = kp.Value.Genre,
                 ShortedAlbumArtist = kp.Value.AlbumArtists.First(),
                 Title = kp.Value.Title,
@@ -209,6 +209,17 @@ namespace MPExtended.Services.MediaAccessService.Code
                 Log.Error("Error getting music path for " + itemId, ex);
             }
             return null;
+        }
+
+        private string GetLargeAlbumCover(string artistName, string albumName)
+        {
+            if (String.IsNullOrEmpty(artistName) || String.IsNullOrEmpty(albumName))
+                return string.Empty;
+
+            artistName = artistName.Trim(new char[] { '|', ' ' });
+            albumName = albumName.Replace(":", "_");
+
+            return System.IO.Path.Combine(Utils.GetBannerPath("music"), "Albums", artistName + "-" + albumName + "L.jpg");
         }
     }
 }

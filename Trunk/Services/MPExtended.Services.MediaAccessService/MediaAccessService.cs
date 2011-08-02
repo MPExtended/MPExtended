@@ -23,9 +23,6 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region MediaPortal Attributes
-        public string m_gentleConfig;
-        public string m_connStr;
-        public Dictionary<String, WebBannerPath> m_thumbPaths;
         private MovingPictures m_movingPictures;
         private MPTvSeries m_mptvseries;
         private MPMusic m_music;
@@ -34,7 +31,6 @@ namespace MPExtended.Services.MediaAccessService
 
         public MediaAccessService()
         {
-            m_thumbPaths = Utils.GetWebBannerPaths();
             m_movingPictures = new MovingPictures();
             m_mptvseries = new MPTvSeries();
             m_music = new MPMusic();
@@ -43,7 +39,6 @@ namespace MPExtended.Services.MediaAccessService
             WcfUsernameValidator.Init();
         }
 
-        #region MediaPortal
         public WebServiceDescription GetServiceDescription()
         {
             DBLocations db = Utils.GetMPDbLocations();
@@ -494,9 +489,9 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         #endregion
-        #region Pictures
 
-        public List<WebShare> GetPictureRootShares()
+        #region Pictures
+        public List<WebShare> GetPictureShares()
         {
             return Shares.GetAllShares(Shares.ShareType.Picture);
         }
@@ -506,30 +501,10 @@ namespace MPExtended.Services.MediaAccessService
             return MPPictures.GetPictureDirectory(path);
         }
 
-        /// <summary>
-        /// Returns the image object of the given path or null if the image doesn't exists
-        /// </summary>
-        /// <param name="path">Path to image</param>
-        /// <returns>Stream of image or null</returns>
-        public Stream GetImage(string path)
+        public WebPicture GetPicture(string path)
         {
-            return MPPictures.GetImage(path);
+            return MPPictures.GetPicture(path);
         }
-
-        /// <summary>
-        /// Returns the image object of the given path, resized to fit the maxWidth and maxHeight
-        /// parameters, or null if the image doesn't exists
-        /// </summary>
-        /// <param name="path">Path to image</param>
-        /// <param name="maxWidth">Maximum width of image</param>
-        /// <param name="maxHeight">Maximum height of image</param>
-        /// <returns>Stream of image or null</returns>
-        public Stream GetImageResized(string path, int maxWidth, int maxHeight)
-        {
-            return MPPictures.GetImageResized(path, maxWidth, maxHeight);
-        }
-        #endregion
-
         #endregion
 
         #region FileSystemAccess
@@ -543,18 +518,6 @@ namespace MPExtended.Services.MediaAccessService
             return Shares.GetFileListByPath(filepath);
         }
 
-        public byte[] GetFile(string path)
-        {
-            if (!Shares.IsAllowedPath(path))
-            {
-                Log.Warn("Called GetFile() for non-existent or non-allowed file {0}", path);
-                return null;
-            }
-            return Filesystem.GetFile(path);
-        }
-        #endregion
-
-        #region Media
         /// <summary>
         /// Get the full path to a media item as specified by the client
         /// </summary>
@@ -563,7 +526,8 @@ namespace MPExtended.Services.MediaAccessService
         /// The identifier of the media to retrieve:
         /// - ID for tv episode (TvSeriesItem)
         /// - ID for music and video from database (MusiTrackItem, VideoDatabaseItem)
-        /// - Path for music or video shares item (MusicShareItem, VideoShareItem)
+        /// - Path for music, picture or video shares item (MusicShareItem, PictureShareItem, VideoShareItem)
+        /// - Path for image item: this mainly checks if it's a valid path that's allowed to be accessed (i.e. it's in the MP dirs, ImageItem)
         /// - ID-part for movies (that's a dash that separates them, parts start couning at one, e.g. 15-2, defaults to first part, MovieItem) 
         /// </param>
         /// <returns>Full path to the file</returns>
@@ -577,6 +541,10 @@ namespace MPExtended.Services.MediaAccessService
                     break;
                 case MediaItemType.VideoShareItem:
                     if (Shares.IsAllowedPath(itemId, Shares.ShareType.Video))
+                        return itemId;
+                    break;
+                case MediaItemType.PictureShareItem:
+                    if (Shares.IsAllowedPath(itemId, Shares.ShareType.Picture))
                         return itemId;
                     break;
                 case MediaItemType.VideoDatabaseItem:
@@ -595,20 +563,11 @@ namespace MPExtended.Services.MediaAccessService
                     }
                 case MediaItemType.MusicTrackItem:
                     return m_music.GetTrackPath(itemId);
+                case MediaItemType.ImageItem:
+                    return Utils.IsAllowedPath(itemId) ? itemId : null;
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Returns the stream to a media item (video, music, image,...)
-        /// </summary>
-        /// <param name="type">Type of the item</param>
-        /// <param name="itemId">Id of the item (id for series, movie, db video, musictrac and path for shares item)</param>
-        /// <returns>Stream of file or null if file not found</returns>
-        public Stream GetMediaItem(MediaItemType type, string itemId)
-        {
-            return Filesystem.GetFileStream(GetPath(type, itemId));
         }
 
         public WebFileInfo GetFileInfo(MediaItemType type, string itemId)
@@ -616,6 +575,5 @@ namespace MPExtended.Services.MediaAccessService
             return Shares.GetFileInfo(GetPath(type, itemId));
         }
         #endregion 
-      
     }
 }

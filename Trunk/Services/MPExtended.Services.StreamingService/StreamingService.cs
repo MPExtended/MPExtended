@@ -165,6 +165,16 @@ namespace MPExtended.Services.StreamingService
         {
             return Images.ExtractImage(ResolvePath(type, itemId), position, maxWidth, maxHeight);
         }
+
+        public Stream GetImage(string path)
+        {
+            return Images.GetImage(path);
+        }
+
+        public Stream GetImageResized(string path, int maxWidth, int maxHeight)
+        {
+            return Images.GetImageResized(path, maxWidth, maxHeight);
+        }
         #endregion
     }
 }

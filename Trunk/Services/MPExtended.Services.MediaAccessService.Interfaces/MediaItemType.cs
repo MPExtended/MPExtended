@@ -21,5 +21,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         MusicTrackItem = 4,
         [EnumMember]
         MusicShareItem = 5,
+        [EnumMember]
+        PictureShareItem = 6,
+        [EnumMember]
+        ImageItem = 7
     }
 }

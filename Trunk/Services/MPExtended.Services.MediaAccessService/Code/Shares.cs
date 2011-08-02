@@ -38,7 +38,7 @@ namespace MPExtended.Services.MediaAccessService.Code
                 .Elements("entry")
                 .Select(x => new KeyValuePair<string,string>((string)x.Attribute("name"), x.Value));
 
-            string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Key).First().Split(',');
+            string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
             int count = list.Where(x => x.Key.StartsWith("sharename")).Count();
 
             for (int i = 0; i < count; i++)
@@ -103,21 +103,33 @@ namespace MPExtended.Services.MediaAccessService.Code
         /// </summary>
         public static bool IsAllowedPath(string path, ShareType type)
         {
-            // non-existent files don't yield results anyway, we might need to have them existent for the checks here later
-            if(!File.Exists(path) && !Directory.Exists(path))
-                return false;
-
-            // do not allow non-rooted parts for security
-            if(!Path.IsPathRooted(path))
-                return false;
-
-            foreach (WebShare share in GetAllShares(type))
+            try
             {
-                // TODO: what about ftp here?
-                if (path.StartsWith(share.Path + @"\")) // FIXME: ugly
-                    return true;
-            }
+                // non-existent files don't yield results anyway, we might need to have them existent for the checks here later
+                if (!File.Exists(path) && !Directory.Exists(path))
+                    return false;
 
+                // do not allow non-rooted parts for security
+                if (!Path.IsPathRooted(path))
+                    return false;
+
+                // only check on directory
+                if(File.Exists(path))
+                    path = Path.GetDirectoryName(path);
+
+                foreach (WebShare share in GetAllShares(type))
+                {
+                    if (share.IsFtp || !Directory.Exists(share.Path))
+                        continue;
+
+                    if (Utils.IsSubdir(share.Path, path))
+                        return true;
+                }
+            }
+            catch(Exception e) 
+            {
+                Log.Error(String.Format("Exception during IsAllowedPath with path = {0} and type = {1}", path, type), e);
+            }
             return false;
         }
 

@@ -49,9 +49,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface IMediaAccessService
     {
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebServiceDescription GetServiceDescription();
 
-
-        #region FS
+        #region Filesystem
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         List<String> GetDirectoryListByPath(string path);
@@ -64,24 +66,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebFileInfo GetFileInfo(MediaItemType type, string itemId);
 
-        //[OperationContract]
-        //[WebGet(ResponseFormat = WebMessageFormat.Json)]
-        //List<String> GetPictureRootShares(string path);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebPictureDirectory GetPictureDirectory(string path);
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         string GetPath(MediaItemType type, string itemId);
-
         #endregion
-        #region MP
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebServiceDescription GetServiceDescription();
 
         #region Music
         [OperationContract]
@@ -208,8 +196,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebEpisodeFull GetFullEpisode(int episodeId);
-
-
         #endregion
 
         #region Movies
@@ -234,15 +220,20 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         List<WebMovie> SearchForMovie(String searchString);
-
         #endregion
 
         #region Pictures
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        List<WebShare> GetPictureShares();
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebPictureDirectory GetPictureDirectory(string path);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebPicture GetPicture(string path);
         #endregion
-
-        #endregion
-
     }
 }

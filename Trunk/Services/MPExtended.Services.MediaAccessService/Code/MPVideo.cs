@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.SQLite;
 using System.Xml;
+using System.IO;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Code.Helper;
@@ -40,7 +41,7 @@ namespace MPExtended.Services.MediaAccessService.Code
                         TagLine = DatabaseHelperMethods.SafeStr(reader, 4),
                         Year = DatabaseHelperMethods.SafeInt32(reader, 5),
                         Genre = DatabaseHelperMethods.SafeStr(reader, 6),
-                        CoverThumbPath = Utils.GetCoverArtName(@"C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Videos\Title", title + "{" + id + "}")
+                        CoverThumbPath = GetCoverArtName(Path.Combine(Utils.GetBannerPath("videos"), "Title"), title + "{" + id + "}")
                     };
                 }
                 catch (Exception ex)
@@ -89,8 +90,8 @@ namespace MPExtended.Services.MediaAccessService.Code
                         Popularity = Int32.Parse(DatabaseHelperMethods.SafeStr(reader, 13)),
                         Runtime = DatabaseHelperMethods.SafeInt32(reader, 14),
                         ImdbId = DatabaseHelperMethods.SafeStr(reader, 15),
-                        CoverThumbPath = Utils.GetCoverArtName(@"C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Videos\Title", title + "{" + id + "}"),
-                        CoverPath = Utils.GetLargeCoverArtName(@"C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Videos\Title", title + "{" + id + "}")
+                        CoverThumbPath = GetCoverArtName(Path.Combine(Utils.GetBannerPath("videos"), "Title"), title + "{" + id + "}"),
+                        CoverPath = GetLargeCoverArtName(Path.Combine(Utils.GetBannerPath("videos"), "Title"), title + "{" + id + "}")
                     };
 
                     movie.Files.Add(new WebMovieFull.WebMovieFile()
@@ -108,6 +109,27 @@ namespace MPExtended.Services.MediaAccessService.Code
                     return null;
                 }
             });
+        }
+        #endregion
+
+        #region Banners
+        public static string GetCoverArtName(string strFolder, string strFileName)
+        {
+            if (string.IsNullOrEmpty(strFolder) || string.IsNullOrEmpty(strFileName))
+                return string.Empty;
+
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+                strFileName = strFileName.Replace(c, '_');
+
+            return String.Format(@"{0}\{1}{2}", strFolder, strFileName, ".jpg");
+        }
+
+        public static string GetLargeCoverArtName(string strFolder, string strFileName)
+        {
+            if (string.IsNullOrEmpty(strFolder) || string.IsNullOrEmpty(strFileName))
+                return string.Empty;
+
+            return GetCoverArtName(strFolder, strFileName + "L");
         }
         #endregion
 

@@ -17,6 +17,14 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImage(string path);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImageResized(string path, int maxWidth, int maxHeight);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream RetrieveStream(string identifier);
 
         [OperationContract]

@@ -375,14 +375,12 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         private String CreateBannerUrl(String _banner)
         {
-            String path = Utils.GetWebBannerPaths()["tvseries"].Path;
-            return path + "\\" + _banner.Replace('/', '\\');
+            return System.IO.Path.Combine(Utils.GetBannerPath("tvseries"), _banner.Replace('/', '\\'));
         }
 
         private String CreateFanartUrl(String _banner)
         {
-            String path = Utils.GetWebBannerPaths()["fanart"].Path;
-            return path + "\\" + _banner.Replace('/', '\\');
+            return System.IO.Path.Combine(Utils.GetBannerPath("fanart"), _banner.Replace('/', '\\'));
         }
         #endregion
 

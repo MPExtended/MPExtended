@@ -105,31 +105,6 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             doc.Save(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
         }
 
-
-        public static Dictionary<String, WebBannerPath> GetWebBannerPaths()
-        {
-            if (Utils.CachedWebBannerPaths == null)
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Configuration.GetPath("MediaAccess.xml"));
-                XmlNodeList dbNodes = doc.SelectNodes("/appconfig/thumbpaths/thumb");
-                Dictionary<String, WebBannerPath> retList = new Dictionary<String, WebBannerPath>();
-                foreach (XmlNode node in dbNodes)
-                {
-                    retList.Add(node.Attributes["name"].Value, new WebBannerPath(node.Attributes["name"].Value,
-                                                                              node.Attributes["path"].Value,
-                                                                              node.Attributes["virtualpath"].Value));
-                }
-                CachedWebBannerPaths = retList;
-                return retList;
-            }
-            else
-            {
-                return CachedWebBannerPaths;
-            }
-        }
-
-
         public static String[] SplitString(String _stringToSplit)
         {
             if (_stringToSplit != null)
@@ -140,84 +115,52 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             else
             {
                 return null;
-            }
+           }
         }
+
         public static string ClearString(String _stringToClean)
         {
             return _stringToClean.Substring(2, (_stringToClean.Length - 5));
         }
 
-
-        public static string GetCoverArtName(string strFolder, string strFileName)
+        public static string GetBannerPath(string name)
         {
-            if (string.IsNullOrEmpty(strFolder) || string.IsNullOrEmpty(strFileName))
-                return string.Empty;
-
-            return string.Format(@"{0}\{1}{2}", strFolder, Utils.MakeFileName(strFileName), ".jpg");
+            XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
+            XElement res =
+                root.Elements("thumbpaths").First().Elements("thumb").Where(x => x.Name == name).First();
+            return (string)res.Attribute("path");
         }
 
-        public static string GetLargeCoverArtName(string strFolder, string strFileName)
+        public static bool IsAllowedPath(string path)
         {
-            if (string.IsNullOrEmpty(strFolder) || string.IsNullOrEmpty(strFileName))
-                return string.Empty;
+            if (Shares.IsAllowedPath(path))
+                return true;
 
-            return Utils.GetCoverArtName(strFolder, strFileName + "L");
+            // this checks whether the path is in at least one of the thumb paths
+            XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
+            return
+                    (from el in
+                        (root.Elements("thumbpaths").First().Elements("thumb"))
+                     where IsSubdir((string)el.Attribute("path"), path)
+                     select el).Count()
+                > 0;
         }
 
-        public static string GetLargeAlbumCover(string artistName, string albumName)
+        // TODO: check performance and maybe optimize
+        public static bool IsSubdir(string root, string testDir)
         {
-            if (string.IsNullOrEmpty(artistName) || string.IsNullOrEmpty(albumName))
-                return string.Empty;
+            DirectoryInfo shareDir = new DirectoryInfo(root);
+            DirectoryInfo currentDir = new DirectoryInfo(testDir);
 
-            artistName = artistName.Trim(new char[] { '|', ' ' });
-            albumName = albumName.Replace(":", "_");
-            String musicThumbPath = Utils.GetWebBannerPaths()["music"].Path;
-
-            return musicThumbPath + "\\Albums\\" + artistName + "-" + albumName + "L.jpg";
-        }
-
-        public static string MakeFileName(string strText)
-        {
-            if (strText == null) return string.Empty;
-            if (strText.Length == 0) return string.Empty;
-
-            string strFName = strText.Replace(':', '_');
-            strFName = strFName.Replace('/', '_');
-            strFName = strFName.Replace('\\', '_');
-            strFName = strFName.Replace('*', '_');
-            strFName = strFName.Replace('?', '_');
-            strFName = strFName.Replace('\"', '_');
-            strFName = strFName.Replace('<', '_');
-            strFName = strFName.Replace('>', '_');
-            strFName = strFName.Replace('|', '_');
-
-            bool unclean = true;
-            char[] invalids = Path.GetInvalidFileNameChars();
-            while (unclean)
+            while (currentDir != null)
             {
-                unclean = false;
+                if (currentDir.FullName == shareDir.FullName)
+                    return true;
 
-                char[] filechars = strFName.ToCharArray();
-
-                foreach (char c in filechars)
-                {
-                    if (!unclean)
-                        foreach (char i in invalids)
-                        {
-                            if (c == i)
-                            {
-                                unclean = true;
-                                //Log.Warn("Utils: *** File name {1} still contains invalid chars - {0}", Convert.ToString(c), strFName);
-                                strFName = strFName.Replace(c, '_');
-                                break;
-                            }
-                        }
-                }
+                currentDir = currentDir.Parent;
             }
-            return strFName;
+
+            return false;
         }
-
-
-
     }
 }

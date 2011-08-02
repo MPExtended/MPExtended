@@ -9,7 +9,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     [DataContract]
     public enum WebMediaType
     {
-        // same as GMA
+        // see MPExtended.Services.MediaAccessService.Interface.MediaItemType
         [EnumMember]
         VideoShareItem = 0,
         [EnumMember]
@@ -23,6 +23,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [EnumMember]
         MusicShareItem = 5,
         [EnumMember]
-        RecordingItem = 10
+        PictureShareItem = 6,
+        [EnumMember]
+        ImageItem = 7,
+
+        [EnumMember]
+        RecordingItem = 32 // TODO: what value to use here?
     }
 }
