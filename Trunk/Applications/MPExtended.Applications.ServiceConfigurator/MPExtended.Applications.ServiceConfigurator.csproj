@@ -11,7 +11,8 @@
     <RootNamespace>MPExtended.Applications.ServiceConfigurator</RootNamespace>
     <AssemblyName>MPExtended.Applications.ServiceConfigurator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -42,6 +43,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,8 +77,22 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\MediaAccessServer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Overview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\MediaAccessServer.xaml.cs">
+      <DependentUpon>MediaAccessServer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Overview.xaml.cs">
+      <DependentUpon>Overview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,11 +110,34 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.ServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
+      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
+      <Project>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</Project>
+      <Name>MPExtended.Services.MediaAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,11 @@
 ﻿<Window x:Class="MPExtended.Applications.ServiceConfigurator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+       Title="MPExtended Configurator" Height="368" Width="754" MinWidth="700">
+    <Window.Resources>
+
+    </Window.Resources>
     <Grid>
-        
+        <Frame x:Name="MainFrame"></Frame>
     </Grid>
 </Window>

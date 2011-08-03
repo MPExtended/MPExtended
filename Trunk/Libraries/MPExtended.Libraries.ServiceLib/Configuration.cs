@@ -41,6 +41,7 @@ namespace MPExtended.Libraries.ServiceLib
             return Path.Combine(basedir, filename);
         }
 
+
         public static void GetCredentials(out string username, out string password, bool overwriteCached)
         {
             if (overwriteCached || cachedUsername == null || cachedPassword == null)

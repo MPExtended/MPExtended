@@ -12,17 +12,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MPExtended.Applications.ServiceConfigurator
+namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Overview.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Overview : Page
     {
-        public MainWindow()
+        public Overview()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Pages.MediaAccessServer());
         }
     }
 }
