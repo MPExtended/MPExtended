@@ -83,10 +83,19 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 subtitleTranscoder += ",soverlay";
             }
 
+            // prepare output path (some trickying for VLC)
+            string path = @"\#OUT#";
+            string muxer = Profile.CodecParameters["muxer"].Replace("#OUT#", path);
+
             // arguments
-            string arguments = "-I dummy -vvv #IN# " + subtitleArguments + " " + audioTrack + " --sout ";
-            arguments += "'#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}";
-            arguments += Profile.CodecParameters["muxer"] + "'";
+            string arguments = "-I dummy -vvv \"#IN#\" " + subtitleArguments + " " + audioTrack + " --sout ";
+            arguments += "\"#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}";
+            arguments += muxer + "\"";
+
+            if (!InputReaderWanted())
+            {
+                arguments = arguments.Replace("#IN#", Input);
+            }
 
             return arguments;
         }

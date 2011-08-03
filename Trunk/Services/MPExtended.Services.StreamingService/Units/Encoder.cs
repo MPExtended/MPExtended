@@ -116,7 +116,7 @@ namespace MPExtended.Services.StreamingService.Units {
 
         private bool SpawnTranscoder(bool needsStdin, bool needsStdout) {
             ProcessStartInfo start = new ProcessStartInfo(transcoderPath, arguments);
-            start.UseShellExecute = DebugOutput && !IsLogStreamConnected && !needsStdin && !needsStdout;
+            start.UseShellExecute = false;
             start.RedirectStandardInput = needsStdin;
             start.RedirectStandardOutput = needsStdout;
             start.RedirectStandardError = DebugOutput ? false : IsLogStreamConnected;
