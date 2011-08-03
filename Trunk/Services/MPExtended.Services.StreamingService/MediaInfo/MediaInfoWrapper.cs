@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -67,7 +66,6 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             info.Option("ParseSpeed", "0.3");
             info.Open(source);
             WebMediaInfo retinfo = new WebMediaInfo();
-            int index = 0;
 
             // video
             retinfo.VideoStreams = new List<WebVideoStream>();
@@ -83,7 +81,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     Width = StringToInt(info.Get(StreamKind.Video, i, "Width")),
                     Height = StringToInt(info.Get(StreamKind.Video, i, "Height")),
                     ID = StringToInt(info.Get(StreamKind.Video, i, "ID")),
-                    Index = index++
+                    Index = i
                 });
             }
 
@@ -101,20 +99,35 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     Language = info.Get(StreamKind.Audio, i, "Language"),
                     LanguageFull = info.Get(StreamKind.Audio, i, "Language/String"),
                     Title = info.Get(StreamKind.Audio, i, "Title"),
-                    Index = index++
+                    Index = i
                 });
             }
 
             // subtitle codecs
             retinfo.SubtitleStreams = new List<WebSubtitleStream>();
             int subtitleStreams = info.Count_Get(StreamKind.Text);
-            for (int i = 0; i < subtitleStreams; i++)
+            int scodecnr = 0;
+            for (scodecnr = 0; scodecnr < subtitleStreams; scodecnr++)
             {
                 retinfo.SubtitleStreams.Add(new WebSubtitleStream()
                 {
-                    Language = info.Get(StreamKind.Text, i, "Language"),
-                    LanguageFull = info.Get(StreamKind.Text, i, "Language/String"),
-                    Index = index++
+                    Language = info.Get(StreamKind.Text, scodecnr, "Language"),
+                    LanguageFull = info.Get(StreamKind.Text, scodecnr, "Language/String"),
+                    ID = StringToInt(info.Get(StreamKind.Text, scodecnr, "ID")),
+                    Index = scodecnr
+                });
+            }
+
+            // only support usual convention naming convention for external files for now
+            string subfile = Path.GetFileNameWithoutExtension(source) + ".srt";
+            if(File.Exists(subfile)) {
+                retinfo.SubtitleStreams.Add(new WebExternalSubtitleStream()
+                {
+                    Language = "ext",
+                    LanguageFull = "External subtitle file",
+                    ID = 500, // a file with so many streams seems quite unlikely to me
+                    Index = ++scodecnr,
+                    Filename = subfile
                 });
             }
 

@@ -25,6 +25,14 @@ using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Units {
     internal class EncoderUnit : IProcessingUnit {
+        public enum TransportMethod
+        {
+            NamedPipe,
+            StandardIn,
+            StandardOut,
+            Other
+        }
+
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -58,10 +66,8 @@ namespace MPExtended.Services.StreamingService.Units {
             bool needsStdin = false;
             bool needsStdout = false;
 
-            // input (StandardOut not supported and External needs no processing)
-            if (inputMethod == TransportMethod.Filename) {
-                input = this.Source;
-            } else if (inputMethod == TransportMethod.NamedPipe) {
+            // input
+            if (inputMethod == TransportMethod.NamedPipe) {
                 transcoderInputStream = new NamedPipe();
                 input = ((NamedPipe)transcoderInputStream).Url;
                 Log.Info("Encoding: starting input named pipe {0}", input);
@@ -72,12 +78,8 @@ namespace MPExtended.Services.StreamingService.Units {
                 doInputCopy = true;
             } 
 
-            // output stream (StandardIn not supported and External needs no processing)
-            if (outputMethod == TransportMethod.Filename) {
-                if(this.Output == null)
-                    this.Output = Path.GetTempFileName();
-                output = this.Output;
-            } else if (outputMethod == TransportMethod.NamedPipe) {
+            // output stream
+            if (outputMethod == TransportMethod.NamedPipe) {
                 DataOutputStream = new NamedPipe();
                 output = ((NamedPipe)DataOutputStream).Url;
                 Log.Info("Encoding: starting output named pipe {0}", output);
@@ -86,13 +88,11 @@ namespace MPExtended.Services.StreamingService.Units {
                 needsStdout = true;
             }
 
+            // arguments substitution
+            arguments = arguments.Replace("#IN#", input).Replace("#OUT#", output);
+
             // start transcoder
-            Log.Info("Encoding: Transcoder configuration dump");
-            Log.Info("Encoding:   input {0}, output {1}", input, output);
-            Log.Info("Encoding:   needsStdin {0}, needsStdout {1}", needsStdin, needsStdout);
-            Log.Info("Encoding:   path {0}", transcoderPath);
-            Log.Info("Encoding:   arguments {0}", arguments);
-            if (!SpawnTranscoder(input, output, needsStdin, needsStdout))
+            if (!SpawnTranscoder(needsStdin, needsStdout))
                 return false;
 
             // finish stream setup
@@ -100,8 +100,6 @@ namespace MPExtended.Services.StreamingService.Units {
                 transcoderInputStream = transcoderApplication.StandardInput.BaseStream;
             if (outputMethod == TransportMethod.StandardOut)
                 DataOutputStream = transcoderApplication.StandardOutput.BaseStream;
-            if (outputMethod == TransportMethod.Filename)
-                DataOutputStream = new FileStream(output, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // doesn't work yet
 
             // setup stderr forwarding, if not debugging output
             if (IsLogStreamConnected && !DebugOutput)
@@ -116,16 +114,19 @@ namespace MPExtended.Services.StreamingService.Units {
             return true;
         }
 
-        private bool SpawnTranscoder(string input, string output, bool needsStdin, bool needsStdout) {
-            string args = arguments.Replace("#IN#", input).Replace("#OUT#", output);
-            Log.Info("Encoding: Starting ffmpeg now with arguments {0}", args);
-            ProcessStartInfo start = new ProcessStartInfo(transcoderPath, args);
+        private bool SpawnTranscoder(bool needsStdin, bool needsStdout) {
+            ProcessStartInfo start = new ProcessStartInfo(transcoderPath, arguments);
             start.UseShellExecute = DebugOutput && !IsLogStreamConnected && !needsStdin && !needsStdout;
             start.RedirectStandardInput = needsStdin;
             start.RedirectStandardOutput = needsStdout;
             start.RedirectStandardError = DebugOutput ? false : IsLogStreamConnected;
             start.WindowStyle = DebugOutput ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden;
             start.CreateNoWindow = !DebugOutput;
+
+            Log.Info("Encoder: Transcoder configuration dump");
+            Log.Info("Encoder:   hasStdin {0}, hasStdout {1}, hasStderr {2}", start.RedirectStandardInput, start.RedirectStandardOutput, start.RedirectStandardError);
+            Log.Info("Encoder:   path {0}", transcoderPath);
+            Log.Info("Encoder:   arguments {0}", arguments);
 
             try {
                 transcoderApplication = new Process();

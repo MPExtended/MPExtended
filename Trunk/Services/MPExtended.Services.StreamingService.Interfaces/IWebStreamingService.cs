@@ -44,7 +44,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool StartStream(string identifier, string profileName, int startPosition, string audioLanguage);
+        bool StartStream(string identifier, string profileName, int startPosition);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        bool StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -58,13 +58,16 @@
     <Compile Include="Code\ConvertExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\Pipeline.cs" />
-    <Compile Include="Code\Profiles.cs" />
+    <Compile Include="Code\Config.cs" />
     <Compile Include="Code\Services.cs" />
     <Compile Include="Code\Streaming.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
     <Compile Include="StreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transcoders\FFMpeg.cs" />
+    <Compile Include="Transcoders\ITranscoder.cs" />
+    <Compile Include="Transcoders\VLC.cs" />
     <Compile Include="Units\Encoder.cs" />
     <Compile Include="Units\FFMpegLogParsing.cs" />
     <Compile Include="Units\IBlockingProcessingUnit.cs" />
@@ -73,8 +76,8 @@
     <Compile Include="Units\IProcessingUnit.cs" />
     <Compile Include="Units\Passthrough.cs" />
     <Compile Include="Units\StreamCopy.cs" />
+    <Compile Include="Util\EncodingInfo.cs" />
     <Compile Include="Util\NamedPipe.cs" />
-    <Compile Include="Util\OutputParsing.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="Util\Resolution.cs" />
     <Compile Include="Util\StreamCopy.cs" />

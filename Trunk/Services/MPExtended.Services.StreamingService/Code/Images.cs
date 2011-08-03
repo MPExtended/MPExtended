@@ -39,6 +39,7 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Warn("ExtractImage: File " + source + " doesn't exist or is not accessible");
                 return null;
             }
+
             // calculate size
             string ffmpegResize = "";
             if (maxWidth != null && maxHeight != null)
@@ -51,7 +52,7 @@ namespace MPExtended.Services.StreamingService.Code
             string tempFile = Path.GetTempFileName(); // FIXME: maybe we need to clean this up?
             ProcessStartInfo info = new ProcessStartInfo();
             info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source, ffmpegResize, tempFile);
-            info.FileName = Profiles.GetTranscoderProfiles().First().Transcoder; // FIXME
+            info.FileName = Config.GetFFMpegPath();
             info.UseShellExecute = false;
             Process proc = new Process();
             proc.StartInfo = info;

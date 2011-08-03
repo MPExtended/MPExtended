@@ -66,7 +66,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         private ActionResult DoStreaming(string identifier, string transcoderProfile)
         {
-            if (!WebServices.WebStreamService.StartStream(identifier, transcoderProfile, 0, ""))
+            if (!WebServices.WebStreamService.StartStream(identifier, transcoderProfile, 0))
             {
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();

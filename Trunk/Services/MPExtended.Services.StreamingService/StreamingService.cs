@@ -53,17 +53,17 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Profiles.GetTranscoderProfiles().Select(s => s.ToWebTranscoderProfile()).ToList();
+            return Config.GetTranscoderProfiles().Select(s => s.ToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return Profiles.GetTranscoderProfiles().Where(s => s.Target == target).Select(s => s.ToWebTranscoderProfile()).ToList();
+            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Select(s => s.ToWebTranscoderProfile()).ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)
         {
-            TranscoderProfile profile = Profiles.GetTranscoderProfileByName(name);
+            TranscoderProfile profile = Config.GetTranscoderProfileByName(name);
             if (profile == null)
                 return null;
 
@@ -104,12 +104,12 @@ namespace MPExtended.Services.StreamingService
 
         public WebResolution GetStreamSize(WebMediaType type, string itemId, string profile)
         {
-            return _stream.CalculateSize(Profiles.GetTranscoderProfileByName(profile), ResolvePath(type, itemId), false).ToWebResolution();
+            return _stream.CalculateSize(Config.GetTranscoderProfileByName(profile), ResolvePath(type, itemId), false).ToWebResolution();
         }
 
         public WebResolution GetTVStreamSize(int channelId, string profile)
         {
-            return _stream.CalculateSize(Profiles.GetTranscoderProfileByName(profile), null, true).ToWebResolution();
+            return _stream.CalculateSize(Config.GetTranscoderProfileByName(profile), null, true).ToWebResolution();
         }
         #endregion
 
@@ -135,11 +135,20 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, path);
         }
 
-        public bool StartStream(string identifier, string profileName, int startPosition, string audioLanguage)
+        public bool StartStream(string identifier, string profileName, int startPosition)
         {
-            Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}; audioLanguage={3}", identifier, profileName, startPosition, audioLanguage);
+            Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Profiles.GetTranscoderProfileByName(profileName), startPosition, audioLanguage);
+            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, null, null);
+        }
+
+        public bool StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
+        {
+            Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
+                identifier, profileName, startPosition, audioId, subtitleId);
+            _stream.EndStream(identifier); // first end previous stream, if any available
+            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition,
+                audioId == -1 ? (int?)null : audioId, subtitleId == -1 ? (int?)null : subtitleId);
         }
 
         public bool FinishStream(string identifier)

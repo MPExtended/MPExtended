@@ -25,6 +25,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -58,7 +59,7 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public bool StartStream(string identifier, TranscoderProfile profile, int position = 0, string audioLanguage = null)
+        public bool StartStream(string identifier, TranscoderProfile profile, int position = 0, int? audioId = null, int? subtitleId = null)
         {
             if (!Streams.ContainsKey(identifier) || Streams[identifier] == null)
             {
@@ -73,75 +74,48 @@ namespace MPExtended.Services.StreamingService.Code
                 stream.OutputSize = CalculateSize(stream.Profile, stream.Source, stream.IsTsBuffer);
                 Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
 
-                // calculate stream mappings
-                string mappings = "";
-                if(!String.IsNullOrEmpty(audioLanguage)) {
-                    // get media info
-                    WebMediaInfo info;
-                    if (stream.IsTsBuffer)
-                    {
-                        info = MediaInfoWrapper.GetMediaInfo(new TsBuffer(stream.Source));
-                    }
-                    else
-                    {
-                        info = MediaInfoWrapper.GetMediaInfo(stream.Source);
-                    }
-                    mappings = String.Format("-map 0:{0} ", info.VideoStreams.First().Index);
-
-                    // audio streams (select first one if nothing found for selected language)
-                    IEnumerable<WebAudioStream> validStreams = info.AudioStreams.Where(a => a.Language == audioLanguage);
-                    WebAudioStream astream = validStreams.Count() == 0 ? info.AudioStreams.First() : validStreams.First();
-                    mappings += String.Format("-map 0:{0} ", astream.Index);
+                // get media info
+                WebMediaInfo info;
+                if (stream.IsTsBuffer)
+                {
+                    info = MediaInfoWrapper.GetMediaInfo(new TsBuffer(stream.Source));
+                }
+                else
+                {
+                    info = MediaInfoWrapper.GetMediaInfo(stream.Source);
                 }
 
-                // setup input of rendering pipeline
-                stream.Pipeline = new Pipeline();
+                // check for validness of ids
+                if (info.AudioStreams.Where(x => x.ID == audioId).Count() == 0) 
+                    audioId = null;
+                if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() == 0)
+                    subtitleId = null;
 
-                // the input reader
-                bool hasInputUnit = stream.IsTsBuffer || !profile.UseTranscoding;
-                if (hasInputUnit)
+                // build pipeline and fireup transcoder
+                ITranscoder transcoder = profile.GetTranscoder();
+                transcoder.Input = stream.Source;
+                stream.Pipeline = new Pipeline();
+                if (!profile.UseTranscoding || transcoder.InputReaderWanted())
                 {
                     stream.Pipeline.AddDataUnit(new InputUnit(stream.Source), 1);
                 }
 
                 if (profile.UseTranscoding)
                 {
-                    // setup ffmpeg parameters
-                    string arguments;
-                    if (profile.HasVideoStream)
-                    {
-                        arguments = String.Format(
-                            "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
-                            position != 0 ? "-ss " + position : "",
-                            stream.OutputSize, stream.OutputSize.Width, stream.OutputSize.Height,
-                            mappings, stream.Profile.CodecParameters
-                        );
-                    }
-                    else
-                    {
-                        arguments = String.Format(
-                            "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
-                            position != 0 ? "-ss " + position : "",
-                            mappings, stream.Profile.CodecParameters
-                        );
-                    }
-
-                    // setup input and output
-                    TransportMethod prefered = hasInputUnit ? TransportMethod.NamedPipe : TransportMethod.Filename;
-                    TransportMethod input = stream.Profile.InputMethod != TransportMethod.Path ? stream.Profile.InputMethod : prefered;
-                    TransportMethod output = stream.Profile.OutputMethod != TransportMethod.Path ? stream.Profile.InputMethod : TransportMethod.NamedPipe;
-                    EncoderUnit encoder = new EncoderUnit(stream.Profile.Transcoder, arguments, input, output);
-                    encoder.Source = stream.Source; // setting it when we don't need it doesn't hurt
-                    encoder.DebugOutput = false;
-                    stream.Pipeline.AddDataUnit(encoder, 5);
+                    string arguments = transcoder.GenerateArguments(info, stream.OutputSize, position, audioId, subtitleId);
+                    EncoderUnit unit = new EncoderUnit(transcoder.GetTranscoderPath(), arguments, transcoder.GetInputMethod(), transcoder.GetOutputMethod());
+                    unit.Source = stream.Source; // setting it when we don't use it doesn't hurt
+                    unit.DebugOutput = false; // change this for debugging
+                    stream.Pipeline.AddDataUnit(unit, 5);
 
                     // setup output parsing
                     stream.EncodingInfo = new EncodingInfo();
                     Reference<EncodingInfo> eref = new Reference<EncodingInfo>(() => stream.EncodingInfo, x => { stream.EncodingInfo = x; });
-                    FFMpegLogParsing unit = new FFMpegLogParsing(eref);
-                    unit.LogMessages = true;
-                    unit.LogProgress = false;
-                    stream.Pipeline.AddLogUnit(unit, 6);
+                    ILogProcessingUnit logunit = transcoder.GetLogParsingUnit(eref);
+                    if (logunit != null)
+                    {
+                        stream.Pipeline.AddLogUnit(logunit, 6);
+                    }
                 }
 
                 // start the processes

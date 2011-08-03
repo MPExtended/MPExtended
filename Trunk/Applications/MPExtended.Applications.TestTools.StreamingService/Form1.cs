@@ -36,7 +36,7 @@ namespace MPExtended.Applications.TestTools.StreamingService
 {
     public partial class Form1 : Form
     {
-        private const string CURRENT_PROFILE = "Android Medium";
+        private const string CURRENT_PROFILE = "Android VLC Test";
         private const string CURRENT_IP = "localhost";
         private const string CLIENT_NAME = "StreamingService TestTool";
         private const string VLC_PATH = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
@@ -219,15 +219,14 @@ namespace MPExtended.Applications.TestTools.StreamingService
 
         private void StartAndDownloadStream(int _pos)
         {
-            string language = "";
+            int language = -1;
             if (cbLanguage.SelectedIndex != -1)
             {
-                language = mInfo.AudioStreams[cbLanguage.SelectedIndex].Language;
-                Log("Using audio language " + language);
+                language = mInfo.AudioStreams[cbLanguage.SelectedIndex].ID;
             }
 
             Log("Starting Stream from pos " + _pos);
-            bool success = mWebStreamClient.StartStream(mIdentifier, CURRENT_PROFILE, _pos, language);
+            bool success = mWebStreamClient.StartStreamWithStreamSelection(mIdentifier, CURRENT_PROFILE, _pos, language, -1);
             if (success)
             {
                 DownloadStream(_pos);
