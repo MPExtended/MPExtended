@@ -21,7 +21,6 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.MediaAccessService.Code.Helper;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -36,9 +35,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private static ITVAccessService _tvService;
         private static IMediaAccessService _mediaService;
         private static IStreamingService _streamingService;
+        private static IWebStreamingService _webStreamingService;
         private System.Timers.Timer activeSessionTimer = new System.Timers.Timer();
 
-        private string ServiceName { get { return "MPExtendedSingleSeat"; } }
+        private string ServiceName { get { return checkInstalledServices(); } }
 
         BackgroundWorker workerActiveSessions = new BackgroundWorker();
         BackgroundWorker workerMusic = new BackgroundWorker();
@@ -94,9 +94,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         }
         private void LoadLogFiles()
         {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\GmaWebservice\GmaWebservice.log"))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Client.log"))
             {
-                StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\GmaWebservice\GmaWebservice.log");
+                StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Client.log");
                 string input = null;
                 while ((input = re.ReadLine()) != null)
                 {
@@ -118,14 +118,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
         {
-            //List<WebStreamingSession> tmp = StreamingService.GetStreamingSessions().ToList();
-            //if (tmp != null)
-            //{
-            //    lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-            //    {
-            //        lvActiveStreams.ItemsSource = StreamingService.GetStreamingSessions().ToList();
-            //    }));
-            //}
+            List<WebStreamingSession> tmp = WebStreamingService.GetStreamingSessions().ToList();
+            if (tmp != null)
+            {
+                lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
+                {
+                    lvActiveStreams.ItemsSource = WebStreamingService.GetStreamingSessions().ToList();
+                }));
+            }
         }
 
         private void InitActiveSessionWatcher()
@@ -343,7 +343,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (TabDatabases.IsSelected)
             {
-                DBLocations dbLocations = Utils.GetMPDbLocations();
+                DBLocations dbLocations = Configuration.GetMPDbLocations();
                 txtDbLocationMopi.Text = dbLocations.MovingPictures;
                 txtDbLocationMopi.CaretIndex = txtDbLocationMopi.Text.Length;
 
@@ -388,7 +388,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void btnStartStopService_Click(object sender, RoutedEventArgs e)
         {
             switch (mServiceController.Status)
-            { 
+            {
                 case ServiceControllerStatus.Stopped:
                     mServiceController.Start();
                     break;
@@ -396,7 +396,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     mServiceController.Stop();
                     break;
 
-            }       
+            }
         }
 
         private void btnBrowseVideos_Click(object sender, RoutedEventArgs e)
@@ -459,19 +459,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             switch (_db)
             {
                 case DatabaseType.Pictures:
-                    oldFolder = Utils.GetMPDbLocations().Pictures;
+                    oldFolder = Configuration.GetMPDbLocations().Pictures;
                     break;
                 case DatabaseType.Videos:
-                    oldFolder = Utils.GetMPDbLocations().Videos;
+                    oldFolder = Configuration.GetMPDbLocations().Videos;
                     break;
                 case DatabaseType.Music:
-                    oldFolder = Utils.GetMPDbLocations().Music;
+                    oldFolder = Configuration.GetMPDbLocations().Music;
                     break;
                 case DatabaseType.Mopi:
-                    oldFolder = Utils.GetMPDbLocations().MovingPictures;
+                    oldFolder = Configuration.GetMPDbLocations().MovingPictures;
                     break;
                 case DatabaseType.TvSeries:
-                    oldFolder = Utils.GetMPDbLocations().TvSeries;
+                    oldFolder = Configuration.GetMPDbLocations().TvSeries;
                     break;
             }
 
@@ -499,23 +499,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     case DatabaseType.Pictures:
                         txtDbLocationPictures.Text = filename;
-                        Utils.ChangeDbLocation("pictures", filename);
+                        Configuration.ChangeDbLocation("pictures", filename);
                         break;
                     case DatabaseType.Videos:
                         txtDbLocationVideos.Text = filename;
-                        Utils.ChangeDbLocation("videos", filename);
+                        Configuration.ChangeDbLocation("videos", filename);
                         break;
                     case DatabaseType.Music:
                         txtDbLocationMusic.Text = filename;
-                        Utils.ChangeDbLocation("music", filename);
+                        Configuration.ChangeDbLocation("music", filename);
                         break;
                     case DatabaseType.Mopi:
                         txtDbLocationMopi.Text = filename;
-                        Utils.ChangeDbLocation("movingpictures", filename);
+                        Configuration.ChangeDbLocation("movingpictures", filename);
                         break;
                     case DatabaseType.TvSeries:
                         txtDbLocationTvSeries.Text = filename;
-                        Utils.ChangeDbLocation("tvseries", filename);
+                        Configuration.ChangeDbLocation("tvseries", filename);
                         break;
                 }
             }
@@ -540,6 +540,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void btnTestWebService_Click(object sender, RoutedEventArgs e)
         {
             workerServiceText.RunWorkerAsync();
+        }
+        private string checkInstalledServices()
+        {
+            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
+            {
+                return "MPExtendedMultiSeatClient";
+            }
+            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
+            {
+                return "MPExtendedMultiSeatClient";
+            }
+            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("TVAccess.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
+            {
+                return "MPExtendedSingleSeat";
+            }
+            return "";
+
         }
 
         public static ITVAccessService TVService
@@ -579,6 +596,25 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
 
                 return _streamingService;
+            }
+        }
+        public static IWebStreamingService WebStreamingService
+        {
+            get
+            {
+                if (_webStreamingService == null || ((ICommunicationObject)_webStreamingService).State == CommunicationState.Faulted)
+                {
+                    try
+                    {
+                        _webStreamingService = ChannelFactory<IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
+                    }
+                    catch (EndpointNotFoundException ex)
+                    { }
+                    catch (Exception ex)
+                    { }
+                }
+
+                return _webStreamingService;
             }
         }
         public static IMediaAccessService MediaService

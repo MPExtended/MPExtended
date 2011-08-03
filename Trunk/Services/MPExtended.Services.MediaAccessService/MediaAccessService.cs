@@ -58,7 +58,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebServiceDescription GetServiceDescription()
         {
-            DBLocations db = Utils.GetMPDbLocations();
+            DBLocations db = Configuration.GetMPDbLocations();
             WebServiceDescription f = new WebServiceDescription();
             f.SupportsVideos = File.Exists(db.Videos);
             f.VideoApiVersion = VIDEO_API;

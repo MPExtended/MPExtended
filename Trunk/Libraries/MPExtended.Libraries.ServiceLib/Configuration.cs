@@ -24,12 +24,101 @@ using System.Xml;
 
 namespace MPExtended.Libraries.ServiceLib
 {
+    public class DBLocations
+    {
+        public string Music;
+        public string Pictures;
+        public string TvSeries;
+        public string MovingPictures;
+        public string Shares;
+        public string Videos;
+    }
+
     public class Configuration
     {
         private static string cachedUsername;
         private static string cachedPassword;
+        private static String CachedMPLocation;
+        private static DBLocations CachedDbLocation;
 
-        public static string GetPath(string filename) 
+        public static String GetMpConfigPath()
+        {
+            if (CachedMPLocation == null)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Configuration.GetPath("MediaAccess.xml"));
+                XmlNode gNode = doc.SelectSingleNode("/appconfig/config/mpconfig");
+                CachedMPLocation = gNode.InnerText;
+            }
+
+            return CachedMPLocation;
+        }
+
+        public static DBLocations GetMPDbLocations()
+        {
+            if (CachedDbLocation == null)
+            {
+                DBLocations dbLocations = new DBLocations();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Configuration.GetPath("MediaAccess.xml"));
+                XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
+
+                Log.Debug("Reading database paths");
+
+                foreach (XmlNode node in dbNodes)
+                {
+                    String name = node.Attributes["name"].Value;
+                    String value = node.Attributes["filename"].Value;
+                    Log.Debug(name + ": " + value);
+                    switch (name)
+                    {
+                        case "music":
+                            dbLocations.Music = value;
+                            break;
+                        case "pictures":
+                            dbLocations.Pictures = value;
+                            break;
+                        case "tvseries":
+                            dbLocations.TvSeries = value;
+                            break;
+                        case "movingpictures":
+                            dbLocations.MovingPictures = value;
+                            break;
+                        case "shares":
+                            dbLocations.Shares = value;
+                            break;
+                        case "videos":
+                            dbLocations.Videos = value;
+                            break;
+                    }
+                }
+                CachedDbLocation = dbLocations;
+            }
+            return CachedDbLocation;
+        }
+
+        public static void ChangeDbLocation(String _db, String _newPath)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Configuration.GetPath("MediaAccess.xml"));
+            XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
+
+            Log.Debug("Reading database paths");
+
+            foreach (XmlNode node in dbNodes)
+            {
+                String name = node.Attributes["name"].Value;
+
+                if (name.Equals(_db))
+                {
+                    node.Attributes["filename"].Value = _newPath;
+                }
+            }
+
+            doc.Save(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+        }
+
+        public static string GetPath(string filename)
         {
             string basedir = "";
 #if DEBUG
