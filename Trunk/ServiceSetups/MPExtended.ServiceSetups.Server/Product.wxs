@@ -46,6 +46,7 @@
 
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\NLog.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MediaInfo.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\NLog.config" />
 
               <!-- TODO: Do we want to install debugging information? -->
 

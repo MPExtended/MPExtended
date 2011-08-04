@@ -47,6 +47,7 @@
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\NLog.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MediaInfo.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\System.Data.SQLite.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\NLog.config" />
 
               <!-- TODO: Do we want to install debugging information? -->
 

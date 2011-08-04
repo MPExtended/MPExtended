@@ -22,7 +22,14 @@ namespace MPExtended.Applications.ServiceConfigurator
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Pages.MediaAccessServer());
+            try
+            {
+                MainFrame.Navigate(new Pages.MediaAccessServer());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }

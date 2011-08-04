@@ -102,18 +102,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         }
         private void LoadSingleSeatLogFiles()
         {
-            LoadLogFiles("SingleSeat");
+            //LoadLogFiles("SingleSeat");
         }
         private void LoadLogFiles(string fileName)
         {
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log",fileName)))
             {
-                StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName));
-                string input = null;
-                while ((input = re.ReadLine()) != null)
+                try
                 {
-                    lvLogViewer.Items.Add(input);
+                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName));
+                    string input = null;
+                    while ((input = re.ReadLine()) != null)
+                    {
+                        lvLogViewer.Items.Add(input);
+                    }
                 }
+                catch (Exception ex)
+                { ExceptionMessageBox(ex.Message); }
             }
 
         }
