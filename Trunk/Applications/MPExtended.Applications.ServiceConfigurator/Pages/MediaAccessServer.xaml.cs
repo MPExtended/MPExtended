@@ -55,20 +55,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 switch (ServiceName)
                 {
                     case "MPExtendedSingleSeat":
-                        mServiceController = new ServiceController("MPExtendedSingleSeat");
+                        mServiceController = new ServiceController("MPExtended SingleSeat Service");
+                        LoadSingleSeatLogFiles();
                         break;
                     case "MPExtendedMultiSeatServer":
-                        mServiceController = new ServiceController("MPExtendedMultiSeatServer");
+                        mServiceController = new ServiceController("MPExtended Server Service");
+                        LoadServerLogFiles();
                         break;
                     case "MPExtendedMultiSeatClient":
-                        mServiceController = new ServiceController("MPExtendedMultiSeatClient");
+                        mServiceController = new ServiceController("MPExtended Client Service");
+                        LoadClientLogFiles();
                         break;
 
                 }
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show("GmaWebService is not installed! Please install the latest version");
+                MessageBox.Show("MPExtended webservice is not installed! Please install the latest version");
             }
             if (mServiceController != null)
             {
@@ -80,11 +83,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             activeSessionTimer.Elapsed += new System.Timers.ElapsedEventHandler(activeSessionTimer_Elapsed);
             activeSessionTimer.Interval = 18000;
             activeSessionTimer.Enabled = true;
-            activeSessionTimer.AutoReset = true;
-
-            InitWebservice();
+            activeSessionTimer.AutoReset = true;       
             InitBackgroundWorker();
-            LoadLogFiles();
 
         }
 
@@ -92,11 +92,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             InitActiveSessionWatcher();
         }
-        private void LoadLogFiles()
+        private void LoadClientLogFiles()
         {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Client.log"))
+            LoadLogFiles("Client");
+        }
+        private void LoadServerLogFiles()
+        {
+            LoadLogFiles("Server");
+        }
+        private void LoadSingleSeatLogFiles()
+        {
+            LoadLogFiles("SingleSeat");
+        }
+        private void LoadLogFiles(string fileName)
+        {
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log",fileName)))
             {
-                StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Client.log");
+                StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName));
                 string input = null;
                 while ((input = re.ReadLine()) != null)
                 {
@@ -165,7 +177,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
-                    MessageBox.Show(ex.ToString());
+                    ExceptionMessageBox(ex.Message);
+                    Log.Error("Exception in workerTVSeries_DoWork", ex);
                 }));
             }
 
@@ -200,7 +213,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
-                    MessageBox.Show(ex.ToString());
+                    ExceptionMessageBox(ex.Message);
+                    Log.Error("Exception in workerMusic_DoWork", ex);
                 }));
             }
         }
@@ -239,7 +253,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
-                    MessageBox.Show(ex.ToString());
+                    ExceptionMessageBox(ex.Message);
+                    Log.Error("Exception in workerServiceText_DoWork", ex);
                 }));
             }
 
@@ -274,7 +289,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
-                    MessageBox.Show(ex.ToString());
+                    ExceptionMessageBox(ex.Message);
+                    Log.Error("Exception in workerMoPi_DoWork", ex);
+
                 }));
             }
         }
@@ -307,7 +324,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                {
-                   MessageBox.Show(ex.ToString());
+                   ExceptionMessageBox(ex.Message);
+                   Log.Error("Exception in workerVideos_DoWork", ex);
                }));
             }
 
@@ -334,7 +352,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                ExceptionMessageBox(ex.Message);
                 mServiceWatcher.Stop();
             }
         }
@@ -533,8 +551,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 MessageBox.Show("Error updating config");
             }
-
-            InitWebservice();
         }
 
         private void btnTestWebService_Click(object sender, RoutedEventArgs e)
@@ -543,20 +559,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         }
         private string checkInstalledServices()
         {
-            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
-            {
-                return "MPExtendedMultiSeatClient";
-            }
-            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
-            {
-                return "MPExtendedMultiSeatClient";
-            }
             if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("TVAccess.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
             {
                 return "MPExtendedSingleSeat";
             }
+            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
+            {
+                return "MPExtendedMultiSeatClient";
+            }
+            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
+            {
+                return "MPExtendedMultiSeatClient";
+            }
             return "";
-
         }
 
         public static ITVAccessService TVService
@@ -573,7 +588,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     catch (EndpointNotFoundException ex)
                     { }
                     catch (Exception ex)
-                    { }
+                    { ExceptionMessageBox(ex.Message); }
                 }
 
                 return _tvService;
@@ -592,7 +607,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     catch (EndpointNotFoundException ex)
                     { }
                     catch (Exception ex)
-                    { }
+                    { ExceptionMessageBox(ex.Message); }
                 }
 
                 return _streamingService;
@@ -611,7 +626,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     catch (EndpointNotFoundException ex)
                     { }
                     catch (Exception ex)
-                    { }
+                    { ExceptionMessageBox(ex.Message); }
                 }
 
                 return _webStreamingService;
@@ -630,11 +645,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     catch (EndpointNotFoundException ex)
                     { }
                     catch (Exception ex)
-                    { }
+                    {
+                        ExceptionMessageBox(ex.Message);
+                    }
                 }
 
                 return _mediaService;
             }
+        }
+
+        private static void ExceptionMessageBox(string exMessage)
+        {
+
+            MessageBox.Show("An unexpected error occured please file an issue on mpextended.codeplex.com with the service's log files attached", exMessage);
+
         }
     }
 }

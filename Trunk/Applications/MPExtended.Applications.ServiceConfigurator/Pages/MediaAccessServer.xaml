@@ -112,9 +112,9 @@
             </TabItem>
             <TabItem Header="About">
                 <Grid>
-                    <Label Content="GmaWebservice" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
+                    <Label Content="MPExtended" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
                     <TextBlock Margin="28,34,6,0" Name="tbAbout" VerticalAlignment="Top">
-                        Gma Webservice<LineBreak/>
+                        MPExtended webservices<LineBreak/>
                         let's you access all your local media through an api
                         <LineBreak/><LineBreak/><LineBreak/>
                         Contributors:<LineBreak/>

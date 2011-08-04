@@ -32,7 +32,7 @@ namespace MPExtended.Services.MediaAccessService.Code
     {
 
         public MPVideo()
-            : base(Utils.GetMPDbLocations().Videos)
+            : base(Configuration.GetMPDbLocations().Videos)
         {
         }
 

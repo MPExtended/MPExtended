@@ -28,7 +28,7 @@ namespace MPExtended.Services.MediaAccessService.Code
     internal class MPTvSeries : Database
     {
         public MPTvSeries()
-            : base(Utils.GetMPDbLocations().TvSeries)
+            : base(Configuration.GetMPDbLocations().TvSeries)
         {
         }
 

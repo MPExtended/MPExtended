@@ -48,7 +48,7 @@ namespace MPExtended.Services.MediaAccessService.Code
         public static List<WebShare> GetAllShares(ShareType shareType)
         {
             List<WebShare> shares = new List<WebShare>();
-            XElement root = XElement.Load(Utils.GetMpConfigPath());
+            XElement root = XElement.Load(Configuration.GetMpConfigPath());
             IEnumerable<KeyValuePair<string, string>> list = 
                 root.Elements("section")
                 .Where(x => (string)x.Attribute("name") == map[shareType])

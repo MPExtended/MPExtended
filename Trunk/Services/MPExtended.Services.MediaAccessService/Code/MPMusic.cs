@@ -28,7 +28,7 @@ namespace MPExtended.Services.MediaAccessService.Code
     internal class MPMusic : Database
     {
         public MPMusic()
-            : base(Utils.GetMPDbLocations().Music)
+            : base(Configuration.GetMPDbLocations().Music)
         {
         }
 

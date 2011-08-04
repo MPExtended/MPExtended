@@ -28,7 +28,7 @@ namespace MPExtended.Services.MediaAccessService.Code
     internal class MovingPictures : Database
     {
         public MovingPictures() :
-            base(Utils.GetMPDbLocations().MovingPictures)
+            base(Configuration.GetMPDbLocations().MovingPictures)
         {
         }
 

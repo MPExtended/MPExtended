@@ -124,7 +124,7 @@ namespace MPExtended.Libraries.ServiceLib
 #if DEBUG
             basedir = AppDomain.CurrentDomain.BaseDirectory;
 #else
-            basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended";
 #endif
 
             return Path.Combine(basedir, filename);
