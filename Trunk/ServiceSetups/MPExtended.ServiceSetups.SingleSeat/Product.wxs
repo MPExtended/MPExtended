@@ -43,10 +43,9 @@
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
 
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\NLog.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\NLog.config" />
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MediaInfo.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\System.Data.SQLite.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\NLog.config" />
-
 
               <!--MP TVServer dependencies-->
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Gentle.Common.dll" />
@@ -59,6 +58,7 @@
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TvControl.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TVDatabase.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TvLibrary.Interfaces.dll" />
+              
               <!-- TODO: Do we want to install debugging information? -->
 
               <!-- Service -->

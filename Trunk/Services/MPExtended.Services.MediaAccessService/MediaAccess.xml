@@ -4,12 +4,26 @@
     <mpconfig>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</mpconfig>
   </config>
   <mpdatabases>
-    <database name="videos" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3" />
-    <database name="music" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3" />
-    <database name="pictures" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3" />
-    <database name="tvseries" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3" />
-    <database name="movingpictures" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3" />
-    <database name="shares" filename="C:\ProgramData\Team MediaPortal\MediaPortal\database\FolderDatabase3.db3" />
+    <database name="videos">
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</path>
+    </database>
+    <database name="music">
+      <!-- yes, that is correct, we place both paths here. The code automatically ignores non-existent or 0-byte files and picks the first valid one-->
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</path>
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</path>
+    </database>
+    <database name="pictures">
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</path>
+    </database>
+    <database name="tvseries">
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</path>
+    </database>
+    <database name="movingpictures">
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</path>
+    </database>
+    <database name="shares">
+      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\FolderDatabase3.db3</path>
+    </database>
   </mpdatabases>
   <thumbpaths>
     <thumb name="tvseries" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners" />

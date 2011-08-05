@@ -12,6 +12,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebServiceDescription GetServiceDescription();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         List<WebTranscoderProfile> GetTranscoderProfiles();
 
         [OperationContract]

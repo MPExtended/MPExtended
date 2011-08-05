@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceProcess;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,16 +16,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ServiceProcess;
 using System.Windows.Threading;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.ComponentModel;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.TVAccessService.Interfaces;
-using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.MediaAccessService.Interfaces;
+using TAS = MPExtended.Services.TVAccessService.Interfaces;
+using WSS = MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -31,11 +31,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     {
         private ServiceController mServiceController;
         private DispatcherTimer mServiceWatcher;
-        private List<WebStreamingSession> mStreamingSessions = new List<WebStreamingSession>();
-        private static ITVAccessService _tvService;
+        private List<WSS.WebStreamingSession> mStreamingSessions = new List<WSS.WebStreamingSession>();
+        private static TAS.ITVAccessService _tvService;
         private static IMediaAccessService _mediaService;
-        private static IStreamingService _streamingService;
-        private static IWebStreamingService _webStreamingService;
+        private static WSS.IStreamingService _streamingService;
+        private static WSS.IWebStreamingService _webStreamingService;
         private System.Timers.Timer activeSessionTimer = new System.Timers.Timer();
 
         private string ServiceName { get { return checkInstalledServices(); } }
@@ -135,7 +135,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<WebStreamingSession> tmp = WebStreamingService.GetStreamingSessions().ToList();
+            List<WSS.WebStreamingSession> tmp = WebStreamingService.GetStreamingSessions().ToList();
             if (tmp != null)
             {
                 lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -579,7 +579,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             return "";
         }
 
-        public static ITVAccessService TVService
+        public static TAS.ITVAccessService TVService
         {
             get
             {
@@ -588,7 +588,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     try
                     {
 
-                        _tvService = ChannelFactory<ITVAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService/TVAccessService"));
+                        _tvService = ChannelFactory<TAS.ITVAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService/TVAccessService"));
                     }
                     catch (EndpointNotFoundException ex)
                     { }
@@ -599,7 +599,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 return _tvService;
             }
         }
-        public static IStreamingService StreamingService
+        public static WSS.IStreamingService StreamingService
         {
             get
             {
@@ -607,7 +607,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     try
                     {
-                        _streamingService = ChannelFactory<IStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
+                        _streamingService = ChannelFactory<WSS.IStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
                     }
                     catch (EndpointNotFoundException ex)
                     { }
@@ -618,7 +618,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 return _streamingService;
             }
         }
-        public static IWebStreamingService WebStreamingService
+        public static WSS.IWebStreamingService WebStreamingService
         {
             get
             {
@@ -626,7 +626,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     try
                     {
-                        _webStreamingService = ChannelFactory<IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
+                        _webStreamingService = ChannelFactory<WSS.IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
                     }
                     catch (EndpointNotFoundException ex)
                     { }

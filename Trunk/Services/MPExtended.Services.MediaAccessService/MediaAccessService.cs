@@ -31,12 +31,13 @@ namespace MPExtended.Services.MediaAccessService
     {
 
         #region API Constants
-        private const int VIDEO_API = 1;
-        private const int MUSIC_API = 1;
-        private const int PICTURES_API = 1;
-        private const int TVSERIES_API = 1;
         private const int MOVING_PICTURES_API = 1;
-        private const int STREAMING_API = 1;
+        private const int MUSIC_API = 1;
+        private const int MYFILMS_API = 0;
+        private const int PICTURES_API = 2;
+        private const int TVSERIES_API = 1;
+        private const int VIDEO_API = 1;
+        private const int FILESYSTEM_API = 1;
         #endregion
 
         #region MediaPortal Attributes
@@ -59,21 +60,30 @@ namespace MPExtended.Services.MediaAccessService
         public WebServiceDescription GetServiceDescription()
         {
             DBLocations db = Configuration.GetMPDbLocations();
-            WebServiceDescription f = new WebServiceDescription();
-            f.SupportsVideos = File.Exists(db.Videos);
-            f.VideoApiVersion = VIDEO_API;
-            f.SupportsMusic = File.Exists(db.Music);
-            f.MusicApiVersion = MUSIC_API;
-            f.SupportsPictures = File.Exists(db.Pictures);
-            f.PicturesApiVersion = PICTURES_API;
-            f.SupportsTvSeries = File.Exists(db.TvSeries);
-            f.TvSeriesApiVersion = TVSERIES_API;
-            f.SupportsMovingPictures = File.Exists(db.MovingPictures);
-            f.MovingPicturesApiVersion = MOVING_PICTURES_API;
+            return new WebServiceDescription()
+            {
+                SupportsMovingPictures = db.MovingPictures != null,
+                MovingPicturesApiVersion = MOVING_PICTURES_API,
 
-            // see notes in GlobalVersion.cs
-            f.ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-            return f;
+                SupportsMusic = db.Music != null,
+                MusicApiVersion = MUSIC_API,
+
+                SupportsMyFilms = false, // we don't have an API for that at the moment
+                MyFilmsApiVersion = MYFILMS_API,
+
+                SupportsPictures = true, // only share-based access at the moment
+                PicturesApiVersion = PICTURES_API,
+
+                SupportsTvSeries = db.TvSeries != null,
+                TvSeriesApiVersion = TVSERIES_API,
+
+                SupportsVideos = db.Videos != null,
+                VideoApiVersion = VIDEO_API,
+
+                FilesystemApiVersion = FILESYSTEM_API,
+
+                ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
+            };
         }
 
         #region Music

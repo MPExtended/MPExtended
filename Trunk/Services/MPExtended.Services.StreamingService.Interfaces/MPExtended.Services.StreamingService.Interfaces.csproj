@@ -55,6 +55,7 @@
     <Compile Include="WebMediaInfo.cs" />
     <Compile Include="WebMediaType.cs" />
     <Compile Include="WebResolution.cs" />
+    <Compile Include="WebServiceDescription.cs" />
     <Compile Include="WebStreamingSession.cs" />
     <Compile Include="WebTranscoderProfile.cs" />
     <Compile Include="WebTranscodingInfo.cs" />

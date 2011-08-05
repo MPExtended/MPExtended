@@ -41,7 +41,10 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 if (_media == null)
                     _media = ChannelFactory<IMediaAccessService>.CreateChannel(
-                        new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 },
+                        new NetNamedPipeBinding() { 
+                            MaxReceivedMessageSize = 10000000,
+                            OpenTimeout = new TimeSpan(0, 0, 0, 0, 500),
+                        },
                         new EndpointAddress("net.pipe://localhost/MPExtended/MediaAccessService")
                     );
                 return _media;
@@ -54,10 +57,44 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 if (_tv == null)
                     _tv = ChannelFactory<ITVAccessService>.CreateChannel(
-                        new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 },
+                        new NetNamedPipeBinding() { 
+                            MaxReceivedMessageSize = 10000000,
+                            OpenTimeout = new TimeSpan(0, 0, 0, 0, 500),
+                        },
                         new EndpointAddress("net.pipe://localhost/MPExtended/TVAccessService")
                     );
                 return _tv;
+            }
+        }
+
+        public static bool HasMediaConnection
+        {
+            get
+            {
+                try
+                {
+                    WebServices.Media.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static bool HasTVConnection
+        {
+            get
+            {
+                try 
+                {
+                    return WebServices.TV.TestConnectionToTVService();
+                }
+                catch(Exception) 
+                {
+                    return false;
+                }
             }
         }
 

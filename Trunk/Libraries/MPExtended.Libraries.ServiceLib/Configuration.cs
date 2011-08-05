@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MPExtended.Libraries.ServiceLib
 {
@@ -39,7 +40,7 @@ namespace MPExtended.Libraries.ServiceLib
         private static string cachedUsername;
         private static string cachedPassword;
         private static String CachedMPLocation;
-        private static DBLocations CachedDbLocation;
+        private static DBLocations cachedDatabaseLocations;
 
         public static String GetMpConfigPath()
         {
@@ -56,66 +57,40 @@ namespace MPExtended.Libraries.ServiceLib
 
         public static DBLocations GetMPDbLocations()
         {
-            if (CachedDbLocation == null)
+            if (cachedDatabaseLocations == null)
             {
-                DBLocations dbLocations = new DBLocations();
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Configuration.GetPath("MediaAccess.xml"));
-                XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
+                var dbs = XElement.Load(GetPath("MediaAccess.xml"))
+                    .Element("mpdatabases").Elements("database").Select(
+                        el => new KeyValuePair<string, IEnumerable<string>>(
+                            (string)el.Attribute("name"), 
+                            el.Elements("path").Select(x => x.Value).Where(x => File.Exists(x) && new FileInfo(x).Length > 0)
+                        )
+                    );
 
-                Log.Debug("Reading database paths");
-
-                foreach (XmlNode node in dbNodes)
+                cachedDatabaseLocations = new DBLocations()
                 {
-                    String name = node.Attributes["name"].Value;
-                    String value = node.Attributes["filename"].Value;
-                    Log.Debug(name + ": " + value);
-                    switch (name)
-                    {
-                        case "music":
-                            dbLocations.Music = value;
-                            break;
-                        case "pictures":
-                            dbLocations.Pictures = value;
-                            break;
-                        case "tvseries":
-                            dbLocations.TvSeries = value;
-                            break;
-                        case "movingpictures":
-                            dbLocations.MovingPictures = value;
-                            break;
-                        case "shares":
-                            dbLocations.Shares = value;
-                            break;
-                        case "videos":
-                            dbLocations.Videos = value;
-                            break;
-                    }
-                }
-                CachedDbLocation = dbLocations;
+                    Music = dbs.Where(x => x.Key == "music").First().Value.FirstOrDefault(),
+                    Pictures = dbs.Where(x => x.Key == "pictures").First().Value.FirstOrDefault(),
+                    TvSeries = dbs.Where(x => x.Key == "tvseries").First().Value.FirstOrDefault(),
+                    MovingPictures = dbs.Where(x => x.Key == "movingpictures").First().Value.FirstOrDefault(),
+                    Shares = dbs.Where(x => x.Key == "shares").First().Value.FirstOrDefault(),
+                    Videos = dbs.Where(x => x.Key == "videos").First().Value.FirstOrDefault(),
+                };
             }
-            return CachedDbLocation;
+
+            return cachedDatabaseLocations;
         }
 
-        public static void ChangeDbLocation(String _db, String _newPath)
+        public static void ChangeDbLocation(string db, string newPath)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Configuration.GetPath("MediaAccess.xml"));
-            XmlNodeList dbNodes = doc.SelectNodes("/appconfig/mpdatabases/database");
+            XDocument doc = XDocument.Load(GetPath("MediaAccess.xml"));
+            doc.Element("mpdatabases").Elements("database").Where(x => x.Name == db).Remove();
 
-            Log.Debug("Reading database paths");
+            XElement newnode = new XElement("database", new XElement("path", newPath));
+            newnode.SetAttributeValue("name", db);
+            doc.Element("mpdatabases").Add(newnode);
 
-            foreach (XmlNode node in dbNodes)
-            {
-                String name = node.Attributes["name"].Value;
-
-                if (name.Equals(_db))
-                {
-                    node.Attributes["filename"].Value = _newPath;
-                }
-            }
-
-            doc.Save(AppDomain.CurrentDomain.BaseDirectory + "config.xml");
+            doc.Save(GetPath("MediaAccess.xml"));
         }
 
         public static string GetPath(string filename)
@@ -124,9 +99,8 @@ namespace MPExtended.Libraries.ServiceLib
 #if DEBUG
             basedir = AppDomain.CurrentDomain.BaseDirectory;
 #else
-            basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended";
+            basedir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
 #endif
-
             return Path.Combine(basedir, filename);
         }
 

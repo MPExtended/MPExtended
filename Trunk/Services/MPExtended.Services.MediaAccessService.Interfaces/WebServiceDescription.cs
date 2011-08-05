@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
     public class WebServiceDescription
@@ -22,19 +21,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public int TvSeriesApiVersion { get; set; }
         public int MovingPicturesApiVersion { get; set; }
         public int MyFilmsApiVersion { get; set; }
-        public int StreamingApiVersion { get; set; }
+        public int FilesystemApiVersion { get; set; }
         #endregion
 
         public String ServiceVersion { get; set; }
-
-        public WebServiceDescription()
-        {
-            SupportsVideos = false;
-            SupportsMusic = false;
-            SupportsPictures = false;
-            SupportsTvSeries = false;
-            SupportsMovingPictures = false;
-            SupportsMyFilms = false;
-        }
     }
 }

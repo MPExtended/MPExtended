@@ -17,19 +17,21 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Util;
-using MPExtended.Services.MediaAccessService.Interfaces;
+using MASInterfaces = MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
     public class StreamingService : IWebStreamingService, IStreamingService
     {
         private Streaming _stream;
+        private const int API_VERSION = 2;
 
         public StreamingService()
         {
@@ -41,13 +43,26 @@ namespace MPExtended.Services.StreamingService
         {
             if (type != WebMediaType.RecordingItem)
             {
-                return WebServices.Media.GetPath((MediaItemType)type, itemId);
+                return WebServices.Media.GetPath((MASInterfaces.MediaItemType)type, itemId);
             }
             else
             {
                 int id = Int32.Parse(itemId);
                 return WebServices.TV.GetRecordings().Where(r => r.IdRecording == id).Select(r => r.FileName).FirstOrDefault();
             }
+        }
+
+        public WebServiceDescription GetServiceDescription()
+        {
+            bool hasTv = WebServices.HasTVConnection; // takes a while so don't execute it twice
+            return new WebServiceDescription()
+            {
+                SupportsMedia = WebServices.HasMediaConnection,
+                SupportsRecordings = hasTv,
+                SupportsTV = hasTv,
+                ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
+                ApiVersion = API_VERSION,
+            };
         }
 
         #region Profiles
