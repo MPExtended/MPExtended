@@ -2,6 +2,22 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <!--
+  Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+  
+  MPExtended is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+  
+  MPExtended is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+  -->
   <Product
     Id="5c6ca306-2749-4445-a999-f4fb710d824b"
     UpgradeCode="b2aba63e-2197-4c28-b114-c4b0c49efc7c"
