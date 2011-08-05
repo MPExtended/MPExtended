@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code;
 using MPExtended.Services.MediaAccessService.Code.Helper;
@@ -27,6 +28,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class MediaAccessService : IMediaAccessService
     {
 

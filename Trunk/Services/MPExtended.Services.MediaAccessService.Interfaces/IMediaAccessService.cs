@@ -15,7 +15,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Asc = 0,
         [EnumMember]
         Desc = 1
-
     }
 
     [DataContract]
@@ -41,14 +40,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         SeasonNumber_EpisodeNumber = 8,
         [EnumMember]
         DateAdded = 9
-
-
     }
 
-    [ServiceContract]
+    [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
     public interface IMediaAccessService
     {
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebServiceDescription GetServiceDescription();

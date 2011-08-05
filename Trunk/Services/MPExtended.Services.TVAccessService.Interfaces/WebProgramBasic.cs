@@ -7,13 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebProgramBasic
     {
-        #region Constructor
-        public WebProgramBasic()
-        {
-        }
-
-        #endregion
-
         #region Properties
         public string Description { get; set; }
         public DateTime EndTime { get; set; }

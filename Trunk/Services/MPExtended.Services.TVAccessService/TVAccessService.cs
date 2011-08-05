@@ -31,7 +31,7 @@ using TvDatabase;
 
 namespace MPExtended.Services.TVAccessService
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVAccessService : ITVAccessService
     {
         #region Fields

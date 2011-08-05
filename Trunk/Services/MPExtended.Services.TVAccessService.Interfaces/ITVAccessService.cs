@@ -7,26 +7,9 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 
-
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-
-    [DataContract]
-    public enum WebChannelState
-    {
-        [EnumMember]
-        NotTunable = 0,
-        [EnumMember]
-        Tunable = 1,
-        [EnumMember]
-        Timeshifting = 2,
-        [EnumMember]
-        Recording = 3
-
-    }
-
-
-    [ServiceContract(Namespace = "http://tv4home.codeplex.com")]
+    [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
     public interface ITVAccessService
     {
         [OperationContract]
@@ -201,8 +184,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         void WriteSettingToDatabase(string tagName, string value);
-
-   
-
     }
 }

@@ -7,12 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebProgramDetailed : WebProgramBasic
     {
-        #region Constructor
-        public WebProgramDetailed()
-        {
-        }
-        #endregion
-
         #region Properties
         public string Classification { get; set; }
         public string EpisodeName { get; set; }
