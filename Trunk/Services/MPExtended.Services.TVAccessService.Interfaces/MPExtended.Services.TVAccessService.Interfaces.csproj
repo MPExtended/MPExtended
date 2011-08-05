@@ -56,7 +56,6 @@
     <Compile Include="WebChannelBasic.cs" />
     <Compile Include="WebChannelDetailed.cs" />
     <Compile Include="WebChannelGroup.cs" />
-    <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />
     <Compile Include="WebRecording.cs" />

@@ -37,24 +37,6 @@ namespace MPExtended.Services.StreamingService.Code
         }
     }
 
-    internal static class TranscoderProfileExtensionMethods
-    {
-        public static WebTranscoderProfile ToWebTranscoderProfile(this TranscoderProfile profile)
-        {
-            return new WebTranscoderProfile()
-            {
-                Name = profile.Name,
-                Description = profile.Description,
-                MIME = profile.MIME,
-                MaxOutputWidth = profile.MaxOutputWidth,
-                MaxOutputHeight = profile.MaxOutputHeight,
-                UseTranscoding = profile.UseTranscoding,
-                Target = profile.Target,
-                Bandwidth = profile.Bandwidth
-            };
-        }
-    }
-
     internal static class ResolutionExtensionMethods
     {
         public static WebResolution ToWebResolution(this Resolution res)

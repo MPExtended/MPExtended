@@ -54,7 +54,6 @@
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="MediaItemType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebBannerPath.cs" />
     <Compile Include="WebEpisode.cs" />
     <Compile Include="WebEpisodeFull.cs" />
     <Compile Include="WebFileInfo.cs" />
@@ -70,7 +69,6 @@
     <Compile Include="WebSeriesFull.cs" />
     <Compile Include="WebServiceDescription.cs" />
     <Compile Include="WebShare.cs" />
-    <Compile Include="WebVideo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -54,7 +54,7 @@ namespace MPExtended.Services.StreamingService.Units {
             return true;
         }
 
-        private class DoOutputParsing
+        private static class DoOutputParsing
         {
             public static void ParseOutputStream(Stream outputStream, Reference<EncodingInfo> saveData, bool logMessages, bool logProgress)
             {

@@ -104,7 +104,6 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     string arguments = transcoder.GenerateArguments(info, stream.OutputSize, position, audioId, subtitleId);
                     EncoderUnit unit = new EncoderUnit(transcoder.GetTranscoderPath(), arguments, transcoder.GetInputMethod(), transcoder.GetOutputMethod());
-                    unit.Source = stream.Source; // setting it when we don't use it doesn't hurt
                     unit.DebugOutput = false; // change this for debugging
                     stream.Pipeline.AddDataUnit(unit, 5);
 

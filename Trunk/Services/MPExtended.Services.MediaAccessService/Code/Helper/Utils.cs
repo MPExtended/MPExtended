@@ -28,12 +28,9 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Code.Helper
 {
-
-
     public class Utils
     {
-        private static string logDir = AppDomain.CurrentDomain.BaseDirectory + "\\logs";
-        private static Dictionary<String, WebBannerPath> CachedWebBannerPaths = null;
+        private static Dictionary<string, string> cachedBannerPaths = new Dictionary<string, string>();
 
         public static String[] SplitString(String _stringToSplit)
         {
@@ -55,10 +52,14 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
 
         public static string GetBannerPath(string name)
         {
-            XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
-            XElement res =
-                root.Elements("thumbpaths").First().Elements("thumb").Where(x => (string)x.Attribute("name") == name).First();
-            return (string)res.Attribute("path");
+            if(!cachedBannerPaths.ContainsKey(name))
+            {
+                XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
+                XElement res =
+                    root.Elements("thumbpaths").First().Elements("thumb").Where(x => (string)x.Attribute("name") == name).First();
+                cachedBannerPaths[name] = (string)res.Attribute("path");
+            }
+            return cachedBannerPaths[name];
         }
 
         public static bool IsAllowedPath(string path)

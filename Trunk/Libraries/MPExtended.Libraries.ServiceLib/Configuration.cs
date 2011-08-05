@@ -27,12 +27,12 @@ namespace MPExtended.Libraries.ServiceLib
 {
     public class DBLocations
     {
-        public string Music;
-        public string Pictures;
-        public string TvSeries;
-        public string MovingPictures;
-        public string Shares;
-        public string Videos;
+        public string Music { get; set; }
+        public string Pictures { get; set; }
+        public string TvSeries { get; set; }
+        public string MovingPictures { get; set; }
+        public string Shares { get; set; }
+        public string Videos { get; set; }
     }
 
     public class Configuration

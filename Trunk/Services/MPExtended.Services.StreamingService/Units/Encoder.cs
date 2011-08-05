@@ -40,8 +40,6 @@ namespace MPExtended.Services.StreamingService.Units {
         public bool IsDataStreamConnected { get; set; }
         public bool IsLogStreamConnected { get; set; }
 
-        public string Source { get; set; }
-        public string Output { get; set; }
         public bool DebugOutput { get; set; }
 
         private string transcoderPath;

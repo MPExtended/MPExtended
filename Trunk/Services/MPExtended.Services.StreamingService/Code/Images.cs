@@ -106,9 +106,6 @@ namespace MPExtended.Services.StreamingService.Code
                 return null;
             }
 
-            FileInfo imageFile = new FileInfo(path);
-            string imagePathHash = imageFile.Directory.ToString().GetHashCode().ToString();
-
             // string tmpDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "imagecache")
             string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended.Services.MediaAccessService.MPPictures");
             if (!Directory.Exists(tmpDir))

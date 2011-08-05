@@ -45,7 +45,7 @@ namespace MPExtended.Services.StreamingService.Util {
             } catch (NotSupportedException e) {
                 // we only do a workaround for TsBuffer here, nothing for other errors
                 if (!(source is TsBuffer))
-                    throw e;
+                    throw;
 
                 TsBuffer stream = (TsBuffer)source;
                 Log.Error(string.Format("StreamCopy {0}: NotSupportedException when trying to read from TsBuffer", log), e);

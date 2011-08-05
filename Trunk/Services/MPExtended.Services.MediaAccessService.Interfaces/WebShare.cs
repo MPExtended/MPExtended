@@ -7,25 +7,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 {
     public class WebShare
     {
-        public int ShareId;
-        public string Path;
-        public string Name;
-        public String[] Extensions;
-        public String PinCode;
-        public bool IsFtp;
-        public String FtpServer;
-        public int FtpPort;
-        public String FtpPath;
-        public String FtpLogin;
-        public String FtpPassword;
-
-        public WebShare() { }
-        public WebShare(int _shareId, string _name, string _path)
-        {
-            this.ShareId = _shareId;
-            this.Path = _path;
-            this.Name = _name;
-        }
-
+        public int ShareId { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
+        public String[] Extensions { get; set; }
+        public String PinCode { get; set; }
+        public bool IsFtp { get; set; }
+        public String FtpServer { get; set; }
+        public int FtpPort { get; set; }
+        public String FtpPath { get; set; }
+        public String FtpLogin { get; set; }
+        public String FtpPassword { get; set; }
     }
 }

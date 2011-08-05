@@ -76,7 +76,6 @@ namespace MPExtended.Services.StreamingService.Util {
 
         public override int Read(byte[] buffer, int offset, int count) {
             int read = 0;
-            System.Diagnostics.StackFrame[] frames = (new System.Diagnostics.StackTrace()).GetFrames();
             read = pipe.Read(buffer, offset, count);
             return read;
         }
