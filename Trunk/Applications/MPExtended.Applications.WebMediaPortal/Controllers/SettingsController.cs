@@ -22,7 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Applications.WebMediaPortal.Services;
+
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {

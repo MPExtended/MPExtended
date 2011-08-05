@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Applications.WebMediaPortal.Services;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -30,12 +30,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Pictures/
         public ActionResult Index()
         {
-            return View(WebServices.MediaAccessService.GetPictureDirectory(@"\\whs\Fotos"));
+            return View(MPEServices.NetPipeMediaAccessService.GetPictureDirectory(@"\\whs\Fotos"));
         }
 
         public ActionResult Browse(string path)
-        { 
-            return View(WebServices.MediaAccessService.GetPictureDirectory(new System.Text.ASCIIEncoding().GetString(Server.UrlTokenDecode(path))));
+        {
+            return View(MPEServices.NetPipeMediaAccessService.GetPictureDirectory(new System.Text.ASCIIEncoding().GetString(Server.UrlTokenDecode(path))));
         }
 
         public ActionResult Image(string path)

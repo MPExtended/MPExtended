@@ -21,9 +21,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.ServiceModel;
-using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -43,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var channelList = WebServices.TVService.GetChannelsBasic(1);
+                var channelList = MPEServices.NetPipeTVService.GetChannelsBasic(1);
                 if (channelList != null)
                 {
                     return View(channelList);
@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var channel = WebServices.TVService.GetChannelDetailedById(channelId);
+                var channel = MPEServices.NetPipeTVService.GetChannelDetailedById(channelId);
                 if (channel != null)
                 {
                     return View(channel);
@@ -78,7 +78,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                IEnumerable<WebRecording> recordings = WebServices.TVService.GetRecordings().Where(r => r.IdRecording == recordingId);
+                IEnumerable<WebRecording> recordings = MPEServices.NetPipeTVService.GetRecordings().Where(r => r.IdRecording == recordingId);
                 if (recordings.Count() > 0)
                 {
                     return View(recordings.First());
@@ -95,7 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var recordings = WebServices.TVService.GetRecordings();
+                var recordings = MPEServices.NetPipeTVService.GetRecordings();
                 if (recordings != null)
                 {
                     return View(recordings);
@@ -118,7 +118,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             DateTime startTime = DateTime.Now;
             DateTime endTime = DateTime.Now.AddHours(4);
 
-            var programsList = from p in WebServices.TVService.GetProgramsDetailedForChannel(channelId, startTime, endTime)
+            var programsList = from p in MPEServices.NetPipeTVService.GetProgramsDetailedForChannel(channelId, startTime, endTime)
                                select new Models.SingleTVProgramModel(p, startTime, endTime);
 
             return PartialView(programsList);
@@ -128,7 +128,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var program = WebServices.TVService.GetProgramBasicById(programId);
+                var program = MPEServices.NetPipeTVService.GetProgramBasicById(programId);
                 if (program != null)
                 {
                     return View(program);
@@ -143,23 +143,23 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AddSchedule(int programId)
         {
-            var program = WebServices.TVService.GetProgramDetailedById(programId);
-            WebServices.TVService.AddScheduleDetailed(program.IdChannel, program.Title, program.StartTime, program.EndTime, 0, 10, 15, "", 0);
+            var program = MPEServices.NetPipeTVService.GetProgramDetailedById(programId);
+            MPEServices.NetPipeTVService.AddScheduleDetailed(program.IdChannel, program.Title, program.StartTime, program.EndTime, 0, 10, 15, "", 0);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
         public ActionResult DeleteSchedule(int programId)
         {
-            var program = WebServices.TVService.GetProgramDetailedById(programId);
-            int i = WebServices.TVService.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).ElementAt(0).IdSchedule;
-            WebServices.TVService.DeleteSchedule(i);
+            var program = MPEServices.NetPipeTVService.GetProgramDetailedById(programId);
+            int i = MPEServices.NetPipeTVService.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).ElementAt(0).IdSchedule;
+            MPEServices.NetPipeTVService.DeleteSchedule(i);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
         public ActionResult DeleteScheduleById(int scheduleId)
         {
 
-            WebServices.TVService.DeleteSchedule(scheduleId);
+            MPEServices.NetPipeTVService.DeleteSchedule(scheduleId);
             return RedirectToAction("TVGuide", "Television");
         }
 
@@ -167,7 +167,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var schedule = WebServices.TVService.GetScheduleById(scheduleId);
+                var schedule = MPEServices.NetPipeTVService.GetScheduleById(scheduleId);
                 if (schedule != null)
                 {
                     return View(schedule);

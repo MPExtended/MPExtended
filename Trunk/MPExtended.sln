@@ -99,9 +99,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.TestTools.StreamingService", "Applications\MPExtended.Applications.TestTools.StreamingService\MPExtended.Applications.TestTools.StreamingService.csproj", "{1E43D575-56AE-4F75-8FA0-D0EDC8501933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.TestTools.Performance", "Applications\MPExtended.Applications.TestTools.Performance\MPExtended.Applications.TestTools.Performance.csproj", "{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -181,6 +183,10 @@ Global
 		SccProjectTopLevelParentUniqueName19 = MPExtended.sln
 		SccProjectName19 = Applications/MPExtended.Applications.TestTools.StreamingService
 		SccLocalPath19 = Applications\\MPExtended.Applications.TestTools.StreamingService
+		SccProjectUniqueName20 = Applications\\MPExtended.Applications.TestTools.Performance\\MPExtended.Applications.TestTools.Performance.csproj
+		SccProjectTopLevelParentUniqueName20 = MPExtended.sln
+		SccProjectName20 = Applications/MPExtended.Applications.TestTools.Performance
+		SccLocalPath20 = Applications\\MPExtended.Applications.TestTools.Performance
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -378,6 +384,16 @@ Global
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|Mixed Platforms.Build.0 = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|x86.ActiveCfg = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|x86.Build.0 = Release|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|x86.ActiveCfg = Debug|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|x86.Build.0 = Debug|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Any CPU.ActiveCfg = Release|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.ActiveCfg = Release|x86
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -407,6 +423,7 @@ Global
 		{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
+		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{E8ECBC04-8B62-454E-A671-8A33BDB35F4F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{B17C433D-85CA-4FEC-8ECB-A31FC057C139} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}

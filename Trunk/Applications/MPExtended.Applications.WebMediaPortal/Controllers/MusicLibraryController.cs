@@ -23,8 +23,8 @@ using System.Web.Mvc;
 using System.IO;
 using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var artistList = WebServices.MediaAccessService.GetAllArtists();
+                var artistList = MPEServices.NetPipeMediaAccessService.GetAllArtists();
                 if (artistList != null)
                 {
                     return View(artistList);
@@ -53,7 +53,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var albumList = WebServices.MediaAccessService.GetAlbumsByArtist(artist);
+                var albumList = MPEServices.NetPipeMediaAccessService.GetAlbumsByArtist(artist);
                 if (albumList != null)
                 {
                     return View(albumList);
@@ -70,7 +70,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var trackList = WebServices.MediaAccessService.GetSongsOfAlbum(album, artist, SortBy.Name, OrderBy.Asc);
+                var trackList = MPEServices.NetPipeMediaAccessService.GetSongsOfAlbum(album, artist, SortBy.Name, OrderBy.Asc);
                 if (trackList != null)
                 {
                     return View(trackList);
@@ -87,7 +87,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var musicTrack = WebServices.MediaAccessService.GetMusicTrack(track);
+                var musicTrack = MPEServices.NetPipeMediaAccessService.GetMusicTrack(track);
                 if (musicTrack != null)
                 {
                     return View(musicTrack);
@@ -103,7 +103,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                byte[] image = System.IO.File.ReadAllBytes(WebServices.MediaAccessService.GetAlbum(artist, album).CoverPathL);
+                byte[] image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetAlbum(artist, album).CoverPathL);
                 return File(image, "image/jpg");
             }
             catch (Exception ex)

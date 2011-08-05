@@ -76,7 +76,6 @@
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Util.cs" />
-    <Compile Include="Code\Log.cs" />
     <Compile Include="Code\XMLMembershipProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieLibraryController.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="Models\SingleTVProgramModel.cs" />
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\WebServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.users.xml" />
@@ -275,6 +273,10 @@
     <Content Include="Views\Settings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.ServiceLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>

@@ -21,10 +21,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -47,7 +47,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebMovieFull> tmp = WebServices.MediaAccessService.GetMoviesDetailed(1, 4, SortBy.DateAdded, OrderBy.Desc);
+                List<WebMovieFull> tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailed(1, 4, SortBy.DateAdded, OrderBy.Desc);
                 return PartialView(tmp);
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebRecording> tmp = WebServices.TVService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
+                List<WebRecording> tmp = MPEServices.NetPipeTVService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
                 return PartialView(tmp.GetRange(0, tmp.Count / 10));
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebSchedule> tmp = WebServices.TVService.GetSchedules();
+                List<WebSchedule> tmp = MPEServices.NetPipeTVService.GetSchedules();
                 return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
 
 

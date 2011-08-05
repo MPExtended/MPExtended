@@ -23,9 +23,9 @@ using System.Web.Mvc;
 using System.IO;
 using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -39,7 +39,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var movieList = WebServices.MediaAccessService.GetAllMovies(SortBy.Name, OrderBy.Asc);
+                var movieList = MPEServices.NetPipeMediaAccessService.GetAllMovies(SortBy.Name, OrderBy.Asc);
                 if (movieList != null)
                 {
                     return View(movieList);
@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var fullMovie = WebServices.MediaAccessService.GetFullMovie(movie);
+                var fullMovie = MPEServices.NetPipeMediaAccessService.GetFullMovie(movie);
                 if (fullMovie != null)
                 {
                     return View(fullMovie);
@@ -77,7 +77,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var fullMovie = WebServices.MediaAccessService.GetFullMovie(movie);
+                var fullMovie = MPEServices.NetPipeMediaAccessService.GetFullMovie(movie);
                 if (fullMovie != null)
                 {
                     return View(fullMovie);
@@ -94,7 +94,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(WebServices.MediaAccessService.GetFullMovie(movie).CoverPath);
+                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetFullMovie(movie).CoverPath);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

@@ -21,7 +21,8 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.WebPages.Html;
-using MPExtended.Applications.WebMediaPortal.Services;
+using MPExtended.Libraries.ServiceLib;
+
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -46,7 +47,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var profile in WebServices.WebStreamService.GetTranscoderProfiles())
+                foreach (var profile in MPEServices.NetPipeWebStreamService.GetTranscoderProfiles())
                 {
                     _profiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
 
@@ -59,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var group in WebServices.TVService.GetGroups())
+                foreach (var group in MPEServices.NetPipeTVService.GetGroups())
                 {
                     _groups.Add(new SelectListItem() { Text = group.GroupName, Value = group.IdGroup.ToString() });
 

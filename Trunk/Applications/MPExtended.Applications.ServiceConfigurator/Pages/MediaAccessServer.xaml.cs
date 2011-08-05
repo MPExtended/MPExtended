@@ -135,12 +135,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<WSS.WebStreamingSession> tmp = WebStreamingService.GetStreamingSessions().ToList();
+            List<WSS.WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions().ToList();
             if (tmp != null)
             {
                 lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
-                    lvActiveStreams.ItemsSource = WebStreamingService.GetStreamingSessions().ToList();
+                    lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions().ToList();
                 }));
             }
         }
@@ -158,8 +158,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                int count = MediaService.GetSeriesCount();
-                List<WebSeries> items = MediaService.GetSeries(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetSeriesCount();
+                List<WebSeries> items = MPEServices.NetPipeMediaAccessService.GetSeries(0, 1, SortBy.Name, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -194,8 +194,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             try
             {
-                int count = MediaService.GetAlbumsCount();
-                List<WebMusicAlbum> items = MediaService.GetAlbums(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetAlbumsCount();
+                List<WebMusicAlbum> items = MPEServices.NetPipeMediaAccessService.GetAlbums(0, 1, SortBy.Name, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -228,7 +228,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                WebServiceDescription functions = MediaService.GetServiceDescription();
+                WebServiceDescription functions = MPEServices.NetPipeMediaAccessService.GetServiceDescription();
 
                 if (functions != null)
                 {
@@ -270,8 +270,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                int count = MediaService.GetMovieCount();
-                List<WebMovie> items = MediaService.GetMovies(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetMovieCount();
+                List<WebMovie> items = MPEServices.NetPipeMediaAccessService.GetMovies(0, 1, SortBy.Name, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -305,8 +305,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                int count = MediaService.GetVideosCount();
-                List<WebMovie> items = MediaService.GetVideos(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetVideosCount();
+                List<WebMovie> items = MPEServices.NetPipeMediaAccessService.GetVideos(0, 1, SortBy.Name, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -579,85 +579,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             return "";
         }
 
-        public static TAS.ITVAccessService TVService
-        {
-            get
-            {
-                if (_tvService == null || ((ICommunicationObject)_tvService).State == CommunicationState.Faulted)
-                {
-                    try
-                    {
 
-                        _tvService = ChannelFactory<TAS.ITVAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService/TVAccessService"));
-                    }
-                    catch (EndpointNotFoundException ex)
-                    { }
-                    catch (Exception ex)
-                    { ExceptionMessageBox(ex.Message); }
-                }
-
-                return _tvService;
-            }
-        }
-        public static WSS.IStreamingService StreamingService
-        {
-            get
-            {
-                if (_streamingService == null || ((ICommunicationObject)_streamingService).State == CommunicationState.Faulted)
-                {
-                    try
-                    {
-                        _streamingService = ChannelFactory<WSS.IStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
-                    }
-                    catch (EndpointNotFoundException ex)
-                    { }
-                    catch (Exception ex)
-                    { ExceptionMessageBox(ex.Message); }
-                }
-
-                return _streamingService;
-            }
-        }
-        public static WSS.IWebStreamingService WebStreamingService
-        {
-            get
-            {
-                if (_webStreamingService == null || ((ICommunicationObject)_webStreamingService).State == CommunicationState.Faulted)
-                {
-                    try
-                    {
-                        _webStreamingService = ChannelFactory<WSS.IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
-                    }
-                    catch (EndpointNotFoundException ex)
-                    { }
-                    catch (Exception ex)
-                    { ExceptionMessageBox(ex.Message); }
-                }
-
-                return _webStreamingService;
-            }
-        }
-        public static IMediaAccessService MediaService
-        {
-            get
-            {
-                if (_mediaService == null || ((ICommunicationObject)_mediaService).State == CommunicationState.Faulted)
-                {
-                    try
-                    {
-                        _mediaService = ChannelFactory<IMediaAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/MediaAccessService"));
-                    }
-                    catch (EndpointNotFoundException ex)
-                    { }
-                    catch (Exception ex)
-                    {
-                        ExceptionMessageBox(ex.Message);
-                    }
-                }
-
-                return _mediaService;
-            }
-        }
 
         private static void ExceptionMessageBox(string exMessage)
         {

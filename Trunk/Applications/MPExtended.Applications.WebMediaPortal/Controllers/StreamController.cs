@@ -24,8 +24,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Applications.WebMediaPortal.Services;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -43,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult TV(int item, string transcoder, string size)
         {
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!WebServices.WebStreamService.InitTVStream(item, "WebMediaPortal", identifier))
+            if (!MPEServices.NetPipeWebStreamService.InitTVStream(item, "WebMediaPortal", identifier))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
@@ -55,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private ActionResult GenerateStream(StreamMedia type, string itemId, string transcoder)
         {
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!WebServices.WebStreamService.InitStream((WebMediaType)type, itemId, "WebMediaPortal", identifier))
+            if (!MPEServices.NetPipeWebStreamService.InitStream((WebMediaType)type, itemId, "WebMediaPortal", identifier))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
@@ -66,7 +66,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         private ActionResult DoStreaming(string identifier, string transcoderProfile)
         {
-            if (!WebServices.WebStreamService.StartStream(identifier, transcoderProfile, 0))
+            if (!MPEServices.NetPipeWebStreamService.StartStream(identifier, transcoderProfile, 0))
             {
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();
@@ -81,7 +81,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // set headers and diisable buffer
             HttpContext.Response.Buffer = false;
             HttpContext.Response.BufferOutput = false;
-            HttpContext.Response.ContentType = WebServices.WebStreamService.GetTranscoderProfileByName(transcoderProfile).MIME;
+            HttpContext.Response.ContentType = MPEServices.NetPipeWebStreamService.GetTranscoderProfileByName(transcoderProfile).MIME;
             HttpContext.Response.StatusCode = 200;
 
             while (HttpContext.Response.IsClientConnected && (read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 HttpContext.Response.OutputStream.Flush();
             }
 
-            if (!WebServices.WebStreamService.FinishStream(identifier))
+            if (!MPEServices.NetPipeWebStreamService.FinishStream(identifier))
             {
                 Log.Error("Streaming: FinishStream failed");
             }
@@ -131,9 +131,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string target = showVideo ? "pc-flash-video" : "pc-flash-audio";
             string preferredProfile = showVideo ? "Flash LQ" : "Flash Audio";
             string transcoderName = Request.Params["player"] != null ? Request.Params["player"] : preferredProfile;
-            WebTranscoderProfile profile = WebServices.WebStreamService.GetTranscoderProfileByName(transcoderName);
+            WebTranscoderProfile profile = MPEServices.NetPipeWebStreamService.GetTranscoderProfileByName(transcoderName);
             if (profile == null || profile.Target != target) {
-                List<WebTranscoderProfile> profiles = WebServices.WebStreamService.GetTranscoderProfilesForTarget(target);
+                List<WebTranscoderProfile> profiles = MPEServices.NetPipeWebStreamService.GetTranscoderProfilesForTarget(target);
                 if(profiles.Count == 0)
                     throw new ArgumentException("Profile does not exists");
                 profile = profiles.First();
@@ -149,11 +149,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             } 
             else if (type == StreamMedia.TV)
             {
-                playerSize = WebServices.WebStreamService.GetTVStreamSize(Int32.Parse(itemId), profile.Name);
+                playerSize = MPEServices.NetPipeWebStreamService.GetTVStreamSize(Int32.Parse(itemId), profile.Name);
             }
             else
             {
-                playerSize = WebServices.WebStreamService.GetStreamSize((WebMediaType)type, itemId, profile.Name);
+                playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebMediaType)type, itemId, profile.Name);
             }
 
             // generate url
