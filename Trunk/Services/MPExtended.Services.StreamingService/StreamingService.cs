@@ -20,18 +20,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Util;
 using MASInterfaces = MPExtended.Services.MediaAccessService.Interfaces;
+using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
-        private Streaming _stream;
+        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings;
         private const int API_VERSION = 2;
+
+        private Streaming _stream;
 
         public StreamingService()
         {
@@ -43,21 +48,21 @@ namespace MPExtended.Services.StreamingService
         {
             if (type != WebMediaType.RecordingItem)
             {
-                return WebServices.Media.GetPath((MASInterfaces.MediaItemType)type, itemId);
+                return MPEServices.NetPipeMediaAccessService.GetPath((MASInterfaces.MediaItemType)type, itemId);
             }
             else
             {
                 int id = Int32.Parse(itemId);
-                return WebServices.TV.GetRecordings().Where(r => r.IdRecording == id).Select(r => r.FileName).FirstOrDefault();
+                return MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.IdRecording == id).Select(r => r.FileName).FirstOrDefault();
             }
         }
 
         public WebServiceDescription GetServiceDescription()
         {
-            bool hasTv = WebServices.HasTVConnection; // takes a while so don't execute it twice
+            bool hasTv = MPEServices.HasTVAccessConnection; // takes a while so don't execute it twice
             return new WebServiceDescription()
             {
-                SupportsMedia = WebServices.HasMediaConnection,
+                SupportsMedia = MPEServices.HasMediaAccessConnection,
                 SupportsRecordings = hasTv,
                 SupportsTV = hasTv,
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
@@ -100,7 +105,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebMediaInfo GetTVMediaInfo(string identifier)
         {
-            TsBuffer buffer = new TsBuffer(WebServices.GetTimeshifting(identifier).TimeShiftFileName);
+            TsBuffer buffer = new TsBuffer(_timeshiftings[identifier].TimeShiftFileName);
             return MediaInfo.MediaInfoWrapper.GetMediaInfo(buffer);
         }
 
@@ -132,9 +137,9 @@ namespace MPExtended.Services.StreamingService
         public bool InitTVStream(int channelId, string clientDescription, string identifier)
         {
             Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
-            var card = WebServices.TV.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
+            var card = MPEServices.NetPipeTVAccessService.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
             Log.Debug("Timeshifting started!");
-            WebServices.SaveTimeshifting(identifier, card);
+            _timeshiftings[identifier] = card;
             return _stream.InitStream(identifier, clientDescription, card.TimeShiftFileName);
         }
 
@@ -170,10 +175,10 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called FinishStream with ident={0}", identifier);
             _stream.KillStream(identifier);
-            if (WebServices.GetTimeshifting(identifier) != null)
+            if (_timeshiftings[identifier] != null)
             {
-                WebServices.TV.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
-                WebServices.SaveTimeshifting(identifier, null);
+                MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
+                _timeshiftings.Remove(identifier);
             }
             return true;
         }

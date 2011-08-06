@@ -60,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var group in MPEServices.NetPipeTVService.GetGroups())
+                foreach (var group in MPEServices.NetPipeTVAccessService.GetGroups())
                 {
                     _groups.Add(new SelectListItem() { Text = group.GroupName, Value = group.IdGroup.ToString() });
 

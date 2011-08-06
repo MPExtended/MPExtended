@@ -59,7 +59,6 @@
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\Pipeline.cs" />
     <Compile Include="Code\Config.cs" />
-    <Compile Include="Code\Services.cs" />
     <Compile Include="Code\Streaming.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />

@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebRecording> tmp = MPEServices.NetPipeTVService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
+                List<WebRecording> tmp = MPEServices.NetPipeTVAccessService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
                 return PartialView(tmp.GetRange(0, tmp.Count / 10));
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebSchedule> tmp = MPEServices.NetPipeTVService.GetSchedules();
+                List<WebSchedule> tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
                 return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
 
 

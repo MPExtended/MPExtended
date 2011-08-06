@@ -46,7 +46,23 @@ namespace MPExtended.Libraries.ServiceLib
             }
         }
 
-        public static ITVAccessService NetPipeTVService
+        public static bool HasMediaAccessConnection
+        {
+            get
+            {
+                try
+                {
+                    NetPipeMediaAccessService.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static ITVAccessService NetPipeTVAccessService
         {
             get
             {
@@ -57,6 +73,22 @@ namespace MPExtended.Libraries.ServiceLib
                 return _tvService;
             }
         }
+
+        public static bool HasTVAccessConnection
+        {
+            get
+            {
+                try
+                {
+                    return NetPipeTVAccessService.TestConnectionToTVService();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
 
         public static IWebStreamingService NetPipeWebStreamService
         {
@@ -71,6 +103,7 @@ namespace MPExtended.Libraries.ServiceLib
             }
         }
 
+
         public static IStreamingService NetPipeStreams
         {
             get
@@ -81,6 +114,23 @@ namespace MPExtended.Libraries.ServiceLib
                 }
 
                 return _streamService;
+            }
+        }
+
+
+        public static bool HasStreamConnection
+        {
+            get
+            {
+                try
+                {
+                    NetPipeWebStreamService.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
     }
