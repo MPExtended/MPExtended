@@ -56,12 +56,14 @@
             this.cmdPlayInVlc = new System.Windows.Forms.Button();
             this.cbStartAutoPlayback = new System.Windows.Forms.CheckBox();
             this.cbLanguage = new System.Windows.Forms.ComboBox();
+            this.cbProfiles = new System.Windows.Forms.ComboBox();
+            this.cbSubtitle = new System.Windows.Forms.ComboBox();
             cmdStartStream = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdStartStream
             // 
-            cmdStartStream.Location = new System.Drawing.Point(11, 150);
+            cmdStartStream.Location = new System.Drawing.Point(11, 206);
             cmdStartStream.Name = "cmdStartStream";
             cmdStartStream.Size = new System.Drawing.Size(307, 23);
             cmdStartStream.TabIndex = 5;
@@ -71,7 +73,7 @@
             // 
             // cmdSeekToPos
             // 
-            this.cmdSeekToPos.Location = new System.Drawing.Point(243, 242);
+            this.cmdSeekToPos.Location = new System.Drawing.Point(243, 298);
             this.cmdSeekToPos.Name = "cmdSeekToPos";
             this.cmdSeekToPos.Size = new System.Drawing.Size(75, 23);
             this.cmdSeekToPos.TabIndex = 0;
@@ -81,14 +83,14 @@
             // 
             // txtStartPos
             // 
-            this.txtStartPos.Location = new System.Drawing.Point(11, 244);
+            this.txtStartPos.Location = new System.Drawing.Point(11, 300);
             this.txtStartPos.Name = "txtStartPos";
             this.txtStartPos.Size = new System.Drawing.Size(226, 20);
             this.txtStartPos.TabIndex = 2;
             // 
             // cmdInitMovie
             // 
-            this.cmdInitMovie.Location = new System.Drawing.Point(277, 65);
+            this.cmdInitMovie.Location = new System.Drawing.Point(277, 94);
             this.cmdInitMovie.Name = "cmdInitMovie";
             this.cmdInitMovie.Size = new System.Drawing.Size(41, 23);
             this.cmdInitMovie.TabIndex = 3;
@@ -98,7 +100,7 @@
             // 
             // cmdFinishStreaming
             // 
-            this.cmdFinishStreaming.Location = new System.Drawing.Point(12, 302);
+            this.cmdFinishStreaming.Location = new System.Drawing.Point(12, 358);
             this.cmdFinishStreaming.Name = "cmdFinishStreaming";
             this.cmdFinishStreaming.Size = new System.Drawing.Size(306, 23);
             this.cmdFinishStreaming.TabIndex = 3;
@@ -118,7 +120,7 @@
             // 
             // cmdSeek0
             // 
-            this.cmdSeek0.Location = new System.Drawing.Point(12, 179);
+            this.cmdSeek0.Location = new System.Drawing.Point(12, 235);
             this.cmdSeek0.Name = "cmdSeek0";
             this.cmdSeek0.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek0.TabIndex = 6;
@@ -128,7 +130,7 @@
             // 
             // cmdSeek100
             // 
-            this.cmdSeek100.Location = new System.Drawing.Point(64, 179);
+            this.cmdSeek100.Location = new System.Drawing.Point(64, 235);
             this.cmdSeek100.Name = "cmdSeek100";
             this.cmdSeek100.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek100.TabIndex = 6;
@@ -138,7 +140,7 @@
             // 
             // cmdSeek200
             // 
-            this.cmdSeek200.Location = new System.Drawing.Point(116, 179);
+            this.cmdSeek200.Location = new System.Drawing.Point(116, 235);
             this.cmdSeek200.Name = "cmdSeek200";
             this.cmdSeek200.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek200.TabIndex = 6;
@@ -148,7 +150,7 @@
             // 
             // cmdSeek300
             // 
-            this.cmdSeek300.Location = new System.Drawing.Point(168, 179);
+            this.cmdSeek300.Location = new System.Drawing.Point(168, 235);
             this.cmdSeek300.Name = "cmdSeek300";
             this.cmdSeek300.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek300.TabIndex = 6;
@@ -158,7 +160,7 @@
             // 
             // cmdSeek400
             // 
-            this.cmdSeek400.Location = new System.Drawing.Point(220, 179);
+            this.cmdSeek400.Location = new System.Drawing.Point(220, 235);
             this.cmdSeek400.Name = "cmdSeek400";
             this.cmdSeek400.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek400.TabIndex = 6;
@@ -168,7 +170,7 @@
             // 
             // cmdSeek500
             // 
-            this.cmdSeek500.Location = new System.Drawing.Point(272, 179);
+            this.cmdSeek500.Location = new System.Drawing.Point(272, 235);
             this.cmdSeek500.Name = "cmdSeek500";
             this.cmdSeek500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek500.TabIndex = 6;
@@ -178,7 +180,7 @@
             // 
             // cmdSeek1000
             // 
-            this.cmdSeek1000.Location = new System.Drawing.Point(12, 208);
+            this.cmdSeek1000.Location = new System.Drawing.Point(12, 264);
             this.cmdSeek1000.Name = "cmdSeek1000";
             this.cmdSeek1000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek1000.TabIndex = 6;
@@ -188,7 +190,7 @@
             // 
             // cmdSeek1500
             // 
-            this.cmdSeek1500.Location = new System.Drawing.Point(64, 208);
+            this.cmdSeek1500.Location = new System.Drawing.Point(64, 264);
             this.cmdSeek1500.Name = "cmdSeek1500";
             this.cmdSeek1500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek1500.TabIndex = 6;
@@ -198,7 +200,7 @@
             // 
             // cmdSeek2000
             // 
-            this.cmdSeek2000.Location = new System.Drawing.Point(116, 208);
+            this.cmdSeek2000.Location = new System.Drawing.Point(116, 264);
             this.cmdSeek2000.Name = "cmdSeek2000";
             this.cmdSeek2000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek2000.TabIndex = 6;
@@ -208,7 +210,7 @@
             // 
             // cmdSeek2500
             // 
-            this.cmdSeek2500.Location = new System.Drawing.Point(168, 208);
+            this.cmdSeek2500.Location = new System.Drawing.Point(168, 264);
             this.cmdSeek2500.Name = "cmdSeek2500";
             this.cmdSeek2500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek2500.TabIndex = 6;
@@ -218,7 +220,7 @@
             // 
             // cmdSeek3000
             // 
-            this.cmdSeek3000.Location = new System.Drawing.Point(220, 208);
+            this.cmdSeek3000.Location = new System.Drawing.Point(220, 264);
             this.cmdSeek3000.Name = "cmdSeek3000";
             this.cmdSeek3000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek3000.TabIndex = 6;
@@ -228,7 +230,7 @@
             // 
             // cmdSeek3600
             // 
-            this.cmdSeek3600.Location = new System.Drawing.Point(272, 208);
+            this.cmdSeek3600.Location = new System.Drawing.Point(272, 264);
             this.cmdSeek3600.Name = "cmdSeek3600";
             this.cmdSeek3600.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek3600.TabIndex = 6;
@@ -239,21 +241,21 @@
             // lbLog
             // 
             this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(12, 331);
+            this.lbLog.Location = new System.Drawing.Point(12, 387);
             this.lbLog.Name = "lbLog";
             this.lbLog.Size = new System.Drawing.Size(306, 225);
             this.lbLog.TabIndex = 7;
             // 
             // txtFileSize
             // 
-            this.txtFileSize.Location = new System.Drawing.Point(12, 575);
+            this.txtFileSize.Location = new System.Drawing.Point(12, 618);
             this.txtFileSize.Name = "txtFileSize";
             this.txtFileSize.Size = new System.Drawing.Size(306, 20);
             this.txtFileSize.TabIndex = 9;
             // 
             // txtFileName
             // 
-            this.txtFileName.Location = new System.Drawing.Point(11, 41);
+            this.txtFileName.Location = new System.Drawing.Point(11, 70);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(260, 20);
             this.txtFileName.TabIndex = 11;
@@ -261,14 +263,14 @@
             // cbMovies
             // 
             this.cbMovies.FormattingEnabled = true;
-            this.cbMovies.Location = new System.Drawing.Point(10, 67);
+            this.cbMovies.Location = new System.Drawing.Point(12, 96);
             this.cbMovies.Name = "cbMovies";
-            this.cbMovies.Size = new System.Drawing.Size(261, 21);
+            this.cbMovies.Size = new System.Drawing.Size(259, 21);
             this.cbMovies.TabIndex = 12;
             // 
             // cmdInitFile
             // 
-            this.cmdInitFile.Location = new System.Drawing.Point(277, 39);
+            this.cmdInitFile.Location = new System.Drawing.Point(277, 68);
             this.cmdInitFile.Name = "cmdInitFile";
             this.cmdInitFile.Size = new System.Drawing.Size(41, 23);
             this.cmdInitFile.TabIndex = 13;
@@ -279,14 +281,14 @@
             // cbChannels
             // 
             this.cbChannels.FormattingEnabled = true;
-            this.cbChannels.Location = new System.Drawing.Point(12, 94);
+            this.cbChannels.Location = new System.Drawing.Point(12, 123);
             this.cbChannels.Name = "cbChannels";
             this.cbChannels.Size = new System.Drawing.Size(259, 21);
             this.cbChannels.TabIndex = 14;
             // 
             // cmdInitChannel
             // 
-            this.cmdInitChannel.Location = new System.Drawing.Point(277, 92);
+            this.cmdInitChannel.Location = new System.Drawing.Point(277, 121);
             this.cmdInitChannel.Name = "cmdInitChannel";
             this.cmdInitChannel.Size = new System.Drawing.Size(41, 23);
             this.cmdInitChannel.TabIndex = 15;
@@ -296,7 +298,7 @@
             // 
             // cmdPlayInVlc
             // 
-            this.cmdPlayInVlc.Location = new System.Drawing.Point(243, 273);
+            this.cmdPlayInVlc.Location = new System.Drawing.Point(243, 329);
             this.cmdPlayInVlc.Name = "cmdPlayInVlc";
             this.cmdPlayInVlc.Size = new System.Drawing.Size(75, 23);
             this.cmdPlayInVlc.TabIndex = 16;
@@ -307,7 +309,7 @@
             // cbStartAutoPlayback
             // 
             this.cbStartAutoPlayback.AutoSize = true;
-            this.cbStartAutoPlayback.Location = new System.Drawing.Point(12, 277);
+            this.cbStartAutoPlayback.Location = new System.Drawing.Point(12, 333);
             this.cbStartAutoPlayback.Name = "cbStartAutoPlayback";
             this.cbStartAutoPlayback.Size = new System.Drawing.Size(157, 17);
             this.cbStartAutoPlayback.TabIndex = 17;
@@ -317,16 +319,34 @@
             // cbLanguage
             // 
             this.cbLanguage.FormattingEnabled = true;
-            this.cbLanguage.Location = new System.Drawing.Point(13, 122);
+            this.cbLanguage.Location = new System.Drawing.Point(13, 151);
             this.cbLanguage.Name = "cbLanguage";
             this.cbLanguage.Size = new System.Drawing.Size(305, 21);
             this.cbLanguage.TabIndex = 18;
+            // 
+            // cbProfiles
+            // 
+            this.cbProfiles.FormattingEnabled = true;
+            this.cbProfiles.Location = new System.Drawing.Point(12, 41);
+            this.cbProfiles.Name = "cbProfiles";
+            this.cbProfiles.Size = new System.Drawing.Size(305, 21);
+            this.cbProfiles.TabIndex = 19;
+            // 
+            // cbSubtitle
+            // 
+            this.cbSubtitle.FormattingEnabled = true;
+            this.cbSubtitle.Location = new System.Drawing.Point(12, 179);
+            this.cbSubtitle.Name = "cbSubtitle";
+            this.cbSubtitle.Size = new System.Drawing.Size(305, 21);
+            this.cbSubtitle.TabIndex = 20;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(329, 604);
+            this.ClientSize = new System.Drawing.Size(329, 648);
+            this.Controls.Add(this.cbSubtitle);
+            this.Controls.Add(this.cbProfiles);
             this.Controls.Add(this.cbLanguage);
             this.Controls.Add(this.cbStartAutoPlayback);
             this.Controls.Add(this.cmdPlayInVlc);
@@ -391,6 +411,8 @@
         private System.Windows.Forms.Button cmdPlayInVlc;
         private System.Windows.Forms.CheckBox cbStartAutoPlayback;
         private System.Windows.Forms.ComboBox cbLanguage;
+        private System.Windows.Forms.ComboBox cbProfiles;
+        private System.Windows.Forms.ComboBox cbSubtitle;
     }
 }
 

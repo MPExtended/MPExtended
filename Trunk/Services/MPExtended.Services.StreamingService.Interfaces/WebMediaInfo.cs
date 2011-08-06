@@ -33,10 +33,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string LanguageFull { get; set; }
         public int ID { get; set; }
         public int Index { get; set; }
-    }
-
-    public class WebExternalSubtitleStream : WebSubtitleStream
-    {
         public string Filename { get; set; }
     }
 

@@ -71,9 +71,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             if (subtitleId != null)
             {
                 WebSubtitleStream stream = info.SubtitleStreams.Where(x => x.ID == subtitleId).First();
-                if (stream is WebExternalSubtitleStream)
+                if (stream.Filename != null)
                 {
-                    subtitleArguments = "--sub-file=" + ((WebExternalSubtitleStream)stream).Filename;
+                    subtitleArguments = "--sub-file=" + stream.Filename;
                 }
                 else
                 {

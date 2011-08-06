@@ -66,6 +66,12 @@ namespace MPExtended.Services.StreamingService.Code
                 return false;
             }
 
+            if (profile == null)
+            {
+                Log.Warn("Stream requested for non-existent profile");
+                return false;
+            }
+
             try
             {
                 ActiveStream stream = Streams[identifier];

@@ -114,14 +114,15 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     Language = info.Get(StreamKind.Text, scodecnr, "Language"),
                     LanguageFull = info.Get(StreamKind.Text, scodecnr, "Language/String"),
                     ID = StringToInt(info.Get(StreamKind.Text, scodecnr, "ID")),
-                    Index = scodecnr
+                    Index = scodecnr,
+                    Filename = null
                 });
             }
 
             // only support usual convention naming convention for external files for now
-            string subfile = Path.GetFileNameWithoutExtension(source) + ".srt";
+            string subfile = Path.Combine(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".srt");
             if(File.Exists(subfile)) {
-                retinfo.SubtitleStreams.Add(new WebExternalSubtitleStream()
+                retinfo.SubtitleStreams.Add(new WebSubtitleStream()
                 {
                     Language = "ext",
                     LanguageFull = "External subtitle file",

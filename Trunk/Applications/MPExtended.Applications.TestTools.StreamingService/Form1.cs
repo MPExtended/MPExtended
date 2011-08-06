@@ -36,7 +36,6 @@ namespace MPExtended.Applications.TestTools.StreamingService
 {
     public partial class Form1 : Form
     {
-        private const string CURRENT_PROFILE = "Android VLC Test";
         private const string CURRENT_IP = "localhost";
         private const string CLIENT_NAME = "StreamingService TestTool";
         private const string VLC_PATH = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
@@ -48,6 +47,7 @@ namespace MPExtended.Applications.TestTools.StreamingService
 
         private List<WebMovie> mMovies;
         private List<WebChannelBasic> mChannels;
+        private List<WebTranscoderProfile> mProfiles;
         private string mIdentifier;
         private string mName;
         private Thread mDlThread;
@@ -73,8 +73,8 @@ namespace MPExtended.Applications.TestTools.StreamingService
             }
             else
             {
-                mWebStreamClient = ChannelFactory<IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
-                mStreamClient = ChannelFactory<IStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
+                mWebStreamClient = ChannelFactory<IWebStreamingService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
+                mStreamClient = ChannelFactory<IStreamingService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
                 mServiceClient = ChannelFactory<IMediaAccessService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/MediaAccessService"));
                 mTvClient = ChannelFactory<ITVAccessService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/TVAccessService"));
             }
@@ -135,6 +135,22 @@ namespace MPExtended.Applications.TestTools.StreamingService
             {
                 Log("Failed to connect to TV4Home");
             }
+
+            // load profiles
+            try
+            {
+                cbProfiles.Items.Clear();
+                mProfiles = mWebStreamClient.GetTranscoderProfiles();
+                foreach (WebTranscoderProfile profile in mProfiles)
+                {
+                    cbProfiles.Items.Add(profile.Name);
+                }
+                cbProfiles.SelectedIndex = 0;
+            }
+            catch (Exception)
+            {
+                Log("Failed to load profiles");
+            }
         }
 
         private void cmdInitMovie_Click(object sender, EventArgs e)
@@ -177,6 +193,7 @@ namespace MPExtended.Applications.TestTools.StreamingService
             WebVideoStream vid = info.VideoStreams.First();
             Log(String.Format("MediaInfo: video {0}x{1}; {2}; {3}", vid.Width, vid.Height, vid.DisplayAspectRatioString, vid.Codec));
 
+            // audio
             cbLanguage.Items.Clear();
             int i = 1;
             foreach (WebAudioStream audio in info.AudioStreams)
@@ -187,6 +204,17 @@ namespace MPExtended.Applications.TestTools.StreamingService
                 if(!String.IsNullOrEmpty(audio.Title))
                     name += ": " + audio.Title;
                 cbLanguage.Items.Add(name);
+            }
+
+            // subtitle
+            cbSubtitle.Items.Clear();
+            i = 1;
+            foreach (WebSubtitleStream stream in info.SubtitleStreams)
+            {
+                string name = "Subtitle stream #" + i++ + " (" + stream.ID + ")";
+                if(!String.IsNullOrEmpty(stream.Language))
+                    name += ": " + stream.Language;
+                cbSubtitle.Items.Add(name);
             }
         }
 
@@ -219,14 +247,11 @@ namespace MPExtended.Applications.TestTools.StreamingService
 
         private void StartAndDownloadStream(int _pos)
         {
-            int language = -1;
-            if (cbLanguage.SelectedIndex != -1)
-            {
-                language = mInfo.AudioStreams[cbLanguage.SelectedIndex].ID;
-            }
+            int language = cbLanguage.SelectedIndex == -1 ? -1 : mInfo.AudioStreams[cbLanguage.SelectedIndex].ID;
+            int subtitle = cbSubtitle.SelectedIndex == -1 ? -1 : mInfo.SubtitleStreams[cbSubtitle.SelectedIndex].ID;
 
             Log("Starting Stream from pos " + _pos);
-            bool success = mWebStreamClient.StartStreamWithStreamSelection(mIdentifier, CURRENT_PROFILE, _pos, language, -1);
+            bool success = mWebStreamClient.StartStreamWithStreamSelection(mIdentifier, mProfiles[cbProfiles.SelectedIndex].Name, _pos, language, subtitle);
             if (success)
             {
                 DownloadStream(_pos);
