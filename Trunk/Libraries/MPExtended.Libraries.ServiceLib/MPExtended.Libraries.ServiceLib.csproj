@@ -59,6 +59,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WcfUsernameValidator.cs" />
+    <Compile Include="WCFUtil.cs" />
     <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
     <Compile Include="MPEServices.cs" />
   </ItemGroup>
