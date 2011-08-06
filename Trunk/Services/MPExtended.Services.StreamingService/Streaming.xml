@@ -2,7 +2,7 @@
 <appconfig>
   <ffmpeg>
     <!-- TODO: add info about libav/ffmpeg and version (call api) here -->
-    <path>FFMpeg\ffmpeg.exe</path> 
+    <path>..\..\..\..\Libraries\Streaming\ffmpeg.exe</path> 
   </ffmpeg>
   <transcoders>
     <transcoder>
@@ -16,8 +16,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 1024k -profile baseline -preset fast -acodec aac -ab 256k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+        <codecParameters>-vcodec libx264 -b 1024k -vprofile baseline -preset fast -acodec aac -ab 256k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
       </transcoderConfiguration>      
     </transcoder>
     <transcoder>
@@ -31,8 +30,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 768k -profile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+        <codecParameters>-vcodec libx264 -b 768k -vprofile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -46,8 +44,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 512k -profile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -threads 2 -async 1 -f mpegts</codecParameters>
+        <codecParameters>-vcodec libx264 -b 512k -vprofile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -threads 2 -async 1 -f mpegts</codecParameters>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -61,8 +58,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 256k -profile baseline -preset veryfast -acodec aac -ab 64k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+        <codecParameters>-vcodec libx264 -b 256k -vprofile baseline -preset veryfast -acodec aac -ab 64k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -76,8 +72,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 3500k -preset ultrafast -profile baseline -acodec aac -strict experimental -ab 128k -threads 4 -async 1 -f flv</codecParameters>
+        <codecParameters>-vcodec libx264 -b 3500k -preset ultrafast -vprofile baseline -acodec aac -strict experimental -ab 128k -threads 4 -async 1 -f flv</codecParameters>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -91,8 +86,7 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
-        <codecParameters>-vcodec libx264 -b 600k -preset ultrafast -profile baseline -acodec aac -strict experimental -ab 128k -threads 4 -async 1 -f flv</codecParameters>
+        <codecParameters>-vcodec libx264 -b 600k -preset ultrafast -vprofile baseline -acodec aac -strict experimental -ab 128k -threads 4 -async 1 -f flv</codecParameters>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -104,7 +98,6 @@
       <videoStream>false</videoStream>
 
       <transcoderConfiguration type="ffmpeg">
-        <path>FFMpeg\ffmpeg.exe</path>
         <codecParameters>-vn -acodec aac -strict experimental -ab 256k -f flv</codecParameters>
       </transcoderConfiguration>
     </transcoder>
@@ -117,7 +110,6 @@
       <videoStream>true</videoStream>
 
       <transcoderConfiguration type="vlc">
-        <path>C:\Program Files (x86)\VideoLAN\VLC\vlc.exe</path>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>

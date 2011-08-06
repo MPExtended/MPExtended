@@ -54,7 +54,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         public string GetTranscoderPath()
         {
-            return Profile.CodecParameters["path"];
+            return Config.GetFFMpegPath();
         }
 
         public string GenerateArguments(WebMediaInfo info, Resolution outputSize, int position, int? audioId, int? subtitleId)
