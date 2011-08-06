@@ -29,44 +29,24 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         public TranscoderProfile Profile { get; set; }
         public string Input { get; set; }
+        public WebMediaInfo MediaInfo { get; set; }
+        public string Identifier { get; set; }
 
-        public FFMpeg(TranscoderProfile profile)
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
-            this.Profile = profile;
-        }
-
-        public bool InputReaderWanted()
-        {
-            return Input.EndsWith(".ts.tsbuffer");
-        }
-
-        public EncoderUnit.TransportMethod GetInputMethod()
-        {
-            if (InputReaderWanted())
-                return EncoderUnit.TransportMethod.NamedPipe;
-            return EncoderUnit.TransportMethod.Other;
-        }
-
-        public EncoderUnit.TransportMethod GetOutputMethod()
-        {
-            return EncoderUnit.TransportMethod.NamedPipe;
-        }
-
-        public string GetTranscoderPath()
-        {
-            return Config.GetFFMpegPath();
-        }
-
-        public string GenerateArguments(WebMediaInfo info, Resolution outputSize, int position, int? audioId, int? subtitleId)
-        {
-            // no way I'm going to add subtitle support for ffmpeg. It's just broken. 
-
-            // calculate stream mappings
-            string mappings = "";
-            if(audioId != null)
+            // add input
+            bool doInputReader = Input.EndsWith(".ts.tsbuffer");
+            if (doInputReader)
             {
-                mappings = String.Format("-map 0:{0} ", info.VideoStreams.First().Index);
-                mappings += String.Format("-map 0:{0} ", info.AudioStreams.Where(x => x.ID == audioId).First().Index);
+                pipeline.AddDataUnit(new InputUnit(Input), 1);
+            }
+
+            // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
+            string mappings = "";
+            if (audioId != null)
+            {
+                mappings = String.Format("-map 0:{0} ", MediaInfo.VideoStreams.First().Index);
+                mappings += String.Format("-map 0:{0} ", MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().Index);
             }
 
             // calculate full argument string
@@ -90,18 +70,20 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // fix input thing
-            if (!InputReaderWanted())
+            if (!doInputReader)
                 arguments = arguments.Replace("#IN#", Input);
 
-            return arguments;
-        }
+            // add unit
+            EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe);
+            unit.DebugOutput = false; // change this for debugging
+            pipeline.AddDataUnit(unit, 5);
 
-        public ILogProcessingUnit GetLogParsingUnit(Reference<EncodingInfo> save)
-        {
-            FFMpegLogParsing unit = new FFMpegLogParsing(save);
-            unit.LogMessages = true;
-            unit.LogProgress = true;
-            return unit;
+            // setup output parsing
+            FFMpegLogParsing logunit = new FFMpegLogParsing(einfo);
+            logunit.LogMessages = true;
+            logunit.LogProgress = true;
+            pipeline.AddLogUnit(logunit, 6);
         }
     }
 }

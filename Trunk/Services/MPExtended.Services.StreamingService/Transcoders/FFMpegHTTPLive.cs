@@ -18,19 +18,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Code;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
+using System.Text;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal interface ITranscoder
+    internal class FFMpegHTTPLive : HTTPLiveTranscoderWrapper
     {
-        TranscoderProfile Profile { get; set; }
-        string Input { get; set; }
-        WebMediaInfo MediaInfo { get; set; }
-        string Identifier { get; set; }
-
-        void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        public FFMpegHTTPLive()
+            : base(new FFMpeg())
+        {
+        }
     }
 }

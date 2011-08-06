@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
@@ -42,6 +43,7 @@ namespace MPExtended.Services.StreamingService.Code
             public bool IsTsBuffer { get; set; }
             public Resolution OutputSize { get; set; }
 
+            public ITranscoder Transcoder { get; set; }
             public Pipeline Pipeline { get; set; }
             public EncodingInfo EncodingInfo { get; set; }
         }
@@ -89,6 +91,12 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     info = MediaInfoWrapper.GetMediaInfo(stream.Source);
                 }
+                
+                // get transcoder
+                stream.Transcoder = profile.GetTranscoder();
+                stream.Transcoder.Input = stream.Source;
+                stream.Transcoder.MediaInfo = info;
+                stream.Transcoder.Identifier = identifier;
 
                 // check for validness of ids
                 if (info.AudioStreams.Where(x => x.ID == audioId).Count() == 0) 
@@ -96,31 +104,11 @@ namespace MPExtended.Services.StreamingService.Code
                 if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() == 0)
                     subtitleId = null;
 
-                // build pipeline and fireup transcoder
-                ITranscoder transcoder = profile.GetTranscoder();
-                transcoder.Input = stream.Source;
+                // build the pipeline
                 stream.Pipeline = new Pipeline();
-                if (!profile.UseTranscoding || transcoder.InputReaderWanted())
-                {
-                    stream.Pipeline.AddDataUnit(new InputUnit(stream.Source), 1);
-                }
-
-                if (profile.UseTranscoding)
-                {
-                    string arguments = transcoder.GenerateArguments(info, stream.OutputSize, position, audioId, subtitleId);
-                    EncoderUnit unit = new EncoderUnit(transcoder.GetTranscoderPath(), arguments, transcoder.GetInputMethod(), transcoder.GetOutputMethod());
-                    unit.DebugOutput = false; // change this for debugging
-                    stream.Pipeline.AddDataUnit(unit, 5);
-
-                    // setup output parsing
-                    stream.EncodingInfo = new EncodingInfo();
-                    Reference<EncodingInfo> eref = new Reference<EncodingInfo>(() => stream.EncodingInfo, x => { stream.EncodingInfo = x; });
-                    ILogProcessingUnit logunit = transcoder.GetLogParsingUnit(eref);
-                    if (logunit != null)
-                    {
-                        stream.Pipeline.AddLogUnit(logunit, 6);
-                    }
-                }
+                stream.EncodingInfo = new EncodingInfo();
+                Reference<EncodingInfo> eref = new Reference<EncodingInfo>(() => stream.EncodingInfo, x => { stream.EncodingInfo = x; });
+                stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, eref, position, audioId, subtitleId);
 
                 // start the processes
                 stream.Pipeline.Assemble();
@@ -139,7 +127,13 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Stream RetrieveStream(string identifier)
         {
+            WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Profile.MIME;
             return Streams[identifier].Pipeline.GetFinalStream();
+        }
+
+        public Stream HttpLiveStreaming(string identifier, string action, string parameters)
+        {
+            return ((HTTPLiveTranscoderWrapper)Streams[identifier].Transcoder).DoAction(action, parameters);
         }
 
         public void EndStream(string identifier)

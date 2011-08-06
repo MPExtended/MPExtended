@@ -68,12 +68,12 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Config.GetTranscoderProfiles().Select(s => s.ToWebTranscoderProfile()).ToList();
+            return Config.GetTranscoderProfiles().Cast<WebTranscoderProfile>().ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Select(s => s.ToWebTranscoderProfile()).ToList();
+            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Cast<WebTranscoderProfile>().ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)
@@ -82,7 +82,7 @@ namespace MPExtended.Services.StreamingService
             if (profile == null)
                 return null;
 
-            return profile.ToWebTranscoderProfile();
+            return (WebTranscoderProfile)profile;
         }
         #endregion
 
@@ -193,6 +193,11 @@ namespace MPExtended.Services.StreamingService
             }
 
             return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        public Stream HttpLiveStreaming(string identifier, string action, string parameters)
+        {
+            return _stream.HttpLiveStreaming(identifier, action, parameters);
         }
         #endregion
 

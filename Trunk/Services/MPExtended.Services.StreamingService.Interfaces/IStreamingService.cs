@@ -34,5 +34,9 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream ExtractImageResized(WebMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream HttpLiveStreaming(string identifier, string action, string parameters);
     }
 }

@@ -26,57 +26,17 @@ using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    internal enum TranscoderType
+    internal class TranscoderProfile : WebTranscoderProfile
     {
-        FFmpeg,
-        VLC
-    }
-
-    internal class TranscoderProfile
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Target { get; set; }
-        public string Bandwidth { get; set; }
-        public bool HasVideoStream { get; set; }
-        public string MIME { get; set; }
-        public int MaxOutputWidth { get; set; }
-        public int MaxOutputHeight { get; set; }
-
-        public TranscoderType TranscoderType { get; set; }
         public IDictionary<string, string> CodecParameters { get; set; }
-
-        public bool UseTranscoding
-        {
-            get
-            {
-                return CodecParameters != null && CodecParameters.Count > 0;
-            }
-        }
+        public string TranscoderImplementationClass { get; set; }
 
         public ITranscoder GetTranscoder()
         {
-            if (TranscoderType == TranscoderType.FFmpeg)
-                return new FFMpeg(this);
-            if (TranscoderType == TranscoderType.VLC)
-                return new VLC(this);
-            return null;
-        }
-
-        public WebTranscoderProfile ToWebTranscoderProfile()
-        {
-            return new WebTranscoderProfile()
-            {
-                Name = this.Name,
-                Description = this.Description,
-                MIME = this.MIME,
-                MaxOutputWidth = this.MaxOutputWidth,
-                MaxOutputHeight = this.MaxOutputHeight,
-                Target = this.Target,
-                Bandwidth = this.Bandwidth,
-                HasVideoStream = this.HasVideoStream,
-                UseTranscoding = this.UseTranscoding
-            };
+            // For now only support files in current assembly
+            ITranscoder inst = (ITranscoder)Activator.CreateInstance(Type.GetType(TranscoderImplementationClass));
+            inst.Profile = this;
+            return inst;
         }
     }
 
@@ -95,13 +55,14 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         Name = x.Element("name").Value,
                         Description = x.Element("description").Value,
-                        Bandwidth = x.Element("bandwidth").Value,
+                        Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
                         Target = x.Element("target").Value,
                         MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
                         MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
                         MIME = x.Element("mime").Value,
                         HasVideoStream = x.Element("videoStream").Value == "true",
-                        TranscoderType = (TranscoderType)Enum.Parse(typeof(TranscoderType), (string)x.Element("transcoderConfiguration").Attribute("type"), true),
+
+                        TranscoderImplementationClass = (string)x.Element("transcoderConfiguration").Attribute("implementation"),
                         CodecParameters = x.Element("transcoderConfiguration").Descendants().ToDictionary(el => el.Name.LocalName, el => el.Value)
                     }).ToList();
 

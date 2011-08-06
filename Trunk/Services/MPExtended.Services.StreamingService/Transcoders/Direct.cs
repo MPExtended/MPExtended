@@ -19,18 +19,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MPExtended.Services.StreamingService.Code;
-using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Units;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal interface ITranscoder
+    internal class Direct : ITranscoder
     {
-        TranscoderProfile Profile { get; set; }
-        string Input { get; set; }
-        WebMediaInfo MediaInfo { get; set; }
-        string Identifier { get; set; }
+        public TranscoderProfile Profile { get; set; }
+        public string Input { get; set; }
+        public WebMediaInfo MediaInfo { get; set; }
+        public string Identifier { get; set; }
 
-        void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        {
+            // we ignore our arguments :)
+            pipeline.AddDataUnit(new InputUnit(Input), 1);
+            return;
+        }
     }
 }

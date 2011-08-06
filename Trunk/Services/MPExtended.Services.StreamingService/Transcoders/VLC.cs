@@ -29,48 +29,29 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         public TranscoderProfile Profile { get; set; }
         public string Input { get; set; }
+        public WebMediaInfo MediaInfo { get; set; }
+        public string Identifier { get; set; }
 
-        public VLC(TranscoderProfile profile)
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
-            this.Profile = profile;
-        }
+            // input
+            bool doInputReader = Input.EndsWith(".ts.tsbuffer");
+            if (doInputReader)
+            {
+                pipeline.AddDataUnit(new InputUnit(Input), 1);
+            }
 
-        public bool InputReaderWanted()
-        {
-            return Input.EndsWith(".ts.tsbuffer");
-        }
-
-        public EncoderUnit.TransportMethod GetInputMethod()
-        {
-            if (InputReaderWanted())
-                return EncoderUnit.TransportMethod.NamedPipe;
-            return EncoderUnit.TransportMethod.Other;
-        }
-
-        public EncoderUnit.TransportMethod GetOutputMethod()
-        {
-            return EncoderUnit.TransportMethod.NamedPipe;
-        }
-
-        public string GetTranscoderPath()
-        {
-            return Profile.CodecParameters["path"];
-        }
-
-        public string GenerateArguments(WebMediaInfo info, Resolution outputSize, int position, int? audioId, int? subtitleId)
-        {
             // audio language selection
             string audioTrack = "";
             if (audioId != null)
-                audioTrack = "--audio-track " + info.AudioStreams.Where(x => x.ID == audioId).First().Index;
+                audioTrack = "--audio-track " + MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().Index;
 
-            // subtitle language selection
-            // TODO: support external subtitle files
+            // subtitle selection
             string subtitleTranscoder = "";
             string subtitleArguments = "";
             if (subtitleId != null)
             {
-                WebSubtitleStream stream = info.SubtitleStreams.Where(x => x.ID == subtitleId).First();
+                WebSubtitleStream stream = MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First();
                 if (stream.Filename != null)
                 {
                     subtitleArguments = "--sub-file=" + stream.Filename;
@@ -91,17 +72,16 @@ namespace MPExtended.Services.StreamingService.Transcoders
             arguments += "\"#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}";
             arguments += muxer + "\"";
 
-            if (!InputReaderWanted())
-            {
+            if(!doInputReader)
                 arguments = arguments.Replace("#IN#", Input);
-            }
 
-            return arguments;
-        }
+            // add the unit
+            EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            EncoderUnit unit = new EncoderUnit(Profile.CodecParameters["path"], arguments, input, EncoderUnit.TransportMethod.NamedPipe);
+            unit.DebugOutput = false; // change this for debugging
+            pipeline.AddDataUnit(unit, 5);
 
-        public ILogProcessingUnit GetLogParsingUnit(Reference<Util.EncodingInfo> save)
-        {
-            return null;
+            // TODO: no output parsing yet
         }
     }
 }
