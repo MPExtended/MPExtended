@@ -20,7 +20,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
         IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);        
-        IList<String> GetGenre();
+        IList<String> GetAllGenres();
      
     }
     public interface IMovieLibrary
@@ -29,7 +29,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        IList<String> GetExistingGenre();
+        IList<String> GetAllGenres();
 
     }
     public interface ITVShowLibrary
