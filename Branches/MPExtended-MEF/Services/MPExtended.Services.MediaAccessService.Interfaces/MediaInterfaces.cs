@@ -19,9 +19,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicTrackBasic GetTrackBasicById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
-        IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);        
+        IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);
         IList<String> GetAllGenres();
-     
+
     }
     public interface IMovieLibrary
     {
@@ -34,12 +34,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     }
     public interface ITVShowLibrary
     {
-        IList<WebTVShowBasic> GetAllSeries();
-         WebTVShowDetailed GetTVShowDetailed(string seriesId);
+        IList<WebTVShowBasic> GetAllTVShows();
+        WebTVShowDetailed GetTVShowDetailed(string seriesId);
         IList<WebTVSeason> GetSeasons(string seriesId);
-         IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
-         IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
-         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
+        IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
+        IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
+        WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
     }
     public interface IPictureLibrary
     {

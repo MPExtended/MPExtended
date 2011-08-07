@@ -7,6 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
     public class WebMovieBasic
     {
+        public string MovieId { get; set; }
         public string Title { get; set; }
     }
 }

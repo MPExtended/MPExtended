@@ -7,5 +7,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
     public class WebMovieDetailed : WebMovieBasic
     {
+        public int Runtime { get; set; }
     }
 }
