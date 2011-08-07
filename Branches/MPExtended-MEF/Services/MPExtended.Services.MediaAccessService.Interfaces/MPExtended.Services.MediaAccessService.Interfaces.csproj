@@ -54,7 +54,16 @@
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="MediaInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
+    <Compile Include="Movie\WebMovieDetailed.cs" />
+    <Compile Include="Music\WebMusicAlbumBasic.cs" />
+    <Compile Include="Music\WebMusicArtistBasic.cs" />
+    <Compile Include="Music\WebMusicTrackBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TVShow\WebTVEpisodeBasic.cs" />
+    <Compile Include="TVShow\WebTVEpisodeDetailed.cs" />
+    <Compile Include="TVShow\WebTVSeason.cs" />
+    <Compile Include="TVShow\WebTVShowBasic.cs" />
+    <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="WebServiceDescription.cs" />
   </ItemGroup>
   <ItemGroup />
