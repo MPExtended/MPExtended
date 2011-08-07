@@ -57,7 +57,7 @@ namespace MPExtended.Services.MediaAccessService
             objContainer.ComposeParts(this);
         }
 
-        public List<WebMovieBasic> GetAllMovies()
+        public IList<WebMovieBasic> GetAllMovies()
         {
             return MovieLibrary.GetAllMovies();
         

@@ -12,7 +12,7 @@ namespace MPExtended.PlugIns.MAS
     [Export(typeof(IMovieLibrary))]
     public class MPMovingPictures : IMovieLibrary
     {
-        public List<WebMovieBasic> GetAllMovies()
+        public IList<WebMovieBasic> GetAllMovies()
         {
             List<WebMovieBasic> list = new List<WebMovieBasic>();
           

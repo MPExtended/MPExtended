@@ -13,35 +13,33 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IMusicLibrary
     {
-        List<WebMusicTrackBasic> GetAllTracks();
-        List<WebMusicAlbumBasic> GetAllAlbums();
-        List<WebMusicArtistBasic> GetAllArtists();
+        IList<WebMusicTrackBasic> GetAllTracks();
+        IList<WebMusicAlbumBasic> GetAllAlbums();
+        IList<WebMusicArtistBasic> GetAllArtists();
         WebMusicTrackBasic GetTrackBasicById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
-        List<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);
-        WebMusicArtistBasic GetArtistByAlbumId(string albumId);
-        List<String> GetExistingGenre();
-        List<WebMusicAlbumBasic> GetAlbumsByGenre(string genre);
+        IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);        
+        IList<String> GetGenre();
+     
     }
     public interface IMovieLibrary
     {
-        List<WebMovieBasic> GetAllMovies();
-        List<WebMovieDetailed> GetAllMoviesDetailed();
+        IList<WebMovieBasic> GetAllMovies();
+        IList<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        List<WebMovieDetailed> GetMoviesDetailedByGenre(string genre);
-        List<String> GetExistingGenre();
+        IList<String> GetExistingGenre();
 
     }
     public interface ITVShowLibrary
     {
-        public IList<WebTVShowBasic> GetAllSeries();
-        public WebTVShowDetailed GetTVShowDetailed(string seriesId);
-        public IList<WebTVSeason> GetSeasons(string seriesId);
-        public IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
-        public IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
-        public WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
+        IList<WebTVShowBasic> GetAllSeries();
+         WebTVShowDetailed GetTVShowDetailed(string seriesId);
+        IList<WebTVSeason> GetSeasons(string seriesId);
+         IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
+         IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
+         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
     }
     public interface IPictureLibrary
     {
