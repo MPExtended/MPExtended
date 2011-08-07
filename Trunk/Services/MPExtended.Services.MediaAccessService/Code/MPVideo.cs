@@ -71,8 +71,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public int GetVideosCount()
         {
-            return ReadInt("Select COUNT(movie.idMovie) " +
-                           "from movie as movie, movieinfo as info where movie.idMovie = info.idMovie");
+            return GetAllVideos().Count;
         }
 
         public List<WebMovie> SearchForVideo(String searchString)

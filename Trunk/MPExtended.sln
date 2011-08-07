@@ -48,10 +48,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E8
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Streaming", "Streaming", "{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9}"
-	ProjectSection(SolutionItems) = preProject
-		Libraries\Streaming\ffmpeg.exe = Libraries\Streaming\ffmpeg.exe
-		Libraries\Streaming\MediaInfo.dll = Libraries\Streaming\MediaInfo.dll
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TVEngine3", "TVEngine3", "{B17C433D-85CA-4FEC-8ECB-A31FC057C139}"
 	ProjectSection(SolutionItems) = preProject

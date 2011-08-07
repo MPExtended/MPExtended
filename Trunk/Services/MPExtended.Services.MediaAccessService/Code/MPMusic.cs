@@ -87,10 +87,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public int GetMusicTracksCount()
         {
-            return ReadInt("SELECT COUNT(*) FROM (" +
-                              "SELECT idTrack " +
-                              "FROM tracks" +
-                           ") AS tracks");
+            return GetAllMusicTracks().Count;
         }
 
         public List<WebMusicTrack> GetAllMusicTracks()
@@ -120,7 +117,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public int GetArtistsCount()
         {
-            return ReadInt("SELECT COUNT(*) FROM (SELECT DISTINCT strAlbumArtist FROM tracks) AS tracks");
+            return GetAllArtists().Count;
         }
         #endregion
 
@@ -175,11 +172,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 
         public int GetAlbumsCount()
         {
-            return ReadInt("SELECT COUNT(*) FROM (" +
-                             "SELECT DISTINCT t.strAlbum " +
-                             "FROM tracks t " +
-                             "WHERE t.strAlbum != ''" +
-                           ") AS albums");
+            return GetAllAlbums().Count;
         }
 
         public List<WebMusicAlbum> GetAlbums(int? start, int? end)
