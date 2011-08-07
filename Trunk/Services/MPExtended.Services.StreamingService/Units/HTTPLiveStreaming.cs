@@ -66,7 +66,7 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Setup()
         {
-            siteRoot = WCFUtil.GetCurrentRoot() + "StreamingService/stream/HttpLiveStreaming?identifier=" + identifier + "&action=segment&parameters=";
+            siteRoot = WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + identifier + "&action=segment&parameters=";
 
             TemporaryDirectory = Path.Combine(Path.GetTempPath(), "MPExtended.Services.StreamingService.HTTPLiveStreaming-" + new Random().Next());
             Directory.CreateDirectory(TemporaryDirectory);

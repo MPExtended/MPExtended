@@ -28,7 +28,7 @@ using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal abstract class HTTPLiveTranscoderWrapper : ITranscoder
+    internal abstract class HTTPLiveTranscoderWrapper : ITranscoder, ICustomActionTranscoder
     {
         public TranscoderProfile Profile
         {
@@ -57,6 +57,11 @@ namespace MPExtended.Services.StreamingService.Transcoders
         protected HTTPLiveTranscoderWrapper(ITranscoder toWrap)
         {
             obj = toWrap;
+        }
+
+        public string GetStreamURL()
+        {
+            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?parameters=&action=playlist&identifier=" + Identifier;
         }
 
         public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)

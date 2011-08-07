@@ -22,6 +22,7 @@ using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Util;
 using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
@@ -31,6 +32,11 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public string Input { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
+
+        public string GetStreamURL()
+        {
+            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+        }
 
         public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {

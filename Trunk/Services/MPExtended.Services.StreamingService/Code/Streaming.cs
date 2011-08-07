@@ -60,18 +60,18 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public bool StartStream(string identifier, TranscoderProfile profile, int position = 0, int? audioId = null, int? subtitleId = null)
+        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int? audioId = null, int? subtitleId = null)
         {
             if (!Streams.ContainsKey(identifier) || Streams[identifier] == null)
             {
                 Log.Warn("Stream requested for invalid identifier {0}", identifier);
-                return false;
+                return null;
             }
 
             if (profile == null)
             {
                 Log.Warn("Stream requested for non-existent profile");
-                return false;
+                return null;
             }
 
             try
@@ -115,13 +115,12 @@ namespace MPExtended.Services.StreamingService.Code
                 stream.Pipeline.Start();
 
                 Log.Info("Started stream with identifier " + identifier);
-
-                return true;
+                return stream.Transcoder.GetStreamURL();
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to start stream " + identifier, ex);
-                return false;
+                return null;
             }
         }
 
@@ -131,9 +130,12 @@ namespace MPExtended.Services.StreamingService.Code
             return Streams[identifier].Pipeline.GetFinalStream();
         }
 
-        public Stream HttpLiveStreaming(string identifier, string action, string parameters)
+        public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
-            return ((HTTPLiveTranscoderWrapper)Streams[identifier].Transcoder).DoAction(action, parameters);
+            if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
+                return null;
+
+            return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
         }
 
         public void EndStream(string identifier)

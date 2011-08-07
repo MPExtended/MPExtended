@@ -153,14 +153,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, path);
         }
 
-        public bool StartStream(string identifier, string profileName, int startPosition)
+        public string StartStream(string identifier, string profileName, int startPosition)
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, null, null);
         }
 
-        public bool StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
+        public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
         {
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
@@ -198,9 +198,9 @@ namespace MPExtended.Services.StreamingService
             return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
 
-        public Stream HttpLiveStreaming(string identifier, string action, string parameters)
+        public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
-            return _stream.HttpLiveStreaming(identifier, action, parameters);
+            return _stream.CustomTranscoderData(identifier, action, parameters);
         }
         #endregion
 

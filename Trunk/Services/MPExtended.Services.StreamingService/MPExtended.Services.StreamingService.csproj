@@ -68,6 +68,7 @@
     <Compile Include="Transcoders\FFMpeg.cs" />
     <Compile Include="Transcoders\FFMpegHTTPLive.cs" />
     <Compile Include="Transcoders\HTTPLiveTranscoderWrapper.cs" />
+    <Compile Include="Transcoders\ICustomActionTranscoder.cs" />
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
     <Compile Include="Transcoders\VLCWrapped.cs" />
