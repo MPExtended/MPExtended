@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <!--
+  Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+  
+  MPExtended is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+  
+  MPExtended is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+  -->
+  <Product
+    Id="13b8d36a-8534-4402-81d7-196d0054cb5b"
+    UpgradeCode="77a3282a-2b29-4b6f-bf6e-c7df725a6194"
+    Name="MPExtended SingleSeat Services"
+    Language="1033"
+    Version="!(bind.FileVersion.MPExtended.Services.StreamingService.dll)"
+    Manufacturer="MPExtended">
+    <Package InstallerVersion="200" Compressed="yes" />
+    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
+
+    <!-- TODO: do we really want to disallow downgrades? -->
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <!-- Directory structure-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="MPExtendedDir" Name="MPExtended">
+          <Directory Id="InstallDirectory" Name="SingleSeat Service">
+            <Directory Id="FFMpegDir" Name="FFMpeg">
+              <Component Id="FFMpegBinaries" Guid="2154927b-a317-42df-bab0-7eedd5379675">
+                <File Source="$(var.SolutionDir)\Libraries\Streaming\ffmpeg.exe" />
+              </Component>
+            </Directory>
+
+            <Component Id="ServiceBinaries" Guid="1b140519-1d3e-47e7-8474-aeea8f55300f">
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.ServiceHosts.SingleSeat.exe" KeyPath="yes" Id="MainService"/>
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.ServiceHosts.SingleSeat.exe.config" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.TVAccessService.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.StreamingService.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
+
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\NLog.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\NLog.config" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MediaInfo.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\System.Data.SQLite.dll" />
+
+              <!--MP TVServer dependencies-->
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Gentle.Common.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Gentle.Framework.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Gentle.Provider.MySQL.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Gentle.Provider.SQLServer.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\log4net.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MySql.Data.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TvBusinessLayer.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TvControl.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TVDatabase.dll" />
+              <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TvLibrary.Interfaces.dll" />
+              
+              <!-- TODO: Do we want to install debugging information? -->
+
+              <!-- Service -->
+              <ServiceInstall
+                Id="InstallService"
+                Type="ownProcess"
+                Vital="yes"
+                Name="MPExtended SingleSeat Service"
+                DisplayName="MPExtended SingleSeat Service"
+                Description="Offers remote access to MediaPortal TV Server, databases and shares"
+                Start="auto"
+                ErrorControl="ignore"
+                Interactive="no"
+                Account="LocalSystem">
+              </ServiceInstall>
+              <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="MPExtended SingleSeat Service" Wait="yes" />
+
+              <!-- Add firewall exception -->
+              <fire:FirewallException IgnoreFailure="yes" Id="FirewallException" Name="MPExtended SingleSeat Service" Scope="localSubnet" Protocol="tcp" Program="[#MainService]"/>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="CommonAppDataFolder">
+        <Directory Id="OurAppDataFolder" Name="MPExtended">
+          <Component Id="AppDataConfig" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
+            <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Services.xml" />
+            <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MediaAccess.xml" />
+            <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\Streaming.xml" />
+            <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\TVAccess.xml" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.SingleSeat" Level="1">
+      <ComponentRef Id="ServiceBinaries" />
+      <ComponentRef Id="FFMpegBinaries" />
+      <ComponentRef Id="AppDataConfig" />
+    </Feature>
+  </Product>
+</Wix>

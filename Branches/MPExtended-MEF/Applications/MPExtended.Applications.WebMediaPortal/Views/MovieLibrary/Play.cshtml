@@ -1,0 +1,11 @@
+﻿@model MPExtended.Services.MediaAccessService.Interfaces.WebMovieFull
+@{
+    ViewBag.Title = "Play";
+}
+<h2>Play</h2>
+You are watching <strong>@Model.Title</strong>
+@{Html.RenderAction("Player", "Stream", new
+  {
+      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Movie,
+      itemId = @Model.Id
+  });}

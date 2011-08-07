@@ -1,0 +1,23 @@
+﻿@model MPExtended.Services.TVAccessService.Interfaces.WebProgramBasic
+@{
+    ViewBag.Title = "ProgramDetails";
+}
+<h2>@Model.Title</h2>
+<div class="TVProgramDescription">
+    @Model.Description
+</div>
+@{if (@Model.IsScheduled)
+  {
+
+    <div class="TVProgramSchedule">
+        <a href="@Url.Action("DeleteSchedule", "Television", new { programId = @Model.IdProgram })">
+        Cancel</a>
+    </div>
+  }
+  else
+  {
+   <div class="TVProgramSchedule">
+        <a   href="@Url.Action("AddSchedule", "Television", new { programId = @Model.IdProgram })">
+        Schedule</a>
+    </div>
+  }}

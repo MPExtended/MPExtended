@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecording>
+
+@{
+    ViewBag.Title = "Recordings";
+}
+<style type="text/css">
+    .recordingList
+    {
+        overflow: hidden;
+        min-width: 1000px;
+    }
+    
+    .recordingList li
+    {
+        width: 250px;
+        float: left;
+        margin: 15px;
+        
+    }
+</style>
+<h2>
+    Your recordings</h2>
+<ul class="recordingList">
+    @foreach (var recording in Model)
+    {
+        <li>@Html.ActionLink(recording.Title, "WatchRecording", new { recording = recording.IdRecording })</li>
+    }
+</ul>
+

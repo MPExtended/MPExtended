@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.WebSeason>
+@{
+    ViewBag.Title = "Seasons";
+}
+<style type="text/css">
+    .column
+    {
+        float: left;
+        margin-right: 100px;
+    }
+    .img
+    {
+        max-width: 700px;
+    }
+</style>
+<h2>
+    Seasons</h2>
+<div class="column">
+    @if (Model.Count() > 0)
+    {   
+        <img class="img" src="@Url.Action("SeriesFanart", new { serie = @Model.ElementAt(0).SeriesId })" alt="" />
+    }
+</div>
+
+<div class="column">
+    <ul>
+        @foreach (var season in Model)
+        {
+            if (!season.SeasonNumber.Equals(0))
+            {
+            <li>@Html.ActionLink("Season " + season.SeasonNumber, "Episodes", new { serie = season.SeriesId, season = season.SeasonNumber })</li>
+            }
+        }
+    </ul>
+</div>

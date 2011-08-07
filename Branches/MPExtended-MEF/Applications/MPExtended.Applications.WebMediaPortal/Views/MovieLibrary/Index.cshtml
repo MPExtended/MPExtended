@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.WebMovie>
+@{
+    ViewBag.Title = "Movies";
+}
+<style type="text/css">
+    .movieList
+    {
+        overflow: hidden;
+        min-width: 1000px;
+    }
+    
+    .movieList li
+    {
+        width: 250px;
+        float: left;
+        margin: 15px;
+        
+    }
+</style>
+<h2>
+    Your movies</h2>
+<ul class="movieList">
+    @foreach (var movie in Model)
+    {
+        <li>@Html.ActionLink(movie.Title, "Details", new { movie = movie.Id })</li>
+    }
+</ul>

@@ -1,0 +1,18 @@
+<webmediaportal>
+  <users>
+    <user>
+      <password>D033E22AE348AEB5660FC2140AEC35850C4DA997</password>
+      <comment>
+      </comment>
+      <creationDate>2011-07-15T16:10:28</creationDate>
+      <email>admin@admin.de</email>
+      <isApproved>true</isApproved>
+      <lastActivity>2011-07-15T16:10:28</lastActivity>
+      <lastLoginDate>2011-07-15T16:10:28</lastLoginDate>
+      <lastPasswordChangedDate>2011-07-15T16:10:28</lastPasswordChangedDate>
+      <passwordQuestion>
+      </passwordQuestion>
+      <username>admin</username>
+    </user>
+  </users>
+</webmediaportal>
