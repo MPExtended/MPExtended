@@ -33,6 +33,13 @@ namespace MPExtended.Services.StreamingService.Units {
             Other
         }
 
+        public enum LogStream
+        {
+            StandardOut,
+            StandardError,
+            None
+        }
+
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -46,15 +53,19 @@ namespace MPExtended.Services.StreamingService.Units {
         private string arguments;
         private TransportMethod inputMethod;
         private TransportMethod outputMethod;
+        private LogStream logStream;
         private Process transcoderApplication;
         private Stream transcoderInputStream;
         private bool doInputCopy;
+        private bool waitForOutputPipe;
 
-        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod) {
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, bool waitForOutputPipe) {
             this.transcoderPath = transcoder;
             this.arguments = arguments;
             this.inputMethod = inputMethod;
             this.outputMethod = outputMethod;
+            this.logStream = logStream;
+            this.waitForOutputPipe = waitForOutputPipe;
         }
 
         public bool Setup() {
@@ -99,12 +110,16 @@ namespace MPExtended.Services.StreamingService.Units {
             if (outputMethod == TransportMethod.StandardOut)
                 DataOutputStream = transcoderApplication.StandardOutput.BaseStream;
 
-            // setup stderr forwarding, if not debugging output
-            if (IsLogStreamConnected && !DebugOutput)
+            // setup log stream
+            if (!DebugOutput && logStream == LogStream.StandardOut && IsLogStreamConnected && outputMethod != TransportMethod.StandardOut)
             {
-                LogOutputStream = transcoderApplication.StandardError.BaseStream;
+                LogOutputStream = transcoderApplication.StandardOutput.BaseStream;
             }
-            else if (IsLogStreamConnected && DebugOutput)
+            else if (!DebugOutput && logStream == LogStream.StandardError && IsLogStreamConnected)
+            {
+                LogOutputStream = transcoderApplication.StandardOutput.BaseStream;
+            }
+            else 
             {
                 LogOutputStream = new MemoryStream(4096);
             }
@@ -116,8 +131,8 @@ namespace MPExtended.Services.StreamingService.Units {
             ProcessStartInfo start = new ProcessStartInfo(transcoderPath, arguments);
             start.UseShellExecute = false;
             start.RedirectStandardInput = needsStdin;
-            start.RedirectStandardOutput = needsStdout;
-            start.RedirectStandardError = DebugOutput ? false : IsLogStreamConnected;
+            start.RedirectStandardOutput = needsStdout || (!DebugOutput && logStream == LogStream.StandardOut && IsLogStreamConnected);
+            start.RedirectStandardError = !DebugOutput && logStream == LogStream.StandardError && IsLogStreamConnected;
             start.WindowStyle = DebugOutput ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden;
             start.CreateNoWindow = !DebugOutput;
 
@@ -150,7 +165,7 @@ namespace MPExtended.Services.StreamingService.Units {
             }
 
             // delay start of next unit till our output stream is ready
-            if (DataOutputStream is NamedPipe) {
+            if (DataOutputStream is NamedPipe && waitForOutputPipe) {
                 Log.Info("Encoding: Waiting till output named pipe is ready");
                 ((NamedPipe)DataOutputStream).WaitTillReady();
             }

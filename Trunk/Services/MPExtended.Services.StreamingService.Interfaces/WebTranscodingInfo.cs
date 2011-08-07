@@ -7,24 +7,19 @@ namespace MPExtended.Services.StreamingService.Interfaces
 {
     public class WebTranscodingInfo
     {
-        /// <summary>
-        /// Bitrate (bandwidth needed) for the currently running transcoding
-        /// </summary>
+        // whether or not getting the transcoding info is supported
+        public bool Supported { get; set; }
+        // current bitrate in kbit/s
         public decimal CurrentBitrate { get; set; }
-
-        /// <summary>
-        /// Current time in ms of the currently running transcoding
-        /// </summary>
+        // current time in milliseconds for the transcoding
         public int CurrentTime { get; set; }
-
-        /// <summary>
-        /// FPS (Frames per second -> speed) of the currently running transcoding
-        /// </summary>
+        // number of frames that get encoded per second
         public int EncodingFPS { get; set; }
-
-        /// <summary>
-        /// Frames encoded on the currently running transcoding
-        /// </summary>
+        // number of encoded frames
         public int EncodedFrames { get; set; }
+        // is the transcoding finished?
+        public bool Finished { get; set; }
+        // did the transcoding fail?
+        public bool Failed { get; set; }
     }
 }

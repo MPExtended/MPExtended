@@ -32,7 +32,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             // add input
             bool doInputReader = Input.EndsWith(".ts.tsbuffer");
@@ -75,7 +75,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe);
+            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError, true);
             unit.DebugOutput = false; // change this for debugging
             pipeline.AddDataUnit(unit, 5);
 

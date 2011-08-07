@@ -32,7 +32,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             // we ignore our arguments :)
             pipeline.AddDataUnit(new InputUnit(Input), 1);

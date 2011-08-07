@@ -30,10 +30,10 @@ using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
+    //[ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
-        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings;
+        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings = new Dictionary<string, TASInterfaces.WebVirtualCard>();
         private const int API_VERSION = 2;
 
         private Streaming _stream;
@@ -73,12 +73,13 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Config.GetTranscoderProfiles().Cast<WebTranscoderProfile>().ToList();
+            // apparantly you can't serialize a derived classes to a parent class. That sucks.
+            return Config.GetTranscoderProfiles().Select(x => x.CopyToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Cast<WebTranscoderProfile>().ToList();
+            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Select(x => x.CopyToWebTranscoderProfile()).ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)
@@ -87,7 +88,7 @@ namespace MPExtended.Services.StreamingService
             if (profile == null)
                 return null;
 
-            return (WebTranscoderProfile)profile;
+            return profile.CopyToWebTranscoderProfile();
         }
         #endregion
 
@@ -111,10 +112,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier)
         {
-            EncodingInfo info = _stream.GetEncodingInfo(identifier);
-            if (info != null)
-                return info.ToWebTranscodingInfo();
-            return null;
+            return _stream.GetEncodingInfo(identifier);
         }
 
         public List<WebStreamingSession> GetStreamingSessions()

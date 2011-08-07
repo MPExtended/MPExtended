@@ -31,6 +31,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
         WebMediaInfo MediaInfo { get; set; }
         string Identifier { get; set; }
 
-        void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId);
     }
 }

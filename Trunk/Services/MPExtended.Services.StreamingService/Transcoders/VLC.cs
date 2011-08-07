@@ -32,7 +32,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public virtual void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        {
+            // VLC doesn't support output parsing, but subclasses do
+            AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.None);
+        }
+
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId, EncoderUnit.LogStream output)
         {
             // input
             bool doInputReader = Input.EndsWith(".ts.tsbuffer");
@@ -63,25 +69,28 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 subtitleTranscoder += ",soverlay";
             }
 
-            // prepare output path (some trickying for VLC)
+            // prepare output path (some trickying for VLC to accept named pipes)
             string path = @"\#OUT#";
             string muxer = Profile.CodecParameters["muxer"].Replace("#OUT#", path);
 
             // arguments
-            string arguments = "-I dummy -vvv \"#IN#\" " + subtitleArguments + " " + audioTrack + " --sout ";
-            arguments += "\"#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}";
-            arguments += muxer + "\"";
-
+            string sout = "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}" + muxer;
+            string arguments = GenerateArguments("#IN#", sout, subtitleArguments + " " + audioTrack);
             if(!doInputReader)
                 arguments = arguments.Replace("#IN#", Input);
 
             // add the unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Profile.CodecParameters["path"], arguments, input, EncoderUnit.TransportMethod.NamedPipe);
+            // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
+            // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).
+            EncoderUnit unit = new EncoderUnit(Profile.CodecParameters["path"], arguments, input, EncoderUnit.TransportMethod.NamedPipe, output, false);
             unit.DebugOutput = false; // change this for debugging
             pipeline.AddDataUnit(unit, 5);
+        }
 
-            // TODO: no output parsing yet
+        protected virtual string GenerateArguments(string input, string sout, string args)
+        {
+            return String.Format("-I dummy -vvv \"{0}\" {1} --sout \"{2}\"", input, args, sout);
         }
     }
 }

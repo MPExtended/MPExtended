@@ -18,20 +18,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.StreamingService.Code;
 
-namespace MPExtended.Services.StreamingService.Code
+namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal static class ResolutionExtensionMethods
+    internal class VLCWrapped : VLC
     {
-        public static WebResolution ToWebResolution(this Resolution res)
+        public override void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
-            return new WebResolution()
-            {
-                Width = res.Width,
-                Height = res.Height
-            };
+            base.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.StandardOut);
+
+            // setup output parsing
+            VLCWrapperParsing logunit = new VLCWrapperParsing(einfo);
+            pipeline.AddLogUnit(logunit, 6);
+        }
+
+        protected override string GenerateArguments(string input, string sout, string args)
+        {
+            return String.Format("\"{0}\" \"{1}\" {2}", input, sout, args);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             obj = toWrap;
         }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             obj.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId);
 

@@ -70,6 +70,7 @@
     <Compile Include="Transcoders\HTTPLiveTranscoderWrapper.cs" />
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
+    <Compile Include="Transcoders\VLCWrapped.cs" />
     <Compile Include="Units\Encoder.cs" />
     <Compile Include="Units\FFMpegLogParsing.cs" />
     <Compile Include="Units\HTTPLiveStreaming.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Units\IProcessingUnit.cs" />
     <Compile Include="Units\Passthrough.cs" />
     <Compile Include="Units\StreamCopy.cs" />
-    <Compile Include="Util\EncodingInfo.cs" />
+    <Compile Include="Units\VLCWrapperParsing.cs" />
     <Compile Include="Util\NamedPipe.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="Util\Resolution.cs" />

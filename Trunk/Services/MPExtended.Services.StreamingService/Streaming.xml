@@ -117,8 +117,8 @@
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
 
-      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLC">
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\vlc.exe</path>
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapped">
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>

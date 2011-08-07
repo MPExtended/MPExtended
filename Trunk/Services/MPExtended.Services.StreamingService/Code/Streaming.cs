@@ -45,7 +45,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             public ITranscoder Transcoder { get; set; }
             public Pipeline Pipeline { get; set; }
-            public EncodingInfo EncodingInfo { get; set; }
+            public WebTranscodingInfo TranscodingInfo { get; set; }
         }
 
         public bool InitStream(string identifier, string clientDescription, string source)
@@ -106,8 +106,8 @@ namespace MPExtended.Services.StreamingService.Code
 
                 // build the pipeline
                 stream.Pipeline = new Pipeline();
-                stream.EncodingInfo = new EncodingInfo();
-                Reference<EncodingInfo> eref = new Reference<EncodingInfo>(() => stream.EncodingInfo, x => { stream.EncodingInfo = x; });
+                stream.TranscodingInfo = new WebTranscodingInfo();
+                Reference<WebTranscodingInfo> eref = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
                 stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, eref, position, audioId, subtitleId);
 
                 // start the processes
@@ -168,14 +168,14 @@ namespace MPExtended.Services.StreamingService.Code
                 Identifier = s.Identifier,
                 SourceFile = s.Source,
                 Profile = s.Profile != null ? s.Profile.Name : null,
-                TranscodingInfo = s.EncodingInfo != null ? s.EncodingInfo.ToWebTranscodingInfo() : null
+                TranscodingInfo = s.TranscodingInfo != null ? s.TranscodingInfo : null
             }).ToList();
         }
 
-        public EncodingInfo GetEncodingInfo(string identifier) 
+        public WebTranscodingInfo GetEncodingInfo(string identifier) 
         {
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
-                return Streams[identifier].EncodingInfo;
+                return Streams[identifier].TranscodingInfo;
 
             return null;
         }
