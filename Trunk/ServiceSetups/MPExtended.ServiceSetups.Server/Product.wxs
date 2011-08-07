@@ -25,58 +25,23 @@
     Language="1033"
     Version="!(bind.FileVersion.MPExtended.Services.StreamingService.dll)"
     Manufacturer="MPExtended">
-    <Package InstallerVersion="200" Compressed="yes" />
-    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
-    <!-- TODO: do we really want to disallow downgrades? -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
-
-    <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
-      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
-    </Condition>
+    <?include ../MPExtended.ServiceSetups.General/MPExtended.wxi ?>
 
     <!-- Directory structure-->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPExtendedDir" Name="MPExtended">
-          <Directory Id="InstallDirectory" Name="Client Service">
-            <Directory Id="FFMpegDir" Name="FFMpeg">
+          <Directory Id="InstallDirectory" Name="SingleSeat Service">
+            <?include ../MPExtended.ServiceSetups.General/StreamBinaries.wxi ?>
 
-              <Component Id="FFMpegBinaries" Guid="a35fbcbb-c000-45d3-9a4c-c772db10ee8e">
-                <File Source="$(var.SolutionDir)\Libraries\Streaming\ffmpeg.exe" />
-              </Component>
-
-            </Directory>
-
-            <Component Id="ServiceBinaries" Guid="8dba1ffb-242c-4517-a3f6-f5c43b845b99">
+            <Component Id="Component_MPExtended" Guid="8dba1ffb-242c-4517-a3f6-f5c43b845b99">
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.ServiceHosts.Server.exe" KeyPath="yes" Id="MainService" />
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.ServiceHosts.Server.exe.config" />
-
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Services.TVAccessService.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Services.StreamingService.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
-
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\NLog.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\NLog.config" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MediaInfo.dll" />
 
-              <!--MP TVServer dependencies-->
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Gentle.Common.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Gentle.Framework.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Gentle.Provider.MySQL.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Gentle.Provider.SQLServer.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\log4net.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\MySql.Data.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\TvBusinessLayer.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\TvControl.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\TVDatabase.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\TvLibrary.Interfaces.dll" />
-
-              <!-- TODO: Do we want to install debugging information? -->
+              <?include ../MPExtended.ServiceSetups.General/StreamingService.wxi ?>
+              <?include ../MPExtended.ServiceSetups.General/ServerSetup.wxi ?>
 
               <!-- Service -->
               <ServiceInstall
@@ -102,7 +67,7 @@
 
       <Directory Id="CommonAppDataFolder">
         <Directory Id="OurAppDataFolder" Name="MPExtended">
-          <Component Id="AppDataConfig" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
+          <Component Id="Component_AppData" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
             <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Services.xml" />
             <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\Streaming.xml" />
             <File Source="$(var.MPExtended.ServiceHosts.Server.TargetDir)\TVAccess.xml" />
@@ -112,9 +77,12 @@
     </Directory>
 
     <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.Server" Level="1">
-      <ComponentRef Id="ServiceBinaries" />
-      <ComponentRef Id="FFMpegBinaries" />
-      <ComponentRef Id="AppDataConfig" />
+      <ComponentRef Id="Component_Streaming_FFMpeg"/>
+      <ComponentRef Id="Component_Streaming_Segmenter"/>
+      <ComponentRef Id="Component_Streaming_VLC"/>
+      <ComponentRef Id="Component_Streaming_VLC_Plugins"/>
+      <ComponentRef Id="Component_MPExtended" />
+      <ComponentRef Id="Component_AppData" />
     </Feature>
   </Product>
 </Wix>
