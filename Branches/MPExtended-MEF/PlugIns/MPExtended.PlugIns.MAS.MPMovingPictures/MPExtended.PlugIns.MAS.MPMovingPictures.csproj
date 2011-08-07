@@ -5,18 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</ProjectGuid>
+    <ProjectGuid>{EFE0F9B5-D937-44F5-9293-9C6A82C15747}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Services.MediaAccessService</RootNamespace>
-    <AssemblyName>MPExtended.Services.MediaAccessService</AssemblyName>
+    <RootNamespace>MPExtended.PlugIns.MAS.MPMovingPictures</RootNamespace>
+    <AssemblyName>MPExtended.PlugIns.MAS.MPMovingPictures</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,61 +35,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\Libraries\Database\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Channels" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Xaml" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\GlobalVersion.cs">
-      <Link>Properties\GlobalVersion.cs</Link>
-    </Compile>
-    <Compile Include="Code\ExtensionMethods.cs" />
-    <Compile Include="Code\Filesystem.cs" />
-    <Compile Include="Code\Helper\Database.cs" />
-    <Compile Include="Code\Helper\DatabaseHelperMethods.cs" />
-    <Compile Include="Code\Helper\Query.cs" />
-    <Compile Include="Code\Shares.cs" />
-    <Compile Include="Code\Helper\Utils.cs" />
-    <Compile Include="Code\MovingPictures.cs" />
-    <Compile Include="Code\MPMusic.cs" />
-    <Compile Include="Code\MPPictures.cs" />
-    <Compile Include="Code\MPTvSeries.cs" />
-    <Compile Include="Code\MPVideo.cs" />
-    <Compile Include="MediaAccessService.cs" />
+    <Compile Include="MPMovingPictures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
-      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.ServiceLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MediaAccess.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
