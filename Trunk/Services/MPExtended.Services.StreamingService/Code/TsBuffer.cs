@@ -25,7 +25,7 @@ using System.Text;
 using MPExtended.Libraries.ServiceLib;
 #endregion
 
-namespace MPExtended.Services.StreamingService.Util {
+namespace MPExtended.Services.StreamingService.Code {
     internal class TsBuffer : Stream {
         #region State
         private enum State {

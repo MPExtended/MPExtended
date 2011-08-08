@@ -36,11 +36,11 @@ using System.Threading;
 using System.IO;
 using System.Diagnostics;
 using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Units
 {
-    internal class HTTPLiveStreaming : IProcessingUnit
+    internal class HTTPLiveStreamingUnit : IProcessingUnit
     {
         private const int SEGMENT_LENGTH = 10;
         private const int SEGMENT_BUFFER = 10;
@@ -59,7 +59,7 @@ namespace MPExtended.Services.StreamingService.Units
         private Process segmenterApplication;
         private string siteRoot;
 
-        public HTTPLiveStreaming(string identifier)
+        public HTTPLiveStreamingUnit(string identifier)
         {
             this.identifier = identifier;
         }

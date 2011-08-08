@@ -21,7 +21,7 @@ using System.IO;
 using System.Threading;
 using MPExtended.Libraries.ServiceLib;
 
-namespace MPExtended.Services.StreamingService.Util {
+namespace MPExtended.Services.StreamingService.Code {
     internal class StreamCopy {
         private const int _defaultBufferSize = 0x10000;
         private byte[] buffer;

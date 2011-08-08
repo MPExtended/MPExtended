@@ -24,7 +24,6 @@ using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Util;
 using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code

@@ -18,27 +18,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Util;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Code;
+using System.Text;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class VLCWrapped : VLC
+    internal class VLCWrapperHTTPLive : HTTPLiveTranscoderWrapper
     {
-        public override void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public VLCWrapperHTTPLive() :
+            base(new VLCWrapper())
         {
-            base.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.StandardOut);
-
-            // setup output parsing
-            VLCWrapperParsing logunit = new VLCWrapperParsing(einfo);
-            pipeline.AddLogUnit(logunit, 6);
-        }
-
-        protected override string GenerateArguments(string input, string sout, string args)
-        {
-            return String.Format("\"{0}\" \"{1}\" {2}", input, sout, args);
         }
     }
 }

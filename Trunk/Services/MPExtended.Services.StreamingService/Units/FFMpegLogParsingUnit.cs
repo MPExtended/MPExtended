@@ -21,12 +21,12 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Units 
 {
-    internal class FFMpegLogParsing : ILogProcessingUnit 
+    internal class FFMpegLogParsingUnit : ILogProcessingUnit 
     {
         public Stream InputStream { get; set; }
         public bool LogMessages { get; set; }
@@ -34,7 +34,7 @@ namespace MPExtended.Services.StreamingService.Units
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
 
-        public FFMpegLogParsing(Reference<WebTranscodingInfo> save) 
+        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save) 
         {
             data = save;
         }

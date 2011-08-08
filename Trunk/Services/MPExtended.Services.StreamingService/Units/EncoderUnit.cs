@@ -21,7 +21,6 @@ using System.Diagnostics;
 using System.IO;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
-using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Units {
     internal class EncoderUnit : IProcessingUnit {
@@ -57,15 +56,13 @@ namespace MPExtended.Services.StreamingService.Units {
         private Process transcoderApplication;
         private Stream transcoderInputStream;
         private bool doInputCopy;
-        private bool waitForOutputPipe;
 
-        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, bool waitForOutputPipe) {
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream) {
             this.transcoderPath = transcoder;
             this.arguments = arguments;
             this.inputMethod = inputMethod;
             this.outputMethod = outputMethod;
             this.logStream = logStream;
-            this.waitForOutputPipe = waitForOutputPipe;
         }
 
         public bool Setup() {
@@ -165,7 +162,7 @@ namespace MPExtended.Services.StreamingService.Units {
             }
 
             // delay start of next unit till our output stream is ready
-            if (DataOutputStream is NamedPipe && waitForOutputPipe) {
+            if (DataOutputStream is NamedPipe && (outputMethod == TransportMethod.NamedPipe || outputMethod == TransportMethod.StandardOut)) {
                 Log.Info("Encoding: Waiting till output named pipe is ready");
                 ((NamedPipe)DataOutputStream).WaitTillReady();
             }

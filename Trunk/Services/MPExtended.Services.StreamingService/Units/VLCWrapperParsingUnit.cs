@@ -21,19 +21,19 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Units
 {
-    internal class VLCWrapperParsing : ILogProcessingUnit
+    internal class VLCWrapperParsingUnit : ILogProcessingUnit
     {
         public Stream InputStream { get; set; }
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
         private bool vlcIsStarted;
 
-        public VLCWrapperParsing(Reference<WebTranscodingInfo> save) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save) 
         {
             data = save;
         }

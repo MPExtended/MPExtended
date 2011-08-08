@@ -109,33 +109,69 @@
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
-      <name>Android VLC Test</name>
-      <description>VLC Test profile</description>
+      <name>VLC Test</name>
+      <description>VLC test profile</description>
       <bandwidth>1024</bandwidth>
       <target>android</target>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
 
-      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapped">
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
-      <name>Android LQ HTTP Live Test</name>
-      <description>HTTP Live Test</description>
-      <bandwidth>380</bandwidth>
+      <name>FFMpeg HTTP Live Test</name>
+      <description>FFMpeg HTTP live test profile</description>
+      <bandwidth>1024</bandwidth>
       <target>android</target>
-      <transport>httplive</transport>
-      <maxOutputWidth>400</maxOutputWidth>
-      <maxOutputHeight>300</maxOutputHeight>
+      <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.FFMpegHTTPLive">
-        <codecParameters>-vcodec libx264 -b 256k -vprofile baseline -preset veryfast -acodec aac -ab 64k -ac 2 -strict experimental -threads 1 -async 1 -f mpegts</codecParameters>
+        <codecParameters>-vcodec libx264 -b 768k -vprofile baseline -preset veryfast -acodec aac -ab 128k -ac 2 -strict experimental -async 1 -f mpegts</codecParameters>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>VLC HTTP Live Test</name>
+      <description>VLC HTTP live test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>android</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLive">
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>VLC RTSP Test</name>
+      <description>VLC RTSP test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>android</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP">
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
+        <muxer>:rtp{sdp=rtsp://:5544/stream.ts,mux=ts}</muxer>
       </transcoderConfiguration>
     </transcoder>
   </transcoders>

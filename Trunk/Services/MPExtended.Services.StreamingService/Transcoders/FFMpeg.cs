@@ -21,7 +21,6 @@ using System.Linq;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Util;
 using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Transcoders
@@ -38,7 +37,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             // add input
             bool doInputReader = Input.EndsWith(".ts.tsbuffer");
@@ -81,12 +80,12 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError, true);
+            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
             unit.DebugOutput = false; // change this for debugging
             pipeline.AddDataUnit(unit, 5);
 
             // setup output parsing
-            FFMpegLogParsing logunit = new FFMpegLogParsing(einfo);
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
             pipeline.AddLogUnit(logunit, 6);

@@ -16,22 +16,24 @@
 #endregion
 
 using System;
+using MPExtended.Services.StreamingService.Interfaces;
 
-namespace MPExtended.Services.StreamingService.Util {
-    internal class Resolution {
-        public int Width { get; set; }
-        public int Height { get; set; }
-
-        public Resolution(int width, int height) {
+namespace MPExtended.Services.StreamingService.Code {
+    internal class Resolution : WebResolution
+    {
+        public Resolution(int width, int height)
+        {
             Width = width;
             Height = height;
         }
 
-        public Resolution CalculateResize(Resolution maxOutputSize, int framesizeMultipleOff = 1) {
+        public Resolution CalculateResize(Resolution maxOutputSize, int framesizeMultipleOff = 1) 
+        {
             return CalculateResize(Width / Height, maxOutputSize, framesizeMultipleOff);
         }
 
-        public Resolution CalculateResize(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) {
+        public Resolution CalculateResize(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) 
+        {
             // get the aspect ratio for the height / width calculation, defaulting to 16:9
             decimal displayAspect = destinationAspectRatio == 0 ? 16 / 9 : destinationAspectRatio;
 
@@ -50,11 +52,13 @@ namespace MPExtended.Services.StreamingService.Util {
             return new Resolution(newWidth, newHeight);
         }
 
-        public override string ToString() {
+        public override string ToString() 
+        {
             return Width.ToString() + "x" + Height.ToString();
         }
 
-        public static Resolution Calculate(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) {
+        public static Resolution Calculate(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) 
+        {
             Resolution res = new Resolution(0, 0);
             return res.CalculateResize(destinationAspectRatio, maxOutput, framesizeMultipleOff);
         }

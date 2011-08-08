@@ -17,7 +17,7 @@
 
 using System;
 
-namespace MPExtended.Services.StreamingService.Util {
+namespace MPExtended.Services.StreamingService.Code {
     /* Thanks to StackOverflow: http://stackoverflow.com/questions/2980463/how-do-i-assign-by-reference-to-a-class-field-in-c
      * 
      * Example:

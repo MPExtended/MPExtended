@@ -17,10 +17,11 @@
 
 using System;
 using System.IO;
-using MPExtended.Services.StreamingService.Util;
+using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Units {
-    internal class StreamCopyUnit : IProcessingUnit {
+    internal class InputUnit : IProcessingUnit {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -28,29 +29,34 @@ namespace MPExtended.Services.StreamingService.Units {
         public bool IsDataStreamConnected { get; set; }
         public bool IsLogStreamConnected { get; set; }
 
-        private Stream outputStream;
-        private string logIdentifier = null;
+        private string source;
 
-        public StreamCopyUnit(Stream outputStream) {
-            this.outputStream = outputStream;
-        }
-
-        public StreamCopyUnit(Stream outputStream, string logIdentifier) :
-            this(outputStream) {
-            this.logIdentifier = logIdentifier;
+        public InputUnit(string source) {
+            this.source = source;
         }
 
         public bool Setup() {
-            this.DataOutputStream = this.outputStream;
+            try {
+                if (source.IndexOf(".ts.tsbuffer") != -1) {
+                    Log.Info("Using TsBuffer to read input");
+                    DataOutputStream = new TsBuffer(this.source);
+                } else {
+                    Log.Info("Using FileStream to read input");
+                    DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                }
+            } catch (Exception e) {
+                Log.Error("Failed to setup InputProcessingUnit", e);
+                return false;
+            }
             return true;
         }
 
         public bool Start() {
-            StreamCopy.AsyncStreamCopy(InputStream, DataOutputStream, logIdentifier);
             return true;
         }
 
         public bool Stop() {
+            DataOutputStream.Close();
             return true;
         }
     }

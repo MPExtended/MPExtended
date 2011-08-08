@@ -25,7 +25,6 @@ using System.Drawing.Drawing2D;
 using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.MediaInfo;
-using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Code
 {

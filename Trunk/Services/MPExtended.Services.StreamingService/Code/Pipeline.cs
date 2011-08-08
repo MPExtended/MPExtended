@@ -21,7 +21,6 @@ using System.IO;
 using System.Linq;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Code {
     internal class Pipeline {

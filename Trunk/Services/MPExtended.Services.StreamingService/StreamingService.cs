@@ -24,7 +24,6 @@ using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
 using MASInterfaces = MPExtended.Services.MediaAccessService.Interfaces;
 using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
 
