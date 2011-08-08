@@ -173,7 +173,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called FinishStream with ident={0}", identifier);
             _stream.KillStream(identifier);
-            if (_timeshiftings[identifier] != null)
+            if(_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
             {
                 MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
                 _timeshiftings.Remove(identifier);

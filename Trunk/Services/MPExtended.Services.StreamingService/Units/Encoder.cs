@@ -117,7 +117,7 @@ namespace MPExtended.Services.StreamingService.Units {
             }
             else if (!DebugOutput && logStream == LogStream.StandardError && IsLogStreamConnected)
             {
-                LogOutputStream = transcoderApplication.StandardOutput.BaseStream;
+                LogOutputStream = transcoderApplication.StandardError.BaseStream;
             }
             else 
             {

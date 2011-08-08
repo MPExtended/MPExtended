@@ -24,6 +24,8 @@
 // - Change include and library directories
 //
 // There is some preprocessor magic to make it usable on Linux too.
+// There is probably a bith too much preprocessor magic here anyway,
+// but it works. 
 
 #ifdef __unix__
 #define PLATFORM_LINUX
@@ -51,8 +53,10 @@
 #define false 0
 #endif
 
-#define USER_AGENT "VLC Transcoder for MPExtended"
-#define HTTP_USER_AGENT "VLCTranscoder/0.1 MPExtended/0.3.9"
+#define ENDLN(x) (x "\n")
+
+#define USER_AGENT "VLC Wrapper for MPExtended"
+#define HTTP_USER_AGENT "VLCWrapper/0.1 MPExtended/0.3.9"
 
 #define MEDIA_NAME "Stream"
 
@@ -78,7 +82,8 @@ int global_state = STATE_NULL;
 void event_callback(const libvlc_event_t *event_data, void *data_void) {
    int data = *(int*)data_void;
    global_state = data;
-   printf("S %s\n", state_name[global_state]);
+   fprintf(stdout, ENDLN("S %s"), state_name[global_state]);
+	fflush(stdout);
 }
 
 void register_event(libvlc_event_manager_t *eventManager, libvlc_event_type_t event_type, int type) {
@@ -93,7 +98,7 @@ void handle_messages(libvlc_log_t *log) {
    while(libvlc_log_iterator_has_next(log_iter)) {
       libvlc_log_message_t *message = libvlc_log_iterator_next(log_iter, &messageBuffer);
       const char *header = message->psz_header == NULL ? "[null]" : message->psz_header;
-      fprintf(stderr, "%d %s %s %s %s\n", message->i_severity, header, message->psz_type, message->psz_name, message->psz_message);
+      fprintf(stderr, ENDLN("%d %s %s %s %s"), message->i_severity, header, message->psz_type, message->psz_name, message->psz_message);
    }
    libvlc_log_clear(log);
    libvlc_log_iterator_free(log_iter);
@@ -118,7 +123,7 @@ int main(int argc, char **argv) {
 
    // init arguments
    if(argc < 3) {
-      printf("Usage: vlcwrapper <input> <soutstring> [optional vlc arguments\n");
+      printf(ENDLN("Usage: vlcwrapper <input> <soutstring> [optional vlc arguments]"));
       return 1;
    }
    
@@ -133,7 +138,7 @@ int main(int argc, char **argv) {
       strcpy(vlc_argv[i-3], argv[i]);
    }
    for(i = 0; i < nr; i++)
-      printf("A %d %s\n", i, vlc_argv[i]);
+      fprintf(stdout, ENDLN("A %d %s"), i, vlc_argv[i]);
 
    // init vlc
    vlc = libvlc_new(0, NULL);
@@ -161,9 +166,10 @@ int main(int argc, char **argv) {
    // let it play till it's ended
    while(global_state == STATE_PLAYING) {
       handle_messages(log);
-      printf("P %d, %.9f\n", 
+      fprintf(stdout, ENDLN("P %d, %.9f"), 
              libvlc_vlm_get_media_instance_time(vlc, MEDIA_NAME, 0),
              libvlc_vlm_get_media_instance_position(vlc, MEDIA_NAME, 0));
+		fflush(stdout);
       millisleep(LOG_INTERVAL);
    }
 

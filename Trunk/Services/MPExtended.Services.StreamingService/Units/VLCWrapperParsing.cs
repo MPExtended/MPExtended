@@ -53,8 +53,8 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Start() 
         {
-            //while (!vlcIsStarted)
-            //    Thread.Sleep(100);
+            while (!vlcIsStarted)
+                Thread.Sleep(100);
             return true;
         }
 
@@ -107,14 +107,14 @@ namespace MPExtended.Services.StreamingService.Units
                         // FIXME: hardcoded 25fps 
 
                         int millisecs = Int32.Parse(line.Substring(2, line.IndexOf(",") - 2)) / 1000;
-                        Decimal percent = Decimal.Parse(line.Substring(line.IndexOf(",") + 1));
-                        int fps = (millisecs - data.Value.CurrentTime) / (1000 * 25) * 2;
+                        Decimal percent = Decimal.Parse(line.Substring(line.IndexOf(",") + 1), System.Globalization.CultureInfo.InvariantCulture);
+                        int fps = (millisecs - data.Value.CurrentTime) / (1000 / 25) * 2;
 
                         lock (data)
                         {
                             data.Value.CurrentTime = millisecs;
                             data.Value.EncodingFPS = fps;
-                            data.Value.EncodedFrames = millisecs / (1000 * 25);
+                            data.Value.EncodedFrames = millisecs / (1000 / 25);
                         }
                         continue;
                     }
