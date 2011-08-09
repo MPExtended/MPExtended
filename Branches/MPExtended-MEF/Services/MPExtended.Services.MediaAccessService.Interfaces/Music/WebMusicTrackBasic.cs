@@ -7,7 +7,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
     public class WebMusicTrackBasic
     {
-        public string TrackId { get; set; }
-        public string Title { get; set; }
+        public String TrackId { get; set; }
+        public String Title { get; set; }
+        public int TrackNumber { get; set; }
+        public string FileName { get; set; }
     }
 }

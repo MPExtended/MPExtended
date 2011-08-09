@@ -5,6 +5,8 @@ using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Picture;
+using System.IO;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -21,7 +23,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicArtistBasic GetArtistBasicById(string artistId);
         IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);
         IList<String> GetAllGenres();
-
+        DirectoryInfo GetSourceRootDirectory();
     }
     public interface IMovieLibrary
     {
@@ -30,7 +32,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IList<String> GetAllGenres();
-
+        DirectoryInfo GetSourceRootDirectory();
     }
     public interface ITVShowLibrary
     {
@@ -40,9 +42,17 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
         IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
+        DirectoryInfo GetSourceRootDirectory();
+  
     }
     public interface IPictureLibrary
     {
-
+        IList<WebPictureBasic> GetAllPictures();
+        WebPictureDetailed GetPictureDetailed();        
+        DirectoryInfo GetSourceRootDirectory(); 
+    }
+    public interface IFileSystemProvider
+    { 
+    
     }
 }

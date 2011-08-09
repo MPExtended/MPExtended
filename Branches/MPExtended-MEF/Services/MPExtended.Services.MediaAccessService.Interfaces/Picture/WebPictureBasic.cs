@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
+namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-    public class WebTVEpisodeBasic
+    public class WebPictureBasic
     {
-        public string EpisodeId { get; set; }
+        public string PictureId { get; set; }
         public string Title { get; set; }
+        public string DateTaken { get; set; }
         public string FileName { get; set; }
+    
     }
 }
