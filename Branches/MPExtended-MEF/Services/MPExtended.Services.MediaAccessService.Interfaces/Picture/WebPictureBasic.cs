@@ -10,7 +10,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         public string PictureId { get; set; }
         public string Title { get; set; }
         public string DateTaken { get; set; }
-        public string FileName { get; set; }
+        public string FilePath { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     
     }
 }

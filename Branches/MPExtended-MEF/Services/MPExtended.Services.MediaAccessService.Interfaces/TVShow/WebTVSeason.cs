@@ -8,6 +8,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
     public class WebTVSeason
     {
         public string SeasonId { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; }   
+        public bool IsProtected { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

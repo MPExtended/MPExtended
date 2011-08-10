@@ -9,6 +9,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
     {
         public string TVShowId { get; set; }
         public string Title { get; set; }
+        public string Genre { get; set; }
+        public bool IsProtected { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
         
     }
 }

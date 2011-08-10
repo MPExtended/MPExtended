@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Database\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -56,6 +59,9 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
+    <Compile Include="DB\Database.cs" />
+    <Compile Include="DB\DatabaseHelperMethods.cs" />
+    <Compile Include="DB\Query.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WcfUsernameValidator.cs" />

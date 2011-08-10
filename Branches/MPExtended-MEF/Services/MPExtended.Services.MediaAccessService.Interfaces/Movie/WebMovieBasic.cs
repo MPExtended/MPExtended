@@ -12,12 +12,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
             DateAdded = new DateTime(1970, 1, 1);
         }
 
-        public String MovieId { get; set; }
-        public String Title { get; set; }
-        public String Genre { get; set; }
+        public string MovieId { get; set; }
+        public string Title { get; set; }
+        public string Genre { get; set; }
+        public bool IsProtected { get; set; }
         public int Year { get; set; }
-        public String CoverThumbPath { get; set; }
-        public String BackdropPath { get; set; }
+        public string CoverThumbPath { get; set; }
+        public string BackdropPath { get; set; }
         public DateTime DateAdded { get; set; }
         public string FileName { get; set; }
 

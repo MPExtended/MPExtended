@@ -7,10 +7,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
     public class WebMovieDetailed : WebMovieBasic
     {
-        public IList<String> Directors { get; set; }
-        public IList<String> Writers { get; set; }
-        public IList<String> Actors { get; set; }
-        //may be use Language enum?
-        public String Language { get; set; }
+        public IList<string> Directors { get; set; }
+        public IList<string> Writers { get; set; }
+        public IList<string> Actors { get; set; }
+        //how to force ISO standard naming?
+        public string Language { get; set; }
     }
 }
