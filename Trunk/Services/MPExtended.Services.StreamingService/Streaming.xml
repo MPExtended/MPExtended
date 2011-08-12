@@ -121,6 +121,7 @@
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -153,6 +154,7 @@
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLive">
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--no-ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -170,6 +172,7 @@
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP">
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--no-ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:rtp{sdp=rtsp://:5544/stream.ts,mux=ts}</muxer>
       </transcoderConfiguration>

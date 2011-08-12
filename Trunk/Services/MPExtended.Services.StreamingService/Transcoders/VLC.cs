@@ -82,7 +82,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // arguments
             string sout = "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}" + muxer;
-            string arguments = GenerateArguments("#IN#", sout, subtitleArguments + " " + audioTrack);
+            string arguments = GenerateArguments("#IN#", sout, subtitleArguments + " " + audioTrack + " " + Profile.CodecParameters["options"]);
             if(!doInputReader)
                 arguments = arguments.Replace("#IN#", Input);
 
