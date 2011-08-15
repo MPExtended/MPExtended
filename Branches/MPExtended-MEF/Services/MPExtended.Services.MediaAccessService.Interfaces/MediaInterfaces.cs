@@ -49,10 +49,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         IList<WebPictureBasic> GetAllPicturesBasic();
         IList<WebPictureDetailed> GetAllPicturesDetailed();
-        WebPictureDetailed GetPictureDetailed(string pictureId);  
-      
-
-
+        WebPictureDetailed GetPictureDetailed(string pictureId);
+        IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
         DirectoryInfo GetSourceRootDirectory(); 
     }
     public interface IFileSystemProvider

@@ -12,6 +12,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public string Title { get; set; }
         public int TrackNumber { get; set; }
         public string FilePath { get; set; }
+        public int Year { get; set; }
 
         public override string ToString()
         {

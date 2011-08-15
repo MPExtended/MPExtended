@@ -44,15 +44,15 @@ namespace MPExtended.Services.MediaAccessService.Code
                 try
                 {
                     WebMusicTrackBasic track = new WebMusicTrackBasic();
-                    track.TrackId = DatabaseHelperMethods.SafeInt32(reader, 0);
-                    track.Album = DatabaseHelperMethods.SafeStr(reader, 1);
-                    track.Artists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
-                    track.AlbumArtists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 3));
-                    track.ShortedAlbumArtist = track.AlbumArtists.FirstOrDefault();
-                    track.TrackNum = DatabaseHelperMethods.SafeInt32(reader, 4);
+                    track.TrackId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString();
+                    //track.Album = DatabaseHelperMethods.SafeStr(reader, 1);
+                    //track.Artists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
+                    //track.AlbumArtists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 3));
+                    //track.ShortedAlbumArtist = track.AlbumArtists.FirstOrDefault();
+                    track.TrackNumber = DatabaseHelperMethods.SafeInt32(reader, 4);
                     track.Title = DatabaseHelperMethods.SafeStr(reader, 5);
                     track.FilePath = DatabaseHelperMethods.SafeStr(reader, 6);
-                    track.Duration = DatabaseHelperMethods.SafeInt32(reader, 7);
+                    //track.Duration = DatabaseHelperMethods.SafeInt32(reader, 7);
                     track.Year = DatabaseHelperMethods.SafeInt32(reader, 8);
                     return track;
                 }
@@ -108,10 +108,24 @@ namespace MPExtended.Services.MediaAccessService.Code
             // TODO: we expect only one artist in the strAlbumArtist field here. that's not correct, there can be multiple artists there
             List<WebMusicArtistBasic> retList = ReadList<WebMusicArtistBasic>("SELECT DISTINCT strAlbumArtist FROM tracks GROUP BY strAlbumArtist", delegate(SQLiteDataReader reader)
             {
-                if (!String.IsNullOrEmpty(Utils.ClearString(DatabaseHelperMethods.SafeStr(reader, 0))))
-                { return new WebMusicArtistBasic(Utils.ClearString(DatabaseHelperMethods.SafeStr(reader, 0))); }
+                if (!String.IsNullOrEmpty(ClearString(DatabaseHelperMethods.SafeStr(reader, 0))))
+                {
+                    return new WebMusicArtistBasic() 
+                    {
+                        Title = ClearString(DatabaseHelperMethods.SafeStr(reader, 0)),
+                        ArtistId = 
+                    
+                    };
+                }
                 else
-                { return new WebMusicArtistBasic("No Title",null); }
+                {
+                    return new WebMusicArtistBasic()
+                    {
+                        Title = "No title",
+                        ArtistId = ""
+
+                    }; 
+                }
             }, start, end);
             return retList;
         }
@@ -231,6 +245,11 @@ namespace MPExtended.Services.MediaAccessService.Code
             albumName = albumName.Replace(":", "_");
 
             return System.IO.Path.Combine(Utils.GetBannerPath("music"), "Albums", artistName + "-" + albumName + "L.jpg");
+        }
+
+        public static string ClearString(String _stringToClean)
+        {
+            return _stringToClean.Substring(2, (_stringToClean.Length - 5));
         }
     }
 }
