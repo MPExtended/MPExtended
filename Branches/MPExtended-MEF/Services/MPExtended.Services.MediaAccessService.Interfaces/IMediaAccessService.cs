@@ -15,90 +15,91 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     // IMediaAccessService is the "real" api which is exposed by WCF and
     // can basically  differ from the interfaces described
     // in MediaInterfaces except they have to use the same known media descriptions
+    #region Enum
+    [DataContract]
+    public enum OrderBy
+    {
+        [EnumMember]
+        Asc = 0,
+        [EnumMember]
+        Desc = 1
+
+    }
+
+    [DataContract]
+    public enum SortMusicBy
+    {
+        [EnumMember]
+        Name = 0,
+        [EnumMember]
+        DateAdded = 1,
+        [EnumMember]
+        Year = 2,
+        [EnumMember]
+        Genre = 3,
+        [EnumMember]
+        Rating = 4,
+        [EnumMember]
+        TrackNumber = 5,
+        [EnumMember]
+        Composer = 6
+    }
+    [DataContract]
+    public enum SortTVShowsBy
+    {
+        [EnumMember]
+        Name = 0,
+        [EnumMember]
+        DateAdded = 1,
+        [EnumMember]
+        Year = 2,
+        [EnumMember]
+        Genre = 3,
+        [EnumMember]
+        Rating = 4,
+        [EnumMember]
+        EpisodeNumber = 5,
+        [EnumMember]
+        SeasonNumberEpisodeNumber = 6
+    }
+
+
+    [DataContract]
+    public enum SortMoviesBy
+    {
+        [EnumMember]
+        Name = 0,
+        [EnumMember]
+        DateAdded = 1,
+        [EnumMember]
+        Year = 2,
+        [EnumMember]
+        Genre = 3,
+        [EnumMember]
+        Rating = 4
+    }
+    [DataContract]
+    public enum SortPicturesBy
+    {
+        [EnumMember]
+        Name = 0,
+        [EnumMember]
+        DateAdded = 1,
+        [EnumMember]
+        Year = 2,
+        [EnumMember]
+        Genre = 3,
+        [EnumMember]
+        Rating = 4,
+        [EnumMember]
+        DateTaken = 5
+    }
+    #endregion
+
 
     [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
     public interface IMediaAccessService
     {
-        #region Enum
-        [DataContract]
-        public enum OrderBy
-        {
-            [EnumMember]
-            Asc = 0,
-            [EnumMember]
-            Desc = 1
-
-        }
-
-        [DataContract]
-        public enum SortMusicBy
-        {
-            [EnumMember]
-            Name = 0,
-            [EnumMember]
-            DateAdded = 1,
-            [EnumMember]
-            Year = 2,
-            [EnumMember]
-            Genre = 3,
-            [EnumMember]
-            Rating = 4,
-            [EnumMember]
-            TrackNumber = 5,
-            [EnumMember]
-            Composer = 6
-        }
-        [DataContract]
-        public enum SortTVShowsBy
-        {
-            [EnumMember]
-            Name = 0,
-            [EnumMember]
-            DateAdded = 1,
-            [EnumMember]
-            Year = 2,
-            [EnumMember]
-            Genre = 3,
-            [EnumMember]
-            Rating = 4,
-            [EnumMember]
-            EpisodeNumber = 5,
-            [EnumMember]
-            SeasonNumber_EpisodeNumber = 6
-        }
-
-
-        [DataContract]
-        public enum SortMoviesBy
-        {
-            [EnumMember]
-            Name = 0,
-            [EnumMember]
-            DateAdded = 1,
-            [EnumMember]
-            Year = 2,
-            [EnumMember]
-            Genre = 3,
-            [EnumMember]
-            Rating = 4
-        }
-        [DataContract]
-        public enum SortPicturesBy
-        {
-            [EnumMember]
-            Name = 0,
-            [EnumMember]
-            DateAdded = 1,
-            [EnumMember]
-            Year = 2,
-            [EnumMember]
-            Genre = 3,
-            [EnumMember]
-            Rating = 4,
-            [EnumMember]
-            DateTaken = 5
-        }
-        #endregion
 
         #region GlobalOperations
         [OperationContract]
@@ -107,6 +108,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region Movies
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetMovieCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -134,7 +139,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<string> GetAllMovieGenre();
+        IList<string> GetAllMovieGenres();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -144,6 +149,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region Music
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetMusicTrackCount();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetMusicAlbumCount();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetMusicArtistCount();
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebMusicTrackBasic> GetAllMusicTracksBasic(SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc);
@@ -170,7 +188,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<string> GetAllMusicGenre();
+        IList<string> GetAllMusicGenres();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

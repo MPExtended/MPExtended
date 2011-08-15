@@ -10,13 +10,38 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 namespace MPExtended.PlugIns.MAS
 {
     [Export(typeof(IMovieLibrary))]
+    [ExportMetadata("Database","MovingPictures")]
     public class MPMovingPictures : IMovieLibrary
     {
+
         public IList<WebMovieBasic> GetAllMovies()
         {
-            List<WebMovieBasic> list = new List<WebMovieBasic>();
-          
-            return list;
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMovieDetailed> GetAllMoviesDetailed()
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebMovieBasic GetMovieBasicById(string movieId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebMovieDetailed GetMovieDetailedById(string movieId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<string> GetAllGenres()
+        {
+            throw new NotImplementedException();
+        }
+
+        public System.IO.DirectoryInfo GetSourceRootDirectory()
+        {
+            throw new NotImplementedException();
         }
     }
 

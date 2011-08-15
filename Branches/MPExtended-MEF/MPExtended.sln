@@ -69,6 +69,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		GlobalVersion.cs = GlobalVersion.cs
 		LICENSE.txt = LICENSE.txt
+		MPExtendedKey.snk = MPExtendedKey.snk
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.SingleSeat", "ServiceHosts\MPExtended.ServiceHosts.SingleSeat\MPExtended.ServiceHosts.SingleSeat.csproj", "{245E9751-BDD9-4E94-A114-1D6832CE26DD}"
