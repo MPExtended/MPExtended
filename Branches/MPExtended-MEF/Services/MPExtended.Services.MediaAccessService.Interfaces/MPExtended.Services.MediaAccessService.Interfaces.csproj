@@ -58,6 +58,9 @@
     <Compile Include="Music\WebMusicAlbumBasic.cs" />
     <Compile Include="Music\WebMusicArtistBasic.cs" />
     <Compile Include="Music\WebMusicTrackBasic.cs" />
+    <Compile Include="Music\WebMusicTrackDetailed.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
