@@ -15,15 +15,20 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
     [ExportMetadata("Database","MovingPictures")]
     public class MPMovingPictures : IMovieLibrary
     {
+        private MovingPicturesDB _db = null;
+        public MPMovingPictures()
+        {
+            _db = new MovingPicturesDB();
+        }
 
         public IList<WebMovieBasic> GetAllMovies()
         {
-            throw new NotImplementedException();
+          return  _db.GetAllMovies();
         }
 
         public IList<WebMovieDetailed> GetAllMoviesDetailed()
         {
-            throw new NotImplementedException();
+            return _db.GetAllMoviesDetailed();
         }
 
         public WebMovieBasic GetMovieBasicById(string movieId)
@@ -33,7 +38,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         public WebMovieDetailed GetMovieDetailedById(string movieId)
         {
-            throw new NotImplementedException();
+            return _db.GetFullMovie(movieId);
         }
 
         public IList<string> GetAllGenres()

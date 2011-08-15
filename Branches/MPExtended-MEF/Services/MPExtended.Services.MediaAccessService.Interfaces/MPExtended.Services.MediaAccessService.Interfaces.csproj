@@ -61,6 +61,7 @@
     <Compile Include="MediaInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
+    <Compile Include="Movie\WebMovieFile.cs" />
     <Compile Include="Music\WebMusicAlbumBasic.cs" />
     <Compile Include="Music\WebMusicArtistBasic.cs" />
     <Compile Include="Music\WebMusicTrackBasic.cs" />

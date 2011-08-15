@@ -33,7 +33,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
         }
 
-        public WebMovieDetailed GetFullMovie(int idMovie)
+        public WebMovieDetailed GetFullMovie(string idMovie)
         {
             string sql = "SELECT movie.id, local.fullpath, local.discid, local.filehash, local.part, local.duration, local.videowidth, local.videoheight, local.videoresolution, local.videocodec, " +
                          "local.audiocodec, local.audiochannels, local.hassubtitles, local.videoformat, " +
@@ -45,7 +45,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                          "INNER JOIN local_media AS local ON local.id = info.local_media_id AND local.ignored = 0 " +
                          "WHERE movie.id = @idMovie";
             WebMovieDetailed movie = new WebMovieDetailed();
-            movie.Files = new List<WebMovieDetailed.WebMovieFile>();
+            //movie.Files = new List<WebMovieDetailed.WebMovieFile>();
             ReadList<int>(sql, delegate(SQLiteDataReader reader) 
             {
                 movie = AddToMovie(reader, movie);
@@ -85,31 +85,31 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             try
             {
                 // set movie properties
-                movie.Id = DatabaseHelperMethods.SafeInt32(reader, 0);
+                movie.MovieId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString();
                 movie.Title = DatabaseHelperMethods.SafeStr(reader, 14);
-                movie.AlternateTitles = DatabaseHelperMethods.SafeStr(reader, 15);
-                movie.SortBy = DatabaseHelperMethods.SafeStr(reader, 16);
-                movie.Directors = DatabaseHelperMethods.SafeStr(reader, 17);
-                movie.Writers = DatabaseHelperMethods.SafeStr(reader, 18);
-                movie.Actors = DatabaseHelperMethods.SafeStr(reader, 19);
+                //movie.AlternateTitles = DatabaseHelperMethods.SafeStr(reader, 15);
+                //movie.SortBy = DatabaseHelperMethods.SafeStr(reader, 16);
+                //movie.Directors = DatabaseHelperMethods.SafeStr(reader, 17);
+                //movie.Writers = DatabaseHelperMethods.SafeStr(reader, 18);
+                //movie.Actors = DatabaseHelperMethods.SafeStr(reader, 19);
                 movie.Year = DatabaseHelperMethods.SafeInt32(reader, 20);
                 movie.Genre = DatabaseHelperMethods.SafeStr(reader, 21);
-                movie.Certification = DatabaseHelperMethods.SafeStr(reader, 22);
+                //movie.Certification = DatabaseHelperMethods.SafeStr(reader, 22);
                 movie.Language = DatabaseHelperMethods.SafeStr(reader, 23);
-                movie.TagLine = DatabaseHelperMethods.SafeStr(reader, 24);
+                //movie.TagLine = DatabaseHelperMethods.SafeStr(reader, 24);
                 movie.Summary = DatabaseHelperMethods.SafeStr(reader, 25);
-                movie.Score = DatabaseHelperMethods.SafeFloat(reader, 26);
-                movie.Popularity = DatabaseHelperMethods.SafeInt32(reader, 27);
+                movie.Rating =Convert.ToInt32(DatabaseHelperMethods.SafeFloat(reader, 26));
+                //movie.Popularity = DatabaseHelperMethods.SafeInt32(reader, 27);
                 movie.DateAdded = DatabaseHelperMethods.SafeDateTime(reader, 28);
-                movie.Runtime = DatabaseHelperMethods.SafeInt32(reader, 29);
-                movie.ImdbId = DatabaseHelperMethods.SafeStr(reader, 30);
-                movie.CoverPathAlternate = DatabaseHelperMethods.SafeStr(reader, 31);
+                //movie.Runtime = DatabaseHelperMethods.SafeInt32(reader, 29);
+                //movie.ImdbId = DatabaseHelperMethods.SafeStr(reader, 30);
+                //movie.CoverPathAlternate = DatabaseHelperMethods.SafeStr(reader, 31);
                 movie.CoverPath = DatabaseHelperMethods.SafeStr(reader, 32);
                 movie.CoverThumbPath = DatabaseHelperMethods.SafeStr(reader, 33);
                 movie.BackdropPath = DatabaseHelperMethods.SafeStr(reader, 34);
 
-                // set file properties
-                WebMovieFull.WebMovieFile file = new WebMovieFull.WebMovieFile();
+                 //set file properties
+                WebMovieFile file = new WebMovieFile();
                 file.Filename = DatabaseHelperMethods.SafeStr(reader, 1);
                 file.DiscId = DatabaseHelperMethods.SafeStr(reader, 2);
                 file.Hash = DatabaseHelperMethods.SafeStr(reader, 3);
@@ -124,8 +124,6 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 file.HasSubtitles = DatabaseHelperMethods.SafeBoolean(reader, 12);
                 file.VideoFormat = DatabaseHelperMethods.SafeStr(reader, 13);
                 movie.Files.Add(file);
-                movie.Parts = movie.Files.Count;
-
                 return movie;
             }
             catch (Exception e)
@@ -152,7 +150,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                          "INNER JOIN local_media__movie_info AS info ON info.movie_info_id = movie.id " +
                          "INNER JOIN local_media AS local ON local.id = info.local_media_id AND local.ignored = 0 " +
                          "ORDER BY movie.id ";
-            return ReadList<WebMovie>(sql, FillBasicMovie, start, end);
+            return ReadList<WebMovieBasic>(sql, FillBasicMovie, start, end);
         }
 
         public List<WebMovieBasic> SearchForMovie(String searchString)
@@ -172,9 +170,9 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             {
                 return new WebMovieBasic()
                 {
-                    Id = DatabaseHelperMethods.SafeInt32(reader, 0),
+                    MovieId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
                     Title = DatabaseHelperMethods.SafeStr(reader, 1),
-                    TagLine = DatabaseHelperMethods.SafeStr(reader, 2),
+                    //TagLine = DatabaseHelperMethods.SafeStr(reader, 2),
                     Year = DatabaseHelperMethods.SafeInt32(reader, 3),
                     Genre = DatabaseHelperMethods.SafeStr(reader, 4),
                     CoverThumbPath = DatabaseHelperMethods.SafeStr(reader, 5),
@@ -188,12 +186,12 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             }
         }
 
-        public string GetMoviePath(int itemId, int part)
+        public string GetMoviePath(string itemId, int part)
         {
             try
             {
                 WebMovieDetailed movie = GetFullMovie(itemId);
-                if (movie != null && movie.Parts >= part)
+                if (movie != null && movie.Files.Count >= part)
                 {
                     return movie.Files[part - 1].Filename;
                 }

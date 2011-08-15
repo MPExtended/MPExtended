@@ -22,6 +22,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
         public string FileName { get; set; }
+        public int Rating { get; set; }
+    
 
         public override string ToString()
         {
