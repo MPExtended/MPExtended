@@ -23,7 +23,8 @@ using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib.DB;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
-namespace MPExtended.PlugIns.MAS
+
+namespace MPExtended.PlugIns.MAS.MovingPictures
 {
     internal class MovingPicturesDB : Database
     {

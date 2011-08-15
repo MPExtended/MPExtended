@@ -24,7 +24,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib.DB;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
-namespace MPExtended.Services.MediaAccessService.Code
+namespace MPExtended.PlugIns.MAS.MPMusic
 {
     internal class MPMusicDB : Database
     {
@@ -113,7 +113,7 @@ namespace MPExtended.Services.MediaAccessService.Code
                     return new WebMusicArtistBasic() 
                     {
                         Title = ClearString(DatabaseHelperMethods.SafeStr(reader, 0)),
-                        ArtistId = 
+                        ArtistId = ClearString(DatabaseHelperMethods.SafeStr(reader, 0))
                     
                     };
                 }
@@ -130,22 +130,18 @@ namespace MPExtended.Services.MediaAccessService.Code
             return retList;
         }
 
-        public int GetArtistsCount()
-        {
-            return GetAllArtists().Count;
-        }
         #endregion
 
         #region Albums
-        private List<WebMusicAlbum> GetAlbumsByWhere(string where, int? start, int? end, params SQLiteParameter[] parameters)
+        private List<WebMusicAlbumBasic> GetAlbumsByWhere(string where, int? start, int? end, params SQLiteParameter[] parameters)
         {
             string sql = "SELECT t.strAlbum, t.strAlbumArtist, t.strArtist, a.iYear, g.strGenre " +
                          "FROM tracks t " +
                          "LEFT JOIN albuminfo a ON t.strAlbum = a.strAlbum " + // this table is empty for me
                          "LEFT JOIN genre g ON a.idGenre = g.strGenre " +
                          "WHERE t.strAlbum != '' " + (where == string.Empty ? "" : " AND " + where);
-            Dictionary<string, WebMusicAlbum> ret = new Dictionary<string, WebMusicAlbum>();
-            ReadList<WebMusicAlbum>(sql, delegate(SQLiteDataReader reader) {
+            var ret = new Dictionary<string, WebMusicAlbumBasic>();
+            ReadList<WebMusicAlbumBasic>(sql, delegate(SQLiteDataReader reader) {
                 try {
                     string title = DatabaseHelperMethods.SafeStr(reader, 0);
                     string[] albumartists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 1));
@@ -156,11 +152,11 @@ namespace MPExtended.Services.MediaAccessService.Code
                     }
                     else
                     {
-                        ret[title] = new WebMusicAlbum() {
+                        ret[title] = new WebMusicAlbumBasic() {
                             Title = title,
                             AlbumArtists = albumartists,
                             Artists = artists,
-                            Year = (uint)DatabaseHelperMethods.SafeInt32(reader, 3),
+                            Year = DatabaseHelperMethods.SafeInt32(reader, 3),
                             Genre = reader.IsDBNull(4) ? null : DatabaseHelperMethods.SafeStr(reader, 4)
                         };
                     }
@@ -174,7 +170,7 @@ namespace MPExtended.Services.MediaAccessService.Code
                 return null;
             }, start, end, parameters);
 
-            return ret.Select(kp => new WebMusicAlbum() { 
+            return ret.Select(kp => new WebMusicAlbumBasic() { 
                 AlbumArtists = kp.Value.AlbumArtists.Distinct().ToArray(),
                 Artists = kp.Value.Artists.Distinct().ToArray(),
                 CoverPathL = GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title),
@@ -190,17 +186,17 @@ namespace MPExtended.Services.MediaAccessService.Code
             return GetAllAlbums().Count;
         }
 
-        public List<WebMusicAlbum> GetAlbums(int? start, int? end)
+        public List<WebMusicAlbumBasic> GetAlbums(int? start, int? end)
         {
             return GetAlbumsByWhere(string.Empty, start, end);
         }
 
-        public List<WebMusicAlbum> GetAlbumsByArtist(string artistName)
+        public List<WebMusicAlbumBasic> GetAlbumsByArtist(string artistName)
         {
             return GetAlbumsByWhere("t.strAlbumArtist LIKE @albumArtist", null, null, new SQLiteParameter("@albumArtist", String.Format("%| {0} |%", artistName)));
         }
 
-        public WebMusicAlbum GetAlbum(string albumName, string artistName)
+        public WebMusicAlbumBasic GetAlbum(string albumName, string artistName)
         {
             return GetAlbumsByWhere("t.strAlbumArtist LIKE @albumArtist AND t.strAlbum LIKE @album", null, null,
                 new SQLiteParameter("@albumArtist", String.Format("%| {0} |%", artistName)),
@@ -208,7 +204,7 @@ namespace MPExtended.Services.MediaAccessService.Code
             ).FirstOrDefault();
         }
 
-        public List<WebMusicAlbum> GetAllAlbums()
+        public List<WebMusicAlbumBasic> GetAllAlbums()
         {
             return GetAlbumsByWhere(string.Empty, null, null);
         }

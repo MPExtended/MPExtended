@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.Composition;
+using MPExtended.Services.MediaAccessService.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
@@ -12,9 +13,15 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [ExportMetadata("Database", "MPMyVideo")]
     public class MPVideos : IMovieLibrary
     {
+        private MPVideoDB _db = null;
+        public MPVideos()
+        {
+            _db = new MPVideoDB();
+        }
+
         public IList<WebMovieBasic> GetAllMovies()
         {
-            throw new NotImplementedException();
+            return _db.GetAllVideos();
         }
 
         public IList<WebMovieDetailed> GetAllMoviesDetailed()

@@ -19,6 +19,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public int Year { get; set; }
         public string CoverThumbPath { get; set; }
         public string BackdropPath { get; set; }
+        public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
         public string FileName { get; set; }
 

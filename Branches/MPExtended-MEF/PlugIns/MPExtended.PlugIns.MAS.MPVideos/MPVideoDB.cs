@@ -25,9 +25,10 @@ using System.IO;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib.DB;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 
-namespace MPExtended.Services.MediaAccessService.Code
+namespace MPExtended.PlugIns.MAS.MPVideos
 {
     internal class MPVideoDB : Database
     {
@@ -38,21 +39,21 @@ namespace MPExtended.Services.MediaAccessService.Code
         }
 
         #region Video DB
-        public List<WebMovie> GetAllVideos()
+        public List<WebMovieBasic> GetAllVideos()
         {
             return GetVideos(null, null);
         }
 
-        public List<WebMovie> GetVideos(int? _start, int? _end)
+        public List<WebMovieBasic> GetVideos(int? _start, int? _end)
         {
             string sql = "Select movie.idMovie, local.strFilename, path.strPath,info.strTitle, info.strPlotOutline, info.iYear, info.strGenre from movie as movie Natural Join movieinfo as info NATURAL JOIN files as local NATURAL JOIN path as path";
-            return ReadList<WebMovie>(sql, delegate(SQLiteDataReader reader)
+            return ReadList<WebMovieBasic>(sql, delegate(SQLiteDataReader reader)
             {
                 try
                 {
                     int id = DatabaseHelperMethods.SafeInt32(reader, 0);
                     string title = DatabaseHelperMethods.SafeStr(reader, 3);
-                    return new WebMovie()
+                    return new WebMovieBasic()
                     {
                         Id = id,
                         Title = title,
@@ -75,25 +76,25 @@ namespace MPExtended.Services.MediaAccessService.Code
             return GetAllVideos().Count;
         }
 
-        public List<WebMovie> SearchForVideo(String searchString)
+        public List<WebMovieBasic> SearchForVideo(String searchString)
         {
             return null;
         }
 
-        public WebMovieFull GetFullVideo(int videoId)
+        public WebMovieDetailed GetFullVideo(int videoId)
         {
             string sql = "Select movie.idMovie, local.strFilename, path.strPath, movie.discid, movie.hasSubtitles, " +
                         "info.strTitle, info.strCast, " +
                         "info.iYear, info.strGenre, info.mpaa, info.strPlotOutline, info.strPlot, info.fRating, info.strVotes, info.runtime, info.IMDBID " +
                         "from movie as movie, movieinfo as info, files as local, path as path where movie.idMovie = info.idMovie and movie.idPath = local.idPath " +
                         "and path.idPath = local.idPath and movie.idMovie = " + videoId;
-            return ReadRow<WebMovieFull>(sql, delegate(SQLiteDataReader reader)
+            return ReadRow<WebMovieDetailed>(sql, delegate(SQLiteDataReader reader)
             {
                 try
                 {
                     int id = DatabaseHelperMethods.SafeInt32(reader, 0);
                     string title = DatabaseHelperMethods.SafeStr(reader, 5);
-                    WebMovieFull movie = new WebMovieFull()
+                    WebMovieDetailed movie = new WebMovieDetailed()
                     {
                         Id = id,
                         Title = title,
@@ -111,7 +112,7 @@ namespace MPExtended.Services.MediaAccessService.Code
                         CoverPath = GetLargeCoverArtName(Path.Combine(Utils.GetBannerPath("videos"), "Title"), title + "{" + id + "}")
                     };
 
-                    movie.Files.Add(new WebMovieFull.WebMovieFile()
+                    movie.Files.Add(new WebMovieDetailed.WebMovieFile()
                     {
                         Filename = DatabaseHelperMethods.SafeStr(reader, 1) + DatabaseHelperMethods.SafeStr(reader, 2),
                         DiscId = DatabaseHelperMethods.SafeStr(reader, 3),
@@ -160,7 +161,7 @@ namespace MPExtended.Services.MediaAccessService.Code
         {
             try
             {
-                WebMovieFull vid = GetFullVideo(Int32.Parse(itemId));
+                WebMovieDetailed vid = GetFullVideo(Int32.Parse(itemId));
                 if (vid != null)
                 {
                     return vid.Files.First().Filename;

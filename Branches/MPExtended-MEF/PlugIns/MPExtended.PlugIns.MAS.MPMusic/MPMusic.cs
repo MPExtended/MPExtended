@@ -12,15 +12,20 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [ExportMetadata("Database", "MPMyMusic")]
     public class MPMusic : IMusicLibrary
     {
+        private MPMusicDB _db = null;
+        public MPMusic()
+        {
+            _db = new MPMusicDB();
+        }
 
         public IList<WebMusicTrackBasic> GetAllTracks()
         {
-            throw new NotImplementedException();
+            return _db.GetAllMusicTracks();
         }
 
         public IList<WebMusicAlbumBasic> GetAllAlbums()
         {
-            throw new NotImplementedException();
+            return _db.GetAllAlbums();
         }
 
         public IList<WebMusicArtistBasic> GetAllArtists()

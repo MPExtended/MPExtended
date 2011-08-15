@@ -23,7 +23,7 @@ using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib.DB;
 
-namespace MPExtended.Services.MediaAccessService.Code
+namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
     internal class MPTvSeriesDB : Database
     {

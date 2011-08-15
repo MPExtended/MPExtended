@@ -23,7 +23,7 @@ using System.Windows.Media.Imaging;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
-namespace MPExtended.Services.MediaAccessService.Code
+namespace MPExtended.PlugIns.MAS.MPPictures
 {
     internal class MPPicturesDB
     {

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.IO;
 using System.ComponentModel.Composition;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
-namespace MPExtended.PlugIns.MAS
+
+namespace MPExtended.PlugIns.MAS.MovingPictures
+
 {
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Database","MovingPictures")]
@@ -39,7 +41,7 @@ namespace MPExtended.PlugIns.MAS
             throw new NotImplementedException();
         }
 
-        public System.IO.DirectoryInfo GetSourceRootDirectory()
+        public DirectoryInfo GetSourceRootDirectory()
         {
             throw new NotImplementedException();
         }
