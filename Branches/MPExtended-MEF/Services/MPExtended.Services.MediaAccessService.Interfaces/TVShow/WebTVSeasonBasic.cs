@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVSeason
+    public class WebTVSeasonBasic
     {
         public string SeasonId { get; set; }
         public string Title { get; set; }   

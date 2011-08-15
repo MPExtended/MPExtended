@@ -38,7 +38,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         IList<WebTVShowBasic> GetAllTVShows();
         WebTVShowDetailed GetTVShowDetailed(string seriesId);
-        IList<WebTVSeason> GetSeasons(string seriesId);
+        IList<WebTVSeasonBasic> GetSeasons(string seriesId);
         IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
         IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
@@ -47,8 +47,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     }
     public interface IPictureLibrary
     {
-        IList<WebPictureBasic> GetAllPictures();
-        WebPictureDetailed GetPictureDetailed();        
+        IList<WebPictureBasic> GetAllPicturesBasic();
+        IList<WebPictureDetailed> GetAllPicturesDetailed();
+        WebPictureDetailed GetPictureDetailed(string pictureId);  
+      
+
+
         DirectoryInfo GetSourceRootDirectory(); 
     }
     public interface IFileSystemProvider
