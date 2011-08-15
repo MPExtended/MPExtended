@@ -43,17 +43,21 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 try
                 {
-                    WebMusicTrackBasic track = new WebMusicTrackBasic();
-                    track.TrackId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString();
-                    //track.Album = DatabaseHelperMethods.SafeStr(reader, 1);
-                    //track.Artists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
-                    //track.AlbumArtists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 3));
-                    //track.ShortedAlbumArtist = track.AlbumArtists.FirstOrDefault();
-                    track.TrackNumber = DatabaseHelperMethods.SafeInt32(reader, 4);
-                    track.Title = DatabaseHelperMethods.SafeStr(reader, 5);
-                    track.FilePath = DatabaseHelperMethods.SafeStr(reader, 6);
-                    //track.Duration = DatabaseHelperMethods.SafeInt32(reader, 7);
-                    track.Year = DatabaseHelperMethods.SafeInt32(reader, 8);
+                    var track = new WebMusicTrackBasic
+                                    {
+                                        TrackId = EncodeTo64(DatabaseHelperMethods.SafeInt32(reader, 0).ToString()),
+                                        TrackNumber = DatabaseHelperMethods.SafeInt32(reader, 4),
+                                        Title = DatabaseHelperMethods.SafeStr(reader, 5),
+                                        FilePath = DatabaseHelperMethods.SafeStr(reader, 6),
+                                        Year = DatabaseHelperMethods.SafeInt32(reader, 8)
+
+                                        //track.Album = DatabaseHelperMethods.SafeStr(reader, 1);
+                                        //track.Artists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
+                                        //track.AlbumArtists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 3));
+                                        //track.ShortedAlbumArtist = track.AlbumArtists.FirstOrDefault();
+                                        //track.Duration = DatabaseHelperMethods.SafeInt32(reader, 7);
+                                    };
+
                     return track;
                 }
                 catch (Exception ex)
@@ -73,14 +77,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             );
         }
 
-        public WebMusicTrackBasic GetMusicTrack(int trackId)
+        public WebMusicTrackBasic GetMusicTrack(string trackId)
         {
-            return GetMusicTracksByWhere("idTrack = @id", new SQLiteParameter("@id", trackId)).FirstOrDefault();
+            return GetMusicTracksByWhere("idTrack = @id", new SQLiteParameter("@id", ConvertBase64ToInt(trackId))).FirstOrDefault();
         }
 
         public List<WebMusicTrackBasic> GetSongsOfAlbum(string albumName, string albumArtist)
         {
-            return GetMusicTracksByWhere("strAlbum LIKE @album and strAlbumArtist LIKE @albumArtist", 
+            return GetMusicTracksByWhere("strAlbum LIKE @album and strAlbumArtist LIKE @albumArtist",
                 new SQLiteParameter("@album", albumName),
                 new SQLiteParameter("@albumArtist", string.Format("%| {0} |%", albumArtist))
             );
@@ -110,24 +114,19 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 if (!String.IsNullOrEmpty(ClearString(DatabaseHelperMethods.SafeStr(reader, 0))))
                 {
-                    return new WebMusicArtistBasic() 
+                    return new WebMusicArtistBasic()
                     {
                         Title = ClearString(DatabaseHelperMethods.SafeStr(reader, 0)),
-                        ArtistId = ClearString(DatabaseHelperMethods.SafeStr(reader, 0))
-                    
+                        ArtistId = EncodeTo64(ClearString(DatabaseHelperMethods.SafeStr(reader, 0)))
+
                     };
                 }
                 else
                 {
-                    return new WebMusicArtistBasic()
-                    {
-                        Title = "No title",
-                        ArtistId = ""
-
-                    }; 
+                    return null;
                 }
             }, start, end);
-            return retList;
+            return retList.Where(p => p != null).ToList();
         }
 
         #endregion
@@ -141,28 +140,31 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                          "LEFT JOIN genre g ON a.idGenre = g.strGenre " +
                          "WHERE t.strAlbum != '' " + (where == string.Empty ? "" : " AND " + where);
             var ret = new Dictionary<string, WebMusicAlbumBasic>();
-            ReadList<WebMusicAlbumBasic>(sql, delegate(SQLiteDataReader reader) {
-                try {
+            ReadList<WebMusicAlbumBasic>(sql, delegate(SQLiteDataReader reader)
+            {
+                try
+                {
                     string title = DatabaseHelperMethods.SafeStr(reader, 0);
-                    string[] albumartists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 1));
-                    string[] artists = Utils.SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
+                    string albumartist = DatabaseHelperMethods.SafeStr(reader, 1);
+                    List<string> artists = SplitString(DatabaseHelperMethods.SafeStr(reader, 2));
                     if (ret.ContainsKey(title))
                     {
                         ret[title].AlbumArtists = ret[title].AlbumArtists.Concat(albumartists).ToArray();
                     }
                     else
                     {
-                        ret[title] = new WebMusicAlbumBasic() {
+                        ret[title] = new WebMusicAlbumBasic()
+                        {
                             Title = title,
-                            AlbumArtists = albumartists,
+                            AlbumArtist = albumartist,
                             Artists = artists,
                             Year = DatabaseHelperMethods.SafeInt32(reader, 3),
-                            Genre = reader.IsDBNull(4) ? null : DatabaseHelperMethods.SafeStr(reader, 4)
+                            Genre = reader.IsDBNull(4) ? null : SplitString(DatabaseHelperMethods.SafeStr(reader, 4))
                         };
                     }
 
-                } 
-                catch(Exception ex) 
+                }
+                catch (Exception ex)
                 {
                     Log.Error("Error reading music album", ex);
                 }
@@ -170,7 +172,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 return null;
             }, start, end, parameters);
 
-            return ret.Select(kp => new WebMusicAlbumBasic() { 
+            return ret.Select(kp => new WebMusicAlbumBasic()
+            {
                 AlbumArtists = kp.Value.AlbumArtists.Distinct().ToArray(),
                 Artists = kp.Value.Artists.Distinct().ToArray(),
                 CoverPathL = GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title),
@@ -219,7 +222,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             try
             {
-                WebMusicTrackBasic track = GetMusicTrack(Int32.Parse(itemId));
+                WebMusicTrackBasic track = GetMusicTrack(itemId);
                 if (track != null)
                 {
                     return track.FilePath;
@@ -240,12 +243,35 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             artistName = artistName.Trim(new char[] { '|', ' ' });
             albumName = albumName.Replace(":", "_");
 
-            return System.IO.Path.Combine(Utils.GetBannerPath("music"), "Albums", artistName + "-" + albumName + "L.jpg");
+            return System.IO.Path.Combine(GetBannerPath("music"), "Albums", artistName + "-" + albumName + "L.jpg");
         }
 
-        public static string ClearString(String _stringToClean)
+        public static string ClearString(string str)
         {
-            return _stringToClean.Substring(2, (_stringToClean.Length - 5));
+            return str.Substring(2, (str.Length - 5));
+        }
+        public static List<string> SplitString(string str)
+        {
+            return str.Split('|').Where(p => !String.IsNullOrWhiteSpace(p)).ToList();
+        }
+
+        private static string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
+            return returnValue;
+        }
+        private static string DecodeFrom64(string encodedData)
+        {
+            byte[] encodedDataAsBytes
+                = System.Convert.FromBase64String(encodedData);
+            string returnValue =
+               System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            return returnValue;
+        }
+        private static int ConvertBase64ToInt(string str)
+        {
+            return Int32.Parse(DecodeFrom64(str));
         }
     }
 }
