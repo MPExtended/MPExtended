@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
 {
-    public class WebActorDetailed :WebActorBasic
+    public class WebActorDetailed : WebActorBasic
     {
         public string Image { get; set; }
     }

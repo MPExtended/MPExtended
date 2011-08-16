@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVShowBasic
+    public class WebTVShowBasic : ITitleSortable, IGenreSortable
     {
         public WebTVShowBasic()
         {
@@ -20,6 +20,5 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         {
             return Title;
         }
-        
     }
 }

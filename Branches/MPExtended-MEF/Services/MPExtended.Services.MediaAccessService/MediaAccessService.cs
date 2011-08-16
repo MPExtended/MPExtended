@@ -35,11 +35,19 @@ using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
 {
-
-    // each method described by IMediaAccessService has to be implemented here, but instead of doing it itself it just references to the MediaInterfaces
+    // Here we implement all the methods, but we don't do any data retrieval, that
+    // is handled by the backend library classes. We only do some filtering and
+    // sorting.
+    
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class MediaAccessService : IMediaAccessService
     {
+        private const int MOVIE_API = 3;
+        private const int MUSIC_API = 3;
+        private const int PICTURES_API = 3;
+        private const int TVSHOWS_API = 3;
+        private const int FILESYSTEM_API = 3;
+
         [ImportMany]
         private Lazy<IMovieLibrary, IDictionary<string, object>>[] MovieLibraries { get; set; }
         [ImportMany]
@@ -62,6 +70,7 @@ namespace MPExtended.Services.MediaAccessService
             ChosenPictureLibrary = PictureLibraries.FirstOrDefault().Value;
             ChosenTVShowLibrary = TVShowLibraries.FirstOrDefault().Value;
         }
+
         private void Compose()
         {
             var catalog = new AggregateCatalog();
@@ -71,16 +80,22 @@ namespace MPExtended.Services.MediaAccessService
             container.ComposeParts(this);
         }
 
-
         public WebServiceDescription GetServiceDescription()
         {
-            var description = new WebServiceDescription();
-            description.AvailableMovieProvider = MovieLibraries.Select(p => (string)p.Metadata["Database"]).ToList();
-            description.AvailableMusicProvider = MusicLibraries.Select(p => (string)p.Metadata["Database"]).ToList();
-            description.AvailablePictureProvider = PictureLibraries.Select(p => (string)p.Metadata["Database"]).ToList();
-            description.AvailableTvShowProvider = TVShowLibraries.Select(p => (string)p.Metadata["Database"]).ToList();
+            return new WebServiceDescription() {
+                AvailableMovieProvider = MovieLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
+                AvailableMusicProvider = MusicLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
+                AvailablePictureProvider = PictureLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
+                AvailableTvShowProvider = TVShowLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
 
-            return description;
+                MovieApiVersion = MOVIE_API,
+                MusicApiVersion = MUSIC_API,
+                PicturesApiVersion = PICTURES_API,
+                TvShowsApiVersion = TVSHOWS_API,
+                FilesystemApiVersion = FILESYSTEM_API,
+
+                ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
+            };
         }
 
         #region Movies
@@ -89,32 +104,32 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMovieLibrary.GetAllMovies().Count;
         }
 
-        public IList<WebMovieBasic> GetAllMoviesBasic(SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetAllMoviesBasic(SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesBasic(ChosenMovieLibrary.GetAllMovies(), sort, order);
         }
 
-        public IList<WebMovieDetailed> GetAllMoviesDetailed(SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieDetailed> GetAllMoviesDetailed(SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesDetailed(ChosenMovieLibrary.GetAllMoviesDetailed(), sort, order);
         }
 
-        public IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesBasic(ChosenMovieLibrary.GetAllMovies(), sort, order).Skip(start).Take(end - start).ToList();
         }
 
-        public IList<WebMovieDetailed> GetMoviesDetailedByRange(int start, int end, SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieDetailed> GetMoviesDetailedByRange(int start, int end, SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesDetailed(ChosenMovieLibrary.GetAllMoviesDetailed(), sort, order).Skip(start).Take(end - start).ToList();
         }
 
-        public IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesBasic(ChosenMovieLibrary.GetAllMovies().Where(p => p.Genre == genre), sort, order);
         }
 
-        public IList<WebMovieDetailed> GetMoviesDetailedByGenre(string genre, SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieDetailed> GetMoviesDetailedByGenre(string genre, SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return SortMoviesDetailed(ChosenMovieLibrary.GetAllMoviesDetailed().Where(p => p.Genre == genre), sort, order);
         }
@@ -128,7 +143,6 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMovieLibrary.GetMovieDetailedById(movieId);
         }
-
         #endregion
 
         public int GetMusicTrackCount()
@@ -146,32 +160,32 @@ namespace MPExtended.Services.MediaAccessService
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackBasic> GetTracksBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackBasic> GetTracksBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(int start, int end, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackBasic> GetMusicTracksBasicByGenre(string genre, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicByGenre(string genre, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByGenre(string genre, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByGenre(string genre, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
@@ -186,22 +200,22 @@ namespace MPExtended.Services.MediaAccessService
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
@@ -211,12 +225,12 @@ namespace MPExtended.Services.MediaAccessService
             throw new NotImplementedException();
         }
 
-        public IList<WebPictureBasic> GetAllPicturesBasic(SortPicturesBy sort = SortPicturesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebPictureBasic> GetAllPicturesBasic(SortPicturesBy sort = SortPicturesBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
 
-        public IList<WebPictureDetailed> GetAllPicturesDetailed(SortPicturesBy sort = SortPicturesBy.Name, OrderBy order = OrderBy.Asc)
+        public IList<WebPictureDetailed> GetAllPicturesDetailed(SortPicturesBy sort = SortPicturesBy.Title, OrderBy order = OrderBy.Asc)
         {
             throw new NotImplementedException();
         }
@@ -227,36 +241,6 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         public IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVShowBasic> GetAllTVShows(SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebTVShowDetailed GetTVShowDetailed(string seriesId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVSeasonBasic> GetTVSeasons(string seriesId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVEpisodeBasic> GetTVEpisodes(string seriesId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVEpisodeBasic> GetTVEpisodesForSeason(string seriesId, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId)
         {
             throw new NotImplementedException();
         }
@@ -273,6 +257,122 @@ namespace MPExtended.Services.MediaAccessService
 
             return list.ToList();
         }
+
+        #region TVShows
+        public IList<WebTVShowBasic> GetAllTVShowsBasic(SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsBasic();
+        }
+
+        public IList<WebTVShowDetailed> GetAllTVShowsDetailed(SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsDetailed();
+        }
+
+        public IList<WebTVShowBasic> GetTVShowsBasicByRange(int start, int end, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVShowList(ChosenTVShowLibrary.GetAllTVShowsBasic(), sort, order).GetRange(start, start - end).ToList();
+        }
+
+        public IList<WebTVShowDetailed> GetTVShowsDetailedByRange(int start, int end, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVShowList(ChosenTVShowLibrary.GetAllTVShowsDetailed(), sort, order).GetRange(start, start - end).ToList();
+        }
+
+        public WebTVShowDetailed GetTVShowDetailed(string id)
+        {
+            return ChosenTVShowLibrary.GetTVShowDetailed(id);
+        }
+
+        public IList<WebTVSeasonBasic> GetAllTVSeasonsBasic(string id, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVShowList(ChosenTVShowLibrary.GetAllSeasonsBasic(id), sort, order);
+        }
+
+        public IList<WebTVSeasonDetailed> GetAllTVSeasonsDetailed(string id, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVShowList(ChosenTVShowLibrary.GetAllSeasonsDetailed(id), sort, order);
+        }
+
+        public WebTVSeasonDetailed GetTVSeasonDetailed(string showId, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetSeasonDetailed(showId, seasonId);
+        }
+
+        public IList<WebTVEpisodeBasic> GetAllTVEpisodesBasicForTVShow(string id, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesBasic(id), id, sort, order);
+        }
+
+        public IList<WebTVEpisodeDetailed> GetAllTVEpisodesDetailedForTVShow(string id, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesDetailed(id), id, sort, order);
+        }
+
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(string id, int start, int end, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesBasic(id), id, sort, order).GetRange(start, end - start).ToList();
+        }
+
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(string id, int start, int end, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesDetailed(id), id, sort, order).GetRange(start, end - start).ToList();
+        }
+
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(string showId, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesBasicForSeason(showId, seasonId), showId, sort, order);
+        }
+
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(string showId, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return SortTVEpisodeList(ChosenTVShowLibrary.GetEpisodesDetailedForSeason(showId, seasonId), showId, sort, order);
+        }
+
+        public WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId)
+        {
+            return ChosenTVShowLibrary.GetEpisodeDetailed(episodeId);
+        }
+
+        private IList<T> SortTVShowList<T>(IList<T> list, SortTVShowsBy sort, OrderBy order)
+        {
+            switch (sort)
+            {
+                // generic cases
+                case SortTVShowsBy.Title:
+                    return list.OrderBy(x => ((ITitleSortable)x).Title, order).ToList();
+                case SortTVShowsBy.DateAdded:
+                    return list.OrderBy(x => ((IDateAddedSortable)x).DateAdded, order).ToList();
+                case SortTVShowsBy.Year:
+                    return list.OrderBy(x => ((IYearSortable)x).Year, order).ToList();
+                case SortTVShowsBy.Genre:
+                    return list.OrderBy(x => ((IGenreSortable)x).Genre, order).ToList();
+                case SortTVShowsBy.Rating:
+                    return list.OrderBy(x => ((IRatingSortable)x).Rating, order).ToList();
+                default:
+                    return list;
+            }
+        }
+
+        private IList<T> SortTVEpisodeList<T>(IList<T> list, string showId, SortTVShowsBy sort, OrderBy order) where T : WebTVEpisodeBasic {   
+            switch(sort) {
+                case SortTVShowsBy.EpisodeNumber:
+                    return list.OrderBy(x => ((WebTVEpisodeBasic)x).EpisodeNumber, order).ToList();
+
+                case SortTVShowsBy.SeasonNumberEpisodeNumber:
+                    // this can be done better
+                    IDictionary<string, WebTVSeasonBasic> seasons = GetAllTVSeasonsBasic(showId).ToDictionary(x => x.Id);
+                    return list.Select(x => (WebTVEpisodeBasic)x)
+                               .OrderBy(x => seasons[x.SeasonId].SeasonNumber, order)
+                               .OrderBy(x => x.EpisodeNumber, order)
+                               .Cast<T>()
+                               .ToList();
+
+                default:
+                    return list;
+            }
+        }
+        #endregion
 
     }
 }

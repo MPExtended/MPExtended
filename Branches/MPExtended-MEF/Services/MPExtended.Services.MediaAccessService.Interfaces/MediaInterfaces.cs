@@ -10,8 +10,8 @@ using System.IO;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    // each interface represents the structure of MEF plugins
-    // A new MEF plugin has to implement one of these interfaces in order to be used by the service.
+    // This are the interfaces used for internal communication between
+    // the service and the backends which provide the data.
 
     public interface IMusicLibrary
     {
@@ -25,6 +25,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<String> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
+
     public interface IMovieLibrary
     {
         IList<WebMovieBasic> GetAllMovies();
@@ -34,17 +35,23 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<String> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
+
     public interface ITVShowLibrary
     {
-        IList<WebTVShowBasic> GetAllTVShows();
+        IList<WebTVShowBasic> GetAllTVShowsBasic();
+        IList<WebTVShowDetailed> GetAllTVShowsDetailed();
         WebTVShowDetailed GetTVShowDetailed(string seriesId);
-        IList<WebTVSeasonBasic> GetSeasons(string seriesId);
-        IList<WebTVEpisodeBasic> GetEpisodes(string seriesId);
-        IList<WebTVEpisodeBasic> GetEpisodesForSeason(string seriesId, string seasonId);
+        IList<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId);
+        IList<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId);
+        WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId);
+        IList<WebTVEpisodeBasic> GetEpisodesBasic(string seriesId);
+        IList<WebTVEpisodeBasic> GetEpisodesBasicForSeason(string seriesId, string seasonId);
+        IList<WebTVEpisodeDetailed> GetEpisodesDetailed(string seriesId);
+        IList<WebTVEpisodeDetailed> GetEpisodesDetailedForSeason(string seriesId, string seasonId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
         DirectoryInfo GetSourceRootDirectory();
-  
     }
+
     public interface IPictureLibrary
     {
         IList<WebPictureBasic> GetAllPicturesBasic();
@@ -53,6 +60,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
         DirectoryInfo GetSourceRootDirectory(); 
     }
+
     public interface IFileSystemProvider
     { 
     

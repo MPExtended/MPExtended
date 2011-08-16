@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVEpisodeBasic : WebMediaItem
+    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable
     {
         public WebTVEpisodeBasic()
         {
@@ -14,6 +14,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         }
         public string Id { get; set; }
         public string Title { get; set; }
+        public int EpisodeNumber { get; set; }
+        public string SeasonId { get; set; }
         public string FilePath { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
