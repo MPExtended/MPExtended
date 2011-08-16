@@ -57,6 +57,8 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="FileSystem\WebFile.cs" />
+    <Compile Include="FileSystem\WebFolder.cs" />
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="MediaInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />

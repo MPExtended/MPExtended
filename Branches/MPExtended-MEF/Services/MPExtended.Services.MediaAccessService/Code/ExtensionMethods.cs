@@ -21,14 +21,16 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Picture;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {
     public static class WebFileInfoExtensionMethods
     {
-        public static WebPicture ToWebPicture(this WebFileInfo info)
+        public static WebPictureBasic ToWebPicture(this WebFile info)
         {
-            return MPPictures.GetPicture(info.FullName);
+            //return MPPictures.GetPicture(info.FullName);
         }
     }
 
@@ -42,19 +44,19 @@ namespace MPExtended.Services.MediaAccessService.Code
 
     public static class FileInfoExtensionMethods
     {
-        public static WebFileInfo ToWebFileInfo(this FileInfo info)
+        public static WebFile ToWebFileInfo(this FileInfo info)
         {
-            return new WebFileInfo()
+            return new WebFile()
             {
-                DirectoryName = info.DirectoryName,
-                Exists = info.Exists, // isn't this always true?
-                Extension = info.Extension,
-                FullName = info.FullName,
-                IsReadOnly = info.IsReadOnly,
-                LastAccessTime = info.LastAccessTime,
-                LastWriteTime = info.LastWriteTime,
-                Length = info.Length,
-                Name = info.Name
+                //DirectoryName = info.DirectoryName,
+                //Exists = info.Exists, // isn't this always true?
+                //Extension = info.Extension,
+                //FullName = info.FullName,
+                //IsReadOnly = info.IsReadOnly,
+                //LastAccessTime = info.LastAccessTime,
+                //LastWriteTime = info.LastWriteTime,
+                //Length = info.Length,
+                //Name = info.Name
             };
         }
     }

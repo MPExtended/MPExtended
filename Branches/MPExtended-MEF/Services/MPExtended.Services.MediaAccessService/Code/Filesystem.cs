@@ -20,6 +20,7 @@ using System.IO;
 using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {
@@ -63,7 +64,7 @@ namespace MPExtended.Services.MediaAccessService.Code
             }
         }
 
-        public static WebFileInfo GetFileInfo(string path)
+        public static WebFile GetFileInfo(string path)
         {
             if (!File.Exists(path))
             {

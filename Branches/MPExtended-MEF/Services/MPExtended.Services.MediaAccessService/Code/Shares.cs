@@ -23,6 +23,7 @@ using System.Xml.Linq;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code.Helper;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {
@@ -93,18 +94,18 @@ namespace MPExtended.Services.MediaAccessService.Code
             return Directory.EnumerateDirectories(path).ToList();
         }
 
-        public static List<WebFileInfo> GetFileListByPath(string path)
+        public static List<WebFile> GetFileListByPath(string path)
         {
             if (!IsAllowedPath(path))
             {
                 Log.Warn("Tried to get file list of non-allowed or non-existent directory {0}", path);
-                return new List<WebFileInfo>();
+                return new List<WebFile>();
             }
 
             return Directory.EnumerateFiles(path).Select(x => new FileInfo(x).ToWebFileInfo()).ToList();
         }
 
-        public static WebFileInfo GetFileInfo(string path)
+        public static WebFile GetFileInfo(string path)
         {
             if (!IsAllowedPath(path))
             {

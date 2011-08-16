@@ -63,7 +63,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public static Stream GetImage(string path)
         {
-            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.MediaItemType.ImageItem, path) == null)
+            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.WebMediaType.Picture, path) == null)
             {
                 Log.Warn("Tried to download image that isn't allowed: {0}", path);
                 return null;
@@ -99,7 +99,7 @@ namespace MPExtended.Services.StreamingService.Code
         /// <returns>Stream of image or null</returns>
         public static Stream GetImageResized(string path, int maxWidth, int maxHeight)
         {
-            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.MediaItemType.ImageItem, path) == null)
+            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.WebMediaType.Picture, path) == null)
             {
                 Log.Warn("Tried to download image that isn't allowed: {0}", path);
                 return null;

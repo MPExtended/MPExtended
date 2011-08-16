@@ -35,7 +35,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Picture = 2,
         [EnumMember]
-        TVShow = 3
+        TVShow = 3,
+        [EnumMember]
+        File = 4,
+        [EnumMember]
+        Folder = 5
 
 
     }
@@ -269,6 +273,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVEpisodeDetailed GetTVEpisodeDetailed(string Id);
+        #endregion
+
+        #region FileSystem
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        string GetPath(WebMediaType type, string id);
         #endregion
 
 

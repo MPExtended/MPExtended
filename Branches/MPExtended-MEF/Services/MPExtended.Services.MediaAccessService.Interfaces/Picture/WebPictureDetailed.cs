@@ -6,8 +6,7 @@ using System.Text;
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
    public class WebPictureDetailed : WebPictureBasic
-    {
-        public string Type { get; set; }
+    {     
      
         public string Subject { get; set; }
         public string Comment { get; set; }
