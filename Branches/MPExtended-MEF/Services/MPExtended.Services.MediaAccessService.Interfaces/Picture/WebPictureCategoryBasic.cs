@@ -7,7 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
     public class WebPictureCategoryBasic
     {
-        public string CategoryId { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 }

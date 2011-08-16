@@ -6,14 +6,14 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : MediaItem
+    public class WebMovieBasic : WebMediaItem
     {
         public WebMovieBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
         }
 
-        public string MovieId { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Genre { get; set; }
         public bool IsProtected { get; set; }
@@ -30,6 +30,24 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         {
             return Title;
         }
+
+
+        public WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Movie;
+            }
+            set 
+            {
+                Type = value;
+            }
+
+        }
+
+
+
+
     }
 
 }

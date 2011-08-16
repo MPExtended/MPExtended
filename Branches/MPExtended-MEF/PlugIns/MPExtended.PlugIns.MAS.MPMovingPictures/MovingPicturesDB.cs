@@ -85,7 +85,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             try
             {
                 // set movie properties
-                movie.MovieId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString();
+                movie.Id = DatabaseHelperMethods.SafeInt32(reader, 0).ToString();
                 movie.Title = DatabaseHelperMethods.SafeStr(reader, 14);
                 //movie.AlternateTitles = DatabaseHelperMethods.SafeStr(reader, 15);
                 //movie.SortBy = DatabaseHelperMethods.SafeStr(reader, 16);
@@ -170,7 +170,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             {
                 return new WebMovieBasic()
                 {
-                    MovieId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
+                    Id = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
                     Title = DatabaseHelperMethods.SafeStr(reader, 1),
                     //TagLine = DatabaseHelperMethods.SafeStr(reader, 2),
                     Year = DatabaseHelperMethods.SafeInt32(reader, 3),

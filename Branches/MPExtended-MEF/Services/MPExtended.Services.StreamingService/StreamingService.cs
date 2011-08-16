@@ -48,7 +48,7 @@ namespace MPExtended.Services.StreamingService
         {
             if (type != WebMediaType.RecordingItem)
             {
-                return MPEServices.NetPipeMediaAccessService.GetPath((MASInterfaces.MediaItemType)type, itemId);
+                return MPEServices.NetPipeMediaAccessService.GetPath((MASInterfaces.WebMediaType)type, itemId);
             }
             else
             {

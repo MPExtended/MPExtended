@@ -7,7 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
 {
     public class WebActorBasic
     {
-        public string ActorId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public override string ToString()
         {

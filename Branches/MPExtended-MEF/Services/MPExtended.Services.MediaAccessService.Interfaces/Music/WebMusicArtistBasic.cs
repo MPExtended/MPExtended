@@ -8,7 +8,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
     public class WebMusicArtistBasic
     {
-        public string ArtistId { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
 
         public override string ToString()

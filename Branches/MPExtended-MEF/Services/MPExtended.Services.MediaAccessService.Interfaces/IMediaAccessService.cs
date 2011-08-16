@@ -25,6 +25,20 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Desc = 1
 
     }
+    [DataContract]
+    public enum WebMediaType
+    {
+        [EnumMember]
+        Movie = 0,
+        [EnumMember]
+        Music = 1,
+        [EnumMember]
+        Picture = 2,
+        [EnumMember]
+        TVShow = 3
+
+
+    }
 
     [DataContract]
     public enum SortMusicBy
@@ -131,7 +145,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieBasic> GetMoviesBasicByGenre(string genre,SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc);
+        IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortMoviesBy sort = SortMoviesBy.Name, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -143,7 +157,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMovieDetailed GetMovieDetailedById(string movieId);
+        WebMovieDetailed GetMovieDetailedById(string Id);
 
 
         #endregion
@@ -192,7 +206,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMusicTrackDetailed GetMusicTracksDetailedById(string trackId);
+        WebMusicTrackDetailed GetMusicTracksDetailedById(string Id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -200,7 +214,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end,SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc);
+        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Name, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -212,7 +226,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMusicArtistBasic GetMusicArtistBasicById(string artistId);
+        WebMusicArtistBasic GetMusicArtistBasicById(string Id);
 
         #endregion
 
@@ -226,7 +240,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebPictureDetailed> GetAllPicturesDetailed(SortPicturesBy sort = SortPicturesBy.Name, OrderBy order = OrderBy.Asc);
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebPictureDetailed GetPictureDetailed(string pictureId);
+        WebPictureDetailed GetPictureDetailed(string Id);
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();
@@ -241,20 +255,20 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebTVShowDetailed GetTVShowDetailed(string seriesId);
+        WebTVShowDetailed GetTVShowDetailed(string Id);
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVSeasonBasic> GetTVSeasons(string seriesId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
+        IList<WebTVSeasonBasic> GetTVSeasons(string Id, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodes(string seriesId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodes(string Id, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodesForSeason(string seriesId, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodesForSeason(string Id, string seasonId, SortTVShowsBy sort = SortTVShowsBy.Name, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId);
+        WebTVEpisodeDetailed GetTVEpisodeDetailed(string Id);
         #endregion
 
 

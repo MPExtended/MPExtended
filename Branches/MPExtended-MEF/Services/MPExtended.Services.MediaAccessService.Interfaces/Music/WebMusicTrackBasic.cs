@@ -6,18 +6,37 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic : MediaItem
+    public class WebMusicTrackBasic : WebMediaItem
     {
-        public string TrackId { get; set; }
+        public WebMusicTrackBasic()
+        {
+            DateAdded = new DateTime(1970, 1, 1);
+        }
+
+        public string Id { get; set; }
         public string ArtistId { get; set; }
         public string Title { get; set; }
         public int TrackNumber { get; set; }
         public string FilePath { get; set; }
         public int Year { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public override string ToString()
         {
             return Title;
+        }
+
+
+        public WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Music;
+            }
+            set
+            {
+                Type = value;
+            }
         }
     }
 }
