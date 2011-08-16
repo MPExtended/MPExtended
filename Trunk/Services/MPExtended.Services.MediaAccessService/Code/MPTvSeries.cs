@@ -48,7 +48,7 @@ namespace MPExtended.Services.MediaAccessService.Code
             // Please contact me if you've a better way to do this, this just sucks. I could use a GROUP BY but SQLite gets really slow in the long version
             // below, plus i'd have to use group_concat and string splitting, which also sucks.
             string sql = "SELECT DISTINCT series.ID, series.Pretty_Name, series.EpisodeCount, series.IMDB_ID, series.Rating, series.RatingCount, " +
-                            "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, local.Parsed_Name " +
+                            "series.fanart, series.PosterBannerFileName, series.CurrentBannerFileName, series.Genre, local.Parsed_Name, series.EpisodesUnWatched " +
                          "FROM online_series AS series " +
                          "INNER JOIN local_series AS local ON series.ID = local.ID AND local.Hidden = 0 " + 
                          "WHERE series.ID != 0 AND series.HasLocalFiles = 1";
@@ -83,6 +83,8 @@ namespace MPExtended.Services.MediaAccessService.Code
                 series.CurrentBannerUrl = CreateBannerUrl(bannerUrl);
                 series.GenreString = DatabaseHelperMethods.SafeStr(reader, 9);
                 series.Genres = Utils.SplitString(series.GenreString);
+
+                series.EpisodesUnwatchedCount = DatabaseHelperMethods.SafeInt32(reader, 11);
 
                 return series;
             }, start, end);
@@ -151,7 +153,6 @@ namespace MPExtended.Services.MediaAccessService.Code
                 series.Summary = DatabaseHelperMethods.SafeStr(reader, 18);
                 series.AirsDay = DatabaseHelperMethods.SafeStr(reader, 19);
                 series.AirsTime = DatabaseHelperMethods.SafeStr(reader, 20);
-                series.EpisodesUnwatchedCount = DatabaseHelperMethods.SafeInt32(reader, 21);
                 series.Runtime = DatabaseHelperMethods.SafeInt32(reader, 22);
                 series.FirstAired = DatabaseHelperMethods.SafeDateTime(reader, 23);
                 series.EpisodeOrder = DatabaseHelperMethods.SafeStr(reader, 24);

@@ -10,6 +10,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public int Id { get; set; }
         public String PrettyName { get; set; }
         public int EpisodeCount { get; set; }
+        public int EpisodesUnwatchedCount { get; set; }
         public String ImdbId { get; set; }
         public double Rating { get; set; }
         public int RatingCount { get; set; }
