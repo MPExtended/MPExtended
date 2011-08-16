@@ -45,7 +45,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     var track = new WebMusicTrackBasic
                                     {
-                                        TrackId = EncodeTo64(DatabaseHelperMethods.SafeInt32(reader, 0).ToString()),
+                                        TrackId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
                                         TrackNumber = DatabaseHelperMethods.SafeInt32(reader, 4),
                                         Title = DatabaseHelperMethods.SafeStr(reader, 5),
                                         FilePath = DatabaseHelperMethods.SafeStr(reader, 6),
@@ -79,7 +79,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public WebMusicTrackBasic GetMusicTrack(string trackId)
         {
-            return GetMusicTracksByWhere("idTrack = @id", new SQLiteParameter("@id", ConvertBase64ToInt(trackId))).FirstOrDefault();
+            return GetMusicTracksByWhere("idTrack = @id", new SQLiteParameter("@id", trackId)).FirstOrDefault();
         }
 
         public List<WebMusicTrackBasic> GetSongsOfAlbum(string albumName, string albumArtist)
@@ -117,7 +117,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     return new WebMusicArtistBasic()
                     {
                         Title = ClearString(DatabaseHelperMethods.SafeStr(reader, 0)),
-                        ArtistId = EncodeTo64(ClearString(DatabaseHelperMethods.SafeStr(reader, 0)))
+                        ArtistId = ClearString(DatabaseHelperMethods.SafeStr(reader, 0))
 
                     };
                 }
@@ -255,23 +255,23 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return str.Split('|').Where(p => !String.IsNullOrWhiteSpace(p)).ToList();
         }
 
-        private static string EncodeTo64(string toEncode)
-        {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
-        }
-        private static string DecodeFrom64(string encodedData)
-        {
-            byte[] encodedDataAsBytes
-                = System.Convert.FromBase64String(encodedData);
-            string returnValue =
-               System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
-        }
-        private static int ConvertBase64ToInt(string str)
-        {
-            return Int32.Parse(DecodeFrom64(str));
-        }
+        //private static string EncodeTo64(string toEncode)
+        //{
+        //    byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+        //    string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
+        //    return returnValue;
+        //}
+        //private static string DecodeFrom64(string encodedData)
+        //{
+        //    byte[] encodedDataAsBytes
+        //        = System.Convert.FromBase64String(encodedData);
+        //    string returnValue =
+        //       System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+        //    return returnValue;
+        //}
+        //private static int ConvertBase64ToInt(string str)
+        //{
+        //    return Int32.Parse(DecodeFrom64(str));
+        //}
     }
 }

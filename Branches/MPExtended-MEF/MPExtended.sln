@@ -110,9 +110,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPTVSeries", "PlugIns\MPExtended.PlugIns.MAS.MPTVSeries\MPExtended.PlugIns.MAS.MPTVSeries.csproj", "{77C38FB8-C17E-444E-A3AE-1F8B713875CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.XBMCMusic", "MPExtended.PlugIns.MAS.XBMCMusic\MPExtended.PlugIns.MAS.XBMCMusic.csproj", "{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 26
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -216,6 +218,10 @@ Global
 		SccProjectTopLevelParentUniqueName25 = MPExtended.sln
 		SccProjectName25 = PlugIns/MPExtended.PlugIns.MAS.MPTVSeries
 		SccLocalPath25 = PlugIns\\MPExtended.PlugIns.MAS.MPTVSeries
+		SccProjectUniqueName26 = MPExtended.PlugIns.MAS.XBMCMusic\\MPExtended.PlugIns.MAS.XBMCMusic.csproj
+		SccProjectTopLevelParentUniqueName26 = MPExtended.sln
+		SccProjectName26 = MPExtended.PlugIns.MAS.XBMCMusic
+		SccLocalPath26 = MPExtended.PlugIns.MAS.XBMCMusic
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -473,6 +479,16 @@ Global
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Debug|x86.ActiveCfg = Debug|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Debug|x86.Build.0 = Debug|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Release|Any CPU.ActiveCfg = Release|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Release|x86.ActiveCfg = Release|x86
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -513,5 +529,6 @@ Global
 		{A480254C-5E26-4025-B770-294979A6D882} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{BE720CDC-DCBB-4C20-A98B-86FFAF275B39} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 	EndGlobalSection
 EndGlobal
