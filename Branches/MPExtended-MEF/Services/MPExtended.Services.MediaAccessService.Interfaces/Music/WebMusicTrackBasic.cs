@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic
+    public class WebMusicTrackBasic : MediaItem
     {
         public string TrackId { get; set; }
         public string ArtistId { get; set; }
