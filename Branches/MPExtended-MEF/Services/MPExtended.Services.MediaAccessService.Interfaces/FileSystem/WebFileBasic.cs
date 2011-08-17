@@ -13,7 +13,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
             DateAdded = new DateTime(1970, 1, 1);
         }
         public string Id { get; set; }
-        public string Path { get; set; }
+         public  IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
 
         public WebMediaType Type

@@ -21,6 +21,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public DateTime DateAdded { get; set; }
         public IList<string> Genre { get; set; }
         public int Year { get; set; }
+        public string CoverPath { get; set; }        
 
         public override string ToString()
         {

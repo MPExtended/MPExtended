@@ -131,7 +131,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 
                 foreach (WebFolderBasic share in GetAllShares(type))
                 {
-                    if (!Directory.Exists(share.Path))
+                    if (!Directory.Exists(share.Path ))
                         continue;
 
                     if (Utils.IsSubdir(share.Path, path))

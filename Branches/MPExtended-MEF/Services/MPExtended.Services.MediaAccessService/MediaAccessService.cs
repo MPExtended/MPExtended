@@ -334,6 +334,7 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetEpisodeDetailed(episodeId);
         }
 
+
         private IList<T> SortTVShowList<T>(IList<T> list, SortTVShowsBy sort, OrderBy order)
         {
             switch (sort)

@@ -7,9 +7,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
 {
     public interface WebMediaItem
     {
-         string Id { get; set; }
-         string Path { get; set; }
-         DateTime DateAdded { get; set; }
-         WebMediaType Type { get; set; }
+        string Id { get; set; }
+        IList<string> Path { get; set; }
+        DateTime DateAdded { get; set; }
+        WebMediaType Type { get; set; }
     }
 }

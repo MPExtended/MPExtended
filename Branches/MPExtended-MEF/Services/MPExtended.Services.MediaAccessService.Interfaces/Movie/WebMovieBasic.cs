@@ -22,7 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string BackdropPath { get; set; }
         public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
-        public string Path { get; set; }
+         public  IList<string> Path { get; set; }
         public int Rating { get; set; }
         public int Runtime { get; set; }
 

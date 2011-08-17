@@ -25,7 +25,7 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
                     return new WebMusicArtistBasic()
                     {
                         Title = DatabaseHelperMethods.SafeStr(reader, 1),
-                        ArtistId = DatabaseHelperMethods.SafeStr(reader, 0)
+                        Id = DatabaseHelperMethods.SafeStr(reader, 0)
 
                     };
                 }

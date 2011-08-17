@@ -18,7 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         public string CategoryId { get; set; }
         public string Title { get; set; }
         public DateTime DateTaken { get; set; }
-        public string Path { get; set; }
+         public  IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
         public override string ToString()
         {

@@ -63,7 +63,6 @@
     <Compile Include="MediaInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
-    <Compile Include="Movie\WebMovieFile.cs" />
     <Compile Include="Music\WebMusicAlbumBasic.cs" />
     <Compile Include="Music\WebMusicArtistBasic.cs" />
     <Compile Include="Music\WebMusicTrackBasic.cs" />
@@ -86,7 +85,7 @@
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="WebServiceDescription.cs" />
   </ItemGroup>
- <ItemGroup>
+  <ItemGroup>
     <None Include="..\..\MPExtendedKey.snk">
       <Link>MPExtendedKey.snk</Link>
     </None>
