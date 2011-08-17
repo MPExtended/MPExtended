@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable
+    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable, IRatingSortable
     {
         public WebTVEpisodeBasic()
         {
@@ -21,7 +21,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
         public bool Watched { get; set; }
-        public int Rating { get; set; }
+        public float Rating { get; set; }
+
+        public string BannerPath { get; set; }
+        public string FanArtPath { get; set; }
 
         public override string ToString()
         {

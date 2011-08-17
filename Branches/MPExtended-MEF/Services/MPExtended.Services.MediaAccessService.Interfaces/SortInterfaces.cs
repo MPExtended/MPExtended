@@ -27,6 +27,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IRatingSortable
     {
-        int Rating { get; set; }
+        float Rating { get; set; }
     }
 }

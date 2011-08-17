@@ -248,7 +248,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 {
                     episode.HasLocalFile = true;
                     String filename = DatabaseHelperMethods.SafeStr(reader, 14);
-                    episode.FileName = filename;
+                    episode.Path = filename;
                 }
                 else
                 {
@@ -324,15 +324,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             try
             {
-                episode.Id = DatabaseHelperMethods.SafeInt32(reader, 1);
-                episode.ShowId = DatabaseHelperMethods.SafeInt32(reader, 2);
+                episode.Id = DatabaseHelperMethods.SafeStr(reader, 1);
+                episode.ShowId = DatabaseHelperMethods.SafeStr(reader, 2);
                 episode.Title = DatabaseHelperMethods.SafeStr(reader, 3);
-                episode.SeasonNumber = DatabaseHelperMethods.SafeInt32(reader, 4);
+                episode.SeasonId = DatabaseHelperMethods.SafeStr(reader, 4);
                 episode.EpisodeNumber = DatabaseHelperMethods.SafeInt32(reader, 5);
-                episode.Watched = DatabaseHelperMethods.SafeInt32(reader, 6);
-                episode.FirstAired = DatabaseHelperMethods.SafeDateTime(reader, 7);
+                episode.Watched = DatabaseHelperMethods.SafeBoolean(reader, 6);
+                
                 String bannerUrl = DatabaseHelperMethods.SafeStr(reader, 8);
-                episode.BannerUrl = CreateBannerUrl(bannerUrl);
+                episode.BannerPath = CreateBannerUrl(bannerUrl);
                 episode.Rating = DatabaseHelperMethods.SafeFloat(reader, 9);
                 episode.RatingCount = DatabaseHelperMethods.SafeInt32(reader, 10);
             }
@@ -345,7 +345,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private void FillFullEpisode(SQLiteDataReader reader, WebTVEpisodeDetailed episode)
         {
             try
-            {             
+            {
+                episode.FirstAired = DatabaseHelperMethods.SafeDateTime(reader, 7);
                 episode.Summary = DatabaseHelperMethods.SafeStr(reader, 11);
                 episode.GuestStarsString = DatabaseHelperMethods.SafeStr(reader, 12);
                 episode.GuestStars = Utils.SplitString(episode.GuestStarsString).ToList();

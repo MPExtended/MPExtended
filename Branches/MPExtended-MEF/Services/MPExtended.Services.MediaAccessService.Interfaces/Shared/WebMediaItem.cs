@@ -9,6 +9,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
     {
          string Id { get; set; }
          string Path { get; set; }
+         DateTime DateAdded { get; set; }
          WebMediaType Type { get; set; }
     }
 }

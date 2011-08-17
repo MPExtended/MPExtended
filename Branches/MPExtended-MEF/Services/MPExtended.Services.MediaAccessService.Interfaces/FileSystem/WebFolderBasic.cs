@@ -8,9 +8,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
     public class WebFolderBasic : WebMediaItem
     {
+        public WebFolderBasic()
+        {
+            DateAdded = new DateTime(1970, 1, 1);
+        }
+
         public string Id { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public WebMediaType Type { get { return WebMediaType.Folder; } set { Type = value; } }
     }
