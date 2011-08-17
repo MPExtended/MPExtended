@@ -112,7 +112,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                         CoverPath = GetLargeCoverArtName(Path.Combine(Utils.GetBannerPath("videos"), "Title"), title + "{" + id + "}")
                     };
 
-                    movie.Files.Add(new WebMovieDetailed.WebMovieFile()
+                    movie.Files.Add(new WebMovieFile()
                     {
                         Filename = DatabaseHelperMethods.SafeStr(reader, 1) + DatabaseHelperMethods.SafeStr(reader, 2),
                         DiscId = DatabaseHelperMethods.SafeStr(reader, 3),

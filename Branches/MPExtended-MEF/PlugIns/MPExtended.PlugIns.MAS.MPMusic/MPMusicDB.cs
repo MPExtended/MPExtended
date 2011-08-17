@@ -45,10 +45,10 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     var track = new WebMusicTrackBasic
                                     {
-                                        TrackId = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
+                                        Id = DatabaseHelperMethods.SafeInt32(reader, 0).ToString(),
                                         TrackNumber = DatabaseHelperMethods.SafeInt32(reader, 4),
                                         Title = DatabaseHelperMethods.SafeStr(reader, 5),
-                                        FilePath = DatabaseHelperMethods.SafeStr(reader, 6),
+                                        Path = DatabaseHelperMethods.SafeStr(reader, 6),
                                         Year = DatabaseHelperMethods.SafeInt32(reader, 8)
 
                                         //track.Album = DatabaseHelperMethods.SafeStr(reader, 1);
@@ -117,7 +117,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     return new WebMusicArtistBasic()
                     {
                         Title = ClearString(DatabaseHelperMethods.SafeStr(reader, 0)),
-                        ArtistId = ClearString(DatabaseHelperMethods.SafeStr(reader, 0))
+                        Id = ClearString(DatabaseHelperMethods.SafeStr(reader, 0))
 
                     };
                 }
@@ -225,7 +225,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 WebMusicTrackBasic track = GetMusicTrack(itemId);
                 if (track != null)
                 {
-                    return track.FilePath;
+                    return track.Path;
                 }
             }
             catch (Exception ex)

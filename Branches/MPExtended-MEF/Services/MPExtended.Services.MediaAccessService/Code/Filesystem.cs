@@ -64,7 +64,7 @@ namespace MPExtended.Services.MediaAccessService.Code
             }
         }
 
-        public static WebFile GetFileInfo(string path)
+        public static WebFileBasic GetFileInfo(string path)
         {
             if (!File.Exists(path))
             {

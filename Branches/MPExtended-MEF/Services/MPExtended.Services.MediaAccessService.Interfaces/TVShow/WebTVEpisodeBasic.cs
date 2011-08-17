@@ -13,12 +13,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
             DateAdded = new DateTime(1970, 1, 1);
         }
         public string Id { get; set; }
+        public string ShowId { get; set; }
         public string Title { get; set; }
         public int EpisodeNumber { get; set; }
         public string SeasonId { get; set; }
-        public string FilePath { get; set; }
+        public string Path { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
+        public bool Watched { get; set; }
+        public int Rating { get; set; }
 
         public override string ToString()
         {

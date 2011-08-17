@@ -310,5 +310,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId);
         #endregion
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        string GetPath(WebMediaType type, string id);
+
     }
 }

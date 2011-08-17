@@ -46,9 +46,9 @@ namespace MPExtended.Services.MediaAccessService.Code
         /// Gets a list of all shares for a given type from MediaPortal.xml, which requires an awful lot of logic.
         /// </summary>
         /// <returns>List of all shares</returns>
-        public static List<WebShare> GetAllShares(ShareType shareType)
+        public static List<WebFolderBasic> GetAllShares(ShareType shareType)
         {
-            List<WebShare> shares = new List<WebShare>();
+            List<WebFolderBasic> shares = new List<WebFolderBasic>();
             XElement root = XElement.Load(Configuration.GetMpConfigPath());
             IEnumerable<KeyValuePair<string, string>> list = 
                 root.Elements("section")
@@ -61,19 +61,13 @@ namespace MPExtended.Services.MediaAccessService.Code
 
             for (int i = 0; i < count; i++)
             {
-                shares.Add(new WebShare()
+                shares.Add(new WebFolderBasic()
                 {
-                    ShareId = i,
+                    //Id = i,
                     Name = list.SelectShareNode("sharename", i),
                     Path = list.SelectShareNode("sharepath", i),
-                    PinCode = list.SelectShareNode("pincode", i),
-                    IsFtp = list.SelectShareNode("sharetype", i) == "yes",
-                    FtpServer = list.SelectShareNode("shareserver", i),
-                    FtpLogin = list.SelectShareNode("sharelogin", i),
-                    FtpPassword = list.SelectShareNode("sharepassword", i),
-                    FtpPath = list.SelectShareNode("shareremotepath", i),
-                    FtpPort = Int32.Parse(list.SelectShareNode("shareport", i)),
-                    Extensions = extensions
+                    //PinCode = list.SelectShareNode("pincode", i),
+
                 });
             }
 
@@ -94,18 +88,18 @@ namespace MPExtended.Services.MediaAccessService.Code
             return Directory.EnumerateDirectories(path).ToList();
         }
 
-        public static List<WebFile> GetFileListByPath(string path)
+        public static List<WebFileBasic> GetFileListByPath(string path)
         {
             if (!IsAllowedPath(path))
             {
                 Log.Warn("Tried to get file list of non-allowed or non-existent directory {0}", path);
-                return new List<WebFile>();
+                return new List<WebFileBasic>();
             }
 
             return Directory.EnumerateFiles(path).Select(x => new FileInfo(x).ToWebFileInfo()).ToList();
         }
 
-        public static WebFile GetFileInfo(string path)
+        public static WebFileBasic GetFileInfo(string path)
         {
             if (!IsAllowedPath(path))
             {
@@ -135,9 +129,9 @@ namespace MPExtended.Services.MediaAccessService.Code
                 if(File.Exists(path))
                     path = Path.GetDirectoryName(path);
 
-                foreach (WebShare share in GetAllShares(type))
+                foreach (WebFolderBasic share in GetAllShares(type))
                 {
-                    if (share.IsFtp || !Directory.Exists(share.Path))
+                    if (!Directory.Exists(share.Path))
                         continue;
 
                     if (Utils.IsSubdir(share.Path, path))

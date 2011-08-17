@@ -57,6 +57,8 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="FileSystem\WebFileBasic.cs" />
+    <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="MediaInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
@@ -83,6 +85,11 @@
     <Compile Include="TVShow\WebTVShowBasic.cs" />
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="WebServiceDescription.cs" />
+  </ItemGroup>
+ <ItemGroup>
+    <None Include="..\..\MPExtendedKey.snk">
+      <Link>MPExtendedKey.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

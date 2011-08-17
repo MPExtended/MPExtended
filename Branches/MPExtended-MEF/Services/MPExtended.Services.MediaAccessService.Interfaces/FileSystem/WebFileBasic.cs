@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebFile : WebMediaItem
+    public class WebFileBasic : WebMediaItem
     {
         public string Id { get; set; }
         public string Path { get; set; }

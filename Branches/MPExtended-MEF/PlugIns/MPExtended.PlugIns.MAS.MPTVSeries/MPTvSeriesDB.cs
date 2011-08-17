@@ -22,6 +22,7 @@ using System.Linq;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib.DB;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
@@ -202,27 +203,27 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         #endregion
 
         #region Episodes
-        public List<WebEpisode> GetAllEpisodes(int _seriesId)
+        public List<WebTVEpisodeBasic> GetAllEpisodes(int _seriesId)
         {
             return GetEpisodesForSeasonAndRange(_seriesId, null, null, null);
         }
 
-        public List<WebEpisode> GetEpisodes(int _seriesId, int _start, int _end)
+        public List<WebTVEpisodeBasic> GetEpisodes(int _seriesId, int _start, int _end)
         {
             return GetEpisodesForSeasonAndRange(_seriesId, null, _start, _end);
         }
 
-        public List<WebEpisode> GetEpisodesForSeason(int _seriesId, int _seasonId, int _start, int _end)
+        public List<WebTVEpisodeBasic> GetEpisodesForSeason(int _seriesId, int _seasonId, int _start, int _end)
         {
             return GetEpisodesForSeasonAndRange(_seriesId, _seasonId, _start, _end);
         }
 
-        public List<WebEpisode> GetAllEpisodesForSeason(int _seriesId, int _seasonNumber)
+        public List<WebTVEpisodeBasic> GetAllEpisodesForSeason(int _seriesId, int _seasonNumber)
         {
             return GetEpisodesForSeasonAndRange(_seriesId, _seasonNumber, null, null);
         }
 
-        private List<WebEpisode> GetEpisodesForSeasonAndRange(int _seriesId, int? _season, int? _start, int? _end)
+        private List<WebTVEpisodeBasic> GetEpisodesForSeasonAndRange(int _seriesId, int? _season, int? _start, int? _end)
         {
             List<String> alreadyDone = new List<String>();
             string sql = "Select online_eps.CompositeID, online_eps.EpisodeId, online_eps.SeriesID, online_eps.EpisodeName, online_eps.SeasonIndex, online_eps.EpisodeIndex, online_eps.Watched, online_eps.FirstAired, " +
@@ -232,7 +233,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                               "ON online_eps.CompositeID=local_eps.CompositeID " +
                               "WHERE online_eps.SeriesID=" + _seriesId +
                               (_season != null ? (" and online_eps.SeasonIndex=" + _season) : ""); //also only get from one season
-            return ReadList<WebEpisode>(sql, delegate(SQLiteDataReader reader)
+            return ReadList<WebTVEpisodeBasic>(sql, delegate(SQLiteDataReader reader)
             {
                 string compositeId = DatabaseHelperMethods.SafeStr(reader, 0);
                 if (alreadyDone.Contains(compositeId))
@@ -240,7 +241,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     return null;
 
                 // we don't haven an entry for this episode yet -> add it
-                WebEpisode episode = new WebEpisode();
+                WebTVEpisodeBasic episode = new WebTVEpisodeBasic();
                 FillBasicEpisode(reader, episode);
 
                 if (!reader.IsDBNull(11))
@@ -268,7 +269,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetEpisodesForSeasonAndRange(_seriesId, _season, null, null).Count;
         }
 
-        public WebEpisodeFull GetFullEpisode(int _episodeId)
+        public WebTVEpisodeDetailed GetFullEpisode(int _episodeId)
         {
             string sql = "Select online_eps.CompositeID, online_eps.EpisodeId, online_eps.SeriesID, online_eps.EpisodeName, online_eps.SeasonIndex, online_eps.EpisodeIndex, online_eps.Watched, online_eps.FirstAired, " + //basic episode
                               "online_eps.thumbFilename, online_eps.Rating, online_eps.RatingCount, " + //basic episode
@@ -284,20 +285,20 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                               "WHERE online_eps.Hidden = 0 AND online_eps.EpisodeID = " + _episodeId;
             //Todo: Remove "Removable" (changed to 2nd IsAvailable for now) since it doesn't exist anymore
 
-            WebEpisodeFull episode = null;
+            WebTVEpisodeDetailed episode = null;
             ReadList<int>(sql, delegate(SQLiteDataReader reader)
             {
                 if (episode == null)
                 {
                     // we don't have an entry for this episode yet -> add it
-                    episode = new WebEpisodeFull();
+                    episode = new WebTVEpisodeDetailed();
                     FillBasicEpisode(reader, episode);
                     FillFullEpisode(reader, episode);
 
                     if (!reader.IsDBNull(31))
                     {
                         episode.HasLocalFile = true;
-                        WebEpisodeFull.WebEpisodeFile file = CreateEpisodeFile(reader);
+                        WebTVEpisodeDetailed.WebEpisodeFile file = CreateEpisodeFile(reader);
                         episode.EpisodeFile = file;
                     }
                     else
@@ -308,7 +309,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 else
                 {
                     // episode has more than one file, atm only up to 2 files supported
-                    WebEpisodeFull.WebEpisodeFile file = CreateEpisodeFile(reader);
+                    WebTVEpisodeDetailed.WebEpisodeFile file = CreateEpisodeFile(reader);
                     episode.EpisodeFile2 = file;
                 }
 
@@ -319,13 +320,13 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return episode;
         }
 
-        private void FillBasicEpisode(SQLiteDataReader reader, WebEpisode episode)
+        private void FillBasicEpisode(SQLiteDataReader reader, WebTVEpisodeBasic episode)
         {
             try
             {
                 episode.Id = DatabaseHelperMethods.SafeInt32(reader, 1);
-                episode.IdSerie = DatabaseHelperMethods.SafeInt32(reader, 2);
-                episode.Name = DatabaseHelperMethods.SafeStr(reader, 3);
+                episode.ShowId = DatabaseHelperMethods.SafeInt32(reader, 2);
+                episode.Title = DatabaseHelperMethods.SafeStr(reader, 3);
                 episode.SeasonNumber = DatabaseHelperMethods.SafeInt32(reader, 4);
                 episode.EpisodeNumber = DatabaseHelperMethods.SafeInt32(reader, 5);
                 episode.Watched = DatabaseHelperMethods.SafeInt32(reader, 6);
@@ -341,10 +342,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             }
         }
 
-        private void FillFullEpisode(SQLiteDataReader reader, WebEpisodeFull episode)
+        private void FillFullEpisode(SQLiteDataReader reader, WebTVEpisodeDetailed episode)
         {
             try
-            {
+            {             
                 episode.Summary = DatabaseHelperMethods.SafeStr(reader, 11);
                 episode.GuestStarsString = DatabaseHelperMethods.SafeStr(reader, 12);
                 episode.GuestStars = Utils.SplitString(episode.GuestStarsString).ToList();
@@ -375,11 +376,11 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         }
 
-        private WebEpisodeFull.WebEpisodeFile CreateEpisodeFile(SQLiteDataReader reader)
+        private WebTVEpisodeDetailed.WebEpisodeFile CreateEpisodeFile(SQLiteDataReader reader)
         {
             try
             {
-                WebEpisodeFull.WebEpisodeFile file = new WebEpisodeFull.WebEpisodeFile();
+                WebTVEpisodeDetailed.WebEpisodeFile file = new WebTVEpisodeDetailed.WebEpisodeFile();
                 file.FileName = DatabaseHelperMethods.SafeStr(reader, 28);
                 file.EpisodeIndex = DatabaseHelperMethods.SafeInt32(reader, 29);
                 file.SeasonIndex = DatabaseHelperMethods.SafeInt32(reader, 30);
@@ -428,7 +429,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             try
             {
-                WebEpisodeFull ep = GetFullEpisode(Int32.Parse(itemId));
+                WebTVEpisodeDetailed ep = GetFullEpisode(Int32.Parse(itemId));
                 if (ep != null)
                 {
                     return ep.EpisodeFile.FileName;

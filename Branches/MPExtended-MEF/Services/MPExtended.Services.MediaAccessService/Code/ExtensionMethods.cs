@@ -28,7 +28,7 @@ namespace MPExtended.Services.MediaAccessService.Code
 {
     public static class WebFileInfoExtensionMethods
     {
-        public static WebPictureBasic ToWebPicture(this WebFile info)
+        public static WebPictureBasic ToWebPicture(this WebFileBasic info)
         {
             //return MPPictures.GetPicture(info.FullName);
         }
@@ -44,9 +44,9 @@ namespace MPExtended.Services.MediaAccessService.Code
 
     public static class FileInfoExtensionMethods
     {
-        public static WebFile ToWebFileInfo(this FileInfo info)
+        public static WebFileBasic ToWebFileInfo(this FileInfo info)
         {
-            return new WebFile()
+            return new WebFileBasic()
             {
                 //DirectoryName = info.DirectoryName,
                 //Exists = info.Exists, // isn't this always true?

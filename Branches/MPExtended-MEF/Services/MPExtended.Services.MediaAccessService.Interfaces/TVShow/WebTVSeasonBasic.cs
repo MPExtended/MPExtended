@@ -13,6 +13,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         }
         public string Id { get; set; }
         public string Title { get; set; }
+        public string ShowId { get; set; }
         public int SeasonNumber { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
