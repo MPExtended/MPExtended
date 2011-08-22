@@ -1,4 +1,4 @@
-﻿@model MPExtended.Services.MediaAccessService.Interfaces.WebMusicTrack
+﻿@model MPExtended.Services.MediaAccessService.Interfaces.Music.WebMusicTrackBasic
 @{
     ViewBag.Title = "Listen";
 }
@@ -7,7 +7,7 @@ You are listening to <strong>@Model.Title</strong> by <strong>@Model.ShortedAlbu
 @{Html.RenderAction("Player", "Stream", new
   {
       type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Music,
-      itemId = @Model.TrackId,
+      itemId = @Model.Id,
       showVideo = false
   });
 }

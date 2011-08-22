@@ -230,6 +230,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region Pictures
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetPictureCount();
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPictureBasic> GetAllPicturesBasic(SortPicturesBy sort = SortPicturesBy.Title, OrderBy order = OrderBy.Asc);
@@ -248,6 +253,24 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region TVShows
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetTVEpisodeCount();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetTVEpisodeCountForTVShow(int id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetTVShowCount();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetTVSeasonCountForTVShow(int id);
+
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVShowBasic> GetAllTVShowsBasic(SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc);

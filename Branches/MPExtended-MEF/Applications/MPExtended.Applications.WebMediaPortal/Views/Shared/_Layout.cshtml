@@ -16,15 +16,15 @@ type="text/javascript"></script>
         <div id="logindisplay">
             @Html.Partial("_LogOnPartial")
         </div>
-        <ul id="navlist">
-            <li class="first"><a href="/" id="current">Home</a></li>
-            <li> @Html.ActionLink("Music","Index","MusicLibrary")  </li>
-            <li> @Html.ActionLink("Movies","Index","MovieLibrary") </li>
-            <li> @Html.ActionLink("TV Shows","Index","TVShowsLibrary") </li>
-            <li> @Html.ActionLink("Television","Index","Television") </li>
-
-            
-        </ul>
+        <div class="navigation">
+            <ul id="navlist">
+                <li class="first"><a href="/" id="current">Home</a></li>
+                <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li>
+                <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li>
+                <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li>
+                <li>@Html.ActionLink("Television", "Index", "Television") </li>
+            </ul>
+        </div>
     </div>
     @RenderBody()
 </body>
