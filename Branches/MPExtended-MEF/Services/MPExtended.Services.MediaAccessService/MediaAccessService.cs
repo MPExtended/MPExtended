@@ -64,16 +64,18 @@ namespace MPExtended.Services.MediaAccessService
 
         public MediaAccessService()
         {
-            Compose();
             try
             {
+                Compose();
                 ChosenMovieLibrary = MovieLibraries.ElementAt(0).Value;
                 ChosenMusicLibrary = MusicLibraries.ElementAt(0).Value;
                 ChosenPictureLibrary = PictureLibraries.ElementAt(0).Value;
                 ChosenTVShowLibrary = TVShowLibraries.ElementAt(0).Value;
             }
-            catch (Exception)
-            { }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to create MEF service", ex);
+            }
         }
 
         private void Compose()
@@ -152,24 +154,34 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMovieLibrary.GetMovieDetailedById(movieId);
         }
+
+        private IList<WebMovieBasic> SortMoviesBasic(IEnumerable<WebMovieBasic> list, SortMoviesBy sort, OrderBy order)
+        {
+            return list.ToList();
+        }
+
+        private IList<WebMovieDetailed> SortMoviesDetailed(IEnumerable<WebMovieDetailed> list, SortMoviesBy sort, OrderBy order)
+        {
+            return list.ToList();
+        }
         #endregion
 
+        #region Music
         public WebItemCount GetMusicTrackCount()
         {
-
             return new WebItemCount() { Count = ChosenMusicLibrary.GetAllTracks().Count };
         }
 
         public WebItemCount GetMusicAlbumCount()
         {
-        
             return new WebItemCount() { Count = ChosenMusicLibrary.GetAllAlbums().Count };
         }
 
         public WebItemCount GetMusicArtistCount()
         {
-                        return new WebItemCount() { Count = ChosenMusicLibrary.GetAllArtists().Count };
+            return new WebItemCount() { Count = ChosenMusicLibrary.GetAllArtists().Count };
         }
+
         public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenMusicLibrary.GetAllTracks();
@@ -235,6 +247,33 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMusicLibrary.GetAllArtists().Single(p => p.Id == Id);
         }
 
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllTracks().GetRange(start, end).ToList();
+        }
+
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllTracks().Where(p => p.AlbumId == id).ToList();
+        }
+
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllTracksDetailed().Where(p => p.AlbumId == id).ToList();
+        }
+
+        public WebMusicAlbumBasic GetMusicAlbumBasicById(string id)
+        {
+            return ChosenMusicLibrary.GetAllAlbums().Single(p => p.Id == id);
+        }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.ArtistId == id).ToList();
+        }
+        #endregion
+
+        #region Pictures
         public IList<WebPictureBasic> GetAllPicturesBasic(SortPicturesBy sort = SortPicturesBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenPictureLibrary.GetAllPicturesBasic();
@@ -255,16 +294,11 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenPictureLibrary.GetAllPictureCategoriesBasic();
         }
 
-
-        private IList<WebMovieBasic> SortMoviesBasic(IEnumerable<WebMovieBasic> list, SortMoviesBy sort, OrderBy order)
+        public WebItemCount GetPictureCount()
         {
-            return list.ToList();
+            return new WebItemCount() {  Count = ChosenPictureLibrary.GetAllPicturesBasic().Count };
         }
-
-        private IList<WebMovieDetailed> SortMoviesDetailed(IEnumerable<WebMovieDetailed> list, SortMoviesBy sort, OrderBy order)
-        {
-            return list.ToList();
-        }
+        #endregion
 
         #region TVShows
         public IList<WebTVShowBasic> GetAllTVShowsBasic(SortTVShowsBy sort = SortTVShowsBy.Title, OrderBy order = OrderBy.Asc)
@@ -342,6 +376,25 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetEpisodeDetailed(episodeId);
         }
 
+        public WebItemCount GetTVEpisodeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebItemCount GetTVEpisodeCountForTVShow(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebItemCount GetTVShowCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebItemCount GetTVSeasonCountForTVShow(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         private IList<T> SortTVShowList<T>(IList<T> list, SortTVShowsBy sort, OrderBy order)
         {
@@ -384,69 +437,6 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
         #endregion
-
-
-
-        public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMusicLibrary.GetAllTracks().GetRange(start, end).ToList();
-        }
-
-        public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMusicLibrary.GetAllTracks().Where(p => p.AlbumId == id).ToList();
-        }
-
-        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMusicLibrary.GetAllTracksDetailed().Where(p => p.AlbumId == id).ToList();
-        }
-
-        public WebMusicTrackDetailed GetMusicTrackDetailedById(string id)
-        {
-            return ChosenMusicLibrary.GetAllTracksDetailed().Single(p => p.Id == id);
-        }
-
-        public WebMusicAlbumBasic GetMusicAlbumBasicById(string id)
-        {
-            return ChosenMusicLibrary.GetAllAlbums().Single(p => p.Id == id);
-        }
-
-        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.ArtistId == id).ToList();
-        }
-
-        public WebItemCount GetPictureCount()
-        {
-            return new WebItemCount()
-            {
-                Count = ChosenPictureLibrary.GetAllPicturesBasic().Count
-            };
-        }
-
-        public WebItemCount GetTVEpisodeCount()
-        {
-            return new WebItemCount()
-            {
-
-            };
-        }
-
-        public WebItemCount GetTVEpisodeCountForTVShow(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebItemCount GetTVShowCount()
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebItemCount GetTVSeasonCountForTVShow(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public string GetPath(WebMediaType type, string id)
         {

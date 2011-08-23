@@ -156,7 +156,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<string> GetAllMovieGenres();
+        IList<WebGenre> GetAllMovieGenres();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

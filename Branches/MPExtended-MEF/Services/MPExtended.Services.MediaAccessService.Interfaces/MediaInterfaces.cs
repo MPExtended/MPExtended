@@ -23,7 +23,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicTrackBasic GetTrackBasicById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
-        WebMusicTrackDetailed GetTrackBasicById(string trackId);
+        WebMusicTrackDetailed GetTrackDetailedById(string trackId);
         IList<WebGenre> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
