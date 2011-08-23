@@ -12,6 +12,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         {
             DateAdded = new DateTime(1970, 1, 1);
         }
+
         public string Id { get; set; }
         public string ShowId { get; set; }
         public string Title { get; set; }
@@ -22,15 +23,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public DateTime DateAdded { get; set; }
         public bool Watched { get; set; }
         public float Rating { get; set; }
-
         public string BannerPath { get; set; }
         public string FanArtPath { get; set; }
-
-        public override string ToString()
-        {
-            return Title;
-        }
-
 
         public WebMediaType Type
         {
@@ -38,10 +32,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
             {
                 return WebMediaType.TVShow;
             }
-            set
-            {
-                Type = value;
-            }
+        }
+
+        public override string ToString()
+        {
+            return Title;
         }
     }
 }

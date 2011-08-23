@@ -18,14 +18,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         public string CategoryId { get; set; }
         public string Title { get; set; }
         public DateTime DateTaken { get; set; }
-         public  IList<string> Path { get; set; }
+        public IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
-        public override string ToString()
-        {
-            return Title;
-        }
-
-
 
         public WebMediaType Type
         {
@@ -33,10 +27,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
             {
                 return WebMediaType.Picture;
             }
-            set
-            {
-                Type = value;
-            }
+        }
+
+        public override string ToString()
+        {
+            return Title;
         }
     }
 }

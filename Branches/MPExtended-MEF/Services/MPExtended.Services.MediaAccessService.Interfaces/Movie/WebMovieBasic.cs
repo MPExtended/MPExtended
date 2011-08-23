@@ -22,32 +22,21 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string BackdropPath { get; set; }
         public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
-         public  IList<string> Path { get; set; }
+        public IList<string> Path { get; set; }
         public int Rating { get; set; }
         public int Runtime { get; set; }
 
-        public override string ToString()
-        {
-            return Title;
-        }
-
-
-        public WebMediaType Type
+        public WebMediaType Type 
         {
             get
             {
                 return WebMediaType.Movie;
             }
-            set 
-            {
-                Type = value;
-            }
-
         }
 
-
-
-
+        public override string ToString()
+        {
+            return Title;
+        }
     }
-
 }

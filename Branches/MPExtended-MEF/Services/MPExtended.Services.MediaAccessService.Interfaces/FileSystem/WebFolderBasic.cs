@@ -14,10 +14,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
         }
 
         public string Id { get; set; }
-       public  IList<string> Path { get; set; }
+        public IList<string> Path { get; set; }
         public string Name { get; set; }
         public DateTime DateAdded { get; set; }
 
-        public WebMediaType Type { get { return WebMediaType.Folder; } set { Type = value; } }
+        public WebMediaType Type 
+        { 
+            get 
+            { 
+                return WebMediaType.Folder; 
+            }
+        }
     }
 }

@@ -18,16 +18,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public string AlbumId { get; set; }
         public string Title { get; set; }
         public int TrackNumber { get; set; }
-         public  IList<string> Path { get; set; }
+        public IList<string> Path { get; set; }
         public int Year { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> Genre { get; set; }
-
-        public override string ToString()
-        {
-            return Title;
-        }
-
 
         public WebMediaType Type
         {
@@ -35,10 +29,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
             {
                 return WebMediaType.Music;
             }
-            set
-            {
-                Type = value;
-            }
+        }
+
+        public override string ToString()
+        {
+            return Title;
         }
     }
 }

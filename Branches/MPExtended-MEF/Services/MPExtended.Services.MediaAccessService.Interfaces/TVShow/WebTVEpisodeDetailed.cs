@@ -12,7 +12,5 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 
         ///<summary>The LastViewPosition property will a float value which indicates the Position a user stopped playing this episode</summary>
         public float LastViewPosition { get; set; }
-       
-
     }
 }

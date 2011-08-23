@@ -24,6 +24,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public int FilesystemApiVersion { get; set; }
         #endregion
 
-        public String ServiceVersion { get; set; }
+        public string ServiceVersion { get; set; }
     }
 }

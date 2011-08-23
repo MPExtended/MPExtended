@@ -10,6 +10,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
         string Id { get; set; }
         IList<string> Path { get; set; }
         DateTime DateAdded { get; set; }
-        WebMediaType Type { get; set; }
+        WebMediaType Type { get; }
     }
 }

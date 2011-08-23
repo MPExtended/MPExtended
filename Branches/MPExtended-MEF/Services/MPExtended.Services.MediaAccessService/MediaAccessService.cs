@@ -109,10 +109,7 @@ namespace MPExtended.Services.MediaAccessService
         #region Movies
         public WebItemCount GetMovieCount()
         {
-            return new WebItemCount()
-            {
-                Count = ChosenMovieLibrary.GetAllMovies().Count
-            };
+            return new WebItemCount() { Count = ChosenMovieLibrary.GetAllMovies().Count };
         }
 
         public IList<WebMovieBasic> GetAllMoviesBasic(SortMoviesBy sort = SortMoviesBy.Title, OrderBy order = OrderBy.Asc)
@@ -296,7 +293,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebItemCount GetPictureCount()
         {
-            return new WebItemCount() {  Count = ChosenPictureLibrary.GetAllPicturesBasic().Count };
+            return new WebItemCount() { Count = ChosenPictureLibrary.GetAllPicturesBasic().Count };
         }
         #endregion
 
@@ -371,29 +368,29 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == showId && p.SeasonId == seasonId).ToList();
         }
 
-        public WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId)
+        public WebTVEpisodeDetailed GetTVEpisodeDetailed(string id)
         {
-            return ChosenTVShowLibrary.GetEpisodeDetailed(episodeId);
+            return ChosenTVShowLibrary.GetEpisodeDetailed(id);
         }
 
         public WebItemCount GetTVEpisodeCount()
         {
-            throw new NotImplementedException();
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllEpisodesBasic().Count };
         }
 
-        public WebItemCount GetTVEpisodeCountForTVShow(int id)
+        public WebItemCount GetTVEpisodeCountForTVShow(string id)
         {
-            throw new NotImplementedException();
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllEpisodesBasic().Where(e => e.ShowId == id).Count() };
         }
 
         public WebItemCount GetTVShowCount()
         {
-            throw new NotImplementedException();
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllTVShowsBasic().Count };
         }
 
-        public WebItemCount GetTVSeasonCountForTVShow(int id)
+        public WebItemCount GetTVSeasonCountForTVShow(string id)
         {
-            throw new NotImplementedException();
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllSeasonsBasic(id).Count };
         }
 
         private IList<T> SortTVShowList<T>(IList<T> list, SortTVShowsBy sort, OrderBy order)

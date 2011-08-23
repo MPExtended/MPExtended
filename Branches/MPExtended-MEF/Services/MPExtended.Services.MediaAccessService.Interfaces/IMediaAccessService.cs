@@ -232,8 +232,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
 
-    
-        
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
@@ -245,11 +243,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicArtistBasic GetMusicArtistBasicById(string id);
-
         #endregion
 
         #region Pictures
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebItemCount GetPictureCount();
@@ -272,14 +268,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region TVShows
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebItemCount GetTVEpisodeCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVEpisodeCountForTVShow(int id);
+        WebItemCount GetTVEpisodeCountForTVShow(string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -287,7 +282,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVSeasonCountForTVShow(int id);
+        WebItemCount GetTVSeasonCountForTVShow(string id);
 
 
         [OperationContract]
@@ -350,12 +345,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebTVEpisodeDetailed GetTVEpisodeDetailed(string episodeId);
+        WebTVEpisodeDetailed GetTVEpisodeDetailed(string id);
         #endregion
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         string GetPath(WebMediaType type, string id);
-
     }
 }
