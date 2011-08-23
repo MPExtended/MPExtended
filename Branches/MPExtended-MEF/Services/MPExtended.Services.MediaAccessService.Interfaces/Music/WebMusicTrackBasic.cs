@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic : WebMediaItem
+    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IMusicTrackNumberSortable
     {
         public WebMusicTrackBasic()
         {

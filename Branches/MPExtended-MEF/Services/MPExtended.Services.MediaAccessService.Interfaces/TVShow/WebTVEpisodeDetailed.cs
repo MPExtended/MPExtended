@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVEpisodeDetailed : WebTVEpisodeBasic, IRatingSortable
+    public class WebTVEpisodeDetailed : WebTVEpisodeBasic
     {
         ///<summary>The FirstAired property will return a DateTime object which indicates the time the episode was aired by broadcasting company  </summary>
         public DateTime FirstAired { get; set; }

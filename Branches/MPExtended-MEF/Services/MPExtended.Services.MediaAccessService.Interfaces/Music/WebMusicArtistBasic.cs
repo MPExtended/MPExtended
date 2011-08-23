@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicArtistBasic
+    public class WebMusicArtistBasic : ITitleSortable
     {
         public string Id { get; set; }
         public string Title { get; set; }

@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable, IRatingSortable
+    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable, IRatingSortable, ITVEpisodeNumberSortable
     {
         public WebTVEpisodeBasic()
         {

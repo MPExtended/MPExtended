@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicAlbumBasic
+    public class WebMusicAlbumBasic : ITitleSortable, IYearSortable, IMusicComposerSortable
     {
         public WebMusicAlbumBasic()
         {
@@ -20,7 +20,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public IList<string> Composer { get; set; }
         public string ArtistId { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> Genre { get; set; }
         public int Year { get; set; }
         public string CoverPath { get; set; }        
 

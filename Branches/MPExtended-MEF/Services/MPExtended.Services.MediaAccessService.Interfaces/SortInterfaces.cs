@@ -29,4 +29,30 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         float Rating { get; set; }
     }
+
+    public interface IMusicTrackNumberSortable 
+    {
+        int TrackNumber { get; set; }
+    }
+
+    public interface IMusicComposerSortable
+    {
+        IList<string> Composer { get; set; }
+    }
+
+    public interface ITVEpisodeNumberSortable
+    {
+        int EpisodeNumber { get; set; }
+        string SeasonId { get; set; }
+    }
+
+    public interface ITVSeasonNumberSortable
+    {
+        int SeasonNumber { get; set; }
+    }
+
+    public interface IPictureDateTakenSortable
+    {
+        DateTime DateTaken { get; set; }
+    }
 }

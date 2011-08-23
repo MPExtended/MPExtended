@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem
+    public class WebMovieBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable
     {
         public WebMovieBasic()
         {
@@ -23,7 +23,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> Path { get; set; }
-        public int Rating { get; set; }
+        public float Rating { get; set; }
         public int Runtime { get; set; }
 
         public WebMediaType Type 

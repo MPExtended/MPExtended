@@ -16,50 +16,50 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IMusicLibrary
     {
-        IList<WebMusicTrackBasic> GetAllTracks();
-        IList<WebMusicAlbumBasic> GetAllAlbums();
-        IList<WebMusicArtistBasic> GetAllArtists();
-        IList<WebMusicTrackDetailed> GetAllTracksDetailed();
+        IEnumerable<WebMusicTrackBasic> GetAllTracks();
+        IEnumerable<WebMusicAlbumBasic> GetAllAlbums();
+        IEnumerable<WebMusicArtistBasic> GetAllArtists();
+        IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed();
         WebMusicTrackBasic GetTrackBasicById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
         WebMusicTrackDetailed GetTrackDetailedById(string trackId);
-        IList<WebGenre> GetAllGenres();
+        IEnumerable<WebGenre> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface IMovieLibrary
     {
-        IList<WebMovieBasic> GetAllMovies();
-        IList<WebMovieDetailed> GetAllMoviesDetailed();
+        IEnumerable<WebMovieBasic> GetAllMovies();
+        IEnumerable<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        IList<WebGenre> GetAllGenres();
+        IEnumerable<WebGenre> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface ITVShowLibrary
     {
-        IList<WebTVShowBasic> GetAllTVShowsBasic();
-        IList<WebTVShowDetailed> GetAllTVShowsDetailed();
+        IEnumerable<WebTVShowBasic> GetAllTVShowsBasic();
+        IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed();
         WebTVShowDetailed GetTVShowDetailed(string seriesId);
-        IList<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId);
-        IList<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId);
+        IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId);
+        IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId);
         WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId);
-        IList<WebTVEpisodeBasic> GetAllEpisodesBasic();
-        IList<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
+        IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic();
+        IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
 
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
         DirectoryInfo GetSourceRootDirectory();
-        IList<WebGenre> GetAllGenres();
+        IEnumerable<WebGenre> GetAllGenres();
     }
 
     public interface IPictureLibrary
     {
-        IList<WebPictureBasic> GetAllPicturesBasic();
-        IList<WebPictureDetailed> GetAllPicturesDetailed();
+        IEnumerable<WebPictureBasic> GetAllPicturesBasic();
+        IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
-        IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
+        IEnumerable<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
         DirectoryInfo GetSourceRootDirectory();
     }
 

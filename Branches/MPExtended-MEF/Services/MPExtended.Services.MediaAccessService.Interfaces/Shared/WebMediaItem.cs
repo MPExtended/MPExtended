@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
 {
-    public interface WebMediaItem
+    public interface WebMediaItem : IDateAddedSortable
     {
         string Id { get; set; }
         IList<string> Path { get; set; }
