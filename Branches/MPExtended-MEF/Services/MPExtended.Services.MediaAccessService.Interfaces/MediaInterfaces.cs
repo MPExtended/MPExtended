@@ -7,6 +7,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using System.IO;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -18,11 +19,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebMusicTrackBasic> GetAllTracks();
         IList<WebMusicAlbumBasic> GetAllAlbums();
         IList<WebMusicArtistBasic> GetAllArtists();
+        IList<WebMusicTrackDetailed> GetAllTracksDetailed();
         WebMusicTrackBasic GetTrackBasicById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
-        IList<WebMusicTrackBasic> GetTracksByAlbumId(string albumId);
-        IList<String> GetAllGenres();
+        WebMusicTrackDetailed GetTrackBasicById(string trackId);
+        IList<WebGenre> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
 
@@ -32,7 +34,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        IList<String> GetAllGenres();
+        IList<WebGenre> GetAllGenres();
         DirectoryInfo GetSourceRootDirectory();
     }
 
@@ -44,12 +46,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId);
         IList<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId);
         WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId);
-        IList<WebTVEpisodeBasic> GetEpisodesBasic(string seriesId);
-        IList<WebTVEpisodeBasic> GetEpisodesBasicForSeason(string seriesId, string seasonId);
-        IList<WebTVEpisodeDetailed> GetEpisodesDetailed(string seriesId);
-        IList<WebTVEpisodeDetailed> GetEpisodesDetailedForSeason(string seriesId, string seasonId);
+        IList<WebTVEpisodeBasic> GetAllEpisodesBasic();
+        IList<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
+
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
         DirectoryInfo GetSourceRootDirectory();
+        IList<WebGenre> GetAllGenres();
     }
 
     public interface IPictureLibrary
@@ -58,7 +60,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
         IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
-        DirectoryInfo GetSourceRootDirectory(); 
+        DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface IFileSystemProvider

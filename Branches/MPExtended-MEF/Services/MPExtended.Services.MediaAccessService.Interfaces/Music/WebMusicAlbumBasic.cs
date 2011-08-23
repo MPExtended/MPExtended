@@ -18,6 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public string AlbumArtist { get; set; }
         public IList<string> Artists { get; set; }
         public IList<string> Composer { get; set; }
+        public string ArtistId { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> Genre { get; set; }
         public int Year { get; set; }
