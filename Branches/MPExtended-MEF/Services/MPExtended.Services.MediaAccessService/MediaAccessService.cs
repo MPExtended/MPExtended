@@ -65,16 +65,21 @@ namespace MPExtended.Services.MediaAccessService
         public MediaAccessService()
         {
             Compose();
-            ChosenMovieLibrary = MovieLibraries.FirstOrDefault().Value;
-            ChosenMusicLibrary = MusicLibraries.FirstOrDefault().Value;
-            ChosenPictureLibrary = PictureLibraries.FirstOrDefault().Value;
-            ChosenTVShowLibrary = TVShowLibraries.FirstOrDefault().Value;
+            try
+            {
+                ChosenMovieLibrary = MovieLibraries.ElementAt(0).Value;
+                ChosenMusicLibrary = MusicLibraries.ElementAt(0).Value;
+                ChosenPictureLibrary = PictureLibraries.ElementAt(0).Value;
+                ChosenTVShowLibrary = TVShowLibraries.ElementAt(0).Value;
+            }
+            catch (Exception)
+            { }
         }
 
         private void Compose()
         {
             var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"MPExtended\Extensions\"));
+            catalog.Catalogs.Add(new DirectoryCatalog(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Extensions\"));
 
             var container = new CompositionContainer(catalog);
             container.ComposeParts(this);
@@ -212,7 +217,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
         {
-            throw new NotImplementedException();
+            return ChosenMusicLibrary.GetAllArtists();
         }
 
         public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
@@ -375,5 +380,66 @@ namespace MPExtended.Services.MediaAccessService
         }
         #endregion
 
+
+
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebMusicTrackDetailed GetMusicTrackDetailedById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WebMusicAlbumBasic GetMusicAlbumBasicById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPictureCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetTVEpisodeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetTVEpisodeCountForTVShow(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetTVShowCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetTVSeasonCountForTVShow(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPath(WebMediaType type, string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

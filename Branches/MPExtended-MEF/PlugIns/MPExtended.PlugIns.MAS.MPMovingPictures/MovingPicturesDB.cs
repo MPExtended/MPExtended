@@ -109,21 +109,21 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 movie.BackdropPath = DatabaseHelperMethods.SafeStr(reader, 34);
 
                  //set file properties
-                WebMovieFile file = new WebMovieFile();
-                file.Filename = DatabaseHelperMethods.SafeStr(reader, 1);
-                file.DiscId = DatabaseHelperMethods.SafeStr(reader, 2);
-                file.Hash = DatabaseHelperMethods.SafeStr(reader, 3);
-                file.Part = DatabaseHelperMethods.SafeInt32(reader, 4);
-                file.Duration = DatabaseHelperMethods.SafeInt32(reader, 5);
-                file.VideoWidth = DatabaseHelperMethods.SafeInt32(reader, 6);
-                file.VideoHeight = DatabaseHelperMethods.SafeInt32(reader, 7);
-                file.VideoResolution = DatabaseHelperMethods.SafeStr(reader, 8);
-                file.VideoCodec = DatabaseHelperMethods.SafeStr(reader, 9);
-                file.AudioCodec = DatabaseHelperMethods.SafeStr(reader, 10);
-                file.AudioChannels = DatabaseHelperMethods.SafeStr(reader, 11);
-                file.HasSubtitles = DatabaseHelperMethods.SafeBoolean(reader, 12);
-                file.VideoFormat = DatabaseHelperMethods.SafeStr(reader, 13);
-                movie.Files.Add(file);
+                //WebMovieFile file = new WebMovieFile();
+                //file.Filename = DatabaseHelperMethods.SafeStr(reader, 1);
+                //file.DiscId = DatabaseHelperMethods.SafeStr(reader, 2);
+                //file.Hash = DatabaseHelperMethods.SafeStr(reader, 3);
+                //file.Part = DatabaseHelperMethods.SafeInt32(reader, 4);
+                //file.Duration = DatabaseHelperMethods.SafeInt32(reader, 5);
+                //file.VideoWidth = DatabaseHelperMethods.SafeInt32(reader, 6);
+                //file.VideoHeight = DatabaseHelperMethods.SafeInt32(reader, 7);
+                //file.VideoResolution = DatabaseHelperMethods.SafeStr(reader, 8);
+                //file.VideoCodec = DatabaseHelperMethods.SafeStr(reader, 9);
+                //file.AudioCodec = DatabaseHelperMethods.SafeStr(reader, 10);
+                //file.AudioChannels = DatabaseHelperMethods.SafeStr(reader, 11);
+                //file.HasSubtitles = DatabaseHelperMethods.SafeBoolean(reader, 12);
+                //file.VideoFormat = DatabaseHelperMethods.SafeStr(reader, 13);
+                //movie.Files.Add(file);
                 return movie;
             }
             catch (Exception e)
@@ -191,10 +191,10 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             try
             {
                 WebMovieDetailed movie = GetFullMovie(itemId);
-                if (movie != null && movie.Files.Count >= part)
-                {
-                    return movie.Files[part - 1].Filename;
-                }
+                //if (movie != null && movie.Files.Count >= part)
+                //{
+                //    return movie.Files[part - 1].Filename;
+                //}
             }
             catch (Exception ex)
             {

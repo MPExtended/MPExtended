@@ -203,20 +203,20 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
         }
 
-        public List<WebRecording> GetRecordings()
+        public List<WebRecordingBasic> GetRecordings()
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
         }
-        public WebRecording GetRecordingById(int recordingId)
+        public WebRecordingBasic GetRecordingById(int recordingId)
         {
             return Recording.ListAll().First(p => p.IdRecording == recordingId).ToWebRecording();
         }
 
-        public List<WebSchedule> GetSchedules()
+        public List<WebScheduleBasic> GetSchedules()
         {
             return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).ToList();
         }
-        public WebSchedule GetScheduleById(int scheduleId)
+        public WebScheduleBasic GetScheduleById(int scheduleId)
         {
             return Schedule.Retrieve(scheduleId).ToWebSchedule();
         }

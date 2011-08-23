@@ -65,9 +65,9 @@
     <Compile Include="WebChannelState.cs" />
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />
-    <Compile Include="WebRecording.cs" />
+    <Compile Include="WebRecordingBasic.cs" />
     <Compile Include="WebRtspClient.cs" />
-    <Compile Include="WebSchedule.cs" />
+    <Compile Include="WebScheduleBasic.cs" />
     <Compile Include="WebUser.cs" />
     <Compile Include="WebVirtualCard.cs" />
   </ItemGroup>

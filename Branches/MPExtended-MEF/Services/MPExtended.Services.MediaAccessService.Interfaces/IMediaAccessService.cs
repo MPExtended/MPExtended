@@ -201,11 +201,23 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)] 
+        IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<string> GetAllMusicGenres();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMusicTrackDetailed GetMusicTracksDetailedById(string id);
+        WebMusicTrackDetailed GetMusicTrackDetailedById(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebMusicAlbumBasic GetMusicAlbumBasicById(string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -215,6 +227,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);
+
+    
+        
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortMusicBy sort = SortMusicBy.Title, OrderBy order = OrderBy.Asc);

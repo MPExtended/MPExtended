@@ -9,7 +9,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 	{
         #region Properties
         public string DisplayName { get; set; }
-        public int IdChannel { get; set; }
+        public int Id { get; set; }
         #endregion
 	}
 }

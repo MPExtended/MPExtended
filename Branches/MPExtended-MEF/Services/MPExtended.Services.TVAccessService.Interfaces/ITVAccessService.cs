@@ -79,15 +79,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebRecording> GetRecordings();
+        List<WebRecordingBasic> GetRecordings();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebSchedule> GetSchedules();
+        List<WebScheduleBasic> GetSchedules();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebSchedule GetScheduleById(int scheduleId);
+        WebScheduleBasic GetScheduleById(int scheduleId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -12,6 +12,7 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
     [ExportMetadata("Database", "XBMCMusic")]
     public class XBMCMusic : IMusicLibrary
     {
+        XBMCMusicDB _db = new XBMCMusicDB();
 
         public IList<WebMusicTrackBasic> GetAllTracks()
         {
@@ -25,7 +26,7 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
 
         public IList<WebMusicArtistBasic> GetAllArtists()
         {
-            throw new NotImplementedException();
+           return _db.GetArtists(null, null);
         }
 
         public WebMusicTrackBasic GetTrackBasicById(string trackId)

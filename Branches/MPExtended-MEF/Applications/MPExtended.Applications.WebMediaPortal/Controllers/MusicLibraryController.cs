@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var artistList = MPEServices.NetPipeMediaAccessService.GetAllArtists();
+                var artistList = MPEServices.NetPipeMediaAccessService.GetAllMusicArtistsBasic();
                 if (artistList != null)
                 {
                     return View(artistList);
@@ -49,11 +49,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         }
 
-        public ActionResult Albums(string artist)
+        public ActionResult Albums(string id)
         {
             try
             {
-                var albumList = MPEServices.NetPipeMediaAccessService.GetAlbumsByArtist(artist);
+                var albumList = MPEServices.NetPipeMediaAccessService.GetMusicAlbumsBasicForArtist(id);
                 if (albumList != null)
                 {
                     return View(albumList);
@@ -66,11 +66,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Tracks(string album,string artist)
+        public ActionResult Tracks(string id)
         {
             try
             {
-                var trackList = MPEServices.NetPipeMediaAccessService.GetSongsOfAlbum(album, artist, SortBy.Name, OrderBy.Asc);
+                var trackList = MPEServices.NetPipeMediaAccessService.GetMusicTracksBasicForAlbum(id, SortMusicBy.Title, OrderBy.Asc);
                 if (trackList != null)
                 {
                     return View(trackList);
@@ -83,11 +83,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Play(int track)
+        public ActionResult Play(string id)
         {
             try
             {
-                var musicTrack = MPEServices.NetPipeMediaAccessService.GetMusicTrack(track);
+                var musicTrack = MPEServices.NetPipeMediaAccessService.GetMusicTrackDetailedById(id);
                 if (musicTrack != null)
                 {
                     return View(musicTrack);
@@ -99,11 +99,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             return View("Error");
         }
-        public ActionResult Image(string album, string artist)
+        public ActionResult AlbumImage(string id)
         {
             try
             {
-                byte[] image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetAlbum(artist, album).CoverPathL);
+                byte[] image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetMusicAlbumBasicById(id).CoverPath);
                 return File(image, "image/jpg");
             }
             catch (Exception ex)

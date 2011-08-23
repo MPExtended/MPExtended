@@ -53,7 +53,7 @@ namespace MPExtended.Services.StreamingService
             else
             {
                 int id = Int32.Parse(itemId);
-                return MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.IdRecording == id).Select(r => r.FileName).FirstOrDefault();
+                return MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.Id == id).Select(r => r.FileName).FirstOrDefault();
             }
         }
 

@@ -15,6 +15,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 
         public string Id { get; set; }
         public string ArtistId { get; set; }
+        public string AlbumId { get; set; }
         public string Title { get; set; }
         public int TrackNumber { get; set; }
          public  IList<string> Path { get; set; }

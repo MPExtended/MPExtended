@@ -22,7 +22,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             _db = new MovingPicturesDB();
         }
 
-        public List<WebMovieBasic> GetAllMovies()
+        public IList<WebMovieBasic> GetAllMovies()
         {
           return  _db.GetAllMovies();
         }
@@ -48,6 +48,11 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         }
 
         public DirectoryInfo GetSourceRootDirectory()
+        {
+            throw new NotImplementedException();
+        }
+
+        IList<WebMovieBasic> IMovieLibrary.GetAllMovies()
         {
             throw new NotImplementedException();
         }

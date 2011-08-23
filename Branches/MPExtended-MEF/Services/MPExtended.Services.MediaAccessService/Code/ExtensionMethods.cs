@@ -28,10 +28,10 @@ namespace MPExtended.Services.MediaAccessService.Code
 {
     public static class WebFileInfoExtensionMethods
     {
-        public static WebPictureBasic ToWebPicture(this WebFileBasic info)
-        {
-            //return MPPictures.GetPicture(info.FullName);
-        }
+        //public static WebPictureBasic ToWebPicture(this WebFileBasic info)
+        //{
+        //    //return MPPictures.GetPicture(info.FullName);
+        //}
     }
 
     public static class IEnumerableExtensionMethods

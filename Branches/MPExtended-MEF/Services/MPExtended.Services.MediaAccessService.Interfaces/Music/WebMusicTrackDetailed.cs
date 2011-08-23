@@ -7,7 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
     public class WebMusicTrackDetailed : WebMusicTrackBasic
     {
-
+    
         public WebMusicArtistBasic Artist { get; set; }
 
     }

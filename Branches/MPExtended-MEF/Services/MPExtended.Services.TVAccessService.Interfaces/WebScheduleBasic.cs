@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-    public class WebSchedule
+    public class WebScheduleBasic
     {
         #region Properties
         public int BitRateMode { get; set; }
@@ -15,7 +15,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public DateTime EndTime { get; set; }
         public int IdChannel { get; set; }
         public int IdParentSchedule { get; set; }
-        public int IdSchedule { get; set; }
+        public int Id { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
         public DateTime KeepDate { get; set; }

@@ -122,7 +122,7 @@ namespace MPExtended.Applications.TestTools.StreamingService
                 mChannels = new List<WebChannelBasic>();
                 foreach (WebChannelGroup group in mTvClient.GetGroups())
                 {
-                    WebChannelBasic[] channels = mTvClient.GetChannelsBasic(group.IdGroup).ToArray();
+                    WebChannelBasic[] channels = mTvClient.GetChannelsBasic(group.Id).ToArray();
                     foreach (WebChannelBasic ch in channels)
                     {
                         cbChannels.Items.Add(ch.DisplayName);
@@ -170,7 +170,7 @@ namespace MPExtended.Applications.TestTools.StreamingService
             WebChannelBasic channel = mChannels[cbChannels.SelectedIndex];
             mName = channel.DisplayName;
             Log("Init Stream with channel " + channel.DisplayName);
-            bool success = mWebStreamClient.InitTVStream(channel.IdChannel, CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitTVStream(channel.Id, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
             LoadMediaInfo(mWebStreamClient.GetTVMediaInfo(mIdentifier));
         }

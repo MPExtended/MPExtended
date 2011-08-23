@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-    public class WebRecording
+    public class WebRecordingBasic
     {
         #region Properties
         public string Description { get; set; }
@@ -17,7 +17,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string FileName { get; set; }
         public string Genre { get; set; }
         public int IdChannel { get; set; }
-        public int IdRecording { get; set; }
+        public int Id { get; set; }
         public int Idschedule { get; set; }
         public int IdServer { get; set; }
         public bool IsChanged { get; set; }

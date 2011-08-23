@@ -9,7 +9,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     {
         #region Properties
         public string GroupName { get; set; }
-        public int IdGroup { get; set; }
+        public int Id { get; set; }
         public bool IsChanged { get; set; }
         public int SortOrder { get; set; }
         #endregion

@@ -78,7 +78,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                IEnumerable<WebRecording> recordings = MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.IdRecording == recordingId);
+                IEnumerable<WebRecordingBasic> recordings = MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.Id == recordingId);
                 if (recordings.Count() > 0)
                 {
                     return View(recordings.First());
@@ -151,7 +151,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult DeleteSchedule(int programId)
         {
             var program = MPEServices.NetPipeTVAccessService.GetProgramDetailedById(programId);
-            int i = MPEServices.NetPipeTVAccessService.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).ElementAt(0).IdSchedule;
+            int i = MPEServices.NetPipeTVAccessService.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).ElementAt(0).Id;
             MPEServices.NetPipeTVAccessService.DeleteSchedule(i);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }

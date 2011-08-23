@@ -61,11 +61,13 @@ namespace MPExtended.Services.MediaAccessService.Code
 
             for (int i = 0; i < count; i++)
             {
+               
                 shares.Add(new WebFolderBasic()
                 {
+                    
                     //Id = i,
                     Name = list.SelectShareNode("sharename", i),
-                    Path = list.SelectShareNode("sharepath", i),
+                    //Path = list.SelectShareNode("sharepath", i),
                     //PinCode = list.SelectShareNode("pincode", i),
 
                 });
@@ -131,11 +133,11 @@ namespace MPExtended.Services.MediaAccessService.Code
 
                 foreach (WebFolderBasic share in GetAllShares(type))
                 {
-                    if (!Directory.Exists(share.Path ))
-                        continue;
+                    //if (!Directory.Exists(share.Path ))
+                    //    continue;
 
-                    if (Utils.IsSubdir(share.Path, path))
-                        return true;
+                    //if (Utils.IsSubdir(share.Path, path))
+                    //    return true;
                 }
             }
             catch(Exception e) 

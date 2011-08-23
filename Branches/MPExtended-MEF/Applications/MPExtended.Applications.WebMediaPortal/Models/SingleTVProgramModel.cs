@@ -37,7 +37,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Title = program.Title;
             StartTime = program.StartTime;
             EndTime = program.EndTime;
-            IdProgram = program.IdProgram;
+            IdProgram = program.Id;
 
             PercentageWidth = GetPercentageWidth(program, overallStartTime, overallEndTime);
             CssClass = GetCssClass(program); 

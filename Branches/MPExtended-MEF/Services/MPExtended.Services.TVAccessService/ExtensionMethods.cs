@@ -148,7 +148,7 @@ namespace MPExtended.Services.TVAccessService
                 FreeToAir = GetFreeToAirInformation(ch),
                 GrabEpg = ch.GrabEpg,
                 GroupNames = ch.GroupNames,
-                IdChannel = ch.IdChannel,
+                Id = ch.IdChannel,
                 IsChanged = ch.IsChanged,
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,
@@ -199,7 +199,7 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelBasic
             {
                 DisplayName = ch.DisplayName,
-                IdChannel = ch.IdChannel
+                Id = ch.IdChannel
             };
         }
         public static List<WebProgramBasic> ToListWebProgramBasicNowNext(this Channel ch)
@@ -230,7 +230,7 @@ namespace MPExtended.Services.TVAccessService
             if (ch == null)
                 return null;
 
-            return Channel.Retrieve(ch.IdChannel);
+            return Channel.Retrieve(ch.Id);
         }
     }
 
@@ -244,7 +244,7 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelGroup
             {
                 GroupName = group.GroupName,
-                IdGroup = group.IdGroup,
+                Id = group.IdGroup,
                 IsChanged = group.IsChanged,
                 SortOrder = group.SortOrder
             };
@@ -255,7 +255,7 @@ namespace MPExtended.Services.TVAccessService
             if (group == null)
                 return null;
 
-            return ChannelGroup.Retrieve(group.IdGroup);
+            return ChannelGroup.Retrieve(group.Id);
         }
     }
 
@@ -278,7 +278,7 @@ namespace MPExtended.Services.TVAccessService
                 Genre = p.Genre,
                 HasConflict = p.HasConflict,
                 IdChannel = p.IdChannel,
-                IdProgram = p.IdProgram,
+                Id = p.IdProgram,
                 IsChanged = p.IsChanged,
                 IsPartialRecordingSeriesPending = p.IsPartialRecordingSeriesPending,
                 IsRecording = p.IsRecording,
@@ -309,7 +309,7 @@ namespace MPExtended.Services.TVAccessService
                 Description = p.Description,
                 EndTime = p.EndTime != DateTime.MinValue ? p.EndTime : new DateTime(2000, 1, 1),
                 IdChannel = p.IdChannel,
-                IdProgram = p.IdProgram,
+                Id = p.IdProgram,
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
                 DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
@@ -322,7 +322,7 @@ namespace MPExtended.Services.TVAccessService
             if (p == null)
                 return null;
 
-            return Program.Retrieve(p.IdProgram);
+            return Program.Retrieve(p.Id);
         }
     }
 
@@ -346,12 +346,12 @@ namespace MPExtended.Services.TVAccessService
 
     public static class WebScheduleExtensionMethods
     {
-        public static WebSchedule ToWebSchedule(this Schedule sch)
+        public static WebScheduleBasic ToWebSchedule(this Schedule sch)
         {
             if (sch == null)
                 return null;
 
-            return new WebSchedule
+            return new WebScheduleBasic
             {
                 BitRateMode = (int)sch.BitRateMode,
                 Canceled = sch.Canceled != DateTime.MinValue ? sch.Canceled : new DateTime(2000, 1, 1),
@@ -360,7 +360,7 @@ namespace MPExtended.Services.TVAccessService
                 EndTime = sch.EndTime != DateTime.MinValue ? sch.EndTime : new DateTime(2000, 1, 1),
                 IdChannel = sch.IdChannel,
                 IdParentSchedule = sch.IdParentSchedule,
-                IdSchedule = sch.IdSchedule,
+                Id = sch.IdSchedule,
                 IsChanged = sch.IsChanged,
                 IsManual = sch.IsManual,
                 KeepDate = sch.KeepDate != DateTime.MinValue ? sch.KeepDate : new DateTime(2000, 1, 1),
@@ -379,23 +379,23 @@ namespace MPExtended.Services.TVAccessService
             };
         }
 
-        public static Schedule ToSchedule(this WebSchedule sch)
+        public static Schedule ToSchedule(this WebScheduleBasic sch)
         {
             if (sch == null)
                 return null;
 
-            return Schedule.Retrieve(sch.IdSchedule);
+            return Schedule.Retrieve(sch.Id);
         }
     }
 
     public static class WebRecordingExtensionMethods
     {
-        public static WebRecording ToWebRecording(this Recording rec)
+        public static WebRecordingBasic ToWebRecording(this Recording rec)
         {
             if (rec == null)
                 return null;
 
-            return new WebRecording
+            return new WebRecordingBasic
             {
                 Description = rec.Description,
                 EndTime = rec.EndTime != DateTime.MinValue ? rec.EndTime : new DateTime(2000, 1, 1),
@@ -406,7 +406,7 @@ namespace MPExtended.Services.TVAccessService
                 FileName = rec.FileName,
                 Genre = rec.Genre,
                 IdChannel = rec.IdChannel,
-                IdRecording = rec.IdRecording,
+                Id = rec.IdRecording,
                 Idschedule = rec.Idschedule,
                 IdServer = rec.IdServer,
                 IsChanged = rec.IsChanged,
@@ -423,12 +423,12 @@ namespace MPExtended.Services.TVAccessService
             };
         }
 
-        public static Recording ToRecording(this WebRecording rec)
+        public static Recording ToRecording(this WebRecordingBasic rec)
         {
             if (rec == null)
                 return null;
 
-            return Recording.Retrieve(rec.IdRecording);
+            return Recording.Retrieve(rec.Id);
         }
     }
    
