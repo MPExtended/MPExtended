@@ -15,16 +15,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 
         public string Id { get; set; }
         public string Title { get; set; }
-        public string Genre { get; set; }
+        public IList<string> Genres { get; set; }
         public bool IsProtected { get; set; }
         public int Year { get; set; }
-        public string CoverThumbPath { get; set; }
         public string BackdropPath { get; set; }
         public string CoverPath { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> Path { get; set; }
         public float Rating { get; set; }
         public int Runtime { get; set; }
+        public IList<string> UserDefinedCategories { get; set; }
 
         public WebMediaType Type 
         {

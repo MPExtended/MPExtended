@@ -25,6 +25,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicArtistBasic GetArtistBasicById(string artistId);
         WebMusicTrackDetailed GetTrackDetailedById(string trackId);
         IEnumerable<WebGenre> GetAllGenres();
+        IEnumerable<WebCategory> GetAllCategories();
         DirectoryInfo GetSourceRootDirectory();
     }
 
@@ -35,6 +36,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
+        IEnumerable<WebCategory> GetAllCategories();
         DirectoryInfo GetSourceRootDirectory();
     }
 
@@ -48,10 +50,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId);
         IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic();
         IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
-
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
-        DirectoryInfo GetSourceRootDirectory();
         IEnumerable<WebGenre> GetAllGenres();
+        IEnumerable<WebCategory> GetAllCategories();
+        DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface IPictureLibrary
@@ -59,12 +61,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebPictureBasic> GetAllPicturesBasic();
         IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
-        IEnumerable<WebPictureCategoryBasic> GetAllPictureCategoriesBasic();  
+        IEnumerable<WebCategory> GetAllPictureCategoriesBasic();
         DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface IFileSystemProvider
-    { 
-    
+    {
+
     }
 }

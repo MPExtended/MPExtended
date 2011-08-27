@@ -27,7 +27,7 @@ namespace MPExtended.PlugIns.MAS.MPPictures
             throw new NotImplementedException();
         }
 
-        public IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic()
+        public IList<WebCategoryBasic> GetAllPictureCategoriesBasic()
         {
             throw new NotImplementedException();
         }

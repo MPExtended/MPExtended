@@ -70,7 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
-    <Compile Include="Picture\WebPictureCategoryBasic.cs" />
+    <Compile Include="Shared\WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\WebActorBasic.cs" />

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -40,7 +41,7 @@ namespace MPExtended.Services.MediaAccessService
             return source.ThenByDescending(keySelector);
         }
 
-        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> source, int index, int count) 
+        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> source, int index, int count)
         {
             return source.Skip(index).Take(count);
         }

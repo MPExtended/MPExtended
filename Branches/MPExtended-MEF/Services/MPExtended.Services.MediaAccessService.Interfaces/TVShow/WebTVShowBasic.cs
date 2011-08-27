@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
@@ -17,6 +18,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public string Genre { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
+        public IList<string> FanArtPaths { get; set; }
+        public IList<string> BannerPaths { get; set; }
+        public IList<string> PosterPaths { get; set; }
+        public IList<string> UserDefinedCategories { get; set; }
+        public IList<string> Genres { get; set; }
+
 
         public override string ToString()
         {

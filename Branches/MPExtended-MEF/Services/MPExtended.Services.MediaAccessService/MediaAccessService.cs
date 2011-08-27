@@ -134,12 +134,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMovies().Where(p => p.Genre == genre).SortMediaItemList(sort, order).ToList();
+            return ChosenMovieLibrary.GetAllMovies().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebMovieDetailed> GetMoviesDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(p => p.Genre == genre).SortMediaItemList(sort, order).ToList();
+            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebGenre> GetAllMovieGenres()
@@ -276,7 +276,7 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenPictureLibrary.GetPictureDetailed(Id);
         }
 
-        public IList<WebPictureCategoryBasic> GetAllPictureCategoriesBasic()
+        public IList<WebCategory> GetAllPictureCategoriesBasic()
         {
             return ChosenPictureLibrary.GetAllPictureCategoriesBasic().ToList();
         }
