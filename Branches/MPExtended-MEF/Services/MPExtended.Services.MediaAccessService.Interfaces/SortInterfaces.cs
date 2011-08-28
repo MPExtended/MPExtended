@@ -22,7 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IGenreSortable
     {
-        string Genre { get; set; }
+        IList<string> Genres { get; set; }
     }
 
     public interface IRatingSortable

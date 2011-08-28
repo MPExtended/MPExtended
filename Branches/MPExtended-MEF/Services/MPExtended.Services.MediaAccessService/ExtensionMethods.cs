@@ -58,7 +58,7 @@ namespace MPExtended.Services.MediaAccessService
                 case SortBy.Year:
                     return list.OrderBy(x => ((IYearSortable)x).Year, order);
                 case SortBy.Genre:
-                    return list.OrderBy(x => ((IGenreSortable)x).Genre, order);
+                    return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
                 case SortBy.Rating:
                     return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
 
