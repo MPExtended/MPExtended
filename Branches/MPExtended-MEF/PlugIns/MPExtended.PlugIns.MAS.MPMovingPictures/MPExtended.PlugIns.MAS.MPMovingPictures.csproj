@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
-      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.ServiceLib</Name>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.MASPlugin\MPExtended.Libraries.MASPlugin.csproj">
+      <Project>{19467BF5-89FA-4BA3-A4C3-3A382573A20F}</Project>
+      <Name>MPExtended.Libraries.MASPlugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
