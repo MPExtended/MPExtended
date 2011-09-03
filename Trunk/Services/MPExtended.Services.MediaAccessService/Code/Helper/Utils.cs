@@ -57,7 +57,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
                 XElement root = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
                 XElement res =
                     root.Elements("thumbpaths").First().Elements("thumb").Where(x => (string)x.Attribute("name") == name).First();
-                cachedBannerPaths[name] = (string)res.Attribute("path");
+                cachedBannerPaths[name] = Configuration.PerformFolderSubstitution((string)res.Attribute("path"));
             }
             return cachedBannerPaths[name];
         }
@@ -72,7 +72,7 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             return
                     (from el in
                         (root.Elements("thumbpaths").First().Elements("thumb"))
-                     where IsSubdir((string)el.Attribute("path"), path)
+                     where IsSubdir(Configuration.PerformFolderSubstitution((string)el.Attribute("path")), path)
                      select el).Count()
                 > 0;
         }

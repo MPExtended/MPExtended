@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <config>
-    <mpconfig>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</mpconfig>
+    <mpconfig>%ProgramData%\Team MediaPortal\MediaPortal\MediaPortal.xml</mpconfig>
   </config>
   <mpdatabases>
     <database name="videos">
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</path>
     </database>
     <database name="music">
       <!-- yes, that is correct, we place both paths here. The code automatically ignores non-existent or 0-byte files and picks the first valid one-->
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</path>
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</path>
     </database>
     <database name="pictures">
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</path>
     </database>
     <database name="tvseries">
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</path>
     </database>
     <database name="movingpictures">
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</path>
     </database>
     <database name="shares">
-      <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\FolderDatabase3.db3</path>
+      <path>%ProgramData%\Team MediaPortal\MediaPortal\database\FolderDatabase3.db3</path>
     </database>
   </mpdatabases>
   <thumbpaths>
-    <thumb name="tvseries" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners" />
-    <thumb name="music" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Music" />
-    <thumb name="videos" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Videos" />
-    <thumb name="fanart" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art" />
+    <thumb name="tvseries" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners" />
+    <thumb name="music" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music" />
+    <thumb name="videos" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Videos" />
+    <thumb name="fanart" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Fan Art" />
     
     <!-- these aren't used at the moment -->
-    <thumb name="tv" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\tv\logos" />
-    <thumb name="radio" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\radio\logos" />
-    <thumb name="pictures" path="c:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Pictures" />
-    <thumb name="movingpictures" path="C:\ProgramData\Team MediaPortal\MediaPortal\Thumbs\MovingPictures" />
+    <thumb name="tv" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\tv\logos" />
+    <thumb name="radio" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\radio\logos" />
+    <thumb name="pictures" path="%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Pictures" />
+    <thumb name="movingpictures" path="%ProgramData%\Team MediaPortal\MediaPortal\Thumbs\MovingPictures" />
   </thumbpaths>
 </appconfig>

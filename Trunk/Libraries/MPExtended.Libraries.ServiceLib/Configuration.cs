@@ -62,8 +62,8 @@ namespace MPExtended.Libraries.ServiceLib
                 var dbs = XElement.Load(GetPath("MediaAccess.xml"))
                     .Element("mpdatabases").Elements("database").Select(
                         el => new KeyValuePair<string, IEnumerable<string>>(
-                            (string)el.Attribute("name"), 
-                            el.Elements("path").Select(x => x.Value).Where(x => File.Exists(x) && new FileInfo(x).Length > 0)
+                            (string)el.Attribute("name"),
+                            el.Elements("path").Select(x => PerformFolderSubstitution(x.Value)).Where(x => File.Exists(x) && new FileInfo(x).Length > 0)
                         )
                     );
 
@@ -140,6 +140,12 @@ namespace MPExtended.Libraries.ServiceLib
                 Log.Error("Failed to set login", ex);
                 return false;
             }
+        }
+
+        public static string PerformFolderSubstitution(string input)
+        {
+            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            return input.Replace("%ProgramData%", cappdata);
         }
     }
 }
