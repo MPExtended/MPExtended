@@ -19,17 +19,17 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.MASPlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Libraries.ServiceLib.DB;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.PlugIns.MAS.MovingPictures
 {
+#if false
     internal class MovingPicturesDB : Database
     {
         public MovingPicturesDB() :
-            base(Configuration.GetMPDbLocations().MovingPictures)
+            base(Configuration.GetPluginConfiguration()["database"])
         {
         }
 
@@ -203,4 +203,5 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return null;
         }
     }
+#endif
 }

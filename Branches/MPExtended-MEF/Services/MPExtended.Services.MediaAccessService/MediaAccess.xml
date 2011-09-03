@@ -6,6 +6,9 @@
       <banner>C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
       <fanart>C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
     </plugin>
+    <plugin name="MPExtended.PlugIns.MAS.MPMovingPictures">
+      <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
+    </plugin>
   </plugins>
   
   

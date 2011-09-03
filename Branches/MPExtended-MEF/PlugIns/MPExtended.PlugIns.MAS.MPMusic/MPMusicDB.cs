@@ -15,6 +15,7 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
+#if false
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -275,3 +276,4 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         //}
     }
 }
+#endif

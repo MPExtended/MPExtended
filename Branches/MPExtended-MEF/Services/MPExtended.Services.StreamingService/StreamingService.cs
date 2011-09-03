@@ -33,7 +33,7 @@ namespace MPExtended.Services.StreamingService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
-        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings;
+        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings = new Dictionary<string, TASInterfaces.WebVirtualCard>();
         private const int API_VERSION = 2;
 
         private Streaming _stream;
