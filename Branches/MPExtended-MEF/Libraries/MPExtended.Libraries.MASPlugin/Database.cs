@@ -61,32 +61,14 @@ namespace MPExtended.Libraries.ServiceLib.DB
             return ReadRow<T>(queryString, builder, default(T), new SQLiteParameter[] { });
         }
 
-        protected int ReadInt(string queryString) {
-            return ReadRow(queryString, delegate(SQLiteDataReader reader)
-            {
-                return DatabaseHelperMethods.SafeInt32(reader, 0);
-            }, 0);
-        }
-
-        protected List<T> ReadList<T>(string queryString, FillObject<T> builder, int? start, int? end, params SQLiteParameter[] parameters)
+        protected List<T> ReadList<T>(string queryString, FillObject<T> builder, params SQLiteParameter[] parameters)
         {
             List<T> ret = new List<T>();
 
             using (Query query = new Query(DatabasePath, queryString, parameters))
             {
-                int counter = 0;
                 while (query.Reader.Read())
                 {
-                    // select from start to end
-                    if (start.HasValue && counter < start)
-                    {
-                        counter++;
-                        continue;
-                    }
-                    if (end.HasValue && counter > end) break;
-                    counter++;
-
-                    // add the item to the list
                     T item = builder(query.Reader);
                     if (item != null)
                         ret.Add(item);
@@ -96,14 +78,9 @@ namespace MPExtended.Libraries.ServiceLib.DB
             return ret;
         }
 
-        protected List<T> ReadList<T>(string queryString, FillObject<T> builder, int? start, int? end)
-        {
-            return ReadList<T>(queryString, builder, null, null, new SQLiteParameter[] { });
-        }
-
         protected List<T> ReadList<T>(string queryString, FillObject<T> builder)
         {
-            return ReadList<T>(queryString, builder, null, null, new SQLiteParameter[] { });
+            return ReadList<T>(queryString, builder, new SQLiteParameter[] { });
         }
     }
 }

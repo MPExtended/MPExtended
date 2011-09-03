@@ -16,6 +16,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Data.SQLite;
 
 namespace MPExtended.Libraries.ServiceLib.DB
@@ -38,7 +41,8 @@ namespace MPExtended.Libraries.ServiceLib.DB
 
         public Query(string databasePath, string query, SQLiteParameter[] parameters)
         {
-            db = new SQLiteConnection(DatabaseHelperMethods.SQLiteConnStr(databasePath));
+            string connectionString = "Data Source=" + databasePath + ";Read Only=True";
+            db = new SQLiteConnection(connectionString);
             db.Open();
             cmd = db.CreateCommand();
             cmd.CommandText = query;

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</ProjectGuid>
+    <ProjectGuid>{19467BF5-89FA-4BA3-A4C3-3A382573A20F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Libraries.ServiceLib</RootNamespace>
-    <AssemblyName>MPExtended.Libraries.ServiceLib</AssemblyName>
+    <RootNamespace>MPExtended.Libraries.MASPlugin</RootNamespace>
+    <AssemblyName>MPExtended.Libraries.MASPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,16 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\Logging\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Database\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,30 +51,15 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WcfUsernameValidator.cs" />
-    <Compile Include="WCFUtil.cs" />
-    <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
-    <Compile Include="MPEServices.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Services.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
-      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
-      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
-      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
-      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
-      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
-      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    <ProjectReference Include="..\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.ServiceLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

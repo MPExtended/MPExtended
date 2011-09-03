@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <config>
-    <mpconfig>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</mpconfig>
+    <mediaportal>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</mediaportal>
   </config>
-  <mpdatabases>
-    <database name="videos">
+  <databases>
+    <database name="mpvideos">
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</path>
     </database>
-    <database name="music">
+    <database name="mpmusic">
       <!-- yes, that is correct, we place both paths here. The code automatically ignores non-existent or 0-byte files and picks the first valid one-->
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</path>
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</path>
     </database>
-    <database name="pictures">
+    <database name="mppictures">
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</path>
     </database>
-    <database name="tvseries">
+    <database name="mptvseries">
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</path>
     </database>
-    <database name="movingpictures">
+    <database name="mpmovingpictures">
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</path>
     </database>
-    <database name="shares">
+    <database name="mpshares">
       <path>C:\ProgramData\Team MediaPortal\MediaPortal\database\FolderDatabase3.db3</path>
     </database>
-  </mpdatabases>
+  </databases>
   <thumbpaths>
     <thumb name="tvseries" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners" />
     <thumb name="music" path="C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Music" />
