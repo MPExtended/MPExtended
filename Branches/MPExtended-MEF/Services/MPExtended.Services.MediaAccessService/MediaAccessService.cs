@@ -74,10 +74,10 @@ namespace MPExtended.Services.MediaAccessService
             }
             try
             {
-                ChosenMovieLibrary = MovieLibraries.ElementAt(0).Value;
-                ChosenMusicLibrary = MusicLibraries.ElementAt(0).Value;
-                ChosenPictureLibrary = PictureLibraries.ElementAt(0).Value;
-                ChosenTVShowLibrary = TVShowLibraries.ElementAt(0).Value;
+                ChosenMovieLibrary = MovieLibraries.Count() > 0 ? MovieLibraries.First().Value : null;
+                ChosenMusicLibrary = MusicLibraries.Count() > 0 ? MusicLibraries.First().Value : null;
+                ChosenPictureLibrary = PictureLibraries.Count() > 0 ? PictureLibraries.First().Value : null;
+                ChosenTVShowLibrary = TVShowLibraries.Count() > 0 ? TVShowLibraries.First().Value : null;
             }                        
             catch (Exception ex)
             {
