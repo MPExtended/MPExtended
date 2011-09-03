@@ -80,8 +80,15 @@ namespace MPExtended.Services.MediaAccessService
 
         private void Compose()
         {
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MPExtended\Extensions\"));
+            AggregateCatalog catalog = new AggregateCatalog();
+#if DEBUG
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..");
+#else
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string extensionDirectory = Path.Combine(currentDirectory, "Extensions");
+            catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
+#endif
 
             var container = new CompositionContainer(catalog);
             container.ComposeParts(this);
@@ -107,6 +114,11 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         #region Movies
+        public IList<WebCategory> GetAllMovieCategories()
+        {
+            return ChosenMovieLibrary.GetAllCategories().ToList();
+        }
+
         public WebItemCount GetMovieCount()
         {
             return new WebItemCount() { Count = ChosenMovieLibrary.GetAllMovies().Count() };
@@ -120,6 +132,16 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebMovieDetailed> GetAllMoviesDetailed(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenMovieLibrary.GetAllMoviesDetailed().SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebMovieBasic> GetMoviesBasicForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMovieLibrary.GetAllMovies().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebMovieDetailed> GetMoviesDetailedForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -154,6 +176,11 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Music
+        public IList<WebCategory> GetAllMusicCategories()
+        {
+            return ChosenMusicLibrary.GetAllCategories().ToList();
+        }
+
         public WebItemCount GetMusicTrackCount()
         {
             return new WebItemCount() { Count = ChosenMusicLibrary.GetAllTracks().Count() };
@@ -191,12 +218,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllTracks().Where(p => p.Genre.Contains(genre)).SortMediaItemList(sort, order).ToList();
+            return ChosenMusicLibrary.GetAllTracks().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllTracksDetailed().Where(p => p.Genre.Contains(genre)).SortMediaItemList(sort, order).ToList();
+            return ChosenMusicLibrary.GetAllTracksDetailed().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebGenre> GetAllMusicGenres()
@@ -222,6 +249,11 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenMusicLibrary.GetAllArtists().SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebMusicArtistBasic> GetMusicArtistsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllArtists().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -258,6 +290,16 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMusicLibrary.GetAllAlbums().Where(p => p.ArtistId == id).SortMediaItemList(sort, order).ToList();
         }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
+        }
         #endregion
 
         #region Pictures
@@ -288,6 +330,16 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region TVShows
+        public IList<WebCategory> GetAllTVShowCategories()
+        {
+            return ChosenTVShowLibrary.GetAllCategories().ToList();
+        }
+
+        public IList<WebGenre> GetAllTVShowGenres()
+        {
+            return ChosenTVShowLibrary.GetAllGenres().ToList();
+        }
+
         public IList<WebTVShowBasic> GetAllTVShowsBasic(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenTVShowLibrary.GetAllTVShowsBasic().SortMediaItemList(sort, order).ToList();
@@ -296,6 +348,26 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebTVShowDetailed> GetAllTVShowsDetailed(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenTVShowLibrary.GetAllTVShowsDetailed().SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebTVShowBasic> GetTVShowsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsBasic().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebTVShowDetailed> GetTVShowsDetailedByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsDetailed().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebTVShowBasic> GetTVShowsBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsBasic().Where(x => x.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebTVShowDetailed> GetTVShowsDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllTVShowsDetailed().Where(x => x.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebTVShowBasic> GetTVShowsBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)

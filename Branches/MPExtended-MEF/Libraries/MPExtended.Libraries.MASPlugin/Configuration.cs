@@ -22,12 +22,36 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using System.Reflection;
 
 namespace MPExtended.Libraries.MASPlugin
 {
     public class Configuration
     {
+        private static Dictionary<string, Dictionary<string, string>> cachedConfig = new Dictionary<string, Dictionary<string, string>>();
+
+        public static Dictionary<string, string> GetPluginConfiguration()
+        {
+            string name = Assembly.GetCallingAssembly().FullName;
+            if (!cachedConfig.ContainsKey(name))
+            {
+                var config = XElement.Load(ServiceLib.Configuration.GetPath("MediaAccess.xml"))
+                    .Element("plugins")
+                    .Elements("plugin")
+                    .Where(p => p.Attribute("name").Value == name)
+                    .First()
+                    .Descendants()
+                    .Select(n => new KeyValuePair<string, string>(n.Name.LocalName, (string)n.Value))
+                    .ToDictionary(x => x.Key, x => x.Value);
+                cachedConfig[name] = config;
+            }
+
+            return cachedConfig[name];
+        }
+
+
         private static Dictionary<string, string> cachedConfigLocations = new Dictionary<string, string>();
+        private static Dictionary<string, string> cachedDataLocations = new Dictionary<string, string>();
         private static Dictionary<string, string> cachedDatabaseLocations = new Dictionary<string, string>();
 
         public static String GetConfigPath(string type)
@@ -45,6 +69,23 @@ namespace MPExtended.Libraries.MASPlugin
 
             return cachedConfigLocations[type];
         }
+
+        public static string GetDataLocation(string data)
+        {
+            if (!cachedDataLocations.ContainsKey(data))
+            {
+                var paths = XElement.Load(ServiceLib.Configuration.GetPath("MediaAccess.xml"))
+                    .Element("datalocations")
+                    .Elements(data);
+
+                if (paths.Count() == 0)
+                    return null;
+                cachedDataLocations[data] = paths.First().Value;
+            }
+
+            return cachedDataLocations[data];
+        }
+
 
         public static string GetDatabaseLocation(string db)
         {

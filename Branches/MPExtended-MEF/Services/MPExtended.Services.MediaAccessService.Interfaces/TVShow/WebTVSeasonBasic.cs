@@ -18,6 +18,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public int SeasonNumber { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
+        public IList<string> FanArtPaths { get; set; }
+        public IList<string> BannerPaths { get; set; }
 
         public override string ToString()
         {

@@ -40,7 +40,7 @@ namespace MPExtended.Libraries.MASPlugin
             }
         }
 
-        public static string ReadString(SQLiteDataReader reader, int idx)
+        public static string ReadString(this SQLiteDataReader reader, int idx)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace MPExtended.Libraries.MASPlugin
             }
         }
 
-        public static bool ReadBoolean(SQLiteDataReader reader, int idx)
+        public static bool ReadBoolean(this SQLiteDataReader reader, int idx)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace MPExtended.Libraries.MASPlugin
             }
         }
 
-        public static DateTime ReadDateTime(SQLiteDataReader reader, int idx)
+        public static DateTime ReadDateTime(this SQLiteDataReader reader, int idx)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace MPExtended.Libraries.MASPlugin
             }
         }
 
-        public static float ReadFloat(SQLiteDataReader reader, int idx)
+        public static float ReadFloat(this SQLiteDataReader reader, int idx)
         {
             try
             {
@@ -104,6 +104,20 @@ namespace MPExtended.Libraries.MASPlugin
             {
                 return 0;
             }
+        }
+
+        public static IList<string> ReadList(this SQLiteDataReader reader, int idx, char separator)
+        {
+            string txt = ReadString(reader, idx);
+            if (txt.Length == 0)
+                return new List<string>();
+
+            return txt.Split(separator).Where(y => y.Length > 0).ToList();
+        }
+
+        public static IList<string> ReadPipeList(this SQLiteDataReader reader, int idx)
+        {
+            return ReadList(reader, idx, '|');
         }
     }
 }

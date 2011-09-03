@@ -23,8 +23,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public DateTime DateAdded { get; set; }
         public bool Watched { get; set; }
         public float Rating { get; set; }
-        public string BannerPath { get; set; }
-        public string FanArtPath { get; set; }
+        public IList<string> FanArtPaths { get; set; }
+        public IList<string> BannerPaths { get; set; }
+        public DateTime FirstAired { get; set; }
+        public IList<string> GuestStars { get; set; }
+        public IList<string> Directors { get; set; }
+        public IList<string> Writers { get; set; }
 
         public WebMediaType Type
         {

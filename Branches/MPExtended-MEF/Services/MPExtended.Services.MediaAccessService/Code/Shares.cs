@@ -27,6 +27,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Code
 {
+    /*
     public class Shares
     {
         public enum ShareType
@@ -157,4 +158,5 @@ namespace MPExtended.Services.MediaAccessService.Code
             return false;
         }
     }
+     */
 }

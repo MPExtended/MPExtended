@@ -205,7 +205,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByGenre(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

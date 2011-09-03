@@ -15,7 +15,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 
         public string Id { get; set; }
         public string Title { get; set; }
-        public string Genre { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> FanArtPaths { get; set; }
@@ -23,7 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public IList<string> PosterPaths { get; set; }
         public IList<string> UserDefinedCategories { get; set; }
         public IList<string> Genres { get; set; }
-
+        public IList<string> Actors { get; set; }
 
         public override string ToString()
         {

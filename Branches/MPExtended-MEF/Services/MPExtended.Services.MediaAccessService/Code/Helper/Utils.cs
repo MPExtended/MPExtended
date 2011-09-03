@@ -28,6 +28,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Code.Helper
 {
+    /*
     public class Utils
     {
         private static Dictionary<string, string> cachedBannerPaths = new Dictionary<string, string>();
@@ -94,4 +95,5 @@ namespace MPExtended.Services.MediaAccessService.Code.Helper
             return false;
         }
     }
+    */
 }
