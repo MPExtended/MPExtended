@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebFolderBasic : WebMediaItem
+    public class WebFolderBasic : WebMediaItem, IDateAddedSortable
     {
         public WebFolderBasic()
         {

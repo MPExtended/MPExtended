@@ -47,12 +47,25 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         #region Shows
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()
         {
-            return GetAllTVShowsDetailed().Cast<WebTVShowBasic>();
+            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames " +
+                         "FROM online_series AS s " +
+                         "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
+                         "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
+            List<int> alreadyDone = new List<int>();
+            return ReadList<WebTVShowBasic>(
+                sql,
+                delegate(SQLiteDataReader reader)
+                {
+                    if (alreadyDone.Contains(reader.ReadInt32(0)))
+                        return null;
+                    return CreateWebTVShow<WebTVShowBasic>(reader);
+                }
+            );
         }
 
         public IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed()
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, s.PosterFileNames, s.fanart " +
+            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, s.PosterFileNames, s.fanart, s.Actors " +
                          "FROM online_series AS s " +
                          "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                          "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
@@ -63,7 +76,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 {
                     if (alreadyDone.Contains(reader.ReadInt32(0)))
                         return null;
-                    return CreateWebTVShow<WebTVShowDetailed>(reader);
+                    return CreateWebTVShowDetailed(reader);
                 }
             );
         }
@@ -78,7 +91,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVShow<WebTVShowDetailed>(reader);
+                    return CreateWebTVShowDetailed(reader);
                 },
                 new SQLiteParameter("@seriesId", seriesId)
             );
@@ -92,9 +105,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Title = !String.IsNullOrEmpty(reader.ReadString(1)) ? reader.ReadString(1) : reader.ReadString(2),
                 Genres = reader.ReadPipeList(3),
                 BannerPaths = reader.ReadPipeList(4).Select(y => CreateImagePath("banner", y)).ToList(),
-                PosterPaths = reader.ReadPipeList(5).Select(y => CreateImagePath("banner", y)).ToList(),
-                FanArtPaths = new List<string>() { CreateImagePath("fanart", reader.ReadString(6)) },
-                Actors = reader.ReadPipeList(7),
 
                 // TODO
                 DateAdded = new DateTime(1970, 1, 1),
@@ -102,12 +112,31 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 UserDefinedCategories = new List<string>(),
             };
         }
+
+        private WebTVShowDetailed CreateWebTVShowDetailed(SQLiteDataReader reader)
+        {
+            WebTVShowDetailed show = CreateWebTVShow<WebTVShowDetailed>(reader);
+            show.PosterPaths = reader.ReadPipeList(5).Select(y => CreateImagePath("banner", y)).ToList();
+            show.FanArtPaths = new List<string>() { CreateImagePath("fanart", reader.ReadString(6)) };
+            show.Actors = reader.ReadPipeList(7);
+            return show;
+        }
         #endregion
 
         #region Seasons
         public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId)
         {
-            return GetAllSeasonsDetailed(seriesId).Cast<WebTVSeasonBasic>();
+            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames " +
+                         "FROM season " +
+                         "WHERE SeriesID = @seriesId";
+            return ReadList<WebTVSeasonBasic>(
+                sql,
+                delegate(SQLiteDataReader reader)
+                {
+                    return CreateWebTVSeason<WebTVSeasonBasic>(reader);
+                },
+                new SQLiteParameter("@seriesId", seriesId)
+            );
         }
 
         public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId)
@@ -119,7 +148,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVSeason<WebTVSeasonDetailed>(reader);
+                    return CreateWebTVSeasonDetailed(reader);
                 },
                 new SQLiteParameter("@seriesId", seriesId)
             );
@@ -134,7 +163,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVSeason<WebTVSeasonDetailed>(reader);
+                    return CreateWebTVSeasonDetailed(reader);
                 },
                 new SQLiteParameter("@seriesId", seriesId),
                 new SQLiteParameter("@seasonId", seasonId)
@@ -148,31 +177,51 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Id = reader.ReadString(0),
                 SeasonNumber = reader.ReadInt32(1),
                 ShowId = reader.ReadString(2),
-                BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),
-
-                // unavailable
-                Title = String.Empty,
-                FanArtPaths = new List<string>(),
+                BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),                
 
                 // TODO
+                Title = String.Empty,
                 DateAdded = new DateTime(1970, 1, 1),
                 IsProtected = false,
             };
+        }
+
+        private WebTVSeasonDetailed CreateWebTVSeasonDetailed(SQLiteDataReader reader)
+        {
+            WebTVSeasonDetailed season = CreateWebTVSeason<WebTVSeasonDetailed>(reader);
+
+            // unavailable
+            season.FanArtPaths = new List<string>();
+
+            return season;
         }
         #endregion
 
         #region Episodes
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
-            return GetAllEpisodesDetailed().Cast<WebTVEpisodeBasic>();
+            string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename " +
+                         "FROM online_episodes e " +
+                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                         "WHERE e.Hidden = 0 " +
+                         "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                            "e.FirstAired, e.GuestStars, e.Director, e.Writer";
+            return ReadList<WebTVEpisodeBasic>(
+                sql,
+                delegate(SQLiteDataReader reader)
+                {
+                    return CreateWebTVEpisode<WebTVEpisodeBasic>(reader);
+                }
+            );
         }
 
         public IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed()
         {
             string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, e.GuestStars, e.Director, e.Writer, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename " +
+                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, e.GuestStars, e.Director, e.Writer " +
                          "FROM online_episodes e " +
-                         "INNER JOIN local_episodes l ON e.ComposieID = l.CompositeID " +
+                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
                          "WHERE e.Hidden = 0 " +
                          "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                             "e.FirstAired, e.GuestStars, e.Director, e.Writer";
@@ -180,7 +229,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVEpisode<WebTVEpisodeDetailed>(reader);
+                    return CreateWebTVEpisodeDetailed(reader);
                 }
             );
         }
@@ -188,9 +237,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         public WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId)
         {
             string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, e.GuestStars, e.Director, e.Writer, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename " +
+                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, e.GuestStars, e.Director, e.Writer " +
                          "FROM online_episodes e " +
-                         "INNER JOIN local_episodes l ON e.ComposieID = l.CompositeID " +
+                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
                          "WHERE e.Hidden = 0 AND e.EpisodeID = @episodeId " +
                          "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                             "e.FirstAired, e.GuestStars, e.Director, e.Writer";
@@ -198,7 +247,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVEpisode<WebTVEpisodeDetailed>(reader);
+                    return CreateWebTVEpisodeDetailed(reader);
                 },
                 new SQLiteParameter("@episodeId", episodeId)
             );
@@ -217,18 +266,27 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Rating = reader.ReadFloat(6),
                 BannerPaths = new List<string>() { CreateImagePath("banner", reader.ReadString(7)) },
                 FirstAired = reader.ReadDateTime(8),
-                GuestStars = reader.ReadPipeList(9),
-                Directors = reader.ReadPipeList(10),
-                Writers = reader.ReadPipeList(11),
-                Path = reader.ReadPipeList(12),
-                
-                // unavailable
-                FanArtPaths = new List<string>(),
+                Path = reader.ReadPipeList(9),
+
 
                 // TODO
                 DateAdded = new DateTime(1970, 1, 1),
                 IsProtected = false,
             };
+        }
+
+        private WebTVEpisodeDetailed CreateWebTVEpisodeDetailed(SQLiteDataReader reader)
+        {
+            WebTVEpisodeDetailed ep = CreateWebTVEpisode<WebTVEpisodeDetailed>(reader);
+
+            ep.GuestStars = reader.ReadPipeList(10);
+            ep.Directors = reader.ReadPipeList(11);
+            ep.Writers = reader.ReadPipeList(12);
+                
+            // unavailable
+            ep.FanArtPaths = new List<string>();           
+
+            return ep;
         }
         #endregion
 

@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVShowBasic : ITitleSortable, IGenreSortable
+    public class WebTVShowBasic : ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable
     {
         public WebTVShowBasic()
         {
@@ -17,12 +17,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public string Title { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> FanArtPaths { get; set; }
+        public int Year { get; set; }
         public IList<string> BannerPaths { get; set; }
-        public IList<string> PosterPaths { get; set; }
         public IList<string> UserDefinedCategories { get; set; }
         public IList<string> Genres { get; set; }
-        public IList<string> Actors { get; set; }
 
         public override string ToString()
         {

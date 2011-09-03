@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-    public class WebPictureDetailed : WebPictureBasic
+    public class WebPictureDetailed : WebPictureBasic, IRatingSortable
     {     
         public string Subject { get; set; }
         public string Comment { get; set; }
@@ -17,6 +17,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         public string Width { get; set; }
         public string Dpi { get; set; }
         public string Author { get; set; }
-        public string Rating { get; set; }
+        public float Rating { get; set; }
     }
 }

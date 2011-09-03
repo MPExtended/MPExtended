@@ -58,15 +58,17 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Rating = 4,
         [EnumMember]
-        MusicTrackNumber = 5,
+        UserDefinedCategories = 5,
         [EnumMember]
-        MusicComposer = 6,
+        MusicTrackNumber = 6,
         [EnumMember]
-        TVEpisodeNumber = 7,
+        MusicComposer = 7,
         [EnumMember]
-        TVSeasonNumber = 8,
+        TVEpisodeNumber = 8,
         [EnumMember]
-        PictureDateTaken = 9
+        TVSeasonNumber = 9,
+        [EnumMember]
+        PictureDateTaken = 10
     }
     #endregion
 

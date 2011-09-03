@@ -30,6 +30,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         float Rating { get; set; }
     }
 
+    public interface ICategorySortable
+    {
+        IList<string> UserDefinedCategories { get; set; }
+    }
+
     public interface IMusicTrackNumberSortable 
     {
         int TrackNumber { get; set; }

@@ -67,10 +67,10 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 Compose();
-                ChosenMovieLibrary = MovieLibraries.ElementAt(0).Value;
-                ChosenMusicLibrary = MusicLibraries.ElementAt(0).Value;
-                ChosenPictureLibrary = PictureLibraries.ElementAt(0).Value;
-                ChosenTVShowLibrary = TVShowLibraries.ElementAt(0).Value;
+                ChosenMovieLibrary = MovieLibraries.Count() > 0 ? MovieLibraries.First().Value : null;
+                ChosenMusicLibrary = MusicLibraries.Count() > 0 ? MusicLibraries.First().Value : null;
+                ChosenPictureLibrary = PictureLibraries.Count() > 0 ? PictureLibraries.First().Value : null;
+                ChosenTVShowLibrary = TVShowLibraries.Count() > 0 ? TVShowLibraries.First().Value : null;
             }
             catch (Exception ex)
             {
@@ -83,7 +83,12 @@ namespace MPExtended.Services.MediaAccessService
             AggregateCatalog catalog = new AggregateCatalog();
 #if DEBUG
             string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..");
+            string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..", "PlugIns");
+            foreach (string pdir in Directory.GetDirectories(pluginRoot))
+            {
+                string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
+                catalog.Catalogs.Add(new DirectoryCatalog(dir));
+            }
 #else
             string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string extensionDirectory = Path.Combine(currentDirectory, "Extensions");
@@ -102,6 +107,11 @@ namespace MPExtended.Services.MediaAccessService
                 AvailableMusicProvider = MusicLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
                 AvailablePictureProvider = PictureLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
                 AvailableTvShowProvider = TVShowLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
+
+                SupportsMovies = ChosenMovieLibrary != null,
+                SupportsMusic = ChosenMusicLibrary != null,
+                SupportsPictures = ChosenPictureLibrary != null,
+                SupportsTvShows = ChosenTVShowLibrary != null,
 
                 MovieApiVersion = MOVIE_API,
                 MusicApiVersion = MUSIC_API,

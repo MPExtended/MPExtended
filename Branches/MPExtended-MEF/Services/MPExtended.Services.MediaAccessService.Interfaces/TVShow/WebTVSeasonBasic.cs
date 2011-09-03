@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVSeasonBasic : ITitleSortable
+    public class WebTVSeasonBasic : ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
     {
         public WebTVSeasonBasic()
         {
@@ -17,8 +17,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public string ShowId { get; set; }
         public int SeasonNumber { get; set; }
         public bool IsProtected { get; set; }
+        public int Year { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> FanArtPaths { get; set; }
         public IList<string> BannerPaths { get; set; }
 
         public override string ToString()

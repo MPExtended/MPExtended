@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.MASPlugin
 
         public static Dictionary<string, string> GetPluginConfiguration()
         {
-            string name = Assembly.GetCallingAssembly().FullName;
+            string name = Assembly.GetCallingAssembly().GetName().Name;
             if (!cachedConfig.ContainsKey(name))
             {
                 var config = XElement.Load(ServiceLib.Configuration.GetPath("MediaAccess.xml"))
@@ -49,7 +49,7 @@ namespace MPExtended.Libraries.MASPlugin
             return cachedConfig[name];
         }
 
-
+        // everything below this is obsolete
         private static Dictionary<string, string> cachedConfigLocations = new Dictionary<string, string>();
         private static Dictionary<string, string> cachedDataLocations = new Dictionary<string, string>();
         private static Dictionary<string, string> cachedDatabaseLocations = new Dictionary<string, string>();
