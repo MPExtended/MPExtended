@@ -162,9 +162,9 @@ namespace MPExtended.Services.MediaAccessService.Code
             return ret.Select(kp => new WebMusicAlbum() { 
                 AlbumArtists = kp.Value.AlbumArtists.Distinct().ToArray(),
                 Artists = kp.Value.Artists.Distinct().ToArray(),
-                CoverPathL = GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title),
+                CoverPathL = kp.Value.AlbumArtists.Length > 0 ? GetLargeAlbumCover(kp.Value.AlbumArtists.Distinct().First(), kp.Value.Title) : String.Empty,
                 Genre = kp.Value.Genre,
-                ShortedAlbumArtist = kp.Value.AlbumArtists.First(),
+                ShortedAlbumArtist = kp.Value.AlbumArtists.Length > 0 ? kp.Value.AlbumArtists.First() : String.Empty,
                 Title = kp.Value.Title,
                 Year = kp.Value.Year
             }).ToList();
