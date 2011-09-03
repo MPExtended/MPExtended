@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using System.Xml.Linq;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code;
 using MPExtended.Services.MediaAccessService.Code.Helper;
@@ -42,6 +43,7 @@ namespace MPExtended.Services.MediaAccessService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class MediaAccessService : IMediaAccessService
     {
+        #region Service
         private const int MOVIE_API = 3;
         private const int MUSIC_API = 3;
         private const int PICTURES_API = 3;
@@ -64,47 +66,66 @@ namespace MPExtended.Services.MediaAccessService
 
         public MediaAccessService()
         {
+            if (!Compose())
+            {
+                return;
+            }
+
             try
             {
-                Compose();
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to create MEF service", ex);
-            }
-            try
-            {
-                ChosenMovieLibrary = MovieLibraries.Count() > 0 ? MovieLibraries.First().Value : null;
-                ChosenMusicLibrary = MusicLibraries.Count() > 0 ? MusicLibraries.First().Value : null;
-                ChosenPictureLibrary = PictureLibraries.Count() > 0 ? PictureLibraries.First().Value : null;
-                ChosenTVShowLibrary = TVShowLibraries.Count() > 0 ? TVShowLibraries.First().Value : null;
+                var config = XElement.Load(Configuration.GetPath("MediaAccess.xml")).Element("plugins");
+                ChosenMovieLibrary = SelectLibrary<IMovieLibrary>(config, "movie", MovieLibraries);
+                ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(config, "music", MusicLibraries);
+                ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, "picture", PictureLibraries);
+                ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, "tvShow", TVShowLibraries);
             }                        
             catch (Exception ex)
             {
-                Log.Error("Can't find backends for all interfaces", ex);
+                Log.Error("Failed to create backends", ex);
             }
 
         }
 
-        private void Compose()
+        private T SelectLibrary<T>(XElement config, string type, Lazy<T, IDictionary<string, object>>[] libraries)
         {
-            AggregateCatalog catalog = new AggregateCatalog();
-#if DEBUG
-            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..", "PlugIns");
-            foreach (string pdir in Directory.GetDirectories(pluginRoot))
+            var configured = config.Elements(type).Where(x => x.Value.Length > 0);
+
+            if (configured.Count() == 0)
+                return default(T);
+
+            string configuredName = configured.First().Value;
+            return libraries.Where(x => (string)x.Metadata["Database"] == configuredName).First().Value;
+        }
+
+        private bool Compose()
+        {
+            try
             {
-                string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-                catalog.Catalogs.Add(new DirectoryCatalog(dir));
-            }
+                AggregateCatalog catalog = new AggregateCatalog();
+#if DEBUG
+                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..", "PlugIns");
+                foreach (string pdir in Directory.GetDirectories(pluginRoot))
+                {
+                    string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
+                    catalog.Catalogs.Add(new DirectoryCatalog(dir));
+                }
 #else
-            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string extensionDirectory = Path.Combine(currentDirectory, "Extensions");
-            catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
+                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string extensionDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "Extensions"));
+                catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
 #endif
 
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
+                CompositionContainer container = new CompositionContainer(catalog);
+                container.ComposeParts(this);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to create MEF service", ex);
+                return false;
+            }
         }
 
         public WebServiceDescription GetServiceDescription()
@@ -130,6 +151,7 @@ namespace MPExtended.Services.MediaAccessService
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
             };
         }
+        #endregion
 
         #region Movies
         public IList<WebCategory> GetAllMovieCategories()
@@ -475,72 +497,6 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         public string GetPath(WebMediaType type, string id)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IList<WebMovieBasic> GetMoviesBasicForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebMovieDetailed> GetMoviesDetailedForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebCategory> GetAllMovieCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebCategory> GetAllMusicCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByGenre(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebMusicArtistBasic> GetMusicArtistsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVShowBasic> GetTVShowsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVShowDetailed> GetTVShowsDetailedByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVShowBasic> GetTVShowsBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebTVShowDetailed> GetTVShowsDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebCategory> GetAllTVShowCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebGenre> GetAllTVShowGenres()
         {
             throw new NotImplementedException();
         }

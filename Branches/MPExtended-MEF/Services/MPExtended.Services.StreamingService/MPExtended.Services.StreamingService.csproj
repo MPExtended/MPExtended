@@ -55,6 +55,9 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="..\..\MPEServices.cs">
+      <Link>Code\MPEServices.cs</Link>
+    </Compile>
     <Compile Include="Code\ConvertExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\Pipeline.cs" />

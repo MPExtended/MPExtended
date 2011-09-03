@@ -36,7 +36,7 @@ namespace MPExtended.Libraries.MASPlugin
             if (!cachedConfig.ContainsKey(name))
             {
                 var config = XElement.Load(ServiceLib.Configuration.GetPath("MediaAccess.xml"))
-                    .Element("plugins")
+                    .Element("pluginConfiguration")
                     .Elements("plugin")
                     .Where(p => p.Attribute("name").Value == name)
                     .First()

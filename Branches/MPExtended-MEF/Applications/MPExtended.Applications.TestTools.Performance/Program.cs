@@ -28,28 +28,31 @@ namespace MPExtended.Applications.TestTools.Performance
     {
         static void Main(string[] args)
         {
-
+            /*
             Console.WriteLine("MPExtended performance test tool");
-                        Console.WriteLine("");
-                        Console.WriteLine("First Test");
-                        Console.WriteLine("GetItemCount based on .Net");
-                        try
-                        {
-                            MPEServices.NetPipeMediaAccessService.GetAllVideos();
-                        }
-                        catch (Exception ex)
-                        { }
-                        Stopwatch watch = new Stopwatch();
-                        watch.Start();
-                        Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMovieCount());
-                        watch.Stop();
-                        Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
-                        Console.WriteLine("GetItemCount based on SQL");
-                        watch.Start();
-                        Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMusicTracksCount());
-                        watch.Stop();
-                        Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
-                        Console.Read();
+            Console.WriteLine("");
+            Console.WriteLine("First Test");
+            Console.WriteLine("GetItemCount based on .Net");
+            try
+            {
+                MPEServices.NetPipeMediaAccessService.GetAllVideos();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMovieCount());
+            watch.Stop();
+            Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
+            Console.WriteLine("GetItemCount based on SQL");
+            watch.Start();
+            Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMusicTracksCount());
+            watch.Stop();
+            Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
+            Console.Read();
+            */
         }
     }
 }

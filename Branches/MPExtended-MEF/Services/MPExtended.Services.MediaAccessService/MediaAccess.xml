@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <plugins>
+    <tvShow>MPTVSeries</tvShow>
+    <!--
+    <movie>MovingPictures</movie>
+    <music>MPMyMusic</music>
+    <picture>MPPictures</picture>
+    -->
+  </plugins>
+  
+  <pluginConfiguration>
     <plugin name="MPExtended.PlugIns.MAS.MPTVSeries">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
       <banner>C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
@@ -9,9 +18,19 @@
     <plugin name="MPExtended.PlugIns.MAS.MPMovingPictures">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
     </plugin>
-  </plugins>
+    <plugin name="MPExtended.PlugIns.MAS.MPMusic">
+      <preferedDatabase>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</preferedDatabase>
+      <alternateDatabase>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</alternateDatabase>
+    </plugin>
+    <plugin name="MPExtended.PlugIns.MAS.MPPictures">
+      <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</database>
+    </plugin>
+    <plugin name="MPExtended.PlugIns.MAS.MPVideos">
+      <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+    </plugin>
+  </pluginConfiguration>
   
-  
+  <!-- everything below is obsolete -->
   <config>
     <mediaportal>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</mediaportal>
   </config>

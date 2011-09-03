@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -28,9 +29,10 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
-using System.Diagnostics;
+using MPExtended.Services.TVAccessService.Interfaces;
+using WSSMediaType = MPExtended.Services.StreamingService.Interfaces.WebMediaType;
 
 namespace MPExtended.Applications.TestTools.StreamingService
 {
@@ -45,9 +47,9 @@ namespace MPExtended.Applications.TestTools.StreamingService
         private IWebStreamingService mWebStreamClient;
         private IStreamingService mStreamClient;
 
-        private List<WebMovie> mMovies;
-        private List<WebChannelBasic> mChannels;
-        private List<WebTranscoderProfile> mProfiles;
+        private IList<WebMovieDetailed> mMovies;
+        private IList<WebChannelBasic> mChannels;
+        private IList<WebTranscoderProfile> mProfiles;
         private string mIdentifier;
         private string mName;
         private Thread mDlThread;
@@ -85,34 +87,17 @@ namespace MPExtended.Applications.TestTools.StreamingService
             try
             {
                 cbMovies.Items.Clear();
-                mMovies = new List<WebMovie>();
-                int count = mServiceClient.GetMovieCount();
-                int done = 0;
-                while (done < count)
+                mMovies = mServiceClient.GetAllMoviesDetailed();
+                foreach (WebMovieDetailed movie in mMovies)
                 {
-                    int startIndex = done;
-                    int endIndex = done + 50;
-
-                    if (endIndex >= count)
-                    {
-                        endIndex = count - 1;
-                    }
-
-                    WebMovie[] movies = mServiceClient.GetMovies(startIndex, endIndex, SortBy.Name, OrderBy.Asc).ToArray();
-
-                    foreach (WebMovie m in movies)
-                    {
-                        cbMovies.Items.Add(m.Title);
-                        mMovies.Add(m);
-                    }
-                    done += 50;
+                    cbMovies.Items.Add(movie.Title);
                 }
 
                 Log("Loaded movies");
             }
             catch (Exception)
             {
-                Log("Failed to connect to GMA");
+                Log("Failed to connect to MAS");
             }
 
             // load chanels
@@ -156,12 +141,12 @@ namespace MPExtended.Applications.TestTools.StreamingService
         private void cmdInitMovie_Click(object sender, EventArgs e)
         {
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
-            WebMovie movie = mMovies[cbMovies.SelectedIndex];
+            WebMovieDetailed movie = mMovies[cbMovies.SelectedIndex];
             mName = movie.Title;
             Log("Init Stream with movie " + movie.Title);
-            bool success = mWebStreamClient.InitStream(WebMediaType.MovieItem, movie.Id.ToString(), CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream(WSSMediaType.Movie, movie.Id.ToString(), CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebMediaType.MovieItem, movie.Id.ToString()));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WSSMediaType.Movie, movie.Id.ToString()));
         }
 
         private void cmdInitChannel_Click(object sender, EventArgs e)
@@ -180,9 +165,9 @@ namespace MPExtended.Applications.TestTools.StreamingService
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
             mName = new FileInfo(txtFileName.Text).Name;
             Log("Init Stream with file " + txtFileName.Text);
-            bool success = mWebStreamClient.InitStream(WebMediaType.VideoShareItem, txtFileName.Text, CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream(WSSMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebMediaType.VideoDatabaseItem, txtFileName.Text));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WSSMediaType.File, txtFileName.Text));
         }
 
         private void LoadMediaInfo(WebMediaInfo info)

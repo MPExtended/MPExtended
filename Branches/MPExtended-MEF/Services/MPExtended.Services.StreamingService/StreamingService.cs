@@ -46,7 +46,7 @@ namespace MPExtended.Services.StreamingService
 
         private string ResolvePath(WebMediaType type, string itemId)
         {
-            if (type != WebMediaType.RecordingItem)
+            if (type != WebMediaType.Recording)
             {
                 return MPEServices.NetPipeMediaAccessService.GetPath((MASInterfaces.WebMediaType)type, itemId);
             }

@@ -9,25 +9,21 @@ namespace MPExtended.Services.StreamingService.Interfaces
     [DataContract]
     public enum WebMediaType
     {
-        // see MPExtended.Services.MediaAccessService.Interface.MediaItemType
+        // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType
+        // TODO: maybe change name?
         [EnumMember]
-        VideoShareItem = 0,
+        Recording = -1,
         [EnumMember]
-        VideoDatabaseItem = 1,
+        Movie = 0,
         [EnumMember]
-        TvSeriesItem = 2,
+        Music = 1,
         [EnumMember]
-        MovieItem = 3,
+        Picture = 2,
         [EnumMember]
-        MusicTrackItem = 4,
+        TVShow = 3,
         [EnumMember]
-        MusicShareItem = 5,
+        File = 4,
         [EnumMember]
-        PictureShareItem = 6,
-        [EnumMember]
-        ImageItem = 7,
-
-        [EnumMember]
-        RecordingItem = 32 // TODO: what value to use here?
+        Folder = 5
     }
 }

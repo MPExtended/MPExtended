@@ -16,15 +16,12 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ServiceModel;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using System.ServiceModel;
 
-namespace MPExtended.Libraries.ServiceLib
+namespace MPExtended
 {
     public static class MPEServices
     {
@@ -89,7 +86,6 @@ namespace MPExtended.Libraries.ServiceLib
             }
         }
 
-
         public static IWebStreamingService NetPipeWebStreamService
         {
             get
@@ -103,7 +99,6 @@ namespace MPExtended.Libraries.ServiceLib
             }
         }
 
-
         public static IStreamingService NetPipeStreams
         {
             get
@@ -116,7 +111,6 @@ namespace MPExtended.Libraries.ServiceLib
                 return _streamService;
             }
         }
-
 
         public static bool HasStreamConnection
         {

@@ -68,7 +68,6 @@
     <Compile Include="WcfUsernameValidator.cs" />
     <Compile Include="WCFUtil.cs" />
     <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
-    <Compile Include="MPEServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Services.xml">
