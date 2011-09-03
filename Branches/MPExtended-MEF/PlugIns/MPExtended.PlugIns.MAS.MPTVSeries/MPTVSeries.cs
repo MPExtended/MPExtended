@@ -47,7 +47,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         #region Shows
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames " +
+            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year " +
                          "FROM online_series AS s " +
                          "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                          "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
@@ -65,7 +65,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed()
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, s.PosterFileNames, s.fanart, s.Actors " +
+            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
+                            "s.PosterFileNames, s.fanart, s.Actors " +
                          "FROM online_series AS s " +
                          "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                          "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
@@ -83,7 +84,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public WebTVShowDetailed GetTVShowDetailed(string seriesId)
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, s.PosterFileNames, s.fanart, s.Actors " +
+            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
+                            "s.PosterFileNames, s.fanart, s.Actors " +
                          "FROM online_series AS s " +
                          "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                          "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND s.ID = @seriesId";
@@ -105,6 +107,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Title = !String.IsNullOrEmpty(reader.ReadString(1)) ? reader.ReadString(1) : reader.ReadString(2),
                 Genres = reader.ReadPipeList(3),
                 BannerPaths = reader.ReadPipeList(4).Select(y => CreateImagePath("banner", y)).ToList(),
+                Year = Int32.Parse(reader.ReadString(5)),
 
                 // TODO
                 DateAdded = new DateTime(1970, 1, 1),
@@ -116,9 +119,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private WebTVShowDetailed CreateWebTVShowDetailed(SQLiteDataReader reader)
         {
             WebTVShowDetailed show = CreateWebTVShow<WebTVShowDetailed>(reader);
-            show.PosterPaths = reader.ReadPipeList(5).Select(y => CreateImagePath("banner", y)).ToList();
-            show.FanArtPaths = new List<string>() { CreateImagePath("fanart", reader.ReadString(6)) };
-            show.Actors = reader.ReadPipeList(7);
+            show.PosterPaths = reader.ReadPipeList(6).Select(y => CreateImagePath("banner", y)).ToList();
+            show.FanArtPaths = new List<string>() { CreateImagePath("fanart", reader.ReadString(7)) };
+            show.Actors = reader.ReadPipeList(8);
             return show;
         }
         #endregion
@@ -126,9 +129,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         #region Seasons
         public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames " +
-                         "FROM season " +
-                         "WHERE SeriesID = @seriesId";
+            string sql = "SELECT DISTINCT s.ID, s.SeasonIndex, s.SeriesID, s.BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
+                         "FROM season s " +
+                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
+                         "WHERE s.SeriesID = @seriesId";
             return ReadList<WebTVSeasonBasic>(
                 sql,
                 delegate(SQLiteDataReader reader)
@@ -141,8 +145,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames " +
+            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
                          "FROM season " +
+                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
                          "WHERE SeriesID = @seriesId";
             return ReadList<WebTVSeasonDetailed>(
                 sql,
@@ -156,8 +161,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames " +
+            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
                          "FROM season " +
+                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
                          "WHERE SeriesID = @seriesId AND ID = @seasonId";
             return ReadRow<WebTVSeasonDetailed>(
                 sql,
@@ -177,7 +183,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Id = reader.ReadString(0),
                 SeasonNumber = reader.ReadInt32(1),
                 ShowId = reader.ReadString(2),
-                BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),                
+                BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),
+                Year = Int32.Parse(reader.ReadString(4)), // strftime returns an string
 
                 // TODO
                 Title = String.Empty,
