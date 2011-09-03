@@ -67,15 +67,23 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 Compose();
-                ChosenMovieLibrary = MovieLibraries.Count() > 0 ? MovieLibraries.First().Value : null;
-                ChosenMusicLibrary = MusicLibraries.Count() > 0 ? MusicLibraries.First().Value : null;
-                ChosenPictureLibrary = PictureLibraries.Count() > 0 ? PictureLibraries.First().Value : null;
-                ChosenTVShowLibrary = TVShowLibraries.Count() > 0 ? TVShowLibraries.First().Value : null;
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to create MEF service", ex);
             }
+            try
+            {
+                ChosenMovieLibrary = MovieLibraries.ElementAt(0).Value;
+                ChosenMusicLibrary = MusicLibraries.ElementAt(0).Value;
+                ChosenPictureLibrary = PictureLibraries.ElementAt(0).Value;
+                ChosenTVShowLibrary = TVShowLibraries.ElementAt(0).Value;
+            }                        
+            catch (Exception ex)
+            {
+                Log.Error("Can't find backends for all interfaces", ex);
+            }
+
         }
 
         private void Compose()
@@ -467,6 +475,72 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         public string GetPath(WebMediaType type, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IList<WebMovieBasic> GetMoviesBasicForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMovieDetailed> GetMoviesDetailedForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebCategory> GetAllMovieCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebCategory> GetAllMusicCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByGenre(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebMusicArtistBasic> GetMusicArtistsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebTVShowBasic> GetTVShowsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebTVShowDetailed> GetTVShowsDetailedByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebTVShowBasic> GetTVShowsBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebTVShowDetailed> GetTVShowsDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebCategory> GetAllTVShowCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<WebGenre> GetAllTVShowGenres()
         {
             throw new NotImplementedException();
         }
