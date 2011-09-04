@@ -30,6 +30,14 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [ExportMetadata("Database", "MPMyVideo")]
     public class MPVideos : IMovieLibrary
     {
+        private IPluginData data;
+
+        [ImportingConstructor]
+        public MPVideos(IPluginData data)
+        {
+            this.data = data;
+        }
+
         public IEnumerable<WebMovieBasic> GetAllMovies()
         {
             throw new NotImplementedException();

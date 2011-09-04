@@ -30,6 +30,14 @@ namespace MPExtended.PlugIns.MAS.MPPictures
     [ExportMetadata("Database", "MPPictures")]
     public class MPPictures : IPictureLibrary
     {
+        private IPluginData data;
+
+        [ImportingConstructor]
+        public MPPictures(IPluginData data)
+        {
+            this.data = data;
+        }
+
         public IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
             throw new NotImplementedException();

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
-using System.IO;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -68,5 +68,33 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface IFileSystemProvider
     {
 
+    }
+
+    public interface ILogger
+    {
+        void Trace(String _msg);
+        void Trace(String _msg, Exception ex);
+        void Trace(String _msg, params object[] args);
+        void Debug(String _msg);
+        void Debug(String _msg, Exception ex);
+        void Debug(String _msg, params object[] args);
+        void Info(String _msg);
+        void Info(String _msg, Exception ex);
+        void Info(String _msg, params object[] args);
+        void Warn(String _msg);
+        void Warn(String _msg, Exception ex);
+        void Warn(String _msg, params object[] args);
+        void Error(String _msg);
+        void Error(String _msg, Exception ex);
+        void Error(String _msg, params object[] arg);
+        void Fatal(String _msg);
+        void Fatal(String _msg, Exception ex);
+        void Fatal(String _msg, params object[] args);
+    }
+
+    public interface IPluginData
+    {
+        Dictionary<string, string> Configuration { get; }
+        ILogger Log { get; }
     }
 }

@@ -30,6 +30,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
     [ExportMetadata("Database", "MovingPictures")]
     public class MPMovingPictures : IMovieLibrary
     {
+        private IPluginData data;
+
+        [ImportingConstructor]
+        public MPMovingPictures(IPluginData data)
+        {
+            this.data = data;
+        }
+
         public IEnumerable<WebMovieBasic> GetAllMovies()
         {
             throw new NotImplementedException();

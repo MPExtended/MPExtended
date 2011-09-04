@@ -141,7 +141,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPTV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.XBMCMusic", "PlugIns\MPExtended.PlugIns.MAS.XBMCMusic\MPExtended.PlugIns.MAS.XBMCMusic.csproj", "{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.MASPlugin", "Libraries\MPExtended.Libraries.MASPlugin\MPExtended.Libraries.MASPlugin.csproj", "{19467BF5-89FA-4BA3-A4C3-3A382573A20F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.SQLitePlugin", "Libraries\MPExtended.Libraries.SQLitePlugin\MPExtended.Libraries.SQLitePlugin.csproj", "{19467BF5-89FA-4BA3-A4C3-3A382573A20F}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -253,10 +253,10 @@ Global
 		SccProjectTopLevelParentUniqueName26 = MPExtended.sln
 		SccProjectName26 = PlugIns/MPExtended.PlugIns.MAS.XBMCMusic
 		SccLocalPath26 = PlugIns\\MPExtended.PlugIns.MAS.XBMCMusic
-		SccProjectUniqueName27 = Libraries\\MPExtended.Libraries.MASPlugin\\MPExtended.Libraries.MASPlugin.csproj
+		SccProjectUniqueName27 = Libraries\\MPExtended.Libraries.SQLitePlugin\\MPExtended.Libraries.SQLitePlugin.csproj
 		SccProjectTopLevelParentUniqueName27 = MPExtended.sln
-		SccProjectName27 = Libraries/MPExtended.Libraries.MASPlugin
-		SccLocalPath27 = Libraries\\MPExtended.Libraries.MASPlugin
+		SccProjectName27 = Libraries/MPExtended.Libraries.SQLitePlugin
+		SccLocalPath27 = Libraries\\MPExtended.Libraries.SQLitePlugin
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

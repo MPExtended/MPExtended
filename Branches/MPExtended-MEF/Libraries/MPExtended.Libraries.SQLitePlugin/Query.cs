@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 
-namespace MPExtended.Libraries.MASPlugin
+namespace MPExtended.Libraries.SQLitePlugin
 {
     public class Query : IDisposable
     {

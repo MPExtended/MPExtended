@@ -16,13 +16,13 @@
 #endregion
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using MPExtended.Libraries.MASPlugin;
+using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -33,14 +33,17 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [ExportMetadata("Database", "MPTVSeries")]
     public class MPTVSeries : Database, ITVShowLibrary
     {
-        public MPTVSeries() :
-            base(Configuration.GetPluginConfiguration()["database"])
+        private IPluginData data;
+
+        [ImportingConstructor]
+        public MPTVSeries(IPluginData data) : base(data.Configuration["database"])
         {
+            this.data = data;
         }
 
         private string CreateImagePath(string type, string dbPath)
         {
-            string rootDir = Configuration.GetPluginConfiguration()[type];
+            string rootDir = data.Configuration[type];
             return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
         }
 

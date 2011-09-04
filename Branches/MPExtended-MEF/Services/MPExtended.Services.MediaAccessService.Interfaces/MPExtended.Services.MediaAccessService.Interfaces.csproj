@@ -61,7 +61,7 @@
     <Compile Include="FileSystem\WebFileBasic.cs" />
     <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
-    <Compile Include="MediaInterfaces.cs" />
+    <Compile Include="PluginInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
     <Compile Include="Music\WebMusicAlbumBasic.cs" />

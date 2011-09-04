@@ -18,7 +18,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace MPExtended.Libraries.MASPlugin
+namespace MPExtended.Libraries.SQLitePlugin
 {
     public abstract class Database
     {

@@ -74,7 +74,9 @@
     <Compile Include="Code\Shares.cs" />
     <Compile Include="Code\Helper\Utils.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="LogProxy.cs" />
     <Compile Include="MediaAccessService.cs" />
+    <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

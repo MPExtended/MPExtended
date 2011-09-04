@@ -94,7 +94,12 @@ namespace MPExtended.Services.MediaAccessService
                 return default(T);
 
             string configuredName = configured.First().Value;
-            return libraries.Where(x => (string)x.Metadata["Database"] == configuredName).First().Value;
+
+            var list = libraries.Where(x => (string)x.Metadata["Database"] == configuredName);
+            if (list.Count() == 0)
+                return default(T);
+
+            return list.First().Value;
         }
 
         private bool Compose()
@@ -102,6 +107,7 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 AggregateCatalog catalog = new AggregateCatalog();
+                catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
 #if DEBUG
                 string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..", "PlugIns");
@@ -117,6 +123,7 @@ namespace MPExtended.Services.MediaAccessService
 #endif
 
                 CompositionContainer container = new CompositionContainer(catalog);
+                container.ComposeExportedValue(new PluginData());
                 container.ComposeParts(this);
 
                 return true;

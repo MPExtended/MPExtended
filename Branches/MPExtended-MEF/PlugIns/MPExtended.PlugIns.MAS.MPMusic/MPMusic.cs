@@ -30,6 +30,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [ExportMetadata("Database", "MPMyMusic")]
     public class MPMusic : IMusicLibrary
     {
+        private IPluginData data;
+
+        [ImportingConstructor]
+        public MPMusic(IPluginData data)
+        {
+            this.data = data;
+        }
+
         public IEnumerable<WebMusicTrackBasic> GetAllTracks()
         {
             throw new NotImplementedException();
