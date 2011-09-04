@@ -16,21 +16,31 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using MPExtended.Services.StreamingService.Interfaces;
 
-namespace MPExtended.Services.StreamingService.Code
-{
-    internal static class ResolutionExtensionMethods
-    {
-        public static WebResolution ToWebResolution(this Resolution res)
-        {
-            return new WebResolution()
-            {
-                Width = res.Width,
-                Height = res.Height
-            };
+namespace MPExtended.Services.StreamingService.Code {
+    /* Thanks to StackOverflow: http://stackoverflow.com/questions/2980463/how-do-i-assign-by-reference-to-a-class-field-in-c
+     * 
+     * Example:
+     *   int y = 123;
+     *   x = new Reference<int>( () => y, z => { y=z; } );
+     * </code>
+     */
+    internal sealed class Reference<T> {
+        private readonly Func<T> getMethod;
+        private readonly Action<T> setMethod;
+
+        public Reference(Func<T> get, Action<T> set) {
+            this.getMethod = get;
+            this.setMethod = set;
+        }
+
+        public T Value { 
+            get { 
+                return getMethod();
+            } 
+            set {
+                setMethod(value);
+            } 
         }
     }
 }

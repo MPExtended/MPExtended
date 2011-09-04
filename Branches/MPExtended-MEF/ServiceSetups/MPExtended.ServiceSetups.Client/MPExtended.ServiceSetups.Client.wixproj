@@ -6,7 +6,7 @@
     <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{8cf51f45-7f45-4473-920d-f0dc12cb6bf8}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>MPExtended.ServiceSetups.MS.MediaAccessService</OutputName>
+    <OutputName>MPExtended.ServiceSetups.Client</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -42,6 +42,22 @@
     <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.Client\MPExtended.ServiceHosts.Client.csproj">
       <Name>MPExtended.ServiceHosts.Client</Name>
       <Project>{d77d182c-d095-43b5-8564-1ff9e4967838}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
+      <Name>MPExtended.Services.MediaAccessService</Name>
+      <Project>{b7e31cd0-1494-4e60-8ac1-2b4656b44e8c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
+      <Name>MPExtended.Services.StreamingService</Name>
+      <Project>{da449ffd-88d4-42fe-a83a-166c7097d825}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

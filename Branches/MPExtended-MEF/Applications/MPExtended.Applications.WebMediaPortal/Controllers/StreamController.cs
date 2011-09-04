@@ -66,7 +66,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         private ActionResult DoStreaming(string identifier, string transcoderProfile)
         {
-            if (!MPEServices.NetPipeWebStreamService.StartStream(identifier, transcoderProfile, 0))
+            string url = MPEServices.NetPipeWebStreamService.StartStream(identifier, transcoderProfile, 0);
+            if(String.IsNullOrEmpty(url)) 
             {
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();
@@ -75,7 +76,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // TODO: this should be done better
             byte[] buffer = new byte[65536];
             int read;
-            string url = "http://localhost:4322/MPExtended/StreamingService/stream/RetrieveStream?identifier=" + identifier;
             Stream inputStream = WebRequest.Create(url).GetResponse().GetResponseStream();
 
             // set headers and diisable buffer

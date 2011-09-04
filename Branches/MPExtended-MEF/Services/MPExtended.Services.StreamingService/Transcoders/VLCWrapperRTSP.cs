@@ -18,31 +18,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Code;
-using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
+using System.Text;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class Direct : ITranscoder
+    class VLCWrapperRTSP : VLCWrapper
     {
-        public TranscoderProfile Profile { get; set; }
-        public string Input { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
-        public string Identifier { get; set; }
-
-        public string GetStreamURL()
+        public VLCWrapperRTSP()
         {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+            readOutputStream = false;
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public override string GetStreamURL()
         {
-            // we ignore our arguments :)
-            einfo.Value.Supported = false;
-            pipeline.AddDataUnit(new InputUnit(Input), 1);
-            return;
+            // TODO
+            return "rtsp://localhost:5544/";
         }
     }
 }

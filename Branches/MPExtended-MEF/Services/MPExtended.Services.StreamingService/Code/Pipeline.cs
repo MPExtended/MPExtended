@@ -21,7 +21,6 @@ using System.IO;
 using System.Linq;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Units;
-using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Code {
     internal class Pipeline {
@@ -109,9 +108,9 @@ namespace MPExtended.Services.StreamingService.Code {
                     dataUnits[dataConnections[i]].InputStream = dataUnits[i].DataOutputStream;
             }
             foreach (int i in logUnits.Keys.OrderBy(k => k)) {
-                logUnits[i].Setup();
                 if (logConnections.ContainsKey(i))
                     logUnits[i].InputStream = dataUnits[logConnections[i]].LogOutputStream;
+                logUnits[i].Setup();
             }
 
             Log.Info("Pipeline assembled");

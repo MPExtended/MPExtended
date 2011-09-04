@@ -25,47 +25,23 @@
     Language="1033"
     Version="!(bind.FileVersion.MPExtended.Services.StreamingService.dll)"
     Manufacturer="MPExtended">
-    <Package InstallerVersion="200" Compressed="yes" />
-    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
-    <!-- TODO: do we really want to disallow downgrades? -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
-
-    <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
-      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
-    </Condition>
+    <?include ../MPExtended.ServiceSetups.General/MPExtended.wxi ?>
 
     <!-- Directory structure-->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPExtendedDir" Name="MPExtended">
-          <Directory Id="InstallDirectory" Name="Client Service">
-            <Directory Id="FFMpegDir" Name="FFMpeg">
+          <Directory Id="InstallDirectory" Name="SingleSeat Service">
+            <?include ../MPExtended.ServiceSetups.General/StreamBinaries.wxi ?>
 
-              <Component Id="FFMpegBinaries" Guid="a967d64b-fe1a-4c8e-9655-ae7efb7c79fb">
-                <File Source="$(var.SolutionDir)\Libraries\Streaming\ffmpeg.exe" />
-              </Component>
-
-            </Directory>
-
-            <Component Id="ServiceBinaries" Guid="ddd6c617-8fe7-408b-82b0-25c0eb6699fb">
+            <Component Id="Component_MPExtended" Guid="ddd6c617-8fe7-408b-82b0-25c0eb6699fb">
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.ServiceHosts.Client.exe" Id="MainService" />
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.ServiceHosts.Client.exe.config" />
-
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Services.StreamingService.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
-
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\NLog.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MediaInfo.dll" />
-              <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\System.Data.SQLite.dll" />
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\NLog.config" />
 
-              <!-- TODO: Do we want to install debugging information? -->
+              <?include ../MPExtended.ServiceSetups.General/StreamingService.wxi ?>
+              <?include ../MPExtended.ServiceSetups.General/ClientSetup.wxi ?>
 
               <!-- Service -->
               <ServiceInstall
@@ -91,7 +67,7 @@
 
       <Directory Id="CommonAppDataFolder">
         <Directory Id="OurAppDataFolder" Name="MPExtended">
-          <Component Id="AppDataConfig" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
+          <Component Id="Component_AppData" Guid="6a3f3fb7-81d4-48db-85cd-96677df6834a">
             <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\Services.xml" />
             <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MediaAccess.xml" />
             <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\Streaming.xml" />
@@ -101,9 +77,12 @@
     </Directory>
 
     <Feature Id="ProductFeature" Title="MPExtended.ServiceSetups.Client" Level="1">
-      <ComponentRef Id="ServiceBinaries" />
-      <ComponentRef Id="FFMpegBinaries" />
-      <ComponentRef Id="AppDataConfig" />
+      <ComponentRef Id="Component_Streaming_FFMpeg"/>
+      <ComponentRef Id="Component_Streaming_Segmenter"/>
+      <ComponentRef Id="Component_Streaming_VLC"/>
+      <ComponentRef Id="Component_Streaming_VLC_Plugins"/>
+      <ComponentRef Id="Component_MPExtended" />
+      <ComponentRef Id="Component_AppData" />
     </Feature>
   </Product>
 </Wix>

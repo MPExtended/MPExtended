@@ -71,23 +71,27 @@
     <Compile Include="Transcoders\FFMpeg.cs" />
     <Compile Include="Transcoders\FFMpegHTTPLive.cs" />
     <Compile Include="Transcoders\HTTPLiveTranscoderWrapper.cs" />
+    <Compile Include="Transcoders\ICustomActionTranscoder.cs" />
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
-    <Compile Include="Units\Encoder.cs" />
-    <Compile Include="Units\FFMpegLogParsing.cs" />
-    <Compile Include="Units\HTTPLiveStreaming.cs" />
+    <Compile Include="Transcoders\VLCWrapper.cs" />
+    <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
+    <Compile Include="Transcoders\VLCWrapperRTSP.cs" />
+    <Compile Include="Units\EncoderUnit.cs" />
+    <Compile Include="Units\FFMpegLogParsingUnit.cs" />
+    <Compile Include="Units\HTTPLiveStreamingUnit.cs" />
     <Compile Include="Units\IBlockingProcessingUnit.cs" />
     <Compile Include="Units\ILogProcessingUnit.cs" />
-    <Compile Include="Units\Input.cs" />
+    <Compile Include="Units\InputUnit.cs" />
     <Compile Include="Units\IProcessingUnit.cs" />
-    <Compile Include="Units\Passthrough.cs" />
-    <Compile Include="Units\StreamCopy.cs" />
-    <Compile Include="Util\EncodingInfo.cs" />
-    <Compile Include="Util\NamedPipe.cs" />
-    <Compile Include="Util\Reference.cs" />
-    <Compile Include="Util\Resolution.cs" />
-    <Compile Include="Util\StreamCopy.cs" />
-    <Compile Include="Util\TsBuffer.cs" />
+    <Compile Include="Units\PassthroughUnit.cs" />
+    <Compile Include="Units\StreamCopyUnit.cs" />
+    <Compile Include="Units\VLCWrapperParsingUnit.cs" />
+    <Compile Include="Code\NamedPipe.cs" />
+    <Compile Include="Code\Reference.cs" />
+    <Compile Include="Code\Resolution.cs" />
+    <Compile Include="Code\StreamCopy.cs" />
+    <Compile Include="Code\TsBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
@@ -115,6 +119,9 @@
     <Content Include="Streaming.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

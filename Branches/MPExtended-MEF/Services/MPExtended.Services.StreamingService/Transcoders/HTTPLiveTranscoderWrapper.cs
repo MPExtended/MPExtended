@@ -23,12 +23,11 @@ using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
 using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal abstract class HTTPLiveTranscoderWrapper : ITranscoder
+    internal abstract class HTTPLiveTranscoderWrapper : ITranscoder, ICustomActionTranscoder
     {
         public TranscoderProfile Profile
         {
@@ -52,18 +51,23 @@ namespace MPExtended.Services.StreamingService.Transcoders
         }
 
         private ITranscoder obj;
-        private HTTPLiveStreaming segmenterUnit;
+        private HTTPLiveStreamingUnit segmenterUnit;
 
         protected HTTPLiveTranscoderWrapper(ITranscoder toWrap)
         {
             obj = toWrap;
         }
 
-        public void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public string GetStreamURL()
+        {
+            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?parameters=&action=playlist&identifier=" + Identifier;
+        }
+
+        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             obj.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId);
 
-            segmenterUnit = new HTTPLiveStreaming(Identifier);
+            segmenterUnit = new HTTPLiveStreamingUnit(Identifier);
             segmenterUnit.DebugOutput = false; // change for debugging
 
             pipeline.AddDataUnit(segmenterUnit, 7);
@@ -86,6 +90,12 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 case "playlist":
                     WebOperationContext.Current.OutgoingResponse.ContentType = "application/vnd.apple.mpegurl";
                     string playlistPath = Path.Combine(segmenterUnit.TemporaryDirectory, "playlist.m3u8");
+                    if (!File.Exists(playlistPath))
+                    {
+                        // playlist not yet created. technically StartStream shouldn't have returned now but that's not implemented yet. 
+                        // client should retry after 5s delay
+                        return null;
+                    }
                     return new FileStream(playlistPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
 
                 default:

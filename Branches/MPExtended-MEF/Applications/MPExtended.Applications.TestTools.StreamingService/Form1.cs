@@ -236,18 +236,18 @@ namespace MPExtended.Applications.TestTools.StreamingService
             int subtitle = cbSubtitle.SelectedIndex == -1 ? -1 : mInfo.SubtitleStreams[cbSubtitle.SelectedIndex].ID;
 
             Log("Starting Stream from pos " + _pos);
-            bool success = mWebStreamClient.StartStreamWithStreamSelection(mIdentifier, mProfiles[cbProfiles.SelectedIndex].Name, _pos, language, subtitle);
-            if (success)
+            string url = mWebStreamClient.StartStreamWithStreamSelection(mIdentifier, mProfiles[cbProfiles.SelectedIndex].Name, _pos, language, subtitle);
+            if (String.IsNullOrEmpty(url))
             {
-                DownloadStream(_pos);
+                Log("StartStream failed");
             }
             else
             {
-                Log("StartStream returned false");
+                DownloadStream(url, _pos);
             }
         }
 
-        private void DownloadStream(int _startPos)
+        private void DownloadStream(string url, int _startPos)
         {
             Log("Retrieve Stream from pos " + _startPos);
 
@@ -259,7 +259,6 @@ namespace MPExtended.Applications.TestTools.StreamingService
 
             mDlThread = new Thread(new ThreadStart(delegate()
             {
-                string url = "http://" + CURRENT_IP + ":4322/MPExtended/StreamingService/stream/RetrieveStream?identifier=" + mIdentifier;                
                 Stream webstream = WebRequest.Create(url).GetResponse().GetResponseStream();
                 FileStream file = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 mCurrentFile = file;

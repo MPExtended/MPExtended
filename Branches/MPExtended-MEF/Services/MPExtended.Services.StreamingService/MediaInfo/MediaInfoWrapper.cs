@@ -22,7 +22,7 @@ using System.Linq;
 using System.IO;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
+using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.MediaInfo
 {

@@ -18,19 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Interfaces;
+using System.IO;
 
-namespace MPExtended.Services.StreamingService.Code
+namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal static class ResolutionExtensionMethods
+    internal interface ICustomActionTranscoder : ITranscoder
     {
-        public static WebResolution ToWebResolution(this Resolution res)
-        {
-            return new WebResolution()
-            {
-                Width = res.Width,
-                Height = res.Height
-            };
-        }
+        Stream DoAction(string action, string parameters);
     }
 }

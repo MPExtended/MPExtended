@@ -22,7 +22,7 @@ using System.IO;
 using System.IO.Pipes;
 using MPExtended.Libraries.ServiceLib;
 
-namespace MPExtended.Services.StreamingService.Util {
+namespace MPExtended.Services.StreamingService.Code {
     internal class NamedPipe : Stream {
         private String _pipeName;
         private Boolean isReady;

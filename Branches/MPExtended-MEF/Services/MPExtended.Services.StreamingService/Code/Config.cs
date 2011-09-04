@@ -38,6 +38,23 @@ namespace MPExtended.Services.StreamingService.Code
             inst.Profile = this;
             return inst;
         }
+
+        public WebTranscoderProfile CopyToWebTranscoderProfile()
+        {
+            // apparantly you can't serialize a derived classes to a parent class. That sucks.
+            return new WebTranscoderProfile()
+            {
+                Bandwidth = this.Bandwidth,
+                Description = this.Description,
+                HasVideoStream = this.HasVideoStream,
+                MaxOutputHeight = this.MaxOutputHeight,
+                MaxOutputWidth = this.MaxOutputWidth,
+                MIME = this.MIME,
+                Name = this.Name,
+                Target = this.Target,
+                Transport = this.Transport
+            };
+        }
     }
 
     internal static class Config
@@ -57,6 +74,7 @@ namespace MPExtended.Services.StreamingService.Code
                         Description = x.Element("description").Value,
                         Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
                         Target = x.Element("target").Value,
+                        Transport = x.Element("transport").Value,
                         MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
                         MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
                         MIME = x.Element("mime").Value,

@@ -60,11 +60,18 @@ namespace MPExtended.Services.MediaAccessService
                     .First()
                     .Descendants()
                     .Select(n => new KeyValuePair<string, string>(n.Name.LocalName, (string)n.Value))
-                    .ToDictionary(x => x.Key, x => x.Value);
+                    .ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
                 cachedConfig[name] = config;
             }
 
             return cachedConfig[name];
+        }
+
+
+        private string PerformFolderSubstitution(string input)
+        {
+            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            return input.Replace("%ProgramData%", cappdata);
         }
     }
 }

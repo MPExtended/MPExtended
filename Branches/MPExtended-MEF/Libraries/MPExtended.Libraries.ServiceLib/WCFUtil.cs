@@ -28,12 +28,21 @@ namespace MPExtended.Libraries.ServiceLib
     {
         public static string GetCurrentRoot()
         {
-            string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
-            if (val != null)
+            // first try the HTTP host header
+            try
             {
-                return "http://" + val + "/MPExtended/";
+                string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
+                if (val != null)
+                {
+                    return "http://" + val + "/MPExtended/";
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding
             }
 
+            // last resort: localhost
             return "http://localhost:4322/MPExtended/";
         }
     }

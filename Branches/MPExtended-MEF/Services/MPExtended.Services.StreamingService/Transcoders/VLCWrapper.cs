@@ -18,31 +18,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class Direct : ITranscoder
+    internal class VLCWrapper : VLC
     {
-        public TranscoderProfile Profile { get; set; }
-        public string Input { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
-        public string Identifier { get; set; }
-
-        public string GetStreamURL()
+        public override void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+            base.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.StandardOut);
+
+            // setup output parsing
+            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo);
+            pipeline.AddLogUnit(logunit, 6);
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        protected override string GenerateArguments(string input, string sout, string args)
         {
-            // we ignore our arguments :)
-            einfo.Value.Supported = false;
-            pipeline.AddDataUnit(new InputUnit(Input), 1);
-            return;
+            return String.Format("\"{0}\" \"{1}\" {2}", input, sout, args);
         }
     }
 }

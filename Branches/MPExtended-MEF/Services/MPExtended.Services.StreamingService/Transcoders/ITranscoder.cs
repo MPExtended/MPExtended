@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
@@ -31,6 +30,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         WebMediaInfo MediaInfo { get; set; }
         string Identifier { get; set; }
 
-        void AlterPipeline(Pipeline pipeline, Resolution outputSize, Reference<EncodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        string GetStreamURL();
     }
 }

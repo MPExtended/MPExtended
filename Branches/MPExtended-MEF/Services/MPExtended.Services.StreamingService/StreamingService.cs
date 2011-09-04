@@ -24,13 +24,12 @@ using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Util;
 using MASInterfaces = MPExtended.Services.MediaAccessService.Interfaces;
 using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
+    //[ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
         private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings = new Dictionary<string, TASInterfaces.WebVirtualCard>();
@@ -73,12 +72,13 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Config.GetTranscoderProfiles().Cast<WebTranscoderProfile>().ToList();
+            // apparantly you can't serialize a derived classes to a parent class. That sucks.
+            return Config.GetTranscoderProfiles().Select(x => x.CopyToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Cast<WebTranscoderProfile>().ToList();
+            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Select(x => x.CopyToWebTranscoderProfile()).ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)
@@ -87,7 +87,7 @@ namespace MPExtended.Services.StreamingService
             if (profile == null)
                 return null;
 
-            return (WebTranscoderProfile)profile;
+            return profile.CopyToWebTranscoderProfile();
         }
         #endregion
 
@@ -111,10 +111,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier)
         {
-            EncodingInfo info = _stream.GetEncodingInfo(identifier);
-            if (info != null)
-                return info.ToWebTranscodingInfo();
-            return null;
+            return _stream.GetEncodingInfo(identifier);
         }
 
         public List<WebStreamingSession> GetStreamingSessions()
@@ -155,14 +152,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, path);
         }
 
-        public bool StartStream(string identifier, string profileName, int startPosition)
+        public string StartStream(string identifier, string profileName, int startPosition)
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, null, null);
         }
 
-        public bool StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
+        public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
         {
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
@@ -175,7 +172,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called FinishStream with ident={0}", identifier);
             _stream.KillStream(identifier);
-            if (_timeshiftings[identifier] != null)
+            if(_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
             {
                 MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
                 _timeshiftings.Remove(identifier);
@@ -200,9 +197,9 @@ namespace MPExtended.Services.StreamingService
             return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
 
-        public Stream HttpLiveStreaming(string identifier, string action, string parameters)
+        public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
-            return _stream.HttpLiveStreaming(identifier, action, parameters);
+            return _stream.CustomTranscoderData(identifier, action, parameters);
         }
         #endregion
 
