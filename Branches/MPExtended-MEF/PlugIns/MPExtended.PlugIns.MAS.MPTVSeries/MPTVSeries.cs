@@ -106,7 +106,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             return new T()
             {
-                Id = reader.ReadString(0),
+                Id = reader.ReadInt32(0).ToString(),
                 Title = !String.IsNullOrEmpty(reader.ReadString(1)) ? reader.ReadString(1) : reader.ReadString(2),
                 Genres = reader.ReadPipeList(3),
                 BannerPaths = reader.ReadPipeList(4).Select(y => CreateImagePath("banner", y)).ToList(),
@@ -185,7 +185,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             {
                 Id = reader.ReadString(0),
                 SeasonNumber = reader.ReadInt32(1),
-                ShowId = reader.ReadString(2),
+                ShowId = reader.ReadInt32(2).ToString(),
                 BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),
                 Year = Int32.Parse(reader.ReadString(4)), // strftime returns an string
 
@@ -221,7 +221,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 sql,
                 delegate(SQLiteDataReader reader)
                 {
-                    return CreateWebTVEpisode<WebTVEpisodeBasic>(reader);
+                    var a = CreateWebTVEpisode<WebTVEpisodeBasic>(reader);
+                    return a;
                 }
             );
         }
@@ -265,19 +266,17 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         private T CreateWebTVEpisode<T>(SQLiteDataReader reader) where T : WebTVEpisodeBasic, new()
         {
-            return new T()
-            {
-                Id = reader.ReadString(0),
-                ShowId = reader.ReadString(1),
+            return new T() {
+                Id = reader.ReadInt32(0).ToString(),
+                ShowId = reader.ReadInt32(1).ToString(),
                 Title = reader.ReadString(2),
                 EpisodeNumber = reader.ReadInt32(3),
-                SeasonId = reader.ReadString(1) + "_s" + reader.ReadString(4),
+                SeasonId = reader.ReadInt32(1).ToString() + "_s" + reader.ReadInt32(4).ToString(),
                 Watched = reader.ReadBoolean(5),
                 Rating = reader.ReadFloat(6),
                 BannerPaths = new List<string>() { CreateImagePath("banner", reader.ReadString(7)) },
                 FirstAired = reader.ReadDateTime(8),
                 Path = reader.ReadPipeList(9),
-
 
                 // TODO
                 DateAdded = new DateTime(1970, 1, 1),
