@@ -27,97 +27,42 @@ namespace MPExtended.Libraries.SQLitePlugin
     {
         public static int ReadInt32(this SQLiteDataReader reader, int idx)
         {
-            try
-            {
-                if (reader.IsDBNull(idx))
-                    return 0;
-                else
-                    return reader.GetInt32(idx);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
+            return (int)DataReaders.ReadInt32(reader, idx);
         }
 
         public static string ReadString(this SQLiteDataReader reader, int idx)
         {
-            try
-            {
-                if (reader.IsDBNull(idx))
-                    return "";
-                else
-                    return reader.GetString(idx);
-            }
-            catch (InvalidCastException)
-            {
-                // This is a workaround for the weird bug that for some reason numeric values throw an InvalidCastException. 
-                // See for example http://forum.team-mediaportal.com/webservice-mobile-access-537/webservice-general-media-access-webservice-89956/index7.html#post748640
-                return ReadInt32(reader, idx).ToString();
-            }
-            catch (Exception)
-            {
-                return "";
-            }
+            return (string)DataReaders.ReadString(reader, idx);
         }
 
         public static bool ReadBoolean(this SQLiteDataReader reader, int idx)
         {
-            try
-            {
-                if (reader.IsDBNull(idx))
-                    return false;
-                else
-                    return reader.GetBoolean(idx);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return (bool)DataReaders.ReadBoolean(reader, idx);
         }
 
         public static DateTime ReadDateTime(this SQLiteDataReader reader, int idx)
         {
-            try
-            {
-                if (reader.IsDBNull(idx))
-                    return new DateTime(1970, 1, 1);
-                else
-                    return DateTime.Parse(reader.GetString(idx));
-            }
-            catch (Exception)
-            {
-                return new DateTime(1970, 1, 1);
-            }
+            return (DateTime)DataReaders.ReadDateTime(reader, idx);
         }
 
         public static float ReadFloat(this SQLiteDataReader reader, int idx)
         {
-            try
-            {
-                if (reader.IsDBNull(idx))
-                    return 0;
-                else
-                    return reader.GetFloat(idx);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
+            return (float)DataReaders.ReadFloat(reader, idx);
         }
 
         public static IList<string> ReadList(this SQLiteDataReader reader, int idx, char separator)
         {
-            string txt = ReadString(reader, idx);
-            if (txt.Length == 0)
-                return new List<string>();
-
-            return txt.Split(separator).Where(y => y.Length > 0).ToList();
+            return (IList<string>)DataReaders.ReadList(reader, idx, separator);
         }
 
         public static IList<string> ReadPipeList(this SQLiteDataReader reader, int idx)
         {
-            return ReadList(reader, idx, '|');
+            return (IList<string>)DataReaders.ReadPipeList(reader, idx);
+        }
+
+        public static string ReadIntAsString(this SQLiteDataReader reader, int idx)
+        {
+            return (string)DataReaders.ReadIntAsString(reader, idx);
         }
     }
 }

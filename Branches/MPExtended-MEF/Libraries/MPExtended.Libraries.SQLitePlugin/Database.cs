@@ -24,10 +24,10 @@ namespace MPExtended.Libraries.SQLitePlugin
     {
         protected delegate T FillObject<T>(SQLiteDataReader reader);
 
-        protected string DatabasePath
+        public string DatabasePath
         {
             get;
-            set;
+            protected set;
         }
 
         protected Database(string databasePath)

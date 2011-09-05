@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
@@ -96,5 +97,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         Dictionary<string, string> Configuration { get; }
         ILogger Log { get; }
+    }
+
+    public interface ILazyQuery<T> : IOrderedEnumerable<T>
+    {
+        IOrderedEnumerable<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector);
+        IOrderedEnumerable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector);
+        IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
+        int Count();
     }
 }

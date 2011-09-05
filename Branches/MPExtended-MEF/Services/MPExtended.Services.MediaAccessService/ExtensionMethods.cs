@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -27,11 +28,44 @@ namespace MPExtended.Services.MediaAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy order)
+        // Missing in IList for some reason, but let's just implement it for all IEnumerables
+        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> source, int index, int count)
         {
+            if (source is List<T>)
+                return ((List<T>)source).GetRange(index, count);
+            return source.Skip(index).Take(count);
+        }
+
+        // Take advantage of lazy queries
+        public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Expression<Func<T, bool>> predicate)
+        {
+            if (source is ILazyQuery<T>)
+                return ((ILazyQuery<T>)source).Where(predicate);
+            return Enumerable.Where(source, predicate.Compile());
+        }
+
+        // Take advantage of lazy queries
+        public static int Count<T>(this IEnumerable<T> source)
+        {
+            if (source is ILazyQuery<T>)
+                return ((ILazyQuery<T>)source).Count();
+            return Enumerable.Count(source);
+        }
+
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        {
+            if (source is ILazyQuery<TSource>)
+            {
+                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
+                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+                    return lazy.OrderBy(keySelector);
+                return lazy.OrderByDescending(keySelector);
+            }
+
+            var comp = keySelector.Compile();
             if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                return source.OrderBy(keySelector);
-            return source.OrderByDescending(keySelector);
+                return Enumerable.OrderBy(source, comp);
+            return Enumerable.OrderByDescending(source, comp);
         }
 
         public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy order)
@@ -41,11 +75,7 @@ namespace MPExtended.Services.MediaAccessService
             return source.ThenByDescending(keySelector);
         }
 
-        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> source, int index, int count)
-        {
-            return source.Skip(index).Take(count);
-        }
-
+        // Allow easy sorting from MediaAccessService.cs
         public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy sort, OrderBy order)
         {
             switch (sort)
