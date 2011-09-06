@@ -86,7 +86,7 @@
     <Compile Include="TVShow\WebTVSeasonBasic.cs" />
     <Compile Include="TVShow\WebTVShowBasic.cs" />
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
-    <Compile Include="WebServiceDescription.cs" />
+    <Compile Include="WebMediaServiceDescription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

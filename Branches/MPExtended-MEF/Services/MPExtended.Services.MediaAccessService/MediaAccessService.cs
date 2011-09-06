@@ -135,9 +135,9 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        public WebServiceDescription GetServiceDescription()
+        public WebMediaServiceDescription GetServiceDescription()
         {
-            return new WebServiceDescription()
+            return new WebMediaServiceDescription()
             {
                 AvailableMovieProvider = MovieLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
                 AvailableMusicProvider = MusicLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),

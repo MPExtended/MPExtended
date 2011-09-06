@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace MPExtended.Services.StreamingService.Interfaces
 {
     [DataContract]
-    public enum WebMediaType
+    public enum WebStreamMediaType
     {
         // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType
         // TODO: maybe change name?

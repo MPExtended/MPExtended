@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebServiceDescription
+    public class WebMediaServiceDescription
     {
         public bool SupportsMovies { get; set; }
         public bool SupportsMusic { get; set; }

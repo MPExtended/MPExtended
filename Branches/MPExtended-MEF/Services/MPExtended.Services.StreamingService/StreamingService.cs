@@ -24,15 +24,15 @@ using System.ServiceModel;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
-using MASInterfaces = MPExtended.Services.MediaAccessService.Interfaces;
-using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
     //[ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
-        private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings = new Dictionary<string, TASInterfaces.WebVirtualCard>();
+        private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
         private const int API_VERSION = 2;
 
         private Streaming _stream;
@@ -43,11 +43,11 @@ namespace MPExtended.Services.StreamingService
             WcfUsernameValidator.Init();
         }
 
-        private string ResolvePath(WebMediaType type, string itemId)
+        private string ResolvePath(WebStreamMediaType type, string itemId)
         {
-            if (type != WebMediaType.Recording)
+            if (type != WebStreamMediaType.Recording)
             {
-                return MPEServices.NetPipeMediaAccessService.GetPath((MASInterfaces.WebMediaType)type, itemId);
+                return MPEServices.NetPipeMediaAccessService.GetPath((WebMediaType)type, itemId);
             }
             else
             {
@@ -56,10 +56,10 @@ namespace MPExtended.Services.StreamingService
             }
         }
 
-        public WebServiceDescription GetServiceDescription()
+        public WebStreamServiceDescription GetServiceDescription()
         {
             bool hasTv = MPEServices.HasTVAccessConnection; // takes a while so don't execute it twice
-            return new WebServiceDescription()
+            return new WebStreamServiceDescription()
             {
                 SupportsMedia = MPEServices.HasMediaAccessConnection,
                 SupportsRecordings = hasTv,
@@ -92,7 +92,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Info methods
-        public WebMediaInfo GetMediaInfo(WebMediaType type, string itemId)
+        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, string itemId)
         {
             string path = ResolvePath(type, itemId);
             if (path == null)
@@ -119,7 +119,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.GetStreamingSessions();
         }
 
-        public WebResolution GetStreamSize(WebMediaType type, string itemId, string profile)
+        public WebResolution GetStreamSize(WebStreamMediaType type, string itemId, string profile)
         {
             return _stream.CalculateSize(Config.GetTranscoderProfileByName(profile), ResolvePath(type, itemId), false).ToWebResolution();
         }
@@ -140,7 +140,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, card.TimeShiftFileName);
         }
 
-        public bool InitStream(WebMediaType type, string itemId, string clientDescription, string identifier)
+        public bool InitStream(WebStreamMediaType type, string itemId, string clientDescription, string identifier)
         {
             string path = ResolvePath(type, itemId);
             if (path == null)
@@ -185,7 +185,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(WebMediaType type, string itemId)
+        public Stream GetMediaItem(WebStreamMediaType type, string itemId)
         {
             string path = ResolvePath(type, itemId);
             if (path == null)
@@ -204,12 +204,12 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Images
-        public Stream ExtractImage(WebMediaType type, string itemId, int position)
+        public Stream ExtractImage(WebStreamMediaType type, string itemId, int position)
         {
             return Images.ExtractImage(ResolvePath(type, itemId), position, null, null);
         }
 
-        public Stream ExtractImageResized(WebMediaType type, string itemId, int position, int maxWidth, int maxHeight)
+        public Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight)
         {
             return Images.ExtractImage(ResolvePath(type, itemId), position, maxWidth, maxHeight);
         }

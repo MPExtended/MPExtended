@@ -32,7 +32,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using WSSMediaType = MPExtended.Services.StreamingService.Interfaces.WebMediaType;
+using WSSMediaType = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType;
 
 namespace MPExtended.Applications.TestTools.StreamingService
 {

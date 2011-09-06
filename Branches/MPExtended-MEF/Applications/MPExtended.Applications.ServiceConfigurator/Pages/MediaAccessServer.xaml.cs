@@ -248,7 +248,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                WebServiceDescription functions = MPEServices.NetPipeMediaAccessService.GetServiceDescription();
+                WebMediaServiceDescription functions = MPEServices.NetPipeMediaAccessService.GetServiceDescription();
 
                 if (functions != null)
                 {

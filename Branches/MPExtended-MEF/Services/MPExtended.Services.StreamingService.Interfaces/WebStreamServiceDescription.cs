@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
-    public class WebServiceDescription
+    public class WebStreamServiceDescription
     {
         public bool SupportsMedia { get; set; }
         public bool SupportsRecordings { get; set; }

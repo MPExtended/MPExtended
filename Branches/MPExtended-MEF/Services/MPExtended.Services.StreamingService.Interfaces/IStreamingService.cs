@@ -13,7 +13,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetMediaItem(WebMediaType type, string itemId);
+        Stream GetMediaItem(WebStreamMediaType type, string itemId);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
@@ -29,11 +29,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImage(WebMediaType type, string itemId, int position);
+        Stream ExtractImage(WebStreamMediaType type, string itemId, int position);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImageResized(WebMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+        Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

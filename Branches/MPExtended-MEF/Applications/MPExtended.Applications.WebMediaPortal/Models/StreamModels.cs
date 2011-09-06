@@ -39,9 +39,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public enum StreamMedia
     {
         TV = -2, // recording is -1 in WSS
-        Movie = WebMediaType.Movie,
-        Serie = WebMediaType.TVShow,
-        Recording = WebMediaType.Recording,
-        Music = WebMediaType.Music
+        Movie = WebStreamMediaType.Movie,
+        Serie = WebStreamMediaType.TVShow,
+        Recording = WebStreamMediaType.Recording,
+        Music = WebStreamMediaType.Music
     }
 }

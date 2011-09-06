@@ -79,7 +79,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Global
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebServiceDescription GetServiceDescription();
+        WebMediaServiceDescription GetServiceDescription();
         #endregion
 
         #region Movies
