@@ -18,6 +18,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebTVServiceDescription GetServiceDescription();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType);
 
         [OperationContract]

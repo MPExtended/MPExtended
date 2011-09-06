@@ -62,6 +62,7 @@
     <Compile Include="WebRecording.cs" />
     <Compile Include="WebRtspClient.cs" />
     <Compile Include="WebSchedule.cs" />
+    <Compile Include="WebTVServiceDescription.cs" />
     <Compile Include="WebUser.cs" />
     <Compile Include="WebVirtualCard.cs" />
   </ItemGroup>
