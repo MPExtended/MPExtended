@@ -29,7 +29,7 @@ using TASInterfaces = MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService
 {
-    //[ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class StreamingService : IWebStreamingService, IStreamingService
     {
         private static Dictionary<string, TASInterfaces.WebVirtualCard> _timeshiftings = new Dictionary<string, TASInterfaces.WebVirtualCard>();
@@ -105,8 +105,11 @@ namespace MPExtended.Services.StreamingService
 
         public WebMediaInfo GetTVMediaInfo(string identifier)
         {
-            TsBuffer buffer = new TsBuffer(_timeshiftings[identifier].TimeShiftFileName);
-            return MediaInfo.MediaInfoWrapper.GetMediaInfo(buffer);
+            lock (_timeshiftings)
+            {
+                TsBuffer buffer = new TsBuffer(_timeshiftings[identifier].TimeShiftFileName);
+                return MediaInfo.MediaInfoWrapper.GetMediaInfo(buffer);
+            }
         }
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier)
@@ -133,11 +136,14 @@ namespace MPExtended.Services.StreamingService
         #region Streaming
         public bool InitTVStream(int channelId, string clientDescription, string identifier)
         {
-            Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
-            var card = MPEServices.NetPipeTVAccessService.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
-            Log.Debug("Timeshifting started!");
-            _timeshiftings[identifier] = card;
-            return _stream.InitStream(identifier, clientDescription, card.TimeShiftFileName);
+            lock (_timeshiftings)
+            {
+                Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
+                var card = MPEServices.NetPipeTVAccessService.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
+                Log.Debug("Timeshifting started!");
+                _timeshiftings[identifier] = card;
+                return _stream.InitStream(identifier, clientDescription, card.TimeShiftFileName);
+            }
         }
 
         public bool InitStream(WebMediaType type, string itemId, string clientDescription, string identifier)
@@ -172,11 +178,16 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called FinishStream with ident={0}", identifier);
             _stream.KillStream(identifier);
-            if(_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
+
+            lock(_timeshiftings)
             {
-                MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
-                _timeshiftings.Remove(identifier);
+                if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
+                {
+                    MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
+                    _timeshiftings.Remove(identifier);
+                }
             }
+
             return true;
         }
 

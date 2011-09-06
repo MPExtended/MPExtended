@@ -55,12 +55,17 @@ namespace MPExtended.Services.StreamingService.Code
             stream.Source = source;
             stream.IsTsBuffer = source.EndsWith(".ts.tsbuffer");
 
-            Streams[identifier] = stream;
+            lock (Streams)
+            {
+                Streams[identifier] = stream;
+            }
             return true;
         }
 
         public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int? audioId = null, int? subtitleId = null)
         {
+            // there's a theoretical race condition here between the insert in InitStream() and this, but the client should really, really
+            // always have a positive result from InitStream() before continuing, so their bad that the stream failed. 
             if (!Streams.ContainsKey(identifier) || Streams[identifier] == null)
             {
                 Log.Warn("Stream requested for invalid identifier {0}", identifier);
@@ -75,46 +80,49 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
-                ActiveStream stream = Streams[identifier];
-                stream.Profile = profile;
-                stream.OutputSize = CalculateSize(stream.Profile, stream.Source, stream.IsTsBuffer);
-                Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
-
-                // get media info
-                WebMediaInfo info;
-                if (stream.IsTsBuffer)
+                lock (Streams[identifier])
                 {
-                    info = MediaInfoWrapper.GetMediaInfo(new TsBuffer(stream.Source));
+                    ActiveStream stream = Streams[identifier];
+                    stream.Profile = profile;
+                    stream.OutputSize = CalculateSize(stream.Profile, stream.Source, stream.IsTsBuffer);
+                    Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
+
+                    // get media info
+                    WebMediaInfo info;
+                    if (stream.IsTsBuffer)
+                    {
+                        info = MediaInfoWrapper.GetMediaInfo(new TsBuffer(stream.Source));
+                    }
+                    else
+                    {
+                        info = MediaInfoWrapper.GetMediaInfo(stream.Source);
+                    }
+
+                    // get transcoder
+                    stream.Transcoder = profile.GetTranscoder();
+                    stream.Transcoder.Input = stream.Source;
+                    stream.Transcoder.MediaInfo = info;
+                    stream.Transcoder.Identifier = identifier;
+
+                    // check for validness of ids
+                    if (info.AudioStreams.Where(x => x.ID == audioId).Count() == 0)
+                        audioId = null;
+                    if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() == 0)
+                        subtitleId = null;
+
+                    // build the pipeline
+                    stream.Pipeline = new Pipeline();
+                    stream.TranscodingInfo = new WebTranscodingInfo();
+                    Reference<WebTranscodingInfo> eref = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
+                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, eref, position, audioId, subtitleId);
+
+                    // start the processes
+                    stream.Pipeline.Assemble();
+                    stream.Pipeline.Start();
+
+                    Log.Info("Started stream with identifier " + identifier);
+                    return stream.Transcoder.GetStreamURL();
                 }
-                else
-                {
-                    info = MediaInfoWrapper.GetMediaInfo(stream.Source);
-                }
-                
-                // get transcoder
-                stream.Transcoder = profile.GetTranscoder();
-                stream.Transcoder.Input = stream.Source;
-                stream.Transcoder.MediaInfo = info;
-                stream.Transcoder.Identifier = identifier;
-
-                // check for validness of ids
-                if (info.AudioStreams.Where(x => x.ID == audioId).Count() == 0) 
-                    audioId = null;
-                if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() == 0)
-                    subtitleId = null;
-
-                // build the pipeline
-                stream.Pipeline = new Pipeline();
-                stream.TranscodingInfo = new WebTranscodingInfo();
-                Reference<WebTranscodingInfo> eref = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
-                stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, eref, position, audioId, subtitleId);
-
-                // start the processes
-                stream.Pipeline.Assemble();
-                stream.Pipeline.Start();
-
-                Log.Info("Started stream with identifier " + identifier);
-                return stream.Transcoder.GetStreamURL();
             }
             catch (Exception ex)
             {
@@ -125,16 +133,22 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Stream RetrieveStream(string identifier)
         {
-            WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Profile.MIME;
-            return Streams[identifier].Pipeline.GetFinalStream();
+            lock (Streams[identifier])
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Profile.MIME;
+                return Streams[identifier].Pipeline.GetFinalStream();
+            }
         }
 
         public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
-            if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
-                return null;
+            lock (Streams[identifier])
+            {
+                if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
+                    return null;
 
-            return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
+                return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
+            }
         }
 
         public void EndStream(string identifier)
@@ -144,9 +158,12 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
-                Log.Debug("Stopping stream with identifier " + identifier);
-                Streams[identifier].Pipeline.Stop();
-                Streams[identifier].Pipeline = null;
+                lock (Streams[identifier])
+                {
+                    Log.Debug("Stopping stream with identifier " + identifier);
+                    Streams[identifier].Pipeline.Stop();
+                    Streams[identifier].Pipeline = null;
+                }
             }
             catch (Exception ex)
             {
@@ -157,7 +174,10 @@ namespace MPExtended.Services.StreamingService.Code
         public void KillStream(string identifier)
         {
             EndStream(identifier);
-            Streams.Remove(identifier);
+            lock (Streams)
+            {
+                Streams.Remove(identifier);
+            }
             Log.Debug("Killed stream with identifier {0}", identifier);
         }
 
