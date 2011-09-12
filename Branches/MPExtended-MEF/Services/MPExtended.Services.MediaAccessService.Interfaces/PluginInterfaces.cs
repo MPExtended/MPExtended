@@ -71,6 +71,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebDriveBasic> GetLocalDrives();
         IEnumerable<WebFileBasic> GetFilesByPath(string id);
         IEnumerable<WebFolderBasic> GetFoldersByPath(string id);
+        Stream GetFile(string id);
 
     }
 

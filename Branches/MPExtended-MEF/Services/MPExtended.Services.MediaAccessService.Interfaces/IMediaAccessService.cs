@@ -32,7 +32,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         File = 4,
         [EnumMember]
-        Folder = 5
+        Folder = 5,
+        [EnumMember]
+        LocalDrive = 6
     }
 
     [DataContract]

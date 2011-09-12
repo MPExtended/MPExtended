@@ -145,9 +145,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.SQLite
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.General", "ServiceSetups\MPExtended.ServiceSetups.General\MPExtended.ServiceSetups.General.wixproj", "{56ECF88E-2C80-4451-8A4A-AFCC11798F94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.LocalFileSystem", "PlugIns\MPExtended.PlugIns.MAS.LocalFileSystem\MPExtended.PlugIns.MAS.LocalFileSystem.csproj", "{456F3244-967E-4732-A2C4-0219B85521DC}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 29
+		SccNumberOfProjects = 30
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -204,15 +206,12 @@ Global
 		SccProjectName13 = ServiceHosts/MPExtended.ServiceHosts.Server
 		SccLocalPath13 = ServiceHosts\\MPExtended.ServiceHosts.Server
 		SccProjectUniqueName14 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeat\\MPExtended.ServiceSetups.SingleSeat.wixproj
-		SccProjectTopLevelParentUniqueName14 = MPExtended.sln
 		SccProjectName14 = ServiceSetups/MPExtended.ServiceSetups.SingleSeat
 		SccLocalPath14 = ServiceSetups\\MPExtended.ServiceSetups.SingleSeat
 		SccProjectUniqueName15 = ServiceSetups\\MPExtended.ServiceSetups.Server\\MPExtended.ServiceSetups.Server.wixproj
-		SccProjectTopLevelParentUniqueName15 = MPExtended.sln
 		SccProjectName15 = ServiceSetups/MPExtended.ServiceSetups.Server
 		SccLocalPath15 = ServiceSetups\\MPExtended.ServiceSetups.Server
 		SccProjectUniqueName16 = ServiceSetups\\MPExtended.ServiceSetups.Client\\MPExtended.ServiceSetups.Client.wixproj
-		SccProjectTopLevelParentUniqueName16 = MPExtended.sln
 		SccProjectName16 = ServiceSetups/MPExtended.ServiceSetups.Client
 		SccLocalPath16 = ServiceSetups\\MPExtended.ServiceSetups.Client
 		SccProjectUniqueName17 = Applications\\MPExtended.Applications.WebMediaPortal\\MPExtended.Applications.WebMediaPortal.csproj
@@ -260,9 +259,12 @@ Global
 		SccProjectName27 = Libraries/MPExtended.Libraries.SQLitePlugin
 		SccLocalPath27 = Libraries\\MPExtended.Libraries.SQLitePlugin
 		SccProjectUniqueName28 = ServiceSetups\\MPExtended.ServiceSetups.General\\MPExtended.ServiceSetups.General.wixproj
-		SccProjectTopLevelParentUniqueName28 = MPExtended.sln
 		SccProjectName28 = ServiceSetups/MPExtended.ServiceSetups.General
 		SccLocalPath28 = ServiceSetups\\MPExtended.ServiceSetups.General
+		SccProjectUniqueName29 = PlugIns\\MPExtended.PlugIns.MAS.LocalFileSystem\\MPExtended.PlugIns.MAS.LocalFileSystem.csproj
+		SccProjectTopLevelParentUniqueName29 = MPExtended.sln
+		SccProjectName29 = PlugIns/MPExtended.PlugIns.MAS.LocalFileSystem
+		SccLocalPath29 = PlugIns\\MPExtended.PlugIns.MAS.LocalFileSystem
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -550,6 +552,16 @@ Global
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Release|Mixed Platforms.Build.0 = Release|x86
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Release|x86.ActiveCfg = Release|x86
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Release|x86.Build.0 = Release|x86
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -572,10 +584,6 @@ Global
 		{245E9751-BDD9-4E94-A114-1D6832CE26DD} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
 		{D77D182C-D095-43B5-8564-1FF9E4967838} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
 		{D1B78750-D906-4621-8C2F-50E2C19124A1} = {C2857547-9ECB-45BD-8E98-996749CC43AC}
-		{8CF51F45-7F45-4473-920D-F0DC12CB6BF8} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
-		{DFB26301-070B-4C7E-8CEA-62BD95C820AD} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
-		{B00DAA89-C862-4575-9557-F8ACA77E2603} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
-		{56ECF88E-2C80-4451-8A4A-AFCC11798F94} = {5ABCE6FD-3F8D-4B02-9AB2-8DE4E759D404}
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
@@ -593,5 +601,6 @@ Global
 		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{456F3244-967E-4732-A2C4-0219B85521DC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 	EndGlobalSection
 EndGlobal
