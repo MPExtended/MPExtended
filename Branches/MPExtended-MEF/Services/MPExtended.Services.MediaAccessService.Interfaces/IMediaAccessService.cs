@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -132,6 +133,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMovieDetailed GetMovieDetailedById(string id);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetMovieCover(string id, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetMovieBackdrop(string id, int offset);
         #endregion
 
         #region Music
@@ -230,6 +239,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicArtistBasic GetMusicArtistBasicById(string id);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetMusicCover(string id, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetMusicBackdrop(string id, int offset);
         #endregion
 
         #region Pictures
@@ -252,6 +269,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCategory> GetAllPictureCategoriesBasic();
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetPicture(string id);
         #endregion
 
         #region TVShows
@@ -311,6 +332,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
 
         [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVShowBanner(string id, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVShowPoster(string id, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVShowBackdrop(string id, int offset);
+
+
+        [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSeasonBasic> GetAllTVSeasonsBasic(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
@@ -321,6 +355,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVSeasonDetailed GetTVSeasonDetailed(string showId, string seasonId, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVSeasonBanner(string showId, string seasonId, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVSeasonPoster(string showId, string seasonId, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetTVSeasonBackdrop(string showId, string seasonId, int offset);
 
 
         [OperationContract]
@@ -351,6 +398,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVEpisodeDetailed GetTVEpisodeDetailed(string id);
 
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCategory> GetAllTVShowCategories();
@@ -359,9 +407,5 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebGenre> GetAllTVShowGenres();
         #endregion
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string GetPath(WebMediaType type, string id);
     }
 }

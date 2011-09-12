@@ -220,6 +220,16 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMovieLibrary.GetMovieDetailedById(movieId);
         }
+
+        public Stream GetMovieCover(string id, int offset)
+        {
+            return ChosenMovieLibrary.GetCover(id, offset);
+        }
+
+        public Stream GetMovieBackdrop(string id, int offset)
+        {
+            return ChosenMovieLibrary.GetBackdrop(id, offset);
+        }
         #endregion
 
         #region Music
@@ -347,6 +357,16 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMusicLibrary.GetAllAlbums().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
+
+        public Stream GetMusicCover(string id, int offset)
+        {
+            return ChosenMusicLibrary.GetCover(id, offset);
+        }
+
+        public Stream GetMusicBackdrop(string id, int offset)
+        {
+            return ChosenMusicLibrary.GetBackdrop(id, offset);
+        }
         #endregion
 
         #region Pictures
@@ -373,6 +393,11 @@ namespace MPExtended.Services.MediaAccessService
         public WebItemCount GetPictureCount()
         {
             return new WebItemCount() { Count = ChosenPictureLibrary.GetAllPicturesBasic().Count() };
+        }
+
+        public Stream GetPicture(string id)
+        {
+            return ChosenPictureLibrary.GetPicture(id);
         }
         #endregion
 
@@ -432,6 +457,21 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetTVShowDetailed(id);
         }
 
+        public Stream GetTVShowBanner(string id, int offset)
+        {
+            return ChosenTVShowLibrary.GetBanner(id, offset);
+        }
+
+        public Stream GetTVShowPoster(string id, int offset)
+        {
+            return ChosenTVShowLibrary.GetPoster(id, offset);
+        }
+
+        public Stream GetTVShowBackdrop(string id, int offset)
+        {
+            return ChosenTVShowLibrary.GetBackdrop(id, offset);
+        }
+
         public IList<WebTVSeasonBasic> GetAllTVSeasonsBasic(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenTVShowLibrary.GetAllSeasonsBasic(id).SortMediaItemList(sort, order).ToList();
@@ -445,6 +485,21 @@ namespace MPExtended.Services.MediaAccessService
         public WebTVSeasonDetailed GetTVSeasonDetailed(string showId, string seasonId, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenTVShowLibrary.GetSeasonDetailed(showId, seasonId);
+        }
+
+        public Stream GetTVSeasonBanner(string seriesId, string seasonId, int offset)
+        {
+            return ChosenTVShowLibrary.GetSeasonBanner(seriesId, seasonId, offset);
+        }
+
+        public Stream GetTVSeasonPoster(string seriesId, string seasonId, int offset)
+        {
+            return ChosenTVShowLibrary.GetSeasonPoster(seriesId, seasonId, offset);
+        }
+
+        public Stream GetTVSeasonBackdrop(string seriesId, string seasonId, int offset)
+        {
+            return ChosenTVShowLibrary.GetSeasonBackdrop(seriesId, seasonId, offset);
         }
 
         public IList<WebTVEpisodeBasic> GetAllTVEpisodesBasicForTVShow(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -502,10 +557,5 @@ namespace MPExtended.Services.MediaAccessService
             return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllSeasonsBasic(id).Count() };
         }
         #endregion
-
-        public string GetPath(WebMediaType type, string id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

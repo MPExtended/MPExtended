@@ -64,5 +64,10 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             return (string)DataReaders.ReadIntAsString(reader, idx);
         }
+
+        public static IList<string> ReadStringAsList(this SQLiteDataReader reader, int idx)
+        {
+            return (IList<string>)DataReaders.ReadStringAsList(reader, idx);
+        }
     }
 }

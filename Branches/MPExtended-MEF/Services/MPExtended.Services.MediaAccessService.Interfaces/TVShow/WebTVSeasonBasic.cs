@@ -19,7 +19,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public bool IsProtected { get; set; }
         public int Year { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> BannerPaths { get; set; }
 
         public override string ToString()
         {

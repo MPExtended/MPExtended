@@ -148,7 +148,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
+            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
+                            "BannerFileNames " +
                          "FROM season " +
                          "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
                          "WHERE SeriesID = @seriesId";
@@ -164,7 +165,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
+            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
+                            "BannerFileNames " +
                          "FROM season " +
                          "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
                          "WHERE SeriesID = @seriesId AND ID = @seasonId";
@@ -186,8 +188,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 Id = reader.ReadString(0),
                 SeasonNumber = reader.ReadInt32(1),
                 ShowId = reader.ReadInt32(2).ToString(),
-                BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList(),
-                Year = Int32.Parse(reader.ReadString(4)), // strftime returns an string
+                Year = Int32.Parse(reader.ReadString(3)), // strftime returns an string
 
                 // TODO
                 Title = String.Empty,
@@ -201,7 +202,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             WebTVSeasonDetailed season = CreateWebTVSeason<WebTVSeasonDetailed>(reader);
 
             // unavailable
-            season.FanArtPaths = new List<string>();
+            season.BackdropPaths = new List<string>();
+            season.BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList();
+            season.PosterPaths = new List<string>();
 
             return season;
         }
@@ -315,12 +318,39 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public IEnumerable<WebCategory> GetAllCategories()
         {
+            return new List<WebCategory>();
+        }
+        #endregion
+
+        #region Retrieval
+        public Stream GetBanner(string seriesId, int offset)
+        {
             throw new NotImplementedException();
         }
 
-        public DirectoryInfo GetSourceRootDirectory()
+        public Stream GetPoster(string seriesId, int offset)
         {
             throw new NotImplementedException();
+        }
+
+        public Stream GetBackdrop(string seriesId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetSeasonBanner(string seriesId, string seasonId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetSeasonPoster(string seriesId, string seasonId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetSeasonBackdrop(string seriesId, string seasonId, int offset)
+        {
+            return new FileStream(GetSeasonDetailed(seriesId, seasonId).BackdropPaths[offset], FileMode.Open);
         }
         #endregion
     }
