@@ -9,6 +9,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -27,7 +28,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicTrackDetailed GetTrackDetailedById(string trackId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        DirectoryInfo GetSourceRootDirectory();
+
     }
 
     public interface IMovieLibrary
@@ -38,7 +39,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        DirectoryInfo GetSourceRootDirectory();
+
     }
 
     public interface ITVShowLibrary
@@ -54,7 +55,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        DirectoryInfo GetSourceRootDirectory();
     }
 
     public interface IPictureLibrary
@@ -63,11 +63,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
         IEnumerable<WebCategory> GetAllPictureCategoriesBasic();
-        DirectoryInfo GetSourceRootDirectory();
+
     }
 
     public interface IFileSystemProvider
     {
+        IEnumerable<WebDriveBasic> GetLocalDrives();
+        IEnumerable<WebFileBasic> GetFilesByPath(string id);
+        IEnumerable<WebFolderBasic> GetFoldersByPath(string id);
 
     }
 

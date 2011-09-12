@@ -86,6 +86,7 @@
     <Compile Include="TVShow\WebTVSeasonBasic.cs" />
     <Compile Include="TVShow\WebTVShowBasic.cs" />
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
+    <Compile Include="FileSystem\WebDriveBasic.cs" />
     <Compile Include="WebMediaServiceDescription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
