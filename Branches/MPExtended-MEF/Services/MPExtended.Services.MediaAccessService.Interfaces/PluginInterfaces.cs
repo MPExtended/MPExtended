@@ -16,7 +16,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     // This are the interfaces used for internal communication between
     // the service and the backends which provide the data.
 
-    public interface IMusicLibrary
+    public interface ILibrary
+    {
+        bool IsLocalFile(string path);
+        Stream GetFile(string path);
+    }
+
+    public interface IMusicLibrary : ILibrary
     {
         IEnumerable<WebMusicTrackBasic> GetAllTracks();
         IEnumerable<WebMusicAlbumBasic> GetAllAlbums();
@@ -32,7 +38,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Stream GetBackdrop(string albumId, int offset);
     }
 
-    public interface IMovieLibrary
+    public interface IMovieLibrary : ILibrary
     {
         IEnumerable<WebMovieBasic> GetAllMovies();
         IEnumerable<WebMovieDetailed> GetAllMoviesDetailed();
@@ -44,7 +50,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Stream GetBackdrop(string movieId, int offset);
     }
 
-    public interface ITVShowLibrary
+    public interface ITVShowLibrary : ILibrary
     {
         IEnumerable<WebTVShowBasic> GetAllTVShowsBasic();
         IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed();
@@ -65,22 +71,20 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Stream GetSeasonBackdrop(string seriesId, string seasonId, int offset);
     }
 
-    public interface IPictureLibrary
+    public interface IPictureLibrary : ILibrary
     {
         IEnumerable<WebPictureBasic> GetAllPicturesBasic();
         IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
         IEnumerable<WebCategory> GetAllPictureCategoriesBasic();
-        Stream GetPicture(string pictureId);
     }
 
-    public interface IFileSystemProvider
+    public interface IFileSystemLibrary : ILibrary
     {
         IEnumerable<WebDriveBasic> GetLocalDrives();
-        IEnumerable<WebFileBasic> GetFilesByPath(string id);
-        IEnumerable<WebFolderBasic> GetFoldersByPath(string id);
-        Stream GetFile(string id);
-
+        IEnumerable<WebFileBasic> GetFilesListing(string id);
+        IEnumerable<WebFolderBasic> GetFoldersListing(string id);
+        WebFileBasic GetFileBasic(string id);
     }
 
     public interface ILogger

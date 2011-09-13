@@ -28,6 +28,7 @@ using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Code;
 using MPExtended.Services.MediaAccessService.Code.Helper;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
@@ -58,11 +59,14 @@ namespace MPExtended.Services.MediaAccessService
         private Lazy<IPictureLibrary, IDictionary<string, object>>[] PictureLibraries { get; set; }
         [ImportMany]
         private Lazy<IMusicLibrary, IDictionary<string, object>>[] MusicLibraries { get; set; }
+        [ImportMany]
+        private Lazy<IFileSystemLibrary, IDictionary<string, object>>[] FileSystemLibraries { get; set; }
 
         private IMovieLibrary ChosenMovieLibrary { get; set; }
         private ITVShowLibrary ChosenTVShowLibrary { get; set; }
         private IPictureLibrary ChosenPictureLibrary { get; set; }
         private IMusicLibrary ChosenMusicLibrary { get; set; }
+        private IFileSystemLibrary ChosenFileSystemLibrary { get; set; }
 
         public MediaAccessService()
         {
@@ -78,6 +82,7 @@ namespace MPExtended.Services.MediaAccessService
                 ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(config, "music", MusicLibraries);
                 ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, "picture", PictureLibraries);
                 ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, "tvShow", TVShowLibraries);
+                ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(config, "filesystem", FileSystemLibraries);
             }                        
             catch (Exception ex)
             {
@@ -135,6 +140,25 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
+        private ILibrary GetLibrary(WebMediaType type)
+        {
+            switch (type)
+            {
+                case WebMediaType.Movie:
+                    return ChosenMovieLibrary;
+                case WebMediaType.Music:
+                    return ChosenMusicLibrary;
+                case WebMediaType.Picture:
+                    return ChosenPictureLibrary;
+                case WebMediaType.TVShow:
+                    return ChosenTVShowLibrary;
+                case WebMediaType.File:
+                    return ChosenFileSystemLibrary;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
         public WebMediaServiceDescription GetServiceDescription()
         {
             return new WebMediaServiceDescription()
@@ -157,6 +181,25 @@ namespace MPExtended.Services.MediaAccessService
 
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
             };
+        }
+
+        public WebMediaItem GetMediaItem(WebMediaType type, string id)
+        {
+            switch (type)
+            {
+                case WebMediaType.Movie:
+                    return GetMovieDetailedById(id);
+                case WebMediaType.Music:
+                    return GetMusicTrackDetailedById(id);
+                case WebMediaType.Picture:
+                    return GetPictureDetailed(id);
+                case WebMediaType.TVShow:
+                    return GetTVEpisodeDetailed(id);
+                case WebMediaType.File:
+                    return GetFileSystemFile(id);
+                default:
+                    throw new ArgumentException();
+            }
         }
         #endregion
 
@@ -394,11 +437,6 @@ namespace MPExtended.Services.MediaAccessService
         {
             return new WebItemCount() { Count = ChosenPictureLibrary.GetAllPicturesBasic().Count() };
         }
-
-        public Stream GetPicture(string id)
-        {
-            return ChosenPictureLibrary.GetPicture(id);
-        }
         #endregion
 
         #region TVShows
@@ -555,6 +593,38 @@ namespace MPExtended.Services.MediaAccessService
         public WebItemCount GetTVSeasonCountForTVShow(string id)
         {
             return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllSeasonsBasic(id).Count() };
+        }
+        #endregion
+
+        #region Filesystem
+        public IList<WebDriveBasic> GetFileSystemDrives()
+        {
+            return ChosenFileSystemLibrary.GetLocalDrives().ToList();
+        }
+
+        public IList<WebFolderBasic> GetFileSystemFoldersListing(string id)
+        {
+            return ChosenFileSystemLibrary.GetFoldersListing(id).ToList();
+        }
+
+        public IList<WebFileBasic> GetFileSystemFilesListing(string id)
+        {
+            return ChosenFileSystemLibrary.GetFilesListing(id).ToList();
+        }
+
+        public WebFileBasic GetFileSystemFile(string id)
+        {
+            return ChosenFileSystemLibrary.GetFileBasic(id);
+        }
+
+        public bool IsLocalFile(WebMediaType type, string id, int offset)
+        {
+            return GetLibrary(type).IsLocalFile(GetMediaItem(type, id).Path[offset]);
+        }
+
+        public Stream RetrieveFile(WebMediaType type, string id, int offset) 
+        {
+            return GetLibrary(type).GetFile(GetMediaItem(type, id).Path[offset]);
         }
         #endregion
     }

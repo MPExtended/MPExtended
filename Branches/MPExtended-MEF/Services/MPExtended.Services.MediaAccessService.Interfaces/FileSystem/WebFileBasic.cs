@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebFileBasic : IDateAddedSortable
+    public class WebFileBasic : WebMediaItem, IDateAddedSortable
     {
         public WebFileBasic()
         {
@@ -15,7 +15,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Path { get; set; }   
+        public IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
 
         public WebMediaType Type

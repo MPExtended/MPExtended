@@ -11,6 +11,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -32,10 +33,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         TVShow = 3,
         [EnumMember]
         File = 4,
-        [EnumMember]
-        Folder = 5,
-        [EnumMember]
-        LocalDrive = 6
     }
 
     [DataContract]
@@ -83,6 +80,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMediaServiceDescription GetServiceDescription();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]        
+        WebMediaItem GetMediaItem(WebMediaType type, string id);
         #endregion
 
         #region Movies
@@ -269,10 +270,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCategory> GetAllPictureCategoriesBasic();
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetPicture(string id);
         #endregion
 
         #region TVShows
@@ -406,6 +403,32 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebGenre> GetAllTVShowGenres();
+        #endregion
+
+        #region Filesystem
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebDriveBasic> GetFileSystemDrives();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebFolderBasic> GetFileSystemFoldersListing(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebFileBasic> GetFileSystemFilesListing(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebFileBasic GetFileSystemFile(string id);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        bool IsLocalFile(WebMediaType type, string id, int offset);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream RetrieveFile(WebMediaType type, string id, int offset);
         #endregion
     }
 }
