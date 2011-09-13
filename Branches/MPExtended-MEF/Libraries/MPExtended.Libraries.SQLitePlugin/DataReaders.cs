@@ -125,6 +125,11 @@ namespace MPExtended.Libraries.SQLitePlugin
             return ReadInt32(reader, idx).ToString();
         }
 
+        public static object ReadStringAsInt(SQLiteDataReader reader, int idx)
+        {
+            return Int32.Parse((string)ReadString(reader, idx));
+        }
+
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
             return new List<string>() { (string)ReadString(reader, idx) };

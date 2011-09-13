@@ -18,72 +18,41 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Data.SQLite;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
-    public class SQLFieldMapping
-    {
-        public delegate object ReadValue(SQLiteDataReader reader, int index);
-
-        public string Table { get; set; }
-        public string Field { get; set; }
-        public string PropertyName { get; set; }
-        public ReadValue Reader { get; set; }
-
-        public SQLFieldMapping()
-        {
-        }
-
-        public SQLFieldMapping(string table, string field, string propertyname, ReadValue reader)
-        {
-            this.Table = table;
-            this.Field = field;
-            this.PropertyName = propertyname;
-            this.Reader = reader;
-        }
-    }
-
     public class LazyQuery<T> : ILazyQuery<T> where T : new()
     {
         public delegate T FillMethod(T obj, SQLiteDataReader reader);
+        public delegate T CreateMethod(SQLiteDataReader reader);
+        public delegate List<T> ListCreateMethod(SQLiteDataReader reader);
 
         private Database db;
         private string inputQuery;
         private SQLiteParameter[] parameters;
-        private List<SQLFieldMapping> mapping;
-        private FillMethod fill;
-
-        private Dictionary<int, SQLFieldMapping> autofillMapping;
-        private Dictionary<string, PropertyInfo> autofillProperties;
+        private IEnumerable<SQLFieldMapping> mapping;
+        private ObjectFactory<T> factory;
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqlname, descending
         private List<Tuple<string, string, object>> whereItems = new List<Tuple<string, string, object>>(); // sqlname, operator, value
 
-        public LazyQuery(Database db, string sql, List<SQLFieldMapping> mapping)
+        public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping)
         {
             this.db = db;
             this.inputQuery = sql;
             this.mapping = mapping;
             this.parameters = new SQLiteParameter[] { };
-            this.fill = AutoFill;
+            this.factory = ObjectFactory<T>.FromList(new AutoFiller<T>(mapping).AutoCreateAndFill);
         }
 
-        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, List<SQLFieldMapping> mapping)
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping)
             : this(db, sql, mapping)
         {
             this.parameters = parameters;
-        }
-
-        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, List<SQLFieldMapping> mapping, FillMethod fill)
-            : this(db, sql, parameters, mapping)
-        {
-            this.fill = fill;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -112,8 +81,8 @@ namespace MPExtended.Libraries.SQLitePlugin
             sql = sql.Replace("%order", orderItems.Count == 0 ? String.Empty : orderSql);
 
             // prepare where
-            SQLiteParameter[] realParams = whereItems.Select(x => new SQLiteParameter("@lazyQuery" + x.Item1, x.Item3)).Union(parameters).ToArray();
-            string whereSql = String.Join(" AND ", whereItems.Select(x => "(" + x.Item1 + " " + x.Item2 + " @lazyQuery" + x.Item1 + ")"));
+            SQLiteParameter[] realParams = whereItems.Select((x, index) => new SQLiteParameter("@lazyQuery" + index, x.Item3)).Union(parameters).ToArray();
+            string whereSql = String.Join(" AND ", whereItems.Select((x, index) => "(" + x.Item1 + " " + x.Item2 + " @lazyQuery" + index + ")"));
             sql = sql.Replace("%where", whereItems.Count == 0 ? "1" : whereSql);
 
             return new Tuple<string, SQLiteParameter[]>(sql, realParams);
@@ -129,49 +98,11 @@ namespace MPExtended.Libraries.SQLitePlugin
             {
                 while (query.Reader.Read())
                 {
-                    T item = new T();
-                    ret.Add(fill(item, query.Reader));
+                    ret.AddRange(factory.CreateObjects(query.Reader));
                 }
             }
 
             return ret;
-        }
-
-        private Dictionary<int, SQLFieldMapping> GenerateResultingMapping(SQLiteDataReader reader)
-        {
-            // this generates the field nr => (property name, property reader) mappings for the autofiller
-            var ret = new Dictionary<int, SQLFieldMapping>();
-            autofillProperties = typeof(T).GetProperties().ToDictionary(x => x.Name, x => x);
-
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                string fieldname = reader.GetName(i);
-                IEnumerable<SQLFieldMapping> matchedMappings = mapping.Where(x => x.Field == fieldname);
-                if (matchedMappings.Count() == 0)
-                    continue;
-                SQLFieldMapping thisMapping = matchedMappings.First();
-                string propertyName = thisMapping.PropertyName;
-                if (!autofillProperties.ContainsKey(propertyName))
-                    continue;
-
-                ret[i] = thisMapping;
-            }
-
-            return ret;
-        }
-
-        private T AutoFill(T obj, SQLiteDataReader reader)
-        {
-            // automatically fill objects based upon the sql mappings provided
-            if (autofillMapping == null)
-                autofillMapping = GenerateResultingMapping(reader);
-
-            foreach (KeyValuePair<int, SQLFieldMapping> item in autofillMapping)
-            {
-                autofillProperties[item.Value.PropertyName].SetValue(obj, item.Value.Reader.Invoke(reader, item.Key), null);
-            }
-
-            return obj;
         }
 
         private IEnumerable<T> SmartWhere(Expression<Func<T, bool>> predicate)
@@ -208,15 +139,22 @@ namespace MPExtended.Libraries.SQLitePlugin
             if (!(value is Int32) && !(value is String))
                 return null;
             SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == leftName).First();
-            whereItems.Add(new Tuple<string, string, object>(thisMapping.Table + "." + thisMapping.Field, "=", value));
+            whereItems.Add(new Tuple<string, string, object>(thisMapping.FullSQLName, "=", value));
             return this;
         }
 
         public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
         {
-            IEnumerable<T> smart = SmartWhere(predicate);
-            if (smart != null)
-                return smart;
+            try
+            {
+                IEnumerable<T> smart = SmartWhere(predicate);
+                if (smart != null)
+                    return smart;
+            }
+            catch (Exception ex)
+            {
+                // TODO: do some logging here
+            }
 
             // if we can't do it in SQL just execute the code
             Func<T, bool> comp = predicate.Compile();
@@ -243,19 +181,25 @@ namespace MPExtended.Libraries.SQLitePlugin
             // we got the fieldname, map it to an SQL name
             string fieldName = ex.Member.Name;
             SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == fieldName).First();
-            string sqlName = thisMapping.Table + "." + thisMapping.Field;
 
             // add to the order clausule
-            orderItems.Add(new Tuple<string, string, bool>(fieldName, sqlName, desc));
+            orderItems.Add(new Tuple<string, string, bool>(fieldName, thisMapping.FullSQLName, desc));
             return this;
         }
 
         private IOrderedEnumerable<T> AddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
         {
             // first try to do it in SQL
-            IOrderedEnumerable<T> smart = SmartAddOrder(desc, keySelector);
-            if (smart != null)
-                return smart;
+            try
+            {
+                IOrderedEnumerable<T> smart = SmartAddOrder(desc, keySelector);
+                if (smart != null)
+                    return smart;
+            }
+            catch (Exception)
+            {
+                // TODO: do some logging here
+            }
 
             // if we can't do it in SQL just execute the code
             Func<T, TKey> comp = keySelector.Compile();
