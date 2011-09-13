@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="ClientSetup.wxi" />
+    <Content Include="Extensions.wxi" />
     <Content Include="MPExtended.wxi" />
     <Content Include="StreamingService.wxi" />
     <Content Include="StreamBinaries.wxi" />

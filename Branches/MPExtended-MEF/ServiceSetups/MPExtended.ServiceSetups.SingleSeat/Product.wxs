@@ -34,6 +34,7 @@
         <Directory Id="MPExtendedDir" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="SingleSeat Service">
             <?include ../MPExtended.ServiceSetups.General/StreamBinaries.wxi ?>
+            <?include ../MPExtended.ServiceSetups.General/Extensions.wxi ?>
 
             <Component Id="Component_MPExtended" Guid="1b140519-1d3e-47e7-8474-aeea8f55300f">
               <File Source="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)\MPExtended.ServiceHosts.SingleSeat.exe" KeyPath="yes" Id="MainService"/>
