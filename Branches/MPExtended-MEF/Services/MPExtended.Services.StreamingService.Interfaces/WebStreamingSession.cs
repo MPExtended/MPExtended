@@ -9,7 +9,8 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         public string Profile { get; set; }
         public string Identifier { get; set; }
-        public string SourceFile { get; set; }
+        public WebStreamMediaType SourceType { get; set; }
+        public string SourceId { get; set; }
         public string ClientDescription { get; set; }
         public WebTranscodingInfo TranscodingInfo { get; set; }
     }

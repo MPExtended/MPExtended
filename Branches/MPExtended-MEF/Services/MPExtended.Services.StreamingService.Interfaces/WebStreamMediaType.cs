@@ -12,6 +12,8 @@ namespace MPExtended.Services.StreamingService.Interfaces
         // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType
         // TODO: maybe change name?
         [EnumMember]
+        TV = -2,
+        [EnumMember]
         Recording = -1,
         [EnumMember]
         Movie = 0,
@@ -22,8 +24,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [EnumMember]
         TVShow = 3,
         [EnumMember]
-        File = 4,
-        [EnumMember]
-        Folder = 5
+        File = 4
     }
 }

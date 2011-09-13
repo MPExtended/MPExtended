@@ -28,7 +28,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal class VLC : ITranscoder
     {
         public TranscoderProfile Profile { get; set; }
-        public string Input { get; set; }
+        public MediaSource Source { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
@@ -48,10 +48,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId, EncoderUnit.LogStream output)
         {
             // input
-            bool doInputReader = Input.EndsWith(".ts.tsbuffer");
-            if (doInputReader)
+            bool doInputReader = !Source.IsLocalFile;
+            if(doInputReader)
             {
-                pipeline.AddDataUnit(new InputUnit(Input), 1);
+                pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             }
 
             // audio language selection
@@ -84,7 +84,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             string sout = "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}" + muxer;
             string arguments = GenerateArguments("#IN#", sout, subtitleArguments + " " + audioTrack + " " + Profile.CodecParameters["options"]);
             if(!doInputReader)
-                arguments = arguments.Replace("#IN#", Input);
+                arguments = arguments.Replace("#IN#", Source.GetPath());
 
             // add the unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;

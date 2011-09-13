@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Code\ConvertExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
+    <Compile Include="Code\MediaSource.cs" />
     <Compile Include="Code\Pipeline.cs" />
     <Compile Include="Code\Config.cs" />
     <Compile Include="Code\Streaming.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Transcoders\VLCWrapper.cs" />
     <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
     <Compile Include="Transcoders\VLCWrapperRTSP.cs" />
+    <Compile Include="Units\InjectStreamUnit.cs" />
     <Compile Include="Units\EncoderUnit.cs" />
     <Compile Include="Units\FFMpegLogParsingUnit.cs" />
     <Compile Include="Units\HTTPLiveStreamingUnit.cs" />

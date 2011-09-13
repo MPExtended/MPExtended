@@ -17,14 +17,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImage(string path);
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImageResized(string path, int maxWidth, int maxHeight);
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream RetrieveStream(string identifier);
 
         [OperationContract]
@@ -34,6 +26,14 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImage(WebStreamMediaType type, string id);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

@@ -26,7 +26,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal interface ITranscoder
     {
         TranscoderProfile Profile { get; set; }
-        string Input { get; set; }
+        MediaSource Source { get; set; }
         WebMediaInfo MediaInfo { get; set; }
         string Identifier { get; set; }
 

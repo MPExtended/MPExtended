@@ -38,8 +38,7 @@ namespace MPExtended.Services.StreamingService.Code
             public string ClientDescription { get; set; }
             public TranscoderProfile Profile { get; set; }
 
-            public string Source { get; set; }
-            public bool IsTsBuffer { get; set; }
+            public MediaSource Source { get; set; }
             public Resolution OutputSize { get; set; }
 
             public ITranscoder Transcoder { get; set; }
@@ -47,13 +46,12 @@ namespace MPExtended.Services.StreamingService.Code
             public WebTranscodingInfo TranscodingInfo { get; set; }
         }
 
-        public bool InitStream(string identifier, string clientDescription, string source)
+        public bool InitStream(string identifier, string clientDescription, MediaSource source)
         {
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
             stream.Source = source;
-            stream.IsTsBuffer = source.EndsWith(".ts.tsbuffer");
 
             Streams[identifier] = stream;
             return true;
@@ -77,23 +75,15 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 ActiveStream stream = Streams[identifier];
                 stream.Profile = profile;
-                stream.OutputSize = CalculateSize(stream.Profile, stream.Source, stream.IsTsBuffer);
+                stream.OutputSize = CalculateSize(stream.Profile, stream.Source);
                 Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
 
                 // get media info
-                WebMediaInfo info;
-                if (stream.IsTsBuffer)
-                {
-                    info = MediaInfoWrapper.GetMediaInfo(new TsBuffer(stream.Source));
-                }
-                else
-                {
-                    info = MediaInfoWrapper.GetMediaInfo(stream.Source);
-                }
+                WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
                 
                 // get transcoder
                 stream.Transcoder = profile.GetTranscoder();
-                stream.Transcoder.Input = stream.Source;
+                stream.Transcoder.Source = stream.Source;
                 stream.Transcoder.MediaInfo = info;
                 stream.Transcoder.Identifier = identifier;
 
@@ -167,7 +157,8 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 ClientDescription = s.ClientDescription,
                 Identifier = s.Identifier,
-                SourceFile = s.Source,
+                SourceType = s.Source.MediaType,
+                SourceId = s.Source.Id,
                 Profile = s.Profile != null ? s.Profile.Name : null,
                 TranscodingInfo = s.TranscodingInfo != null ? s.TranscodingInfo : null
             }).ToList();
@@ -181,20 +172,20 @@ namespace MPExtended.Services.StreamingService.Code
             return null;
         }
 
-        public Resolution CalculateSize(TranscoderProfile profile, string file, bool isTsBuffer = false)
+        public Resolution CalculateSize(TranscoderProfile profile, MediaSource source)
         {
             if (!profile.HasVideoStream)
                 return new Resolution(0, 0);
 
             decimal aspect;
-            if (isTsBuffer)
+            if (source.MediaType == WebStreamMediaType.TV)
             {
                 // FIXME: we might want to support TV with other aspect ratios
                 aspect = (decimal)16 / 9;
             }
             else
             {
-                WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(file);
+                WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(source);
                 aspect = info.VideoStreams.First().DisplayAspectRatio;
             }
             return Resolution.Calculate(aspect, new Resolution(profile.MaxOutputWidth, profile.MaxOutputHeight), 2);

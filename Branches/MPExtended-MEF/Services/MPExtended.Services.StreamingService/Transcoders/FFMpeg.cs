@@ -28,7 +28,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal class FFMpeg : ITranscoder
     {
         public TranscoderProfile Profile { get; set; }
-        public string Input { get; set; }
+        public MediaSource Source { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
@@ -40,10 +40,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             // add input
-            bool doInputReader = Input.EndsWith(".ts.tsbuffer");
+            bool doInputReader = !Source.IsLocalFile;
             if (doInputReader)
             {
-                pipeline.AddDataUnit(new InputUnit(Input), 1);
+                pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             }
 
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
@@ -76,7 +76,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // fix input thing
             if (!doInputReader)
-                arguments = arguments.Replace("#IN#", Input);
+                arguments = arguments.Replace("#IN#", Source.GetPath());
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
