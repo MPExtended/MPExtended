@@ -3,10 +3,9 @@
   <plugins>
     <tvShow>MPTVSeries</tvShow>
     <movie>MovingPictures</movie>
-    <!--
     <music>MPMyMusic</music>
     <picture>MPPictures</picture>
-    -->
+    <filesystem>LocalFileSystem</filesystem>
   </plugins>
   
   <pluginConfiguration>

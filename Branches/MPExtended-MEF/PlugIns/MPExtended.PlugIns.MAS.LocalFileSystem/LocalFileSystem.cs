@@ -1,132 +1,102 @@
-﻿using System;
+﻿#region Copyright (C) 2011 MPExtended
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
-using System.IO;
 
 namespace MPExtended.PlugIns.MAS.LocalFileSystem
 {
-    public class LocalFileSystem : IFileSystemProvider
+    [Export(typeof(IFileSystemLibrary))]
+    [ExportMetadata("Database", "LocalFileSystem")]
+    public class LocalFileSystem : IFileSystemLibrary
     {
-        private Dictionary<string, WebDriveBasic> _drives = new Dictionary<string, WebDriveBasic>();
-        private Dictionary<string, WebFolderBasic> _folders = new Dictionary<string, WebFolderBasic>();
-        private Dictionary<string, WebFileBasic> _files = new Dictionary<string, WebFileBasic>();
-
         public IEnumerable<WebDriveBasic> GetLocalDrives()
         {
-            List<WebDriveBasic> drives = new List<WebDriveBasic>();
-            // Store in a string array
-            var localDrives = System.IO.DriveInfo.GetDrives();
-            // Loop into the string array
-            foreach (var drive in localDrives)
+            return DriveInfo.GetDrives().Select(x => new WebDriveBasic()
             {
-                WebDriveBasic webDrive = new WebDriveBasic();
-                webDrive.Id = EncodeTo64(drive.RootDirectory.FullName);
-                webDrive.Name = drive.Name;
-                webDrive.Path = drive.RootDirectory.FullName;
-
-                if (_drives.Keys.Contains(EncodeTo64(drive.RootDirectory.FullName)) == false)
-                {
-                    _drives.Add(webDrive.Id, webDrive);
-                }
-                drives.Add(webDrive);
-            }
-            return drives;
+                Id = EncodeTo64(x.RootDirectory.Name),
+                Name = x.Name,
+                Path = x.RootDirectory.FullName
+            });
         }
 
-        public IEnumerable<WebFileBasic> GetFilesByPath(string id)
+        public IEnumerable<WebFileBasic> GetFilesListing(string id)
         {
-            List<WebFileBasic> localFiles = new List<WebFileBasic>();
-
-            string path = "";
-
-            if (_drives.Keys.Contains(id))
+            string path = DecodeFrom64(id);
+            if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
             {
-                WebDriveBasic drive;
-                _drives.TryGetValue(id, out drive);
-                path = drive.Path;
-
-            }
-            else if (_folders.Keys.Contains(id))
-            {
-                WebFolderBasic folder;
-                _folders.TryGetValue(id, out folder);
-                path = folder.Path;
-            }
-            if (!String.IsNullOrEmpty(path))
-            {
-                var files = new DirectoryInfo(path).GetFiles();
-
-                foreach (var file in files)
+                return new DirectoryInfo(path).GetFiles().Select(file => new WebFileBasic()
                 {
-                    WebFileBasic webFile = new WebFileBasic();
-                    webFile.Name = file.Name;
-                    webFile.Path = file.FullName;
-                    webFile.DateAdded = file.CreationTime;
-                    webFile.Id = EncodeTo64(file.FullName);
-
-                    if (_files.Keys.Contains(webFile.Id) == false)
-                    {
-                        _files.Add(webFile.Id, webFile);
-                    }
-                    localFiles.Add(webFile);
-                }
+                    Name = file.Name,
+                    Path = new List<string>() { file.FullName },
+                    DateAdded = file.CreationTime,
+                    Id = EncodeTo64(file.FullName)
+                });
             }
-            return localFiles;
 
+            return new List<WebFileBasic>();
         }
 
-        public IEnumerable<WebFolderBasic> GetFoldersByPath(string id)
+        public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
         {
-            List<WebFolderBasic> folders = new List<WebFolderBasic>();
-
-            string path = "";
-
-            if (_drives.Keys.Contains(id))
+            string path = DecodeFrom64(id);
+            if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
             {
-                WebDriveBasic drive;
-                _drives.TryGetValue(id, out drive);
-                path = drive.Path;
-
-            }
-            else if (_folders.Keys.Contains(id))
-            {
-                WebFolderBasic folder;
-                _folders.TryGetValue(id, out folder);
-                path = folder.Path;
-            }
-            if (!String.IsNullOrEmpty(path))
-            {
-                var localFolder = new DirectoryInfo(path).GetDirectories();
-
-                foreach (var dir in localFolder)
+                return new DirectoryInfo(path).GetDirectories().Select(dir => new WebFolderBasic()
                 {
-                    WebFolderBasic folder = new WebFolderBasic();
-                    folder.Name = dir.Name;
-                    folder.Path = dir.FullName;
-                    folder.DateAdded = dir.CreationTime;
-                    folder.Id = EncodeTo64(dir.FullName);
-                    if (_folders.Keys.Contains(folder.Id) == false)
-                    {
-                        _folders.Add(folder.Id, folder);
-                    }
-                    folders.Add(folder);
-                }
+                    Name = dir.Name,
+                    Path = dir.FullName,
+                    DateAdded = dir.CreationTime,
+                    Id = EncodeTo64(dir.FullName),
+                });
             }
-            return folders;
+
+            return new List<WebFolderBasic>();
         }
 
-        public System.IO.Stream GetFile(string id)
+        public WebFileBasic GetFileBasic(string id)
         {
-            WebFileBasic file;
-            _files.TryGetValue(id, out file);
-            if (file != null)
-            {
-                return new FileStream(file.Path, FileMode.Open , FileAccess.Read);
-            }
-            return null;
+            string path = DecodeFrom64(id);
+            if (!File.Exists(path))
+                return null;
+            FileInfo file = new FileInfo(path);
+            return new WebFileBasic()
+                {
+                    Name = file.Name,
+                    Path = new List<string>() { file.FullName },
+                    DateAdded = file.CreationTime,
+                    Id = EncodeTo64(file.FullName)
+                };
+        }
+
+        public bool IsLocalFile(string path)
+        {
+            return true;
+        }
+
+        public Stream GetFile(string path)
+        {
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
         static private string EncodeTo64(string toEncode)
@@ -141,7 +111,5 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
             return returnValue;
         }
-
-
     }
 }

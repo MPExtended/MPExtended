@@ -92,5 +92,26 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             throw new NotImplementedException();
         }
+
+
+        public Stream GetCover(string albumId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetBackdrop(string albumId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsLocalFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetFile(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

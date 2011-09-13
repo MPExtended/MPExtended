@@ -132,5 +132,15 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             return new FileStream(GetMovieDetailedById(movieId).BackdropPath[offset], FileMode.Open);
         }
+
+        public bool IsLocalFile(string path)
+        {
+            return true;
+        }
+
+        public Stream GetFile(string path)
+        {
+            return new FileStream(path, FileMode.Open);
+        }
     }
 }

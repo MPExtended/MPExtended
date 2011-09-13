@@ -72,5 +72,26 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             throw new NotImplementedException();
         }
+
+
+        public Stream GetCover(string movieId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetBackdrop(string movieId, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsLocalFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetFile(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

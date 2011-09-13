@@ -233,5 +233,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             return new FileStream(GetSeasonDetailed(seriesId, seasonId).BackdropPaths[offset], FileMode.Open);
         }
+
+        public bool IsLocalFile(string path)
+        {
+            return true;
+        }
+
+        public Stream GetFile(string path)
+        {
+            return new FileStream(path, FileMode.Open);
+        }
     }
 }

@@ -423,7 +423,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileBasic GetFileSystemFile(string id);
 
         [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         bool IsLocalFile(WebMediaType type, string id, int offset);
 
         [OperationContract]

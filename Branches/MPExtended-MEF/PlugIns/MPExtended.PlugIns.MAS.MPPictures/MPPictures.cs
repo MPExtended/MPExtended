@@ -62,5 +62,21 @@ namespace MPExtended.PlugIns.MAS.MPPictures
         {
             throw new NotImplementedException();
         }
+
+
+        public Stream GetPicture(string pictureId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsLocalFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetFile(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
