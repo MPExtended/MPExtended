@@ -7,7 +7,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
     public class WebTVEpisodeDetailed : WebTVEpisodeBasic
     {
-        public IList<string> FanArtPaths { get; set; }
         public IList<string> GuestStars { get; set; }
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }

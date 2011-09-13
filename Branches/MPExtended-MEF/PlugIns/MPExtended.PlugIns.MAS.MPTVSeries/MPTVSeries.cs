@@ -34,11 +34,16 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private IPluginData data;
+        private SQLFieldMapping.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
         public MPTVSeries(IPluginData data) : base(data.Configuration["database"])
         {
             this.data = data;
+            this.fixBannerPathReader = delegate(SQLiteDataReader reader, int index)
+            {
+                return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("banner", x)).ToList();
+            };
         }
 
         private string CreateImagePath(string type, string dbPath)
@@ -47,311 +52,186 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
         }
 
-        #region Shows
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year " +
-                         "FROM online_series AS s " +
-                         "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
-                         "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
-            List<int> alreadyDone = new List<int>();
-            return ReadList<WebTVShowBasic>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    if (alreadyDone.Contains(reader.ReadInt32(0)))
-                        return null;
-                    return CreateWebTVShow<WebTVShowBasic>(reader);
-                }
-            );
+            return GetAllTVShows<WebTVShowBasic>();
         }
 
         public IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed()
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
-                            "s.PosterFileNames, s.fanart, s.Actors " +
-                         "FROM online_series AS s " +
-                         "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
-                         "WHERE s.ID != 0 AND s.HasLocalFiles = 1";
-            List<int> alreadyDone = new List<int>();
-            return ReadList<WebTVShowDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    if (alreadyDone.Contains(reader.ReadInt32(0)))
-                        return null;
-                    return CreateWebTVShowDetailed(reader);
-                }
-            );
+            return GetAllTVShows<WebTVShowDetailed>();
+        }
+
+        private IEnumerable<T> GetAllTVShows<T>() where T: WebTVShowBasic, new()
+        {
+            SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
+            {
+                // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
+                // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
+                string data = reader.ReadString(index);
+                if(data.Length > 0)
+                    return data;
+                return reader.ReadString(index - 1);
+            };
+
+            SQLFieldMapping.ReadValue fixFanartPathReader = delegate(SQLiteDataReader reader, int index)
+            {
+                return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("fanart", x)).ToList();
+            };
+
+            string sql = 
+                    "SELECT DISTINCT s.ID, l.Parsed_Name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
+                        "s.PosterFileNames, s.fanart, s.Actors " +
+                    "FROM online_series AS s " +
+                    "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
+                    "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
+                    "%order";
+            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("s", "Pretty_Name", "Title", fixNameReader),
+                new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
+                new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader),
+                new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
+                new SQLFieldMapping("s", "PosterFileNames", "PosterPaths", fixBannerPathReader),
+                new SQLFieldMapping("s", "fanart", "BackdropPaths", fixFanartPathReader),
+                new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
+            });
         }
 
         public WebTVShowDetailed GetTVShowDetailed(string seriesId)
         {
-            string sql = "SELECT DISTINCT s.ID, s.Pretty_Name, l.Parsed_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
-                            "s.PosterFileNames, s.fanart, s.Actors " +
-                         "FROM online_series AS s " +
-                         "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
-                         "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND s.ID = @seriesId";
-            return ReadRow<WebTVShowDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVShowDetailed(reader);
-                },
-                new SQLiteParameter("@seriesId", seriesId)
-            );
+            return GetAllTVShowsDetailed().Where(x => x.Id == seriesId).First();
         }
 
-        private T CreateWebTVShow<T>(SQLiteDataReader reader) where T : WebTVShowBasic, new()
-        {
-            return new T()
-            {
-                Id = reader.ReadInt32(0).ToString(),
-                Title = !String.IsNullOrEmpty(reader.ReadString(1)) ? reader.ReadString(1) : reader.ReadString(2),
-                Genres = reader.ReadPipeList(3),
-                BannerPaths = reader.ReadPipeList(4).Select(y => CreateImagePath("banner", y)).ToList(),
-                Year = Int32.Parse(reader.ReadString(5)),
-
-                // TODO
-                DateAdded = new DateTime(1970, 1, 1),
-                IsProtected = false,
-                UserDefinedCategories = new List<string>(),
-            };
-        }
-
-        private WebTVShowDetailed CreateWebTVShowDetailed(SQLiteDataReader reader)
-        {
-            WebTVShowDetailed show = CreateWebTVShow<WebTVShowDetailed>(reader);
-            show.PosterPaths = reader.ReadPipeList(6).Select(y => CreateImagePath("banner", y)).ToList();
-            show.FanArtPaths = new List<string>() { CreateImagePath("fanart", reader.ReadString(7)) };
-            show.Actors = reader.ReadPipeList(8);
-            return show;
-        }
-        #endregion
-
-        #region Seasons
         public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId)
         {
-            string sql = "SELECT DISTINCT s.ID, s.SeasonIndex, s.SeriesID, s.BannerFileNames, STRFTIME('%Y', e.FirstAired) AS year " +
-                         "FROM season s " +
-                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
-                         "WHERE s.SeriesID = @seriesId";
-            return ReadList<WebTVSeasonBasic>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVSeason<WebTVSeasonBasic>(reader);
-                },
-                new SQLiteParameter("@seriesId", seriesId)
-            );
+            return GetAllSeasons<WebTVSeasonBasic>(seriesId);
         }
 
         public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
-                            "BannerFileNames " +
-                         "FROM season " +
-                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
-                         "WHERE SeriesID = @seriesId";
-            return ReadList<WebTVSeasonDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVSeasonDetailed(reader);
-                },
-                new SQLiteParameter("@seriesId", seriesId)
-            );
+            return GetAllSeasons<WebTVSeasonDetailed>(seriesId);
+        }
+
+        public IEnumerable<T> GetAllSeasons<T>(string seriesId) where T : WebTVSeasonBasic, new()
+        {
+            string sql = 
+                    "SELECT DISTINCT s.ID, s.SeasonIndex, s.SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
+                        "BannerFileNames " +
+                    "FROM season s " +
+                    "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " +
+                    "WHERE s.SeriesID = @seriesId AND %where " +
+                    "%order";
+            var parameters = new SQLiteParameter[] { new SQLiteParameter("@seriesId", seriesId) };
+            return new LazyQuery<T>(this, sql, parameters, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
+                new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
+                new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
+                new SQLFieldMapping("", "BannerFileNames", "BannerPaths", fixBannerPathReader)
+            });
         }
 
         public WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId)
         {
-            string sql = "SELECT DISTINCT ID, SeasonIndex, SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
-                            "BannerFileNames " +
-                         "FROM season " +
-                         "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " + 
-                         "WHERE SeriesID = @seriesId AND ID = @seasonId";
-            return ReadRow<WebTVSeasonDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVSeasonDetailed(reader);
-                },
-                new SQLiteParameter("@seriesId", seriesId),
-                new SQLiteParameter("@seasonId", seasonId)
-            );
+            return GetAllSeasonsDetailed(seriesId).Where(x => x.Id == seasonId).First();
         }
 
-        private T CreateWebTVSeason<T>(SQLiteDataReader reader) where T : WebTVSeasonBasic, new()
-        {
-            return new T()
-            {
-                Id = reader.ReadString(0),
-                SeasonNumber = reader.ReadInt32(1),
-                ShowId = reader.ReadInt32(2).ToString(),
-                Year = Int32.Parse(reader.ReadString(3)), // strftime returns an string
-
-                // TODO
-                Title = String.Empty,
-                DateAdded = new DateTime(1970, 1, 1),
-                IsProtected = false,
-            };
-        }
-
-        private WebTVSeasonDetailed CreateWebTVSeasonDetailed(SQLiteDataReader reader)
-        {
-            WebTVSeasonDetailed season = CreateWebTVSeason<WebTVSeasonDetailed>(reader);
-
-            // unavailable
-            season.BackdropPaths = new List<string>();
-            season.BannerPaths = reader.ReadPipeList(3).Select(x => CreateImagePath("banner", x)).ToList();
-            season.PosterPaths = new List<string>();
-
-            return season;
-        }
-        #endregion
-
-        #region Episodes
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
-            string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename " +
-                         "FROM online_episodes e " +
-                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
-                         "WHERE e.Hidden = 0 " +
-                         "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, e.GuestStars, e.Director, e.Writer";
-            return ReadList<WebTVEpisodeBasic>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    var a = CreateWebTVEpisode<WebTVEpisodeBasic>(reader);
-                    return a;
-                }
-            );
+            return GetAllEpisodes<WebTVEpisodeBasic>();
         }
 
         public IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed()
         {
-            string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, e.GuestStars, e.Director, e.Writer " +
-                         "FROM online_episodes e " +
-                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
-                         "WHERE e.Hidden = 0 " +
-                         "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, e.GuestStars, e.Director, e.Writer";
-            return ReadList<WebTVEpisodeDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVEpisodeDetailed(reader);
-                }
-            );
+            return GetAllEpisodes<WebTVEpisodeDetailed>();
+        }
+
+        private IEnumerable<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
+        {
+            SQLFieldMapping.ReadValue seasonIdReader = delegate (SQLiteDataReader reader, int index) { 
+                return reader.ReadIntAsString(index - 1) + "_s" + reader.ReadIntAsString(index); 
+            };
+            string sql =                     
+                    "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                        "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
+                        "e.GuestStars, e.Director, e.Writer " +
+                    "FROM online_episodes e " +
+                    "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                    "WHERE e.Hidden = 0 AND %where " +
+                    "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                         "e.FirstAired, e.GuestStars, e.Director, e.Writer " +
+                    "%order";
+            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
+            {
+                new SQLFieldMapping("e", "EpisodeID", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
+                new SQLFieldMapping("e", "SeasonIndex", "SeasonId", 
+                    delegate (SQLiteDataReader reader, int index) { return reader.ReadIntAsString(index - 1) + "_s" + reader.ReadIntAsString(index); }),
+                new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
+                new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
+                new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
+                new SQLFieldMapping("e", "Rating", "Rating", DataReaders.ReadFloat),
+                new SQLFieldMapping("e", "thumbFilename", "BannerPaths", fixBannerPathReader),
+                new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
+                new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
+                new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList)
+            });
         }
 
         public WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId)
         {
-            string sql = "SELECT e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, e.GuestStars, e.Director, e.Writer " +
-                         "FROM online_episodes e " +
-                         "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
-                         "WHERE e.Hidden = 0 AND e.EpisodeID = @episodeId " +
-                         "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                            "e.FirstAired, e.GuestStars, e.Director, e.Writer";
-            return ReadRow<WebTVEpisodeDetailed>(
-                sql,
-                delegate(SQLiteDataReader reader)
-                {
-                    return CreateWebTVEpisodeDetailed(reader);
-                },
-                new SQLiteParameter("@episodeId", episodeId)
-            );
+            return GetAllEpisodesDetailed().Where(x => x.Id == episodeId).First();
         }
 
-        private T CreateWebTVEpisode<T>(SQLiteDataReader reader) where T : WebTVEpisodeBasic, new()
-        {
-            return new T() {
-                Id = reader.ReadInt32(0).ToString(),
-                ShowId = reader.ReadInt32(1).ToString(),
-                Title = reader.ReadString(2),
-                EpisodeNumber = reader.ReadInt32(3),
-                SeasonId = reader.ReadInt32(1).ToString() + "_s" + reader.ReadInt32(4).ToString(),
-                Watched = reader.ReadBoolean(5),
-                Rating = reader.ReadFloat(6),
-                BannerPaths = new List<string>() { CreateImagePath("banner", reader.ReadString(7)) },
-                FirstAired = reader.ReadDateTime(8),
-                Path = reader.ReadPipeList(9),
-
-                // TODO
-                DateAdded = new DateTime(1970, 1, 1),
-                IsProtected = false,
-            };
-        }
-
-        private WebTVEpisodeDetailed CreateWebTVEpisodeDetailed(SQLiteDataReader reader)
-        {
-            WebTVEpisodeDetailed ep = CreateWebTVEpisode<WebTVEpisodeDetailed>(reader);
-
-            ep.GuestStars = reader.ReadPipeList(10);
-            ep.Directors = reader.ReadPipeList(11);
-            ep.Writers = reader.ReadPipeList(12);
-                
-            // unavailable
-            ep.FanArtPaths = new List<string>();           
-
-            return ep;
-        }
-        #endregion
-
-        #region Misc
         public IEnumerable<WebGenre> GetAllGenres()
         {
             string sql = "SELECT DISTINCT Genre FROM online_series";
-            List<string> genres = new List<string>();
-            ReadList<WebGenre>(sql, delegate(SQLiteDataReader reader)
-            {
-                genres.AddRange(reader.ReadPipeList(0));
-                return null;
-            });
-
-            return genres.Distinct().Select(x => new WebGenre() { Name = x });
+            return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
+                {
+                    return reader.ReadPipeList(0);
+                })
+                    .SelectMany(x => x)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .Select(x => new WebGenre() { Name = x });
         }
 
         public IEnumerable<WebCategory> GetAllCategories()
         {
             return new List<WebCategory>();
         }
-        #endregion
 
-        #region Retrieval
         public Stream GetBanner(string seriesId, int offset)
         {
-            throw new NotImplementedException();
+            return new FileStream(GetTVShowDetailed(seriesId).BannerPaths[offset], FileMode.Open);
         }
 
         public Stream GetPoster(string seriesId, int offset)
         {
-            throw new NotImplementedException();
+            return new FileStream(GetTVShowDetailed(seriesId).PosterPaths[offset], FileMode.Open);
         }
 
         public Stream GetBackdrop(string seriesId, int offset)
         {
-            throw new NotImplementedException();
+            return new FileStream(GetTVShowDetailed(seriesId).BackdropPaths[offset], FileMode.Open);
         }
 
         public Stream GetSeasonBanner(string seriesId, string seasonId, int offset)
         {
-            throw new NotImplementedException();
+            return new FileStream(GetSeasonDetailed(seriesId, seasonId).BannerPaths[offset], FileMode.Open);
         }
 
         public Stream GetSeasonPoster(string seriesId, string seasonId, int offset)
         {
-            throw new NotImplementedException();
+            return new FileStream(GetSeasonDetailed(seriesId, seasonId).PosterPaths[offset], FileMode.Open);
         }
 
         public Stream GetSeasonBackdrop(string seriesId, string seasonId, int offset)
         {
             return new FileStream(GetSeasonDetailed(seriesId, seasonId).BackdropPaths[offset], FileMode.Open);
         }
-        #endregion
     }
 }
