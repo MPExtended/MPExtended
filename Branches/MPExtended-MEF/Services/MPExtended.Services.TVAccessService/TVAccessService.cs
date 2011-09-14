@@ -22,6 +22,8 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Diagnostics;
+using System.Reflection;
 using Gentle.Provider.MySQL;
 using Gentle.Provider.SQLServer;
 using MPExtended.Libraries.ServiceLib;
@@ -35,6 +37,8 @@ namespace MPExtended.Services.TVAccessService
     public class TVAccessService : ITVAccessService
     {
         #region Fields
+        private const int API_VERSION = 2;
+
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
         private Dictionary<string, User> _tvUsers;
@@ -53,10 +57,19 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Public Methods
-
         public bool TestConnectionToTVService()
         {
             return RemoteControl.IsConnected;
+        }
+
+        public WebTVServiceDescription GetServiceDescription()
+        {
+            return new WebTVServiceDescription()
+            {
+                HasConnectionToTVServer = RemoteControl.IsConnected,
+                ApiVersion = API_VERSION,
+                ServiceVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
+            };
         }
 
         public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType)

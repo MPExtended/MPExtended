@@ -2,22 +2,24 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{0B852F64-7C0E-4555-A20D-0F0ABF337255}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Services.TVAccessService.Interfaces</RootNamespace>
-    <AssemblyName>MPExtended.Services.TVAccessService.Interfaces</AssemblyName>
+    <RootNamespace>MPExtended.Applications.DocumentationGenerator</RootNamespace>
+    <AssemblyName>MPExtended.Applications.DocumentationGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,7 +28,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,18 +37,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\MPExtendedKey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,27 +50,9 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="ITVAccessService.cs" />
+    <Compile Include="Generator.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebCard.cs" />
-    <Compile Include="WebChannelBasic.cs" />
-    <Compile Include="WebChannelDetailed.cs" />
-    <Compile Include="WebChannelGroup.cs" />
-    <Compile Include="WebChannelState.cs" />
-    <Compile Include="WebProgramBasic.cs" />
-    <Compile Include="WebProgramDetailed.cs" />
-    <Compile Include="WebRecordingBasic.cs" />
-    <Compile Include="WebRtspClient.cs" />
-    <Compile Include="WebSchedule.cs" />
-    <Compile Include="WebTVServiceDescription.cs" />
-    <Compile Include="WebScheduleBasic.cs" />
-    <Compile Include="WebUser.cs" />
-    <Compile Include="WebVirtualCard.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\MPExtendedKey.snk">
-      <Link>MPExtendedKey.snk</Link>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
