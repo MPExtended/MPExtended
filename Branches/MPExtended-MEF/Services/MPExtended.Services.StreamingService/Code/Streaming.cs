@@ -78,24 +78,25 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
- lock (Streams[identifier]) {
-                ActiveStream stream = Streams[identifier];
-                stream.Profile = profile;
-                stream.OutputSize = CalculateSize(stream.Profile, stream.Source);
-                Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
+                lock (Streams[identifier]) 
+                {
+                    ActiveStream stream = Streams[identifier];
+                    stream.Profile = profile;
+                    stream.OutputSize = CalculateSize(stream.Profile, stream.Source);
+                    Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
 
-                // get media info
-                WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
+                    // get media info
+                    WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
                 
-                // get transcoder
-                stream.Transcoder = profile.GetTranscoder();
-                stream.Transcoder.Source = stream.Source;
-                stream.Transcoder.MediaInfo = info;
-                stream.Transcoder.Identifier = identifier;
+                    // get transcoder
+                    stream.Transcoder = profile.GetTranscoder();
+                    stream.Transcoder.Source = stream.Source;
+                    stream.Transcoder.MediaInfo = info;
+                    stream.Transcoder.Identifier = identifier;
 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
-                    stream.Transcoder.Input = stream.Source;
+                    stream.Transcoder.Source = stream.Source;
                     stream.Transcoder.MediaInfo = info;
                     stream.Transcoder.Identifier = identifier;
 

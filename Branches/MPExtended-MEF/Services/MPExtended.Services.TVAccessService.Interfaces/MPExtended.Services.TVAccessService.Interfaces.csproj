@@ -67,16 +67,10 @@
     <Compile Include="WebProgramDetailed.cs" />
     <Compile Include="WebRecordingBasic.cs" />
     <Compile Include="WebRtspClient.cs" />
-    <Compile Include="WebSchedule.cs" />
     <Compile Include="WebTVServiceDescription.cs" />
     <Compile Include="WebScheduleBasic.cs" />
     <Compile Include="WebUser.cs" />
     <Compile Include="WebVirtualCard.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\MPExtendedKey.snk">
-      <Link>MPExtendedKey.snk</Link>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
