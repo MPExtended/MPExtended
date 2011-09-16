@@ -32,19 +32,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMediaInfo GetTVMediaInfo(string identifier);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTranscodingInfo GetTranscodingInfo(string identifier);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         bool InitStream(WebStreamMediaType type, string itemId, string clientDescription, string identifier);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitTVStream(int channelId, string clientDescription, string identifier);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -65,10 +57,5 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResolution GetStreamSize(WebStreamMediaType type, string itemId, string profile);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResolution GetTVStreamSize(int channelId, string profile);
     }
-
 }
