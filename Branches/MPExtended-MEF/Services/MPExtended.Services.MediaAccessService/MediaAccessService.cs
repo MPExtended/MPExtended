@@ -119,7 +119,8 @@ namespace MPExtended.Services.MediaAccessService
                 foreach (string pdir in Directory.GetDirectories(pluginRoot))
                 {
                     string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-                    catalog.Catalogs.Add(new DirectoryCatalog(dir));
+                    if(Directory.Exists(dir))
+                        catalog.Catalogs.Add(new DirectoryCatalog(dir));
                 }
 #else
                 string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
