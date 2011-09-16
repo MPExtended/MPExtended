@@ -147,9 +147,13 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Ge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.DocumentationGenerator", "Applications\MPExtended.Applications.DocumentationGenerator\MPExtended.Applications.DocumentationGenerator.csproj", "{0B852F64-7C0E-4555-A20D-0F0ABF337255}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.LocalFileSystem", "PlugIns\MPExtended.PlugIns.MAS.LocalFileSystem\MPExtended.PlugIns.MAS.LocalFileSystem.csproj", "{456F3244-967E-4732-A2C4-0219B85521DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPShares", "PlugIns\MPExtended.PlugIns.MAS.MPShares\MPExtended.PlugIns.MAS.MPShares.csproj", "{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 31
+		SccNumberOfProjects = 32
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -273,6 +277,10 @@ Global
 		SccProjectTopLevelParentUniqueName30 = MPExtended.sln
 		SccProjectName30 = Applications/MPExtended.Applications.DocumentationGenerator
 		SccLocalPath30 = Applications\\MPExtended.Applications.DocumentationGenerator
+		SccProjectUniqueName31 = PlugIns\\MPExtended.PlugIns.MAS.MPShares\\MPExtended.PlugIns.MAS.MPShares.csproj
+		SccProjectTopLevelParentUniqueName31 = MPExtended.sln
+		SccProjectName31 = PlugIns/MPExtended.PlugIns.MAS.MPShares
+		SccLocalPath31 = PlugIns\\MPExtended.PlugIns.MAS.MPShares
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -570,6 +578,26 @@ Global
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|Mixed Platforms.Build.0 = Release|x86
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|x86.ActiveCfg = Release|x86
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|x86.Build.0 = Release|x86
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -614,5 +642,7 @@ Global
 		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{456F3244-967E-4732-A2C4-0219B85521DC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 	EndGlobalSection
 EndGlobal

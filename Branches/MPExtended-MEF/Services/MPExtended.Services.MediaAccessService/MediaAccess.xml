@@ -27,6 +27,9 @@
     <plugin name="MPExtended.PlugIns.MAS.MPVideos">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
+    <plugin name="MPExtended.PlugIns.MAS.MPShares">
+      <config>C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
+    </plugin>
   </pluginConfiguration>
   
   <!-- everything below is obsolete -->
