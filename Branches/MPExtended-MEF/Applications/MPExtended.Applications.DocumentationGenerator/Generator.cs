@@ -29,7 +29,9 @@ namespace MPExtended.Applications.DocumentationGenerator
         private Dictionary<string, string> namemap = new Dictionary<string, string>()
         {
             { "Int32", "int" },
+            { "Int64", "long" },
             { "String", "string" },
+            { "Boolean", "bool" },
             { "Double", "float" },
         };
 
@@ -41,8 +43,8 @@ namespace MPExtended.Applications.DocumentationGenerator
         {
             Console.WriteLine("Generating documentation for assembly {0}", Assembly.GetName().Name);
             Console.WriteLine("=> Generating documentation for class {0}", API.Name);
-            var rettypes = new List<Type>();
-            foreach (var method in API.GetMethods())
+            var methods = API.GetMethods().OrderBy(x => GenerateSortOrder(x.Name)).ThenBy(x => x.Name);
+            foreach (var method in methods)
             {
                 Console.WriteLine("==> Generating documentation for method {0}", method.Name);
                 Output.WriteLine(String.Format("<h4>{0}</h4><dl>", method.Name));
@@ -68,6 +70,7 @@ namespace MPExtended.Applications.DocumentationGenerator
 
                 Output.WriteLine("</dl>");
             }
+            Console.WriteLine("=> Done");
 
             Output.Flush();
             Output.Close();
@@ -105,7 +108,9 @@ namespace MPExtended.Applications.DocumentationGenerator
         private bool IsListType(Type type, out Type elementType)
         {
             // i've a feeling .NET already has a method for this
-            bool isList = type.Name != "String" && type.GetMethods().Count(x => x.Name == "GetEnumerator") > 0;
+            bool isList = type.Name != "String" && 
+                (type.GetMethods().Count(x => x.Name == "GetEnumerator") > 0 || 
+                    type.GetInterfaces().Count(x => x.Name == "IEnumerable") > 0);
             elementType = null;
             if (isList)
             {
@@ -128,6 +133,16 @@ namespace MPExtended.Applications.DocumentationGenerator
                 return namemap[input];
 
             return input;
+        }
+
+        private int GenerateSortOrder(string methodName)
+        {
+            if (methodName.Contains("Movie")) return 2;
+            if (methodName.Contains("Music")) return 3;
+            if (methodName.Contains("Picture")) return 4;
+            if (methodName.Contains("TV")) return 5;
+            if (methodName.Contains("FileSystem")) return 6;
+            return 1; // show unknown at first
         }
     }
 }

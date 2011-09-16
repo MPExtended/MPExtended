@@ -115,4 +115,19 @@ namespace MPExtended.Services.MediaAccessService
             throw new Exception();
         }
     }
+
+    internal static class WebMediaItemExtensionMethods
+    {
+        public static ConcreteWebMediaItem ToWebMediaItem(this WebMediaItem item)
+        {
+            var x = new ConcreteWebMediaItem
+            {
+                Id = item.Id,
+                DateAdded = item.DateAdded,
+                Path = item.Path,
+                Type = item.Type
+            };
+            return x;
+        }
+    }
 }

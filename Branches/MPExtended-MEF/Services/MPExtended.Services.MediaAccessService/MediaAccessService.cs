@@ -184,20 +184,20 @@ namespace MPExtended.Services.MediaAccessService
             };
         }
 
-        public WebMediaItem GetMediaItem(WebMediaType type, string id)
+        public ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id)
         {
             switch (type)
             {
                 case WebMediaType.Movie:
-                    return GetMovieDetailedById(id);
+                    return GetMovieDetailedById(id).ToWebMediaItem();
                 case WebMediaType.Music:
-                    return GetMusicTrackDetailedById(id);
+                    return GetMusicTrackDetailedById(id).ToWebMediaItem();
                 case WebMediaType.Picture:
-                    return GetPictureDetailed(id);
+                    return GetPictureDetailed(id).ToWebMediaItem();
                 case WebMediaType.TVShow:
-                    return GetTVEpisodeDetailed(id);
+                    return GetTVEpisodeDetailed(id).ToWebMediaItem();
                 case WebMediaType.File:
-                    return GetFileSystemFile(id);
+                    return GetFileSystemFile(id).ToWebMediaItem();
                 default:
                     throw new ArgumentException();
             }

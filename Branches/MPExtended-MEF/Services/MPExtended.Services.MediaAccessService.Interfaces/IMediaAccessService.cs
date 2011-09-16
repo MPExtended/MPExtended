@@ -83,7 +83,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]        
-        WebMediaItem GetMediaItem(WebMediaType type, string id);
+        ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id);
         #endregion
 
         #region Movies
