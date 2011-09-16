@@ -32,16 +32,22 @@ namespace MPExtended.Applications.DocumentationGenerator
 
             // let's start with MAS
             Assembly mas = Assembly.LoadFrom(Path.Combine(rootpath, "Services", "MPExtended.Services.MediaAccessService.Interfaces", "bin", "Debug", "MPExtended.Services.MediaAccessService.Interfaces.dll"));
-            Generator g = new Generator()
+            Generator g = new MASGenerator(mas)
             {
-                Assembly = mas,
-                API = mas.GetType("MPExtended.Services.MediaAccessService.Interfaces.IMediaAccessService"),
-                Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-out.html")
+                Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-mas.txt")
             };
             g.Generate();
 
+            // continue with WSS
+            Assembly wss = Assembly.LoadFrom(Path.Combine(rootpath, "Services", "MPExtended.Services.StreamingService.Interfaces", "bin", "Debug", "MPExtended.Services.StreamingService.Interfaces.dll"));
+            Generator g2 = new WSSGenerator(wss)
+            {
+                Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-wss.txt")
+            };
+            g2.Generate();
+
             // finish
-            Console.ReadLine();
+            Console.ReadKey();
         }
     }
 }

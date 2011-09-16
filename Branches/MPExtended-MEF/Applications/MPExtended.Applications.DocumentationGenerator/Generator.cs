@@ -24,51 +24,109 @@ using System.IO;
 
 namespace MPExtended.Applications.DocumentationGenerator
 {
-    internal class Generator
+    internal abstract class Generator
     {
-        private Dictionary<string, string> namemap = new Dictionary<string, string>()
-        {
-            { "Int32", "int" },
-            { "Int64", "long" },
-            { "String", "string" },
-            { "Boolean", "bool" },
-            { "Double", "float" },
-        };
-
         public Assembly Assembly { get; set; }
-        public Type API { get; set; }
         public TextWriter Output { get; set; }
+        protected Type JsonAPI { get; set; }
+        protected Type StreamAPI { get; set; }
+        protected IEnumerable<Type> Enums { get; set; }
+
+        protected abstract int GenerateSortOrder(string methodName);
+        protected abstract Dictionary<int, string> GetHeadings();
+
+        protected virtual void CustomGenerate()
+        {
+        }
+
+        protected virtual string MapName(MethodInfo method, string typename)
+        {
+            var namemap = new Dictionary<string, string>()
+            {
+                { "Int32", "int" },
+                { "Int64", "long" },
+                { "String", "string" },
+                { "Boolean", "bool" },
+                { "Double", "float" },
+                { "Single", "float" },
+            };
+            if(namemap.ContainsKey(typename))
+                return namemap[typename];
+            return typename;
+        }
 
         public void Generate()
         {
+            // header
+            string date = DateTime.Now.ToString("dd MMM yyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+            Output.WriteLine("<p>This page contains the API documentation for this MPExtended service, as automatically generated on {0}. " +
+                "Please do not edit, as these probably will be overwritten.</p>", date);
+
             Console.WriteLine("Generating documentation for assembly {0}", Assembly.GetName().Name);
-            Console.WriteLine("=> Generating documentation for class {0}", API.Name);
-            var methods = API.GetMethods().OrderBy(x => GenerateSortOrder(x.Name)).ThenBy(x => x.Name);
-            foreach (var method in methods)
+            CustomGenerate();
+
+            // get all items 
+            var itemstogen = JsonAPI.GetMethods().Select(x => new DocGenItem()
             {
-                Console.WriteLine("==> Generating documentation for method {0}", method.Name);
-                Output.WriteLine(String.Format("<h4>{0}</h4><dl>", method.Name));
-                Output.WriteLine(String.Format("<dt>URL</dt><dd>/{0}</dd>", method.Name));
-                
-                // parameters
-                Output.WriteLine("<dt>Parameters</dt><dd>");
-                GenerateParameterDocumentation(method);
-                Output.WriteLine("</dd>");
-
-                // return type
-                Type itemType;
-                if (IsListType(method.ReturnType, out itemType))
+                URLPrefix = "/json",
+                Reflected = x,
+                Name = x.Name,
+                Order = GenerateSortOrder(x.Name)
+            });
+            if(Enums != null)
+                itemstogen = itemstogen.Union(Enums.Select(x => new DocGenItem()
+                    {
+                        URLPrefix = "",
+                        Reflected = x,
+                        Name = x.Name,
+                        Order = GenerateSortOrder(x.Name),
+                    }));
+            if(StreamAPI != null)
+                itemstogen = itemstogen.Union(StreamAPI.GetMethods().Select(x => new DocGenItem()
                 {
-                    Output.WriteLine(String.Format("<dt>Returns</dt><dd>List of <strong>{0}</strong><br />", itemType.Name));
-                }
-                else
-                {
-                    Output.WriteLine(String.Format("<dt>Returns</dt><dd><strong>{0}</strong><br />", itemType.Name));
-                }
-                GenerateReturnDocumentation(itemType);
-                Output.WriteLine("</dd>");
+                    URLPrefix = "/stream",
+                    Reflected = x,
+                    Name = x.Name,
+                    Order = GenerateSortOrder(x.Name)
+                }));
 
-                Output.WriteLine("</dl>");
+            itemstogen = itemstogen
+                .OrderBy(x => x.Order)
+                .ThenBy(x => x.Name);
+            int lastOrder = -1;
+
+            // navigation
+            Console.WriteLine("=> Generating documentation header");
+            Output.WriteLine("<h3>Navigation</h3>");
+            foreach (var item in itemstogen)
+            {
+                if (lastOrder != item.Order)
+                {
+                    if (lastOrder != -1) Output.WriteLine("</ul>");
+                    Output.WriteLine("<h4>{0}</h4><ul>", GetHeadings()[item.Order]);
+                    lastOrder = item.Order;
+                }
+                Output.WriteLine("<li><a href=\"#{0}\">{0}</a></li>", item.Name);
+            }
+            Output.WriteLine("</ul>");
+
+            // method docs
+            foreach (var item in itemstogen)
+            {
+                if (lastOrder != item.Order)
+                {
+                    Output.WriteLine(String.Format("<h3>{0}</h3>", GetHeadings()[item.Order]));
+                    lastOrder = item.Order;
+                }
+
+                if (item.Reflected is MethodInfo)
+                {
+                    GenerateMethodDocumentation(item.Reflected as MethodInfo, item.URLPrefix);
+                }
+                else if (item.Reflected is Type)
+                {
+                    GenerateEnumDocumentation(item.Reflected as Type);
+                }
             }
             Console.WriteLine("=> Done");
 
@@ -76,7 +134,41 @@ namespace MPExtended.Applications.DocumentationGenerator
             Output.Close();
         }
 
-        private void GenerateParameterDocumentation(MethodInfo method)
+        protected void GenerateMethodDocumentation(MethodInfo method, string urlprefix)
+        {
+            // general method
+            Console.WriteLine("=> Generating documentation for method {0}", method.Name);
+            Output.WriteLine(String.Format("<h4 name=\"{0}\">{0}</h4><dl>", method.Name));
+            Output.WriteLine(String.Format("<dt>URL</dt><dd>{0}/{1}</dd>", urlprefix, method.Name));
+
+            // parameters
+            Output.WriteLine("<dt>Parameters</dt><dd>");
+            GenerateParameterDocumentation(method);
+            Output.WriteLine("</dd>");
+
+            // return type
+            Type itemType = null;
+            if (method.ReturnType.Name == "Stream")
+            {
+                Output.WriteLine(String.Format("<dt>Returns</dt><dd>Raw data"));
+            }
+            else if (IsListType(method.ReturnType, out itemType))
+            {
+                Output.WriteLine(String.Format("<dt>Returns</dt><dd>List of <strong>{0}</strong><br />", itemType.Name));
+            }
+            else
+            {
+                Output.WriteLine(String.Format("<dt>Returns</dt><dd><strong>{0}</strong><br />", itemType.Name));
+            }
+            if (itemType != null)
+            {
+                GenerateReturnDocumentation(method, itemType);
+            }
+            Output.WriteLine("</dd>");
+            Output.WriteLine("</dl>");
+        }
+
+        protected void GenerateParameterDocumentation(MethodInfo method)
         {
             if (method.GetParameters().Count() == 0)
             {
@@ -87,25 +179,42 @@ namespace MPExtended.Applications.DocumentationGenerator
             Output.WriteLine("<ul>");
             foreach (var param in method.GetParameters())
             {
-                Output.WriteLine("<li><strong>{0}</strong> ({1})", param.Name, MapName(param.ParameterType.Name));
+                Output.WriteLine("<li><strong>{0}</strong> ({1})", param.Name, GenerateTypeNameLink(method, param.ParameterType));
             }
             Output.WriteLine("</ul>");
         }
 
-        private void GenerateReturnDocumentation(Type type)
+        protected void GenerateReturnDocumentation(MethodInfo method, Type type)
         {
-            Console.WriteLine("===> Generating documentation for type {0}", type.Name);
+            Console.WriteLine("==> Generating documentation for type {0}", type.Name);
             Output.WriteLine("<ul>");
             foreach (var property in type.GetProperties())
             {
-                Type elementType;
-                string typename = IsListType(property.PropertyType, out elementType) ? "list of " + MapName(elementType.Name) : property.PropertyType.Name;
-                Output.WriteLine(String.Format("<li><strong>{0}</strong> ({1})</li>", property.Name, MapName(typename)));
+                Output.WriteLine(String.Format("<li><strong>{0}</strong> ({1})</li>", property.Name, GenerateTypeNameLink(method, property.PropertyType)));
             }
             Output.WriteLine("</ul>");
         }
 
-        private bool IsListType(Type type, out Type elementType)
+        protected void GenerateEnumDocumentation(Type type)
+        {
+            Console.WriteLine("=> Generating documentation for type {0}", type.Name);
+            Output.WriteLine("<h4 name=\"{0}\">{0} (enumeration)</h4>", type.Name);
+            Output.WriteLine("<dl><dt>Values</dt><dd><ul>");
+            foreach (var val in type.GetEnumValues())
+            {
+                Output.WriteLine("<li>{0}: {1}</li>", type.GetEnumName(val), (int)val);
+            }
+            Output.WriteLine("</ul></dt></dl>");
+        }
+
+        protected string GenerateTypeNameLink(MethodInfo method, Type type)
+        {
+            Type elementType;
+            string typename = IsListType(type, out elementType) ? "list of " + MapName(method, elementType.Name) : MapName(method, type.Name);
+            return typename == elementType.Name ? "<a href=\"#" + typename + "\">" + typename + "</a>" : typename;
+        }
+
+        protected bool IsListType(Type type, out Type elementType)
         {
             // i've a feeling .NET already has a method for this
             bool isList = type.Name != "String" && 
@@ -125,24 +234,6 @@ namespace MPExtended.Applications.DocumentationGenerator
             }
 
             return isList;
-        }
-
-        private string MapName(string input)
-        {
-            if (namemap.ContainsKey(input))
-                return namemap[input];
-
-            return input;
-        }
-
-        private int GenerateSortOrder(string methodName)
-        {
-            if (methodName.Contains("Movie")) return 2;
-            if (methodName.Contains("Music")) return 3;
-            if (methodName.Contains("Picture")) return 4;
-            if (methodName.Contains("TV")) return 5;
-            if (methodName.Contains("FileSystem")) return 6;
-            return 1; // show unknown at first
         }
     }
 }

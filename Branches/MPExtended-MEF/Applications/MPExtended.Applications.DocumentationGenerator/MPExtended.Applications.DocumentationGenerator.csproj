@@ -50,7 +50,10 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="DocGenItem.cs" />
+    <Compile Include="WSSGenerator.cs" />
     <Compile Include="Generator.cs" />
+    <Compile Include="MASGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
