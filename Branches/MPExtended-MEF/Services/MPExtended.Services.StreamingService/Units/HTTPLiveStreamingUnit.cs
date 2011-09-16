@@ -58,6 +58,7 @@ namespace MPExtended.Services.StreamingService.Units
         private string identifier;
         private Process segmenterApplication;
         private string siteRoot;
+        private Thread monitorThread;
 
         public HTTPLiveStreamingUnit(string identifier)
         {
@@ -79,18 +80,37 @@ namespace MPExtended.Services.StreamingService.Units
             start.UseShellExecute = false;
             start.RedirectStandardInput = true;
             start.RedirectStandardOutput = false;
-            start.RedirectStandardError = false;
+            start.RedirectStandardError = true;
             start.WindowStyle = DebugOutput ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden;
             start.CreateNoWindow = !DebugOutput;
             start.WorkingDirectory = TemporaryDirectory;
 
             Log.Info("HTTPLiveStreaming: segmenter arguments: {0}", arguments);
 
+            // TODO: separate class or something
+            monitorThread = new Thread(delegate()
+                {
+                    while (!segmenterApplication.HasExited)
+                    {
+                        try
+                        {
+                            Log.Info("SMON: is running {0}", !segmenterApplication.HasExited);
+                            Log.Info("SMON: stderr: {0}", segmenterApplication.StandardError.ReadLine());
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Info("SMON: failed", ex);
+                        }
+                    }
+                    Log.Info("SMON: is running end {0}", !segmenterApplication.HasExited);
+                });
+
             try
             {
                 segmenterApplication = new Process();
                 segmenterApplication.StartInfo = start;
                 segmenterApplication.Start();
+                monitorThread.Start();
             }
             catch (Exception ex)
             {
