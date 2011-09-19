@@ -38,6 +38,9 @@ using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using TAS = MPExtended.Services.TVAccessService.Interfaces;
 using WSS = MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -100,7 +103,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             activeSessionTimer.Elapsed += new System.Timers.ElapsedEventHandler(activeSessionTimer_Elapsed);
             activeSessionTimer.Interval = 18000;
             activeSessionTimer.Enabled = true;
-            activeSessionTimer.AutoReset = true;       
+            activeSessionTimer.AutoReset = true;
             InitBackgroundWorker();
 
         }
@@ -123,7 +126,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         }
         private void LoadLogFiles(string fileName)
         {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log",fileName)))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName)))
             {
                 try
                 {
@@ -142,7 +145,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void InitBackgroundWorker()
         {
-            workerVideos.DoWork += new DoWorkEventHandler(workerVideos_DoWork);
+
             workerMoPi.DoWork += new DoWorkEventHandler(workerMoPi_DoWork);
             workerServiceText.DoWork += new DoWorkEventHandler(workerServiceText_DoWork);
             workerMusic.DoWork += new DoWorkEventHandler(workerMusic_DoWork);
@@ -175,8 +178,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                int count = MPEServices.NetPipeMediaAccessService.GetSeriesCount();
-                List<WebSeries> items = MPEServices.NetPipeMediaAccessService.GetSeries(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetTVShowCount();
+                IList<WebTVShowBasic> items = MPEServices.NetPipeMediaAccessService.GetTVShowsBasicByRange(0, 1, SortTVShowsBy.Title, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -211,8 +214,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             try
             {
-                int count = MPEServices.NetPipeMediaAccessService.GetAlbumsCount();
-                List<WebMusicAlbum> items = MPEServices.NetPipeMediaAccessService.GetAlbums(0, 1, SortBy.Name, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetMusicAlbumCount();
+                IList<WebMusicAlbumBasic> items = MPEServices.NetPipeMediaAccessService.GetMusicAlbumsBasicByRange(0, 1, SortMusicBy.Title, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -245,16 +248,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                WebServiceDescription functions = MPEServices.NetPipeMediaAccessService.GetServiceDescription();
+                WebMediaServiceDescription functions = MPEServices.NetPipeMediaAccessService.GetServiceDescription();
 
                 if (functions != null)
                 {
                     String functionString = "Functions:";
-                    functionString += "\nSupports Videos: " + functions.SupportsVideos.ToString();
-                    functionString += "\nSupports Movies: " + functions.SupportsMovingPictures.ToString();
-                    functionString += "\nSupports Series: " + functions.SupportsTvSeries.ToString();
-                    functionString += "\nSupports Music: " + functions.SupportsMusic.ToString();
-                    functionString += "\nSupports Pictures: " + functions.SupportsPictures.ToString();
+                    //functionString += "\nSupports Videos: " + functions.SupportsVideos.ToString();
+                    //functionString += "\nSupports Movies: " + functions.SupportsMovingPictures.ToString();
+                    //functionString += "\nSupports Series: " + functions.SupportsTvSeries.ToString();
+                    //functionString += "\nSupports Music: " + functions.SupportsMusic.ToString();
+                    //functionString += "\nSupports Pictures: " + functions.SupportsPictures.ToString();
 
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                {
@@ -288,7 +291,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 int count = MPEServices.NetPipeMediaAccessService.GetMovieCount();
-                List<WebMovie> items = MPEServices.NetPipeMediaAccessService.GetMovies(0, 1, SortBy.Name, OrderBy.Asc);
+                IList<WebMovieBasic> items = MPEServices.NetPipeMediaAccessService.GetMoviesBasicByRange(0, 1, SortMoviesBy.Title, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -318,41 +321,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-        void workerVideos_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                int count = MPEServices.NetPipeMediaAccessService.GetVideosCount();
-                List<WebMovie> items = MPEServices.NetPipeMediaAccessService.GetVideos(0, 1, SortBy.Name, OrderBy.Asc);
-                if (items != null)
-                {
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-{
-    MessageBox.Show(count + " Videos in Database", "Success");
-}));
 
-                }
-
-            }
-            catch (System.ServiceModel.FaultException ex)
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-                {
-                    MessageBox.Show("Couldn't open database! Check whether the paths are correct and the databases aren't empty");
-                }));
-
-            }
-            catch (Exception ex)
-            {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-               {
-                   ExceptionMessageBox(ex.Message);
-                   Log.Error("Exception in workerVideos_DoWork", ex);
-               }));
-            }
-
-
-        }
 
         private void InitWebservice()
         {

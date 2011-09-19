@@ -32,8 +32,9 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPExtendedDir" Name="MPExtended">
-          <Directory Id="InstallDirectory" Name="SingleSeat Service">
+          <Directory Id="InstallDirectory" Name="Client Service">
             <?include ../MPExtended.ServiceSetups.General/StreamBinaries.wxi ?>
+            <?include ../MPExtended.ServiceSetups.General/Extensions.wxi ?>
 
             <Component Id="Component_MPExtended" Guid="ddd6c617-8fe7-408b-82b0-25c0eb6699fb">
               <File Source="$(var.MPExtended.ServiceHosts.Client.TargetDir)\MPExtended.ServiceHosts.Client.exe" Id="MainService" />

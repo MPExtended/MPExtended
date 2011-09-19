@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\MPExtendedKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,10 +65,10 @@
     <Compile Include="WebChannelState.cs" />
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />
-    <Compile Include="WebRecording.cs" />
+    <Compile Include="WebRecordingBasic.cs" />
     <Compile Include="WebRtspClient.cs" />
-    <Compile Include="WebSchedule.cs" />
     <Compile Include="WebTVServiceDescription.cs" />
+    <Compile Include="WebScheduleBasic.cs" />
     <Compile Include="WebUser.cs" />
     <Compile Include="WebVirtualCard.cs" />
   </ItemGroup>

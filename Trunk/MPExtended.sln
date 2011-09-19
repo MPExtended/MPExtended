@@ -69,21 +69,55 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		GlobalVersion.cs = GlobalVersion.cs
 		LICENSE.txt = LICENSE.txt
+		MPEServices.cs = MPEServices.cs
+		MPExtendedKey.snk = MPExtendedKey.snk
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.SingleSeat", "ServiceHosts\MPExtended.ServiceHosts.SingleSeat\MPExtended.ServiceHosts.SingleSeat.csproj", "{245E9751-BDD9-4E94-A114-1D6832CE26DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{A480254C-5E26-4025-B770-294979A6D882} = {A480254C-5E26-4025-B770-294979A6D882}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+	EndProjectSection
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Client", "ServiceSetups\MPExtended.ServiceSetups.Client\MPExtended.ServiceSetups.Client.wixproj", "{8CF51F45-7F45-4473-920D-F0DC12CB6BF8}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.Server", "ServiceSetups\MPExtended.ServiceSetups.Server\MPExtended.ServiceSetups.Server.wixproj", "{DFB26301-070B-4C7E-8CEA-62BD95C820AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Console.Client", "ServiceHosts\MPExtended.ServiceHosts.Console.Client\MPExtended.ServiceHosts.Console.Client.csproj", "{3B1CE041-0FA3-4D71-9AA3-C6655B526259}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{A480254C-5E26-4025-B770-294979A6D882} = {A480254C-5E26-4025-B770-294979A6D882}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Console.Server", "ServiceHosts\MPExtended.ServiceHosts.Console.Server\MPExtended.ServiceHosts.Console.Server.csproj", "{2FB38DB7-155E-4BA8-A292-2022DE08105A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Console.SingleSeat", "ServiceHosts\MPExtended.ServiceHosts.Console.SingleSeat\MPExtended.ServiceHosts.Console.SingleSeat.csproj", "{C3392739-1A84-4864-BB0C-F7CE02203B23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{A480254C-5E26-4025-B770-294979A6D882} = {A480254C-5E26-4025-B770-294979A6D882}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Client", "ServiceHosts\MPExtended.ServiceHosts.Client\MPExtended.ServiceHosts.Client.csproj", "{D77D182C-D095-43B5-8564-1FF9E4967838}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{A480254C-5E26-4025-B770-294979A6D882} = {A480254C-5E26-4025-B770-294979A6D882}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Server", "ServiceHosts\MPExtended.ServiceHosts.Server\MPExtended.ServiceHosts.Server.csproj", "{D1B78750-D906-4621-8C2F-50E2C19124A1}"
 EndProject
@@ -97,13 +131,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.TestTools.Performance", "Applications\MPExtended.Applications.TestTools.Performance\MPExtended.Applications.TestTools.Performance.csproj", "{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlugIns", "PlugIns", "{714FAF3E-26F8-4495-8BA5-D40333C4FC56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPMovingPictures", "PlugIns\MPExtended.PlugIns.MAS.MPMovingPictures\MPExtended.PlugIns.MAS.MPMovingPictures.csproj", "{EFE0F9B5-D937-44F5-9293-9C6A82C15747}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPMusic", "PlugIns\MPExtended.PlugIns.MAS.MPMusic\MPExtended.PlugIns.MAS.MPMusic.csproj", "{243E120B-20C2-4D9C-9874-196C8B120E9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPPictures", "PlugIns\MPExtended.PlugIns.MAS.MPPictures\MPExtended.PlugIns.MAS.MPPictures.csproj", "{A480254C-5E26-4025-B770-294979A6D882}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPVideos", "PlugIns\MPExtended.PlugIns.MAS.MPVideos\MPExtended.PlugIns.MAS.MPVideos.csproj", "{7304D17F-85F1-4C5A-8D55-B3599B4B2759}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPTVSeries", "PlugIns\MPExtended.PlugIns.MAS.MPTVSeries\MPExtended.PlugIns.MAS.MPTVSeries.csproj", "{77C38FB8-C17E-444E-A3AE-1F8B713875CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.XBMCMusic", "PlugIns\MPExtended.PlugIns.MAS.XBMCMusic\MPExtended.PlugIns.MAS.XBMCMusic.csproj", "{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.SQLitePlugin", "Libraries\MPExtended.Libraries.SQLitePlugin\MPExtended.Libraries.SQLitePlugin.csproj", "{19467BF5-89FA-4BA3-A4C3-3A382573A20F}"
+EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.ServiceSetups.General", "ServiceSetups\MPExtended.ServiceSetups.General\MPExtended.ServiceSetups.General.wixproj", "{56ECF88E-2C80-4451-8A4A-AFCC11798F94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.DocumentationGenerator", "Applications\MPExtended.Applications.DocumentationGenerator\MPExtended.Applications.DocumentationGenerator.csproj", "{0B852F64-7C0E-4555-A20D-0F0ABF337255}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.LocalFileSystem", "PlugIns\MPExtended.PlugIns.MAS.LocalFileSystem\MPExtended.PlugIns.MAS.LocalFileSystem.csproj", "{456F3244-967E-4732-A2C4-0219B85521DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPShares", "PlugIns\MPExtended.PlugIns.MAS.MPShares\MPExtended.PlugIns.MAS.MPShares.csproj", "{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 32
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -187,14 +241,50 @@ Global
 		SccProjectTopLevelParentUniqueName20 = MPExtended.sln
 		SccProjectName20 = Applications/MPExtended.Applications.TestTools.Performance
 		SccLocalPath20 = Applications\\MPExtended.Applications.TestTools.Performance
-		SccProjectUniqueName21 = ServiceSetups\\MPExtended.ServiceSetups.General\\MPExtended.ServiceSetups.General.wixproj
+		SccProjectUniqueName21 = PlugIns\\MPExtended.PlugIns.MAS.MPMovingPictures\\MPExtended.PlugIns.MAS.MPMovingPictures.csproj
 		SccProjectTopLevelParentUniqueName21 = MPExtended.sln
-		SccProjectName21 = ServiceSetups/MPExtended.ServiceSetups.General
-		SccLocalPath21 = ServiceSetups\\MPExtended.ServiceSetups.General
-		SccProjectUniqueName22 = Applications\\MPExtended.Applications.DocumentationGenerator\\MPExtended.Applications.DocumentationGenerator.csproj
+		SccProjectName21 = PlugIns/MPExtended.PlugIns.MAS.MPMovingPictures
+		SccLocalPath21 = PlugIns\\MPExtended.PlugIns.MAS.MPMovingPictures
+		SccProjectUniqueName22 = PlugIns\\MPExtended.PlugIns.MAS.MPMusic\\MPExtended.PlugIns.MAS.MPMusic.csproj
 		SccProjectTopLevelParentUniqueName22 = MPExtended.sln
-		SccProjectName22 = Applications/MPExtended.Applications.DocumentationGenerator
-		SccLocalPath22 = Applications\\MPExtended.Applications.DocumentationGenerator
+		SccProjectName22 = PlugIns/MPExtended.PlugIns.MAS.MPMusic
+		SccLocalPath22 = PlugIns\\MPExtended.PlugIns.MAS.MPMusic
+		SccProjectUniqueName23 = PlugIns\\MPExtended.PlugIns.MAS.MPPictures\\MPExtended.PlugIns.MAS.MPPictures.csproj
+		SccProjectTopLevelParentUniqueName23 = MPExtended.sln
+		SccProjectName23 = PlugIns/MPExtended.PlugIns.MAS.MPPictures
+		SccLocalPath23 = PlugIns\\MPExtended.PlugIns.MAS.MPPictures
+		SccProjectUniqueName24 = PlugIns\\MPExtended.PlugIns.MAS.MPVideos\\MPExtended.PlugIns.MAS.MPVideos.csproj
+		SccProjectTopLevelParentUniqueName24 = MPExtended.sln
+		SccProjectName24 = PlugIns/MPExtended.PlugIns.MAS.MPVideos
+		SccLocalPath24 = PlugIns\\MPExtended.PlugIns.MAS.MPVideos
+		SccProjectUniqueName25 = PlugIns\\MPExtended.PlugIns.MAS.MPTVSeries\\MPExtended.PlugIns.MAS.MPTVSeries.csproj
+		SccProjectTopLevelParentUniqueName25 = MPExtended.sln
+		SccProjectName25 = PlugIns/MPExtended.PlugIns.MAS.MPTVSeries
+		SccLocalPath25 = PlugIns\\MPExtended.PlugIns.MAS.MPTVSeries
+		SccProjectUniqueName26 = PlugIns\\MPExtended.PlugIns.MAS.XBMCMusic\\MPExtended.PlugIns.MAS.XBMCMusic.csproj
+		SccProjectTopLevelParentUniqueName26 = MPExtended.sln
+		SccProjectName26 = PlugIns/MPExtended.PlugIns.MAS.XBMCMusic
+		SccLocalPath26 = PlugIns\\MPExtended.PlugIns.MAS.XBMCMusic
+		SccProjectUniqueName27 = Libraries\\MPExtended.Libraries.SQLitePlugin\\MPExtended.Libraries.SQLitePlugin.csproj
+		SccProjectTopLevelParentUniqueName27 = MPExtended.sln
+		SccProjectName27 = Libraries/MPExtended.Libraries.SQLitePlugin
+		SccLocalPath27 = Libraries\\MPExtended.Libraries.SQLitePlugin
+		SccProjectUniqueName28 = ServiceSetups\\MPExtended.ServiceSetups.General\\MPExtended.ServiceSetups.General.wixproj
+		SccProjectTopLevelParentUniqueName28 = MPExtended.sln
+		SccProjectName28 = ServiceSetups/MPExtended.ServiceSetups.General
+		SccLocalPath28 = ServiceSetups\\MPExtended.ServiceSetups.General
+		SccProjectUniqueName29 = PlugIns\\MPExtended.PlugIns.MAS.LocalFileSystem\\MPExtended.PlugIns.MAS.LocalFileSystem.csproj
+		SccProjectTopLevelParentUniqueName29 = MPExtended.sln
+		SccProjectName29 = PlugIns/MPExtended.PlugIns.MAS.LocalFileSystem
+		SccLocalPath29 = PlugIns\\MPExtended.PlugIns.MAS.LocalFileSystem
+		SccProjectUniqueName30 = Applications\\MPExtended.Applications.DocumentationGenerator\\MPExtended.Applications.DocumentationGenerator.csproj
+		SccProjectTopLevelParentUniqueName30 = MPExtended.sln
+		SccProjectName30 = Applications/MPExtended.Applications.DocumentationGenerator
+		SccLocalPath30 = Applications\\MPExtended.Applications.DocumentationGenerator
+		SccProjectUniqueName31 = PlugIns\\MPExtended.PlugIns.MAS.MPShares\\MPExtended.PlugIns.MAS.MPShares.csproj
+		SccProjectTopLevelParentUniqueName31 = MPExtended.sln
+		SccProjectName31 = PlugIns/MPExtended.PlugIns.MAS.MPShares
+		SccLocalPath31 = PlugIns\\MPExtended.PlugIns.MAS.MPShares
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -402,6 +492,76 @@ Global
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.ActiveCfg = Release|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.Build.0 = Release|x86
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747}.Release|x86.ActiveCfg = Release|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{243E120B-20C2-4D9C-9874-196C8B120E9D}.Release|x86.ActiveCfg = Release|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A480254C-5E26-4025-B770-294979A6D882}.Release|x86.ActiveCfg = Release|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759}.Release|x86.ActiveCfg = Release|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F}.Release|x86.ActiveCfg = Release|Any CPU
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{56ECF88E-2C80-4451-8A4A-AFCC11798F94}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -422,6 +582,26 @@ Global
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|Mixed Platforms.Build.0 = Release|x86
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|x86.ActiveCfg = Release|x86
 		{0B852F64-7C0E-4555-A20D-0F0ABF337255}.Release|x86.Build.0 = Release|x86
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{456F3244-967E-4732-A2C4-0219B85521DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -459,5 +639,14 @@ Global
 		{B17C433D-85CA-4FEC-8ECB-A31FC057C139} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{7B88E985-6F2F-4194-9480-12D8C1D09F8D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{CEA12075-6DD2-442D-96F8-88A77EDCC16D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{19467BF5-89FA-4BA3-A4C3-3A382573A20F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{A480254C-5E26-4025-B770-294979A6D882} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{456F3244-967E-4732-A2C4-0219B85521DC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 	EndGlobalSection
 EndGlobal

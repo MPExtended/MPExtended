@@ -12,7 +12,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebServiceDescription GetServiceDescription();
+        WebStreamServiceDescription GetServiceDescription();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -28,11 +28,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMediaInfo GetMediaInfo(WebMediaType type, string itemId);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMediaInfo GetTVMediaInfo(string identifier);
+        WebMediaInfo GetMediaInfo(WebStreamMediaType type, string itemId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -40,11 +36,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitStream(WebMediaType type, string itemId, string clientDescription, string identifier);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitTVStream(int channelId, string clientDescription, string identifier);
+        bool InitStream(WebStreamMediaType type, string itemId, string clientDescription, string identifier);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -64,11 +56,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResolution GetStreamSize(WebMediaType type, string itemId, string profile);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResolution GetTVStreamSize(int channelId, string profile);
+        WebResolution GetStreamSize(WebStreamMediaType type, string itemId, string profile);
     }
-
 }

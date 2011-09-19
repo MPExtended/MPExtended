@@ -59,7 +59,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebChannelDetailed> GetChannelsDetailed(int groupId);
+        IList<WebChannelDetailed> GetChannelsDetailed(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -67,15 +67,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count);
+        IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebChannelBasic> GetChannelsBasic(int groupId);
+        IList<WebChannelBasic> GetChannelsBasic(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count);
+        IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -83,15 +83,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebRecording> GetRecordings();
+        IList<WebRecordingBasic> GetRecordings();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebSchedule> GetSchedules();
+        IList<WebScheduleBasic> GetSchedules();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebSchedule GetScheduleById(int scheduleId);
+        WebScheduleBasic GetScheduleById(int scheduleId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -111,19 +111,19 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId);
+        IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId);
+        IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime);
+        IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime);
+        IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -135,15 +135,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramDetailed> SearchProgramsDetailed(string searchTerm);
+        IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebProgramBasic> SearchProgramsBasic(string searchTerm);
+        IList<WebProgramBasic> SearchProgramsBasic(string searchTerm);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebChannelGroup> GetGroups();
+        IList<WebChannelGroup> GetGroups();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -159,19 +159,19 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebCard> GetCards();
+        IList<WebCard> GetCards();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebVirtualCard> GetActiveCards();
+        IList<WebVirtualCard> GetActiveCards();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebRtspClient> GetStreamingClients();
+        IList<WebRtspClient> GetStreamingClients();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebUser> GetActiveUsers();
+        IList<WebUser> GetActiveUsers();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

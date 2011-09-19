@@ -34,6 +34,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,24 +58,37 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="FileSystem\WebFileBasic.cs" />
+    <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
-    <Compile Include="MediaItemType.cs" />
+    <Compile Include="PluginInterfaces.cs" />
+    <Compile Include="Movie\WebMovieBasic.cs" />
+    <Compile Include="Movie\WebMovieDetailed.cs" />
+    <Compile Include="Music\WebMusicAlbumBasic.cs" />
+    <Compile Include="Music\WebMusicArtistBasic.cs" />
+    <Compile Include="Music\WebMusicTrackBasic.cs" />
+    <Compile Include="Music\WebMusicTrackDetailed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Picture\WebPictureBasic.cs" />
+    <Compile Include="Shared\ConcreteWebMediaItem.cs" />
+    <Compile Include="Shared\WebCategory.cs" />
+    <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebEpisode.cs" />
-    <Compile Include="WebEpisodeFull.cs" />
-    <Compile Include="WebFileInfo.cs" />
-    <Compile Include="WebMovie.cs" />
-    <Compile Include="WebMovieFull.cs" />
-    <Compile Include="WebMusicAlbum.cs" />
-    <Compile Include="WebMusicArtist.cs" />
-    <Compile Include="WebMusicTrack.cs" />
-    <Compile Include="WebPicture.cs" />
-    <Compile Include="WebPictureDirectory.cs" />
-    <Compile Include="WebSeason.cs" />
-    <Compile Include="WebSeries.cs" />
-    <Compile Include="WebSeriesFull.cs" />
-    <Compile Include="WebServiceDescription.cs" />
-    <Compile Include="WebShare.cs" />
+    <Compile Include="Shared\WebActorBasic.cs" />
+    <Compile Include="Shared\WebActorDetailed.cs" />
+    <Compile Include="Shared\WebGenre.cs" />
+    <Compile Include="Shared\WebItemCount.cs" />
+    <Compile Include="Shared\WebMediaItem.cs" />
+    <Compile Include="SortInterfaces.cs" />
+    <Compile Include="TVShow\WebTVSeasonDetailed.cs" />
+    <Compile Include="TVShow\WebTVEpisodeBasic.cs" />
+    <Compile Include="TVShow\WebTVEpisodeDetailed.cs" />
+    <Compile Include="TVShow\WebTVSeasonBasic.cs" />
+    <Compile Include="TVShow\WebTVShowBasic.cs" />
+    <Compile Include="TVShow\WebTVShowDetailed.cs" />
+    <Compile Include="FileSystem\WebDriveBasic.cs" />
+    <Compile Include="WebMediaServiceDescription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

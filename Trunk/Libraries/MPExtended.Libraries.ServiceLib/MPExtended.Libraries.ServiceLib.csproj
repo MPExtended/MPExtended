@@ -34,6 +34,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
       <HintPath>..\Logging\NLog.dll</HintPath>
@@ -61,7 +68,6 @@
     <Compile Include="WcfUsernameValidator.cs" />
     <Compile Include="WCFUtil.cs" />
     <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
-    <Compile Include="MPEServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Services.xml">

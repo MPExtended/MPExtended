@@ -25,16 +25,17 @@ using System.Drawing.Drawing2D;
 using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.MediaInfo;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
     internal static class Images
     {
-        public static Stream ExtractImage(string source, int startPosition, int? maxWidth, int? maxHeight)
+        public static Stream ExtractImage(MediaSource source, int startPosition, int? maxWidth, int? maxHeight)
         {
-            if (!File.Exists(source))
+            if (!source.IsLocalFile)
             {
-                Log.Warn("ExtractImage: File " + source + " doesn't exist or is not accessible");
+                Log.Warn("ExtractImage: Source " + source + " is not supported");
                 return null;
             }
 
@@ -49,7 +50,7 @@ namespace MPExtended.Services.StreamingService.Code
             // execute it
             string tempFile = Path.GetTempFileName(); // FIXME: maybe we need to clean this up?
             ProcessStartInfo info = new ProcessStartInfo();
-            info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source, ffmpegResize, tempFile);
+            info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
             info.FileName = Config.GetFFMpegPath();
             info.UseShellExecute = false;
             Process proc = new Process();
@@ -60,18 +61,61 @@ namespace MPExtended.Services.StreamingService.Code
             return new FileStream(tempFile, FileMode.Open, FileAccess.Read);
         }
 
-        public static Stream GetImage(string path)
+        public static Stream GetImage(MediaSource source)
         {
-            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.MediaItemType.ImageItem, path) == null)
+            // TODO: check filetype
+            Log.Info("Streaming image of media source {0}", source);
+            if (source.IsLocalFile)
             {
-                Log.Warn("Tried to download image that isn't allowed: {0}", path);
-                return null;
+                return StreamImage(source.GetPath());
             }
-
-            return GetImageTrusted(path);
+            else
+            {
+                // TODO: set MIME
+                return source.Retrieve();
+            }
         }
 
-        private static Stream GetImageTrusted(string path)
+        public static Stream GetImageResized(MediaSource source, int maxWidth, int maxHeight)
+        {
+            // create temporary directory if non-existent
+            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            if (!Directory.Exists(tmpDir))
+                Directory.CreateDirectory(tmpDir);
+
+            // generate cache name
+            string fullpath = ((int)source.MediaType).ToString() + "_" + source.Id;
+            foreach (char c in Path.GetInvalidFileNameChars())
+                fullpath = fullpath.Replace(c, '_');
+            if (fullpath.Length > 125)
+                fullpath = fullpath.Substring(fullpath.Length - 125);
+            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}.{3}", fullpath, maxWidth, maxHeight, "jpg"));
+
+            if (!File.Exists(cachedPath))
+            {
+                // TODO: check filetype
+                // get source
+                Log.Info("Streaming resized image of media source {0}", source);
+                Image img;
+                if (source.IsLocalFile)
+                {
+                    img = System.Drawing.Image.FromFile(source.GetPath());
+                }
+                else
+                {
+                    img = System.Drawing.Image.FromStream(source.Retrieve());
+                }
+                
+                if (!ResizeImage(img, cachedPath, maxWidth, maxHeight))
+                {
+                    return null;
+                }
+            }
+
+            return StreamImage(cachedPath);
+        }
+
+        private static Stream StreamImage(string path)
         {
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
                 { ".jpeg", "image/jpeg" },
@@ -88,60 +132,10 @@ namespace MPExtended.Services.StreamingService.Code
             return fs;
         }
 
-        /// <summary>
-        /// Returns the image object of the given path, resized to fit the maxWidth and maxHeight
-        /// parameters, or null if the image doesn't exists
-        /// </summary>
-        /// <param name="path">Path to image</param>
-        /// <param name="maxWidth">Maximum width of image</param>
-        /// <param name="maxHeight">Maximum height of image</param>
-        /// <returns>Stream of image or null</returns>
-        public static Stream GetImageResized(string path, int maxWidth, int maxHeight)
-        {
-            if (MPEServices.NetPipeMediaAccessService.GetPath(MediaAccessService.Interfaces.MediaItemType.ImageItem, path) == null)
-            {
-                Log.Warn("Tried to download image that isn't allowed: {0}", path);
-                return null;
-            }
-
-            // string tmpDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "imagecache")
-            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended.Services.MediaAccessService.MPPictures");
-            if (!Directory.Exists(tmpDir))
-                Directory.CreateDirectory(tmpDir);
-
-            // generate cache name
-            string fullpath = path;
-            foreach (char c in Path.GetInvalidFileNameChars())
-                fullpath = fullpath.Replace(c, '_');
-            if (fullpath.Length > 125)
-                fullpath = fullpath.Substring(fullpath.Length - 125);
-            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}.{3}", fullpath, maxWidth, maxHeight, "jpg"));
-
-            if (!File.Exists(cachedPath))
-            {
-                if (!ResizeImage(path, cachedPath, maxWidth, maxHeight))
-                {
-                    return null;
-                }
-            }
-
-            return GetImageTrusted(cachedPath);
-        }
-
-        /// <summary>
-        /// Resizes the given image and saves the new file to a new location
-        /// </summary>
-        /// <param name="origFile">Original file</param>
-        /// <param name="newFile">Target file</param>
-        /// <param name="maxWidth">Maximum width of the image</param>
-        /// <param name="maxHeight">Maximum height of the image</param>
-        /// <returns>True if resizing succeeded, false otherwise</returns>
-        private static bool ResizeImage(string origFile, string newFile, int maxWidth, int maxHeight)
+        private static bool ResizeImage(Image origImage, string newFile, int maxWidth, int maxHeight)
         {
             try
             {
-                Image origImage = System.Drawing.Image.FromFile(origFile);
-
                 int sourceWidth = origImage.Width;
                 int sourceHeight = origImage.Height;
 
@@ -174,7 +168,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             catch (Exception ex)
             {
-                Log.Warn("Couldn't resize image " + origFile, ex);
+                Log.Warn("Couldn't resize image", ex);
             }
             return false;
         }

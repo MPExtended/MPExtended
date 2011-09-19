@@ -13,15 +13,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetMediaItem(WebMediaType type, string itemId);
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImage(string path);
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImageResized(string path, int maxWidth, int maxHeight);
+        Stream GetMediaItem(WebStreamMediaType type, string itemId);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
@@ -29,11 +21,19 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImage(WebMediaType type, string itemId, int position);
+        Stream ExtractImage(WebStreamMediaType type, string itemId, int position);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImageResized(WebMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+        Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImage(WebStreamMediaType type, string id);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

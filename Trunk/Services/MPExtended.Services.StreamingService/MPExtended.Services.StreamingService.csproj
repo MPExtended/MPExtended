@@ -55,8 +55,12 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="..\..\MPEServices.cs">
+      <Link>Code\MPEServices.cs</Link>
+    </Compile>
     <Compile Include="Code\ConvertExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
+    <Compile Include="Code\MediaSource.cs" />
     <Compile Include="Code\Pipeline.cs" />
     <Compile Include="Code\Config.cs" />
     <Compile Include="Code\Streaming.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="Transcoders\VLCWrapper.cs" />
     <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
     <Compile Include="Transcoders\VLCWrapperRTSP.cs" />
+    <Compile Include="Units\InjectStreamUnit.cs" />
     <Compile Include="Units\EncoderUnit.cs" />
     <Compile Include="Units\FFMpegLogParsingUnit.cs" />
     <Compile Include="Units\HTTPLiveStreamingUnit.cs" />
@@ -117,9 +122,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Util\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

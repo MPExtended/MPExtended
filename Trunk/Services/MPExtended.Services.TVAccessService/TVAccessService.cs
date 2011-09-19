@@ -162,7 +162,7 @@ namespace MPExtended.Services.TVAccessService
         }
 
 
-        public List<WebChannelDetailed> GetChannelsDetailed(int groupId)
+        public IList<WebChannelDetailed> GetChannelsDetailed(int groupId)
         {
             if (groupId <= 0)
                 return null;
@@ -170,7 +170,7 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
-        public List<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count)
         {
             if (groupId <= 0)
                 return null;
@@ -181,7 +181,7 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
-        public List<WebChannelBasic> GetChannelsBasic(int groupId)
+        public IList<WebChannelBasic> GetChannelsBasic(int groupId)
         {
             if (groupId <= 0)
                 return null;
@@ -189,7 +189,7 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
         }
 
-        public List<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count)
         {
             if (groupId <= 0)
             {
@@ -216,20 +216,20 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
         }
 
-        public List<WebRecording> GetRecordings()
+        public IList<WebRecordingBasic> GetRecordings()
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
         }
-        public WebRecording GetRecordingById(int recordingId)
+        public WebRecordingBasic GetRecordingById(int recordingId)
         {
             return Recording.ListAll().First(p => p.IdRecording == recordingId).ToWebRecording();
         }
 
-        public List<WebSchedule> GetSchedules()
+        public IList<WebScheduleBasic> GetSchedules()
         {
             return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).ToList();
         }
-        public WebSchedule GetScheduleById(int scheduleId)
+        public WebScheduleBasic GetScheduleById(int scheduleId)
         {
             return Schedule.Retrieve(scheduleId).ToWebSchedule();
         }
@@ -297,7 +297,7 @@ namespace MPExtended.Services.TVAccessService
 
             return Program.Retrieve(programId).ToWebProgramBasic();
         }
-        public List<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId)
+        public IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId)
         {
             if (channelId <= 0)
             {
@@ -306,7 +306,7 @@ namespace MPExtended.Services.TVAccessService
             }
             return Channel.Retrieve(channelId).ToListWebProgramBasicNowNext();
         }
-        public List<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId)
+        public IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId)
         {
             if (channelId <= 0)
             {
@@ -317,12 +317,12 @@ namespace MPExtended.Services.TVAccessService
         }
 
 
-        public List<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
+        public IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
             return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
         }
 
-        public List<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
+        public IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
             return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
         }
@@ -341,17 +341,17 @@ namespace MPExtended.Services.TVAccessService
             return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true) && schedule.IdChannel == p.IdChannel).Count() > 0;
         }
 
-        public List<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
+        public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
         {
             return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).ToList();
         }
 
-        public List<WebProgramBasic> SearchProgramsBasic(string searchTerm)
+        public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm)
         {
             return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramBasic()).ToList();
         }
 
-        public List<WebChannelGroup> GetGroups()
+        public IList<WebChannelGroup> GetGroups()
         {
             return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
         }
@@ -410,22 +410,22 @@ namespace MPExtended.Services.TVAccessService
             _tvControl.OnNewSchedule();
         }
 
-        public List<WebCard> GetCards()
+        public IList<WebCard> GetCards()
         {
             return Card.ListAll().Select(c => c.ToWebCard()).ToList();
         }
 
-        public List<WebVirtualCard> GetActiveCards()
+        public IList<WebVirtualCard> GetActiveCards()
         {
             return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.ToWebVirtualCard()).ToList();
         }
 
-        public List<WebRtspClient> GetStreamingClients()
+        public IList<WebRtspClient> GetStreamingClients()
         {
             return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
         }
 
-        public List<WebUser> GetActiveUsers()
+        public IList<WebUser> GetActiveUsers()
         {
             return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.User.ToWebUser()).ToList();
         }
@@ -561,7 +561,7 @@ namespace MPExtended.Services.TVAccessService
             return _tvUsers[userName];
         }
 
-        private List<VirtualCard> GetTimeshiftingOrRecordingVirtualCards()
+        private IList<VirtualCard> GetTimeshiftingOrRecordingVirtualCards()
         {
             List<VirtualCard> result = new List<VirtualCard>();
 
@@ -609,7 +609,7 @@ namespace MPExtended.Services.TVAccessService
             }
             return null;
         }
-        private static List<FileInfo> GetChannelLogos()
+        private static IList<FileInfo> GetChannelLogos()
         {
             List<FileInfo> logoPaths = new List<FileInfo>();
 

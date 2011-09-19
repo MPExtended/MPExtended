@@ -22,7 +22,6 @@ using System.Web;
 using System.Xml;
 using MPExtended.Services.StreamingService.Interfaces;
 
-
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class StreamModel
@@ -39,10 +38,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public enum StreamMedia
     {
-        TV = -1,
-        Movie = WebMediaType.MovieItem,
-        Serie = WebMediaType.TvSeriesItem,
-        Recording = WebMediaType.RecordingItem,
-        Music = WebMediaType.MusicTrackItem
+        TV = -2, // recording is -1 in WSS
+        Movie = WebStreamMediaType.Movie,
+        Serie = WebStreamMediaType.TVShow,
+        Recording = WebStreamMediaType.Recording,
+        Music = WebStreamMediaType.Music
     }
 }

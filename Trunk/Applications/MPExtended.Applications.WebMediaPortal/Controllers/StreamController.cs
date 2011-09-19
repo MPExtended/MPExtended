@@ -55,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private ActionResult GenerateStream(StreamMedia type, string itemId, string transcoder)
         {
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!MPEServices.NetPipeWebStreamService.InitStream((WebMediaType)type, itemId, "WebMediaPortal", identifier))
+            if (!MPEServices.NetPipeWebStreamService.InitStream((WebStreamMediaType)type, itemId, "WebMediaPortal", identifier))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
@@ -153,7 +153,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             else
             {
-                playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebMediaType)type, itemId, profile.Name);
+                playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebStreamMediaType)type, itemId, profile.Name);
             }
 
             // generate url

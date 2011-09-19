@@ -30,6 +30,24 @@ namespace MPExtended.Services.StreamingService.MediaInfo
     {
         private static Dictionary<string, WebMediaInfo> Cache = new Dictionary<string, WebMediaInfo>();
 
+        public static WebMediaInfo GetMediaInfo(MediaSource source)
+        {
+            if (source.MediaType == WebStreamMediaType.TV)
+            {
+                TsBuffer buf = new TsBuffer(source.Id);
+                return GetMediaInfo(buf.GetCurrentFilePath(), true);
+            }
+            else if (source.IsLocalFile)
+            {
+                return GetMediaInfo(source.GetPath(), false);
+            }
+            else 
+            { 
+                // not (yet?) supported
+                throw new NotSupportedException(); 
+            }
+        }
+
         public static WebMediaInfo GetMediaInfo(TsBuffer buffer)
         {
             string path = buffer.GetCurrentFilePath();
@@ -41,7 +59,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             return GetMediaInfo(source, false);
         }
 
-        public static WebMediaInfo GetMediaInfo(string source, bool ignoreCache) 
+        public static WebMediaInfo GetMediaInfo(string source, bool ignoreCache)
         {
             if (source == null || !File.Exists(source))
             {
@@ -121,7 +139,8 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
             // only support usual convention naming convention for external files for now
             string subfile = Path.Combine(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".srt");
-            if(File.Exists(subfile)) {
+            if (File.Exists(subfile))
+            {
                 retinfo.SubtitleStreams.Add(new WebSubtitleStream()
                 {
                     Language = "ext",

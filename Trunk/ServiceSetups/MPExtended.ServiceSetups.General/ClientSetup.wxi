@@ -17,5 +17,4 @@ along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 -->
 <Include>
   <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
-  <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\System.Data.SQLite.dll" />
 </Include>

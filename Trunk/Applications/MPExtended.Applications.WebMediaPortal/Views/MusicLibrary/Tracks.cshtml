@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.WebMusicTrack>
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Music.WebMusicTrackBasic>
 
 @{
     ViewBag.Title = "Tracks";
@@ -18,13 +18,13 @@
 
 <h3>Browse Tracks</h3>
 <div class="column">
-<img class="img" src="@Url.Action("Image", new { album = @Model.ElementAt(0).Album, artist = @Model.ElementAt(0).ShortedAlbumArtist })" alt="" />
+<img class="img" src="@Url.Action("AlbumImage", new { id = Model.ElementAt(0).AlbumId })" alt="" />
 </div>
 <div class="column">
     <ul>
     @foreach (var track in Model)
     {
-        <li>@Html.ActionLink(@track.Title, "Play", new { track = @track.TrackId })</li>      
+        <li>@Html.ActionLink(@track.Title, "Play", new { track = @track.Id })</li>      
     }
     </ul>
 </div>

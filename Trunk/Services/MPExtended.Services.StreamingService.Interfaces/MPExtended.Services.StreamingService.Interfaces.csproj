@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\MPExtendedKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,9 +59,9 @@
     <Compile Include="IWebStreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebMediaInfo.cs" />
-    <Compile Include="WebMediaType.cs" />
+    <Compile Include="WebStreamMediaType.cs" />
     <Compile Include="WebResolution.cs" />
-    <Compile Include="WebServiceDescription.cs" />
+    <Compile Include="WebStreamServiceDescription.cs" />
     <Compile Include="WebStreamingSession.cs" />
     <Compile Include="WebTranscoderProfile.cs" />
     <Compile Include="WebTranscodingInfo.cs" />

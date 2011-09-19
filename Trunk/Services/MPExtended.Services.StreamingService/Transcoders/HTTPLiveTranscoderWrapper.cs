@@ -34,10 +34,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             get { return obj.Profile; }
             set { obj.Profile = value; }
         }
-        public string Input
+        public MediaSource Source
         {
-            get { return obj.Input; }
-            set { obj.Input = value; }
+            get { return obj.Source; }
+            set { obj.Source = value; }
         }
         public WebMediaInfo MediaInfo
         {
@@ -70,7 +70,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             segmenterUnit = new HTTPLiveStreamingUnit(Identifier);
             segmenterUnit.DebugOutput = false; // change for debugging
 
-            pipeline.AddDataUnit(segmenterUnit, 7);
+            pipeline.AddDataUnit(segmenterUnit, 20);
         }
 
         public Stream DoAction(string action, string param)

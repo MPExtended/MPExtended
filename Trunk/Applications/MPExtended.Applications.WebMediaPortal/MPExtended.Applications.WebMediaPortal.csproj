@@ -73,6 +73,9 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="..\..\MPEServices.cs">
+      <Link>Code\MPEServices.cs</Link>
+    </Compile>
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Util.cs" />
@@ -288,10 +291,6 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
       <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
       <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj">
-      <Project>{EDD71CEF-C318-4229-9427-DD822C6EDEB1}</Project>
-      <Name>MPExtended.Applications.ServiceConfigurator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

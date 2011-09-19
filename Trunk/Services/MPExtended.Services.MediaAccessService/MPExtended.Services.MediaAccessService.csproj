@@ -35,12 +35,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
       <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data.SQLite">
       <HintPath>..\..\Libraries\Database\System.Data.SQLite.dll</HintPath>
@@ -61,19 +69,10 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="Code\ExtensionMethods.cs" />
-    <Compile Include="Code\Filesystem.cs" />
-    <Compile Include="Code\Helper\Database.cs" />
-    <Compile Include="Code\Helper\DatabaseHelperMethods.cs" />
-    <Compile Include="Code\Helper\Query.cs" />
-    <Compile Include="Code\Shares.cs" />
-    <Compile Include="Code\Helper\Utils.cs" />
-    <Compile Include="Code\MovingPictures.cs" />
-    <Compile Include="Code\MPMusic.cs" />
-    <Compile Include="Code\MPPictures.cs" />
-    <Compile Include="Code\MPTvSeries.cs" />
-    <Compile Include="Code\MPVideo.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="LogProxy.cs" />
     <Compile Include="MediaAccessService.cs" />
+    <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
