@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -32,7 +33,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class MPShares : IFileSystemLibrary
     {
         private IPluginData data;
-        private List<WebDriveBasic> shares = null;
+        private List<Share> shares = null;
 
         [ImportingConstructor]
         public MPShares(IPluginData data)
@@ -42,37 +43,51 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public IEnumerable<WebDriveBasic> GetLocalDrives()
         {
-            XElement root = XElement.Load(this.data.Configuration["configpath"]);
-            IEnumerable<KeyValuePair<string, string>> list =
-                root.Elements("section")
-                .Where(x => (string)x.Attribute("name") == "pictures" || (string)x.Attribute("name") == "movies" || (string)x.Attribute("name") == "music")
-                .Elements("entry")
-                .Select(x => new KeyValuePair<string, string>((string)x.Attribute("name"), x.Value));
+            var localsharelist = new List<Share>();
+            string[] sections = { "pictures", "movies", "music" };
+            XElement root = XElement.Load(this.data.Configuration["config"]);
 
-            string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
-            int count = list.Where(x => x.Key.StartsWith("sharename")).Count();
-
-            var alreadyDonePath = new List<string>();
-            shares = new List<WebDriveBasic>();
-            int j = 0;
-            for (int i = 0; i < count; i++)
+            foreach (string section in sections)
             {
-                string path = list.Where(x => x.Key == "sharepath" + i).Select(x => x.Value).First();
-                if (alreadyDonePath.Contains(path))
-                {
-                    continue;
-                }
+                IEnumerable<KeyValuePair<string, string>> list = root
+                    .Elements("section")
+                    .Where(x => (string)x.Attribute("name") == section)
+                    .Elements("entry")
+                    .Select(x => new KeyValuePair<string, string>((string)x.Attribute("name"), x.Value));
 
-                shares.Add(new WebDriveBasic()
+                string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
+                int count = list.Where(x => x.Key.StartsWith("sharename")).Count();
+
+                for (int i = 0; i < count; i++)
                 {
-                    Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
-                    Path = path,
-                    Id = "s" + j++
-                });
-                alreadyDonePath.Add(path);
+                    if (list.Where(x => x.Key == "sharetype" + i).Select(x => x.Value).First() == "yes")
+                    {
+                        continue;
+                    }
+
+                    string path = list.Where(x => x.Key == "sharepath" + i).Select(x => x.Value).First();
+                    localsharelist.Add(new Share()
+                    {
+                        Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
+                        Path = path,
+                        Extensions = extensions.ToList(),
+                    });
+                }
             }
 
-            return shares;
+            // make shares unique
+            shares = localsharelist.GroupBy(x => x.Path, (path, gshares) => new Share()
+            {
+                Name = gshares.First().Name,
+                Path = path,
+                Extensions = gshares.SelectMany(x => x.Extensions).ToList()
+            }).ToList();
+            int shareNr = 0;
+            foreach (Share share in shares)
+            {
+                share.Id = "s" + (shareNr++);
+            }
+            return shares.Select(x => x.ToWebDriveBasic());
         }
 
         public IEnumerable<WebFileBasic> GetFilesListing(string id)
@@ -85,7 +100,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     Name = file.Name,
                     Path = new List<string>() { file.FullName },
                     DateAdded = file.CreationTime,
-                    Id = "f" + EncodeTo64(file.FullName)
+                    Id = PathToIdentifier(file.FullName)
                 });
             }
 
@@ -102,7 +117,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     Name = dir.Name,
                     Path = dir.FullName,
                     DateAdded = dir.CreationTime,
-                    Id = "d" + EncodeTo64(dir.FullName),
+                    Id = PathToIdentifier(dir.FullName),
                 });
             }
 
@@ -120,7 +135,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Name = file.Name,
                 Path = new List<string>() { file.FullName },
                 DateAdded = file.CreationTime,
-                Id = "f" + EncodeTo64(file.FullName)
+                Id = PathToIdentifier(file.FullName)
             };
         }
 
@@ -138,15 +153,21 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             if (id.StartsWith("s"))
             {
-                int intId = Int32.Parse(id.Substring(1));
-                return GetLocalDrives().ElementAt(intId).Path;
+                return GetLocalDrives().Where(x => x.Id == id).First().Path;
             }
             else if (id.StartsWith("d") || id.StartsWith("f"))
             {
-                string path = DecodeFrom64(id.Substring(1));
-                if (Security.IsAllowedPath(data.Log, path, GetLocalDrives()))
+                string sid = id.Substring(1, id.IndexOf("_") - 1);
+                string reldir = DecodeFrom64(id.Substring(id.IndexOf("_") + 1));
+                if (!String.IsNullOrEmpty(reldir) && !String.IsNullOrEmpty(sid))
                 {
-                    return path;
+                    string path = Path.GetFullPath(Path.Combine(shares.Where(x => x.Id == sid).First().Path, reldir));
+
+                    // it is possible that someone tricks us into looking out of the shareroot by a /../ path
+                    if (Security.IsAllowedPath(data.Log, path, shares))
+                    {
+                        return path;
+                    }
                 }
 
                 return null;
@@ -155,6 +176,24 @@ namespace MPExtended.PlugIns.MAS.MPShares
             {
                 return null;
             }
+        }
+
+        private string PathToIdentifier(string path)
+        {
+            foreach (Share share in shares)
+            {
+                if (path.StartsWith(share.Path + @"\"))
+                {
+                    string type = File.Exists(path) ? "f" : "d";
+                    return type + share.Id + "_" + EncodeTo64(path.Substring(share.Path.Length + 1));
+                }
+                else if (path == share.Path)
+                {
+                    return "s" + share.Id;
+                }
+            }
+
+            return String.Empty;
         }
 
         private string EncodeTo64(string toEncode)
@@ -166,9 +205,17 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         private string DecodeFrom64(string encodedData)
         {
-            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
+            try
+            {
+                byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
+                string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+                return returnValue;
+            }
+            catch (FormatException)
+            {
+                data.Log.Warn("MPShares: Invalid base64 input {0}", encodedData);
+                return String.Empty;
+            }
         }
     }
 }

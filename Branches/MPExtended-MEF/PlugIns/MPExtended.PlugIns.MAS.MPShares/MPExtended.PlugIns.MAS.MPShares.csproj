@@ -51,6 +51,7 @@
     <Compile Include="MPShares.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="Share.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">

@@ -43,7 +43,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return false;
         }
 
-        public static bool IsAllowedPath(ILogger log, string path, IEnumerable<WebDriveBasic> shares)
+        public static bool IsAllowedPath(ILogger log, string path, IEnumerable<Share> shares)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 if (File.Exists(path))
                     path = Path.GetDirectoryName(path);
 
-                foreach (WebDriveBasic share in shares)
+                foreach (Share share in shares)
                 {
                     if (!Directory.Exists(share.Path))
                         continue;

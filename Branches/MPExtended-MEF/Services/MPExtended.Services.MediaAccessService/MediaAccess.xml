@@ -5,7 +5,7 @@
     <movie>MovingPictures</movie>
     <music>MPMyMusic</music>
     <picture>MPPictures</picture>
-    <filesystem>LocalFileSystem</filesystem>
+    <filesystem>MP Shares</filesystem>
   </plugins>
   
   <pluginConfiguration>
