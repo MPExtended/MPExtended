@@ -36,19 +36,45 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         private IPluginData data;
 
         [ImportingConstructor]
-        public MPMusic(IPluginData data) : base(data.Configuration["database"])
+        public MPMusic(IPluginData data)
+            : base(data.Configuration["database"])
         {
             this.data = data;
         }
 
         public IEnumerable<WebMusicTrackBasic> GetAllTracks()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT idTrack, strAlbum, strArtist, strAlbumArtist, iTrack, strTitle, strPath, iDuration, iYear,strGenre " +
+                          "FROM tracks " + "WHERE %where %order";
+            return new LazyQuery<WebMusicTrackBasic>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("", "strArtist", "ArtistId", DataReaders.ReadString),
+                 new SQLFieldMapping("", "strAlbum", "AlbumId", DataReaders.ReadString),
+                  new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
+                   new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
+                   new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadString),
+                    new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadString),
+                          new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
+                   new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+            });
         }
 
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT t.strAlbum, t.strAlbumArtist, t.strArtist, a.iYear, g.strGenre " +
+                         "FROM tracks t " +
+                         "LEFT JOIN albuminfo a ON t.strAlbum = a.strAlbum " + // this table is empty for me
+                         "LEFT JOIN genre g ON a.idGenre = g.strGenre " +
+                          "WHERE %where %order";
+            return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("t", "strAlbum", "Id", DataReaders.ReadString),
+                                new SQLFieldMapping("t", "strAlbum", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtist", DataReaders.ReadString),
+                 new SQLFieldMapping("t", "strArtist", "Artists", DataReaders.ReadString),
+                  new SQLFieldMapping("a", "iYear", "Year", DataReaders.ReadString),
+                   new SQLFieldMapping("g", "strGenre", "Genres", DataReaders.ReadString)
+
+            });
         }
 
         public IEnumerable<WebMusicArtistBasic> GetAllArtists()
