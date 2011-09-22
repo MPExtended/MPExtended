@@ -31,6 +31,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Database", "MPTVSeries")]
+    [ExportMetadata("Version", "1.0.0.0")]
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private IPluginData data;

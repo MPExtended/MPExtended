@@ -53,6 +53,10 @@
     <Compile Include="XBMCMusicDB.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.SQLitePlugin\MPExtended.Libraries.SQLitePlugin.csproj">
+      <Project>{19467BF5-89FA-4BA3-A4C3-3A382573A20F}</Project>
+      <Name>MPExtended.Libraries.SQLitePlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>

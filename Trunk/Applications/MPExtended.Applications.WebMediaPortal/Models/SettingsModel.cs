@@ -26,6 +26,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public int DefaultGroup { get; set; }
         public string TranscodingProfile { get; set; }
-
+        public bool UseLocalServices { get; set; }
+        public string RemoteTVServiceURL { get; set; }
+        public string RemoteMediaServiceURL { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
 {
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Database", "LocalFileSystem")]
+    [ExportMetadata("Version", "1.0.0.0")]
     public class LocalFileSystem : IFileSystemLibrary
     {
         public IEnumerable<WebDriveBasic> GetLocalDrives()

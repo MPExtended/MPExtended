@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
     <Compile Include="Shared\ConcreteWebMediaItem.cs" />
+    <Compile Include="Shared\WebBackendProvider.cs" />
     <Compile Include="Shared\WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -162,10 +162,30 @@ namespace MPExtended.Services.MediaAccessService
         {
             return new WebMediaServiceDescription()
             {
-                AvailableMovieProvider = MovieLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
-                AvailableMusicProvider = MusicLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
-                AvailablePictureProvider = PictureLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
-                AvailableTvShowProvider = TVShowLibraries.Select(p => (string)p.Metadata["Database"]).ToList(),
+                AvailableMovieProvider = MovieLibraries.Select(p => new WebBackendProvider()
+                {
+                    Name = (string)p.Metadata["Database"],
+                    Version = (string)p.Metadata["Version"]
+                   
+                }).ToList(),
+                AvailableMusicProvider = MusicLibraries.Select(p => new WebBackendProvider()
+                {
+                    Name = (string)p.Metadata["Database"],
+                    Version = (string)p.Metadata["Version"]
+
+                }).ToList(),
+                AvailablePictureProvider = PictureLibraries.Select(p => new WebBackendProvider()
+                {
+                    Name = (string)p.Metadata["Database"],
+                    Version = (string)p.Metadata["Version"]
+
+                }).ToList(),
+                AvailableTvShowProvider = TVShowLibraries.Select(p => new WebBackendProvider()
+                {
+                    Name = (string)p.Metadata["Database"],
+                    Version = (string)p.Metadata["Version"]
+
+                }).ToList(),
 
                 SupportsMovies = ChosenMovieLibrary != null,
                 SupportsMusic = ChosenMusicLibrary != null,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -11,10 +12,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public bool SupportsMusic { get; set; }
         public bool SupportsPictures { get; set; }
         public bool SupportsTvShows{ get; set; }
-        public List<string> AvailableMovieProvider { get; set; }
-        public List<string> AvailableMusicProvider { get; set; }
-        public List<string> AvailablePictureProvider { get; set; }
-        public List<string> AvailableTvShowProvider { get; set; }
+        public List<WebBackendProvider> AvailableMovieProvider { get; set; }
+        public List<WebBackendProvider> AvailableMusicProvider { get; set; }
+        public List<WebBackendProvider> AvailablePictureProvider { get; set; }
+        public List<WebBackendProvider> AvailableTvShowProvider { get; set; }
 
         #region API Versions
         public int MovieApiVersion { get; set; }

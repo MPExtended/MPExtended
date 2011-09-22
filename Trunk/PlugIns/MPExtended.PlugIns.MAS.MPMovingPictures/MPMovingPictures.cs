@@ -30,6 +30,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 {
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Database", "MovingPictures")]
+    [ExportMetadata("Version", "1.0.0.0")]
     public class MPMovingPictures : Database, IMovieLibrary
     {
         private IPluginData data;

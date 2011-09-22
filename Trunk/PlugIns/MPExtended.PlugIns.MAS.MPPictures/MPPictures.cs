@@ -28,6 +28,7 @@ namespace MPExtended.PlugIns.MAS.MPPictures
 {
     [Export(typeof(IPictureLibrary))]
     [ExportMetadata("Database", "MPPictures")]
+    [ExportMetadata("Version", "1.0.0.0")]
     public class MPPictures : IPictureLibrary
     {
         private IPluginData data;
