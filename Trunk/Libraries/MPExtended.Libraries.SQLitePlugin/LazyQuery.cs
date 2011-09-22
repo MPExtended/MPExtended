@@ -85,14 +85,19 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private Tuple<string, SQLiteParameter[]> PrepareQuery()
         {
-            // prepare order
             string sql = this.inputQuery;
+
+            // fix query if needed
+            if (!sql.Contains("%order"))
+                sql = sql + " %order"; // at the end works in 99,9% of the cases. just add it yourself for the other 0,1% (mainly UNION)
+
+            // prepare order
             string orderSql = "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2 + " " + (x.Item3 ? "DESC" : "ASC")));
             sql = sql.Replace("%order", orderItems.Count == 0 ? String.Empty : orderSql);
 
             // prepare where
             SQLiteParameter[] realParams = whereItems.Select((x, index) => new SQLiteParameter("@lazyQuery" + index, x.Item3)).Union(parameters).ToArray();
-            string whereSql = String.Join(" AND ", whereItems.Select((x, index) => "(" + x.Item1 + " " + x.Item2 + " @lazyQuery" + index + ")"));
+            string whereSql = "(" + String.Join(" AND ", whereItems.Select((x, index) => "(" + x.Item1 + " " + x.Item2 + " @lazyQuery" + index + ")")) + ")";
             sql = sql.Replace("%where", whereItems.Count == 0 ? "1" : whereSql);
 
             return new Tuple<string, SQLiteParameter[]>(sql, realParams);
@@ -122,6 +127,10 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private IEnumerable<T> SmartWhere(Expression<Func<T, bool>> predicate)
         {
+            // make sure query is valid
+            if (!this.inputQuery.Contains("%where"))
+                return null;
+
             // validate the parameter
             if (predicate.Parameters.Count != 1)
                 return null;
@@ -144,15 +153,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             // check right value
             if (ex.Right.NodeType == ExpressionType.MemberAccess && ((MemberExpression)ex.Right).Expression.NodeType == ExpressionType.Parameter)
                 return null;
-            object value = null;
-            try
-            {
-                value = Expression.Lambda(ex.Right).Compile().DynamicInvoke();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            object value = Expression.Lambda(ex.Right).Compile().DynamicInvoke();
             if (!(value is Int32) && !(value is String))
                 return null;
 
@@ -174,9 +175,9 @@ namespace MPExtended.Libraries.SQLitePlugin
                 if (smart != null)
                     return smart;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // TODO: do some logging here
+                // just ignore it
             }
 
             // if we can't do it in SQL just execute the code
@@ -221,7 +222,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
             catch (Exception)
             {
-                // TODO: do some logging here
+                // ah well, just ignore it
             }
 
             // if we can't do it in SQL just execute the code
