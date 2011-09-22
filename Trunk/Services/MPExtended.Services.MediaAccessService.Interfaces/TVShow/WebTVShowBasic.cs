@@ -18,6 +18,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
         public int Year { get; set; }
+        public int EpisodeCount { get; set; }
+        public int UnwatchedEpisodeCount { get; set; }
         public IList<string> BannerPaths { get; set; }
         public IList<string> UserDefinedCategories { get; set; }
         public IList<string> Genres { get; set; }

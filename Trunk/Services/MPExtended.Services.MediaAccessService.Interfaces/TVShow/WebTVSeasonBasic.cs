@@ -18,6 +18,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public int SeasonNumber { get; set; }
         public bool IsProtected { get; set; }
         public int Year { get; set; }
+        public int EpisodeCount { get; set; }
+        public int UnwatchedEpisodeCount { get; set; }
         public DateTime DateAdded { get; set; }
 
         public override string ToString()

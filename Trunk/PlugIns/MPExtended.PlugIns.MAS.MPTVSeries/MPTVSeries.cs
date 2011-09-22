@@ -63,7 +63,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllTVShows<WebTVShowDetailed>();
         }
 
-        private IEnumerable<T> GetAllTVShows<T>() where T: WebTVShowBasic, new()
+        private LazyQuery<T> GetAllTVShows<T>() where T : WebTVShowBasic, new()
         {
             SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
             {
@@ -93,9 +93,17 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
+                new SQLFieldMapping("s", "EpisodeCount", "EpisodeCount", DataReaders.ReadInt32),
+                new SQLFieldMapping("s", "EpisodesUnWatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "PosterFileNames", "PosterPaths", fixBannerPathReader),
                 new SQLFieldMapping("s", "fanart", "BackdropPaths", fixFanartPathReader),
                 new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
+            }, delegate(T obj)
+            {
+                var eps = GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.Id);
+                obj.EpisodeCount = eps.Count();
+                obj.UnwatchedEpisodeCount = eps.Select(x => x.Watched == false).Count();
+                return obj;
             });
         }
 
@@ -114,11 +122,11 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllSeasons<WebTVSeasonDetailed>(seriesId);
         }
 
-        public IEnumerable<T> GetAllSeasons<T>(string seriesId) where T : WebTVSeasonBasic, new()
+        public LazyQuery<T> GetAllSeasons<T>(string seriesId) where T : WebTVSeasonBasic, new()
         {
             string sql = 
                     "SELECT DISTINCT s.ID, s.SeasonIndex, s.SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
-                        "BannerFileNames " +
+                        "s.BannerFileNames " +
                     "FROM season s " +
                     "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " +
                     "WHERE s.SeriesID = @seriesId AND %where " +
@@ -129,7 +137,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("", "BannerFileNames", "BannerPaths", fixBannerPathReader)
+                new SQLFieldMapping("s", "EpisodeCount", "EpisodeCount", DataReaders.ReadInt32),
+                new SQLFieldMapping("s", "EpisodesUnWatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
+                new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader)
+            }, delegate(T obj)
+            {
+                var eps = GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.ShowId).Where(x => x.SeasonId == obj.Id);
+                obj.EpisodeCount = eps.Count();
+                obj.UnwatchedEpisodeCount = eps.Select(x => x.Watched == false).Count();
+                return obj;
             });
         }
 
@@ -148,7 +164,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllEpisodes<WebTVEpisodeDetailed>();
         }
 
-        private IEnumerable<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
+        private LazyQuery<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
         {
             SQLFieldMapping.ReadValue seasonIdReader = delegate (SQLiteDataReader reader, int index) { 
                 return reader.ReadIntAsString(index - 1) + "_s" + reader.ReadIntAsString(index); 
@@ -169,8 +185,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
-                new SQLFieldMapping("e", "SeasonIndex", "SeasonId", 
-                    delegate (SQLiteDataReader reader, int index) { return reader.ReadIntAsString(index - 1) + "_s" + reader.ReadIntAsString(index); }),
+                new SQLFieldMapping("e", "SeasonIndex", "SeasonId", seasonIdReader),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
