@@ -23,67 +23,50 @@ using System.Text;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
+    // TODO: remove new() constraint
     internal class ObjectFactory<T> where T : new()
     {
-        private LazyQuery<T>.FillMethod fill;
-        private LazyQuery<T>.CreateMethod create;
-        private LazyQuery<T>.ListCreateMethod list;
+        private Delegates<T>.FillMethod fill;
+        private Delegates<T>.CreateMethod create;
 
-        private void SetFill(LazyQuery<T>.FillMethod fill)
+        private void SetFill(Delegates<T>.FillMethod fill)
         {
             this.fill = fill;
         }
 
-        private void SetCreate(LazyQuery<T>.CreateMethod create)
+        private void SetCreate(Delegates<T>.CreateMethod create)
         {
             this.create = create;
         }
 
-        private void SetList(LazyQuery<T>.ListCreateMethod list)
-        {
-            this.list = list;
-        }
-
-        public List<T> CreateObjects(SQLiteDataReader reader)
+        public T CreateObject(SQLiteDataReader reader)
         {
             if (this.fill != null)
             {
                 T obj = new T();
                 fill(obj, reader);
-                return new List<T>() { obj };
+                return obj;
             }
 
             if (this.create != null)
             {
-                return new List<T>() { create(reader) };
-            }
-
-            if (this.list != null)
-            {
-                return list(reader);
+                return create(reader);
             }
 
             throw new InvalidOperationException();
         }
 
-        public static ObjectFactory<T> FromFill(LazyQuery<T>.FillMethod fill)
+        public static ObjectFactory<T> FromFill(Delegates<T>.FillMethod fill)
         {
             ObjectFactory<T> obj = new ObjectFactory<T>();
             obj.SetFill(fill);
             return obj;
         }
 
-        public static ObjectFactory<T> FromCreate(LazyQuery<T>.CreateMethod create)
+        public static ObjectFactory<T> FromCreate(Delegates<T>.CreateMethod create)
         {
             ObjectFactory<T> obj = new ObjectFactory<T>();
             obj.SetCreate(create);
-            return obj;
-        }
-
-        public static ObjectFactory<T> FromList(LazyQuery<T>.ListCreateMethod list)
-        {
-            ObjectFactory<T> obj = new ObjectFactory<T>();
-            obj.SetList(list);
             return obj;
         }
     }

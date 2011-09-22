@@ -57,9 +57,11 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="AllowSQLCompareAttribute.cs" />
     <Compile Include="AutoFiller.cs" />
     <Compile Include="DataReaders.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="Delegates.cs" />
     <Compile Include="LazyQuery.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

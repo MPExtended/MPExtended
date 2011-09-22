@@ -22,8 +22,6 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public abstract class Database
     {
-        protected delegate T FillObject<T>(SQLiteDataReader reader);
-
         public string DatabasePath
         {
             get;
@@ -35,7 +33,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             DatabasePath = databasePath;
         }
 
-        protected T ReadRow<T>(string queryString, FillObject<T> builder, T defaultValue, params SQLiteParameter[] parameters)
+        protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
         {
             using(Query query = new Query(DatabasePath, queryString, parameters)) {
                 if(query.Reader.Read()) {
@@ -46,22 +44,22 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
-        protected T ReadRow<T>(string queryString, FillObject<T> builder, T defaultValue)
+        protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue)
         {
             return ReadRow<T>(queryString, builder, defaultValue, new SQLiteParameter[] { });
         }
 
-        protected T ReadRow<T>(string queryString, FillObject<T> builder, params SQLiteParameter[] parameters)
+        protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, params SQLiteParameter[] parameters)
         {
             return ReadRow<T>(queryString, builder, default(T), parameters);
         }
 
-        protected T ReadRow<T>(string queryString, FillObject<T> builder)
+        protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder)
         {
             return ReadRow<T>(queryString, builder, default(T), new SQLiteParameter[] { });
         }
 
-        protected List<T> ReadList<T>(string queryString, FillObject<T> builder, params SQLiteParameter[] parameters)
+        protected List<T> ReadList<T>(string queryString, Delegates<T>.CreateMethod builder, params SQLiteParameter[] parameters)
         {
             List<T> ret = new List<T>();
 
@@ -78,7 +76,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             return ret;
         }
 
-        protected List<T> ReadList<T>(string queryString, FillObject<T> builder)
+        protected List<T> ReadList<T>(string queryString, Delegates<T>.CreateMethod builder)
         {
             return ReadList<T>(queryString, builder, new SQLiteParameter[] { });
         }

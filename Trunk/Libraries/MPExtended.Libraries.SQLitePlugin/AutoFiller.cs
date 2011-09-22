@@ -59,28 +59,23 @@ namespace MPExtended.Libraries.SQLitePlugin
             return ret;
         }
 
-        public List<T> AutoCreateAndFill(SQLiteDataReader reader)
+        public T AutoCreate(SQLiteDataReader reader)
         {
             // automatically fill objects based upon the sql mappings provided
             if (autofillMapping == null)
                 autofillMapping = GenerateResultingMapping(reader);
 
-            // all items that we return (only one for now, maybe multiple items per row will be supported later)
-            List<T> results = new List<T>() { new T() };
+            // return object
+            T obj = new T();
 
             // loop through all properties and get the value for it
             foreach (KeyValuePair<int, SQLFieldMapping> item in autofillMapping)
             {
                 object res = item.Value.Reader.Invoke(reader, item.Key);
-
-                // set value on all objects we return
-                foreach (T obj in results)
-                {
-                    autofillProperties[item.Value.PropertyName].SetValue(obj, res, null);
-                }
+                autofillProperties[item.Value.PropertyName].SetValue(obj, res, null);
             }
 
-            return results;
+            return obj;
         }
     }
 }

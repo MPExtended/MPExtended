@@ -25,6 +25,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public static class DataReaders
     {
+        [AllowSQLCompare]
         public static object ReadInt32(SQLiteDataReader reader, int idx)
         {
             try
@@ -40,6 +41,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
+        [AllowSQLCompare]
         public static object ReadString(SQLiteDataReader reader, int idx)
         {
             try
@@ -61,6 +63,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
+        [AllowSQLCompare]
         public static object ReadBoolean(SQLiteDataReader reader, int idx)
         {
             try
@@ -76,6 +79,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
+        [AllowSQLCompare]
         public static object ReadDateTime(SQLiteDataReader reader, int idx)
         {
             try
@@ -91,6 +95,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
+        [AllowSQLCompare]
         public static object ReadFloat(SQLiteDataReader reader, int idx)
         {
             try
@@ -120,16 +125,19 @@ namespace MPExtended.Libraries.SQLitePlugin
             return ReadList(reader, idx, '|');
         }
 
+        [AllowSQLCompare]
         public static object ReadIntAsString(SQLiteDataReader reader, int idx)
         {
             return ReadInt32(reader, idx).ToString();
         }
 
+        [AllowSQLCompare]
         public static object ReadStringAsInt(SQLiteDataReader reader, int idx)
         {
             return Int32.Parse((string)ReadString(reader, idx));
         }
 
+        [AllowSQLCompare]
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
             return new List<string>() { (string)ReadString(reader, idx) };

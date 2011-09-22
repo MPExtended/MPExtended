@@ -27,15 +27,13 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public class LazyQuery<T> : ILazyQuery<T> where T : new()
     {
-        public delegate T FillMethod(T obj, SQLiteDataReader reader);
-        public delegate T CreateMethod(SQLiteDataReader reader);
-        public delegate List<T> ListCreateMethod(SQLiteDataReader reader);
-
         private Database db;
         private string inputQuery;
         private SQLiteParameter[] parameters;
         private IEnumerable<SQLFieldMapping> mapping;
         private ObjectFactory<T> factory;
+
+        private Delegates<T>.FinalizeObject finalize;
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqlname, descending
         private List<Tuple<string, string, object>> whereItems = new List<Tuple<string, string, object>>(); // sqlname, operator, value
@@ -46,13 +44,25 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.inputQuery = sql;
             this.mapping = mapping;
             this.parameters = new SQLiteParameter[] { };
-            this.factory = ObjectFactory<T>.FromList(new AutoFiller<T>(mapping).AutoCreateAndFill);
+            this.factory = ObjectFactory<T>.FromCreate(new AutoFiller<T>(mapping).AutoCreate);
         }
 
         public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping)
             : this(db, sql, mapping)
         {
             this.parameters = parameters;
+        }
+
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
+            : this(db, sql, parameters, mapping)
+        {
+            this.finalize = finalize;
+        }
+
+        public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
+            : this(db, sql, mapping)
+        {
+            this.finalize = finalize;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -98,7 +108,12 @@ namespace MPExtended.Libraries.SQLitePlugin
             {
                 while (query.Reader.Read())
                 {
-                    ret.AddRange(factory.CreateObjects(query.Reader));
+                    T obj = factory.CreateObject(query.Reader);
+                    if(finalize != null) 
+                    {
+                        obj = finalize(obj);
+                    }
+                    ret.Add(obj);
                 }
             }
 
@@ -126,19 +141,27 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return null;
             string leftName = left.Member.Name;
 
-            // get right value and check for support
-            if (ex.Right.NodeType != ExpressionType.MemberAccess)
+            // check right value
+            if (ex.Right.NodeType == ExpressionType.MemberAccess && ((MemberExpression)ex.Right).Expression.NodeType == ExpressionType.Parameter)
                 return null;
-            MemberExpression right = (MemberExpression)ex.Right;
-            if (right.Expression.NodeType != ExpressionType.Constant)
+            object value = null;
+            try
+            {
+                value = Expression.Lambda(ex.Right).Compile().DynamicInvoke();
+            }
+            catch (Exception)
+            {
                 return null;
-            ConstantExpression rightval = (ConstantExpression)right.Expression;
-            object value = ((System.Reflection.FieldInfo)right.Member).GetValue(rightval.Value);
-
-            // and return value if supported
+            }
             if (!(value is Int32) && !(value is String))
                 return null;
+
+            // check if mapping supports SQL compare
             SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == leftName).First();
+            if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute)))
+                return null;
+
+            // create smart where
             whereItems.Add(new Tuple<string, string, object>(thisMapping.FullSQLName, "=", value));
             return this;
         }
