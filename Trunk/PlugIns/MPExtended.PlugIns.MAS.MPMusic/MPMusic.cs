@@ -24,7 +24,6 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using System.Data.SQLite;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Libraries.SQLitePlugin;
 
 namespace MPExtended.PlugIns.MAS.MPMusic
@@ -32,12 +31,12 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Database", "MPMyMusic")]
     [ExportMetadata("Version", "1.0.0.0")]
-    public class MPMusic : Database, IMusicLibrary
+    public class MPMusic :  IMusicLibrary
     {
         private IPluginData data;
 
         [ImportingConstructor]
-        public MPMusic(IPluginData data) : base(data.Configuration["database"])
+        public MPMusic(IPluginData data) 
         {
             this.data = data;
         }
@@ -54,12 +53,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicArtistBasic> GetAllArtists()
         {
-            string sql = "SELECT DISTINCT strAlbumArtist FROM tracks GROUP BY strAlbumArtist";
-            return new LazyQuery<WebMusicArtistBasic>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("", "strAlbumArtist", "Id", DataReaders.ReadString),
-                new SQLFieldMapping("", "strAlbumArtist", "Title", DataReaders.ReadString)
+            //string sql = "SELECT DISTINCT strAlbumArtist FROM tracks GROUP BY strAlbumArtist";
+            //return new LazyQuery<WebMusicArtistBasic>(this, sql, new List<SQLFieldMapping>() {
+            //    new SQLFieldMapping("", "strAlbumArtist", "Id", DataReaders.ReadString),
+            //    new SQLFieldMapping("", "strAlbumArtist", "Title", DataReaders.ReadString)
        
-            });
+            //});
+            throw new NotImplementedException();
         }
 
         public IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed()
@@ -89,15 +89,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebGenre> GetAllGenres()
         {
-            string sql = "SELECT DISTINCT strGenre FROM tracks";
-            return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
-            {
-                return reader.ReadPipeList(0);
-            })
-                    .SelectMany(x => x)
-                    .Distinct()
-                    .OrderBy(x => x)
-                    .Select(x => new WebGenre() { Name = x.Replace("| ", "").Replace(" |", "") });
+            //string sql = "SELECT DISTINCT strGenre FROM tracks";
+            //return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
+            //{
+            //    return reader.ReadPipeList(0);
+            //})
+            //        .SelectMany(x => x)
+            //        .Distinct()
+            //        .OrderBy(x => x)
+            //        .Select(x => new WebGenre() { Name = x.Replace("| ", "").Replace(" |", "") });
+            throw new NotImplementedException();
         }
 
         public IEnumerable<WebCategory> GetAllCategories()

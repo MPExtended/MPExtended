@@ -12,6 +12,7 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
 {
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Database", "XBMCMusic")]
+    [ExportMetadata("Version", "1.0.0.0")]
     public class XBMCMusic : Database, IMusicLibrary
     {
         XBMCMusicDB _db = new XBMCMusicDB();
