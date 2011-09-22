@@ -18,8 +18,7 @@
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPMusic">
-      <preferedDatabase>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV11.db3</preferedDatabase>
-      <alternateDatabase>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</alternateDatabase>
+      <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPPictures">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</database>
