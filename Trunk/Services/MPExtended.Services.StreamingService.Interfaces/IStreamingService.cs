@@ -38,5 +38,9 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream CustomTranscoderData(string identifier, string action, string parameters);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
+        Stream GetArtwork(WebArtworkType artworktype, WebArtworkSource mediatype, string id, int offset, int maxWidth, int maxHeight);
     }
 }

@@ -115,6 +115,25 @@ namespace MPExtended.Services.StreamingService.Code
             return StreamImage(cachedPath);
         }
 
+        public static Stream GetResizedImageFromStream(Stream input, int maxWidth, int maxHeight)
+        {
+            // create temporary directory if non-existent
+            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            if (!Directory.Exists(tmpDir))
+                Directory.CreateDirectory(tmpDir);
+            string cachedPath = Path.Combine(tmpDir, new Random().Next(0, 10000) + ".jpg"); // FIXME
+
+            // resize it
+            Image img = System.Drawing.Image.FromStream(input);
+
+            if (!ResizeImage(img, cachedPath, maxWidth, maxHeight))
+            {
+                return null;
+            }
+
+            return StreamImage(cachedPath);
+        }
+
         private static Stream StreamImage(string path)
         {
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
