@@ -270,6 +270,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCategory> GetAllPictureCategoriesBasic();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IEnumerable<WebPictureDetailed> GetPicturesDetailedByCategory(string id);
         #endregion
 
         #region TVShows

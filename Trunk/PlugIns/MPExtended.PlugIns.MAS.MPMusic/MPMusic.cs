@@ -88,7 +88,19 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT idTrack, strAlbum, strArtist, strAlbumArtist, iTrack, strTitle, strPath, iDuration, iYear,strGenre " +
+                        "FROM tracks " + "WHERE %where %order";
+            return new LazyQuery<WebMusicTrackDetailed>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("", "strArtist", "ArtistId", DataReaders.ReadString),
+                 new SQLFieldMapping("", "strAlbum", "AlbumId", DataReaders.ReadString),
+                  new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
+                   new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
+                   new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadString),
+                    new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadString),
+                          new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
+                   new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+            });
         }
 
         public WebMusicTrackBasic GetTrackBasicById(string trackId)

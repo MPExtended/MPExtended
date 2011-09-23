@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -29,18 +30,54 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Pictures/
         public ActionResult Index()
         {
-            return View(MPEServices.NetPipeMediaAccessService.GetPictureDirectory(@"\\whs\Fotos"));
+            try
+            {
+                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategoriesBasic();
+                if (categories != null)
+                {
+                    return View(categories);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Exception in PictureLibrary.Browse", ex);
+            }
+            return null;
         }
 
-        public ActionResult Browse(string path)
-        {
-            return View(MPEServices.NetPipeMediaAccessService.GetPictureDirectory(new System.Text.ASCIIEncoding().GetString(Server.UrlTokenDecode(path))));
+        public ActionResult Browse(string category)
+        {          
+
+            try
+            {
+                var images = MPEServices.NetPipeMediaAccessService.GetPicturesBasicByCategory(category);
+                if (images != null)
+                {
+                    return View(images);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Exception in PictureLibrary.Browse", ex);
+            }
+            return null;
         }
 
-        public ActionResult Image(string path)
-        {
-            byte[] image = System.IO.File.ReadAllBytes(new System.Text.ASCIIEncoding().GetString(Server.UrlTokenDecode(path)));
-            return File(image, "image/jpg");
+        public ActionResult Image(string id)
+        {         
+            try
+            {
+                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(Services.MediaAccessService.Interfaces.WebMediaType.Picture, id, 0);  
+                if (image != null)
+                {
+                    return File(image, "image/jpg");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Exception in PictureLibrary.Image", ex);
+            }
+            return null;
         }
     }
 }

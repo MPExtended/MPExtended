@@ -24,6 +24,7 @@ using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -34,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var series = MPEServices.NetPipeMediaAccessService.GetAllSeries();
+                var series = MPEServices.NetPipeMediaAccessService.GetAllTVShowsBasic();
                 if (series != null)
                 {
                     return View(series);
@@ -47,11 +48,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Seasons(int serie)
+        public ActionResult Seasons(string serie)
         {
             try
             {
-                var seasons = MPEServices.NetPipeMediaAccessService.GetAllSeasons(serie);
+                var seasons = MPEServices.NetPipeMediaAccessService.GetAllTVSeasonsBasic(serie);
                 if (seasons != null)
                 {
                     return View(seasons);
@@ -64,11 +65,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Episodes(int serie, int season)
+        public ActionResult Episodes(string show, string season)
         {
             try
             {
-                var episodes = MPEServices.NetPipeMediaAccessService.GetAllEpisodesForSeason(serie, season);
+                var episodes = MPEServices.NetPipeMediaAccessService.GetTVEpisodesBasicForSeason(show, season);
                 if (episodes != null)
                 {
                     return View(episodes);
@@ -81,15 +82,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Image(int serie, int season)
+        public ActionResult Image(string show, string season)
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetSeason(serie, season).SeasonBanner);
+                var image = MPEServices.NetPipeMediaAccessService.GetTVSeasonBanner(show, season,0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");
-                }
+                }            
             }
             catch (Exception ex)
             {
@@ -98,11 +99,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult EpisodeImage(int episode)
+        public ActionResult EpisodeImage(string episode)
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetFullEpisode(episode).BannerUrl);
+                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode).BannerPaths.ElementAt(0));
                 if (image != null)
                 {
                     return File(image, "image/jpg");
@@ -115,11 +116,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult SeriesFanart(int serie)
+        public ActionResult SeriesFanart(string show)
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetFullSeries(serie).CurrentFanartUrl);
+                var image = MPEServices.NetPipeMediaAccessService.GetTVShowBackdrop(show,0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");
@@ -132,14 +133,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Details(int episode)
+        public ActionResult Details(string episode)
         {
             try
             {
-                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetFullEpisode(episode);
+                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode);
                 if (fullEpisode != null)
                 {
-                    ViewBag.ShowPlay = fullEpisode.EpisodeFile != null;
+                    ViewBag.ShowPlay = fullEpisode.Path != null;
                     return View(fullEpisode);
                 }
             }
@@ -150,13 +151,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Play(int episode)
+        public ActionResult Play(string episode)
         {
             try
             {
-                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetFullEpisode(episode);
+                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode);
                 if (fullEpisode != null)
-                    return View(new Tuple<WebEpisodeFull, WebSeriesFull>(fullEpisode, MPEServices.NetPipeMediaAccessService.GetFullSeries(fullEpisode.IdSerie)));
+                    return View(new Tuple<WebTVEpisodeDetailed, WebTVShowDetailed>(fullEpisode, MPEServices.NetPipeMediaAccessService.GetTVShowDetailed(fullEpisode.ShowId)));
             }
             catch (Exception ex)
             {

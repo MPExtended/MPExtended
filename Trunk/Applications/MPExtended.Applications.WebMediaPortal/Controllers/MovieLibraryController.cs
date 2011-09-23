@@ -39,7 +39,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var movieList = MPEServices.NetPipeMediaAccessService.GetAllMovies(SortBy.Name, OrderBy.Asc);
+                var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(SortBy.Title, OrderBy.Asc);
                 if (movieList != null)
                 {
                     return View(movieList);
@@ -52,12 +52,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Details(int movie)
+        public ActionResult Details(string movie)
         {
 
             try
             {
-                var fullMovie = MPEServices.NetPipeMediaAccessService.GetFullMovie(movie);
+                var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
                 if (fullMovie != null)
                 {
                     return View(fullMovie);
@@ -72,12 +72,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Play(int movie)
+        public ActionResult Play(string movie)
         {
 
             try
             {
-                var fullMovie = MPEServices.NetPipeMediaAccessService.GetFullMovie(movie);
+                var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
                 if (fullMovie != null)
                 {
                     return View(fullMovie);
@@ -90,11 +90,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View("Error");
         }
 
-        public ActionResult Image(int movie)
+        public ActionResult Image(string movie)
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetFullMovie(movie).CoverPath);
+                var image = MPEServices.NetPipeMediaAccessService.GetMovieCover(movie,0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

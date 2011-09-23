@@ -25,6 +25,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -47,7 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebMovieFull> tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailed(1, 4, SortBy.DateAdded, OrderBy.Desc);
+             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(1, 4, SortBy.DateAdded, OrderBy.Desc);
                 return PartialView(tmp);
             }
             catch (Exception ex)
@@ -75,10 +76,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                List<WebScheduleBasic> tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
+                var tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
                 return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
-
-
             }
             catch (Exception ex)
             {

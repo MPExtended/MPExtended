@@ -77,6 +77,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
         WebPictureDetailed GetPictureDetailed(string pictureId);
         IEnumerable<WebCategory> GetAllPictureCategoriesBasic();
+        IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id);
+        IEnumerable<WebPictureDetailed> GetPicturesDetailedByCategory(string id);
     }
 
     public interface IFileSystemLibrary : ILibrary

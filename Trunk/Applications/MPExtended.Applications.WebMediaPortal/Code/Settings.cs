@@ -22,6 +22,7 @@ using System.Linq;
 using System.Web;
 using System.Xml.Serialization;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {

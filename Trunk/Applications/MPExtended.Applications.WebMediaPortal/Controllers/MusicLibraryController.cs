@@ -70,7 +70,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var trackList = MPEServices.NetPipeMediaAccessService.GetMusicTracksBasicForAlbum(id, SortMusicBy.Title, OrderBy.Asc);
+                var trackList = MPEServices.NetPipeMediaAccessService.GetMusicTracksBasicForAlbum(id, SortBy.Title, OrderBy.Asc);
                 if (trackList != null)
                 {
                     return View(trackList);
