@@ -23,6 +23,9 @@
     <plugin name="MPExtended.PlugIns.MAS.MPPictures">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</database>
     </plugin>
+    <plugin name="MPExtended.PlugIns.MAS.FSPictures">
+      <root>E:\Pictures</root>
+    </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPVideos">
       <database>C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>

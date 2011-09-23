@@ -155,9 +155,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.Loca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPShares", "PlugIns\MPExtended.PlugIns.MAS.MPShares\MPExtended.PlugIns.MAS.MPShares.csproj", "{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.FSPictures", "PlugIns\MPExtended.PlugIns.MAS.FSPictures\MPExtended.PlugIns.MAS.FSPictures.csproj", "{D08E4B27-E77C-4258-B050-333D42AA7362}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 32
+		SccNumberOfProjects = 33
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -285,6 +287,10 @@ Global
 		SccProjectTopLevelParentUniqueName31 = MPExtended.sln
 		SccProjectName31 = PlugIns/MPExtended.PlugIns.MAS.MPShares
 		SccLocalPath31 = PlugIns\\MPExtended.PlugIns.MAS.MPShares
+		SccProjectUniqueName32 = PlugIns\\MPExtended.PlugIns.MAS.FSPictures\\MPExtended.PlugIns.MAS.FSPictures.csproj
+		SccProjectTopLevelParentUniqueName32 = MPExtended.sln
+		SccProjectName32 = PlugIns/MPExtended.PlugIns.MAS.FSPictures
+		SccLocalPath32 = PlugIns\\MPExtended.PlugIns.MAS.FSPictures
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -602,6 +608,16 @@ Global
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB}.Release|x86.ActiveCfg = Release|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D08E4B27-E77C-4258-B050-333D42AA7362}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -648,5 +664,6 @@ Global
 		{52DBD781-2509-4ABB-8B97-7FE5F6635AC3} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{456F3244-967E-4732-A2C4-0219B85521DC} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{D08E4B27-E77C-4258-B050-333D42AA7362} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 	EndGlobalSection
 EndGlobal
