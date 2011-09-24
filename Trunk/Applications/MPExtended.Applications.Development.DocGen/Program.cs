@@ -22,7 +22,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 
-namespace MPExtended.Applications.DocumentationGenerator
+namespace MPExtended.Applications.Development.DocGen
 {
     class Program
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{0B852F64-7C0E-4555-A20D-0F0ABF337255}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Applications.DocumentationGenerator</RootNamespace>
-    <AssemblyName>MPExtended.Applications.DocumentationGenerator</AssemblyName>
+    <RootNamespace>MPExtended.Applications.Development.DocumentationGenerator</RootNamespace>
+    <AssemblyName>MPExtended.Applications.Development.DocumentationGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

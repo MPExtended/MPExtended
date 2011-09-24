@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace MPExtended.Applications.DocumentationGenerator
+namespace MPExtended.Applications.Development.DocGen
 {
     internal class WSSGenerator : Generator
     {
@@ -31,7 +31,8 @@ namespace MPExtended.Applications.DocumentationGenerator
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IWebStreamingService");
             this.StreamAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IStreamingService");
             this.Enums = new List<Type>() {
-                this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType")
+                this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType"),
+                this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebArtworkType")
             };
         }
 

@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MPExtended.Applications.DocumentationGenerator")]
+[assembly: AssemblyTitle("MPExtended.Applications.Development.DocGen")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Applications.DocumentationGenerator")]
+[assembly: AssemblyProduct("MPExtended.Applications.Development.DocGen")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

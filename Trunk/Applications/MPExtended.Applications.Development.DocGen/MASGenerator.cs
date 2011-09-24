@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace MPExtended.Applications.DocumentationGenerator
+namespace MPExtended.Applications.Development.DocGen
 {
     internal class MASGenerator : Generator
     {
@@ -32,7 +32,8 @@ namespace MPExtended.Applications.DocumentationGenerator
             this.Enums = new List<Type>() {
                 this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.OrderBy"),
                 this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.SortBy"),
-                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.WebMediaType")
+                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.WebMediaType"),
+                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.WebFileType")
             };
         }
 

@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Applications.DocumentationGenerator
+namespace MPExtended.Applications.Development.DocGen
 {
     internal class DocGenItem
     {

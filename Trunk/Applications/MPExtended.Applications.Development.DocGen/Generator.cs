@@ -22,7 +22,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace MPExtended.Applications.DocumentationGenerator
+namespace MPExtended.Applications.Development.DocGen
 {
     internal abstract class Generator
     {
@@ -49,6 +49,7 @@ namespace MPExtended.Applications.DocumentationGenerator
                 { "Boolean", "bool" },
                 { "Double", "float" },
                 { "Single", "float" },
+                { "Decimal", "float" },
             };
             if(namemap.ContainsKey(typename))
                 return namemap[typename];
@@ -190,7 +191,18 @@ namespace MPExtended.Applications.DocumentationGenerator
             Output.WriteLine("<ul>");
             foreach (var property in type.GetProperties())
             {
-                Output.WriteLine(String.Format("<li><strong>{0}</strong> ({1})</li>", property.Name, GenerateTypeNameLink(method, property.PropertyType)));
+                Type otype;
+                bool isList = IsListType(property.PropertyType, out otype);
+                if (property.PropertyType.Name.StartsWith("Web") || (isList && otype.Name.StartsWith("Web")))
+                {
+                    Output.WriteLine(String.Format("<li><strong>{0}</strong> ({1}):", property.Name, GenerateTypeNameLink(method, property.PropertyType)));
+                    GenerateReturnDocumentation(method, otype);
+                    Output.WriteLine(String.Format("</li>"));
+                }
+                else
+                {
+                    Output.WriteLine(String.Format("<li><strong>{0}</strong> ({1})</li>", property.Name, GenerateTypeNameLink(method, property.PropertyType)));
+                }
             }
             Output.WriteLine("</ul>");
         }
