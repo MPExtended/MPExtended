@@ -34,8 +34,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicTrackDetailed GetTrackDetailedById(string trackId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        Stream GetCover(string albumId, int offset);
-        Stream GetBackdrop(string albumId, int offset);
     }
 
     public interface IMovieLibrary : ILibrary
@@ -46,29 +44,27 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        Stream GetCover(string movieId, int offset);
-        Stream GetBackdrop(string movieId, int offset);
     }
 
     public interface ITVShowLibrary : ILibrary
     {
         IEnumerable<WebTVShowBasic> GetAllTVShowsBasic();
         IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed();
+        WebTVShowDetailed GetTVShowBasic(string seriesId);
         WebTVShowDetailed GetTVShowDetailed(string seriesId);
-        IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId);
-        IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId);
-        WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId);
+
+        IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic();
+        IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed();
+        WebTVSeasonDetailed GetSeasonBasic(string seasonId);
+        WebTVSeasonDetailed GetSeasonDetailed(string seasonId);
+
         IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic();
         IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
+        WebTVEpisodeDetailed GetEpisodeBasic(string episodeId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
+
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-        Stream GetBanner(string seriesId, int offset);
-        Stream GetPoster(string seriesId, int offset);
-        Stream GetBackdrop(string seriesId, int offset);
-        Stream GetSeasonBanner(string seriesId, string seasonId, int offset);
-        Stream GetSeasonPoster(string seriesId, string seasonId, int offset);
-        Stream GetSeasonBackdrop(string seriesId, string seasonId, int offset);
     }
 
     public interface IPictureLibrary : ILibrary

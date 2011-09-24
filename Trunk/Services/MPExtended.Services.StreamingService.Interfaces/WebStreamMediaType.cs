@@ -9,8 +9,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     [DataContract]
     public enum WebStreamMediaType
     {
-        // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType
-        // TODO: maybe change name?
+        // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType, except for TV and Recording values
         [EnumMember]
         TV = -2,
         [EnumMember]
@@ -18,12 +17,18 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [EnumMember]
         Movie = 0,
         [EnumMember]
-        Music = 1,
+        MusicTrack = 1,
         [EnumMember]
         Picture = 2,
         [EnumMember]
-        TVShow = 3,
+        TVEpisode = 3,
         [EnumMember]
-        File = 4
+        File = 4,
+        [EnumMember]
+        TVShow = 5,
+        [EnumMember]
+        TVSeason = 6,
+        [EnumMember]
+        MusicAlbum = 7,
     }
 }

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
-namespace MPExtended.Services.StreamingService.Interfaces
+namespace MPExtended.Services.MediaAccessService.Interfaces
 {
     [DataContract]
-    public enum WebArtworkType
+    public enum WebFileType
     {
-        // present values should equal to MPExtended.Services.MediaAccessService.WebFileType
+        [EnumMember]
+        Content = 0,
         [EnumMember]
         Backdrop = 1,
         [EnumMember]

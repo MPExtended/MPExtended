@@ -195,30 +195,14 @@ namespace MPExtended.Services.StreamingService
             return Images.GetImageResized(new MediaSource(type, id), maxWidth, maxHeight);
         }
 
-        public Stream GetArtwork(WebArtworkType artworktype, WebArtworkSource source, string id, int offset, int maxWidth, int maxHeight)
+        public Stream GetArtwork(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
         {
-            // TODO: proper implementation
-            var items = new[] {
-                new { Source = WebArtworkSource.Movie,    Artwork = WebArtworkType.Backdrop, Method = "GetMovieBackdrop" },
-                new { Source = WebArtworkSource.Movie,    Artwork = WebArtworkType.Cover,    Method = "GetMovieCover"    },
-                new { Source = WebArtworkSource.Music,    Artwork = WebArtworkType.Backdrop, Method = "GetMusicBackdrop" },
-                new { Source = WebArtworkSource.Music,    Artwork = WebArtworkType.Cover,    Method = "GetMusicCover"    },
-                new { Source = WebArtworkSource.TVShow,   Artwork = WebArtworkType.Backdrop, Method = "GetTVShowBackdrop" },
-                new { Source = WebArtworkSource.TVShow,   Artwork = WebArtworkType.Banner,   Method = "GetTVShowBanner" },
-                new { Source = WebArtworkSource.TVShow,   Artwork = WebArtworkType.Poster,   Method = "GetTVShowPoster" },
-                //new { Source = WebArtworkSource.TVSeason, Artwork = WebArtworkType.Backdrop, Method = "GetTVSeasonBackdrop" },
-                //new { Source = WebArtworkSource.TVSeason, Artwork = WebArtworkType.Banner,   Method = "GetTVSeasonBanner" },
-                //new { Source = WebArtworkSource.TVSeason, Artwork = WebArtworkType.Poster,   Method = "GetTVSeasonPoster" },
-            };
+            return MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
+        }
 
-            var valid = items.Select(x => x.Source == source && x.Artwork == artworktype);
-            if (valid.Count() == 0)
-                return null;
-
-            Type t = typeof(IMediaAccessService);
-            Stream input = (Stream)t.InvokeMember(items.First().Method, BindingFlags.InvokeMethod, null, MPEServices.NetPipeMediaAccessService, new object[] { id, offset });
-
-            return Images.GetResizedImageFromStream(input, maxWidth, maxHeight);
+        public Stream GetArtworkResized(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
+        {
+            return Images.GetResizedImageFromStream(MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset), maxWidth, maxHeight);
         }
         #endregion
     }

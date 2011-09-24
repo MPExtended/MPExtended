@@ -27,7 +27,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         {
             get
             {
-                return WebMediaType.Music;
+                return WebMediaType.MusicTrack;
             }
         }
 

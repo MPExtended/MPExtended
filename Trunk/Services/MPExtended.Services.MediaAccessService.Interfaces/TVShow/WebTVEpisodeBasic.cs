@@ -30,7 +30,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         {
             get
             {
-                return WebMediaType.TVShow;
+                return WebMediaType.TVEpisode;
             }
         }
 

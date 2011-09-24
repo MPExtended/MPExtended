@@ -145,11 +145,11 @@ namespace MPExtended.Services.MediaAccessService
             {
                 case WebMediaType.Movie:
                     return ChosenMovieLibrary;
-                case WebMediaType.Music:
+                case WebMediaType.MusicTrack:
                     return ChosenMusicLibrary;
                 case WebMediaType.Picture:
                     return ChosenPictureLibrary;
-                case WebMediaType.TVShow:
+                case WebMediaType.TVEpisode:
                     return ChosenTVShowLibrary;
                 case WebMediaType.File:
                     return ChosenFileSystemLibrary;
@@ -208,14 +208,14 @@ namespace MPExtended.Services.MediaAccessService
             {
                 case WebMediaType.Movie:
                     return GetMovieDetailedById(id).ToWebMediaItem();
-                case WebMediaType.Music:
+                case WebMediaType.MusicTrack:
                     return GetMusicTrackDetailedById(id).ToWebMediaItem();
                 case WebMediaType.Picture:
-                    return GetPictureDetailed(id).ToWebMediaItem();
-                case WebMediaType.TVShow:
-                    return GetTVEpisodeDetailed(id).ToWebMediaItem();
+                    return GetPictureDetailedById(id).ToWebMediaItem();
+                case WebMediaType.TVEpisode:
+                    return GetTVEpisodeDetailedById(id).ToWebMediaItem();
                 case WebMediaType.File:
-                    return GetFileSystemFile(id).ToWebMediaItem();
+                    return GetFileSystemFileBasicById(id).ToWebMediaItem();
                 default:
                     throw new ArgumentException();
             }
@@ -278,19 +278,14 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMovieLibrary.GetAllGenres().ToList();
         }
 
-        public WebMovieDetailed GetMovieDetailedById(string movieId)
+        public WebMovieBasic GetMovieBasicById(string id)
         {
-            return ChosenMovieLibrary.GetMovieDetailedById(movieId);
+            return ChosenMovieLibrary.GetMovieBasicById(id);
         }
 
-        public Stream GetMovieCover(string id, int offset)
+        public WebMovieDetailed GetMovieDetailedById(string id)
         {
-            return ChosenMovieLibrary.GetCover(id, offset);
-        }
-
-        public Stream GetMovieBackdrop(string id, int offset)
-        {
-            return ChosenMovieLibrary.GetBackdrop(id, offset);
+            return ChosenMovieLibrary.GetMovieDetailedById(id);
         }
         #endregion
 
@@ -325,7 +320,7 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMusicLibrary.GetAllTracksDetailed().SortMediaItemList(sort, order).ToList();
         }
 
-        public IList<WebMusicTrackBasic> GetTracksBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenMusicLibrary.GetAllTracks().SortMediaItemList(sort, order).GetRange(start, end).ToList();
         }
@@ -345,14 +340,19 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMusicLibrary.GetAllTracksDetailed().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
 
+        public WebMusicTrackBasic GetMusicTrackBasicById(string id)
+        {
+            return ChosenMusicLibrary.GetAllTracks().Where(x => x.Id == id).First();
+        }
+
         public IList<WebGenre> GetAllMusicGenres()
         {
             return ChosenMusicLibrary.GetAllGenres().ToList();
         }
 
-        public WebMusicTrackDetailed GetMusicTrackDetailedById(string Id)
+        public WebMusicTrackDetailed GetMusicTrackDetailedById(string id)
         {
-            return ChosenMusicLibrary.GetAllTracksDetailed().Single(p => p.Id == Id);
+            return ChosenMusicLibrary.GetAllTracksDetailed().Single(p => p.Id == id);
         }
 
         public IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -380,14 +380,9 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMusicLibrary.GetAllArtists().SortMediaItemList(sort, order).GetRange(start, end).ToList();
         }
 
-        public WebMusicArtistBasic GetMusicArtistBasicById(string Id)
+        public WebMusicArtistBasic GetMusicArtistBasicById(string id)
         {
-            return ChosenMusicLibrary.GetAllArtists().Single(p => p.Id == Id);
-        }
-
-        public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMusicLibrary.GetAllTracks().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMusicLibrary.GetAllArtists().Single(p => p.Id == id);
         }
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -419,16 +414,6 @@ namespace MPExtended.Services.MediaAccessService
         {
             return ChosenMusicLibrary.GetAllAlbums().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
         }
-
-        public Stream GetMusicCover(string id, int offset)
-        {
-            return ChosenMusicLibrary.GetCover(id, offset);
-        }
-
-        public Stream GetMusicBackdrop(string id, int offset)
-        {
-            return ChosenMusicLibrary.GetBackdrop(id, offset);
-        }
         #endregion
 
         #region Pictures
@@ -442,11 +427,6 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenPictureLibrary.GetAllPicturesDetailed().SortMediaItemList(sort, order).ToList();
         }
 
-        public WebPictureDetailed GetPictureDetailed(string Id)
-        {
-            return ChosenPictureLibrary.GetPictureDetailed(Id);
-        }
-
         public IList<WebCategory> GetAllPictureCategoriesBasic()
         {
             return ChosenPictureLibrary.GetAllPictureCategoriesBasic().ToList();
@@ -455,6 +435,26 @@ namespace MPExtended.Services.MediaAccessService
         public WebItemCount GetPictureCount()
         {
             return new WebItemCount() { Count = ChosenPictureLibrary.GetAllPicturesBasic().Count() };
+        }
+
+        public IList<WebPictureBasic> GetPicturesBasicByCategory(string id)
+        {
+            return ChosenPictureLibrary.GetPicturesBasicByCategory(id).ToList();
+        }
+
+        public IList<WebPictureDetailed> GetPicturesDetailedByCategory(string id)
+        {
+            return ChosenPictureLibrary.GetPicturesDetailedByCategory(id).ToList();
+        }
+
+        public WebPictureBasic GetPictureBasicById(string id)
+        {
+            return ChosenPictureLibrary.GetAllPicturesBasic().Where(x => x.Id == id).First();
+        }
+
+        public WebPictureDetailed GetPictureDetailedById(string id)
+        {
+            return ChosenPictureLibrary.GetPictureDetailed(id);
         }
         #endregion
 
@@ -509,54 +509,34 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetAllTVShowsDetailed().SortMediaItemList(sort, order).GetRange(start, start - end).ToList();
         }
 
-        public WebTVShowDetailed GetTVShowDetailed(string id)
+        public WebTVShowDetailed GetTVShowDetailedById(string id)
         {
             return ChosenTVShowLibrary.GetTVShowDetailed(id);
         }
 
-        public Stream GetTVShowBanner(string id, int offset)
+        public WebTVShowBasic GetTVShowBasicById(string id)
         {
-            return ChosenTVShowLibrary.GetBanner(id, offset);
+            return ChosenTVShowLibrary.GetAllTVShowsBasic().Where(x => x.Id == id).First();
         }
 
-        public Stream GetTVShowPoster(string id, int offset)
+        public IList<WebTVSeasonBasic> GetAllTVSeasonsBasicForTVShow(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetPoster(id, offset);
+            return ChosenTVShowLibrary.GetAllSeasonsBasic().Where(x => x.ShowId == id).SortMediaItemList(sort, order).ToList();
         }
 
-        public Stream GetTVShowBackdrop(string id, int offset)
+        public IList<WebTVSeasonDetailed> GetAllTVSeasonsDetailedForTVShow(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetBackdrop(id, offset);
+            return ChosenTVShowLibrary.GetAllSeasonsDetailed().Where(x => x.ShowId == id).SortMediaItemList(sort, order).ToList();
         }
 
-        public IList<WebTVSeasonBasic> GetAllTVSeasonsBasic(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public WebTVSeasonDetailed GetTVSeasonDetailedById(string id)
         {
-            return ChosenTVShowLibrary.GetAllSeasonsBasic(id).SortMediaItemList(sort, order).ToList();
+            return ChosenTVShowLibrary.GetSeasonDetailed(id);
         }
 
-        public IList<WebTVSeasonDetailed> GetAllTVSeasonsDetailed(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public WebTVSeasonBasic GetTVSeasonBasicById(string id)
         {
-            return ChosenTVShowLibrary.GetAllSeasonsDetailed(id).SortMediaItemList(sort, order).ToList();
-        }
-
-        public WebTVSeasonDetailed GetTVSeasonDetailed(string showId, string seasonId, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenTVShowLibrary.GetSeasonDetailed(showId, seasonId);
-        }
-
-        public Stream GetTVSeasonBanner(string seriesId, string seasonId, int offset)
-        {
-            return ChosenTVShowLibrary.GetSeasonBanner(seriesId, seasonId, offset);
-        }
-
-        public Stream GetTVSeasonPoster(string seriesId, string seasonId, int offset)
-        {
-            return ChosenTVShowLibrary.GetSeasonPoster(seriesId, seasonId, offset);
-        }
-
-        public Stream GetTVSeasonBackdrop(string seriesId, string seasonId, int offset)
-        {
-            return ChosenTVShowLibrary.GetSeasonBackdrop(seriesId, seasonId, offset);
+            return ChosenTVShowLibrary.GetSeasonBasic(id);
         }
 
         public IList<WebTVEpisodeBasic> GetAllTVEpisodesBasicForTVShow(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -579,17 +559,22 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).GetRange(start, end - start).ToList();
         }
 
-        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(string showId, string seasonId, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.ShowId == showId && p.SeasonId == seasonId).SortMediaItemList(sort, order).ToList();
+            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).ToList();
         }
 
-        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(string showId, string seasonId, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {           
-            return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == showId && p.SeasonId == seasonId).SortMediaItemList(sort, order).ToList();
+            return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).ToList();
         }
 
-        public WebTVEpisodeDetailed GetTVEpisodeDetailed(string id)
+        public WebTVEpisodeBasic GetTVEpisodeBasicById(string id)
+        {
+            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(x => x.Id == id).First();
+        }
+
+        public WebTVEpisodeDetailed GetTVEpisodeDetailedById(string id)
         {
             return ChosenTVShowLibrary.GetEpisodeDetailed(id);
         }
@@ -611,7 +596,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebItemCount GetTVSeasonCountForTVShow(string id)
         {
-            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllSeasonsBasic(id).Count() };
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllSeasonsBasic().Where(x => x.ShowId == id).Count() };
         }
         #endregion
 
@@ -631,19 +616,55 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenFileSystemLibrary.GetFilesListing(id).ToList();
         }
 
-        public WebFileBasic GetFileSystemFile(string id)
+        public WebFileBasic GetFileSystemFileBasicById(string id)
         {
             return ChosenFileSystemLibrary.GetFileBasic(id);
         }
+        #endregion
 
-        public bool IsLocalFile(WebMediaType type, string id, int offset)
+        #region Files
+        public IList<string> GetPathList(WebMediaType mediatype, WebFileType filetype, string id)
         {
-            return GetLibrary(type).IsLocalFile(GetMediaItem(type, id).Path[offset]);
+            if (mediatype == WebMediaType.File && filetype == WebFileType.Content)
+                return GetFileSystemFileBasicById(id).Path;
+            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Content)
+                return GetMovieDetailedById(id).Path;
+            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Backdrop)
+                return GetMovieDetailedById(id).BackdropPath;
+            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Cover)
+                return GetMovieDetailedById(id).CoverPath;
+            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Banner)
+                return GetTVShowDetailedById(id).BannerPaths;
+            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Backdrop)
+                return GetTVShowDetailedById(id).BackdropPaths;
+            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Poster)
+                return GetTVShowDetailedById(id).PosterPaths;
+            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Backdrop)
+                return GetTVSeasonDetailedById(id).BackdropPaths;
+            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Banner)
+                return GetTVSeasonDetailedById(id).BannerPaths;
+            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Poster)
+                return GetTVSeasonDetailedById(id).PosterPaths;
+            else if (mediatype == WebMediaType.TVEpisode && filetype == WebFileType.Content)
+                return GetTVEpisodeBasicById(id).Path;
+            else if (mediatype == WebMediaType.Picture && filetype == WebFileType.Content)
+                return GetPictureBasicById(id).Path;
+            else if (mediatype == WebMediaType.MusicAlbum && filetype == WebFileType.Cover)
+                return GetMusicAlbumBasicById(id).CoverPaths;
+            else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Content)
+                return GetMusicTrackBasicById(id).Path;
+            else
+                throw new ArgumentException("Invalid combination of filetype and mediatype");
         }
 
-        public Stream RetrieveFile(WebMediaType type, string id, int offset) 
+        public bool IsLocalFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetLibrary(type).GetFile(GetMediaItem(type, id).Path[offset]);
+            return GetLibrary(mediatype).IsLocalFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
+        }
+
+        public Stream RetrieveFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
+        {
+            return GetLibrary(mediatype).GetFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
         }
         #endregion
     }
