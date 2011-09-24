@@ -19,65 +19,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     // from the interfaces described in MediaInterfaces, which are the interfaces used
     // for internal communication, but they have to use the same known media descriptions.
 
-    #region Enums
-    [DataContract]
-    public enum WebMediaType
-    {
-        [EnumMember]
-        Movie = 0,
-        [EnumMember]
-        MusicTrack = 1,
-        [EnumMember]
-        Picture = 2,
-        [EnumMember]
-        TVEpisode = 3,
-        [EnumMember]
-        File = 4,
-        [EnumMember]
-        TVShow = 5,
-        [EnumMember]
-        TVSeason = 6,
-        [EnumMember]
-        MusicAlbum = 7,
-    }
-
-    [DataContract]
-    public enum OrderBy
-    {
-        [EnumMember]
-        Asc = 0,
-        [EnumMember]
-        Desc = 1
-    }
-
-    [DataContract]
-    public enum SortBy
-    {
-        [EnumMember]
-        Title = 0,
-        [EnumMember]
-        DateAdded = 1,
-        [EnumMember]
-        Year = 2,
-        [EnumMember]
-        Genre = 3,
-        [EnumMember]
-        Rating = 4,
-        [EnumMember]
-        UserDefinedCategories = 5,
-        [EnumMember]
-        MusicTrackNumber = 6,
-        [EnumMember]
-        MusicComposer = 7,
-        [EnumMember]
-        TVEpisodeNumber = 8,
-        [EnumMember]
-        TVSeasonNumber = 9,
-        [EnumMember]
-        PictureDateTaken = 10
-    }
-    #endregion
-
     [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
     public interface IMediaAccessService
     {

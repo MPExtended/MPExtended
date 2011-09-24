@@ -26,6 +26,7 @@ using System.ServiceModel.Web;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -46,9 +47,12 @@ namespace MPExtended.Services.StreamingService.Code
                 decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
                 ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
             }
+            
+            // get temporary filename
+            string tempDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            string tempFile = Path.Combine(tempDir, Guid.NewGuid().ToString() + ".jpg");
 
             // execute it
-            string tempFile = Path.GetTempFileName(); // FIXME: maybe we need to clean this up?
             ProcessStartInfo info = new ProcessStartInfo();
             info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
             info.FileName = Config.GetFFMpegPath();
@@ -58,55 +62,27 @@ namespace MPExtended.Services.StreamingService.Code
             proc.Start();
             proc.WaitForExit();
 
-            return new FileStream(tempFile, FileMode.Open, FileAccess.Read);
+            return StreamImage(tempFile);
         }
 
-        public static Stream GetImage(MediaSource source)
+        public static Stream GetResizedImage(WebStreamMediaType mediatype, string id, int maxWidth, int maxHeight)
         {
-            // TODO: check filetype
-            Log.Info("Streaming image of media source {0}", source);
-            if (source.IsLocalFile)
-            {
-                return StreamImage(source.GetPath());
-            }
-            else
-            {
-                // TODO: set MIME
-                return source.Retrieve();
-            }
+            return GetResizedImage(mediatype, WebArtworkType.Content, id, 0, maxWidth, maxHeight);
         }
 
-        public static Stream GetImageResized(MediaSource source, int maxWidth, int maxHeight)
+        public static Stream GetResizedImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
         {
-            // create temporary directory if non-existent
+            // create cache path
             string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
             if (!Directory.Exists(tmpDir))
                 Directory.CreateDirectory(tmpDir);
+            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}_{3}_{4}.jpg", mediatype, artworktype, id, maxWidth, maxHeight));
 
-            // generate cache name
-            string fullpath = ((int)source.MediaType).ToString() + "_" + source.Id;
-            foreach (char c in Path.GetInvalidFileNameChars())
-                fullpath = fullpath.Replace(c, '_');
-            if (fullpath.Length > 125)
-                fullpath = fullpath.Substring(fullpath.Length - 125);
-            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}.{3}", fullpath, maxWidth, maxHeight, "jpg"));
-
+            // check for existence on disk
             if (!File.Exists(cachedPath))
             {
-                // TODO: check filetype
-                // get source
-                Log.Info("Streaming resized image of media source {0}", source);
-                Image img;
-                if (source.IsLocalFile)
-                {
-                    img = System.Drawing.Image.FromFile(source.GetPath());
-                }
-                else
-                {
-                    img = System.Drawing.Image.FromStream(source.Retrieve());
-                }
-                
-                if (!ResizeImage(img, cachedPath, maxWidth, maxHeight))
+                Image orig = Image.FromStream(MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset));
+                if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
                 {
                     return null;
                 }
@@ -115,26 +91,24 @@ namespace MPExtended.Services.StreamingService.Code
             return StreamImage(cachedPath);
         }
 
-        public static Stream GetResizedImageFromStream(Stream input, int maxWidth, int maxHeight)
+        public static Stream GetImage(WebStreamMediaType mediatype, string id)
         {
-            // create temporary directory if non-existent
-            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
-            if (!Directory.Exists(tmpDir))
-                Directory.CreateDirectory(tmpDir);
-            string cachedPath = Path.Combine(tmpDir, new Random().Next(0, 10000) + ".jpg"); // FIXME
-
-            // resize it
-            Image img = System.Drawing.Image.FromStream(input);
-
-            if (!ResizeImage(img, cachedPath, maxWidth, maxHeight))
-            {
-                return null;
-            }
-
-            return StreamImage(cachedPath);
+            return GetImage(mediatype, WebArtworkType.Content, id, 0);
         }
 
-        private static Stream StreamImage(string path)
+        public static Stream GetImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
+        {
+            string path = MPEServices.NetPipeMediaAccessService.GetPathList((WebMediaType)mediatype, (WebFileType)artworktype, id).ElementAt(offset);
+            Stream data = null;
+            if (MPEServices.NetPipeMediaAccessService.IsLocalFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset))
+            {
+                data = MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
+            }
+
+            return StreamImage(path, data);
+        }
+
+        private static Stream StreamImage(string path, Stream data = null)
         {
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
                 { ".jpeg", "image/jpeg" },
@@ -143,12 +117,19 @@ namespace MPExtended.Services.StreamingService.Code
                 { ".gif", "image/gif" },
                 { ".bmp", "image/x-ms-bmp" },
             };
-            FileInfo info = new FileInfo(path);
-            string mime = commonMimeTypes.ContainsKey(info.Extension) ? commonMimeTypes[info.Extension] : "application/octet-stream";
-
-            FileStream fs = File.OpenRead(path);
+            string extension = Path.GetExtension(path);
+            string mime = commonMimeTypes.ContainsKey(extension) ? commonMimeTypes[extension] : "application/octet-stream";
             WebOperationContext.Current.OutgoingResponse.ContentType = mime;
-            return fs;
+
+            if (data == null)
+            {
+                FileStream fs = File.OpenRead(path);
+                return fs;
+            }
+            else
+            {
+                return data;
+            }
         }
 
         private static bool ResizeImage(Image origImage, string newFile, int maxWidth, int maxHeight)

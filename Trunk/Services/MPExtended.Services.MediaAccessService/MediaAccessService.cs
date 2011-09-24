@@ -146,9 +146,12 @@ namespace MPExtended.Services.MediaAccessService
                 case WebMediaType.Movie:
                     return ChosenMovieLibrary;
                 case WebMediaType.MusicTrack:
+                case WebMediaType.MusicAlbum:
                     return ChosenMusicLibrary;
                 case WebMediaType.Picture:
                     return ChosenPictureLibrary;
+                case WebMediaType.TVShow:
+                case WebMediaType.TVSeason:
                 case WebMediaType.TVEpisode:
                     return ChosenTVShowLibrary;
                 case WebMediaType.File:

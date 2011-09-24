@@ -187,22 +187,22 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetImage(WebStreamMediaType type, string id)
         {
-            return Images.GetImage(new MediaSource(type, id));
+            return Images.GetImage(type, id);
         }
 
         public Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight)
         {
-            return Images.GetImageResized(new MediaSource(type, id), maxWidth, maxHeight);
+            return Images.GetResizedImage(type, id, maxWidth, maxHeight);
         }
 
         public Stream GetArtwork(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
         {
-            return MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
+            return Images.GetImage(mediatype, artworktype, id, offset);
         }
 
         public Stream GetArtworkResized(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
         {
-            return Images.GetResizedImageFromStream(MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset), maxWidth, maxHeight);
+            return Images.GetResizedImage(mediatype, artworktype, id, offset, maxWidth, maxHeight);
         }
         #endregion
     }

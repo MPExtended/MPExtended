@@ -11,6 +11,8 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         // present values should equal to MPExtended.Services.MediaAccessService.WebFileType
         [EnumMember]
+        Content = 0,
+        [EnumMember]
         Backdrop = 1,
         [EnumMember]
         Banner = 2,
