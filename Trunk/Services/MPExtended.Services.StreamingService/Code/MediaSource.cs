@@ -46,7 +46,7 @@ namespace MPExtended.Services.StreamingService.Code
                     return false;
                 }
 
-                return MPEServices.NetPipeMediaAccessService.IsLocalFile((WebMediaType)MediaType, Id, Offset);
+                return MPEServices.NetPipeMediaAccessService.IsLocalFile((WebMediaType)MediaType, WebFileType.Content, Id, Offset);
             }
         }
 
@@ -103,7 +103,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return new TsBuffer(Id);
             }
 
-            return MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)MediaType, Id, Offset);
+            return MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)MediaType, WebFileType.Content, Id, Offset);
         }
 
         public IProcessingUnit GetInputReaderUnit()

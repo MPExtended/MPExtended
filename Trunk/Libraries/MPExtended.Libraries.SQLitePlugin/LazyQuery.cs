@@ -36,7 +36,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         private Delegates<T>.FinalizeObject finalize;
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqlname, descending
-        private List<Tuple<string, string, object>> whereItems = new List<Tuple<string, string, object>>(); // sqlname, operator, value
+        private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
 
         public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping)
         {
@@ -96,8 +96,8 @@ namespace MPExtended.Libraries.SQLitePlugin
             sql = sql.Replace("%order", orderItems.Count == 0 ? String.Empty : orderSql);
 
             // prepare where
-            SQLiteParameter[] realParams = whereItems.Select((x, index) => new SQLiteParameter("@lazyQuery" + index, x.Item3)).Union(parameters).ToArray();
-            string whereSql = "(" + String.Join(" AND ", whereItems.Select((x, index) => "(" + x.Item1 + " " + x.Item2 + " @lazyQuery" + index + ")")) + ")";
+            SQLiteParameter[] realParams = whereItems.Select((x, index) => new SQLiteParameter("@lazyQuery" + index, x.Item2)).Union(parameters).ToArray();
+            string whereSql = "(" + String.Join(" AND ", whereItems.Select((x, index) => "(" + x.Item1.Replace("%prepared", "@lazyQuery" + index) + ")")) + ")";
             sql = sql.Replace("%where", whereItems.Count == 0 ? "1" : whereSql);
 
             return new Tuple<string, SQLiteParameter[]>(sql, realParams);
@@ -162,8 +162,11 @@ namespace MPExtended.Libraries.SQLitePlugin
             if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute)))
                 return null;
 
+            // build SQL
+            AllowSQLCompareAttribute attr = (AllowSQLCompareAttribute)Attribute.GetCustomAttribute(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute));
+
             // create smart where
-            whereItems.Add(new Tuple<string, string, object>(thisMapping.FullSQLName, "=", value));
+            whereItems.Add(new Tuple<string, object>(attr.GetSQLCondition(thisMapping), value));
             return this;
         }
 

@@ -50,17 +50,17 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         IEnumerable<WebTVShowBasic> GetAllTVShowsBasic();
         IEnumerable<WebTVShowDetailed> GetAllTVShowsDetailed();
-        WebTVShowDetailed GetTVShowBasic(string seriesId);
+        WebTVShowBasic GetTVShowBasic(string seriesId);
         WebTVShowDetailed GetTVShowDetailed(string seriesId);
 
         IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic();
         IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed();
-        WebTVSeasonDetailed GetSeasonBasic(string seasonId);
+        WebTVSeasonBasic GetSeasonBasic(string seasonId);
         WebTVSeasonDetailed GetSeasonDetailed(string seasonId);
 
         IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic();
         IEnumerable<WebTVEpisodeDetailed> GetAllEpisodesDetailed();
-        WebTVEpisodeDetailed GetEpisodeBasic(string episodeId);
+        WebTVEpisodeBasic GetEpisodeBasic(string episodeId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
 
         IEnumerable<WebGenre> GetAllGenres();

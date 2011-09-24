@@ -63,6 +63,16 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllTVShows<WebTVShowDetailed>();
         }
 
+        public WebTVShowDetailed GetTVShowDetailed(string seriesId)
+        {
+            return GetAllTVShows<WebTVShowDetailed>().Where(x => x.Id == seriesId).First();
+        }
+
+        public WebTVShowBasic GetTVShowBasic(string seriesId)
+        {
+            return GetAllTVShows<WebTVShowBasic>().Where(x => x.Id == seriesId).First();
+        }
+
         private LazyQuery<T> GetAllTVShows<T>() where T : WebTVShowBasic, new()
         {
             SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
@@ -107,63 +117,68 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             });
         }
 
-        public WebTVShowDetailed GetTVShowDetailed(string seriesId)
+
+        public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic()
         {
-            return GetAllTVShowsDetailed().Where(x => x.Id == seriesId).First();
+            return GetAllSeasons<WebTVSeasonBasic>();
         }
 
-        public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic(string seriesId)
+        public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed()
         {
-            return GetAllSeasons<WebTVSeasonBasic>(seriesId);
+            return GetAllSeasons<WebTVSeasonDetailed>();
         }
 
-        public IEnumerable<WebTVSeasonDetailed> GetAllSeasonsDetailed(string seriesId)
+        public WebTVSeasonBasic GetSeasonBasic(string seasonId)
         {
-            return GetAllSeasons<WebTVSeasonDetailed>(seriesId);
+            return GetAllSeasons<WebTVSeasonBasic>().Where(x => x.Id == seasonId).First();
         }
 
-        public LazyQuery<T> GetAllSeasons<T>(string seriesId) where T : WebTVSeasonBasic, new()
+        public WebTVSeasonDetailed GetSeasonDetailed(string seasonId)
         {
-            string csql = "SELECT SeasonIndex, COUNT(*) AS count FROM online_episodes GROUP BY SeasonIndex";
+            return GetAllSeasons<WebTVSeasonDetailed>().Where(x => x.Id == seasonId).First();
+        }
+
+        private LazyQuery<T> GetAllSeasons<T>() where T : WebTVSeasonBasic, new()
+        {
+            string csql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes GROUP BY SeriesID, SeasonIndex";
             var episodeCountTable = ReadList<KeyValuePair<string, int>>(csql, delegate(SQLiteDataReader reader)
             {
-                return new KeyValuePair<string, int>(reader.ReadIntAsString(0), reader.ReadInt32(1));
+                return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
             }).ToDictionary(x => x.Key, x => x.Value);
 
-            string wsql = "SELECT SeasonIndex, COUNT(*) AS count FROM online_episodes WHERE Watched = 0 GROUP BY SeasonIndex";
+            string wsql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes WHERE Watched = 0 GROUP BY SeriesID, SeasonIndex";
             var episodeUnwatchedCountTable = ReadList<KeyValuePair<string, int>>(wsql, delegate(SQLiteDataReader reader)
             {
-                return new KeyValuePair<string, int>(reader.ReadIntAsString(0), reader.ReadInt32(1));
+                return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
             }).ToDictionary(x => x.Key, x => x.Value);
 
             string sql = 
-                    "SELECT DISTINCT s.ID, s.SeasonIndex, s.SeriesID, STRFTIME('%Y', e.FirstAired) AS year, " +
+                    "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, STRFTIME('%Y', e.FirstAired) AS year, " +
                         "s.BannerFileNames " +
                     "FROM season s " +
-                    "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = @seriesId " +
-                    "WHERE s.SeriesID = @seriesId AND %where " +
+                    "LEFT JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex " +
+                    "WHERE %where " +
                     "%order";
-            var parameters = new SQLiteParameter[] { new SQLiteParameter("@seriesId", seriesId) };
-            return new LazyQuery<T>(this, sql, parameters, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("s", "SeasonIndex", "Id", DataReaders.ReadIntAsString),
+            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("s", "SeasonIndex", "Id", ReadSeasonID),
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "EpisodeCount", "EpisodeCount", DataReaders.ReadInt32),
-                new SQLFieldMapping("s", "EpisodesUnWatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader)
             }, delegate(T obj)
             {
                 obj.EpisodeCount = episodeCountTable.ContainsKey(obj.Id) ? episodeCountTable[obj.Id] : 0;
-                obj.EpisodeCount = episodeUnwatchedCountTable.ContainsKey(obj.Id) ? episodeUnwatchedCountTable[obj.Id] : 0;
+                obj.UnwatchedEpisodeCount = episodeUnwatchedCountTable.ContainsKey(obj.Id) ? episodeUnwatchedCountTable[obj.Id] : 0;
                 return obj;
             });
         }
 
-        public WebTVSeasonDetailed GetSeasonDetailed(string seriesId, string seasonId)
+        [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
+        private string ReadSeasonID(SQLiteDataReader reader, int offset)
         {
-            return GetAllSeasonsDetailed(seriesId).Where(x => x.Id == seasonId).First();
+            return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
         }
+
 
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
@@ -174,6 +189,16 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             return GetAllEpisodes<WebTVEpisodeDetailed>();
         }
+
+        public WebTVEpisodeBasic GetEpisodeBasic(string episodeId)
+        {
+            return GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.Id == episodeId).First();
+        }
+
+        public WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId)
+        {
+            return GetAllEpisodes<WebTVEpisodeDetailed>().Where(x => x.Id == episodeId).First();
+        }       
 
         private LazyQuery<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
         {
@@ -193,7 +218,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
-                new SQLFieldMapping("e", "SeasonIndex", "SeasonId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "SeasonIndex", "SeasonId", ReadSeasonID),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
@@ -205,10 +230,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             });
         }
 
-        public WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId)
-        {
-            return GetAllEpisodesDetailed().Where(x => x.Id == episodeId).First();
-        }
 
         public IEnumerable<WebGenre> GetAllGenres()
         {
@@ -226,36 +247,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         public IEnumerable<WebCategory> GetAllCategories()
         {
             return new List<WebCategory>();
-        }
-
-        public Stream GetBanner(string seriesId, int offset)
-        {
-            return new FileStream(GetTVShowDetailed(seriesId).BannerPaths[offset], FileMode.Open);
-        }
-
-        public Stream GetPoster(string seriesId, int offset)
-        {
-            return new FileStream(GetTVShowDetailed(seriesId).PosterPaths[offset], FileMode.Open);
-        }
-
-        public Stream GetBackdrop(string seriesId, int offset)
-        {
-            return new FileStream(GetTVShowDetailed(seriesId).BackdropPaths[offset], FileMode.Open);
-        }
-
-        public Stream GetSeasonBanner(string seriesId, string seasonId, int offset)
-        {
-            return new FileStream(GetSeasonDetailed(seriesId, seasonId).BannerPaths[offset], FileMode.Open);
-        }
-
-        public Stream GetSeasonPoster(string seriesId, string seasonId, int offset)
-        {
-            return new FileStream(GetSeasonDetailed(seriesId, seasonId).PosterPaths[offset], FileMode.Open);
-        }
-
-        public Stream GetSeasonBackdrop(string seriesId, string seasonId, int offset)
-        {
-            return new FileStream(GetSeasonDetailed(seriesId, seasonId).BackdropPaths[offset], FileMode.Open);
         }
 
         public bool IsLocalFile(string path)

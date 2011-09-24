@@ -28,7 +28,7 @@ namespace MPExtended.Libraries.SQLitePlugin
     internal class AutoFiller<T> where T : new()
     {
         private IEnumerable<SQLFieldMapping> mapping;
-        private Dictionary<int, SQLFieldMapping> autofillMapping;
+        private Dictionary<SQLFieldMapping, int> autofillMapping;
         private Dictionary<string, PropertyInfo> autofillProperties;
 
         public AutoFiller(IEnumerable<SQLFieldMapping> mapping)
@@ -36,10 +36,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.mapping = mapping;
         }
 
-        private Dictionary<int, SQLFieldMapping> GenerateResultingMapping(SQLiteDataReader reader)
+        private Dictionary<SQLFieldMapping, int> GenerateResultingMapping(SQLiteDataReader reader)
         {
             // this generates the field nr => (property name, property reader) mappings for the autofiller
-            var ret = new Dictionary<int, SQLFieldMapping>();
+            var ret = new Dictionary<SQLFieldMapping, int>();
             autofillProperties = typeof(T).GetProperties().ToDictionary(x => x.Name, x => x);
 
             for (int i = 0; i < reader.FieldCount; i++)
@@ -48,12 +48,14 @@ namespace MPExtended.Libraries.SQLitePlugin
                 IEnumerable<SQLFieldMapping> matchedMappings = mapping.Where(x => x.Field == fieldname);
                 if (matchedMappings.Count() == 0)
                     continue;
-                SQLFieldMapping thisMapping = matchedMappings.First();
-                string propertyName = thisMapping.PropertyName;
-                if (!autofillProperties.ContainsKey(propertyName))
-                    continue;
+                foreach (SQLFieldMapping thisMapping in matchedMappings)
+                {
+                    string propertyName = thisMapping.PropertyName;
+                    if (!autofillProperties.ContainsKey(propertyName))
+                        continue;
 
-                ret[i] = thisMapping;
+                    ret[thisMapping] = i;
+                }
             }
 
             return ret;
@@ -69,10 +71,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             T obj = new T();
 
             // loop through all properties and get the value for it
-            foreach (KeyValuePair<int, SQLFieldMapping> item in autofillMapping)
+            foreach (KeyValuePair<SQLFieldMapping, int> item in autofillMapping)
             {
-                object res = item.Value.Reader.Invoke(reader, item.Key);
-                autofillProperties[item.Value.PropertyName].SetValue(obj, res, null);
+                object res = item.Key.Reader.Invoke(reader, item.Value);
+                autofillProperties[item.Key.PropertyName].SetValue(obj, res, null);
             }
 
             return obj;

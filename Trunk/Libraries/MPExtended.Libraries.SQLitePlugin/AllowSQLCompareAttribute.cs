@@ -22,7 +22,28 @@ using System.Text;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Delegate)]
     public class AllowSQLCompareAttribute : Attribute
     {
+        private string SQLText;
+
+        public AllowSQLCompareAttribute()
+        {
+            this.SQLText = "%fullsqlname = %prepared";
+        }
+
+        public AllowSQLCompareAttribute(string SQL)
+        {
+            this.SQLText = SQL;
+        }
+
+        public string GetSQLCondition(SQLFieldMapping mapping)
+        {
+            return SQLText
+                .Replace("%fullsqlname", mapping.FullSQLName)
+                .Replace("%table", mapping.Table)
+                .Replace("%field", mapping.Field)
+                .Replace("%property", mapping.PropertyName);
+        }
     }
 }
