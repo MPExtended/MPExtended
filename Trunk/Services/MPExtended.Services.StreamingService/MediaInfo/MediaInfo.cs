@@ -19,7 +19,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 // copy of MediaPortal SVN trunk/mediaportal/Core/Player/MediaInfo.cs r27491 as of 15 June 2011
 

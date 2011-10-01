@@ -17,14 +17,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using System.IO;
-using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -103,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                byte[] image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetMusicAlbumBasicById(id).CoverPath);
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.MusicAlbum, WebArtworkType.Cover, id, 0);
                 return File(image, "image/jpg");
             }
             catch (Exception ex)

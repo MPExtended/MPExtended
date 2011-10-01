@@ -1,13 +1,31 @@
-﻿using System;
+﻿#region Copyright (C) 2011 MPExtended
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.ComponentModel.Composition;
+using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
-using System.Data.SQLite;
+
 namespace MPExtended.PlugIns.MAS.XBMCMusic
 {
     [Export(typeof(IMusicLibrary))]
@@ -15,7 +33,11 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
     [ExportMetadata("Version", "1.0.0.0")]
     public class XBMCMusic : Database, IMusicLibrary
     {
-        XBMCMusicDB _db = new XBMCMusicDB();
+        [ImportingConstructor]
+        public XBMCMusic(IPluginData data)
+            : base(data.Configuration["database"])
+        {
+        }
 
         public IEnumerable<WebMusicTrackBasic> GetAllTracks()
         {

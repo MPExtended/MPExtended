@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -67,7 +68,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {         
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(Services.MediaAccessService.Interfaces.WebMediaType.Picture, id, 0);  
+                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(WebMediaType.Picture, WebFileType.Content, id, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

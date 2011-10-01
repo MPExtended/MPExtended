@@ -276,9 +276,9 @@
     <Content Include="Views\Settings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
-      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.ServiceLib</Name>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
+      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
+      <Name>MPExtended.Libraries.General</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>

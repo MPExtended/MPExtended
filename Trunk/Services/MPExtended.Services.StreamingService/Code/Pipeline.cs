@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MPExtended.Libraries.ServiceLib;
+using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Code {

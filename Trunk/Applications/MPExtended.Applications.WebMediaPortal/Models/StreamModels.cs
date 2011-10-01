@@ -35,13 +35,4 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Flash,
         VLC
     }
-
-    public enum StreamMedia
-    {
-        TV = -2, // recording is -1 in WSS
-        Movie = WebStreamMediaType.Movie,
-        Serie = WebStreamMediaType.TVShow,
-        Recording = WebStreamMediaType.Recording,
-        Music = WebStreamMediaType.Music
-    }
 }

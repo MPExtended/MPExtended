@@ -18,13 +18,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -52,7 +53,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var seasons = MPEServices.NetPipeMediaAccessService.GetAllTVSeasonsBasic(serie);
+                var seasons = MPEServices.NetPipeMediaAccessService.GetTVSeasonsBasicForTVShow(serie);
                 if (seasons != null)
                 {
                     return View(seasons);
@@ -69,7 +70,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var episodes = MPEServices.NetPipeMediaAccessService.GetTVEpisodesBasicForSeason(show, season);
+                var episodes = MPEServices.NetPipeMediaAccessService.GetTVEpisodesBasicForSeason(season);
                 if (episodes != null)
                 {
                     return View(episodes);
@@ -86,7 +87,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.GetTVSeasonBanner(show, season,0);
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVSeason, WebArtworkType.Banner, season, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");
@@ -94,7 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Exception in MovieLibrary.Image", ex);
+                Log.Error("Exception in TVShowsLibrary.Image", ex);
             }
             return null;
         }
@@ -103,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = System.IO.File.ReadAllBytes(MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode).BannerPaths.ElementAt(0));
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVEpisode, WebArtworkType.Banner, episode, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");
@@ -120,7 +121,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.GetTVShowBackdrop(show,0);
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVShow, WebArtworkType.Backdrop, show, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");
@@ -137,7 +138,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode);
+                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(episode);
                 if (fullEpisode != null)
                 {
                     ViewBag.ShowPlay = fullEpisode.Path != null;
@@ -155,9 +156,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailed(episode);
+                var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(episode);
                 if (fullEpisode != null)
-                    return View(new Tuple<WebTVEpisodeDetailed, WebTVShowDetailed>(fullEpisode, MPEServices.NetPipeMediaAccessService.GetTVShowDetailed(fullEpisode.ShowId)));
+                    return View(new Tuple<WebTVEpisodeDetailed, WebTVShowDetailed>(fullEpisode, MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(fullEpisode.ShowId)));
             }
             catch (Exception ex)
             {

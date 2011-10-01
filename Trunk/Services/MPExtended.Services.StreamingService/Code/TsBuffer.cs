@@ -16,14 +16,12 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
-#region Imports
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using MPExtended.Libraries.ServiceLib;
-#endregion
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Services.StreamingService.Code {
     internal class TsBuffer : Stream {

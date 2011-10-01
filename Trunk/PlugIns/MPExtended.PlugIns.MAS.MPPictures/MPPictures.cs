@@ -79,5 +79,21 @@ namespace MPExtended.PlugIns.MAS.MPPictures
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<WebCategory> GetSubCategoriesBasicById(string categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<WebPictureDetailed> GetPicturesDetailedByCategory(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

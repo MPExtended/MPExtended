@@ -19,19 +19,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.StreamingService.Interfaces;
 
-namespace MPExtended.Services.StreamingService.Code
+namespace MPExtended.Libraries.General
 {
-    internal static class ResolutionExtensionMethods
+    public enum InstallationType
     {
-        public static WebResolution ToWebResolution(this Resolution res)
+        Client,
+        Server,
+        Singleseat
+    }
+
+    public static class Installation
+    {
+        public static bool HasLocalTAS
         {
-            return new WebResolution()
+            get
             {
-                Width = res.Width,
-                Height = res.Height
-            };
+                return true;
+            }
+        }
+
+        public static bool HasLocalMAS
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public static string MASAddress
+        {
+            get
+            {
+                return "127.0.0.1";
+            }
+        }
+
+        public static string TASAddress
+        {
+            get
+            {
+                return "127.0.0.1";
+            }
+        }
+
+        public static InstallationType GetInstallationType()
+        {
+            return InstallationType.Singleseat;
         }
     }
 }

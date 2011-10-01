@@ -20,9 +20,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 
-namespace MPExtended.Applications.TestTools.Performance
+namespace MPExtended.Applications.Development.Performance
 {
     class Program
     {

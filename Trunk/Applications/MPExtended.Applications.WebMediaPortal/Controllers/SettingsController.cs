@@ -23,7 +23,6 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
-
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class SettingsController : Controller

@@ -17,15 +17,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using System.IO;
-using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -94,7 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.GetMovieCover(movie,0);
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.Movie, WebArtworkType.Banner, movie, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

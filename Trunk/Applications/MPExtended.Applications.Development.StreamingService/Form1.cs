@@ -32,9 +32,8 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using WSSMediaType = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType;
 
-namespace MPExtended.Applications.TestTools.StreamingService
+namespace MPExtended.Applications.Development.StreamingService
 {
     public partial class Form1 : Form
     {
@@ -144,9 +143,9 @@ namespace MPExtended.Applications.TestTools.StreamingService
             WebMovieDetailed movie = mMovies[cbMovies.SelectedIndex];
             mName = movie.Title;
             Log("Init Stream with movie " + movie.Title);
-            bool success = mWebStreamClient.InitStream(WSSMediaType.Movie, movie.Id.ToString(), CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream(WebStreamMediaType.Movie, movie.Id.ToString(), CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WSSMediaType.Movie, movie.Id.ToString()));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.Movie, movie.Id.ToString()));
         }
 
         private void cmdInitChannel_Click(object sender, EventArgs e)
@@ -155,9 +154,9 @@ namespace MPExtended.Applications.TestTools.StreamingService
             WebChannelBasic channel = mChannels[cbChannels.SelectedIndex];
             mName = channel.DisplayName;
             Log("Init Stream with channel " + channel.DisplayName);
-            bool success = mWebStreamClient.InitTVStream(channel.Id, CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream(WebStreamMediaType.TV, channel.Id.ToString(), CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetTVMediaInfo(mIdentifier));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.TV, mIdentifier));
         }
 
         private void cmdInitFile_Click(object sender, EventArgs e)
@@ -165,9 +164,9 @@ namespace MPExtended.Applications.TestTools.StreamingService
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
             mName = new FileInfo(txtFileName.Text).Name;
             Log("Init Stream with file " + txtFileName.Text);
-            bool success = mWebStreamClient.InitStream(WSSMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream(WebStreamMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WSSMediaType.File, txtFileName.Text));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.File, txtFileName.Text));
         }
 
         private void LoadMediaInfo(WebMediaInfo info)

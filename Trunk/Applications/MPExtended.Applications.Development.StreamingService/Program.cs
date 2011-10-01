@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace MPExtended.Applications.TestTools.StreamingService
+namespace MPExtended.Applications.Development.StreamingService
 {
     static class Program
     {

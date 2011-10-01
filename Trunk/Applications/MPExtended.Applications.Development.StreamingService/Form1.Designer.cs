@@ -1,4 +1,4 @@
-﻿namespace MPExtended.Applications.TestTools.StreamingService
+﻿namespace MPExtended.Applications.Development.StreamingService
 {
     partial class Form1
     {

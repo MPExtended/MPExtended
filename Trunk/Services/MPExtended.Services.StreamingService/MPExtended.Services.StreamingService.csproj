@@ -55,9 +55,6 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="..\..\MPEServices.cs">
-      <Link>Code\MPEServices.cs</Link>
-    </Compile>
     <Compile Include="Code\ConvertExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaSource.cs" />
@@ -96,6 +93,10 @@
     <Compile Include="Code\TsBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
+      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
+      <Name>MPExtended.Libraries.General</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.ServiceLib</Name>

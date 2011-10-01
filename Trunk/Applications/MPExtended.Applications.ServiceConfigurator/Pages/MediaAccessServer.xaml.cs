@@ -17,30 +17,23 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.ServiceModel;
 using System.ServiceProcess;
-using System.Text;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Timers;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using TAS = MPExtended.Services.TVAccessService.Interfaces;
-using WSS = MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -51,14 +44,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     {
         private ServiceController mServiceController;
         private DispatcherTimer mServiceWatcher;
-        private List<WSS.WebStreamingSession> mStreamingSessions = new List<WSS.WebStreamingSession>();
-        private static TAS.ITVAccessService _tvService;
+        private List<WebStreamingSession> mStreamingSessions = new List<WebStreamingSession>();
+        private static ITVAccessService _tvService;
         private static IMediaAccessService _mediaService;
-        private static WSS.IStreamingService _streamingService;
-        private static WSS.IWebStreamingService _webStreamingService;
-        private System.Timers.Timer activeSessionTimer = new System.Timers.Timer();
-
-        private string ServiceName { get { return checkInstalledServices(); } }
+        private static IStreamingService _streamingService;
+        private static IWebStreamingService _webStreamingService;
+        private Timer activeSessionTimer = new Timer();
+        private InstallationType mInstallationType = Installation.GetInstallationType();
 
         BackgroundWorker workerActiveSessions = new BackgroundWorker();
         BackgroundWorker workerMusic = new BackgroundWorker();
@@ -70,29 +62,31 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         public MediaAccessServer()
         {
             InitializeComponent();
+
             try
             {
-                switch (ServiceName)
+                switch (mInstallationType)
                 {
-                    case "MPExtendedSingleSeat":
+                    case InstallationType.Singleseat:
                         mServiceController = new ServiceController("MPExtended SingleSeat Service");
-                        LoadSingleSeatLogFiles();
+                        LoadLogFiles("SingleSeat");
                         break;
-                    case "MPExtendedMultiSeatServer":
+                    case InstallationType.Server:
                         mServiceController = new ServiceController("MPExtended Server Service");
-                        LoadServerLogFiles();
+                        LoadLogFiles("Server");
                         break;
-                    case "MPExtendedMultiSeatClient":
+                    case InstallationType.Client:
                         mServiceController = new ServiceController("MPExtended Client Service");
-                        LoadClientLogFiles();
+                        LoadLogFiles("Client");
                         break;
-
                 }
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                MessageBox.Show("MPExtended webservice is not installed! Please install the latest version");
+                MessageBox.Show("MPExtended service is not installed! Please install the latest version.");
+                return;
             }
+
             if (mServiceController != null)
             {
                 mServiceWatcher = new DispatcherTimer();
@@ -100,30 +94,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 mServiceWatcher.Tick += timer1_Tick;
                 mServiceWatcher.Start();
             }
-            activeSessionTimer.Elapsed += new System.Timers.ElapsedEventHandler(activeSessionTimer_Elapsed);
+
+            activeSessionTimer.Elapsed += new ElapsedEventHandler(activeSessionTimer_Elapsed);
             activeSessionTimer.Interval = 18000;
             activeSessionTimer.Enabled = true;
             activeSessionTimer.AutoReset = true;
             InitBackgroundWorker();
-
         }
 
-        void activeSessionTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            InitActiveSessionWatcher();
-        }
-        private void LoadClientLogFiles()
-        {
-            LoadLogFiles("Client");
-        }
-        private void LoadServerLogFiles()
-        {
-            LoadLogFiles("Server");
-        }
-        private void LoadSingleSeatLogFiles()
-        {
-            //LoadLogFiles("SingleSeat");
-        }
         private void LoadLogFiles(string fileName)
         {
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName)))
@@ -138,14 +116,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     }
                 }
                 catch (Exception ex)
-                { ExceptionMessageBox(ex.Message); }
+                { 
+                    ExceptionMessageBox(ex.Message); 
+                }
             }
-
         }
 
         private void InitBackgroundWorker()
         {
-
             workerMoPi.DoWork += new DoWorkEventHandler(workerMoPi_DoWork);
             workerServiceText.DoWork += new DoWorkEventHandler(workerServiceText_DoWork);
             workerMusic.DoWork += new DoWorkEventHandler(workerMusic_DoWork);
@@ -153,50 +131,48 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             workerActiveSessions.DoWork += new DoWorkEventHandler(workerActiveSessions_DoWork);
         }
 
-        void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
-        {
-            List<WSS.WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions().ToList();
-            if (tmp != null)
-            {
-                lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-                {
-                    lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions().ToList();
-                }));
-            }
-        }
 
-        private void InitActiveSessionWatcher()
+        void activeSessionTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (!workerActiveSessions.IsBusy)
             {
                 workerActiveSessions.RunWorkerAsync();
             }
-
         }
+
+        void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
+        {
+            List<WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+            if (tmp != null)
+            {
+                lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
+                {
+                    lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+                }));
+            }
+        }
+
 
         void workerTVSeries_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                int count = MPEServices.NetPipeMediaAccessService.GetTVShowCount();
-                IList<WebTVShowBasic> items = MPEServices.NetPipeMediaAccessService.GetTVShowsBasicByRange(0, 1, SortTVShowsBy.Title, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetTVShowCount().Count;
+                IList<WebTVShowBasic> items = MPEServices.NetPipeMediaAccessService.GetAllTVShowsBasic(SortBy.Title, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                     {
                         MessageBox.Show(count + " Tv Shows in Database", "Success");
                     }));
-
                 }
-
             }
-            catch (System.ServiceModel.FaultException ex)
+            catch (FaultException)
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
                     MessageBox.Show("Couldn't open database! Check whether the paths are correct and the databases aren't empty");
                 }));
-
             }
             catch (Exception ex)
             {
@@ -206,7 +182,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     Log.Error("Exception in workerTVSeries_DoWork", ex);
                 }));
             }
-
         }
 
         void workerMusic_DoWork(object sender, DoWorkEventArgs e)
@@ -214,25 +189,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             try
             {
-                int count = MPEServices.NetPipeMediaAccessService.GetMusicAlbumCount();
-                IList<WebMusicAlbumBasic> items = MPEServices.NetPipeMediaAccessService.GetMusicAlbumsBasicByRange(0, 1, SortMusicBy.Title, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetMusicAlbumCount().Count;
+                IList<WebMusicAlbumBasic> items = MPEServices.NetPipeMediaAccessService.GetAllMusicAlbumsBasic();
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                     {
                         MessageBox.Show(count + " Albums in Database", "Success");
                     }));
-
                 }
-
             }
-            catch (System.ServiceModel.FaultException ex)
+            catch (FaultException)
             {
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                 {
                     MessageBox.Show("Couldn't open database! Check whether the paths are correct and the databases aren't empty");
                 }));
-
             }
             catch (Exception ex)
             {
@@ -548,30 +520,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             workerServiceText.RunWorkerAsync();
         }
-        private string checkInstalledServices()
-        {
-            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("TVAccess.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
-            {
-                return "MPExtendedSingleSeat";
-            }
-            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
-            {
-                return "MPExtendedMultiSeatClient";
-            }
-            if (File.Exists(Configuration.GetPath("Streaming.xml")) && File.Exists(Configuration.GetPath("MediaAccess.xml")))
-            {
-                return "MPExtendedMultiSeatClient";
-            }
-            return "";
-        }
-
-
 
         private static void ExceptionMessageBox(string exMessage)
         {
-
             MessageBox.Show("An unexpected error occured please file an issue on mpextended.codeplex.com with the service's log files attached", exMessage);
-
         }
     }
 }

@@ -18,12 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using System.ServiceModel;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.General;
 using MPExtended.Services.TVAccessService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {

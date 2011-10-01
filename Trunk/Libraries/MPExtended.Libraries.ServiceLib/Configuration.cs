@@ -58,24 +58,16 @@ namespace MPExtended.Libraries.ServiceLib
 
         public static bool SetCredentials(string username, string password)
         {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(GetPath("Services.xml"));
-                XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
-                userNode.InnerText = username;
+            XmlDocument doc = new XmlDocument();
+            doc.Load(GetPath("Services.xml"));
+            XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
+            userNode.InnerText = username;
 
-                XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
-                passNode.InnerText = password;
+            XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
+            passNode.InnerText = password;
 
-                doc.Save(GetPath("Services.xml"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to set login", ex);
-                return false;
-            }
+            doc.Save(GetPath("Services.xml"));
+            return true;
         }
     }
 }

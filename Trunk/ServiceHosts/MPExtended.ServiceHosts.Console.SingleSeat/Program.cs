@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.ServiceHosts.Console.Client
 {

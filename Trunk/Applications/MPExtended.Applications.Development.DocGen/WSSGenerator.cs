@@ -45,6 +45,7 @@ namespace MPExtended.Applications.Development.DocGen
             if (methodName.Contains("TranscodingInfo")) return 3;
             if (methodName.Contains("MediaInfo")) return 3;
             if (methodName.Contains("CustomTranscoder")) return 5;
+            if (methodName.Contains("Artwork")) return 4;
             if (methodName.Contains("Image")) return 4;
             if (methodName.Contains("Stream")) return 2;
 

@@ -17,9 +17,12 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Services.StreamingService.Code {
     internal class StreamCopy {

@@ -17,15 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Media.Imaging;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
-using MPExtended.Libraries.ServiceLib;
-using System.Windows.Media.Imaging;
-using System.ComponentModel.Composition;
-using System.IO;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
 {
@@ -146,7 +145,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Warn("exception in recursiv picture lookup");
+                data.Log.Warn("exception in recursiv picture lookup");
             }
         }
 
@@ -170,11 +169,11 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Warn("exception in recursiv picture lookup");
+                data.Log.Warn("exception in recursiv picture lookup");
             }
         }
 
-        internal static WebPictureDetailed GetWebPictureDetailed(string path)
+        internal WebPictureDetailed GetWebPictureDetailed(string path)
         {
             WebPictureDetailed pic = new WebPictureDetailed();
             BitmapSource img = BitmapFrame.Create(new Uri(path));
@@ -201,13 +200,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Error("Error reading picture metadata for " + path, ex);
+                data.Log.Error("Error reading picture metadata for " + path, ex);
             }
             pic.Path.Add(path);
             return pic;
         }
 
-        internal static WebPictureBasic GetWebPictureBasic(string path)
+        internal WebPictureBasic GetWebPictureBasic(string path)
         {
             WebPictureBasic pic = new WebPictureBasic();
             BitmapSource img = BitmapFrame.Create(new Uri(path));
@@ -223,7 +222,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Error("Error reading picture metadata for " + path, ex);
+                data.Log.Error("Error reading picture metadata for " + path, ex);
             }
             pic.Path.Add(path);
             return pic;
@@ -240,6 +239,12 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
             string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
             return returnValue;
+        }
+
+
+        public IEnumerable<WebCategory> GetSubCategoriesBasicById(string categoryId)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -25,7 +25,7 @@ using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -40,19 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        public ActionResult TV(int item, string transcoder, string size)
-        {
-            string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!MPEServices.NetPipeWebStreamService.InitTVStream(item, "WebMediaPortal", identifier))
-            {
-                Log.Error("Streaming: InitStream failed");
-                return new EmptyResult();
-            }
-
-            return DoStreaming(identifier, transcoder);
-        }
-
-        private ActionResult GenerateStream(StreamMedia type, string itemId, string transcoder)
+        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
         {
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
             if (!MPEServices.NetPipeWebStreamService.InitStream((WebStreamMediaType)type, itemId, "WebMediaPortal", identifier))
@@ -67,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private ActionResult DoStreaming(string identifier, string transcoderProfile)
         {
             string url = MPEServices.NetPipeWebStreamService.StartStream(identifier, transcoderProfile, 0);
-            if(String.IsNullOrEmpty(url)) 
+            if (String.IsNullOrEmpty(url))
             {
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();
@@ -78,12 +66,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             int read;
             Stream inputStream = WebRequest.Create(url).GetResponse().GetResponseStream();
 
-            // set headers and diisable buffer
+            // set headers and disable buffer
             HttpContext.Response.Buffer = false;
             HttpContext.Response.BufferOutput = false;
             HttpContext.Response.ContentType = MPEServices.NetPipeWebStreamService.GetTranscoderProfileByName(transcoderProfile).MIME;
             HttpContext.Response.StatusCode = 200;
 
+            // stream to output
             while (HttpContext.Response.IsClientConnected && (read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
             {
                 HttpContext.Response.OutputStream.Write(buffer, 0, read);
@@ -100,29 +89,34 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult Movie(int item, string transcoder)
+        public ActionResult TV(int item, string transcoder)
         {
-            return GenerateStream(StreamMedia.Movie, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder);
         }
 
-        public ActionResult Serie(int item, string transcoder)
+        public ActionResult Movie(int item, string transcoder)
         {
-            return GenerateStream(StreamMedia.Serie, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder);
+        }
+
+        public ActionResult TVEpisode(int item, string transcoder)
+        {
+            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder);
         }
 
         public ActionResult Recording(int item, string transcoder)
         {
-            return GenerateStream(StreamMedia.Recording, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder);
         }
 
-        public ActionResult Music(int item, string transcoder)
+        public ActionResult MusicTrack(int item, string transcoder)
         {
-            return GenerateStream(StreamMedia.Music, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder);
         }
 
         //
         // Player
-        public ActionResult Player(StreamMedia type, string itemId, bool showVideo = true)
+        public ActionResult Player(WebStreamMediaType type, string itemId, bool showVideo = true)
         {
             // TODO: insert proper support for non-resizing players
             // TODO: insert proper support for VLC player
@@ -147,10 +141,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 playerSize = new WebResolution() { Width = 300, Height = 120 };
             } 
-            else if (type == StreamMedia.TV)
-            {
-                playerSize = MPEServices.NetPipeWebStreamService.GetTVStreamSize(Int32.Parse(itemId), profile.Name);
-            }
             else
             {
                 playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebStreamMediaType)type, itemId, profile.Name);
@@ -164,7 +154,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // generate view
             return PartialView(viewName, new StreamModel
             {
-                URL = Url.Action(Enum.GetName(typeof(StreamMedia), type), parameters),
+                URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters),
                 Size = playerSize
             });
         }

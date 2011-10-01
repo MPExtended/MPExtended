@@ -18,15 +18,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
 using System.ServiceModel.Web;
-using MPExtended.Libraries.ServiceLib;
-using MPExtended.Services.StreamingService.MediaInfo;
-using MPExtended.Services.StreamingService.Interfaces;
+using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.StreamingService.MediaInfo;
 
 namespace MPExtended.Services.StreamingService.Code
 {

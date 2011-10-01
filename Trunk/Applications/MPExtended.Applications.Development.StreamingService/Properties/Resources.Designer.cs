@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MPExtended.Applications.TestTools.StreamingService.Properties {
+namespace MPExtended.Applications.Development.StreamingService.Properties {
     using System;
     
     

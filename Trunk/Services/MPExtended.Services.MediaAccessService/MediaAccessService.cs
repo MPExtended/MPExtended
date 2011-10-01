@@ -25,6 +25,7 @@ using System.Reflection;
 using System.ServiceModel;
 using System.Xml.Linq;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
