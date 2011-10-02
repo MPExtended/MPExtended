@@ -134,7 +134,17 @@ namespace MPExtended.Libraries.SQLitePlugin
         [AllowSQLCompare]
         public static object ReadStringAsInt(SQLiteDataReader reader, int idx)
         {
-            return Int32.Parse((string)ReadString(reader, idx));
+            string data = (string)ReadString(reader, idx);
+            if (String.IsNullOrEmpty(data))
+                return null;
+            try
+            {
+                return Int32.Parse(data);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [AllowSQLCompare]
