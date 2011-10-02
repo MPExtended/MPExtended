@@ -41,31 +41,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             this.data = data;
         }
 
-        public IEnumerable<WebMovieBasic> GetAllMovies()
-        {
-            string sql = "SELECT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
-                            "GROUP_CONCAT(l.fullpath, '|') AS path " +
-                         "FROM movie_info m " + 
-                         "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
-                         "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
-                         "WHERE %where " + 
-                         "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year " +
-                         "%order";
-            return new LazyQuery<WebMovieBasic>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("m", "id", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("m", "date_added", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("m", "backdropfullpath", "BackdropPath", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("m", "alternatecovers", "CoverPath", DataReaders.ReadPipeList),
-                new SQLFieldMapping("m", "genres", "Genres", DataReaders.ReadPipeList),
-                new SQLFieldMapping("m", "score", "Rating", DataReaders.ReadFloat),
-                new SQLFieldMapping("m", "runtime", "Runtime", DataReaders.ReadInt32),
-                new SQLFieldMapping("m", "title", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("m", "year", "Year", DataReaders.ReadInt32),
-                new SQLFieldMapping("", "path", "Path", DataReaders.ReadPipeList)
-            });
-        }
-
-        public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
+        private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
             string sql = "SELECT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
@@ -77,11 +53,11 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                          "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "m.directors, m.writers, m.actors, m.summary, m.language " +
                          "%order";
-            return new LazyQuery<WebMovieDetailed>(this, sql, new List<SQLFieldMapping>() {
+            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("m", "id", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("m", "date_added", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("m", "backdropfullpath", "BackdropPath", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("m", "alternatecovers", "CoverPath", DataReaders.ReadPipeList),
+                new SQLFieldMapping("m", "backdropfullpath", "BackdropPaths", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("m", "alternatecovers", "CoverPaths", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "genres", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "score", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("m", "runtime", "Runtime", DataReaders.ReadInt32),
@@ -96,14 +72,24 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             });
         }
 
+        public IEnumerable<WebMovieBasic> GetAllMovies()
+        {
+            return GetAllMovies<WebMovieBasic>();
+        }
+
+        public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
+        {
+            return GetAllMovies<WebMovieDetailed>();
+        }
+
         public WebMovieBasic GetMovieBasicById(string movieId)
         {
-            return GetAllMovies().Where(x => x.Id == movieId).First();
+            return GetAllMovies<WebMovieBasic>().Where(x => x.Id == movieId).First();
         }
 
         public WebMovieDetailed GetMovieDetailedById(string movieId)
         {
-            return GetAllMoviesDetailed().Where(x => x.Id == movieId).First();
+            return GetAllMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
         }
 
         public IEnumerable<WebGenre> GetAllGenres()
@@ -122,16 +108,6 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         public IEnumerable<WebCategory> GetAllCategories()
         {
             return new List<WebCategory>();
-        }
-
-        public Stream GetCover(string movieId, int offset)
-        {
-            return new FileStream(GetMovieDetailedById(movieId).CoverPath[offset], FileMode.Open);
-        }
-
-        public Stream GetBackdrop(string movieId, int offset)
-        {
-            return new FileStream(GetMovieDetailedById(movieId).BackdropPath[offset], FileMode.Open);
         }
 
         public bool IsLocalFile(string path)

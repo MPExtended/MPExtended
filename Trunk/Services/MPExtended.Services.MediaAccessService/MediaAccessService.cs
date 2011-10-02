@@ -634,9 +634,9 @@ namespace MPExtended.Services.MediaAccessService
             else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Content)
                 return GetMovieDetailedById(id).Path;
             else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Backdrop)
-                return GetMovieDetailedById(id).BackdropPath;
+                return GetMovieDetailedById(id).BackdropPaths;
             else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Cover)
-                return GetMovieDetailedById(id).CoverPath;
+                return GetMovieDetailedById(id).CoverPaths;
             else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Banner)
                 return GetTVShowDetailedById(id).BannerPaths;
             else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Backdrop)

@@ -42,7 +42,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E8
 		Libraries\Database\Gentle.Provider.MySQL.dll = Libraries\Database\Gentle.Provider.MySQL.dll
 		Libraries\Database\Gentle.Provider.SQLServer.dll = Libraries\Database\Gentle.Provider.SQLServer.dll
 		Libraries\Database\MySql.Data.dll = Libraries\Database\MySql.Data.dll
-		Libraries\Database\System.Data.SQLite.dll = Libraries\Database\System.Data.SQLite.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Streaming", "Streaming", "{F138DFDE-1E65-48FE-8704-DA74BAFB2DC9}"

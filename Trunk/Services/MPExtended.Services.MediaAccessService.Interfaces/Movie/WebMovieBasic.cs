@@ -18,8 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public IList<string> Genres { get; set; }
         public bool IsProtected { get; set; }
         public int Year { get; set; }
-        public IList<string> BackdropPath { get; set; }
-        public IList<string> CoverPath { get; set; }
+        public IList<string> CoverPaths { get; set; }
         public DateTime DateAdded { get; set; }
         public IList<string> Path { get; set; }
         public float Rating { get; set; }
