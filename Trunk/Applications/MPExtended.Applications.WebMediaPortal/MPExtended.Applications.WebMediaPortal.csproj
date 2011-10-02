@@ -73,9 +73,6 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="..\..\MPEServices.cs">
-      <Link>Code\MPEServices.cs</Link>
-    </Compile>
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Util.cs" />
