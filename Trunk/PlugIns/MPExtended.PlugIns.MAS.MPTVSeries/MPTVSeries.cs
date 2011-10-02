@@ -92,7 +92,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
             string sql = 
                     "SELECT DISTINCT s.ID, l.Parsed_Name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
-                        "s.PosterFileNames, s.fanart, s.Actors " +
+                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status " +
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
@@ -103,13 +103,20 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "EpisodeCount", "EpisodeCount", DataReaders.ReadInt32),
-                new SQLFieldMapping("s", "EpisodesUnWatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "PosterFileNames", "PosterPaths", fixBannerPathReader),
                 new SQLFieldMapping("s", "fanart", "BackdropPaths", fixFanartPathReader),
                 new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
+                new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadStringAsFloat),
+                new SQLFieldMapping("s", "ContentRating", "ContentRating", DataReaders.ReadString),
+                new SQLFieldMapping("s", "Summary", "Summary", DataReaders.ReadString),
+                new SQLFieldMapping("s", "Status", "Status", DataReaders.ReadString),
+                new SQLFieldMapping("s", "Network", "Network", DataReaders.ReadString),
+                new SQLFieldMapping("s", "AirsDay", "AirsDay", DataReaders.ReadString),
+                new SQLFieldMapping("s", "AirsTime", "AirsTime", DataReaders.ReadString),
+                new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
             }, delegate(T obj)
             {
+                // cannot rely on information provided by MPTVSeries here because they count different
                 var eps = (LazyQuery<WebTVEpisodeBasic>)(GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.Id)); // and the nice way is... ? 
                 obj.EpisodeCount = eps.Count();
                 obj.UnwatchedEpisodeCount = eps.Where(x => x.Watched == false).Count();

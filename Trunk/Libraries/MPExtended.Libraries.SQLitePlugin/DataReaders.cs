@@ -148,6 +148,22 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        public static object ReadStringAsFloat(SQLiteDataReader reader, int idx)
+        {
+            string data = (string)ReadString(reader, idx);
+            if (String.IsNullOrEmpty(data))
+                return null;
+            try
+            {
+                return Single.Parse(data);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [AllowSQLCompare]
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
             return new List<string>() { (string)ReadString(reader, idx) };
