@@ -237,6 +237,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebItemCount GetTVEpisodeCountForSeason(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebItemCount GetTVShowCount();
 
         [OperationContract]

@@ -593,6 +593,11 @@ namespace MPExtended.Services.MediaAccessService
             return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllEpisodesBasic().Where(e => e.ShowId == id).Count() };
         }
 
+        public WebItemCount GetTVEpisodeCountForSeason(string id)
+        {
+            return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllEpisodesBasic().Where(e => e.SeasonId == id).Count() };
+        }
+
         public WebItemCount GetTVShowCount()
         {
             return new WebItemCount() { Count = ChosenTVShowLibrary.GetAllTVShowsBasic().Count() };
