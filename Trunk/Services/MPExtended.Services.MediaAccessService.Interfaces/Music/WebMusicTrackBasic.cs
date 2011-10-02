@@ -11,6 +11,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public WebMusicTrackBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
+            Path = new List<string>();
+            Genres = new List<string>();
         }
 
         public string Id { get; set; }

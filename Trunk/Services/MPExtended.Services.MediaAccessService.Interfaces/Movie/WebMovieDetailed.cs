@@ -7,6 +7,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
     public class WebMovieDetailed : WebMovieBasic
     {
+        public WebMovieDetailed()
+        {
+            Directors = new List<string>();
+            Writers = new List<string>();
+            Actors = new List<string>();
+            BackdropPaths = new List<string>();
+        }
+
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
         public IList<string> Actors { get; set; }

@@ -7,6 +7,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
     public class WebMusicArtistBasic : ITitleSortable, ICategorySortable
     {
+        public WebMusicArtistBasic()
+        {
+            UserDefinedCategories = new List<string>();
+        }
+
         public string Id { get; set; }
         public string Title { get; set; }
         public IList<string> UserDefinedCategories { get; set; }

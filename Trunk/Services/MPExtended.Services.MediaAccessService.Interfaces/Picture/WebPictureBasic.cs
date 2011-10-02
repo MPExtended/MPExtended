@@ -12,6 +12,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         {
             DateTaken = new DateTime(1970, 1, 1);
             DateAdded = new DateTime(1970, 1, 1);
+            Path = new List<string>();
         }
 
         public string Id { get; set; }

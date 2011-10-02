@@ -11,6 +11,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
         public WebFileBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
+            Path = new List<string>();
         }
 
         public string Id { get; set; }

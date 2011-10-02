@@ -7,6 +7,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
     public class WebTVShowDetailed : WebTVShowBasic
     {
+        public WebTVShowDetailed()
+        {
+            BackdropPaths = new List<string>();
+            PosterPaths = new List<string>();
+            Actors = new List<string>();
+        }
+
         public IList<string> BackdropPaths { get; set; }
         public IList<string> PosterPaths { get; set; }
         public IList<string> Actors { get; set; }

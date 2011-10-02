@@ -11,6 +11,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public WebMovieBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
+            Genres = new List<string>();
+            CoverPaths = new List<string>();
+            Path = new List<string>();
+            UserDefinedCategories = new List<string>();
         }
 
         public string Id { get; set; }

@@ -11,6 +11,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public WebTVShowBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
+            BannerPaths = new List<string>();
+            UserDefinedCategories = new List<string>();
+            Genres = new List<string>();
         }
 
         public string Id { get; set; }

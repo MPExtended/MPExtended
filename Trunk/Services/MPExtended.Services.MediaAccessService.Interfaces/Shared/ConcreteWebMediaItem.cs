@@ -26,6 +26,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
 {
     public class ConcreteWebMediaItem : WebMediaItem
     {
+        public ConcreteWebMediaItem()
+        {
+            Path = new List<string>();
+            DateAdded = new DateTime(1970, 1, 1);
+        }
+
         public string Id { get; set; }
         public IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }

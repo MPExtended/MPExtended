@@ -11,6 +11,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public WebMusicAlbumBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
+            Genres = new List<string>();
+            Artists = new List<string>();
+            Composer = new List<string>();
+            CoverPaths = new List<string>();
+            UserDefinedCategories = new List<string>();
         }
 
         public string Id { get; set; }
