@@ -24,8 +24,8 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.Xml.Linq;
-using MPExtended.Libraries.ServiceLib;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
@@ -204,6 +204,26 @@ namespace MPExtended.Services.MediaAccessService
 
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
             };
+        }
+        #endregion
+
+        #region General
+        public WebStatus IsMediaPortalRunning()
+        {
+            bool running = UserSession.Service.IsMediaPortalRunning();
+            return new WebStatus() { Status = running ? "running" : "not running" };
+        }
+
+        public WebStatus LaunchMediaPortal()
+        {
+            if (UserSession.Service.StartMediaPortalBlocking())
+            {
+                return new WebStatus() { Status = "launched" };
+            }
+            else
+            {
+                return new WebStatus() { Status = "failed" };
+            }
         }
 
         public ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id)
