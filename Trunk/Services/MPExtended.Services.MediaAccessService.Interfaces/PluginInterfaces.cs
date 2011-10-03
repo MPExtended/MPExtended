@@ -118,7 +118,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         IOrderedEnumerable<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector);
         IOrderedEnumerable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector);
+        IOrderedEnumerable<T> ThenBy<TKey>(Expression<Func<T, TKey>> keySelector);
+        IOrderedEnumerable<T> ThenByDescending<TKey>(Expression<Func<T, TKey>> keySelector);
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
+        IEnumerable<T> GetRange(int index, int count);
         int Count();
     }
 }

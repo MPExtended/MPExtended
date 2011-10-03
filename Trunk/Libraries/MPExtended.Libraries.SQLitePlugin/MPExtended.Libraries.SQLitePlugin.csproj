@@ -58,6 +58,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="AllowSQLCompareAttribute.cs" />
+    <Compile Include="AllowSQLSortAttribute.cs" />
     <Compile Include="AutoFiller.cs" />
     <Compile Include="DataReaders.cs" />
     <Compile Include="Database.cs" />

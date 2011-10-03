@@ -26,6 +26,7 @@ namespace MPExtended.Libraries.SQLitePlugin
     public static class DataReaders
     {
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadInt32(SQLiteDataReader reader, int idx)
         {
             try
@@ -42,6 +43,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadString(SQLiteDataReader reader, int idx)
         {
             try
@@ -64,6 +66,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadBoolean(SQLiteDataReader reader, int idx)
         {
             try
@@ -80,6 +83,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadDateTime(SQLiteDataReader reader, int idx)
         {
             try
@@ -96,6 +100,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadFloat(SQLiteDataReader reader, int idx)
         {
             try
@@ -111,27 +116,15 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
-        public static object ReadList(SQLiteDataReader reader, int idx, char separator)
-        {
-            string txt = (string)ReadString(reader, idx);
-            if (txt.Length == 0)
-                return new List<string>();
-
-            return txt.Split(separator).Where(y => y.Trim().Length > 0).ToList();
-        }
-
-        public static object ReadPipeList(SQLiteDataReader reader, int idx)
-        {
-            return ReadList(reader, idx, '|');
-        }
-
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadIntAsString(SQLiteDataReader reader, int idx)
         {
             return ReadInt32(reader, idx).ToString();
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadStringAsInt(SQLiteDataReader reader, int idx)
         {
             string data = (string)ReadString(reader, idx);
@@ -148,6 +141,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadStringAsFloat(SQLiteDataReader reader, int idx)
         {
             string data = (string)ReadString(reader, idx);
@@ -163,7 +157,33 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
-        [AllowSQLCompare]
+        public static object ReadList(SQLiteDataReader reader, int idx, char separator)
+        {
+            string txt = (string)ReadString(reader, idx);
+            if (txt.Length == 0)
+                return new List<string>();
+
+            return txt.Split(separator).Select(y => y.Trim()).Where(y => y.Length > 0).Distinct().ToList();
+        }
+
+        public static object ReadPipeList(SQLiteDataReader reader, int idx)
+        {
+            return ReadList(reader, idx, '|');
+        }
+
+        [AllowSQLCompare("%fullsqlname LIKE '%| ' || %prepared || ' |%'")]
+        [AllowSQLSort]
+        public static object ReadPipeListAsString(SQLiteDataReader reader, int idx)
+        {
+            List<string> list = (List<string>)ReadList(reader, idx, '|');
+            if (list.Count > 0)
+            {
+                return list.First();
+            }
+
+            return null;
+        }
+
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
             return new List<string>() { (string)ReadString(reader, idx) };

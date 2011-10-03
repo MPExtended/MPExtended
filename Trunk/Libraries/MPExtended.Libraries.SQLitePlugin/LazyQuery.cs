@@ -25,7 +25,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
-    public class LazyQuery<T> : ILazyQuery<T> where T : new()
+    public class LazyQuery<T> : ILazyQuery<T>, IEnumerable<T> where T : new()
     {
         private Database db;
         private string inputQuery;
@@ -35,8 +35,9 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private Delegates<T>.FinalizeObject finalize;
 
-        private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqlname, descending
+        private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqltext, descending
         private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
+        private Tuple<int, int> range = null;
 
         public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping)
         {
@@ -92,7 +93,11 @@ namespace MPExtended.Libraries.SQLitePlugin
                 sql = sql + " %order"; // at the end works in 99,9% of the cases. just add it yourself for the other 0,1% (mainly UNION)
 
             // prepare order
-            string orderSql = "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2 + " " + (x.Item3 ? "DESC" : "ASC")));
+            string orderSql = "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2));
+            if (range != null)
+            {
+                orderSql += " LIMIT " + range.Item1 + ", " + range.Item2;
+            }
             sql = sql.Replace("%order", orderItems.Count == 0 ? String.Empty : orderSql);
 
             // prepare where
@@ -209,8 +214,13 @@ namespace MPExtended.Libraries.SQLitePlugin
             string fieldName = ex.Member.Name;
             SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == fieldName).First();
 
+            // check if supported on reader
+            if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLSortAttribute)))
+                return null;
+
             // add to the order clausule
-            orderItems.Add(new Tuple<string, string, bool>(fieldName, thisMapping.FullSQLName, desc));
+            AllowSQLSortAttribute attr = (AllowSQLSortAttribute)Attribute.GetCustomAttribute(thisMapping.Reader.Method, typeof(AllowSQLSortAttribute));
+            orderItems.Add(new Tuple<string, string, bool>(fieldName, attr.GetSQLText(thisMapping).Replace("%order", desc ? "DESC" : "ASC"), desc));
             return this;
         }
 
@@ -248,6 +258,22 @@ namespace MPExtended.Libraries.SQLitePlugin
         public IOrderedEnumerable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
         {
             return AddOrder(true, keySelector);
+        }
+
+        public IOrderedEnumerable<T> ThenBy<TKey>(Expression<Func<T, TKey>> keySelector)
+        {
+            return AddOrder(false, keySelector);
+        }
+
+        public IOrderedEnumerable<T> ThenByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
+        {
+            return AddOrder(true, keySelector);
+        }
+
+        public IEnumerable<T> GetRange(int index, int count)
+        {
+            range = new Tuple<int, int>(index, count);
+            return this;
         }
 
         public int Count()

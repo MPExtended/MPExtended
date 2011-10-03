@@ -34,6 +34,8 @@ namespace MPExtended.Services.MediaAccessService
         {
             if (source is List<T>)
                 return ((List<T>)source).GetRange(index, count);
+            if (source is ILazyQuery<T>)
+                return ((ILazyQuery<T>)source).GetRange(index, count);
             return source.Skip(index).Take(count);
         }
 
@@ -69,11 +71,20 @@ namespace MPExtended.Services.MediaAccessService
             return Enumerable.OrderByDescending(source, comp);
         }
 
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy order)
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
         {
+            if (source is ILazyQuery<TSource>)
+            {
+                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
+                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+                    return lazy.ThenBy(keySelector);
+                return lazy.ThenByDescending(keySelector);
+            }
+
+            var comp = keySelector.Compile();
             if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                return source.ThenBy(keySelector);
-            return source.ThenByDescending(keySelector);
+                return Enumerable.ThenBy(source, comp);
+            return Enumerable.ThenByDescending(source, comp);
         }
 
         // Allow easy sorting from MediaAccessService.cs

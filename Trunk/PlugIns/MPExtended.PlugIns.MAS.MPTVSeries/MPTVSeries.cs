@@ -181,6 +181,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         }
 
         [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
+        [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
         private string ReadSeasonID(SQLiteDataReader reader, int offset)
         {
             return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
