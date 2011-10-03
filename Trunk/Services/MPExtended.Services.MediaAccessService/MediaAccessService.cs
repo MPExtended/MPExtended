@@ -668,17 +668,35 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebFileInfo GetFileInfo(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetLibrary(mediatype).GetFileInfo(GetPathList(mediatype, filetype, id).ElementAt(offset));
+            try
+            {
+                return GetLibrary(mediatype).GetFileInfo(GetPathList(mediatype, filetype, id).ElementAt(offset));
+            }
+            catch (Exception ex)
+            {
+                Log.Info("Failed to get file info for mediatype=" + mediatype + ", filetype=" + filetype + ", id=" + id + " and offset=" + offset, ex);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return new WebFileInfo();
+            }
         }
 
         public bool IsLocalFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetLibrary(mediatype).GetFileInfo(GetPathList(mediatype, filetype, id).ElementAt(offset)).IsLocalFile;
+            return GetFileInfo(mediatype, filetype, id, offset).IsLocalFile;
         }
 
         public Stream RetrieveFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetLibrary(mediatype).GetFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
+            try
+            {
+                return GetLibrary(mediatype).GetFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
+            }
+            catch (Exception ex)
+            {
+                Log.Info("Failed to retrieve file for mediatype=" + mediatype + ", filetype=" + filetype + ", id=" + id + " and offset=" + offset, ex);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
         }
         #endregion
     }

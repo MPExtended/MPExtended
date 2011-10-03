@@ -45,5 +45,17 @@ namespace MPExtended.Libraries.ServiceLib
             // last resort: localhost
             return "http://localhost:4322/MPExtended/";
         }
+
+        public static void SetResponseCode(HttpStatusCode code)
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.StatusCode = code;
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
     }
 }
