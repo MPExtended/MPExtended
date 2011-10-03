@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
@@ -78,41 +79,49 @@ namespace MPExtended.Services.MediaAccessService
         // Allow easy sorting from MediaAccessService.cs
         public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy sort, OrderBy order)
         {
-            switch (sort)
+            try
             {
-                // generic
-                case SortBy.Title:
-                    return list.OrderBy(x => ((ITitleSortable)x).Title, order);
-                case SortBy.DateAdded:
-                    return list.OrderBy(x => ((IDateAddedSortable)x).DateAdded, order);
-                case SortBy.Year:
-                    return list.OrderBy(x => ((IYearSortable)x).Year, order);
-                case SortBy.Genre:
-                    return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
-                case SortBy.Rating:
-                    return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
-                case SortBy.UserDefinedCategories:
-                    return list.OrderBy(x => ((ICategorySortable)x).UserDefinedCategories.First(), order);
+                switch (sort)
+                {
+                    // generic
+                    case SortBy.Title:
+                        return list.OrderBy(x => ((ITitleSortable)x).Title, order);
+                    case SortBy.DateAdded:
+                        return list.OrderBy(x => ((IDateAddedSortable)x).DateAdded, order);
+                    case SortBy.Year:
+                        return list.OrderBy(x => ((IYearSortable)x).Year, order);
+                    case SortBy.Genre:
+                        return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
+                    case SortBy.Rating:
+                        return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
+                    case SortBy.UserDefinedCategories:
+                        return list.OrderBy(x => ((ICategorySortable)x).UserDefinedCategories.First(), order);
 
-                // music
-                case SortBy.MusicTrackNumber:
-                    return list.OrderBy(x => ((IMusicTrackNumberSortable)x).TrackNumber, order);
-                case SortBy.MusicComposer:
-                    return list.OrderBy(x => ((IMusicComposerSortable)x).Composer.First(), order);
+                    // music
+                    case SortBy.MusicTrackNumber:
+                        return list.OrderBy(x => ((IMusicTrackNumberSortable)x).TrackNumber, order);
+                    case SortBy.MusicComposer:
+                        return list.OrderBy(x => ((IMusicComposerSortable)x).Composer.First(), order);
 
-                // tv
-                case SortBy.TVEpisodeNumber:
-                    return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonId, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
-                case SortBy.TVSeasonNumber:
-                    return list.OrderBy(x => ((ITVSeasonNumberSortable)x).SeasonNumber, order);
+                    // tv
+                    case SortBy.TVEpisodeNumber:
+                        return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonId, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
+                    case SortBy.TVSeasonNumber:
+                        return list.OrderBy(x => ((ITVSeasonNumberSortable)x).SeasonNumber, order);
 
-                // picture
-                case SortBy.PictureDateTaken:
-                    return list.OrderBy(x => ((IPictureDateTakenSortable)x).DateTaken, order);
+                    // picture
+                    case SortBy.PictureDateTaken:
+                        return list.OrderBy(x => ((IPictureDateTakenSortable)x).DateTaken, order);
+                }
+
+                // this can't be reached but the compiler is stupid
+                throw new Exception();
             }
-
-            // this can't be reached but the compiler is stupid
-            throw new Exception();
+            catch (InvalidCastException ex)
+            {
+                Log.Warn("Tried to do invalid sorting", ex);
+                throw new Exception("Sorting on this property is not supported for this media type");
+            }
         }
     }
 

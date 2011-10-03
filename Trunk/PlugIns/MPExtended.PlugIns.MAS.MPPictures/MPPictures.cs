@@ -95,5 +95,10 @@ namespace MPExtended.PlugIns.MAS.MPPictures
         {
             throw new NotImplementedException();
         }
+
+        public WebFileInfo GetFileInfo(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -110,14 +110,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return new List<WebCategory>();
         }
 
-        public bool IsLocalFile(string path)
+        public WebFileInfo GetFileInfo(string path)
         {
-            return true;
+            return new WebFileInfo(new FileInfo(path));
         }
 
         public Stream GetFile(string path)
         {
-            return new FileStream(path, FileMode.Open);
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
     }
 }

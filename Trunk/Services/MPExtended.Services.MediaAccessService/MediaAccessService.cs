@@ -666,9 +666,14 @@ namespace MPExtended.Services.MediaAccessService
                 throw new ArgumentException("Invalid combination of filetype and mediatype");
         }
 
+        public WebFileInfo GetFileInfo(WebMediaType mediatype, WebFileType filetype, string id, int offset)
+        {
+            return GetLibrary(mediatype).GetFileInfo(GetPathList(mediatype, filetype, id).ElementAt(offset));
+        }
+
         public bool IsLocalFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetLibrary(mediatype).IsLocalFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
+            return GetLibrary(mediatype).GetFileInfo(GetPathList(mediatype, filetype, id).ElementAt(offset)).IsLocalFile;
         }
 
         public Stream RetrieveFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)

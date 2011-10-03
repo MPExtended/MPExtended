@@ -256,9 +256,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new List<WebCategory>();
         }
 
-        public bool IsLocalFile(string path)
+        public WebFileInfo GetFileInfo(string path)
         {
-            return true;
+            return new WebFileInfo(new FileInfo(path));
         }
 
         public Stream GetFile(string path)

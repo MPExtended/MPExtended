@@ -141,30 +141,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             throw new NotImplementedException();
         }
 
-        public DirectoryInfo GetSourceRootDirectory()
+        public WebFileInfo GetFileInfo(string path)
         {
-            throw new NotImplementedException();
-        }
-
-
-        public Stream GetCover(string albumId, int offset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Stream GetBackdrop(string albumId, int offset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsLocalFile(string path)
-        {
-            throw new NotImplementedException();
+            return new WebFileInfo(new FileInfo(path));
         }
 
         public Stream GetFile(string path)
         {
-            throw new NotImplementedException();
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
     }
 }

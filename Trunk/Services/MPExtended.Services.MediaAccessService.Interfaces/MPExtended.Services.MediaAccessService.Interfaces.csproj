@@ -79,6 +79,7 @@
     <Compile Include="Shared\WebActorBasic.cs" />
     <Compile Include="Shared\WebActorDetailed.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Shared\WebFileInfo.cs" />
     <Compile Include="Shared\WebGenre.cs" />
     <Compile Include="Shared\WebItemCount.cs" />
     <Compile Include="Shared\WebMediaItem.cs" />

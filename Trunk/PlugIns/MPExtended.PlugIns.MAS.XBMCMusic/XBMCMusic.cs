@@ -173,5 +173,10 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
         {
             throw new NotImplementedException();
         }
+
+        public WebFileInfo GetFileInfo(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

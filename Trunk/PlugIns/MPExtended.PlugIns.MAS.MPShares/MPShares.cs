@@ -25,6 +25,7 @@ using System.Text;
 using System.Xml.Linq;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.MPShares
 {
@@ -140,9 +141,9 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
-        public bool IsLocalFile(string path)
+        public WebFileInfo GetFileInfo(string path)
         {
-            return true;
+            return new WebFileInfo(new FileInfo(path));
         }
 
         public Stream GetFile(string path)

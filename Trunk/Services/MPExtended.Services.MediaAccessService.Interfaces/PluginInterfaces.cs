@@ -18,7 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface ILibrary
     {
-        bool IsLocalFile(string path);
+        WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
     }
 

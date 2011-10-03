@@ -113,14 +113,14 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return list;
         }
 
-        public bool IsLocalFile(string path)
+        public WebFileInfo GetFileInfo(string path)
         {
-            throw new NotImplementedException();
+            return new WebFileInfo(new FileInfo(path));
         }
 
-        public System.IO.Stream GetFile(string path)
+        public Stream GetFile(string path)
         {
-            throw new NotImplementedException();
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
         #endregion
 
