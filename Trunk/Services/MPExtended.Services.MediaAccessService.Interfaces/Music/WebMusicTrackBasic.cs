@@ -12,11 +12,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         {
             DateAdded = new DateTime(1970, 1, 1);
             Path = new List<string>();
+            ArtistId = new List<string>();
             Genres = new List<string>();
         }
 
         public string Id { get; set; }
-        public string ArtistId { get; set; }
+        public IList<string> Artist { get; set; }
+        public IList<string> ArtistId { get; set; }
+        public string Album { get; set; }
         public string AlbumId { get; set; }
         public string Title { get; set; }
         public int TrackNumber { get; set; }

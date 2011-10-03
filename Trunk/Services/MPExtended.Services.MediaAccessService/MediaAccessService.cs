@@ -406,7 +406,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.ArtistId == id).SortMediaItemList(sort, order).ToList();
+            return ChosenMusicLibrary.GetAllAlbums().Where(p => p.AlbumArtistId == id).SortMediaItemList(sort, order).ToList();
         }
 
         public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)

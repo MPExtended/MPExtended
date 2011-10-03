@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
@@ -42,85 +43,114 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             this.data = data;
         }
 
+        private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
+        {
+            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre " +
+                         "FROM tracks t " + 
+                         "WHERE %where";
+            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
+                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("", "strArtist", "Artist", DataReaders.ReadPipeList),
+                new SQLFieldMapping("", "strArtist", "ArtistId", ArtistIdReader),
+                new SQLFieldMapping("", "strAlbum", "Album", DataReaders.ReadString),
+                new SQLFieldMapping("", "strAlbum", "AlbumId", AlbumIdReader),
+                new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
+                new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadPipeList),
+                new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
+                new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+            }, delegate(T item)
+            {
+                if (item is WebMusicTrackDetailed)
+                {
+                    WebMusicTrackDetailed det = item as WebMusicTrackDetailed;
+                    det.Artists = GetAllArtists().Where(x => det.ArtistId.Contains(x.Id)).ToList();
+                }
+                return item;
+            });
+        }
+
         public IEnumerable<WebMusicTrackBasic> GetAllTracks()
         {
-            string sql = "SELECT idTrack, strAlbum, strArtist, strAlbumArtist, iTrack, strTitle, strPath, iDuration, iYear,strGenre " +
-                          "FROM tracks " + "WHERE %where %order";
-            return new LazyQuery<WebMusicTrackBasic>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("", "strArtist", "ArtistId", DataReaders.ReadString),
-                 new SQLFieldMapping("", "strAlbum", "AlbumId", DataReaders.ReadString),
-                  new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
-                   new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
-                   new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadString),
-                    new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadString),
-                          new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
-                   new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
-            });
-        }
-
-        public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
-        {
-            string sql = "SELECT t.strAlbum, t.strAlbumArtist, t.strArtist, a.iYear, g.strGenre " +
-                         "FROM tracks t " +
-                         "LEFT JOIN albuminfo a ON t.strAlbum = a.strAlbum " + // this table is empty for me
-                         "LEFT JOIN genre g ON a.idGenre = g.strGenre " +
-                          "WHERE %where %order";
-            return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("t", "strAlbum", "Id", DataReaders.ReadString),
-                                new SQLFieldMapping("t", "strAlbum", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtist", DataReaders.ReadString),
-                 new SQLFieldMapping("t", "strArtist", "Artists", DataReaders.ReadString),
-                  new SQLFieldMapping("a", "iYear", "Year", DataReaders.ReadString),
-                   new SQLFieldMapping("g", "strGenre", "Genres", DataReaders.ReadString)
-
-            });
-        }
-
-        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
-        {
-            string sql = "SELECT DISTINCT strAlbumArtist FROM tracks WHERE %where GROUP BY strAlbumArtist %order";
-            return new LazyQuery<WebMusicArtistBasic>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("", "strAlbumArtist", "Id", DataReaders.ReadString),
-                new SQLFieldMapping("", "strAlbumArtist", "Title", DataReaders.ReadString)
-            });
+            return LoadAllTracks<WebMusicTrackBasic>();
         }
 
         public IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed()
         {
-            string sql = "SELECT idTrack, strAlbum, strArtist, strAlbumArtist, iTrack, strTitle, strPath, iDuration, iYear,strGenre " +
-                        "FROM tracks " + "WHERE %where %order";
-            return new LazyQuery<WebMusicTrackDetailed>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("", "strArtist", "ArtistId", DataReaders.ReadString),
-                 new SQLFieldMapping("", "strAlbum", "AlbumId", DataReaders.ReadString),
-                  new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
-                   new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
-                   new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadString),
-                    new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadString),
-                          new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
-                   new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
-            });
+            return LoadAllTracks<WebMusicTrackDetailed>();
         }
 
         public WebMusicTrackBasic GetTrackBasicById(string trackId)
         {
-            throw new NotImplementedException();
-        }
-
-        public WebMusicAlbumBasic GetAlbumBasicById(string albumId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebMusicArtistBasic GetArtistBasicById(string artistId)
-        {
-            throw new NotImplementedException();
+            return LoadAllTracks<WebMusicTrackBasic>().Where(x => x.Id == trackId).First();
         }
 
         public WebMusicTrackDetailed GetTrackDetailedById(string trackId)
         {
-            throw new NotImplementedException();
+            return LoadAllTracks<WebMusicTrackDetailed>().Where(x => x.Id == trackId).First();
+        }
+
+        public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
+        {
+            SQLFieldMapping.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
+            {
+                var list = (List<string>)ArtistIdReader(reader, index);
+                if (list.Count > 0)
+                {
+                    return list.First();
+                }
+                return null;
+            };
+
+            string sql = "SELECT DISTINCT t.strAlbumArtist AS albumArtist, t.strAlbum AS album, " +
+                            "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
+                            "MIN(dateAdded) AS date, MIN(iYear) AS year " +
+                         "FROM tracks t " +
+                         "GROUP BY strAlbum, strAlbumArtist ";
+            return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
+            {
+                new SQLFieldMapping("album", "Id", AlbumIdReader),
+                new SQLFieldMapping("album", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("albumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("albumArtist", "AlbumArtistId", singleArtistIdReader),
+                new SQLFieldMapping("artists", "Artists", DataReaders.ReadPipeList),
+                new SQLFieldMapping("artists", "ArtistsId", ArtistIdReader),
+                new SQLFieldMapping("genre", "Genres", DataReaders.ReadPipeList),
+                new SQLFieldMapping("composer", "Composer", DataReaders.ReadPipeList),
+                new SQLFieldMapping("date", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("year", "Year", DataReaders.ReadInt32)
+            });
+        }
+
+        public WebMusicAlbumBasic GetAlbumBasicById(string albumId)
+        {
+            return (GetAllAlbums() as LazyQuery<WebMusicAlbumBasic>).Where(x => x.Id == albumId).First();
+        }
+
+        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        {
+            string sql = "SELECT DISTINCT strArtist FROM tracks " +
+                         "UNION " +
+                         "SELECT DISTINCT stralbumArtist FROM tracks ";
+            return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
+            {
+                return reader.ReadPipeList(0);
+            })
+                .SelectMany(x => x)
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new WebMusicArtistBasic()
+                {
+                    Id = GenerateHash(x),
+                    Title = x,
+                    UserDefinedCategories = new List<string>()
+                }).ToList();
+        }
+
+        public WebMusicArtistBasic GetArtistBasicById(string artistId)
+        {
+            return (GetAllArtists() as LazyQuery<WebMusicArtistBasic>).Where(x => x.Id == artistId).First();
         }
 
         public IEnumerable<WebGenre> GetAllGenres()
@@ -133,12 +163,12 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     .SelectMany(x => x)
                     .Distinct()
                     .OrderBy(x => x)
-                    .Select(x => new WebGenre() { Name = x.Replace("| ", "").Replace(" |", "") });
+                    .Select(x => new WebGenre() { Name = x });
         }
 
         public IEnumerable<WebCategory> GetAllCategories()
         {
-            throw new NotImplementedException();
+            return new List<WebCategory>();
         }
 
         public WebFileInfo GetFileInfo(string path)
@@ -149,6 +179,26 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         public Stream GetFile(string path)
         {
             return new FileStream(path, FileMode.Open, FileAccess.Read);
+        }
+
+        private string GenerateHash(string text)
+        {
+            var md5 = System.Security.Cryptography.MD5.Create();
+            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
+            return Convert.ToBase64String(data).ToLower().Substring(0, 10);
+        }
+
+        private object AlbumIdReader(SQLiteDataReader reader, int index)
+        {
+            // make sure you always select strAlbumArtist, strAlbum when using this method
+            string text = reader.ReadString(index) + "_MPExtended_" + reader.ReadString(index - 1);
+            return GenerateHash(text);
+        }
+
+        private object ArtistIdReader(SQLiteDataReader reader, int index)
+        {
+            var artists = (List<string>)DataReaders.ReadPipeList(reader, index);
+            return artists.Select(x => GenerateHash(x)).ToList();
         }
     }
 }

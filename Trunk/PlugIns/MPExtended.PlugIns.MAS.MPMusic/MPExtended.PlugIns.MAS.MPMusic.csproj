@@ -52,7 +52,6 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="MPMusic.cs" />
-    <Compile Include="MPMusicDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
