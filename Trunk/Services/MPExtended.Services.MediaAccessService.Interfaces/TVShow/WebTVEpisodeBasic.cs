@@ -27,6 +27,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public float Rating { get; set; }
         public IList<string> BannerPaths { get; set; }
         public DateTime FirstAired { get; set; }
+        public string IMDBId { get; set; }
+        public string TVDBId { get; set; }
 
         public WebMediaType Type
         {

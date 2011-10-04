@@ -92,13 +92,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
             string sql = 
                     "SELECT DISTINCT s.ID, l.Parsed_Name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
-                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status " +
+                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
+                        "s.IMDB_ID " +
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("s", "ID", "TVDBId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("s", "Pretty_Name", "Title", fixNameReader),
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader),
@@ -114,6 +116,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "AirsDay", "AirsDay", DataReaders.ReadString),
                 new SQLFieldMapping("s", "AirsTime", "AirsTime", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
+                new SQLFieldMapping("s", "IMDB_ID", "IMDBId", DataReaders.ReadString),
             }, delegate(T obj)
             {
                 // cannot rely on information provided by MPTVSeries here because they count different
@@ -213,7 +216,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string sql =                     
                     "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                         "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
-                        "e.GuestStars, e.Director, e.Writer " +
+                        "e.GuestStars, e.Director, e.Writer, e.IMDB_ID " +
                     "FROM online_episodes e " +
                     "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
                     "WHERE e.Hidden = 0 AND %where " +
@@ -223,6 +226,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("e", "EpisodeID", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "EpisodeID", "TVDBId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
@@ -234,7 +238,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "thumbFilename", "BannerPaths", fixBannerPathReader),
                 new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
-                new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList)
+                new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),
+                new SQLFieldMapping("e", "IMDB_ID", "IMDBId", DataReaders.ReadString)
             });
         }
 

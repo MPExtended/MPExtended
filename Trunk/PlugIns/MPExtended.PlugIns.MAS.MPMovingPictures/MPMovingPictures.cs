@@ -33,6 +33,11 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
     [ExportMetadata("Version", "1.0.0.0")]
     public class MPMovingPictures : Database, IMovieLibrary
     {
+        // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:
+        // - it's better for compatibility
+        // - it's less code for us
+        // - we can more easily add new features (see for example the horrible TMDB implementation below)
+
         private IPluginData data;
 
         [ImportingConstructor]
@@ -43,15 +48,21 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
-            string sql = "SELECT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
+            string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, m.imdb_id, s.identifier AS tmdb_id " +
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
-                         "WHERE %where " +
+                         "LEFT JOIN " +
+                                "(SELECT smi.movie, smi.identifier " +
+                                "FROM source_movie_info smi " +
+                                "LEFT JOIN source_info si ON smi.source = si.id " + 
+                                "WHERE si.providertype LIKE 'MediaPortal.Plugins.MovingPictures.DataProviders.TheMovieDbProvider, MovingPictures, %' " + 
+                                "GROUP BY smi.movie, smi.identifier) AS s " +
+                            "ON s.movie = m.id AND s.identifier != '' " +
                          "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, s.identifier " +
                          "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("m", "id", "Id", DataReaders.ReadIntAsString),
@@ -68,7 +79,9 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("m", "writers", "Writers", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "actors", "Actors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "summary", "Summary", DataReaders.ReadString),
-                new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString)
+                new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString),
+                new SQLFieldMapping("m", "imdb_id", "IMDBId", DataReaders.ReadString),
+                new SQLFieldMapping("s", "identifier", "TMDBId", DataReaders.ReadString)
             });
         }
 
