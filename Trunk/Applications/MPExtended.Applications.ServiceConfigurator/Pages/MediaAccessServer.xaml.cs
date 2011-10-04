@@ -104,6 +104,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void LoadLogFiles(string fileName)
         {
+            return;
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName)))
             {
                 try
@@ -262,8 +263,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                int count = MPEServices.NetPipeMediaAccessService.GetMovieCount();
-                IList<WebMovieBasic> items = MPEServices.NetPipeMediaAccessService.GetMoviesBasicByRange(0, 1, SortMoviesBy.Title, OrderBy.Asc);
+                int count = MPEServices.NetPipeMediaAccessService.GetMovieCount().Count;
+                IList<WebMovieBasic> items = MPEServices.NetPipeMediaAccessService.GetMoviesBasicByRange(0, 1, SortBy.Title, OrderBy.Asc);
                 if (items != null)
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
@@ -324,7 +325,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (TabDatabases.IsSelected)
             {
-                DBLocations dbLocations = Configuration.GetMPDbLocations();
+                /*DBLocations dbLocations = Configuration.GetMPDbLocations();
                 txtDbLocationMopi.Text = dbLocations.MovingPictures;
                 txtDbLocationMopi.CaretIndex = txtDbLocationMopi.Text.Length;
 
@@ -338,7 +339,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 txtDbLocationTvSeries.CaretIndex = txtDbLocationTvSeries.Text.Length;
 
                 txtDbLocationPictures.Text = dbLocations.Pictures;
-                txtDbLocationPictures.CaretIndex = txtDbLocationPictures.Text.Length;
+                txtDbLocationPictures.CaretIndex = txtDbLocationPictures.Text.Length;*/
             }
 
         }
@@ -435,7 +436,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void BrowseForDbLocation(DatabaseType _db)
         {
             // Open document
-            string oldFolder = null;
+            /*string oldFolder = null;
 
             switch (_db)
             {
@@ -500,7 +501,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                         break;
                 }
             }
-
+            */
 
         }
 
