@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
 
-namespace MPExtended.Services.MediaAccessService.Trakt
+namespace MPExtended.Services.StreamingService.Trakt
 {
     internal class TraktConfig
     {

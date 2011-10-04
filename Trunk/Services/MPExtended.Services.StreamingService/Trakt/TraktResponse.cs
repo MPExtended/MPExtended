@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace MPExtended.Services.MediaAccessService.Trakt
+namespace MPExtended.Services.StreamingService.Trakt
 {
     /// <summary>
     /// Data structure for a response from Trakt

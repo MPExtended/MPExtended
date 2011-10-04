@@ -29,6 +29,7 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Streaming
     {
+        private WatchSharing sharing;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
 
         private class ActiveStream
@@ -43,6 +44,11 @@ namespace MPExtended.Services.StreamingService.Code
             public ITranscoder Transcoder { get; set; }
             public Pipeline Pipeline { get; set; }
             public WebTranscodingInfo TranscodingInfo { get; set; }
+        }
+
+        public Streaming()
+        {
+            sharing = new WatchSharing();
         }
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source)
@@ -82,10 +88,14 @@ namespace MPExtended.Services.StreamingService.Code
                     ActiveStream stream = Streams[identifier];
                     stream.Profile = profile;
                     stream.OutputSize = CalculateSize(stream.Profile, stream.Source);
+                    Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
                     Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
 
                     // get media info
                     WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
+
+                    // share it
+                    sharing.StartStream(stream.Identifier, stream.Source, infoRef, position);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
@@ -108,8 +118,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // build the pipeline
                     stream.Pipeline = new Pipeline();
                     stream.TranscodingInfo = new WebTranscodingInfo();
-                    Reference<WebTranscodingInfo> eref = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
-                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, eref, position, audioId, subtitleId);
+                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, infoRef, position, audioId, subtitleId);
 
                     // start the processes
                     stream.Pipeline.Assemble();
@@ -153,6 +162,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
+                sharing.EndStream(identifier);
                 lock (Streams[identifier])
                 {
                     Log.Debug("Stopping stream with identifier " + identifier);

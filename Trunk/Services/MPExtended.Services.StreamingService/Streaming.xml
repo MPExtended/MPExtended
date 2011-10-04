@@ -1,9 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
+  <watchsharing>
+    <type>none</type>
+  </watchsharing>
+  <!--
+  <watchsharing>
+    <type>trakt</type>
+    <trakt>
+      <username>bladiebla</username>
+      <password>bladiebla</password>
+    </trakt>
+  </watchsharing>
+  -->
+  
   <ffmpeg>
     <!-- TODO: add info about libav/ffmpeg and version (call api) here -->
     <path>..\..\..\..\Libraries\Streaming\ffmpeg.exe</path> 
   </ffmpeg>
+  
   <transcoders>
     <transcoder>
       <name>Android HQ</name>

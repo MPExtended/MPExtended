@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace MPExtended.Services.MediaAccessService.Trakt
+namespace MPExtended.Services.StreamingService.Trakt
 {
-    /// <summary>
-    /// Data Structure for Movie Items going to Trakt
-    /// </summary>
     [DataContract]
-    internal class TraktMovieScrobble
+    internal class TraktEpisodeScrobble
     {
         [DataMember(Name = "title")]
         public string Title { get; set; }
@@ -18,11 +15,17 @@ namespace MPExtended.Services.MediaAccessService.Trakt
         [DataMember(Name = "year")]
         public string Year { get; set; }
 
+        [DataMember(Name = "season")]
+        public string Season { get; set; }
+
+        [DataMember(Name = "episode")]
+        public string Episode { get; set; }
+
+        [DataMember(Name = "tvdb_id")]
+        public string TVDBID { get; set; }
+
         [DataMember(Name = "imdb_id")]
         public string IMDBID { get; set; }
-
-        [DataMember(Name = "tmdb_id")]
-        public string TMDBID { get; set; }
 
         [DataMember(Name = "progress")]
         public string Progress { get; set; }

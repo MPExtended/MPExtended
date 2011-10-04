@@ -6,8 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 
-
-namespace MPExtended.Services.MediaAccessService.Trakt
+namespace MPExtended.Services.StreamingService.Trakt
 {
     internal static class ExtensionMethods
     {
