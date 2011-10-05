@@ -30,9 +30,9 @@ namespace MPExtended.Services.MediaAccessService
     [Export(typeof(IPluginData))]
     public class PluginData : IPluginData
     {
-        private static Dictionary<string, Dictionary<string, string>> cachedConfig = new Dictionary<string, Dictionary<string, string>>();
+        private static Dictionary<string, Dictionary<string, PluginConfigItem>> cachedConfig = new Dictionary<string, Dictionary<string, PluginConfigItem>>();
 
-        public Dictionary<string, string> Configuration
+        public Dictionary<string, PluginConfigItem> Configuration
         {
             get
             {
@@ -48,7 +48,7 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        private Dictionary<string, string> ReadConfig(Assembly forAssembly)
+        private Dictionary<string, PluginConfigItem> ReadConfig(Assembly forAssembly)
         {
             string name = forAssembly.GetName().Name;
             if (!cachedConfig.ContainsKey(name))
@@ -59,7 +59,7 @@ namespace MPExtended.Services.MediaAccessService
                     .Where(p => p.Attribute("name").Value == name)
                     .First()
                     .Descendants()
-                    .Select(n => new KeyValuePair<string, string>(n.Name.LocalName, (string)n.Value))
+                    .Select(n => new KeyValuePair<string, PluginConfigItem>(n.Name.LocalName, new PluginConfigItem((string)n.Value, (string)n.Attribute("type"))))
                     .ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
                 cachedConfig[name] = config;
             }
@@ -68,10 +68,11 @@ namespace MPExtended.Services.MediaAccessService
         }
 
 
-        private string PerformFolderSubstitution(string input)
+        private PluginConfigItem PerformFolderSubstitution(PluginConfigItem input)
         {
             string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return input.Replace("%ProgramData%", cappdata);
+            input.ConfigValue = input.ConfigValue.Replace("%ProgramData%", cappdata);
+            return input;
         }
     }
 }

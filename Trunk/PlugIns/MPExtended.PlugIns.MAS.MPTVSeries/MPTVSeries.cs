@@ -38,7 +38,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private SQLFieldMapping.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
-        public MPTVSeries(IPluginData data) : base(data.Configuration["database"])
+        public MPTVSeries(IPluginData data) : base(data.Configuration["database"].ConfigValue)
         {
             this.data = data;
             this.fixBannerPathReader = delegate(SQLiteDataReader reader, int index)
@@ -49,7 +49,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         private string CreateImagePath(string type, string dbPath)
         {
-            string rootDir = data.Configuration[type];
+            string rootDir = data.Configuration[type].ConfigValue;
             return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
         }
 

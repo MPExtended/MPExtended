@@ -38,7 +38,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
-            : base(data.Configuration["database"])
+            : base(data.Configuration["database"].ConfigValue)
         {
             this.data = data;
         }

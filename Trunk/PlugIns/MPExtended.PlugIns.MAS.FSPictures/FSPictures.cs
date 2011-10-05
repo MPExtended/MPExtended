@@ -47,7 +47,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
             picturesBasic.Clear();
-            dirSearchWebPictureBasic(data.Configuration["root"]);
+            dirSearchWebPictureBasic(data.Configuration["root"].ConfigValue);
 
             return picturesBasic;
         }
@@ -55,7 +55,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public IEnumerable<WebPictureDetailed> GetAllPicturesDetailed()
         {
             picturesDetailed.Clear();
-            dirSearchWebPictureDetailed(data.Configuration["root"]);
+            dirSearchWebPictureDetailed(data.Configuration["root"].ConfigValue);
             return picturesDetailed;
         }
 
@@ -71,7 +71,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public IEnumerable<WebCategory> GetAllPictureCategoriesBasic()
         {
             categories.Clear();
-            var root =  new DirectoryInfo(data.Configuration["root"]);
+            var root = new DirectoryInfo(data.Configuration["root"].ConfigValue);
 
             categories.Add(EncodeTo64(root.FullName), new WebCategory() { Title = root.Name, Id = EncodeTo64(root.FullName) });
             foreach (var dir in  root.EnumerateDirectories())

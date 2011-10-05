@@ -110,7 +110,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IPluginData
     {
-        Dictionary<string, string> Configuration { get; }
+        Dictionary<string, PluginConfigItem> Configuration { get; }
         ILogger Log { get; }
     }
 

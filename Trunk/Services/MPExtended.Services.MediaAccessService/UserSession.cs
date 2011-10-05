@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Services.UserSessionService;
+using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {

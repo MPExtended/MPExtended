@@ -41,7 +41,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         private IPluginData data;
 
         [ImportingConstructor]
-        public MPMovingPictures(IPluginData data) : base(data.Configuration["database"])
+        public MPMovingPictures(IPluginData data) : base(data.Configuration["database"].ConfigValue)
         {
             this.data = data;
         }

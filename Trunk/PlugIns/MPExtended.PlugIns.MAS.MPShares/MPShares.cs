@@ -47,7 +47,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             var localsharelist = new List<Share>();
             string[] sections = { "pictures", "movies", "music" };
-            XElement root = XElement.Load(this.data.Configuration["config"]);
+            XElement root = XElement.Load(this.data.Configuration["config"].ConfigValue);
 
             foreach (string section in sections)
             {

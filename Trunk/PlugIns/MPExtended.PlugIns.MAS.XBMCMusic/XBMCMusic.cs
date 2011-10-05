@@ -35,7 +35,7 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
     {
         [ImportingConstructor]
         public XBMCMusic(IPluginData data)
-            : base(data.Configuration["database"])
+            : base(data.Configuration["database"].ConfigValue)
         {
         }
 
