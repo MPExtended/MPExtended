@@ -32,6 +32,8 @@ namespace MPExtended.Services.StreamingService.Code
 {
     public interface IWatchSharingService
     {
+        int UpdateInterval { get; } // in minutes
+
         bool StartWatchingMovie(WebMovieDetailed movie);
         bool WatchingMovie(WebMovieDetailed movie, int progress);
         bool FinishMovie(WebMovieDetailed movie);
@@ -45,8 +47,6 @@ namespace MPExtended.Services.StreamingService.Code
 
     internal class WatchSharing
     {
-        private const int STATUS_INTERVAL = 15; // in minutes
-
         private class StreamState
         {
             public string Id { get; set; }
@@ -84,18 +84,23 @@ namespace MPExtended.Services.StreamingService.Code
                 enabled = true;
                 service = new Trakt.TraktBridge(mas, serviceConfig);
             }
+            else if (serviceName == "debug")
+            {
+                enabled = true;
+                service = new WatchSharingDebug();
+            }
             else if (serviceName == "none")
             {
                 enabled = false;
-            } 
-            else 
+            }
+            else
             {
                 Log.Warn("Disabling watch sharing because of unknown service {0}", serviceName);
                 enabled = false;
             }
         }
 
-        public void StartStream(string identifier, MediaSource source, Reference<WebTranscodingInfo> infoRef, int position)
+        public void StartStream(MediaSource source, Reference<WebTranscodingInfo> infoRef, int position)
         {
             // ignore when not needed
             if (!enabled || (source.MediaType != WebStreamMediaType.Movie && source.MediaType != WebStreamMediaType.TVEpisode))
@@ -109,8 +114,8 @@ namespace MPExtended.Services.StreamingService.Code
                 streams.Remove(id);
             }
 
-            // calculate progress
-            int progress = (int)Math.Round((position * 1.0 / 60) / streams[identifier].Runtime);
+            // generate identifier
+            string identifier = Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
 
             // start if non-existent            
             if (!streams.ContainsKey(identifier))
@@ -120,7 +125,6 @@ namespace MPExtended.Services.StreamingService.Code
                     Id = identifier,
                     Source = source,
                     TranscodingInfo = infoRef,
-                    Progress = progress,
                     OverrideProgress = true,
                     Canceled = false,
                     Stale = false
@@ -139,19 +143,26 @@ namespace MPExtended.Services.StreamingService.Code
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime;
                 }
 
-                state.BackgroundThread = new Thread(new ParameterizedThreadStart(this.BackgroundWorker));
-                state.BackgroundThread.Start();
+                state.Progress = CalculatePercent(position / 60, state.Runtime);
                 streams[identifier] = state;
+
+                state.BackgroundThread = new Thread(new ParameterizedThreadStart(this.BackgroundWorker));
+                state.BackgroundThread.Start(identifier);
             }
             else
             {
                 // just update the progress which will be send next time
-                streams[identifier].Progress = progress;
+                Log.Info("WatchSharing: Picking up old stream");
+                streams[identifier].Progress = CalculatePercent(position / 60, streams[identifier].Runtime);
+                streams[identifier].Canceled = false;
             }
         }
 
-        public void EndStream(string identifier)
+        public void EndStream(MediaSource source)
         {
+            // generate identifier
+            string identifier = Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
+
             // ignore if not registered
             if (!enabled || !streams.ContainsKey(identifier))
             {
@@ -159,8 +170,8 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // talk to backend
-            int minutes = streams[identifier].TranscodingInfo.Value.CurrentTime / 60;
-            if (minutes > streams[identifier].Runtime * 0.95)
+            if (streams[identifier].TranscodingInfo.Value != null && 
+                CalculatePercent(streams[identifier].TranscodingInfo.Value.CurrentTime / 60000, streams[identifier].Runtime) >= 95)
             {
                 // finished
                 if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
@@ -196,6 +207,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // check if canceled
                     if (streams[id].Canceled)
                     {
+                        Log.Debug("WatchSharing: stream {0} is canceled", streams[id].Id);
                         canceledWaitIterations = canceledWaitIterations == -1 ? 3 : canceledWaitIterations - 1;
 
                         // user definitely canceled
@@ -215,6 +227,7 @@ namespace MPExtended.Services.StreamingService.Code
                             }
 
                             // and kill us
+                            Log.Debug("WatchSharing: definitly killing stream {0}", streams[id].Id);
                             streams[id].Stale = true;
                             return;
                         }
@@ -224,18 +237,24 @@ namespace MPExtended.Services.StreamingService.Code
                         canceledWaitIterations = -1;
                     }
 
-                    // only send every x iterations the status
-                    if (iteration++ % STATUS_INTERVAL == 0)
+                    // only send every x iterations the status, when we know for sure that we have a value and stream isn't canceled yet
+                    if ((!streams[id].OverrideProgress && streams[id].TranscodingInfo.Value == null) || streams[id].Canceled)
                     {
-                        // calculate progress
-                        int minutes = streams[id].TranscodingInfo.Value.CurrentTime / 60;
-                        int progress = (int)Math.Round(minutes * 1.0 / streams[id].Runtime);
-
-                        // but allow to override it in the beginning
+                        // try again next iteration (iteration++ is NOT called this time)
+                    } 
+                    else if (iteration++ % service.UpdateInterval == 0)
+                    {
+                        // allow to override progress in the beginning
+                        int progress;
                         if (streams[id].OverrideProgress)
                         {
                             progress = streams[id].Progress;
                             streams[id].OverrideProgress = false;
+                        }
+                        else
+                        {
+                            // calculate progress if possible, else just skip this iteratio
+                            progress = CalculatePercent(streams[id].TranscodingInfo.Value.CurrentTime / 60000, streams[id].Runtime);
                         }
 
                         // and send it
@@ -253,7 +272,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
 
                     // wait till next iteration
-                    Thread.Sleep(60000);
+                    Thread.Sleep(15000); // run each minute
                 }
                 catch (ThreadAbortException) 
                 {
@@ -265,6 +284,11 @@ namespace MPExtended.Services.StreamingService.Code
                     Log.Warn("Failed in watch sharing", e);
                 }
             }
+        }
+
+        private static int CalculatePercent(int currentMinutes, int runtime)
+        {
+            return (int)Math.Round(currentMinutes * 1.0 / runtime * 100);
         }
     }
 }

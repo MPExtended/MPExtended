@@ -62,6 +62,7 @@
     <Compile Include="Code\Config.cs" />
     <Compile Include="Code\Streaming.cs" />
     <Compile Include="Code\WatchSharing.cs" />
+    <Compile Include="Code\WatchSharingDebug.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
     <Compile Include="StreamingService.cs" />

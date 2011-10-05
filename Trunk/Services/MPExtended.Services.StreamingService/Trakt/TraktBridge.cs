@@ -41,6 +41,14 @@ namespace MPExtended.Services.StreamingService.Trakt
             this.password = config["password"];
         }
 
+        public int UpdateInterval
+        {
+            get
+            {
+                return 15;
+            }
+        }
+
         private string GetPasswordHash()
         {
             // TODO: save password encrypted instead of in plaintext

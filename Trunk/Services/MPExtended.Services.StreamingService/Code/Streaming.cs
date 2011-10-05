@@ -95,7 +95,7 @@ namespace MPExtended.Services.StreamingService.Code
                     WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
 
                     // share it
-                    sharing.StartStream(stream.Identifier, stream.Source, infoRef, position);
+                    sharing.StartStream(stream.Source, infoRef, position);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
@@ -162,10 +162,10 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
-                sharing.EndStream(identifier);
                 lock (Streams[identifier])
                 {
                     Log.Debug("Stopping stream with identifier " + identifier);
+                    sharing.EndStream(Streams[identifier].Source);
                     Streams[identifier].Pipeline.Stop();
                     Streams[identifier].Pipeline = null;
                 }
