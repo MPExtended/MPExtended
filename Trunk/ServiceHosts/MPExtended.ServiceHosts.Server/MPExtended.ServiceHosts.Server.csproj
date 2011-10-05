@@ -72,10 +72,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
-      <Project>{26752D5F-67E3-45E4-A611-449DC29B9C7F}</Project>
-      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PlugIns\MPExtended.PlugIns.MAS.FSPictures\MPExtended.PlugIns.MAS.FSPictures.csproj">
       <Project>{D08E4B27-E77C-4258-B050-333D42AA7362}</Project>
       <Name>MPExtended.PlugIns.MAS.FSPictures</Name>
@@ -95,6 +91,10 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
       <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
       <Name>MPExtended.Services.TVAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
+      <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
+      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
       <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
