@@ -87,6 +87,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 return;
             }
 
+            if (!isServiceAvailable(mServiceController))
+            {
+                mServiceController = null;
+            }
+
             if (mServiceController != null)
             {
                 mServiceWatcher = new DispatcherTimer();
@@ -100,6 +105,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             activeSessionTimer.Enabled = true;
             activeSessionTimer.AutoReset = true;
             InitBackgroundWorker();
+        }
+
+        private bool isServiceAvailable(ServiceController _controller)
+        {
+            ServiceController[] controllers = ServiceController.GetServices();
+
+            foreach (ServiceController c in controllers)
+            {
+                if (c.Equals(_controller))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void LoadLogFiles(string fileName)
@@ -143,13 +162,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
-            if (tmp != null)
+            try
             {
-                lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
+                List<WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+                if (tmp != null)
                 {
-                    lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
-                }));
+                    lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
+                    {
+                        lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+                    }));
+                }
+            }
+            catch (EndpointNotFoundException)
+            {
+                Log.Warn("No connection to service");
             }
         }
 

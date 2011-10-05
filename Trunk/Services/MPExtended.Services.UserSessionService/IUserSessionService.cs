@@ -26,6 +26,7 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.UserSessionService
 {
+
     [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
     public interface IUserSessionService
     {
