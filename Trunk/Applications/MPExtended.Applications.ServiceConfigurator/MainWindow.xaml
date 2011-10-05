@@ -6,7 +6,7 @@
     <Grid>
         <tb:TaskbarIcon 
       IconSource="/Icons/TrayIcon.ico"
-      ToolTipText="MP Extended Configuration" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
+      ToolTipText="MPExtended Configuration" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border
       Background="White"
@@ -17,7 +17,7 @@
       Width="160"
       Height="40">
                     <TextBlock
-        Text="MP-Extended Configurator"
+        Text="MPExtended Configuration"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         />
@@ -27,12 +27,13 @@
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu Opened="ContextMenu_Opened">
+                    <MenuItem Name="MenuOpenConfigurator" Header="Open MPExtended Configurator" Click="MenuOpenConfigurator_Click" />
                     <MenuItem Name="MenuStartCloseMp" Header="Start MediaPortal" Click="MenuStartCloseMp_Click"/>
                     <MenuItem Name="MenuPowermodes" Header="Powermodes">
                         <MenuItem Name="MenuPowermodeLogoff" Header="LogOff" Click="MenuPowermodeLogoff_Click"/>
                         <MenuItem Name="MenuPowermodeSuspend" Header="Suspend" Click="MenuPowermodeSuspend_Click"/>
                     </MenuItem>
-                    <MenuItem Name="MenuExit" Header="Exit"  Click="MenuItem_Click"/>
+                    <MenuItem Name="MenuExit" Header="Exit"  Click="MenuExit_Click"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
 

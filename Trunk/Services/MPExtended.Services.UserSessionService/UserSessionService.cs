@@ -59,40 +59,46 @@ namespace MPExtended.Services.UserSessionService
             return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0;
         }
 
-        public bool StartMediaPortal()
+        public void StartMediaPortal()
         {
-            return LaunchMediaPortal();
+            LaunchMediaPortal();
         }
 
-        public bool StartMediaPortalBlocking()
+        public void StartMediaPortalBlocking()
         {
             if (!LaunchMediaPortal())
             {
-                return false;
+                return;
             }
 
             while (!IsMediaPortalRunning())
             {
                 System.Threading.Thread.Sleep(500);
             }
-
-            return true;
         }
 
         private bool LaunchMediaPortal()
         {
-            Log.Info("Starting MediaPortal");
+            try
+            {
+                Log.Info("Starting MediaPortal");
 
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = MPPath;
-            info.CreateNoWindow = false;
-            info.ErrorDialog = true;
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.FileName = MPPath;
+                info.CreateNoWindow = false;
+                info.ErrorDialog = true;
 
-            Process proc = new Process();
-            proc.StartInfo = info;
-            proc.Start();
+                Process proc = new Process();
+                proc.StartInfo = info;
+                proc.Start();
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to launch mediaportal", ex);
+                return false;
+            }
         }
 
         public void SetPowerMode(WebPowerModes powerMode)

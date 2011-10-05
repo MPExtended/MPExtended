@@ -49,21 +49,17 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             try
             {
-                Log.Debug("MPExtended.ServiceHosts.Console.Client starting...");
-
+                Log.Debug("MPExtended.Applications.ServiceConfigurator starting...");
                 mUserSessionHost = new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionService));
                 Log.Debug("Opening ServiceHost...");
 
                 mUserSessionHost.Open();
-
-
                 Log.Debug("Host opened");
-
-                Log.Info("UserSessionServiceBehavior started...");
+                Log.Info("UserSessionService started...");
             }
             catch (Exception ex)
             {
-                Log.Error(ex.ToString());
+                Log.Error("Failed to start service", ex);
             }
 
             mUserSessionService = new UserSessionService();
@@ -74,9 +70,12 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
             catch (Exception ex)
             {
+                Log.Error("Failed to open configurator", ex);
                 MessageBox.Show(ex.ToString());
             }
+
             Hide();
+            HandleMpState(mUserSessionService.IsMediaPortalRunning());
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -104,7 +103,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuExit_Click(object sender, RoutedEventArgs e)
         {
             mIsAppExiting = true;
             this.Close();
@@ -157,8 +156,9 @@ namespace MPExtended.Applications.ServiceConfigurator
             this.Show();
         }
 
-
-
-
+        private void MenuOpenConfigurator_Click(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+        }
     }
 }

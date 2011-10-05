@@ -36,10 +36,18 @@ namespace MPExtended.Services.UserSessionService
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool StartMediaPortal();
+        void StartMediaPortal();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool StartMediaPortalBlocking();
+        void StartMediaPortalBlocking();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        void SetPowerMode(WebPowerModes powerMode);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        void CloseMediaPortal();
     }
 }
