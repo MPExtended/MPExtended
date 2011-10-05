@@ -55,6 +55,11 @@ namespace MPExtended.Services.UserSessionService
                 .Replace("%ProgramFiles%", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
         }
 
+        public WebResult TestConnection()
+        {
+            return new WebResult(true);
+        }
+
         public WebResult IsMediaPortalRunning()
         {
             return new WebResult(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0);

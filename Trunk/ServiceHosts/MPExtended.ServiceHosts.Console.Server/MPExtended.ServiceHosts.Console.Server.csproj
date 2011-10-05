@@ -79,6 +79,10 @@
       <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
       <Name>MPExtended.Libraries.General</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
+      <Project>{26752D5F-67E3-45E4-A611-449DC29B9C7F}</Project>
+      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
       <Name>MPExtended.Services.StreamingService.Interfaces</Name>
@@ -94,6 +98,10 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
       <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
       <Name>MPExtended.Services.TVAccessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
+      <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
+      <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,10 @@ namespace MPExtended.Services.UserSessionService.Interfaces
 {
     public class WebResult
     {
+        public WebResult()
+        {
+        }
+
         public WebResult(bool status)
         {
             Status = status;

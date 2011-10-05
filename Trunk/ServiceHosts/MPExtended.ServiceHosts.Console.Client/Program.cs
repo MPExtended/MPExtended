@@ -32,13 +32,18 @@ namespace MPExtended.ServiceHosts.Console.Client
         static void Main()
         {
             Log.Debug("MPExtended.ServiceHosts.Console.Client starting...");
-
-            ServiceHost host1 = new ServiceHost(typeof(MPExtended.Services.MediaAccessService.MediaAccessService));
-            ServiceHost host2 = new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService));
+            var hosts = new List<ServiceHost>()
+            {
+                new ServiceHost(typeof(MPExtended.Services.MediaAccessService.MediaAccessService)),
+                new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService)),
+                new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionProxyService))
+            };
+            
             Log.Debug("Opening ServiceHost...");
-
-            host1.Open();
-            host2.Open();
+            foreach (var host in hosts)
+            {
+                host.Open();
+            }
             Log.Debug("Host opened");
 
             Log.Info("MPExtended.ServiceHosts.Console.Client started...");
@@ -47,9 +52,10 @@ namespace MPExtended.ServiceHosts.Console.Client
             System.Console.WriteLine("Press ENTER to close");
             System.Console.ReadLine();
 
-            host1.Close();
-            host2.Close();
-
+            foreach (var host in hosts)
+            {
+                host.Close();
+            }
             Log.Info("MPExtended.ServiceHosts.Console.Client closed...");
         }
     }

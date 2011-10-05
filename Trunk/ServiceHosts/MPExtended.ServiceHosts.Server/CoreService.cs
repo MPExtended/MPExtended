@@ -24,15 +24,12 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.ServiceModel;
-using MPExtended.Services.TVAccessService;
-using MPExtended.Services.StreamingService;
 
 namespace MPExtended.ServiceHosts.Server
 {
     public partial class CoreService : ServiceBase
     {
-        ServiceHost tvHost = null;
-        ServiceHost streamingHost = null;
+        private List<ServiceHost> hosts;
 
         public CoreService()
         {
@@ -42,28 +39,24 @@ namespace MPExtended.ServiceHosts.Server
 
         protected override void OnStart(string[] args)
         {
-            if (tvHost == null)
+            hosts = new List<ServiceHost>()
             {
-                tvHost = new ServiceHost(typeof(TVAccessService));
-            }
-            if (streamingHost == null)
-            {
-                streamingHost = new ServiceHost(typeof(StreamingService));
-            }
-            tvHost.Open();
-            streamingHost.Open();
+                new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService)),
+                new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService)),
+                new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionProxyService))
+            };
 
+            foreach (var host in hosts)
+            {
+                host.Open();
+            }
         }
 
         protected override void OnStop()
         {
-            if (tvHost != null)
+            foreach (var host in hosts)
             {
-                tvHost.Close();
-            }
-            if (streamingHost != null)
-            {
-                streamingHost.Close();
+                host.Close();
             }
         }
     }

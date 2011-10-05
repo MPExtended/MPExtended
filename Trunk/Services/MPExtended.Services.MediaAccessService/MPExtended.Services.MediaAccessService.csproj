@@ -63,7 +63,6 @@
     <Compile Include="MediaAccessService.cs" />
     <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
@@ -73,10 +72,6 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.ServiceLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
-      <Project>{26752D5F-67E3-45E4-A611-449DC29B9C7F}</Project>
-      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>

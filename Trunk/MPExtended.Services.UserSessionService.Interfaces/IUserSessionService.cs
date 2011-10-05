@@ -14,6 +14,10 @@ namespace MPExtended.Services.UserSessionService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebResult TestConnection();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResult IsMediaPortalRunning();
 
         [OperationContract]

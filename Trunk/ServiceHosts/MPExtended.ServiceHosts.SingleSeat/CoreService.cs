@@ -24,17 +24,12 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.ServiceModel;
-using MPExtended.Services.MediaAccessService;
-using MPExtended.Services.StreamingService;
-using MPExtended.Services.TVAccessService;
 
 namespace MPExtended.ServiceHosts.SingleSeat
 {
     public partial class CoreService : ServiceBase
     {
-        ServiceHost tvHost = null;
-        ServiceHost streamingHost = null;
-        ServiceHost mediaHost = null;
+        private List<ServiceHost> hosts;
 
         public CoreService()
         {
@@ -44,37 +39,25 @@ namespace MPExtended.ServiceHosts.SingleSeat
 
         protected override void OnStart(string[] args)
         {
-            if (tvHost == null)
+            hosts = new List<ServiceHost>()
             {
-                tvHost = new ServiceHost(typeof(TVAccessService));
-            }
-            if (streamingHost == null)
-            {
-                streamingHost = new ServiceHost(typeof(StreamingService));
-            }
-            if (mediaHost == null)
-            {
-                mediaHost = new ServiceHost(typeof(MediaAccessService));
-            }
+                new ServiceHost(typeof(MPExtended.Services.MediaAccessService.MediaAccessService)),
+                new ServiceHost(typeof(MPExtended.Services.TVAccessService.TVAccessService)),
+                new ServiceHost(typeof(MPExtended.Services.StreamingService.StreamingService)),
+                new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionProxyService))
+            };
 
-            tvHost.Open();
-            streamingHost.Open();
-            mediaHost.Open();
+            foreach (var host in hosts)
+            {
+                host.Open();
+            }
         }
 
         protected override void OnStop()
         {
-            if (tvHost != null)
+            foreach (var host in hosts)
             {
-                tvHost.Close();
-            }
-            if (streamingHost != null)
-            {
-                streamingHost.Close();
-            }
-            if (mediaHost != null)
-            {
-                mediaHost.Close();
+                host.Close();
             }
         }
     }
