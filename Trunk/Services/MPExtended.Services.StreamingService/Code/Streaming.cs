@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Web;
+using System.Threading;
 using MPExtended.Libraries.General;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
@@ -29,7 +30,14 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Streaming
     {
+#if DEBUG
+        private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // in milliseconds, use shorter time for debugging
+#else
+        private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // in milliseconds, 2 minutes seams reasonable
+#endif
+
         private WatchSharing sharing;
+        private Thread timeoutWorker;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
 
         private class ActiveStream
@@ -44,11 +52,53 @@ namespace MPExtended.Services.StreamingService.Code
             public ITranscoder Transcoder { get; set; }
             public Pipeline Pipeline { get; set; }
             public WebTranscodingInfo TranscodingInfo { get; set; }
+
+            public ReadTrackingStreamWrapper OutputStream { get; set; }
         }
 
         public Streaming()
         {
             sharing = new WatchSharing();
+            timeoutWorker = new Thread(TimeoutStreamsWorker);
+            timeoutWorker.Start();
+        }
+
+        ~Streaming()
+        {
+            timeoutWorker.Abort();
+        }
+
+        private void TimeoutStreamsWorker()
+        {
+            while (true)
+            {
+                try
+                {
+                    lock (Streams)
+                    {
+                        var toDelete = Streams
+                            .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.MillisecondsSinceLastRead > ALLOW_STREAM_IDLE_TIME)
+                            .Select(x => x.Value.Identifier)
+                            .ToList();
+
+                        foreach (string key in toDelete)
+                        {
+                            Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.MillisecondsSinceLastRead);
+                            KillStream(key);
+                        }
+                    }
+
+                    Thread.Sleep(ALLOW_STREAM_IDLE_TIME);
+                }
+                catch (ThreadAbortException)
+                {
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Error in timeout stream worker", ex);
+                }
+            }
         }
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source)
@@ -120,9 +170,10 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.TranscodingInfo = new WebTranscodingInfo();
                     stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, infoRef, position, audioId, subtitleId);
 
-                    // start the processes
+                    // start the processes and retrieve output stream
                     stream.Pipeline.Assemble();
                     stream.Pipeline.Start();
+                    Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(Streams[identifier].Pipeline.GetFinalStream());
 
                     Log.Info("Started stream with identifier " + identifier);
                     return stream.Transcoder.GetStreamURL();
@@ -140,7 +191,7 @@ namespace MPExtended.Services.StreamingService.Code
             lock (Streams[identifier])
             {
                 WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Profile.MIME;
-                return Streams[identifier].Pipeline.GetFinalStream();
+                return Streams[identifier].OutputStream;
             }
         }
 

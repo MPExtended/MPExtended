@@ -60,6 +60,7 @@
     <Compile Include="Code\MediaSource.cs" />
     <Compile Include="Code\Pipeline.cs" />
     <Compile Include="Code\Config.cs" />
+    <Compile Include="Code\ReadTrackingStreamWrapper.cs" />
     <Compile Include="Code\Streaming.cs" />
     <Compile Include="Code\WatchSharing.cs" />
     <Compile Include="Code\WatchSharingDebug.cs" />

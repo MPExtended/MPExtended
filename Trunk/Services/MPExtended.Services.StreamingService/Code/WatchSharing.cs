@@ -272,7 +272,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
 
                     // wait till next iteration
-                    Thread.Sleep(15000); // run each minute
+                    Thread.Sleep(60000); // run each minute
                 }
                 catch (ThreadAbortException) 
                 {
