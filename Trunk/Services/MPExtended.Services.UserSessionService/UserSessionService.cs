@@ -17,15 +17,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Linq;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.ServiceModel;
 using System.Text;
+using System.Xml.Linq;
 using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
-using System.Runtime.InteropServices;
+using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService
 {
@@ -54,27 +55,30 @@ namespace MPExtended.Services.UserSessionService
                 .Replace("%ProgramFiles%", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
         }
 
-        public bool IsMediaPortalRunning()
+        public WebResult IsMediaPortalRunning()
         {
-            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0;
+            return new WebResult(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0);
         }
 
-        public void StartMediaPortal()
+        public WebResult StartMediaPortal()
         {
             LaunchMediaPortal();
+            return new WebResult(true);
         }
 
-        public void StartMediaPortalBlocking()
+        public WebResult StartMediaPortalBlocking()
         {
             if (!LaunchMediaPortal())
             {
-                return;
+                return new WebResult(false);
             }
 
-            while (!IsMediaPortalRunning())
+            while (!IsMediaPortalRunning().Status)
             {
                 System.Threading.Thread.Sleep(500);
             }
+
+            return new WebResult(true);
         }
 
         private bool LaunchMediaPortal()
@@ -101,7 +105,7 @@ namespace MPExtended.Services.UserSessionService
             }
         }
 
-        public void SetPowerMode(WebPowerModes powerMode)
+        public WebResult SetPowerMode(WebPowerMode powerMode)
         {
             try
             {
@@ -113,31 +117,31 @@ namespace MPExtended.Services.UserSessionService
                 Log.Warn("The powerMode " + powerMode + " is not valid");
             }
 
-           //PowerState.
+            return new WebResult(true);
         }
 
-        private RestartOptions MapPowerMode(WebPowerModes powerMode)
+        private RestartOptions MapPowerMode(WebPowerMode powerMode)
         {
             switch (powerMode)
             {
-                case WebPowerModes.LogOff:
+                case WebPowerMode.LogOff:
                     return RestartOptions.LogOff;
-                case WebPowerModes.PowerOff:
+                case WebPowerMode.PowerOff:
                     return RestartOptions.PowerOff;
-                case WebPowerModes.Reboot:
+                case WebPowerMode.Reboot:
                     return RestartOptions.Reboot;
-                case WebPowerModes.ShutDown:
+                case WebPowerMode.ShutDown:
                     return RestartOptions.ShutDown;
-                case WebPowerModes.Suspend:
+                case WebPowerMode.Suspend:
                     return RestartOptions.Suspend;
-                case WebPowerModes.Hibernate:
+                case WebPowerMode.Hibernate:
                     return RestartOptions.Hibernate;
                 default:
                     throw new InvalidCastException();
             }
         }
 
-        public void CloseMediaPortal()
+        public WebResult CloseMediaPortal()
         {
             Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath));
 
@@ -145,6 +149,8 @@ namespace MPExtended.Services.UserSessionService
             {
                 processes[0].CloseMainWindow();
             }
+
+            return new WebResult(true);
         }
     }
 }

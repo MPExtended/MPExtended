@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,8 +30,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MPExtended.Libraries.General;
-using System.ServiceModel;
 using MPExtended.Services.UserSessionService;
+using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {
@@ -41,7 +42,7 @@ namespace MPExtended.Applications.ServiceConfigurator
     {
         private bool mIsAppExiting = false;
         private ServiceHost mUserSessionHost;
-        private UserSessionService mUserSessionService;
+        private IUserSessionService mUserSessionService;
 
         public MainWindow()
         {
@@ -75,7 +76,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
 
             Hide();
-            HandleMpState(mUserSessionService.IsMediaPortalRunning());
+            HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -111,7 +112,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void MenuStartCloseMp_Click(object sender, RoutedEventArgs e)
         {
-            bool isMpRunning = mUserSessionService.IsMediaPortalRunning();
+            bool isMpRunning = mUserSessionService.IsMediaPortalRunning().Status;
             if (!isMpRunning)
             {
                 mUserSessionService.StartMediaPortal();
@@ -138,17 +139,17 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            HandleMpState(mUserSessionService.IsMediaPortalRunning());
+            HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }
 
         private void MenuPowermodeLogoff_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerModes.LogOff);
+            mUserSessionService.SetPowerMode(WebPowerMode.LogOff);
         }
 
         private void MenuPowermodeSuspend_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerModes.Suspend);
+            mUserSessionService.SetPowerMode(WebPowerMode.Suspend);
         }
 
         private void TaskbarIcon_TrayLeftMouseUp(object sender, RoutedEventArgs e)

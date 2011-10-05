@@ -159,9 +159,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserSessionService", "UserS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.UserSessionService", "Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj", "{26B34D42-CA8B-44BF-A282-E516E2C22588}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.UserSessionService.Interfaces", "MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj", "{26752D5F-67E3-45E4-A611-449DC29B9C7F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 36
+		SccNumberOfProjects = 37
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -305,6 +307,10 @@ Global
 		SccProjectTopLevelParentUniqueName35 = MPExtended.sln
 		SccProjectName35 = Services/MPExtended.Services.UserSessionService
 		SccLocalPath35 = Services\\MPExtended.Services.UserSessionService
+		SccProjectUniqueName36 = MPExtended.Services.UserSessionService.Interfaces\\MPExtended.Services.UserSessionService.Interfaces.csproj
+		SccProjectTopLevelParentUniqueName36 = MPExtended.sln
+		SccProjectName36 = MPExtended.Services.UserSessionService.Interfaces
+		SccLocalPath36 = MPExtended.Services.UserSessionService.Interfaces
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -662,6 +668,16 @@ Global
 		{26B34D42-CA8B-44BF-A282-E516E2C22588}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{26B34D42-CA8B-44BF-A282-E516E2C22588}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{26B34D42-CA8B-44BF-A282-E516E2C22588}.Release|x86.ActiveCfg = Release|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -713,5 +729,6 @@ Global
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{D08E4B27-E77C-4258-B050-333D42AA7362} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
+		{26752D5F-67E3-45E4-A611-449DC29B9C7F} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
 	EndGlobalSection
 EndGlobal
