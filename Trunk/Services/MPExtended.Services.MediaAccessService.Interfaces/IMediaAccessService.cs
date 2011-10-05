@@ -31,14 +31,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]        
         ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStatus LaunchMediaPortal();
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStatus IsMediaPortalRunning();
         #endregion
 
         #region Movies

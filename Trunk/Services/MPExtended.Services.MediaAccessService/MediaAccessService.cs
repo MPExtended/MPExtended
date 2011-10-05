@@ -208,24 +208,6 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region General
-        public WebStatus IsMediaPortalRunning()
-        {
-            bool running = UserSession.Service.IsMediaPortalRunning();
-            return new WebStatus() { Status = running ? "running" : "not running" };
-        }
-
-        public WebStatus LaunchMediaPortal()
-        {
-            if (UserSession.Service.StartMediaPortalBlocking())
-            {
-                return new WebStatus() { Status = "launched" };
-            }
-            else
-            {
-                return new WebStatus() { Status = "failed" };
-            }
-        }
-
         public ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id)
         {
             switch (type)
