@@ -123,9 +123,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             List<WebCategory> list = new List<WebCategory>();
             WebCategory dir;
-            if (!categories.TryGetValue(id, out dir))
+            if (!categories.TryGetValue(categoryId, out dir))
             {
-                subCategories.TryGetValue(id, out dir);
+                subCategories.TryGetValue(categoryId, out dir);
             }
             try
             {
