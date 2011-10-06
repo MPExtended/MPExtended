@@ -59,7 +59,7 @@ namespace MPExtended.Services.MediaAccessService
                     .Where(p => p.Attribute("name").Value == name)
                     .First()
                     .Descendants()
-                    .Select(n => new KeyValuePair<string, PluginConfigItem>(n.Name.LocalName, new PluginConfigItem((string)n.Value, (string)n.Attribute("type"))))
+                    .Select(n => new KeyValuePair<string, PluginConfigItem>(n.Name.LocalName, new PluginConfigItem(n)))
                     .ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
                 cachedConfig[name] = config;
             }

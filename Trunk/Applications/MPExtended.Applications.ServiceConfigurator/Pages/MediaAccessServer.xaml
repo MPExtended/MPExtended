@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="639"
-	Title="MediaAccessServer">
+	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
     <Grid>
 
@@ -26,6 +26,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
+ 
             <TabItem Header="General" Width="140">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -63,34 +64,11 @@
                     </ListView>
                 </Grid>
             </TabItem>
-            <TabItem Header="Databases" Name="TabDatabases">
-                <Grid Name="grid1">
-                    <Label Content="Videos" Height="28" HorizontalAlignment="Left" Margin="6,55,0,0" Name="lblVideoDb" VerticalAlignment="Top" />
-                    <Button Content="Browse" Height="23" Margin="0,56,135,0" Name="btnBrowseVideos" VerticalAlignment="Top" Click="btnBrowseVideos_Click" HorizontalAlignment="Right" Width="46" />
-                    <TextBox Height="23" Margin="135,56,187,0" Name="txtDbLocationVideos" VerticalAlignment="Top" />
-                    <Button Content="Test" Height="23" HorizontalAlignment="Right" Margin="0,55,17,0" Name="btnTestVideos" VerticalAlignment="Top" Width="75" Click="btnTestVideos_Click" />
-
-                    <Label Content="MovingPictures" Height="28" HorizontalAlignment="Left" Margin="6,84,0,0" Name="lblMopiDb" VerticalAlignment="Top" />
-                    <Button Content="Browse" Height="23" Margin="0,85,135,0" Name="btnBrowseMopi" VerticalAlignment="Top" Click="btnBrowseMopi_Click" HorizontalAlignment="Right" Width="46" />
-                    <TextBox Height="23" Margin="135,85,187,0" Name="txtDbLocationMopi" VerticalAlignment="Top" />
-                    <Button Content="Test" Height="23" HorizontalAlignment="Right" Margin="0,84,17,0" Name="btnTestMopi" VerticalAlignment="Top" Width="75" Click="btnTestMopi_Click" />
-
-                    <Label Content="MP-TvSeries" Height="28" HorizontalAlignment="Left" Margin="6,113,0,0" Name="lblTvSeriesDb" VerticalAlignment="Top" />
-                    <Button Content="Browse" Height="23" HorizontalAlignment="Right" Margin="0,114,135,0" Name="btnBrowseTvSeries" VerticalAlignment="Top" Width="46" Click="btnBrowseTvSeries_Click" />
-                    <TextBox Height="23" Margin="135,114,187,0" Name="txtDbLocationTvSeries" VerticalAlignment="Top" />
-                    <Button Content="Test" Height="23" HorizontalAlignment="Right" Margin="0,113,17,0" Name="btnTestTvSeries" VerticalAlignment="Top" Width="75" Click="btnTestTvSeries_Click" />
-
-                    <Label Content="Music" HorizontalAlignment="Left" Margin="6,142,0,131" Name="lblMusicDb" />
-                    <Button Content="Browse" Height="23" HorizontalAlignment="Right" Margin="0,143,135,0" Name="btnBrowseMusic" VerticalAlignment="Top" Width="46" Click="btnBrowseMusic_Click" />
-                    <TextBox Height="23" Margin="135,143,187,0" Name="txtDbLocationMusic" VerticalAlignment="Top" />
-                    <Button Content="Test" Height="23" HorizontalAlignment="Right" Margin="0,142,17,0" Name="btnTestMusic" VerticalAlignment="Top" Width="75" Click="btnTestMusic_Click" />
-
-                    <Label Content="Pictures" Height="28" HorizontalAlignment="Left" Margin="6,171,0,0" Name="lblPicturesDb" VerticalAlignment="Top" />
-                    <Button Content="Browse" Height="23" HorizontalAlignment="Right" Margin="0,172,135,0" Name="btnBrowsePictures" VerticalAlignment="Top" Width="46" Click="btnBrowsePictures_Click" />
-                    <TextBox Height="23" Margin="135,172,187,0" Name="txtDbLocationPictures" VerticalAlignment="Top" />
-                    <Button Content="Test" Height="23" HorizontalAlignment="Right" Margin="0,171,17,0" Name="btnTestPictures" VerticalAlignment="Top" Width="75" Click="btnTestPictures_Click" />
-                    <Label Content="MediaPortal Database Locations" Height="28" Margin="149,14,0,0" Name="label8" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190" FontWeight="Bold" />
-                    <Image Height="43" HorizontalAlignment="Left" Margin="23,6,0,0" Name="image1" Stretch="Uniform" VerticalAlignment="Top" Width="58"  StretchDirection="Both" />
+            <TabItem Header="Plugin Config" Width="140" >
+                <Grid>
+                    <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,11,12,0" Name="cbPluginConfigs" VerticalAlignment="Top" Width="402" ItemsSource="{Binding}" SelectionChanged="cbPluginConfigs_SelectionChanged" />
+                    <Label Content="Plugins" Height="28" HorizontalAlignment="Left" Margin="7,9,0,0" Name="label5" VerticalAlignment="Top" Width="61" />
+                    <my:SectionPluginSettings Margin="7,43,12,7" x:Name="sectionPluginSettings" Background="{x:Null}" />
                 </Grid>
             </TabItem>
             <!--<TabItem Header="Paths"></TabItem>-->

@@ -17,6 +17,8 @@ namespace MPExtended.Services.MediaAccessService
 
     public class PluginConfigItem
     {
+        private System.Xml.Linq.XElement n;
+
         public PluginConfigItem()
         {
             ConfigType = MediaAccessService.ConfigType.Text;
@@ -26,6 +28,11 @@ namespace MPExtended.Services.MediaAccessService
         {
             ConfigValue = value;
 
+            SetType(type);
+        }
+
+        private void SetType(string type)
+        {
             if (type != null)
             {
                 if (type.Equals("file"))
@@ -51,11 +58,24 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
+        public PluginConfigItem(System.Xml.Linq.XElement n)
+        {
+            this.ConfigValue = n.Value;
+            SetType((String)n.Attribute("type"));
+            DisplayName = (String)n.Attribute("displayname");
+            this.n = n;
+        }
+
 
         /// <summary>
         /// Value of the config item
         /// </summary>
         public String ConfigValue { get; set; }
+
+        /// <summary>
+        /// Display name of this config item
+        /// </summary>
+        public String DisplayName { get; set; }
 
         /// <summary>
         /// Type of the config item

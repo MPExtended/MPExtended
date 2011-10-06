@@ -34,6 +34,8 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
+using System.Xml.Linq;
+using MPExtended.Services.MediaAccessService;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -51,6 +53,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private static IWebStreamingService _webStreamingService;
         private Timer activeSessionTimer = new Timer();
         private InstallationType mInstallationType = Installation.GetInstallationType();
+
+        Dictionary<String, Dictionary<String, PluginConfigItem>> PluginConfigurations { get; set; }
 
         BackgroundWorker workerActiveSessions = new BackgroundWorker();
         BackgroundWorker workerMusic = new BackgroundWorker();
@@ -86,6 +90,34 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 MessageBox.Show("MPExtended service is not installed! Please install the latest version.");
                 return;
             }
+
+
+            //Load the MediaAccess.xml configuration file
+            PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
+            try
+            {
+                var config = XElement.Load(Configuration.GetPath("MediaAccess.xml")).Element("pluginConfiguration").Elements("plugin");
+
+                foreach (var p in config)
+                {
+                    Dictionary<String, PluginConfigItem> props = new Dictionary<String, PluginConfigItem>();
+                    foreach (var p2 in p.Descendants())
+                    {
+                        props.Add(p2.Name.LocalName, new PluginConfigItem(p2));
+                        //.ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
+                    }
+                    PluginConfigurations.Add(p.Attribute("name").Value, props);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while loading plugin config");
+                Log.Error(ex.ToString());
+            }
+
+            cbPluginConfigs.DataContext = PluginConfigurations;
+            cbPluginConfigs.DisplayMemberPath = "Key";
+            cbPluginConfigs.SelectedValuePath = "Value";
 
             if (!isServiceAvailable(mServiceController))
             {
@@ -123,12 +155,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void LoadLogFiles(string fileName)
         {
-            return;
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName)))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0}.log", fileName)))
             {
                 try
                 {
-                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0].log", fileName));
+                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0}.log", fileName));
                     string input = null;
                     while ((input = re.ReadLine()) != null)
                     {
@@ -136,8 +167,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     }
                 }
                 catch (Exception ex)
-                { 
-                    ExceptionMessageBox(ex.Message); 
+                {
+                    ExceptionMessageBox(ex.Message);
                 }
             }
         }
@@ -349,24 +380,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TabDatabases.IsSelected)
-            {
-                /*DBLocations dbLocations = Configuration.GetMPDbLocations();
-                txtDbLocationMopi.Text = dbLocations.MovingPictures;
-                txtDbLocationMopi.CaretIndex = txtDbLocationMopi.Text.Length;
-
-                txtDbLocationMusic.Text = dbLocations.Music;
-                txtDbLocationMusic.CaretIndex = txtDbLocationMusic.Text.Length;
-
-                txtDbLocationVideos.Text = dbLocations.Videos;
-                txtDbLocationVideos.CaretIndex = txtDbLocationVideos.Text.Length;
-
-                txtDbLocationTvSeries.Text = dbLocations.TvSeries;
-                txtDbLocationTvSeries.CaretIndex = txtDbLocationTvSeries.Text.Length;
-
-                txtDbLocationPictures.Text = dbLocations.Pictures;
-                txtDbLocationPictures.CaretIndex = txtDbLocationPictures.Text.Length;*/
-            }
+            
 
         }
 
@@ -551,6 +565,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private static void ExceptionMessageBox(string exMessage)
         {
             MessageBox.Show("An unexpected error occured please file an issue on mpextended.codeplex.com with the service's log files attached", exMessage);
+        }
+
+        private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Dictionary<String, PluginConfigItem> selected = (Dictionary<String, PluginConfigItem>)cbPluginConfigs.SelectedValue;
+            sectionPluginSettings.SetPluginConfig(selected);
         }
     }
 }

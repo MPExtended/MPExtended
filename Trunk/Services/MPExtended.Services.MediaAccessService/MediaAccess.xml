@@ -10,27 +10,27 @@
   
   <pluginConfiguration>
     <plugin name="MPExtended.PlugIns.MAS.MPTVSeries">
-      <database type="file">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
-      <banner type="folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
-      <fanart type="folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
+      <banner type="folder" displayname="Banner Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
+      <fanart type="folder" displayname="Fanart Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPMovingPictures">
-      <database type="file">C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPMusic">
-      <database type="file">C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPPictures">
-      <database type="file">C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</database>
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\PictureDatabase.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.FSPictures">
-      <root type="folder">E:\Pictures</root>
+      <root type="folder" displayname="Root Folder">E:\Pictures</root>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPVideos">
-      <database type="file">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
     <plugin name="MPExtended.PlugIns.MAS.MPShares">
-      <config type="file">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
+      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
     </plugin>
   </pluginConfiguration>
   
