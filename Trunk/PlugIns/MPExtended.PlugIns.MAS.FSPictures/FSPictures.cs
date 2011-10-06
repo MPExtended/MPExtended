@@ -33,6 +33,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();
         List<WebPictureDetailed> picturesDetailed = new List<WebPictureDetailed>();
         Dictionary<string, WebCategory> categories = new Dictionary<string, WebCategory>();
+        Dictionary<string, WebCategory> subCategories = new Dictionary<string, WebCategory>();
 
         private IPluginData data;
         private string[] extensions = { ".jpg", ".png", ".bmp" };
@@ -74,7 +75,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             var root = new DirectoryInfo(data.Configuration["root"].ConfigValue);
 
             categories.Add(EncodeTo64(root.FullName), new WebCategory() { Title = root.Name, Id = EncodeTo64(root.FullName) });
-            foreach (var dir in  root.EnumerateDirectories())
+            foreach (var dir in root.EnumerateDirectories())
             {
                 categories.Add(EncodeTo64(dir.FullName), new WebCategory() { Title = dir.Name, Id = EncodeTo64(dir.FullName) });
             }
@@ -85,7 +86,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             List<WebPictureBasic> list = new List<WebPictureBasic>();
             WebCategory dir;
-            categories.TryGetValue(id,out dir);
+            categories.TryGetValue(id, out dir);
             foreach (string strFile in Directory.GetFiles(DecodeFrom64(dir.Id)))
             {
                 var file = new FileInfo(strFile);
@@ -109,6 +110,28 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     picturesBasic.Add(GetWebPictureDetailed(file.FullName));
                 }
+            }
+            return list;
+        }
+        public IEnumerable<WebCategory> GetSubCategoriesBasicById(string categoryId)
+        {
+            List<WebCategory> list = new List<WebCategory>();
+            WebCategory dir;
+             
+            categories.TryGetValue(categoryId, out dir);
+            try
+            {
+            var root = new DirectoryInfo(DecodeFrom64(dir.Id));
+            foreach (var folder in root.EnumerateDirectories())
+            {
+                if (!subCategories.ContainsKey(EncodeTo64(folder.FullName)))
+                {
+                    subCategories.Add(EncodeTo64(folder.FullName), new WebCategory() { Title = folder.Name, Id = EncodeTo64(folder.FullName) });
+                }
+            }            }
+            catch (Exception ex)
+            {
+                data.Log.Warn("exception in GetSubCategoriesBasicById");
             }
             return list;
         }
@@ -240,15 +263,5 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
             return returnValue;
         }
-
-
-        public IEnumerable<WebCategory> GetSubCategoriesBasicById(string categoryId)
-        {
-            throw new NotImplementedException();
-        }
     }
-
-
-
-
 }
