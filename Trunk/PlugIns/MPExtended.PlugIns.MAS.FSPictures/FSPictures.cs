@@ -86,7 +86,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             List<WebPictureBasic> list = new List<WebPictureBasic>();
             WebCategory dir;
-            categories.TryGetValue(id, out dir);
+            if (!categories.TryGetValue(id, out dir))
+            {
+                subCategories.TryGetValue(id, out dir);
+            }
             foreach (string strFile in Directory.GetFiles(DecodeFrom64(dir.Id)))
             {
                 var file = new FileInfo(strFile);
@@ -102,7 +105,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             List<WebPictureDetailed> list = new List<WebPictureDetailed>();
             WebCategory dir;
-            categories.TryGetValue(id, out dir);
+            if (!categories.TryGetValue(id, out dir))
+            {
+                subCategories.TryGetValue(id, out dir);
+            }
             foreach (string strFile in Directory.GetFiles(DecodeFrom64(dir.Id)))
             {
                 var file = new FileInfo(strFile);
@@ -117,8 +123,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             List<WebCategory> list = new List<WebCategory>();
             WebCategory dir;
-             
-            categories.TryGetValue(categoryId, out dir);
+            if (!categories.TryGetValue(id, out dir))
+            {
+                subCategories.TryGetValue(id, out dir);
+            }
             try
             {
             var root = new DirectoryInfo(DecodeFrom64(dir.Id));
