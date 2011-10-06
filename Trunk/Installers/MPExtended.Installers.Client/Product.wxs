@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <!--
+  Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+  
+  MPExtended is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+  
+  MPExtended is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+  -->
+  <?define ServiceType="Client" ?>
+  <?define ServiceName="MPExtended Client Services" ?>
+  <?define ServiceProjectDir="$(var.MPExtended.ServiceHosts.Client.TargetDir)"?>
+  <?define ServiceAssemblyName="MPExtended.ServiceHosts.Client"?>
+  <?define ServiceDescription="Offers remote access to MediaPortal databases and shares"?>
+  <?define InstallDirectory="Client Service" ?>
+  
+  <Product
+    Id="faf9b821-ef2f-450d-a724-cac899e29aa2"
+    UpgradeCode="2500da7a-2c31-4f65-be68-be286b9ee380"
+    Name="$(var.ServiceName)"
+    Language="1033"
+    Version="!(bind.FileVersion.MPExtended.Services.StreamingService.dll)"
+    Manufacturer="MPExtended">
+    <Package Manufacturer="MPExtended" InstallerVersion="200" Compressed="yes" />
+
+    <?include ../General.wxi ?>
+    
+    <!-- Reference components -->
+    <Feature Id="$(var.ServiceAssemblyName)" Level="1" Title="$(var.ServiceName)">
+      <ComponentGroupRef Id="Component_MAS" />
+      <ComponentGroupRef Id="Component_WSS" />
+      <ComponentGroupRef Id="Component_USS" />
+      <ComponentGroupRef Id="Component_Configurator" />
+      <ComponentGroupRef Id="Component_Streaming" />
+      <ComponentRef Id="Component_Service" />
+    </Feature>
+  </Product>
+</Wix>
