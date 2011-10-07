@@ -33,10 +33,16 @@ along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
   <!-- Directory structure -->
   <Directory Id="TARGETDIR" Name="SourceDir">
     <Directory Id="ProgramFilesFolder">
-      <Directory Id="InstallDirectory" Name="$(var.InstallDirectory)">
-        <Directory Id="StreamingDirectory" Name="Streaming">
-          
+      <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
+        <Directory Id="InstallDirectory" Name="$(var.InstallDirectory)">
+          <Directory Id="StreamingDirectory" Name="Streaming">
+          </Directory>
         </Directory>
+      </Directory>
+    </Directory>
+
+    <Directory Id="CommonAppDataFolder">
+      <Directory Id="ConfigDirectory" Name="MPExtended">
       </Directory>
     </Directory>
   </Directory>
@@ -52,15 +58,27 @@ along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
         Id="InstallService"
         Type="ownProcess"
         Vital="yes"
-        Name="$(var.ServiceName)"
-        DisplayName="$(var.ServiceName)"
+        Name="MPExtended $(var.ServiceType) Service"
+        DisplayName="MPExtended $(var.ServiceType) Service"
         Description="$(var.ServiceDescription)"
         Start="auto"
         ErrorControl="ignore"
         Interactive="no"
         Account="LocalSystem" />
-      <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
-      <fire:FirewallException IgnoreFailure="yes" Id="FirewallException" Name="$(var.ServiceName)" Scope="localSubnet" Protocol="tcp" Program="[#MainService]"/>
+      <ServiceControl 
+        Id="StartService" 
+        Start="install" 
+        Stop="both" 
+        Remove="uninstall"
+        Name="MPExtended $(var.ServiceType) Service" 
+        Wait="yes" />
+      <fire:FirewallException 
+        IgnoreFailure="yes" 
+        Id="FirewallException" 
+        Name="MPExtended $(var.ServiceType) Service"
+        Scope="localSubnet" 
+        Protocol="tcp" 
+        Program="[#MainService]" />
     </Component>
   </DirectoryRef>
 </Include>

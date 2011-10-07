@@ -18,37 +18,79 @@
   You should have received a copy of the GNU General Public License
   along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
   -->
-  <?define ServiceType="SingleSeat" ?>
-  <?define ServiceProjectDir="$(var.MPExtended.ServiceHosts.SingleSeat.TargetDir)"?>
-  <?define ServiceAssemblyName="MPExtended.ServiceHosts.SingleSeat"?>
-  <?define ServiceDescription="Offers remote access to MediaPortal TV Server, databases and shares" ?>
-  <?define InstallDirectory="SingleSeat Service" ?>
-  
   <Product
-    Id="13b8d36a-8534-4402-81d7-196d0054cb5b"
-    UpgradeCode="77a3282a-2b29-4b6f-bf6e-c7df725a6194"
-    Name="MPExtended $(var.ServiceType) Service"
+    Id="fdc7ed25-1683-41f3-9a88-3dcabd2d916d"
+    UpgradeCode="21ae5680-f56d-4bb6-8835-87b5081b156d"
+    Name="MPExtended Service"
     Language="1033"
     Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="200" Compressed="yes" />
 
-    <?include ../General.wxi ?>
-    
-    <!-- Reference components -->
-    <!-- OLD:
-    <Feature Id="$(var.ServiceAssemblyName)" Level="1" Title="$(var.ServiceName)">
-      <ComponentGroupRef Id="Component_General" />
-      <ComponentGroupRef Id="Component_MAS" />
-      <ComponentGroupRef Id="Component_TAS" />
-      <ComponentGroupRef Id="Component_WSS" />
-      <ComponentGroupRef Id="Component_USS" />
-      <ComponentGroupRef Id="Component_Configurator" />
-      <ComponentGroupRef Id="Component_Streaming" />
-      <ComponentRef Id="Component_Service" />
-    </Feature>
-    -->
-    
+    <!-- Project general -->
+    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
+
+    <!-- TODO: do we really want to disallow downgrades? -->
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+
+    <!-- Require .net 4 -->
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <!-- Directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
+          <Directory Id="InstallDirectory" Name="Service">
+            <Directory Id="StreamingDirectory" Name="Streaming">
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="CommonAppDataFolder">
+        <Directory Id="ConfigDirectory" Name="MPExtended">
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- Service binaries -->
+    <DirectoryRef Id="InstallDirectory">
+      <Component Id="Component_Service" Guid="bec0610f-43c4-4a1d-840b-6beeb1259a62">
+        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\MPExtended.Services.WindowsServiceHost.exe" KeyPath="yes" Id="MainService"/>
+        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\MPExtended.Services.WindowsServiceHost.exe.config" />
+        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\NLog.config" />
+
+        <ServiceInstall
+          Id="InstallService"
+          Type="ownProcess"
+          Vital="yes"
+          Name="MPExtended Service"
+          DisplayName="MPExtended Service"
+          Description="Offers remote access to MediaPortal"
+          Start="auto"
+          ErrorControl="ignore"
+          Interactive="no"
+          Account="LocalSystem" />
+        <ServiceControl
+          Id="StartService"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Name="MPExtended Service"
+          Wait="yes" />
+        <fire:FirewallException
+          IgnoreFailure="yes"
+          Id="FirewallException"
+          Name="MPExtended Service"
+          Scope="localSubnet"
+          Protocol="tcp"
+          Program="[#MainService]" />
+      </Component>
+    </DirectoryRef>
+
     <!-- User interface -->
     <UI>
       <!-- Based upon WiX source code. -->
@@ -68,7 +110,7 @@
       <DialogRef Id="ResumeDlg" />
       <DialogRef Id="UserExit" />
 
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomizeDlg">NOT Installed</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="SetupTypeDlg">NOT Installed AND NOT PATCH</Publish>
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
 
       <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
@@ -83,19 +125,21 @@
       <Publish Dialog="SetupTypeDlg" Control="CustomButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
       <Publish Dialog="SetupTypeDlg" Control="CompleteButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
 
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="SetupTypeDlg" Order="2">NOT Installed</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">WixUI_InstallMode = "Change"</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="SetupTypeDlg" Order="2">WixUI_InstallMode = "InstallCustom"</Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
 
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">NOT Installed OR WixUI_InstallMode = "Change"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="3">Installed AND PATCH</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">WixUI_InstallMode = "InstallCustom"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="SetupTypeDlg" Order="2">WixUI_InstallMode = "InstallTypical" OR WixUI_InstallMode = "InstallComplete"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="3">WixUI_InstallMode = "Change"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="4">WixUI_InstallMode = "Repair" OR WixUI_InstallMode = "Remove"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">WixUI_InstallMode = "Update"</Publish>
 
       <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
     </UI>
     <UIRef Id="WixUI_Common" />
     <UIRef Id="WixUI_ErrorProgressText" />
-    
+
     <!-- Reference components -->
     <Feature Id="Feature_Both" Display="expand" Level="1" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
              Title="MPExtended services"
@@ -106,13 +150,13 @@
       <ComponentRef Id="Component_Service" />
 
       <Feature Id="Feature_Client"  Level="1" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Client service" 
+               Title="Client service"
                Description="Access to the MediaPortal media databases and shares. Select if you've the MediaPortal UI installed.">
         <ComponentGroupRef Id="Component_MAS"/>
       </Feature>
 
       <Feature Id="Feature_Server" Level="1" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Server service" 
+               Title="Server service"
                Description="Access to the MediaPortal TV Server. Select only if you have the MediaPortal TV Server installed.">
         <ComponentGroupRef Id="Component_TAS"/>
       </Feature>

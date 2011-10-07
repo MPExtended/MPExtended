@@ -53,6 +53,22 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
+      <Name>MPExtended.Libraries.General</Name>
+      <Project>{98732ef2-81bd-4194-b718-db356b03306f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+      <Name>MPExtended.Libraries.ServiceLib</Name>
+      <Project>{cea12075-6dd2-442d-96f8-88a77edcc16d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\PlugIns\MPExtended.PlugIns.MAS.FSPictures\MPExtended.PlugIns.MAS.FSPictures.csproj">
       <Name>MPExtended.PlugIns.MAS.FSPictures</Name>
       <Project>{d08e4b27-e77c-4258-b050-333d42aa7362}</Project>

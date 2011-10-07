@@ -16,7 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
   -->
-  
+
   <!-- General stuff -->
   <Fragment>
     <DirectoryRef Id="InstallDirectory">
@@ -39,13 +39,19 @@
       <ComponentRef Id="Component_General_Config"/>
     </ComponentGroup>
   </Fragment>
-  
+
   <!-- MAS -->
   <Fragment>
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_MAS_Binaries" Guid="61a8f10a-2010-46d2-be8e-1e84fb959b89">
         <!-- interfaces dll and libraries are installed by WSS -->
         <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
+      </Component>
+
+      <Component Id="Component_MAS_Registry" Guid="c9e2ad15-09dd-4f8f-b3be-c24a8cb01379">
+        <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="MASInstalled" Value="true" />
+        </RegistryKey>
       </Component>
 
       <Directory Id="ExtensionDirectory" Name="Extensions">
@@ -76,9 +82,10 @@
       <ComponentRef Id="Component_MAS_Binaries"/>
       <ComponentRef Id="Component_MAS_Extensions"/>
       <ComponentRef Id="Component_MAS_Config"/>
+      <ComponentRef Id="Component_MAS_Registry"/>
     </ComponentGroup>
   </Fragment>
-  
+
   <!-- TAS -->
   <Fragment>
     <DirectoryRef Id="InstallDirectory">
@@ -97,14 +104,21 @@
         <!-- interfaces dll and libraries are installed by WSS -->
         <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.dll" />
       </Component>
+      
+      <Component Id="Component_TAS_Registry" Guid="ee36481d-d196-40b5-bac4-0a6100811738">
+        <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="TASInstalled" Value="true" />
+        </RegistryKey>
+      </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="Component_TAS">
       <ComponentRef Id="Component_TAS_Binaries"/>
+      <ComponentRef Id="Component_TAS_Registry"/>
     </ComponentGroup>
   </Fragment>
-  
+
   <!-- WSS -->
   <Fragment>
     <DirectoryRef Id="InstallDirectory">

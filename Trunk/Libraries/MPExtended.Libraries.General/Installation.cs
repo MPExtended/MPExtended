@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
@@ -31,6 +32,24 @@ namespace MPExtended.Libraries.General
 
     public static class Installation
     {
+        public static bool IsTASInstalled
+        {
+            get
+            {
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
+                return key.GetValue("TASInstalled").ToString() == "true";
+            }
+        }
+
+        public static bool IsMASInstalled
+        {
+            get
+            {
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
+                return key.GetValue("MASInstalled").ToString() == "true";
+            }
+        }
+
         public static bool HasLocalTAS
         {
             get

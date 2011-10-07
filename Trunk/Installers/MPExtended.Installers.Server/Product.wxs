@@ -30,7 +30,7 @@
     UpgradeCode="b2aba63e-2197-4c28-b114-c4b0c49efc7c"
     Name="$(var.ServiceName)"
     Language="1033"
-    Version="!(bind.FileVersion.MPExtended.Services.StreamingService.dll)"
+    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="200" Compressed="yes" />
 
@@ -38,6 +38,7 @@
     
     <!-- Reference components -->
     <Feature Id="$(var.ServiceAssemblyName)" Level="1" Title="$(var.ServiceName)">
+      <ComponentGroupRef Id="Component_General" />
       <ComponentGroupRef Id="Component_TAS" />
       <ComponentGroupRef Id="Component_WSS" />
       <ComponentGroupRef Id="Component_USS" />
