@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Win32;
 using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.UserSessionService.Interfaces;
@@ -47,12 +48,17 @@ namespace MPExtended.Services.UserSessionService
 
         public UserSessionService()
         {
-            // read config file
-            MPPath =
-                XElement.Load(Configuration.GetPath("UserSessionService.xml"))
-                .Element("mediaportal")
-                .Value
-                .Replace("%ProgramFiles%", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+            try
+            {
+                var key = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal");
+                var value = key.GetValue("InstallPath");
+                MPPath = Path.Combine(value.ToString(), "MediaPortal.exe");
+            }
+            catch (Exception e)
+            {
+                Log.Error("Failed to read MP installation path from registry", e);
+                MPPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal", "MediaPortal.exe");
+            }
         }
 
         public WebResult TestConnection()

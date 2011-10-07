@@ -161,14 +161,14 @@
       <ComponentGroupRef Id="Component_Streaming" />
       <ComponentRef Id="Component_Service" />
 
-      <Feature Id="Feature_Client"  Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Client"  Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
                Title="Client service"
                Description="Access to the MediaPortal media databases and shares. Select if you've the MediaPortal UI installed.">
         <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "Client"</Condition>
         <ComponentGroupRef Id="Component_MAS"/>
       </Feature>
 
-      <Feature Id="Feature_Server" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Server" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
                Title="Server service"
                Description="Access to the MediaPortal TV Server. Select only if you have the MediaPortal TV Server installed.">
         <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "TV"</Condition>

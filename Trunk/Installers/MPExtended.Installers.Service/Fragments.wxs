@@ -156,15 +156,7 @@
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="ConfigDirectory">
-      <Component Id="Component_USS_Config" Guid="42d34477-0827-4dea-8d41-c2de2a048a99">
-        <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\UserSessionService.xml" />
-      </Component>
-    </DirectoryRef>
-  </Fragment>
-  <Fragment>
     <ComponentGroup Id="Component_USS">
-      <ComponentRef Id="Component_USS_Config"/>
       <ComponentRef Id="Component_USS_Binaries"/>
     </ComponentGroup>
   </Fragment>
