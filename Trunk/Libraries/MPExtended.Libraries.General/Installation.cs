@@ -36,8 +36,11 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
-                return key.GetValue("TASInstalled").ToString() == "true";
+#if DEBUG
+                return true;
+#else
+                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", "TASInstalled");
+#endif
             }
         }
 
@@ -45,8 +48,11 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
-                return key.GetValue("MASInstalled").ToString() == "true";
+#if DEBUG
+                return true;
+#else
+                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", "MASInstalled");
+#endif
             }
         }
 
@@ -85,6 +91,23 @@ namespace MPExtended.Libraries.General
         public static InstallationType GetInstallationType()
         {
             return InstallationType.Singleseat;
+        }
+
+        private static bool CheckRegistryKey(RegistryKey reg, string key, string name)
+        {
+            RegistryKey regkey = reg.OpenSubKey(key);
+            if (regkey == null)
+            {
+                return false;
+            }
+
+            object value = regkey.GetValue(name);
+            if (value == null)
+            {
+                return false;
+            }
+
+            return value.ToString() == "true";
         }
     }
 }

@@ -28,14 +28,37 @@ namespace MPExtended.Services.WindowsServiceHost
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-			{ 
-				new CoreService() 
-			};
-            ServiceBase.Run(ServicesToRun);
+            bool runAsService = true;
+            if (args.Length > 0 && args[0] == "/noservice")
+                runAsService = false;
+
+            if (runAsService)
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[] 
+			    { 
+    				new CoreService() 
+			    };
+                ServiceBase.Run(ServicesToRun);
+            }
+            else
+            {
+                System.Threading.Thread.Sleep(15000);
+
+                Console.WriteLine("Starting WCF host");
+                WCFHost host = new WCFHost();
+                host.Start();
+
+                while (true)
+                {
+                    System.Threading.Thread.Sleep(60000);
+                }
+
+                Console.WriteLine("Stopping WCF host");
+                host.Stop();
+            }
         }
     }
 }

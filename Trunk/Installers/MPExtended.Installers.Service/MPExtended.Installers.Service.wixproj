@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="SetupType.wxs" />
     <Compile Include="StreamBinaries.wxs" />
     <Compile Include="Fragments.wxs" />
   </ItemGroup>
