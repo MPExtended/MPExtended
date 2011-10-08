@@ -47,6 +47,7 @@ namespace MPExtended.ServiceHosts.Hosting
                 try
                 {
                     Log.Debug("Loading service {0}", srv.Name);
+                    Log.Trace("Assembly path: {0}", srv.AssemblyPath);
                     if (types.ContainsKey(srv.Name))
                     {
                         hosts.Add(new ServiceHost(types[srv.Name]));

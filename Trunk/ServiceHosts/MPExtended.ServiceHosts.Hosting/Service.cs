@@ -39,7 +39,8 @@ namespace MPExtended.ServiceHosts.Hosting
                 string fullpath = Path.GetFullPath(Path.Combine(solutionRoot, "Services", Assembly, "bin", "Debug", Assembly + ".dll"));
                 return fullpath;
 #else
-                return Assembly + ".dll";
+                string ourDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                return Path.GetFullPath(Path.Combine(ourDirectory, Assembly + ".dll"));
 #endif
             }
         }
