@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MPExtended.Services.MediaAccessService;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

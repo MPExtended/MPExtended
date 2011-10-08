@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="639"
+      d:DesignHeight="330" d:DesignWidth="639"
 	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
     <Grid>
@@ -62,7 +62,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                </Grid>
+                 </Grid>
             </TabItem>
             <TabItem Header="Plugin Config" Width="140" >
                 <Grid>
@@ -105,7 +105,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="12,0,0,65" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="119" />
-        <Button Content="Start" Height="23" Name="btnStartStopService" Width="75" Margin="31,0,0,12" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        <Image HorizontalAlignment="Left" Margin="0,0,0,22" Name="image1" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Images/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="Start" Height="23" Name="btnStartStopService" Width="105" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,0,0,4" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="6,0,0,137" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="119" FontWeight="Bold" Foreground="#FF009600" />
+
     </Grid>
 </Page>

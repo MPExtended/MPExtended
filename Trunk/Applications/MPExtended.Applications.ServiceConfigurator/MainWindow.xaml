@@ -32,6 +32,9 @@
                     <MenuItem Name="MenuPowermodes" Header="Powermodes">
                         <MenuItem Name="MenuPowermodeLogoff" Header="LogOff" Click="MenuPowermodeLogoff_Click"/>
                         <MenuItem Name="MenuPowermodeSuspend" Header="Suspend" Click="MenuPowermodeSuspend_Click"/>
+                        <MenuItem Name="MenuPowermodeHibernate" Header="Hibernate" Click="MenuPowermodeHibernate_Click"/>
+                        <MenuItem Name="MenuPowermodeReboot" Header="Reboot" Click="MenuPowermodeReboot_Click"/>
+                        <MenuItem Name="MenuPowermodeShutdown" Header="Shutdown" Click="MenuPowermodeShutdown_Click"/>
                     </MenuItem>
                     <MenuItem Name="MenuExit" Header="Exit"  Click="MenuExit_Click"/>
                 </ContextMenu>

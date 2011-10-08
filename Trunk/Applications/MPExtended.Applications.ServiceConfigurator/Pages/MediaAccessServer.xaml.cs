@@ -36,6 +36,8 @@ using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using System.Xml.Linq;
 using MPExtended.Services.MediaAccessService;
+using System.Diagnostics;
+using System.Security.Principal;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -69,26 +71,25 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             try
             {
-                switch (mInstallationType)
-                {
-                    case InstallationType.Singleseat:
-                        mServiceController = new ServiceController("MPExtended SingleSeat Service");
-                        LoadLogFiles("SingleSeat");
-                        break;
-                    case InstallationType.Server:
-                        mServiceController = new ServiceController("MPExtended Server Service");
-                        LoadLogFiles("Server");
-                        break;
-                    case InstallationType.Client:
-                        mServiceController = new ServiceController("MPExtended Client Service");
-                        LoadLogFiles("Client");
-                        break;
-                }
+                mServiceController = new ServiceController("MPExtended Service");
             }
             catch (InvalidOperationException)
             {
                 MessageBox.Show("MPExtended service is not installed! Please install the latest version.");
                 return;
+            }
+
+            switch (mInstallationType)
+            {
+                case InstallationType.Singleseat:
+                    LoadLogFiles("SingleSeat");
+                    break;
+                case InstallationType.Server:
+                    LoadLogFiles("Server");
+                    break;
+                case InstallationType.Client:
+                    LoadLogFiles("Client");
+                    break;
             }
 
 
@@ -145,7 +146,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             foreach (ServiceController c in controllers)
             {
-                if (c.Equals(_controller))
+                if (c.ServiceName.Equals(_controller.ServiceName))
                 {
                     return true;
                 }
@@ -380,7 +381,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
 
         }
 
@@ -409,18 +410,54 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnStartStopService_Click(object sender, RoutedEventArgs e)
         {
-            switch (mServiceController.Status)
+            if (!IsAdmin())
             {
-                case ServiceControllerStatus.Stopped:
-                    mServiceController.Start();
-                    break;
-                case ServiceControllerStatus.Running:
-                    mServiceController.Stop();
-                    break;
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.FileName = "MPExtended.Applications.UacServiceHandler.exe";
+                info.UseShellExecute = true;
+                info.Verb = "runas"; // Provides Run as Administrator
+                
+                switch (mServiceController.Status)
+                {
+                    case ServiceControllerStatus.Stopped:
+                        info.Arguments = "start";
+                        break;
+                    case ServiceControllerStatus.Running:
+                        info.Arguments = "stop";
+                        break;
 
+                }
+
+                if (Process.Start(info) == null)
+                {
+                    // The user didn't accept the UAC prompt.
+                    MessageBox.Show("This action needs administrative rights");
+                }
+            }
+            else
+            {
+                switch (mServiceController.Status)
+                {
+                    case ServiceControllerStatus.Stopped:
+                        mServiceController.Start();
+                        break;
+                    case ServiceControllerStatus.Running:
+                        mServiceController.Stop();
+                        break;
+
+                }
             }
         }
 
+
+        static internal bool IsAdmin()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal p = new WindowsPrincipal(id);
+            return p.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+     
         private void btnBrowseVideos_Click(object sender, RoutedEventArgs e)
         {
             BrowseForDbLocation(DatabaseType.Videos);

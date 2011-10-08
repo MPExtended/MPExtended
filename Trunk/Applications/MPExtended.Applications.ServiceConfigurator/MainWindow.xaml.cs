@@ -142,6 +142,16 @@ namespace MPExtended.Applications.ServiceConfigurator
             HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }
 
+        private void MenuOpenConfigurator_Click(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+        }
+
+        private void TaskbarIcon_TrayLeftMouseUp(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+        }
+
         private void MenuPowermodeLogoff_Click(object sender, RoutedEventArgs e)
         {
             mUserSessionService.SetPowerMode(WebPowerMode.LogOff);
@@ -152,14 +162,19 @@ namespace MPExtended.Applications.ServiceConfigurator
             mUserSessionService.SetPowerMode(WebPowerMode.Suspend);
         }
 
-        private void TaskbarIcon_TrayLeftMouseUp(object sender, RoutedEventArgs e)
+        private void MenuPowermodeHibernate_Click(object sender, RoutedEventArgs e)
         {
-            this.Show();
+            mUserSessionService.SetPowerMode(WebPowerMode.Hibernate);
         }
 
-        private void MenuOpenConfigurator_Click(object sender, RoutedEventArgs e)
+        private void MenuPowermodeReboot_Click(object sender, RoutedEventArgs e)
         {
-            this.Show();
+            mUserSessionService.SetPowerMode(WebPowerMode.Reboot);
+        }
+
+        private void MenuPowermodeShutdown_Click(object sender, RoutedEventArgs e)
+        {
+            mUserSessionService.SetPowerMode(WebPowerMode.PowerOff);
         }
     }
 }
