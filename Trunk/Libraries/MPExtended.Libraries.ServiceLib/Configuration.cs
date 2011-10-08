@@ -34,7 +34,7 @@ namespace MPExtended.Libraries.ServiceLib
         {
             string basedir = "";
 #if DEBUG
-            basedir = AppDomain.CurrentDomain.BaseDirectory;
+            basedir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Config"));
 #else
             basedir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
 #endif

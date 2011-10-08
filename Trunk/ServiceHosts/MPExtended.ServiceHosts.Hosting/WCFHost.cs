@@ -25,37 +25,41 @@ using System.Threading;
 using System.Reflection;
 using MPExtended.Libraries.General;
 
-namespace MPExtended.Services.WindowsServiceHost
+namespace MPExtended.ServiceHosts.Hosting
 {
     internal class WCFHost
     {
-        private static List<Service> allServices = new List<Service>()
-        {
-            new Service("MPExtended.Services.MediaAccessService.MediaAccessService", "MPExtended.Services.MediaAccessService", Installation.IsMASInstalled),
-            new Service("MPExtended.Services.TVAccessService.TVAccessService", "MPExtended.Services.TVAccessService", Installation.IsTASInstalled),
-            new Service("MPExtended.Services.StreamingService.StreamingService", "MPExtended.Services.StreamingService", true),
-            new Service("MPExtended.Services.UserSessionService.UserSessionProxyService", "MPExtended.Services.UserSessionService", true)
-        };
-
         private List<ServiceHost> hosts = new List<ServiceHost>();
+        private Dictionary<string, Type> types = new Dictionary<string, Type>();
 
-        public void Start()
+        public void SetTypes(List<Type> passedList) 
         {
-            Log.Debug("MPExtended.Services.WindowsServiceHost starting...");
-            string ourDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Log.Trace("Using {0} as root directory", ourDirectory);
+            foreach (Type t in passedList)
+            {
+                types[t.FullName] = t;
+            }
+        }
 
-            foreach (Service srv in allServices.Where(x => x.IsActive))
+        public void Start(List<Service> availableServices)
+        {
+            foreach (Service srv in availableServices)
             {
                 try
                 {
                     Log.Debug("Loading service {0}", srv.Name);
-                    string path = Path.Combine(ourDirectory, srv.Assembly + ".dll");
-                    if (File.Exists(path))
+                    if (types.ContainsKey(srv.Name))
                     {
-                        Assembly asm = Assembly.LoadFrom(path);
+                        hosts.Add(new ServiceHost(types[srv.Name]));
+                    }
+                    else if (File.Exists(srv.AssemblyPath))
+                    {
+                        Assembly asm = Assembly.LoadFrom(srv.AssemblyPath);
                         Type t = asm.GetType(srv.Name);
                         hosts.Add(new ServiceHost(t));
+                    }
+                    else
+                    {
+                        Log.Debug("Service not installed");
                     }
                 }
                 catch (Exception ex)
@@ -75,8 +79,6 @@ namespace MPExtended.Services.WindowsServiceHost
                     Log.Error(String.Format("Failed to open host {0}", host.Description.ServiceType.Name), ex);
                 }
             }
-
-            Log.Info("MPExtended.Services.WindowsServiceHost started...");
         }
 
         public void Stop()

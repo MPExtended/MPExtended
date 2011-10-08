@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}</ProjectGuid>
+    <ProjectGuid>{15A4B23A-240B-481B-8C49-6021000A9206}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Services.ConsoleHost</RootNamespace>
-    <AssemblyName>MPExtended.Services.ConsoleHost</AssemblyName>
+    <RootNamespace>MPExtended.ServiceHosts.ConsoleHost</RootNamespace>
+    <AssemblyName>MPExtended.ServiceHosts.ConsoleHost</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -38,13 +38,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.3.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\Database\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,61 +55,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\GlobalVersion.cs">
-      <Link>Properties\GlobalVersion.cs</Link>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
-      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
-      <Name>MPExtended.Libraries.General</Name>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.ServiceLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
       <Project>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</Project>
       <Name>MPExtended.Services.MediaAccessService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
       <Name>MPExtended.Services.StreamingService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
       <Project>{DA449FFD-88D4-42FE-A83A-166C7097D825}</Project>
       <Name>MPExtended.Services.StreamingService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
       <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
       <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
       <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
       <Name>MPExtended.Services.TVAccessService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
       <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
       <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
+    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
       <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
       <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.ServiceHosts.Hosting\MPExtended.ServiceHosts.Hosting.csproj">
+      <Project>{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}</Project>
+      <Name>MPExtended.ServiceHosts.Hosting</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="..\MPExtended.ServiceHosts.Hosting\App.config">
+      <Link>App.config</Link>
+    </None>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\Services.xml">
-      <Link>Services.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -70,9 +70,9 @@
     <!-- Service binaries -->
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_Service" Guid="bec0610f-43c4-4a1d-840b-6beeb1259a62">
-        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\MPExtended.Services.WindowsServiceHost.exe" KeyPath="yes" Id="MainService"/>
-        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\MPExtended.Services.WindowsServiceHost.exe.config" />
-        <File Source="$(var.MPExtended.Services.WindowsServiceHost.TargetDir)\NLog.config" />
+        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe" KeyPath="yes" Id="MainService"/>
+        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe.config" />
+        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\NLog.config" />
 
         <ServiceInstall
           Id="InstallService"

@@ -17,17 +17,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using MPExtended.ServiceHosts.Hosting;
 
-namespace MPExtended.Services.WindowsServiceHost
+namespace MPExtended.ServiceHosts.CoreService
 {
     public partial class CoreService : ServiceBase
     {
-        private WCFHost host;
-        private Thread createHostsThread;
+        private MPExtendedHost host;
 
         public CoreService()
         {
@@ -37,21 +40,13 @@ namespace MPExtended.Services.WindowsServiceHost
 
         protected override void OnStart(string[] args)
         {
-            host = new WCFHost();
-
-            // Create them in a background thread to allow debugging
-            createHostsThread = new Thread(CreateHosts);
-            createHostsThread.Start();
-        }
-
-        private void CreateHosts()
-        {
-            host.Start();
+            host = new MPExtendedHost();
+            host.Open();
         }
 
         protected override void OnStop()
         {
-            host.Stop();
+            host.Close();
         }
     }
 }

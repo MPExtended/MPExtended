@@ -18,21 +18,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 
-namespace MPExtended.Services.WindowsServiceHost
+namespace MPExtended.ServiceHosts.CoreService
 {
-    internal class Service
+    static class Program
     {
-        public bool IsActive { get; set; }
-        public string Name { get; set; }
-        public string Assembly { get; set; }
-
-        public Service(string name, string assembly, bool isActive)
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        static void Main()
         {
-            this.Name = name;
-            this.Assembly = assembly;
-            this.IsActive = isActive;
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[] 
+			{ 
+				new CoreService() 
+			};
+            ServiceBase.Run(ServicesToRun);
         }
     }
 }

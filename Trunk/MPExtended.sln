@@ -4,6 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService.Interfaces", "Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj", "{26CCB930-9F47-4956-B7E9-5B36AC285663}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService", "Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj", "{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{D08E4B27-E77C-4258-B050-333D42AA7362} = {D08E4B27-E77C-4258-B050-333D42AA7362}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{064D2043-948C-4009-BE37-167B600698DF}"
 EndProject
@@ -164,17 +171,29 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.Serve
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.Service", "Installers\MPExtended.Installers.Service\MPExtended.Installers.Service.wixproj", "{73676C4A-CDDB-407A-AC81-15FD09E22243}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.WindowsServiceHost", "Services\MPExtended.Services.WindowsServiceHost\MPExtended.Services.WindowsServiceHost.csproj", "{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts", "Hosts", "{DE4C402A-C2A6-4FE5-A587-F6315BC6B2AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.ConsoleHost", "Services\MPExtended.Services.ConsoleHost\MPExtended.Services.ConsoleHost.csproj", "{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.UacServiceHandler", "Applications\MPExtended.Applications.UacServiceHandler\MPExtended.Applications.UacServiceHandler.csproj", "{CA3022CA-1E84-485C-8AB3-1116407E32CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Hosting", "ServiceHosts\MPExtended.ServiceHosts.Hosting\MPExtended.ServiceHosts.Hosting.csproj", "{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.CoreService", "ServiceHosts\MPExtended.ServiceHosts.CoreService\MPExtended.ServiceHosts.CoreService.csproj", "{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {26B34D42-CA8B-44BF-A282-E516E2C22588}
+		{5F3A6BBC-96D8-483B-A246-1DD5118465A9} = {5F3A6BBC-96D8-483B-A246-1DD5118465A9}
+		{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C} = {B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}
+		{DA449FFD-88D4-42FE-A83A-166C7097D825} = {DA449FFD-88D4-42FE-A83A-166C7097D825}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.ConsoleHost", "ServiceHosts\MPExtended.ServiceHosts.ConsoleHost\MPExtended.ServiceHosts.ConsoleHost.csproj", "{15A4B23A-240B-481B-8C49-6021000A9206}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {26B34D42-CA8B-44BF-A282-E516E2C22588}
+		{5F3A6BBC-96D8-483B-A246-1DD5118465A9} = {5F3A6BBC-96D8-483B-A246-1DD5118465A9}
+		{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C} = {B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}
+		{DA449FFD-88D4-42FE-A83A-166C7097D825} = {DA449FFD-88D4-42FE-A83A-166C7097D825}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 39
+		SccNumberOfProjects = 40
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs06
 		SccLocalPath0 = .
@@ -318,18 +337,22 @@ Global
 		SccProjectTopLevelParentUniqueName35 = MPExtended.sln
 		SccProjectName35 = Installers/MPExtended.Installers.Service
 		SccLocalPath35 = Installers\\MPExtended.Installers.Service
-		SccProjectUniqueName36 = Services\\MPExtended.Services.WindowsServiceHost\\MPExtended.Services.WindowsServiceHost.csproj
+		SccProjectUniqueName36 = Applications\\MPExtended.Applications.UacServiceHandler\\MPExtended.Applications.UacServiceHandler.csproj
 		SccProjectTopLevelParentUniqueName36 = MPExtended.sln
-		SccProjectName36 = Services/MPExtended.Services.WindowsServiceHost
-		SccLocalPath36 = Services\\MPExtended.Services.WindowsServiceHost
-		SccProjectUniqueName37 = Services\\MPExtended.Services.ConsoleHost\\MPExtended.Services.ConsoleHost.csproj
+		SccProjectName36 = Applications/MPExtended.Applications.UacServiceHandler
+		SccLocalPath36 = Applications\\MPExtended.Applications.UacServiceHandler
+		SccProjectUniqueName37 = ServiceHosts\\MPExtended.ServiceHosts.Hosting\\MPExtended.ServiceHosts.Hosting.csproj
 		SccProjectTopLevelParentUniqueName37 = MPExtended.sln
-		SccProjectName37 = Services/MPExtended.Services.ConsoleHost
-		SccLocalPath37 = Services\\MPExtended.Services.ConsoleHost
-		SccProjectUniqueName38 = Applications\\MPExtended.Applications.UacServiceHandler\\MPExtended.Applications.UacServiceHandler.csproj
+		SccProjectName37 = ServiceHosts/MPExtended.ServiceHosts.Hosting
+		SccLocalPath37 = ServiceHosts\\MPExtended.ServiceHosts.Hosting
+		SccProjectUniqueName38 = ServiceHosts\\MPExtended.ServiceHosts.CoreService\\MPExtended.ServiceHosts.CoreService.csproj
 		SccProjectTopLevelParentUniqueName38 = MPExtended.sln
-		SccProjectName38 = Applications/MPExtended.Applications.UacServiceHandler
-		SccLocalPath38 = Applications\\MPExtended.Applications.UacServiceHandler
+		SccProjectName38 = ServiceHosts/MPExtended.ServiceHosts.CoreService
+		SccLocalPath38 = ServiceHosts\\MPExtended.ServiceHosts.CoreService
+		SccProjectUniqueName39 = ServiceHosts\\MPExtended.ServiceHosts.ConsoleHost\\MPExtended.ServiceHosts.ConsoleHost.csproj
+		SccProjectTopLevelParentUniqueName39 = MPExtended.sln
+		SccProjectName39 = ServiceHosts/MPExtended.ServiceHosts.ConsoleHost
+		SccLocalPath39 = ServiceHosts\\MPExtended.ServiceHosts.ConsoleHost
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -686,26 +709,6 @@ Global
 		{73676C4A-CDDB-407A-AC81-15FD09E22243}.Release|Mixed Platforms.Build.0 = Release|x86
 		{73676C4A-CDDB-407A-AC81-15FD09E22243}.Release|x86.ActiveCfg = Release|x86
 		{73676C4A-CDDB-407A-AC81-15FD09E22243}.Release|x86.Build.0 = Release|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Debug|x86.ActiveCfg = Debug|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Debug|x86.Build.0 = Debug|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Release|Any CPU.ActiveCfg = Release|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Release|x86.ActiveCfg = Release|x86
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D}.Release|x86.Build.0 = Release|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Debug|x86.ActiveCfg = Debug|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Debug|x86.Build.0 = Debug|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Release|Any CPU.ActiveCfg = Release|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Release|Mixed Platforms.Build.0 = Release|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Release|x86.ActiveCfg = Release|x86
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1}.Release|x86.Build.0 = Release|x86
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -716,6 +719,36 @@ Global
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Release|Mixed Platforms.Build.0 = Release|x86
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Release|x86.ActiveCfg = Release|x86
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA}.Release|x86.Build.0 = Release|x86
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Debug|x86.ActiveCfg = Debug|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Debug|x86.Build.0 = Debug|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Release|Any CPU.ActiveCfg = Release|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Release|x86.ActiveCfg = Release|x86
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E}.Release|x86.Build.0 = Release|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Debug|x86.ActiveCfg = Debug|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Debug|x86.Build.0 = Debug|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Release|Any CPU.ActiveCfg = Release|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Release|Mixed Platforms.Build.0 = Release|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Release|x86.ActiveCfg = Release|x86
+		{15A4B23A-240B-481B-8C49-6021000A9206}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -725,7 +758,6 @@ Global
 		{A21BF20B-9C8D-468C-B829-D27CB76B0EF8} = {064D2043-948C-4009-BE37-167B600698DF}
 		{5759CDAD-BD6E-4388-ACB5-F4A2CA4B8D17} = {064D2043-948C-4009-BE37-167B600698DF}
 		{91B3A941-4E1F-4F9A-8005-1BA11303E829} = {064D2043-948C-4009-BE37-167B600698DF}
-		{DE4C402A-C2A6-4FE5-A587-F6315BC6B2AE} = {064D2043-948C-4009-BE37-167B600698DF}
 		{26CCB930-9F47-4956-B7E9-5B36AC285663} = {4A68B836-6611-4C76-AA66-F0DF5E5E036F}
 		{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C} = {4A68B836-6611-4C76-AA66-F0DF5E5E036F}
 		{DA449FFD-88D4-42FE-A83A-166C7097D825} = {A21BF20B-9C8D-468C-B829-D27CB76B0EF8}
@@ -734,6 +766,9 @@ Global
 		{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67} = {5759CDAD-BD6E-4388-ACB5-F4A2CA4B8D17}
 		{E23220C3-CC7E-4846-905E-A08D7C2968E4} = {33EA78E8-93C9-4801-A023-A5639993F342}
 		{C2857547-9ECB-45BD-8E98-996749CC43AC} = {33EA78E8-93C9-4801-A023-A5639993F342}
+		{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A} = {33EA78E8-93C9-4801-A023-A5639993F342}
+		{9A9D8C7D-13B9-48CA-95B2-D06CB3348B4E} = {33EA78E8-93C9-4801-A023-A5639993F342}
+		{15A4B23A-240B-481B-8C49-6021000A9206} = {33EA78E8-93C9-4801-A023-A5639993F342}
 		{3B1CE041-0FA3-4D71-9AA3-C6655B526259} = {E23220C3-CC7E-4846-905E-A08D7C2968E4}
 		{2FB38DB7-155E-4BA8-A292-2022DE08105A} = {E23220C3-CC7E-4846-905E-A08D7C2968E4}
 		{C3392739-1A84-4864-BB0C-F7CE02203B23} = {E23220C3-CC7E-4846-905E-A08D7C2968E4}
@@ -769,7 +804,5 @@ Global
 		{D08E4B27-E77C-4258-B050-333D42AA7362} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
 		{CC3525EA-0721-4299-991B-1C7E01A15E6B} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
-		{83F3DA64-FE16-4B9A-99B0-B6B1FEC2682D} = {DE4C402A-C2A6-4FE5-A587-F6315BC6B2AE}
-		{00CEBD3E-D850-47C9-A1CF-EF2BF3772FB1} = {DE4C402A-C2A6-4FE5-A587-F6315BC6B2AE}
 	EndGlobalSection
 EndGlobal

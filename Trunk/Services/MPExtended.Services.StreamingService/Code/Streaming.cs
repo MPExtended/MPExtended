@@ -65,7 +65,14 @@ namespace MPExtended.Services.StreamingService.Code
 
         ~Streaming()
         {
-            timeoutWorker.Abort();
+            try
+            {
+                timeoutWorker.Abort();
+            }
+            catch (Exception)
+            {
+                // we really don't care
+            }
         }
 
         private void TimeoutStreamsWorker()

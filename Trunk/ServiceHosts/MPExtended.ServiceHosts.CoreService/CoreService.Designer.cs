@@ -1,4 +1,4 @@
-﻿namespace MPExtended.Services.WindowsServiceHost
+﻿namespace MPExtended.ServiceHosts.CoreService
 {
     partial class CoreService
     {
