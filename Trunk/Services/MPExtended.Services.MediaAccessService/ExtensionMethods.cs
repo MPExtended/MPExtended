@@ -19,11 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Meta;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -148,6 +150,20 @@ namespace MPExtended.Services.MediaAccessService
                 Type = item.Type
             };
             return x;
+        }
+    }
+
+    internal static class LazyExtensionMethods
+    {
+        public static WebBackendProvider ToWebBackendProvider<T>(this Lazy<T, IDictionary<string, object>> lazy)
+        {
+            Assembly asm = lazy.Value.GetType().Assembly;
+            return new WebBackendProvider()
+            {
+                Name = (string)lazy.Metadata["Name"],
+                Assembly = asm.GetName().Name,
+                Version = VersionUtil.GetBuildVersion(asm).ToString()
+            };
         }
     }
 }

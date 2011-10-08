@@ -29,8 +29,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 namespace MPExtended.PlugIns.MAS.MovingPictures
 {
     [Export(typeof(IMovieLibrary))]
-    [ExportMetadata("Database", "MovingPictures")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "Moving Pictures")]
     public class MPMovingPictures : Database, IMovieLibrary
     {
         // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:

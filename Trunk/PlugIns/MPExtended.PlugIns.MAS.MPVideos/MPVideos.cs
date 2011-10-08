@@ -27,8 +27,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 namespace MPExtended.PlugIns.MAS.MPVideos
 {
     [Export(typeof(IMovieLibrary))]
-    [ExportMetadata("Database", "MPMyVideo")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "MP MyVideo")]
     public class MPVideos : IMovieLibrary
     {
         private IPluginData data;

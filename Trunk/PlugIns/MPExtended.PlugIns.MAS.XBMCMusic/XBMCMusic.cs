@@ -26,11 +26,11 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
+#if false
 namespace MPExtended.PlugIns.MAS.XBMCMusic
 {
     [Export(typeof(IMusicLibrary))]
-    [ExportMetadata("Database", "XBMCMusic")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "XBMC Music")]
     public class XBMCMusic : Database, IMusicLibrary
     {
         [ImportingConstructor]
@@ -180,3 +180,4 @@ namespace MPExtended.PlugIns.MAS.XBMCMusic
         }
     }
 }
+#endif

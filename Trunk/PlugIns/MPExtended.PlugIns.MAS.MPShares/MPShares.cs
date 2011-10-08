@@ -30,8 +30,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 namespace MPExtended.PlugIns.MAS.MPShares
 {
     [Export(typeof(IFileSystemLibrary))]
-    [ExportMetadata("Database", "MP Shares")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "MP Shares")]
     public class MPShares : IFileSystemLibrary
     {
         private IPluginData data;

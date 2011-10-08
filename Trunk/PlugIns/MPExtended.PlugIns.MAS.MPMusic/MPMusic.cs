@@ -30,8 +30,7 @@ using MPExtended.Libraries.SQLitePlugin;
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
     [Export(typeof(IMusicLibrary))]
-    [ExportMetadata("Database", "MPMyMusic")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "MP MyMusic")]
     public class MPMusic : Database, IMusicLibrary
     {
         private IPluginData data;

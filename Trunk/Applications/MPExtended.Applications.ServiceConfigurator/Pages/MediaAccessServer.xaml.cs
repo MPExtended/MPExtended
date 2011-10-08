@@ -32,6 +32,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Meta;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using System.Xml.Linq;

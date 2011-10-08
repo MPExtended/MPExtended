@@ -28,6 +28,8 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
 {
+    [Export(typeof(IPictureLibrary))]
+    [ExportMetadata("Name", "FS Pictures")]
     public class FSPictures : IPictureLibrary
     {
         List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();

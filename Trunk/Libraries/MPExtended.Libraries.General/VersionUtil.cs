@@ -37,17 +37,32 @@ namespace MPExtended.Libraries.General
 
         public static Version GetVersion()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version;
+            return GetVersion(Assembly.GetExecutingAssembly());
+        }
+
+        public static Version GetVersion(Assembly asm)
+        {
+            return asm.GetName().Version;
         }
 
         public static string GetVersionName()
         {
-            return System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            return GetVersionName(Assembly.GetExecutingAssembly());
+        }
+
+        public static string GetVersionName(Assembly asm)
+        {
+            return System.Diagnostics.FileVersionInfo.GetVersionInfo(asm.Location).ProductVersion;
         }
 
         public static Version GetBuildVersion()
         {
-            string ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+            return GetBuildVersion(Assembly.GetExecutingAssembly());
+        }
+
+        public static Version GetBuildVersion(Assembly asm)
+        {
+            string ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(asm.Location).FileVersion;
             return new Version(ver);
         }
 

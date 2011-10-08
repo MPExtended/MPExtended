@@ -73,7 +73,7 @@
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
     <Compile Include="Shared\ConcreteWebMediaItem.cs" />
-    <Compile Include="Shared\WebBackendProvider.cs" />
+    <Compile Include="Meta\WebBackendProvider.cs" />
     <Compile Include="Shared\WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,7 +92,8 @@
     <Compile Include="TVShow\WebTVShowBasic.cs" />
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="FileSystem\WebDriveBasic.cs" />
-    <Compile Include="WebMediaServiceDescription.cs" />
+    <Compile Include="Meta\WebBackendConfiguration.cs" />
+    <Compile Include="Meta\WebMediaServiceDescription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

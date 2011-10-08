@@ -28,8 +28,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 namespace MPExtended.PlugIns.MAS.LocalFileSystem
 {
     [Export(typeof(IFileSystemLibrary))]
-    [ExportMetadata("Database", "LocalFileSystem")]
-    [ExportMetadata("Version", "1.0.0.0")]
+    [ExportMetadata("Name", "LocalFileSystem")]
     public class LocalFileSystem : IFileSystemLibrary
     {
         public IEnumerable<WebDriveBasic> GetLocalDrives()

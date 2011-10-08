@@ -28,6 +28,7 @@ using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.MediaAccessService.Interfaces.Meta;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
@@ -61,6 +62,12 @@ namespace MPExtended.Services.MediaAccessService
         [ImportMany]
         private Lazy<IFileSystemLibrary, IDictionary<string, object>>[] FileSystemLibraries { get; set; }
 
+        private string movieLibraryName;
+        private string tvShowLibraryName;
+        private string musicLibraryName;
+        private string pictureLibraryName;
+        private string fileSystemLibraryName;
+
         private IMovieLibrary ChosenMovieLibrary { get; set; }
         private ITVShowLibrary ChosenTVShowLibrary { get; set; }
         private IPictureLibrary ChosenPictureLibrary { get; set; }
@@ -77,11 +84,11 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 var config = XElement.Load(Configuration.GetPath("MediaAccess.xml")).Element("plugins");
-                ChosenMovieLibrary = SelectLibrary<IMovieLibrary>(config, "movie", MovieLibraries);
-                ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(config, "music", MusicLibraries);
-                ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, "picture", PictureLibraries);
-                ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, "tvShow", TVShowLibraries);
-                ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(config, "filesystem", FileSystemLibraries);
+                ChosenMovieLibrary = SelectLibrary<IMovieLibrary>(config, ref movieLibraryName, "movie", MovieLibraries);
+                ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(config, ref musicLibraryName, "music", MusicLibraries);
+                ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, ref pictureLibraryName, "picture", PictureLibraries);
+                ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, ref tvShowLibraryName, "tvShow", TVShowLibraries);
+                ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(config, ref fileSystemLibraryName, "filesystem", FileSystemLibraries);
             }                        
             catch (Exception ex)
             {
@@ -90,7 +97,7 @@ namespace MPExtended.Services.MediaAccessService
 
         }
 
-        private T SelectLibrary<T>(XElement config, string type, Lazy<T, IDictionary<string, object>>[] libraries)
+        private T SelectLibrary<T>(XElement config, ref string savefield, string type, Lazy<T, IDictionary<string, object>>[] libraries)
         {
             var configured = config.Elements(type).Where(x => x.Value.Length > 0);
 
@@ -98,8 +105,9 @@ namespace MPExtended.Services.MediaAccessService
                 return default(T);
 
             string configuredName = configured.First().Value;
+            savefield = configuredName;
 
-            var list = libraries.Where(x => (string)x.Metadata["Database"] == configuredName);
+            var list = libraries.Where(x => (string)x.Metadata["Name"] == configuredName);
             if (list.Count() == 0)
                 return default(T);
 
@@ -162,52 +170,44 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
+        public WebBackendConfiguration GetBackendConfiguration()
+        {
+            return new WebBackendConfiguration()
+            {
+                AvailableMovieProvider = MovieLibraries.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableMusicProvider = MusicLibraries.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailablePictureProvider = PictureLibraries.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableTvShowProvider = TVShowLibraries.Select(x => x.ToWebBackendProvider()).ToList(),
+
+                CurrentMovieProvider = movieLibraryName,
+                CurrentMusicProvider = musicLibraryName,
+                CurrentPictureProvider = pictureLibraryName,
+                CurrentTvShowProvider = tvShowLibraryName
+            };
+        }
+        #endregion
+
+        #region General
         public WebMediaServiceDescription GetServiceDescription()
         {
             return new WebMediaServiceDescription()
             {
-                AvailableMovieProvider = MovieLibraries.Select(p => new WebBackendProvider()
-                {
-                    Name = (string)p.Metadata["Database"],
-                    Version = (string)p.Metadata["Version"]
-                   
-                }).ToList(),
-                AvailableMusicProvider = MusicLibraries.Select(p => new WebBackendProvider()
-                {
-                    Name = (string)p.Metadata["Database"],
-                    Version = (string)p.Metadata["Version"]
-
-                }).ToList(),
-                AvailablePictureProvider = PictureLibraries.Select(p => new WebBackendProvider()
-                {
-                    Name = (string)p.Metadata["Database"],
-                    Version = (string)p.Metadata["Version"]
-
-                }).ToList(),
-                AvailableTvShowProvider = TVShowLibraries.Select(p => new WebBackendProvider()
-                {
-                    Name = (string)p.Metadata["Database"],
-                    Version = (string)p.Metadata["Version"]
-
-                }).ToList(),
-
-                SupportsMovies = ChosenMovieLibrary != null,
-                SupportsMusic = ChosenMusicLibrary != null,
-                SupportsPictures = ChosenPictureLibrary != null,
-                SupportsTvShows = ChosenTVShowLibrary != null,
-
                 MovieApiVersion = MOVIE_API,
                 MusicApiVersion = MUSIC_API,
                 PicturesApiVersion = PICTURES_API,
                 TvShowsApiVersion = TVSHOWS_API,
                 FilesystemApiVersion = FILESYSTEM_API,
 
+                SupportsMovies = ChosenMovieLibrary != null,
+                SupportsFilesystem = ChosenFileSystemLibrary != null,
+                SupportsMusic = ChosenMusicLibrary != null,
+                SupportsPictures = ChosenPictureLibrary != null,
+                SupportsTvShows = ChosenTVShowLibrary != null,
+
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
             };
         }
-        #endregion
 
-        #region General
         public ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id)
         {
             switch (type)

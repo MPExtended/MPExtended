@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <plugins>
-    <tvShow>MPTVSeries</tvShow>
-    <movie>MovingPictures</movie>
-    <music>MPMyMusic</music>
-    <picture>MPPictures</picture>
+    <tvShow>MP-TVSeries</tvShow>
+    <movie>Moving Pictures</movie>
+    <music>MP MyMusic</music>
+    <picture>FS Pictures</picture>
     <filesystem>MP Shares</filesystem>
   </plugins>
   
