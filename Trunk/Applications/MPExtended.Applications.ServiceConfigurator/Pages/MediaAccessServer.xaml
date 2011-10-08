@@ -4,12 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="330" d:DesignWidth="639"
+      d:DesignHeight="330" d:DesignWidth="697"
 	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
-    <Grid>
+    <Grid Width="AUTO">
 
-        <TabControl TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Padding" Value="4" />
@@ -26,9 +26,9 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
- 
+
             <TabItem Header="General" Width="140">
-                <Grid>
+                <Grid Width="539">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="111*" />
                         <ColumnDefinition Width="328*" />
@@ -42,8 +42,7 @@
                         <RowDefinition Height="48" />
                         <RowDefinition Height="124*" />
                     </Grid.RowDefinitions>
-                    <Label Content="Active Streams" Height="28" Name="label1" Margin="6,20,-6,0" FontWeight="Bold" Grid.Row="4" Grid.ColumnSpan="3" />
-                    <Button x:Name="btnTestWebService" Grid.Column="2" Grid.Row="0" MinHeight="24" MaxHeight="24" MinWidth="120" MaxWidth="120" Content="Test Service" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="6" Click="btnTestWebService_Click" />
+                    <Button x:Name="btnTestWebService" Grid.Column="1" MinHeight="24" MaxHeight="24" MinWidth="120" MaxWidth="120" Content="Test Service" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,35,6" Click="btnTestWebService_Click" Grid.ColumnSpan="2" Width="120" />
 
                     <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="17,6,0,0" Name="label2" VerticalAlignment="Top" Width="62" />
                     <Label Content="Username" Height="28" HorizontalAlignment="Left" Margin="17,40,0,0" Name="label3" VerticalAlignment="Top" Grid.RowSpan="2" />
@@ -52,17 +51,7 @@
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="15,4,0,0" Name="txtUsername" VerticalAlignment="Top" Width="169" Text="admin" Grid.Row="1" Grid.Column="1" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="15,5,0,0" Name="txtUserPassword" VerticalAlignment="Top" Width="169" Text="admin" Grid.Row="2" Grid.Column="1" />
                     <Button Content="Update" x:Name="btnUpdateConfig" VerticalAlignment="Bottom" HorizontalAlignment="Right" MaxWidth="80" MinWidth="80" Margin="6" MinHeight="23" MaxHeight="23"  Click="cmdUpdateConfig_Click" Grid.Row="3" Grid.Column="2" />
-                    <ListView Margin="3" Name="lvActiveStreams" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="5" AlternationCount="1" Grid.ColumnSpan="3">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Width="140" Header="Client" DisplayMemberBinding="{Binding Path=ClientDescription}"/>
-                                <GridViewColumn Header="Profile" DisplayMemberBinding="{Binding Path=Profile}"/>
-                                <GridViewColumn Header="File" DisplayMemberBinding="{Binding Path=SourceFile}"/>
-                                <GridViewColumn Header="Progress" DisplayMemberBinding="{Binding Path=TranscodingInfo.CurrentTime}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                 </Grid>
+                </Grid>
             </TabItem>
             <TabItem Header="Plugin Config" Width="140" >
                 <Grid>
@@ -72,20 +61,54 @@
                 </Grid>
             </TabItem>
             <!--<TabItem Header="Paths"></TabItem>-->
-            <TabItem Header="Troubleshooting">
+            <TabItem Name="tiTroubleShooting"  Header="Troubleshooting">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="74" />
-                        <RowDefinition Height="245" />
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="To check the validity of the requested content please use the following links"></TextBlock>
+                    <TextBox BorderThickness="0" Text="To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues)." TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
+                    <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
+                    <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" />
+                    <Label Content="MediaAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,160,0,0" Name="label8" VerticalAlignment="Top" />
+                    <TextBlock Height="23" Margin="168,165,6,0" VerticalAlignment="Top">
+                        <Hyperlink  Name="hlTestLinkMediaAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate">
+                            <TextBlock Name="tbTestLinkMediaAccessGeneral" Text="ServiceDescription.xml" />
+                        </Hyperlink>    
+                    </TextBlock>
+                    <Label Content="Streaming General:" Height="28" HorizontalAlignment="Left" Margin="15,189,0,0" Name="label11" VerticalAlignment="Top" />
+                    <TextBlock Height="23" Margin="168,194,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkStreamingGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkStreamingGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
+                    <Label Content="TvAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,218,0,0" Name="label12" VerticalAlignment="Top" />
+                    <TextBlock Height="23" Margin="168,223,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkTvAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkTvAccessGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
                 </Grid>
             </TabItem>
-            <TabItem Header="Streaming" />
-            <TabItem Header="Server Logs">
+            <TabItem Header="Streaming">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="6,78,-6,214" Name="label1" />
+                    <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="0,102,6,6" Name="lvActiveStreams" VerticalAlignment="Stretch" Height="212">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=SourceFile}" Header="File" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=TranscodingInfo.CurrentTime}" Header="Progress" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label9" VerticalAlignment="Top" FontWeight="Bold" />
+                    <Label Content="To change the streaming profiles (advanced users only!!!) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
+                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="15,57,0,0" Name="textBlock1" VerticalAlignment="Top">
+                        <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
+                            <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
+                        </Hyperlink>    
+                    </TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Server Logs" Name="tiLogs">
                 <Grid>
                     <Label Content="Service Log" Height="28" Name="lblLogs" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
-                    <ListView Name="lvLogViewer" Margin="6,34,6,6" />
+                    <ListView Name="lvLogViewer" Margin="6,34,6,32" Height="254" />
+                    <CheckBox Content="Scroll to End" HorizontalAlignment="Left" Margin="6,0,0,6" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
+                    <Label Content="Log Files from:" HorizontalAlignment="Left" Margin="128,0,0,-2" Name="label13" Height="28" VerticalAlignment="Bottom" />
+                    <ComboBox HorizontalAlignment="Left" Margin="218,0,0,3" Name="cbLogFiles" Width="214" Height="23" VerticalAlignment="Bottom" ItemsSource="{Binding}" />
+                    <Button Content="Save" Margin="0,0,8,3" Name="btnSaveLog" HorizontalAlignment="Right" Width="91" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="About">

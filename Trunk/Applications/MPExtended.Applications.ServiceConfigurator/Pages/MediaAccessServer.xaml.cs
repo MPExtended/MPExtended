@@ -38,6 +38,9 @@ using System.Xml.Linq;
 using MPExtended.Services.MediaAccessService;
 using System.Diagnostics;
 using System.Security.Principal;
+using System.Net.NetworkInformation;
+using System.Net;
+using System.Net.Sockets;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -64,10 +67,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         BackgroundWorker workerVideos = new BackgroundWorker();
         BackgroundWorker workerMoPi = new BackgroundWorker();
         BackgroundWorker workerServiceText = new BackgroundWorker();
+        BackgroundWorker workerLogReader = new BackgroundWorker();
+        private string mSelectedLog;
 
         public MediaAccessServer()
         {
             InitializeComponent();
+            SetConfigLocation();
+
+            InitLogFiles();
+
 
             try
             {
@@ -78,20 +87,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 MessageBox.Show("MPExtended service is not installed! Please install the latest version.");
                 return;
             }
-
-            switch (mInstallationType)
-            {
-                case InstallationType.Singleseat:
-                    LoadLogFiles("SingleSeat");
-                    break;
-                case InstallationType.Server:
-                    LoadLogFiles("Server");
-                    break;
-                case InstallationType.Client:
-                    LoadLogFiles("Client");
-                    break;
-            }
-
 
             //Load the MediaAccess.xml configuration file
             PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
@@ -140,6 +135,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             InitBackgroundWorker();
         }
 
+        private void InitLogFiles()
+        {
+            String logRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\MPExtended\\Logs";
+
+            if (File.Exists(logRoot + "\\Service.log"))
+            {
+                cbLogFiles.Items.Add("Service");
+            }
+
+            if (cbLogFiles.Items.Count > 0)
+            {
+                cbLogFiles.SelectedIndex = 0;
+                mSelectedLog = (String)cbLogFiles.SelectedItem;
+            }
+        }
+
         private bool isServiceAvailable(ServiceController _controller)
         {
             ServiceController[] controllers = ServiceController.GetServices();
@@ -154,13 +165,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             return false;
         }
 
+        private void SetConfigLocation()
+        {
+            String configLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\MPExtended");
+            hlStreamingConfigLocation.NavigateUri = new Uri(configLocation);
+            tbStreamingConfigLocation.Text = Path.Combine(configLocation + "\\Streaming.xml");
+        }
+
         private void LoadLogFiles(string fileName)
         {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0}.log", fileName)))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", fileName)))
             {
                 try
                 {
-                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\{0}.log", fileName));
+                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", fileName));
                     string input = null;
                     while ((input = re.ReadLine()) != null)
                     {
@@ -171,8 +189,24 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     ExceptionMessageBox(ex.Message);
                 }
+
+                //scroll to last item
+                ScrollToLastItem(lvLogViewer);
             }
         }
+
+        public void ScrollToLastItem(ListView lv)
+        {
+
+            lv.SelectedItem = lv.Items.GetItemAt(lv.Items.Count - 1);
+            lv.ScrollIntoView(lv.SelectedItem);
+            ListViewItem item = lv.ItemContainerGenerator.ContainerFromItem(lv.SelectedItem) as ListViewItem;
+            if (item != null)
+            {
+                item.Focus();
+            }
+        }
+
 
         private void InitBackgroundWorker()
         {
@@ -181,7 +215,88 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             workerMusic.DoWork += new DoWorkEventHandler(workerMusic_DoWork);
             workerTVSeries.DoWork += new DoWorkEventHandler(workerTVSeries_DoWork);
             workerActiveSessions.DoWork += new DoWorkEventHandler(workerActiveSessions_DoWork);
+
+
         }
+
+        #region Logging Tab
+        private bool mLogReaderRunning = false;
+        DoWorkEventHandler mLogReadingHandler;
+        private void InitLogTab(String _file)
+        {
+            mSelectedLog = _file;
+            if (mSelectedLog != null)
+            {
+                LoadLogFiles(mSelectedLog);
+                mLogReaderRunning = true;
+                mLogReadingHandler = new DoWorkEventHandler(workerLogReader_DoWork);
+                workerLogReader.DoWork += mLogReadingHandler;
+                if (!workerLogReader.IsBusy)
+                {
+                    workerLogReader.RunWorkerAsync();
+                }
+            }
+        }
+
+        private delegate void AddLogDelegate(String _line);
+        void workerLogReader_DoWork(object sender, DoWorkEventArgs e)
+        {
+            String fileName = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
+            using (StreamReader reader = new StreamReader(new FileStream(fileName,
+                     FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                //start at the end of the file
+                long lastMaxOffset = reader.BaseStream.Length;
+
+                while (mLogReaderRunning)
+                {
+                    System.Threading.Thread.Sleep(200);
+
+                    //if the file size has not changed, idle
+                    if (reader.BaseStream.Length == lastMaxOffset)
+                        continue;
+
+
+
+                    //seek to the last max offset
+                    reader.BaseStream.Seek(lastMaxOffset, SeekOrigin.Begin);
+
+                    //read out of the file until the EOF
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        lvLogViewer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (AddLogDelegate)delegate(String _line)
+                        {
+                            lvLogViewer.Items.Add(_line);
+                            if (cbLogScrollToEnd.IsChecked == true)
+                            {
+                                ScrollToLastItem(lvLogViewer);
+                            }
+                        }, line);
+                    }
+                    //update the last max offset
+                    lastMaxOffset = reader.BaseStream.Position;
+                }
+            }
+            workerLogReader.DoWork -= mLogReadingHandler;
+        }
+
+        private void btnSaveLog_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".log";
+            dlg.Filter = "Log file (.log)|*.log";
+            if (dlg.ShowDialog() == true)
+            {
+                String logFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
+
+                string newFileName = dlg.FileName;
+
+                File.Copy(logFile, newFileName);
+            }
+        }
+
+        #endregion
 
 
         void activeSessionTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -201,11 +316,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
                     {
-                        lvActiveStreams.ItemsSource = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+                        lvActiveStreams.ItemsSource = tmp;
                     }));
                 }
             }
-            catch (EndpointNotFoundException)
+            catch (CommunicationException)
             {
                 Log.Warn("No connection to service");
             }
@@ -381,9 +496,84 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.Source is TabControl)
+            {
+                if (tcMainTabs.SelectedItem.Equals(tiTroubleShooting))
+                {
+                    SetNetworkInterfaces();
+                }
 
+                if (tcMainTabs.SelectedItem.Equals(tiLogs))
+                {
+                    InitLogTab(mSelectedLog);
+                }
+                else
+                {
+                    mLogReaderRunning = false;
+                }
+            }
+        }
+
+
+        #region troubleshooting tab
+        internal class MyNetworkAddress
+        {
+            internal NetworkInterface Interface { get; set; }
+            internal IPAddressInformation Address { get; set; }
+
+            public override string ToString()
+            {
+                return Address.Address + " (" + Interface.Name + ")";
+            }
+        }
+
+        private void SetNetworkInterfaces()
+        {
+            cbNetworkInterfaces.Items.Clear();
+
+            foreach (NetworkInterface n in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                Log.Debug("Available Network Interface: {0}", n.Name);
+                IPInterfaceProperties properties = n.GetIPProperties();
+
+                foreach (IPAddressInformation unicast in properties.UnicastAddresses)
+                {
+                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        Log.Debug("\tAvailable UniCast: {0}", unicast.Address);
+                        cbNetworkInterfaces.Items.Add(new MyNetworkAddress() { Interface = n, Address = unicast });
+                    }
+                }
+            }
+
+            SetTestLinks("localhost", 4322);
 
         }
+
+        private void cbNetworkInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MyNetworkAddress addr = (MyNetworkAddress)cbNetworkInterfaces.SelectedItem;
+            SetTestLinks(addr.Address.Address.ToString(), 4322);
+        }
+
+        private void SetTestLinks(string _address, int _port)
+        {
+            String baseAdress = "http://{0}:{1}/MPExtended/{2}/json/{3}";
+
+            String mediaAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "MediaAccessService", "GetServiceDescription");
+            hlTestLinkMediaAccessGeneral.NavigateUri = new Uri(mediaAccessServiceDescriptionUrl);
+            tbTestLinkMediaAccessGeneral.Text = mediaAccessServiceDescriptionUrl;
+
+            String tvAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "TVAccessService", "GetServiceDescription");
+            hlTestLinkTvAccessGeneral.NavigateUri = new Uri(tvAccessServiceDescriptionUrl);
+            tbTestLinkTvAccessGeneral.Text = tvAccessServiceDescriptionUrl;
+
+            String streamingServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "StreamingService", "GetServiceDescription");
+            hlTestLinkStreamingGeneral.NavigateUri = new Uri(streamingServiceDescriptionUrl);
+            tbTestLinkStreamingGeneral.Text = streamingServiceDescriptionUrl;
+        }
+
+        #endregion
 
         private void HandleServiceState(ServiceControllerStatus _status)
         {
@@ -416,7 +606,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 info.FileName = "MPExtended.Applications.UacServiceHandler.exe";
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
-                
+
                 switch (mServiceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:
@@ -457,7 +647,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             return p.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-     
+
         private void btnBrowseVideos_Click(object sender, RoutedEventArgs e)
         {
             BrowseForDbLocation(DatabaseType.Videos);
@@ -609,5 +799,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Dictionary<String, PluginConfigItem> selected = (Dictionary<String, PluginConfigItem>)cbPluginConfigs.SelectedValue;
             sectionPluginSettings.SetPluginConfig(selected);
         }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+
+
+
     }
 }
