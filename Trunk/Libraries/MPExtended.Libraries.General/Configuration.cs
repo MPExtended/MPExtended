@@ -23,7 +23,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace MPExtended.Libraries.ServiceLib
+namespace MPExtended.Libraries.General
 {
     public class Configuration
     {

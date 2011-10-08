@@ -36,7 +36,7 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             foreach (Type t in passedList)
             {
-                types[t.FullName] = t;
+                types[t.Name] = t;
             }
         }
 
@@ -46,16 +46,16 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 try
                 {
-                    Log.Debug("Loading service {0}", srv.Name);
-                    Log.Trace("Assembly path: {0}", srv.AssemblyPath);
-                    if (types.ContainsKey(srv.Name))
+                    Log.Debug("Loading service {0}", srv.ImplementationName);
+                    if (types.ContainsKey(srv.ImplementationName))
                     {
-                        hosts.Add(new ServiceHost(types[srv.Name]));
+                        hosts.Add(new ServiceHost(types[srv.ImplementationName]));
                     }
                     else if (File.Exists(srv.AssemblyPath))
                     {
+                        Log.Trace("Assembly path: {0}", srv.AssemblyPath);
                         Assembly asm = Assembly.LoadFrom(srv.AssemblyPath);
-                        Type t = asm.GetType(srv.Name);
+                        Type t = asm.GetType(srv.FullTypeName);
                         hosts.Add(new ServiceHost(t));
                     }
                     else

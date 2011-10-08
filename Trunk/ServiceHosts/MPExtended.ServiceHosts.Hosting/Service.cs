@@ -25,9 +25,11 @@ namespace MPExtended.ServiceHosts.Hosting
 {
     internal class Service
     {
-        public string Name { get; set; }
+        public string ImplementationName { get; set; }
         public bool IsInstalled { get; set; }
         public string Assembly { get; set; }
+        public string ServiceType { get; set; }
+        public int Port { get; set; }
 
         public string AssemblyPath
         {
@@ -45,10 +47,20 @@ namespace MPExtended.ServiceHosts.Hosting
             }
         }
 
-        public Service(string name, string assembly, bool isInstalled)
+        public string FullTypeName
         {
-            this.Name = name;
+            get
+            {
+                return Assembly + "." + ImplementationName;
+            }
+        }
+
+        public Service(string assembly, string implementationName, string serviceType, int port, bool isInstalled)
+        {
             this.Assembly = assembly;
+            this.ImplementationName = implementationName;
+            this.ServiceType = serviceType;
+            this.Port = port;
             this.IsInstalled = isInstalled;
         }
     }

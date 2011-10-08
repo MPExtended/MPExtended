@@ -22,7 +22,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
-using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
@@ -53,7 +52,7 @@ namespace MPExtended.Services.MediaAccessService
             string name = forAssembly.GetName().Name;
             if (!cachedConfig.ContainsKey(name))
             {
-                var config = XElement.Load(MPExtended.Libraries.ServiceLib.Configuration.GetPath("MediaAccess.xml"))
+                var config = XElement.Load(MPExtended.Libraries.General.Configuration.GetPath("MediaAccess.xml"))
                     .Element("pluginConfiguration")
                     .Elements("plugin")
                     .Where(p => p.Attribute("name").Value == name)

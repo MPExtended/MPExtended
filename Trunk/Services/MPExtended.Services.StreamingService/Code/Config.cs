@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.General;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Transcoders;
 

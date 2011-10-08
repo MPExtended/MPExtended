@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using MPExtended.Libraries.General;
 
 namespace MPExtended.ServiceHosts.Hosting
@@ -29,15 +30,20 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             List<Service> allServices = new List<Service>()
             {
-                new Service("MPExtended.Services.MediaAccessService.MediaAccessService", "MPExtended.Services.MediaAccessService", Installation.IsMASInstalled),
-                new Service("MPExtended.Services.TVAccessService.TVAccessService", "MPExtended.Services.TVAccessService", Installation.IsTASInstalled),
-                new Service("MPExtended.Services.StreamingService.StreamingService", "MPExtended.Services.StreamingService", true),
-                new Service("MPExtended.Services.UserSessionService.UserSessionProxyService", "MPExtended.Services.UserSessionService", true)
+                new Service("MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp", 4322, Installation.IsMASInstalled),
+                new Service("MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp", 4321, Installation.IsTASInstalled),
+                new Service("MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp", 4322, true),
+                new Service("MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp", 4322, true),
             };
 
-            
+            string[] disabled =
+                XElement.Load(Configuration.GetPath("Services.xml"))
+                .Element("disabledServices")
+                .Elements("service")
+                .Select(x => x.Value)
+                .ToArray();
 
-            return allServices.Where(x => x.IsInstalled).ToList();
+            return allServices.Where(x => x.IsInstalled && !disabled.Contains(x.Assembly)).ToList();
         }
     }
 }
