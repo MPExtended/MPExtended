@@ -42,6 +42,8 @@ using System.Security.Principal;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Media;
+
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -90,6 +92,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
 
             //Load the MediaAccess.xml configuration file
+            
+            WebBackendConfiguration backendconfig = MPEServices.NetPipeMediaAccessService.GetBackendConfiguration();
+
             PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
             try
             {
@@ -123,10 +128,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             if (mServiceController != null)
             {
+                btnStartStopService.IsEnabled = true;
                 mServiceWatcher = new DispatcherTimer();
                 mServiceWatcher.Interval = TimeSpan.FromSeconds(2);
                 mServiceWatcher.Tick += timer1_Tick;
                 mServiceWatcher.Start();
+            }
+            else
+            {
+                lblServiceState.Content = "Not installed";
+                btnStartStopService.IsEnabled = false;
             }
 
             activeSessionTimer.Elapsed += new ElapsedEventHandler(activeSessionTimer_Elapsed);
@@ -154,14 +165,21 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private bool isServiceAvailable(ServiceController _controller)
         {
-            ServiceController[] controllers = ServiceController.GetServices();
-
-            foreach (ServiceController c in controllers)
+            try
             {
-                if (c.ServiceName.Equals(_controller.ServiceName))
+                ServiceController[] controllers = ServiceController.GetServices();
+
+                foreach (ServiceController c in controllers)
                 {
-                    return true;
+                    if (c.ServiceName.Equals(_controller.ServiceName))
+                    {
+                        return true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(ex.ToString());
             }
             return false;
         }
@@ -482,7 +500,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-
             try
             {
                 mServiceController.Refresh();
@@ -554,7 +571,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void cbNetworkInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MyNetworkAddress addr = (MyNetworkAddress)cbNetworkInterfaces.SelectedItem;
-            SetTestLinks(addr.Address.Address.ToString(), 4322);
+            if (addr != null)
+            {
+                SetTestLinks(addr.Address.Address.ToString(), 4322);
+            }
         }
 
         private void SetTestLinks(string _address, int _port)
@@ -583,16 +603,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 case ServiceControllerStatus.Stopped:
                     btnStartStopService.Content = "Start";
                     lblServiceState.Content = "Service Stopped";
+                    lblServiceState.Foreground = Brushes.Red;
                     break;
                 case ServiceControllerStatus.Running:
                     btnStartStopService.Content = "Stop";
                     lblServiceState.Content = "Service Started";
+                    lblServiceState.Foreground = Brushes.Green;
                     break;
                 case ServiceControllerStatus.StartPending:
                     btnStartStopService.Content = "Stop";
                     lblServiceState.Content = "Service Starting";
+                    lblServiceState.Foreground = Brushes.Yellow;
                     break;
                 default:
+                    lblServiceState.Foreground = Brushes.Yellow;
                     lblServiceState.Content = "Service " + _status.ToString();
                     break;
 

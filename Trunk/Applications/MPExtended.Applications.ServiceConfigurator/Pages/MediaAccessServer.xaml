@@ -8,8 +8,9 @@
 	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
     <Grid Width="AUTO">
+        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-250,-250" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Images/033130-retro-green-floral-icon-culture-globe-checkered2.png" Opacity="0.4" />
 
-        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged" Visibility="Visible" Background="{x:Null}">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Padding" Value="4" />
@@ -87,7 +88,7 @@
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=SourceFile}" Header="File" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=SourceId}" Header="File" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=TranscodingInfo.CurrentTime}" Header="Progress" />
                             </GridView>
                         </ListView.View>
@@ -131,6 +132,6 @@
         <Image HorizontalAlignment="Left" Margin="0,0,0,22" Name="image1" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Images/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
         <Button Content="Start" Height="23" Name="btnStartStopService" Width="105" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,0,0,4" />
         <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="6,0,0,137" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="119" FontWeight="Bold" Foreground="#FF009600" />
-
+        <Image Height="6" HorizontalAlignment="Left" Margin="720,136,0,0" Name="image2" Stretch="Fill" VerticalAlignment="Top" Width="2" />
     </Grid>
 </Page>
