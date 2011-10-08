@@ -55,6 +55,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.SQLitePlugin\MPExtended.Libraries.SQLitePlugin.csproj">
+      <Name>MPExtended.Libraries.SQLitePlugin</Name>
+      <Project>{19467bf5-89fa-4ba3-a4c3-3a382573a20f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\PlugIns\MPExtended.PlugIns.MAS.FSPictures\MPExtended.PlugIns.MAS.FSPictures.csproj">
       <Name>MPExtended.PlugIns.MAS.FSPictures</Name>
       <Project>{d08e4b27-e77c-4258-b050-333d42aa7362}</Project>
@@ -98,6 +106,22 @@
     <ProjectReference Include="..\..\PlugIns\MPExtended.PlugIns.MAS.MPVideos\MPExtended.PlugIns.MAS.MPVideos.csproj">
       <Name>MPExtended.PlugIns.MAS.MPVideos</Name>
       <Project>{7304d17f-85f1-4c5a-8d55-b3599b4b2759}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.ConsoleHost\MPExtended.ServiceHosts.ConsoleHost.csproj">
+      <Name>MPExtended.ServiceHosts.ConsoleHost</Name>
+      <Project>{15a4b23a-240b-481b-8c49-6021000a9206}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.CoreService\MPExtended.ServiceHosts.CoreService.csproj">
+      <Name>MPExtended.ServiceHosts.CoreService</Name>
+      <Project>{9a9d8c7d-13b9-48ca-95b2-d06cb3348b4e}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
