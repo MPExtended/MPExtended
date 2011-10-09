@@ -185,7 +185,7 @@ namespace MPExtended.Applications.Development.StreamingService
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
             mName = txtItemId.Text;
             Log("Init Stream with id " + txtItemId.Text + " (type: " + cbItemType.SelectedItem + ")");
-            bool success = mWebStreamClient.InitStream(WebStreamMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
+            bool success = mWebStreamClient.InitStream((WebStreamMediaType)cbItemType.SelectedItem, txtItemId.Text, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
             LoadMediaInfo(mWebStreamClient.GetMediaInfo((WebStreamMediaType)cbItemType.SelectedItem, txtItemId.Text));
         }

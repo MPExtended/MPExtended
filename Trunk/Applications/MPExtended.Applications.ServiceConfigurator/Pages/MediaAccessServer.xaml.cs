@@ -75,10 +75,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             InitializeComponent();
 
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
             SetConfigLocation();
             GenerateBarcode();
 
@@ -133,6 +129,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             lvActiveStreams.ItemsSource = mStreamingSessions;
 
             InitBackgroundWorker();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void InitLogFiles()

@@ -51,6 +51,11 @@ namespace MPExtended.Services.StreamingService.Code
             
             // get temporary filename
             string tempDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            if (!Directory.Exists(tempDir))
+            {
+                Directory.CreateDirectory(tempDir);
+            }
+
             string tempFile = Path.Combine(tempDir, Guid.NewGuid().ToString() + ".jpg");
 
             // execute it
