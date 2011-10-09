@@ -32,30 +32,6 @@ namespace MPExtended.Libraries.General
 
     public static class Installation
     {
-        public static bool IsTASInstalled
-        {
-            get
-            {
-#if DEBUG
-                return true;
-#else
-                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", "TASInstalled");
-#endif
-            }
-        }
-
-        public static bool IsMASInstalled
-        {
-            get
-            {
-#if DEBUG
-                return true;
-#else
-                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", "MASInstalled");
-#endif
-            }
-        }
-
         public static bool HasLocalTAS
         {
             get
@@ -91,6 +67,15 @@ namespace MPExtended.Libraries.General
         public static InstallationType GetInstallationType()
         {
             return InstallationType.Singleseat;
+        }
+
+        public static bool CheckInstalled(string service)
+        {
+#if DEBUG
+            return true;
+#else
+            return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", service + "Installed");
+#endif
         }
 
         private static bool CheckRegistryKey(RegistryKey reg, string key, string name)

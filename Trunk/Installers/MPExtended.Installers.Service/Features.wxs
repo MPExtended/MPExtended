@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <!--
+  Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+  
+  MPExtended is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+  
+  MPExtended is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+  <Fragment>
+    <!-- General stuff -->
+    <ComponentGroup Id="Component_General">
+      <ComponentRef Id="Component_General_Libraries"/>
+      <ComponentRef Id="Component_General_Config"/>
+      <ComponentRef Id="Component_General_Logs"/>
+    </ComponentGroup>
+
+    <!-- MAS -->
+    <ComponentGroup Id="Component_MAS">
+      <ComponentRef Id="Component_MAS_Binaries"/>
+      <ComponentRef Id="Component_MAS_Interface"/>
+      <ComponentRef Id="Component_MAS_Extensions"/>
+      <ComponentRef Id="Component_MAS_Config"/>
+      <ComponentRef Id="Component_MAS_Registry"/>
+    </ComponentGroup>
+
+    <!-- TAS -->
+    <ComponentGroup Id="Component_TAS">
+      <ComponentRef Id="Component_TAS_Binaries"/>
+      <ComponentRef Id="Component_TAS_Interface"/>
+      <ComponentRef Id="Component_TAS_Registry"/>
+    </ComponentGroup>
+
+    <!-- WSS -->
+    <ComponentGroup Id="Component_WSS">
+      <ComponentGroupRef Id="Component_Streaming"/>
+      <ComponentRef Id="Component_MAS_Interface"/>
+      <ComponentRef Id="Component_TAS_Interface"/>
+      <ComponentRef Id="Component_WSS_Binaries"/>
+      <ComponentRef Id="Component_WSS_Registry"/>
+      <ComponentRef Id="Component_WSS_Config"/>
+    </ComponentGroup>
+
+    <!-- USS -->
+    <ComponentGroup Id="Component_USS">
+      <ComponentRef Id="Component_USS_Binaries"/>
+      <ComponentRef Id="Component_USS_Registry"/>
+    </ComponentGroup>
+
+    <!-- Configurator -->
+    <ComponentGroup Id="Component_Configurator">
+      <ComponentRef Id="Component_Configurator_Binaries"/>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <!-- Reference components -->
+    <Feature Id="Feature_All" Display="expand" Level="1" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
+             Title="MPExtended services"
+             Description="MPExtended webservices for MediaPortal">
+      <ComponentGroupRef Id="Component_General" />
+      <ComponentRef Id="Component_Service" />
+
+      <Feature Id="Feature_Client"  Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="Client service"
+               Description="Access to the MediaPortal media databases and shares. Select if you have the MediaPortal client installed.">
+        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "Client"</Condition>
+        <ComponentGroupRef Id="Component_MAS"/>
+      </Feature>
+
+      <Feature Id="Feature_Server" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="Server service"
+               Description="Access to the MediaPortal TV Server. Select if you have the MediaPortal TV Server installed.">
+        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "TV"</Condition>
+        <ComponentGroupRef Id="Component_TAS"/>
+      </Feature>
+
+      <Feature Id="Feature_Configurator" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="Configuration tool"
+               Description="A graphical configuration tool for the services. Also allows to remotely start/stop MediaPortal.">
+        <ComponentGroupRef Id="Component_USS"/>
+        <ComponentGroupRef Id="Component_Configurator"/>
+      </Feature>
+
+      <Feature Id="Feature_Streaming" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="Streaming service"
+               Description="Transcodes and streams your media files to clients.">
+        <ComponentGroupRef Id="Component_Streaming"/>
+        <ComponentGroupRef Id="Component_WSS"/>
+      </Feature>
+      
+      <!--
+      <Feature Id="Feature_WifiRemote" Level="15" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="WifiRemote"
+               Description="Install the WifiRemote remote control plugin for the MediaPortal client.">
+      </Feature>
+      -->
+    </Feature>
+  </Fragment>
+</Wix>

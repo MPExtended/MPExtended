@@ -25,10 +25,11 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="SetupType.wxs" />
     <Compile Include="StreamBinaries.wxs" />
-    <Compile Include="Fragments.wxs" />
+    <Compile Include="Features.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Applications\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj">

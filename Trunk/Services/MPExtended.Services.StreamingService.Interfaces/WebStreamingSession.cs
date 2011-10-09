@@ -13,5 +13,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string SourceId { get; set; }
         public string ClientDescription { get; set; }
         public WebTranscodingInfo TranscodingInfo { get; set; }
+        public DateTime StartTime { get; set; }
+        public string DisplayName { get; set; }
     }
 }

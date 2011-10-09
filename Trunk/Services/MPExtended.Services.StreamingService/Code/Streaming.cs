@@ -44,6 +44,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             public string Identifier { get; set; }
             public string ClientDescription { get; set; }
+            public DateTime StartTime { get; set; }
             public TranscoderProfile Profile { get; set; }
 
             public MediaSource Source { get; set; }
@@ -114,6 +115,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
             stream.Source = source;
+            stream.StartTime = DateTime.Now;
 
             lock (Streams)
             {
@@ -253,7 +255,9 @@ namespace MPExtended.Services.StreamingService.Code
                 SourceType = s.Source.MediaType,
                 SourceId = s.Source.Id,
                 Profile = s.Profile != null ? s.Profile.Name : null,
-                TranscodingInfo = s.TranscodingInfo != null ? s.TranscodingInfo : null
+                TranscodingInfo = s.TranscodingInfo != null ? s.TranscodingInfo : null,
+                StartTime = s.StartTime,
+                DisplayName = s.Source.GetDisplayName()
             }).ToList();
         }
 

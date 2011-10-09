@@ -169,10 +169,24 @@ namespace MPExtended.Services.StreamingService.Code
                 return;
             }
 
-            // talk to backend
-            if (streams[identifier].TranscodingInfo.Value != null && 
-                CalculatePercent(streams[identifier].TranscodingInfo.Value.CurrentTime / 60000, streams[identifier].Runtime) >= 95)
+            // calculate progress
+            int transcodedValue = streams[identifier].TranscodingInfo.Value.CurrentTime;
+            int progress = 0;
+            if (transcodedValue != null)
             {
+                progress = CalculatePercent(transcodedValue / 60000, streams[identifier].Runtime);
+                Log.Debug("WatchSharing: transcoded {0} ms, runtime {1}, progress {2}%", transcodedValue, streams[identifier].Runtime, progress);
+            }
+            else
+            {
+                Log.Debug("WatchSharing: no transcoded time known");
+            }
+
+            // talk to backend
+            if (progress >= 95)
+            {
+                Log.Debug("WatchSharing: seeing that as finished");
+
                 // finished
                 if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
                 {
@@ -240,6 +254,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // only send every x iterations the status, when we know for sure that we have a value and stream isn't canceled yet
                     if ((!streams[id].OverrideProgress && streams[id].TranscodingInfo.Value == null) || streams[id].Canceled)
                     {
+                        Log.Trace("WatchSharing: stream canceled or transcoding info not known");
                         // try again next iteration (iteration++ is NOT called this time)
                     } 
                     else if (iteration++ % service.UpdateInterval == 0)
@@ -250,11 +265,14 @@ namespace MPExtended.Services.StreamingService.Code
                         {
                             progress = streams[id].Progress;
                             streams[id].OverrideProgress = false;
+                            Log.Debug("WatchSharing: overridden progress with {0}%", progress);
                         }
                         else
                         {
-                            // calculate progress if possible, else just skip this iteratio
-                            progress = CalculatePercent(streams[id].TranscodingInfo.Value.CurrentTime / 60000, streams[id].Runtime);
+                            // calculate progress if possible, else just skip this iteration
+                            int transcodedValue = streams[id].TranscodingInfo.Value.CurrentTime;
+                            progress = CalculatePercent(transcodedValue / 60000, streams[id].Runtime);
+                            Log.Debug("WatchSharing: transcoded {0} ms, runtime {1}, progress {2}%", transcodedValue, streams[id].Runtime, progress);
                         }
 
                         // and send it

@@ -38,26 +38,6 @@
     <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>
-
-    <!-- Directory structure -->
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
-          <Directory Id="InstallDirectory" Name="Service">
-            <Directory Id="StreamingDirectory" Name="Streaming">
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
-
-      <Directory Id="CommonAppDataFolder">
-        <Directory Id="ConfigDirectory" Name="MPExtended">
-          <Directory Id="LogDirectory" Name="Logs">
-            
-          </Directory>
-        </Directory>
-      </Directory>
-    </Directory>
     
     <!-- WifiRemote installer (FIXME: not working)
     <Binary Id="WifiRemoteInstallerBin" SourceFile="..\..\Libraries\Installer\WifiRemote.0.4.1_rc1.mpe1" />
@@ -67,7 +47,7 @@
     </InstallExecuteSequence>
     -->
 
-    <!-- Service binaries -->
+    <!-- Service -->
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_Service" Guid="bec0610f-43c4-4a1d-840b-6beeb1259a62">
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe" KeyPath="yes" Id="MainService"/>
@@ -81,7 +61,6 @@
         <!-- let's just install the consolehost too, for debugging -->
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe" />
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe.config" />
-
 
         <ServiceInstall
           Id="InstallService"
@@ -165,41 +144,6 @@
     <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />
 
-    <!-- Reference components -->
-    <Feature Id="Feature_Both" Display="expand" Level="1" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
-             Title="MPExtended services"
-             Description="MPExtended web services for MediaPortal">
-      <ComponentGroupRef Id="Component_General" />
-      <ComponentGroupRef Id="Component_WSS" />
-      <ComponentGroupRef Id="Component_Streaming" />
-      <ComponentRef Id="Component_Service" />
-
-      <Feature Id="Feature_Client"  Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Client service"
-               Description="Access to the MediaPortal media databases and shares. Select if you've the MediaPortal UI installed.">
-        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "Client"</Condition>
-        <ComponentGroupRef Id="Component_MAS"/>
-      </Feature>
-
-      <Feature Id="Feature_Server" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Server service"
-               Description="Access to the MediaPortal TV Server. Select only if you have the MediaPortal TV Server installed.">
-        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "TV"</Condition>
-        <ComponentGroupRef Id="Component_TAS"/>
-      </Feature>
-
-      <Feature Id="Feature_Configurator" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Desktop service"
-               Description="Features a tray application to allow remote control of power modes and MediaPortal, and a configuration program for MPExtended services.">
-        <ComponentGroupRef Id="Component_USS"/>
-        <ComponentGroupRef Id="Component_Configurator"/>
-      </Feature>
-<!--
-      <Feature Id="Feature_WifiRemote" Level="15" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="WifiRemote"
-               Description="Install the WifiRemote remote control plugin for the MediaPortal client.">
-      </Feature>
--->
-    </Feature>
+    <FeatureRef Id="Feature_All" />
   </Product>
 </Wix>
