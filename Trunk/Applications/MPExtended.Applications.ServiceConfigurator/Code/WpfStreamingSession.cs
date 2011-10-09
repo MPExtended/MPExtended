@@ -29,7 +29,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 NotifyPropertyChanged("Profile");
             }
 
-            String file = newSession.SourceId + " (" + newSession.SourceType + ")";
+            String file = newSession.DisplayName;
             if (this.File == null || !this.File.Equals(file))
             {
                 this.File = file;

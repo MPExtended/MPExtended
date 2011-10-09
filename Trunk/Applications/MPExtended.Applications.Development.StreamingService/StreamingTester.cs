@@ -59,6 +59,17 @@ namespace MPExtended.Applications.Development.StreamingService
         public Form1()
         {
             InitializeComponent();
+
+            cbItemType.Items.Add(WebStreamMediaType.File);
+            cbItemType.Items.Add(WebStreamMediaType.Movie);
+            cbItemType.Items.Add(WebStreamMediaType.MusicAlbum);
+            cbItemType.Items.Add(WebStreamMediaType.MusicTrack);
+            cbItemType.Items.Add(WebStreamMediaType.Picture);
+            cbItemType.Items.Add(WebStreamMediaType.Recording);
+            cbItemType.Items.Add(WebStreamMediaType.TV);
+            cbItemType.Items.Add(WebStreamMediaType.TVEpisode);
+            cbItemType.Items.Add(WebStreamMediaType.TVSeason);
+            cbItemType.Items.Add(WebStreamMediaType.TVShow);
         }
 
         private void cmdConnect_Click(object sender, EventArgs e)
@@ -167,6 +178,16 @@ namespace MPExtended.Applications.Development.StreamingService
             bool success = mWebStreamClient.InitStream(WebStreamMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
             LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.File, txtFileName.Text));
+        }
+
+        private void cmdInitIdTypeStreaming_Click(object sender, EventArgs e)
+        {
+            mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
+            mName = txtItemId.Text;
+            Log("Init Stream with id " + txtItemId.Text + " (type: " + cbItemType.SelectedItem + ")");
+            bool success = mWebStreamClient.InitStream(WebStreamMediaType.File, txtFileName.Text, CLIENT_NAME, mIdentifier);
+            Log("Success = " + success);
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo((WebStreamMediaType)cbItemType.SelectedItem, txtItemId.Text));
         }
 
         private void LoadMediaInfo(WebMediaInfo info)
@@ -398,5 +419,7 @@ namespace MPExtended.Applications.Development.StreamingService
                 Process.Start(info);
             }
         }
+
+
     }
 }
