@@ -141,7 +141,7 @@ namespace MPExtended.Services.StreamingService.Code
                     var ep = mas.GetTVEpisodeBasicById(Id);
                     var season = mas.GetTVSeasonBasicById(ep.SeasonId);
                     var show = mas.GetTVShowBasicById(ep.ShowId);
-                    return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.Title, ep.EpisodeNumber);
+                    return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
                 case WebStreamMediaType.TVSeason:
                     var season2 = mas.GetTVSeasonDetailedById(Id);
                     var show2 = mas.GetTVShowBasicById(season2.ShowId);
