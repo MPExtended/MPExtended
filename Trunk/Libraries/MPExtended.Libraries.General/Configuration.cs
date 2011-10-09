@@ -58,16 +58,24 @@ namespace MPExtended.Libraries.General
 
         public static bool SetCredentials(string username, string password)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(GetPath("Services.xml"));
-            XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
-            userNode.InnerText = username;
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(GetPath("Services.xml"));
+                XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
+                userNode.InnerText = username;
 
-            XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
-            passNode.InnerText = password;
+                XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
+                passNode.InnerText = password;
 
-            doc.Save(GetPath("Services.xml"));
-            return true;
+                doc.Save(GetPath("Services.xml"));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Couldn't update credentials", ex);
+                return false;
+            }
         }
     }
 }

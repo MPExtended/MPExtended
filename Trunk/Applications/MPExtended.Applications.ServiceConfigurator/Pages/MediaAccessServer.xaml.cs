@@ -43,6 +43,12 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Media;
+using Microsoft.Win32;
+using MPExtended.Applications.ServiceConfigurator.Code;
+using System.Text;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
 
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -54,29 +60,27 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     {
         private ServiceController mServiceController;
         private DispatcherTimer mServiceWatcher;
-        private List<WebStreamingSession> mStreamingSessions = new List<WebStreamingSession>();
-        private static ITVAccessService _tvService;
-        private static IMediaAccessService _mediaService;
-        private static IStreamingService _streamingService;
-        private static IWebStreamingService _webStreamingService;
+        private DispatcherTimer mSessionWatcher;
+        private DispatcherTimer mLogUpdater;
+
+        private ObservableCollection<WpfStreamingSession> mStreamingSessions = new ObservableCollection<WpfStreamingSession>();
         private Timer activeSessionTimer = new Timer();
         private InstallationType mInstallationType = Installation.GetInstallationType();
 
         Dictionary<String, Dictionary<String, PluginConfigItem>> PluginConfigurations { get; set; }
 
-        BackgroundWorker workerActiveSessions = new BackgroundWorker();
-        BackgroundWorker workerMusic = new BackgroundWorker();
-        BackgroundWorker workerTVSeries = new BackgroundWorker();
-        BackgroundWorker workerVideos = new BackgroundWorker();
-        BackgroundWorker workerMoPi = new BackgroundWorker();
-        BackgroundWorker workerServiceText = new BackgroundWorker();
-        BackgroundWorker workerLogReader = new BackgroundWorker();
         private string mSelectedLog;
 
         public MediaAccessServer()
         {
             InitializeComponent();
+
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             SetConfigLocation();
+            GenerateBarcode();
 
             InitLogFiles();
 
@@ -92,8 +96,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
 
             //Load the MediaAccess.xml configuration file
-            
-            WebBackendConfiguration backendconfig = MPEServices.NetPipeMediaAccessService.GetBackendConfiguration();
+
+            //WebBackendConfiguration backendconfig = MPEServices.NetPipeMediaAccessService.GetBackendConfiguration();
 
             PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
             try
@@ -126,24 +130,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 mServiceController = null;
             }
 
-            if (mServiceController != null)
-            {
-                btnStartStopService.IsEnabled = true;
-                mServiceWatcher = new DispatcherTimer();
-                mServiceWatcher.Interval = TimeSpan.FromSeconds(2);
-                mServiceWatcher.Tick += timer1_Tick;
-                mServiceWatcher.Start();
-            }
-            else
-            {
-                lblServiceState.Content = "Not installed";
-                btnStartStopService.IsEnabled = false;
-            }
+            lvActiveStreams.ItemsSource = mStreamingSessions;
 
-            activeSessionTimer.Elapsed += new ElapsedEventHandler(activeSessionTimer_Elapsed);
-            activeSessionTimer.Interval = 18000;
-            activeSessionTimer.Enabled = true;
-            activeSessionTimer.AutoReset = true;
             InitBackgroundWorker();
         }
 
@@ -229,75 +217,102 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void InitBackgroundWorker()
         {
-            workerMoPi.DoWork += new DoWorkEventHandler(workerMoPi_DoWork);
-            workerServiceText.DoWork += new DoWorkEventHandler(workerServiceText_DoWork);
-            workerMusic.DoWork += new DoWorkEventHandler(workerMusic_DoWork);
-            workerTVSeries.DoWork += new DoWorkEventHandler(workerTVSeries_DoWork);
-            workerActiveSessions.DoWork += new DoWorkEventHandler(workerActiveSessions_DoWork);
+            //task to watch the windows service
+            if (mServiceController != null)
+            {
+                btnStartStopService.IsEnabled = true;
+                mServiceWatcher = new DispatcherTimer();
+                mServiceWatcher.Interval = TimeSpan.FromSeconds(2);
+                mServiceWatcher.Tick += serviceWatcher_Tick;
+                mServiceWatcher.Start();
+            }
+            else
+            {
+                lblServiceState.Content = "Not installed";
+                btnStartStopService.IsEnabled = false;
+            }
 
+            //task to watch the streaming sessions, only started/stopped when tab is activated/deactivated
 
+            mSessionWatcher = new DispatcherTimer();
+            mSessionWatcher.Interval = TimeSpan.FromSeconds(2);
+            mSessionWatcher.Tick += activeSessionWatcher_Tick;
+
+            //task to update log listview, only started/stopped when tab is activated/deactivated
+            mLogUpdater = new DispatcherTimer();
+            mLogUpdater.Interval = TimeSpan.FromSeconds(2);
+            mLogUpdater.Tick += logUpdater_Tick;
+        }
+
+        private void InitServiceConfiguration()
+        {
+            String user = null;
+            String pass = null;
+            Configuration.GetCredentials(out user, out pass, true);
+
+            txtUsername.Text = user;
+            txtUserPassword.Text = pass;
         }
 
         #region Logging Tab
         private bool mLogReaderRunning = false;
-        DoWorkEventHandler mLogReadingHandler;
+        private StreamReader mLogStreamReader = null;
+        private long lastMaxOffset;
         private void InitLogTab(String _file)
         {
             mSelectedLog = _file;
             if (mSelectedLog != null)
             {
+                lvLogViewer.Items.Clear();
                 LoadLogFiles(mSelectedLog);
-                mLogReaderRunning = true;
-                mLogReadingHandler = new DoWorkEventHandler(workerLogReader_DoWork);
-                workerLogReader.DoWork += mLogReadingHandler;
-                if (!workerLogReader.IsBusy)
-                {
-                    workerLogReader.RunWorkerAsync();
-                }
+
+                String fileName = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
+                mLogStreamReader = new StreamReader(new FileStream(fileName,
+                         FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                //start at the end of the file
+                lastMaxOffset = mLogStreamReader.BaseStream.Length;
+
+                mLogUpdater.Start();
+            }
+        }
+
+        private void StopLogUpdater()
+        {
+            mLogUpdater.Stop();
+            if (mLogStreamReader != null)
+            {
+                mLogStreamReader.Close();
             }
         }
 
         private delegate void AddLogDelegate(String _line);
-        void workerLogReader_DoWork(object sender, DoWorkEventArgs e)
+        private void logUpdater_Tick(object sender, EventArgs e)
         {
-            String fileName = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
-            using (StreamReader reader = new StreamReader(new FileStream(fileName,
-                     FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+
+            //if the file size has not changed, idle
+            if (mLogStreamReader.BaseStream.Length == lastMaxOffset)
             {
-                //start at the end of the file
-                long lastMaxOffset = reader.BaseStream.Length;
-
-                while (mLogReaderRunning)
-                {
-                    System.Threading.Thread.Sleep(200);
-
-                    //if the file size has not changed, idle
-                    if (reader.BaseStream.Length == lastMaxOffset)
-                        continue;
-
-
-
-                    //seek to the last max offset
-                    reader.BaseStream.Seek(lastMaxOffset, SeekOrigin.Begin);
-
-                    //read out of the file until the EOF
-                    string line = "";
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        lvLogViewer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (AddLogDelegate)delegate(String _line)
-                        {
-                            lvLogViewer.Items.Add(_line);
-                            if (cbLogScrollToEnd.IsChecked == true)
-                            {
-                                ScrollToLastItem(lvLogViewer);
-                            }
-                        }, line);
-                    }
-                    //update the last max offset
-                    lastMaxOffset = reader.BaseStream.Position;
-                }
+                return;
             }
-            workerLogReader.DoWork -= mLogReadingHandler;
+
+            //seek to the last max offset
+            mLogStreamReader.BaseStream.Seek(lastMaxOffset, SeekOrigin.Begin);
+
+            //read out of the file until the EOF
+            string line = "";
+            while ((line = mLogStreamReader.ReadLine()) != null)
+            {
+                lvLogViewer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (AddLogDelegate)delegate(String _line)
+                {
+                    lvLogViewer.Items.Add(_line);
+                    if (cbLogScrollToEnd.IsChecked == true)
+                    {
+                        ScrollToLastItem(lvLogViewer);
+                    }
+                }, line);
+            }
+            //update the last max offset
+            lastMaxOffset = mLogStreamReader.BaseStream.Position;
         }
 
         private void btnSaveLog_Click(object sender, RoutedEventArgs e)
@@ -317,35 +332,140 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         #endregion
 
-
-        void activeSessionTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        #region Streaming Sessions Tab
+        private void DeInitStreamingTab()
         {
-            if (!workerActiveSessions.IsBusy)
-            {
-                workerActiveSessions.RunWorkerAsync();
-            }
+            mSessionWatcher.Stop();
         }
 
-        void workerActiveSessions_DoWork(object sender, DoWorkEventArgs e)
+        private void InitStreamingTab()
+        {
+            mSessionWatcher.Start();
+        }
+
+        void activeSessionWatcher_Tick(object sender, EventArgs e)
         {
             try
             {
                 List<WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+
                 if (tmp != null)
                 {
-                    lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-                    {
-                        lvActiveStreams.ItemsSource = tmp;
-                    }));
+                    mStreamingSessions.UpdateStreamingList(tmp);
+                    //lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
+                    //{
+                    //    lvActiveStreams.InvalidateProperty(ListView.ItemsSourceProperty);
+                    //}));
                 }
             }
             catch (CommunicationException)
             {
+                mStreamingSessions.Clear();
                 Log.Warn("No connection to service");
             }
         }
 
+        #endregion
 
+        #region Windows Service Functions
+        private void serviceWatcher_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                mServiceController.Refresh();
+                HandleServiceState(mServiceController.Status);
+            }
+            catch (Exception ex)
+            {
+                ExceptionMessageBox(ex.Message);
+                mServiceWatcher.Stop();
+            }
+        }
+
+        private void RestartService(int timeoutMilliseconds)
+        {
+            int millisec1 = Environment.TickCount;
+            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+            mServiceController.Stop();
+            mServiceController.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+
+            // count the rest of the timeout
+            int millisec2 = Environment.TickCount;
+            timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (millisec2 - millisec1));
+
+            mServiceController.Start();
+            mServiceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
+        }
+
+        private void HandleServiceState(ServiceControllerStatus _status)
+        {
+            switch (_status)
+            {
+                case ServiceControllerStatus.Stopped:
+                    btnStartStopService.Content = "Start";
+                    lblServiceState.Content = "Service Stopped";
+                    lblServiceState.Foreground = System.Windows.Media.Brushes.Red;
+                    break;
+                case ServiceControllerStatus.Running:
+                    btnStartStopService.Content = "Stop";
+                    lblServiceState.Content = "Service Started";
+                    lblServiceState.Foreground = System.Windows.Media.Brushes.Green;
+                    break;
+                case ServiceControllerStatus.StartPending:
+                    btnStartStopService.Content = "Stop";
+                    lblServiceState.Content = "Service Starting";
+                    lblServiceState.Foreground = System.Windows.Media.Brushes.Teal;
+                    break;
+                default:
+                    lblServiceState.Foreground = System.Windows.Media.Brushes.Teal;
+                    lblServiceState.Content = "Service " + _status.ToString();
+                    break;
+
+            }
+        }
+
+        private void btnStartStopService_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsAdmin())
+            {
+                switch (mServiceController.Status)
+                {
+                    case ServiceControllerStatus.Stopped:
+                        UacServiceHelper.StartService();
+                        break;
+                    case ServiceControllerStatus.Running:
+                        UacServiceHelper.StopService();
+                        break;
+                }
+            }
+            else
+            {
+                switch (mServiceController.Status)
+                {
+                    case ServiceControllerStatus.Stopped:
+                        mServiceController.Start();
+                        break;
+                    case ServiceControllerStatus.Running:
+                        mServiceController.Stop();
+                        break;
+
+                }
+            }
+        }
+
+
+        static internal bool IsAdmin()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal p = new WindowsPrincipal(id);
+            return p.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        #endregion
+
+        #region background worker, not used anymore
+        /*
         void workerTVSeries_DoWork(object sender, DoWorkEventArgs e)
         {
             try
@@ -485,32 +605,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }));
             }
         }
-
-
-
-        private void InitWebservice()
-        {
-            String user = null;
-            String pass = null;
-            Configuration.GetCredentials(out user, out pass, true);
-
-        }
-
-
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                mServiceController.Refresh();
-                HandleServiceState(mServiceController.Status);
-            }
-            catch (Exception ex)
-            {
-                ExceptionMessageBox(ex.Message);
-                mServiceWatcher.Stop();
-            }
-        }
+         * 
+         * */
+        #endregion
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -527,13 +624,21 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
                 else
                 {
-                    mLogReaderRunning = false;
+                    StopLogUpdater();
+                }
+
+                if (tcMainTabs.SelectedItem.Equals(tiStreaming))
+                {
+                    InitStreamingTab();
+                }
+                else
+                {
+                    DeInitStreamingTab();
                 }
             }
         }
 
-
-        #region troubleshooting tab
+        #region Troubleshooting Tab
         internal class MyNetworkAddress
         {
             internal NetworkInterface Interface { get; set; }
@@ -596,222 +701,28 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         #endregion
 
-        private void HandleServiceState(ServiceControllerStatus _status)
-        {
-            switch (_status)
-            {
-                case ServiceControllerStatus.Stopped:
-                    btnStartStopService.Content = "Start";
-                    lblServiceState.Content = "Service Stopped";
-                    lblServiceState.Foreground = Brushes.Red;
-                    break;
-                case ServiceControllerStatus.Running:
-                    btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service Started";
-                    lblServiceState.Foreground = Brushes.Green;
-                    break;
-                case ServiceControllerStatus.StartPending:
-                    btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service Starting";
-                    lblServiceState.Foreground = Brushes.Yellow;
-                    break;
-                default:
-                    lblServiceState.Foreground = Brushes.Yellow;
-                    lblServiceState.Content = "Service " + _status.ToString();
-                    break;
-
-            }
-        }
-
-        private void btnStartStopService_Click(object sender, RoutedEventArgs e)
-        {
-            if (!IsAdmin())
-            {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName = "MPExtended.Applications.UacServiceHandler.exe";
-                info.UseShellExecute = true;
-                info.Verb = "runas"; // Provides Run as Administrator
-
-                switch (mServiceController.Status)
-                {
-                    case ServiceControllerStatus.Stopped:
-                        info.Arguments = "start";
-                        break;
-                    case ServiceControllerStatus.Running:
-                        info.Arguments = "stop";
-                        break;
-
-                }
-
-                if (Process.Start(info) == null)
-                {
-                    // The user didn't accept the UAC prompt.
-                    MessageBox.Show("This action needs administrative rights");
-                }
-            }
-            else
-            {
-                switch (mServiceController.Status)
-                {
-                    case ServiceControllerStatus.Stopped:
-                        mServiceController.Start();
-                        break;
-                    case ServiceControllerStatus.Running:
-                        mServiceController.Stop();
-                        break;
-
-                }
-            }
-        }
-
-
-        static internal bool IsAdmin()
-        {
-            WindowsIdentity id = WindowsIdentity.GetCurrent();
-            WindowsPrincipal p = new WindowsPrincipal(id);
-            return p.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-
-        private void btnBrowseVideos_Click(object sender, RoutedEventArgs e)
-        {
-            BrowseForDbLocation(DatabaseType.Videos);
-        }
-
-        private void btnBrowseMopi_Click(object sender, RoutedEventArgs e)
-        {
-            BrowseForDbLocation(DatabaseType.Mopi);
-        }
-
-        private void btnBrowseTvSeries_Click(object sender, RoutedEventArgs e)
-        {
-            BrowseForDbLocation(DatabaseType.TvSeries);
-        }
-
-        private void btnBrowseMusic_Click(object sender, RoutedEventArgs e)
-        {
-            BrowseForDbLocation(DatabaseType.Music);
-        }
-
-        private void btnBrowsePictures_Click(object sender, RoutedEventArgs e)
-        {
-            BrowseForDbLocation(DatabaseType.Pictures);
-        }
-
-        private void btnTestVideos_Click(object sender, RoutedEventArgs e)
-        {
-            workerVideos.RunWorkerAsync();
-        }
-
-        private void btnTestMopi_Click(object sender, RoutedEventArgs e)
-        {
-            workerMoPi.RunWorkerAsync();
-        }
-
-        private void btnTestTvSeries_Click(object sender, RoutedEventArgs e)
-        {
-            workerTVSeries.RunWorkerAsync();
-        }
-
-        private void btnTestMusic_Click(object sender, RoutedEventArgs e)
-        {
-            workerMusic.RunWorkerAsync();
-        }
-
-        private void btnTestPictures_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Not implemented yet", "Error");
-        }
-
-        private enum DatabaseType { Pictures, Videos, Music, Mopi, TvSeries }
-
-        private void BrowseForDbLocation(DatabaseType _db)
-        {
-            // Open document
-            /*string oldFolder = null;
-
-            switch (_db)
-            {
-                case DatabaseType.Pictures:
-                    oldFolder = Configuration.GetMPDbLocations().Pictures;
-                    break;
-                case DatabaseType.Videos:
-                    oldFolder = Configuration.GetMPDbLocations().Videos;
-                    break;
-                case DatabaseType.Music:
-                    oldFolder = Configuration.GetMPDbLocations().Music;
-                    break;
-                case DatabaseType.Mopi:
-                    oldFolder = Configuration.GetMPDbLocations().MovingPictures;
-                    break;
-                case DatabaseType.TvSeries:
-                    oldFolder = Configuration.GetMPDbLocations().TvSeries;
-                    break;
-            }
-
-            // Configure open file dialog box
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            if (oldFolder != null)
-            {
-                dlg.InitialDirectory = new FileInfo(oldFolder).Directory.FullName;
-            }
-
-            dlg.DefaultExt = ".db"; // Default file extension
-            dlg.Filter = "Database files (.db3)|*.db3|All files (.*)|*.*"; // Filter files by extension
-
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-
-            // Process open file dialog box results
-            if (result == true)
-            {
-                // Open document
-                string filename = dlg.FileName;
-
-                switch (_db)
-                {
-                    case DatabaseType.Pictures:
-                        txtDbLocationPictures.Text = filename;
-                        Configuration.ChangeDbLocation("pictures", filename);
-                        break;
-                    case DatabaseType.Videos:
-                        txtDbLocationVideos.Text = filename;
-                        Configuration.ChangeDbLocation("videos", filename);
-                        break;
-                    case DatabaseType.Music:
-                        txtDbLocationMusic.Text = filename;
-                        Configuration.ChangeDbLocation("music", filename);
-                        break;
-                    case DatabaseType.Mopi:
-                        txtDbLocationMopi.Text = filename;
-                        Configuration.ChangeDbLocation("movingpictures", filename);
-                        break;
-                    case DatabaseType.TvSeries:
-                        txtDbLocationTvSeries.Text = filename;
-                        Configuration.ChangeDbLocation("tvseries", filename);
-                        break;
-                }
-            }
-            */
-
-        }
-
         private void cmdUpdateConfig_Click(object sender, RoutedEventArgs e)
         {
             if (Configuration.SetCredentials(txtUsername.Text, txtUserPassword.Text))
             {
-                MessageBox.Show("Successfully updated config");
+                MessageBoxResult res = MessageBox.Show("Successfully updated config, restart service now?", "Config", MessageBoxButton.YesNo);
+
+                if (res == MessageBoxResult.Yes)
+                {
+                    if (!IsAdmin())
+                    {
+                        UacServiceHelper.RestartService();
+                    }
+                    else
+                    {
+                        RestartService(5000);
+                    }
+                }
             }
             else
             {
                 MessageBox.Show("Error updating config");
             }
-        }
-
-        private void btnTestWebService_Click(object sender, RoutedEventArgs e)
-        {
-            workerServiceText.RunWorkerAsync();
         }
 
         private static void ExceptionMessageBox(string exMessage)
@@ -829,6 +740,127 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+
+        #region Barcode
+        /// <summary>
+        /// Save the generated barcode as image file to harddisk
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">event args</param>
+        private void btnSaveToFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog diag = new SaveFileDialog();
+            diag.Filter = "JPEG Image|*.jpg";
+            diag.Title = "Save Barcode as Image File";
+            if (diag.ShowDialog() == true)
+            {
+                ((BitmapSource)imgQRCode.Source).ToWinFormsBitmap().Save(diag.FileName);
+                //imgQRCode..Image.Save(diag.FileName);
+            }
+        }
+
+        /// <summary>
+        /// Generate a QR Barcode with the server information
+        /// </summary>
+        private void GenerateBarcode()
+        {
+            try
+            {
+                ServerDescription desc = new ServerDescription();
+                desc.Port = Int32.Parse(txtServicePort.Text);
+                desc.Name = txtServiceName.Text;
+                desc.HardwareAddresses = GetHardwareAddresses();
+                desc.Hostname = GetServiceName();
+
+                IPHostEntry host;
+                String localIP = "?";
+                StringBuilder localIPs = new StringBuilder();
+                host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork || ip.AddressFamily == AddressFamily.InterNetworkV6)
+                    {
+                        // Single address field
+                        localIP = ip.ToString();
+
+                        // Multiple addresses field
+                        if (localIPs.Length > 0)
+                        {
+                            localIPs.Append(";");
+                        }
+
+                        localIPs.Append(ip.ToString());
+                    }
+                }
+
+                desc.Addresses = localIP;
+                desc.Addresses = (localIPs.Length > 0) ? localIPs.ToString() : "?";
+
+
+                Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
+                imgQRCode.Source = bm.ToWpfBitmap();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[WifiRemote Setup] Error generating barcode: {0}", ex.Message);
+            }
+        }
+
+
+        public static String GetHardwareAddresses()
+        {
+            StringBuilder hardwareAddresses = new StringBuilder();
+            try
+            {
+                NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+                foreach (NetworkInterface adapter in nics)
+                {
+                    if (adapter.OperationalStatus == OperationalStatus.Up)
+                    {
+                        String hardwareAddress = adapter.GetPhysicalAddress().ToString();
+                        if (!hardwareAddress.Equals(String.Empty) && hardwareAddress.Length == 12)
+                        {
+                            if (hardwareAddresses.Length > 0)
+                            {
+                                hardwareAddresses.Append(";");
+                            }
+
+                            hardwareAddresses.Append(hardwareAddress);
+                        }
+                    }
+                }
+            }
+            catch (NetworkInformationException e)
+            {
+                Log.Warn("Could not get hardware address", e);
+            }
+
+            return hardwareAddresses.ToString();
+        }
+
+        /// <summary>
+        /// Get the machine name or a fallback
+        /// </summary>
+        /// <returns></returns>
+        public static string GetServiceName()
+        {
+            try
+            {
+                return System.Environment.MachineName;
+            }
+            catch (InvalidOperationException)
+            {
+                return "MP-Extended Service";
+            }
+        }
+        #endregion
+
+        private void miKickUserSession_Click(object sender, RoutedEventArgs e)
+        {
+            WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
+            bool success = MPEServices.NetPipeWebStreamService.FinishStream(session.Identifier);
         }
 
 
