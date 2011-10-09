@@ -666,6 +666,8 @@ namespace MPExtended.Services.MediaAccessService
                 return GetTVSeasonDetailedById(id).PosterPaths;
             else if (mediatype == WebMediaType.TVEpisode && filetype == WebFileType.Content)
                 return GetTVEpisodeBasicById(id).Path;
+            else if (mediatype == WebMediaType.TVEpisode && filetype == WebFileType.Banner)
+                return GetTVEpisodeBasicById(id).BannerPaths;
             else if (mediatype == WebMediaType.Picture && filetype == WebFileType.Content)
                 return GetPictureBasicById(id).Path;
             else if (mediatype == WebMediaType.MusicAlbum && filetype == WebFileType.Cover)

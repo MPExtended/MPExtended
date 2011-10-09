@@ -17,5 +17,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public IList<string> GuestStars { get; set; }
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
+
+        public String Summary { get; set; }
     }
 }

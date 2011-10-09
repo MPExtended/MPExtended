@@ -257,7 +257,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string sql =                     
                     "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                         "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
-                        "e.GuestStars, e.Director, e.Writer, e.IMDB_ID " +
+                        "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary " +
                     "FROM online_episodes e " +
                     "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
                     "WHERE e.Hidden = 0 AND %where " +
@@ -280,7 +280,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),
-                new SQLFieldMapping("e", "IMDB_ID", "IMDBId", DataReaders.ReadString)
+                new SQLFieldMapping("e", "IMDB_ID", "IMDBId", DataReaders.ReadString),
+                new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
             });
         }
 
