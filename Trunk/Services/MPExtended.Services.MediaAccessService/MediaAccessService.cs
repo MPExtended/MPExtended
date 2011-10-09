@@ -99,19 +99,27 @@ namespace MPExtended.Services.MediaAccessService
 
         private T SelectLibrary<T>(XElement config, ref string savefield, string type, Lazy<T, IDictionary<string, object>>[] libraries)
         {
-            var configured = config.Elements(type).Where(x => x.Value.Length > 0);
+            try
+            {
+                var configured = config.Elements(type).Where(x => x.Value.Length > 0);
 
-            if (configured.Count() == 0)
+                if (configured.Count() == 0)
+                    return default(T);
+
+                string configuredName = configured.First().Value;
+                savefield = configuredName;
+
+                var list = libraries.Where(x => (string)x.Metadata["Name"] == configuredName);
+                if (list.Count() == 0)
+                    return default(T);
+
+                return list.First().Value;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(String.Format("Failed to select library for {0}", type), ex);
                 return default(T);
-
-            string configuredName = configured.First().Value;
-            savefield = configuredName;
-
-            var list = libraries.Where(x => (string)x.Metadata["Name"] == configuredName);
-            if (list.Count() == 0)
-                return default(T);
-
-            return list.First().Value;
+            }
         }
 
         private bool Compose()
