@@ -159,11 +159,16 @@ namespace MPExtended.Libraries.SQLitePlugin
             if (ex.Right.NodeType == ExpressionType.MemberAccess && ((MemberExpression)ex.Right).Expression.NodeType == ExpressionType.Parameter)
                 return null;
             object value = Expression.Lambda(ex.Right).Compile().DynamicInvoke();
+            if (value is Boolean)
+                value = (bool)value ? 1 : 0;
             if (!(value is Int32) && !(value is String))
                 return null;
 
             // check if mapping supports SQL compare
-            SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == leftName).First();
+            var mappingList = mapping.Where(x => x.PropertyName == leftName);
+            if (mappingList.Count() == 0)
+                return null;
+            SQLFieldMapping thisMapping = mappingList.First();
             if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute)))
                 return null;
 
@@ -212,7 +217,10 @@ namespace MPExtended.Libraries.SQLitePlugin
 
             // we got the fieldname, map it to an SQL name
             string fieldName = ex.Member.Name;
-            SQLFieldMapping thisMapping = mapping.Where(x => x.PropertyName == fieldName).First();
+            var list = mapping.Where(x => x.PropertyName == fieldName);
+            if (list.Count() == 0)
+                return null;
+            SQLFieldMapping thisMapping = list.First();
 
             // check if supported on reader
             if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLSortAttribute)))

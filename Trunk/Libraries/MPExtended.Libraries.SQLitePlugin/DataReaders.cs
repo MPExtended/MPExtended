@@ -88,10 +88,16 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (reader.IsDBNull(idx))
-                    return new DateTime(1970, 1, 1);
-                else
-                    return DateTime.Parse(reader.GetString(idx));
+                if (!reader.IsDBNull(idx))
+                {
+                    string val = reader.GetString(idx);
+                    if(val.Length != 0) 
+                    {
+                        return DateTime.Parse(val);
+                    }
+                }
+
+                return new DateTime(1970, 1, 1);
             }
             catch (Exception)
             {

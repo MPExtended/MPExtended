@@ -72,8 +72,50 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllTVShows<WebTVShowBasic>().Where(x => x.Id == seriesId).First();
         }
 
+        private class WatchedCount
+        {
+            public int WatchedEpisodes { get; set; }
+            public int UnwatchedEpisodes { get; set; }
+
+            public WatchedCount()
+            {
+                WatchedEpisodes = 0;
+                UnwatchedEpisodes = 0;
+            }
+        }
+
         private LazyQuery<T> GetAllTVShows<T>() where T : WebTVShowBasic, new()
         {
+            // pre-read watched information
+            var watchedCount = new Dictionary<string, WatchedCount>();
+            string watchQuery =
+                "SELECT e.SeriesID, e.Watched, COUNT(*) AS cnt " + 
+                "FROM online_episodes e " +
+                "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                "WHERE e.Hidden = 0 " + 
+                "GROUP BY e.Watched, e.SeriesID";
+            ReadList<bool>(watchQuery, delegate(SQLiteDataReader reader) {
+                var seriesId = reader.GetInt32(0).ToString();
+                if (!watchedCount.ContainsKey(seriesId))
+                {
+                    watchedCount[seriesId] = new WatchedCount();
+                }
+
+                var watched = reader.GetInt32(1);
+                var count = reader.GetInt32(2);
+                if (watched == 0)
+                {
+                    watchedCount[seriesId].UnwatchedEpisodes = count;
+                }
+                else
+                {
+                    watchedCount[seriesId].WatchedEpisodes = count;
+                }
+
+                return true;
+            });
+
+
             SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
             {
                 // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
@@ -107,7 +149,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "PosterFileNames", "PosterPaths", fixBannerPathReader),
                 new SQLFieldMapping("s", "fanart", "BackdropPaths", fixFanartPathReader),
                 new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
-                new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadStringAsFloat),
+                new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("s", "ContentRating", "ContentRating", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Summary", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Status", "Status", DataReaders.ReadString),
@@ -120,8 +162,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             {
                 // cannot rely on information provided by MPTVSeries here because they count different
                 var eps = (LazyQuery<WebTVEpisodeBasic>)(GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.Id)); // and the nice way is... ? 
-                obj.EpisodeCount = eps.Count();
-                obj.UnwatchedEpisodeCount = eps.Where(x => x.Watched == false).Count();
+                obj.EpisodeCount = watchedCount[obj.Id].WatchedEpisodes + watchedCount[obj.Id].UnwatchedEpisodes;
+                obj.UnwatchedEpisodeCount = watchedCount[obj.Id].UnwatchedEpisodes;
                 return obj;
             });
         }
@@ -226,8 +268,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             {
                 new SQLFieldMapping("e", "EpisodeID", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeID", "TVDBId", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", ReadSeasonID),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
