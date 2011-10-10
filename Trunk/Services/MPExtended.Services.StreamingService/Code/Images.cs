@@ -26,8 +26,10 @@ using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
+using MPExtended.Libraries.ServiceLib;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -104,9 +106,25 @@ namespace MPExtended.Services.StreamingService.Code
 
         public static Stream GetImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
         {
-            string path = MPEServices.NetPipeMediaAccessService.GetPathList((WebMediaType)mediatype, (WebFileType)artworktype, id).ElementAt(offset);
+            // validate arguments
+            var pathlist = MPEServices.NetPipeMediaAccessService.GetPathList((WebMediaType)mediatype, (WebFileType)artworktype, id);
+            if (pathlist == null || pathlist.Count <= offset)
+            {
+                Log.Info("Requested unavailable artwork mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
+            string path = pathlist.ElementAt(offset);
+
             Stream data = null;
-            if (MPEServices.NetPipeMediaAccessService.IsLocalFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset))
+            WebFileInfo info = MPEServices.NetPipeMediaAccessService.GetFileInfo((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
+            if (!info.Exists)
+            {
+                Log.Info("Requested unavailable artwork mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
+            else if (!info.IsLocalFile)
             {
                 data = MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
             }

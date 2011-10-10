@@ -31,13 +31,19 @@ namespace MPExtended.Services.UserSessionService
 
         public UserSessionProxyService()
         {
+            NetTcpBinding binding = new NetTcpBinding()
+            {
+                MaxReceivedMessageSize = 100000000,
+                ReceiveTimeout = new TimeSpan(0, 0, 5),
+                SendTimeout = new TimeSpan(0, 0, 5),
+            };
+            binding.ReliableSession.Enabled = true;
+            binding.ReliableSession.Ordered = true;
+
+
             proxy = ChannelFactory<IUserSessionService>.CreateChannel(
-                new NetNamedPipeBinding() { 
-                    MaxReceivedMessageSize = 100000000,  
-                    ReceiveTimeout = new TimeSpan(0, 0, 5),
-                    SendTimeout = new TimeSpan(0, 0, 5),
-                },
-                new EndpointAddress("net.pipe://localhost/MPExtended/UserSessionServiceImplementation")
+                binding,
+                new EndpointAddress("net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation")
             );
         }
 

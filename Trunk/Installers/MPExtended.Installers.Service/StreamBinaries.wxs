@@ -41,6 +41,9 @@
       </Directory>
 
       <Directory Id="Dir_Streaming_VLC" Name="vlc-1.1.11">
+        <!-- VC redist for VLCWrapper-->
+        <Merge Id="VC2010Redist" SourceFile="$(var.SolutionDir)\Libraries\Installer\Microsoft_VC100_CRT_x86.msm" DiskId="1" Language="0" />
+        
         <Component Id="Component_Streaming_VLC" Guid="867bac19-d289-4893-875d-6f3bff560b5e">
           <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe" />
 

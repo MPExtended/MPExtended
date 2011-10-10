@@ -674,8 +674,9 @@ namespace MPExtended.Services.MediaAccessService
                 return GetMusicAlbumBasicById(id).CoverPaths;
             else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Content)
                 return GetMusicTrackBasicById(id).Path;
-            else
-                throw new ArgumentException("Invalid combination of filetype and mediatype");
+
+            Log.Warn("Invalid combination of filetype {0} and mediatype {1} requested", filetype, mediatype);
+            return null;
         }
 
         public WebFileInfo GetFileInfo(WebMediaType mediatype, WebFileType filetype, string id, int offset)
@@ -694,13 +695,21 @@ namespace MPExtended.Services.MediaAccessService
 
         public bool IsLocalFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            return GetFileInfo(mediatype, filetype, id, offset).IsLocalFile;
+            WebFileInfo info = GetFileInfo(mediatype, filetype, id, offset);
+            return info.Exists && info.IsLocalFile;
         }
 
         public Stream RetrieveFile(WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
             try
             {
+                WebFileInfo info = GetFileInfo(mediatype, filetype, id, offset);
+                if (!info.Exists)
+                {
+                    Log.Warn("Requested non-existing file mediatype={0} filetype={1} id={2} offset={3}", mediatype, filetype, id, offset);
+                    return null;
+                }
+
                 return GetLibrary(mediatype).GetFile(GetPathList(mediatype, filetype, id).ElementAt(offset));
             }
             catch (Exception ex)

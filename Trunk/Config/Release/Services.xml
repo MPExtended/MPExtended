@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<serviceconfig>
+  <config>
+    <username>admin</username>
+    <password>admin</password>
+  </config>
+  <bonjour>
+    <enabled>false</enabled>
+    <pcname /><!-- Automatically detected when empty -->
+  </bonjour>
+  <disabledServices>
+    <!--
+      You can disable individual services (for debugging) here. Enter the assembly name in a <service> tag:
+      
+        <service>MPExtended.Services.MediaAccessService</service>
+        <service>MPExtended.Services.TVAccessService</service>
+        <service>MPExtended.Services.StreamingService</service>
+        <service>MPExtended.Services.UserSessionService</service>
+    -->
+  </disabledServices>
+</serviceconfig>

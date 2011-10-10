@@ -103,6 +103,7 @@
             <!-- Configurator -->
             <Component Id="Component_Configurator_Binaries" Guid="b35532af-5cc4-41a7-9bce-03175b3d8f92">
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe.config" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.xml" />
@@ -137,21 +138,21 @@
             <CreateFolder Directory="ConfigDirectory">
               <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
             </CreateFolder>
-            <File Source="$(var.SolutionDir)\Config\Services.xml">
+            <File Source="$(var.SolutionDir)\Config\Release\Services.xml">
               <Permission User="Everyone" GenericAll="yes" Write="yes" />
             </File>
           </Component>
 
           <!-- MAS config -->
           <Component Id="Component_MAS_Config" Guid="80b842fd-72b9-4a70-a3de-f307edcacb33">
-            <File Source="$(var.SolutionDir)\Config\MediaAccess.xml">
+            <File Source="$(var.SolutionDir)\Config\Release\MediaAccess.xml">
               <Permission User="Everyone" GenericAll="yes" Write="yes" />
             </File>
           </Component>
 
           <!-- Stream config -->
           <Component Id="Component_WSS_Config" Guid="c1b6913e-a23b-4353-bb64-96bdb712ad19">
-            <File Source="$(var.SolutionDir)\Config\Streaming.xml">
+            <File Source="$(var.SolutionDir)\Config\Release\Streaming.xml">
               <Permission User="Everyone" GenericAll="yes" Write="yes" />
             </File>
           </Component>

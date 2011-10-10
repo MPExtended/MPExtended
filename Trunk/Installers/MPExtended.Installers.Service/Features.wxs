@@ -97,6 +97,7 @@
                Description="Transcodes and streams your media files to clients.">
         <ComponentGroupRef Id="Component_Streaming"/>
         <ComponentGroupRef Id="Component_WSS"/>
+        <MergeRef Id="VC2010Redist"/>
       </Feature>
       
       <!--
