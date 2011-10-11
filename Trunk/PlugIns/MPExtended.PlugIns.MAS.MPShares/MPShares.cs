@@ -46,7 +46,16 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             var localsharelist = new List<Share>();
             string[] sections = { "pictures", "movies", "music" };
-            XElement root = XElement.Load(this.data.Configuration["config"].ConfigValue);
+            XElement root;
+            try
+            {
+                root = XElement.Load(this.data.Configuration["config"].ConfigValue);
+            }
+            catch (FileNotFoundException)
+            {
+                data.Log.Warn("Couldn't load MediaPortal configuration file");
+                return new List<WebDriveBasic>() { };
+            }
 
             foreach (string section in sections)
             {

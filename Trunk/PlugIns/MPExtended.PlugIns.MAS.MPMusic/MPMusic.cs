@@ -26,6 +26,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using System.Data.SQLite;
 using MPExtended.Libraries.SQLitePlugin;
+using System.Security.Cryptography;
 
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
@@ -34,6 +35,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     public class MPMusic : Database, IMusicLibrary
     {
         private IPluginData data;
+        private MD5 md5;
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
@@ -44,6 +46,9 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
         {
+            Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
+
+
             string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre " +
                          "FROM tracks t " + 
                          "WHERE %where";
@@ -64,7 +69,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 if (item is WebMusicTrackDetailed)
                 {
                     WebMusicTrackDetailed det = item as WebMusicTrackDetailed;
-                    det.Artists = GetAllArtists().Where(x => det.ArtistId.Contains(x.Id)).ToList();
+                    det.Artists = det.ArtistId.Where(x => artists.ContainsKey(x)).Select(x => artists[x]).ToList();
                 }
                 return item;
             });
@@ -149,7 +154,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public WebMusicArtistBasic GetArtistBasicById(string artistId)
         {
-            return (GetAllArtists() as LazyQuery<WebMusicArtistBasic>).Where(x => x.Id == artistId).First();
+            return GetAllArtists().Where(x => x.Id == artistId).First();
         }
 
         public IEnumerable<WebGenre> GetAllGenres()
@@ -182,7 +187,9 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         private string GenerateHash(string text)
         {
-            var md5 = System.Security.Cryptography.MD5.Create();
+            if (md5 == null)
+                md5 = new MD5CryptoServiceProvider();
+
             byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
             return Convert.ToBase64String(data).ToLower().Substring(0, 10);
         }
