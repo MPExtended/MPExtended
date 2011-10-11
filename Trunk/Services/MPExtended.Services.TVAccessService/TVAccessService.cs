@@ -37,30 +37,62 @@ namespace MPExtended.Services.TVAccessService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVAccessService : ITVAccessService
     {
-        #region Fields
         private const int API_VERSION = 2;
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
-        private Dictionary<string, User> _tvUsers;
-        #endregion
+        private Dictionary<string, IUser> _tvUsers;
 
-        #region Constructor
+        #region Service
         public TVAccessService()
         {
-            _tvUsers = new Dictionary<string, User>();
+            _tvUsers = new Dictionary<string, IUser>();
             _tvBusiness = new TvBusinessLayer();
             WcfUsernameValidator.Init();
 
             // try to initialize Gentle and TVE API
             InitializeGentleAndTVE();
         }
-        #endregion
 
-        #region Public Methods
-        public bool TestConnectionToTVService()
+        private void InitializeGentleAndTVE()
         {
-            return RemoteControl.IsConnected;
+            try
+            {
+                // read Gentle configuration from CommonAppData
+                string gentleConfigFile = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), 
+                    "Team MediaPortal", "MediaPortal TV Server", "Gentle.config"
+                );
+
+                if (!File.Exists(gentleConfigFile))
+                    throw new FileNotFoundException("The Gentle configuration file couldn't be found. This occurs when TV Server is not installed.", gentleConfigFile);
+
+                Gentle.Common.Configurator.AddFileHandler(gentleConfigFile);
+
+                // connect to tv server via TVE API
+                RemoteControl.Clear();
+                RemoteControl.HostName = TvDatabase.Server.ListAll().First(server => server.IsMaster).HostName;
+
+                _tvControl = RemoteControl.Instance;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to connect to TVEngine", ex);
+            }
+        }
+
+        private IUser GetUserByUserName(string userName, bool create = false)
+        {
+            if (!_tvUsers.ContainsKey(userName) && !create)
+            {
+                return null;
+            }
+            else if (!_tvUsers.ContainsKey(userName) && create)
+            {
+                _tvUsers.Add(userName, new User(userName, false));
+            }
+
+            return _tvUsers[userName];
         }
 
         public WebTVServiceDescription GetServiceDescription()
@@ -72,39 +104,67 @@ namespace MPExtended.Services.TVAccessService
                 ServiceVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
             };
         }
+        #endregion
 
+        #region TV Server
+        public bool TestConnectionToTVService()
+        {
+            return RemoteControl.IsConnected;
+        }
+
+        public IList<WebCard> GetCards()
+        {
+            return Card.ListAll().Select(c => c.ToWebCard()).ToList();
+        }
+
+        public IList<WebVirtualCard> GetActiveCards()
+        {
+            return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.ToWebVirtualCard()).ToList();
+        }
+
+        public IList<WebUser> GetActiveUsers()
+        {
+            return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.User.ToWebUser()).ToList();
+        }
+
+        private IEnumerable<VirtualCard> GetTimeshiftingOrRecordingVirtualCards()
+        {
+            return Card.ListAll()
+                .Where(card => RemoteControl.Instance.CardPresent(card.IdCard))
+                .Select(card => RemoteControl.Instance.GetUsersForCard(card.IdCard))
+                .Where(users => users != null)
+                .SelectMany(user => user)
+                .Select(user => new VirtualCard(user, RemoteControl.HostName))
+                .Where(tvCard => tvCard.IsTimeShifting || !tvCard.IsRecording);
+        }
+
+        public IList<WebRtspClient> GetStreamingClients()
+        {
+            return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
+        }
+
+        public string ReadSettingFromDatabase(string tagName)
+        {
+            return _tvBusiness.GetSetting(tagName, "").Value;
+        }
+
+        public void WriteSettingToDatabase(string tagName, string value)
+        {
+            Setting setting = _tvBusiness.GetSetting(tagName, "");
+            setting.Value = value;
+            setting.Persist();
+        }
+        #endregion
+
+        #region Schedules
         public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType)
         {
             AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
-
-        }
-        public WebChannelState GetChannelState(int channelId, string userName)
-        {
-            ChannelState state = _tvControl.GetChannelState(channelId, GetUserByUserName(userName));
-            return ToWebChannelState(state);
-        }
-
-
-        public Dictionary<int, WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
-        {
-            Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName));
-            Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
-            if (channelStates != null && channelStates.Count > 0)
-            {
-                foreach (var entry in channelStates)
-                {
-
-                    webChannelStates.Add(entry.Key, ToWebChannelState(entry.Value));
-
-                }
-            }
-            return webChannelStates;
         }
 
         public void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
         {
             ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
-
             Schedule schedule = _tvBusiness.AddSchedule(channelId, title, startTime, endTime, (int)scheduleRecType);
 
             schedule.ScheduleType = (int)scheduleRecType;
@@ -117,255 +177,22 @@ namespace MPExtended.Services.TVAccessService
             }
 
             if (priority >= 0)
+            {
                 schedule.Priority = priority;
+            }
 
             schedule.Persist();
             _tvControl.OnNewSchedule();
-        }
-
-        public WebVirtualCard SwitchTVServerToChannelAndGetVirtualCard(string userName, int channelId)
-        {
-            return SwitchTVServerToChannel(userName, channelId).ToWebVirtualCard();
-        }
-
-        public string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
-        {
-            return SwitchTVServerToChannel(userName, channelId).RTSPUrl;
-        }
-
-        public string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
-        {
-            return SwitchTVServerToChannel(userName, channelId).TimeShiftFileName;
-        }
-
-        public void SendHeartbeat(string userName)
-        {
-            if (String.IsNullOrEmpty(userName))
-            {
-                Log.Error("ArgumentNullException in SendHeartbeat");
-                throw new ArgumentNullException("userName");
-            }
-            User currentUser = GetUserByUserName(userName);
-
-            _tvControl.HeartBeat(currentUser);
-        }
-
-        public bool CancelCurrentTimeShifting(string userName)
-        {
-            if (String.IsNullOrEmpty(userName))
-            {
-                Log.Error("ArgumentNullException in CancelCurrentTimeShifting");
-                throw new ArgumentNullException("userName");
-            }
-            User currentUser = GetUserByUserName(userName);
-
-            return _tvControl.StopTimeShifting(ref currentUser);
-        }
-
-
-        public IList<WebChannelDetailed> GetChannelsDetailed(int groupId)
-        {
-            if (groupId <= 0)
-                return null;
-
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
-        }
-
-        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count)
-        {
-            if (groupId <= 0)
-                return null;
-
-            if (startIndex < 0)
-                return null;
-
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
-        }
-
-        public IList<WebChannelBasic> GetChannelsBasic(int groupId)
-        {
-            if (groupId <= 0)
-                return null;
-
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
-        }
-
-        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count)
-        {
-            if (groupId <= 0)
-            {
-                Log.Debug("GroupId in GetChannelsBasicByRange is smaller than 0");
-                return null;
-            }
-            if (startIndex < 0)
-            {
-                Log.Debug("StartIndex in GetChannelsBasicByRange is smaller than 0");
-                return null;
-            }
-
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelBasic()).ToList();
-        }
-
-        public int GetChannelCount(int groupId)
-        {
-            if (groupId <= 0)
-            {
-                Log.Debug("GroupId in GetChannelsBasicByRange is smaller than 0");
-                return 0;
-            }
-
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
-        }
-
-        public IList<WebRecordingBasic> GetRecordings()
-        {
-            return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
-        }
-        public WebRecordingBasic GetRecordingById(int recordingId)
-        {
-            return Recording.ListAll().First(p => p.IdRecording == recordingId).ToWebRecording();
         }
 
         public IList<WebScheduleBasic> GetSchedules()
         {
             return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).ToList();
         }
+
         public WebScheduleBasic GetScheduleById(int scheduleId)
         {
             return Schedule.Retrieve(scheduleId).ToWebSchedule();
-        }
-
-        public WebChannelDetailed GetChannelDetailedById(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("ChannelId in GetChannelDetailedById is smaller than 0");
-                return null;
-            }
-
-            return Channel.Retrieve(channelId).ToWebChannelDetailed();
-        }
-        public Stream GetChannelLogo(int channelId)
-        {
-            var channel = Channel.Retrieve(channelId);
-            if (channel != null)
-            {
-                var fileList = GetChannelLogos();
-                if (fileList != null && fileList.Count > 0)
-                {
-
-                    var logo = fileList.First(p => Path.GetFileNameWithoutExtension(p.Name).ToLowerInvariant() == channel.DisplayName.ToLowerInvariant());
-                    if (logo != null && File.Exists(logo.FullName))
-                    {
-                        return GetImage(logo.FullName);
-
-                    }
-                }
-
-            }
-            return null;
-        }
-
-        public WebChannelBasic GetChannelBasicById(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("ChannelId in GetChannelBasicById is smaller than 0");
-                return null;
-            }
-
-            return Channel.Retrieve(channelId).ToWebChannelBasic();
-        }
-
-        public WebProgramDetailed GetProgramDetailedById(int programId)
-        {
-            if (programId <= 0)
-            {
-                Log.Debug("programId in GetProgramDetailedById is smaller than 0");
-                return null;
-            }
-
-            return Program.Retrieve(programId).ToWebProgramDetailed();
-        }
-
-        public WebProgramBasic GetProgramBasicById(int programId)
-        {
-            if (programId <= 0)
-            {
-                Log.Debug("programId in GetProgramBasicById is smaller or equal 0");
-                return null;
-            }
-
-            return Program.Retrieve(programId).ToWebProgramBasic();
-        }
-        public IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("ChannelId in GetCurrentAndNextProgramForChannel is smaller than 0");
-                return null;
-            }
-            return Channel.Retrieve(channelId).ToListWebProgramBasicNowNext();
-        }
-        public IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("ChannelId in GetCurrentAndNextProgramForChannel is smaller than 0");
-                return null;
-            }
-            return Channel.Retrieve(channelId).ToListWebProgramDetailedNowNext();
-        }
-
-
-        public IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
-        {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
-        }
-
-        public IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
-        {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
-        }
-
-        public bool GetProgramIsScheduledOnChannel(int channelId, int programId)
-        {
-            Program program = Program.Retrieve(programId);
-            Channel channel = Channel.Retrieve(channelId);
-
-            return channel.ReferringSchedule().Any(schedule => schedule.IsRecordingProgram(program, false));
-        }
-
-        public bool GetProgramIsScheduled(int programId)
-        {
-            Program p = Program.Retrieve(programId);
-            return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true) && schedule.IdChannel == p.IdChannel).Count() > 0;
-        }
-
-        public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
-        {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).ToList();
-        }
-
-        public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm)
-        {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramBasic()).ToList();
-        }
-
-        public IList<WebChannelGroup> GetGroups()
-        {
-            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
-        }
-
-        public WebChannelGroup GetGroupById(int groupId)
-        {
-            if (groupId <= 0)
-            {
-                Log.Debug("groupId in GetGroupById is smaller or equal 0");
-                return null;
-            }
-
-            return ChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
         public void CancelSchedule(int programId)
@@ -392,7 +219,8 @@ namespace MPExtended.Services.TVAccessService
         public void DeleteSchedule(int scheduleId)
         {
             Schedule schedule = Schedule.Retrieve(scheduleId);
-            // mgp first cancel all of the episodes of this program for this schedule
+
+            // first cancel all of the episodes of this program for this schedule
             foreach (Program program in Program.ListAll().Where(program => program.Title == schedule.ProgramName))
             {
                 if (schedule.IsRecordingProgram(program, true))
@@ -402,6 +230,7 @@ namespace MPExtended.Services.TVAccessService
                     _tvControl.OnNewSchedule();
                 }
             }
+
             // now remove existing CanceledSchedule for this schedule
             foreach (CanceledSchedule canceled in CanceledSchedule.ListAll().Where(canceled => canceled.IdSchedule == schedule.IdSchedule))
             {
@@ -410,255 +239,245 @@ namespace MPExtended.Services.TVAccessService
             schedule.Remove();
             _tvControl.OnNewSchedule();
         }
-
-        public IList<WebCard> GetCards()
-        {
-            return Card.ListAll().Select(c => c.ToWebCard()).ToList();
-        }
-
-        public IList<WebVirtualCard> GetActiveCards()
-        {
-            return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.ToWebVirtualCard()).ToList();
-        }
-
-        public IList<WebRtspClient> GetStreamingClients()
-        {
-            return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
-        }
-
-        public IList<WebUser> GetActiveUsers()
-        {
-            return GetTimeshiftingOrRecordingVirtualCards().Select(card => card.User.ToWebUser()).ToList();
-        }
-
-        public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("channelId in GetCurrentProgramOnChannel is smaller or equal 0");
-                return null;
-            }
-
-
-            return Channel.Retrieve(channelId).CurrentProgram.ToWebProgramDetailed();
-        }
-
-        public WebProgramDetailed GetNextProgramOnChannel(int channelId)
-        {
-            if (channelId <= 0)
-            {
-                Log.Debug("channelId in GetNextProgramOnChannel is smaller or equal 0");
-                return null;
-            }
-
-
-            return Channel.Retrieve(channelId).NextProgram.ToWebProgramDetailed();
-        }
-
-        public string ReadSettingFromDatabase(string tagName)
-        {
-            return _tvBusiness.GetSetting(tagName, "").Value;
-        }
-
-        public void WriteSettingToDatabase(string tagName, string value)
-        {
-            Setting setting = _tvBusiness.GetSetting(tagName, "");
-
-            setting.Value = value;
-            setting.Persist();
-        }
-    
         #endregion
 
-        #region Private Methods
-        private void InitializeGentleAndTVE()
+        #region Channels
+        public IList<WebChannelGroup> GetGroups()
+        {
+            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+        }
+
+        public WebChannelGroup GetGroupById(int groupId)
+        {
+            return ChannelGroup.Retrieve(groupId).ToWebChannelGroup();
+        }
+
+        public int GetChannelCount(int groupId)
+        {
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
+        }
+
+        public IList<WebChannelBasic> GetChannelsBasic(int groupId)
+        {
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
+        }
+
+        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count)
         {
             try
             {
-                // read Gentle configuration from CommonAppData
-                string gentleConfigFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Team MediaPortal\MediaPortal TV Server\Gentle.config";
-
-                if (!System.IO.File.Exists(gentleConfigFile))
-                    throw new System.IO.FileNotFoundException("The Gentle configuration file couldn't be found. This occurs when TV Server is not installed.", gentleConfigFile);
-
-                Gentle.Common.Configurator.AddFileHandler(gentleConfigFile);
-
-                // connect to tv server via TVE API
-                RemoteControl.Clear();
-                RemoteControl.HostName = GetMasterServerHostname();
-
-                _tvControl = RemoteControl.Instance;
+                return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelBasic()).ToList();
             }
-            catch (Exception ex)
+            catch (ArgumentOutOfRangeException)
             {
-                // TODO: log the exception
-                Log.Error("Failed to connect to TVEngine", ex);
+                Log.Warn("Invalid indexes passed to GetChannelsBasicByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
+                return null;
             }
         }
 
-        private string GetMasterServerHostname()
+        public IList<WebChannelDetailed> GetChannelsDetailed(int groupId)
         {
-            return TvDatabase.Server.ListAll().First(server => server.IsMaster).HostName;
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
+        }
+
+        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count)
+        {
+            try
+            {
+                return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Log.Warn("Invalid indexes passed to GetChannelsDetailedByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
+                return null;
+            }
+        }
+
+        public WebChannelBasic GetChannelBasicById(int channelId)
+        {
+            return Channel.Retrieve(channelId).ToWebChannelBasic();
+        }
+
+        public WebChannelDetailed GetChannelDetailedById(int channelId)
+        {
+            return Channel.Retrieve(channelId).ToWebChannelDetailed();
+        }
+
+        public WebChannelState GetChannelState(int channelId, string userName)
+        {
+            return _tvControl.GetChannelState(channelId, GetUserByUserName(userName)).ToWebChannelState();
+        }
+
+        public Dictionary<int, WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
+        {
+            Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName));
+            Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
+            if (channelStates != null && channelStates.Count > 0)
+            {
+                foreach (var entry in channelStates)
+                {
+                    webChannelStates.Add(entry.Key, entry.Value.ToWebChannelState());
+                }
+            }
+
+            return webChannelStates;
+        }
+        #endregion
+
+        #region Timeshifting
+        public WebVirtualCard SwitchTVServerToChannelAndGetVirtualCard(string userName, int channelId)
+        {
+            return SwitchTVServerToChannel(userName, channelId).ToWebVirtualCard();
+        }
+
+        public string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
+        {
+            return SwitchTVServerToChannel(userName, channelId).RTSPUrl;
+        }
+
+        public string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
+        {
+            return SwitchTVServerToChannel(userName, channelId).TimeShiftFileName;
         }
 
         private VirtualCard SwitchTVServerToChannel(string userName, int channelId)
         {
             if (String.IsNullOrEmpty(userName))
             {
-                Log.Error("ArgumentNullException for argument userName in SwitchTVServerToChannel");
+                Log.Error("Called SwitchTVServerToChannel with empty userName");
                 throw new ArgumentNullException("userName");
             }
 
-            if (channelId == 0)
-            {
-                Log.Error("ArgumentNullException for argument channelId in SwitchTVServerToChannel, channelId is not valid");
-                throw new ArgumentException("The channel id is not valid!", "channelId");
-            }
-            Log.Debug("getting UserName");
-            User currentUser = GetUserByUserName(userName);
+            Log.Debug("Starting timeshifiting with username {0} on channel id {1}", userName, channelId);
+            IUser currentUser = GetUserByUserName(userName, true);
 
             VirtualCard tvCard;
-            Log.Debug("Start Timeshifting");
+            Log.Debug("Starting timeshifting");
             TvResult result = _tvControl.StartTimeShifting(ref currentUser, channelId, out tvCard);
+            Log.Trace("Tried to start timeshifting, result {0}", result);
 
             if (result != TvResult.Succeeded)
             {
-                Log.Debug("Timeshifting hasn't succeded, Thread sleeps 2000ms");
-                // wait a short while
-                System.Threading.Thread.Sleep(2000);
-
-                // Try again
-                Log.Debug("Timeshifting hasn't succeded,start timeshifting again");
-                result = _tvControl.StartTimeShifting(ref currentUser, channelId, out tvCard);
-
-                if (result != TvResult.Succeeded)
-                {
-                    // didn't work
-                    Log.Error("InvalidOperationException couldn't start TV stream: " + result);
-                    throw new InvalidOperationException("Couldn't start TV stream: " + result);
-
-                }
+                // TODO: should we retry?
+                Log.Error("Starting timeshifting failed with result {0}", result);
+                throw new Exception("Failed to start tv stream: " + result);
             }
-            Log.Debug("Timeshifting has succeded");
+
+            Log.Debug("Timeshifting succeeded");
             if (tvCard == null)
             {
-                Log.Error("NullReferenceException: Couldn't get virtual card.");
-                throw new NullReferenceException("Couldn't get virtual card.");
+                Log.Error("Couldn't get virtual card");
+                throw new Exception("Couldn't get virtual card");
             }
+
             // set card id and channel id of user, required for heartbeat and stopping of timeshifting
             currentUser.CardId = tvCard.Id;
             currentUser.IdChannel = channelId;
-
             _tvUsers[userName] = currentUser;
 
             return tvCard;
         }
 
-        private User GetUserByUserName(string userName)
+        public void SendHeartbeat(string userName)
         {
-            if (!_tvUsers.ContainsKey(userName))
-                _tvUsers.Add(userName, new User(userName, false));
-
-            return _tvUsers[userName];
-        }
-
-        private IList<VirtualCard> GetTimeshiftingOrRecordingVirtualCards()
-        {
-            List<VirtualCard> result = new List<VirtualCard>();
-
-            foreach (Card card in Card.ListAll())
+            IUser currentUser = GetUserByUserName(userName);
+            if (currentUser == null)
             {
-                if (!RemoteControl.Instance.CardPresent(card.IdCard))
-                    continue;
-
-                User[] users = RemoteControl.Instance.GetUsersForCard(card.IdCard);
-
-                if (users == null)
-                    continue;
-
-                foreach (User user in users)
-                {
-                    if (card.IdCard != user.CardId)
-                        continue;
-
-                    VirtualCard tvCard = new VirtualCard(user, RemoteControl.HostName);
-
-                    if (!tvCard.IsTimeShifting && !tvCard.IsRecording)
-                        continue;
-
-                    result.Add(tvCard);
-                }
+                Log.Error("Tried to send heartbeat for invalid user {0}", userName);
+                throw new ArgumentException("Invalid username");
             }
 
-            return result;
+            _tvControl.HeartBeat(currentUser);
         }
 
-        private static Stream GetImage(string path)
+        public bool CancelCurrentTimeShifting(string userName)
         {
-            if (System.IO.File.Exists(path))
+            IUser currentUser = GetUserByUserName(userName);
+            if (currentUser == null)
             {
-                try
-                {
-                    FileStream fs = File.OpenRead(path);
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
-                    return fs;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Error getting image " + path, ex);
-                }
+                Log.Error("Tried to cancel timeshifting for invalid user {0}", userName);
+                throw new ArgumentException("Invalid username");
             }
-            return null;
-        }
-        private static IList<FileInfo> GetChannelLogos()
-        {
-            List<FileInfo> logoPaths = new List<FileInfo>();
 
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\TV4Home\\ChannelLogos";
-            if (Directory.Exists(path))
-            {
-                try
-                {
-                    System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(path);
-                    System.IO.FileInfo[] fileList = directoryInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly);
-                    logoPaths = fileList.Where(p => (p.Extension.ToLowerInvariant() == ".png") || (p.Extension.ToLowerInvariant() == ".jpg")).ToList();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Exception in GetChannelLogos", ex);
-                }
-            }
-            return logoPaths;
+            return _tvControl.StopTimeShifting(ref currentUser);
         }
-        private WebChannelState ToWebChannelState(ChannelState state)
-        {
-
-            switch (state)
-            {
-                case ChannelState.tunable:
-                    return WebChannelState.Tunable;
-                case ChannelState.timeshifting:
-                    return WebChannelState.Timeshifting;
-                case ChannelState.recording:
-                    return WebChannelState.Recording;
-                case ChannelState.nottunable:
-                    return WebChannelState.NotTunable;
-            }
-            return WebChannelState.Tunable;
-        }
-
         #endregion
-    }
 
-    /// <summary>
-    /// This is required for VS to pick up the reference in the web project. Ignore it.
-    /// </summary>
-    class GentleProviders
-    {
-        private GentleProviders()
+        #region Recordings
+        public IList<WebRecordingBasic> GetRecordings()
         {
-            MySQLProvider prov1 = new MySQLProvider("");
-            SQLServerProvider prov2 = new SQLServerProvider("");
+            return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
         }
+        public WebRecordingBasic GetRecordingById(int recordingId)
+        {
+            return Recording.ListAll().First(p => p.IdRecording == recordingId).ToWebRecording();
+        }
+        #endregion
+
+        #region EPG
+        public IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
+        {
+            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
+        }
+
+        public IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
+        {
+            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
+        }
+
+        public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)
+        {
+            return Channel.Retrieve(channelId).CurrentProgram.ToWebProgramDetailed();
+        }
+
+        public WebProgramDetailed GetNextProgramOnChannel(int channelId)
+        {
+            return Channel.Retrieve(channelId).NextProgram.ToWebProgramDetailed();
+        }
+
+        public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
+        {
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).ToList();
+        }
+
+        public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm)
+        {
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramBasic()).ToList();
+        }
+
+        public WebProgramBasic GetProgramBasicById(int programId)
+        {
+            return Program.Retrieve(programId).ToWebProgramBasic();
+        }
+
+        public IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId)
+        {
+            return Channel.Retrieve(channelId).ToListWebProgramBasicNowNext();
+        }
+
+        public IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId)
+        {
+            return Channel.Retrieve(channelId).ToListWebProgramDetailedNowNext();
+        }
+
+        public WebProgramDetailed GetProgramDetailedById(int programId)
+        {
+            return Program.Retrieve(programId).ToWebProgramDetailed();
+        }
+
+        public bool GetProgramIsScheduledOnChannel(int channelId, int programId)
+        {
+            Program program = Program.Retrieve(programId);
+            Channel channel = Channel.Retrieve(channelId);
+
+            return channel.ReferringSchedule().Any(schedule => schedule.IsRecordingProgram(program, false));
+        }
+
+        public bool GetProgramIsScheduled(int programId)
+        {
+            Program p = Program.Retrieve(programId);
+            return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0;
+        }
+        #endregion
     }
 }

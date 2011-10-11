@@ -40,6 +40,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Poster = 3,
         [EnumMember]
         Cover = 4
+
+        // 5 is reserved for tv logos in the streaming service
     }
 
     [DataContract]

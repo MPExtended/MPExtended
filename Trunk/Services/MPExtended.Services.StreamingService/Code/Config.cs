@@ -91,5 +91,10 @@ namespace MPExtended.Services.StreamingService.Code
         {
             return XElement.Load(Configuration.GetPath("Streaming.xml")).Element("ffmpeg").Element("path").Value;
         }
+
+        public static string GetTVLogoDirectory()
+        {
+            return XElement.Load(Configuration.GetPath("Streaming.xml")).Element("tvLogoDirectory").Value.Trim();
+        }
     }
 }

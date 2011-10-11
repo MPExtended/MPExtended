@@ -20,10 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
+using MPExtended.Services.TVAccessService.Interfaces;
 using TvControl;
 using TvDatabase;
 using TvLibrary.Streaming;
-using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
@@ -32,7 +33,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebCard ToWebCard(this Card card)
         {
             if (card == null)
+            {
+                Log.Warn("Tried to convert a null Card to WebCard");
                 return null;
+            }
 
             return new WebCard
             {
@@ -71,7 +75,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebVirtualCard ToWebVirtualCard(this VirtualCard card)
         {
             if (card == null)
+            {
+                Log.Warn("Tried to convert a null VirtualCard to WebVirtualCard");
                 return null;
+            }
 
             return new WebVirtualCard
             {
@@ -114,10 +121,13 @@ namespace MPExtended.Services.TVAccessService
 
     public static class WebUserExtensionMethods
     {
-        public static WebUser ToWebUser(this User user)
+        public static WebUser ToWebUser(this IUser user)
         {
             if (user == null)
+            {
+                Log.Warn("Tried to convert a null User to WebUser");
                 return null;
+            }
 
             return new WebUser
             {
@@ -137,7 +147,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebChannelDetailed ToWebChannelDetailed(this Channel ch)
         {
             if (ch == null)
+            {
+                Log.Warn("Tried to convert a null Channel to WebChannelDetailed");
                 return null;
+            }
 
             return new WebChannelDetailed
             {
@@ -194,7 +207,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebChannelBasic ToWebChannelBasic(this Channel ch)
         {
             if (ch == null)
+            {
+                Log.Warn("Tried to convert a null Card to WebChannelBasic");
                 return null;
+            }
 
             return new WebChannelBasic
             {
@@ -202,10 +218,14 @@ namespace MPExtended.Services.TVAccessService
                 Id = ch.IdChannel
             };
         }
+
         public static List<WebProgramBasic> ToListWebProgramBasicNowNext(this Channel ch)
         {
             if (ch == null)
+            {
+                Log.Warn("Tried to convert a null Card to WebProgramBasic");
                 return null;
+            }
 
             List<WebProgramBasic> tmp = new List<WebProgramBasic>();
             tmp.Add(ch.CurrentProgram.ToWebProgramBasic());
@@ -213,16 +233,19 @@ namespace MPExtended.Services.TVAccessService
             return tmp;
 
         }
+
         public static List<WebProgramDetailed> ToListWebProgramDetailedNowNext(this Channel ch)
         {
             if (ch == null)
+            {
+                Log.Warn("Tried to convert a null Card to WebProgramDetailed");
                 return null;
+            }
 
             List<WebProgramDetailed> tmp = new List<WebProgramDetailed>();
             tmp.Add(ch.CurrentProgram.ToWebProgramDetailed());
             tmp.Add(ch.NextProgram.ToWebProgramDetailed());
             return tmp;
-
         }
 
         public static Channel ToChannel(this WebChannelBasic ch)
@@ -234,12 +257,15 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebChannelGroupExtensionMethods
+    public static class webChannelGroupExtensionMethods
     {
         public static WebChannelGroup ToWebChannelGroup(this ChannelGroup group)
         {
             if (group == null)
+            {
+                Log.Warn("Tried to convert a null ChannelGroup to WebChannelGroup");
                 return null;
+            }
 
             return new WebChannelGroup
             {
@@ -264,7 +290,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebProgramDetailed ToWebProgramDetailed(this Program p)
         {
             if (p == null)
+            {
+                Log.Warn("Tried to convert a null Program to WebProgramDetailed");
                 return null;
+            }
 
             return new WebProgramDetailed
             {
@@ -295,14 +324,17 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
                 DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
-                IsScheduled = Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0
+                IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
 
         public static WebProgramBasic ToWebProgramBasic(this Program p)
         {
             if (p == null)
+            {
+                Log.Warn("Tried to convert a null Program to WebProgramBasic");
                 return null;
+            }
 
             return new WebProgramBasic
             {
@@ -331,7 +363,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebRtspClient ToWebRtspClient(this RtspClient rtsp)
         {
             if (rtsp == null)
+            {
+                Log.Warn("Tried to convert a null RtspClient to WebRtspClient");
                 return null;
+            }
 
             return new WebRtspClient
             {
@@ -349,7 +384,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebScheduleBasic ToWebSchedule(this Schedule sch)
         {
             if (sch == null)
+            {
+                Log.Warn("Tried to convert a null Schedule to WebSchedule");
                 return null;
+            }
 
             return new WebScheduleBasic
             {
@@ -393,7 +431,10 @@ namespace MPExtended.Services.TVAccessService
         public static WebRecordingBasic ToWebRecording(this Recording rec)
         {
             if (rec == null)
+            {
+                Log.Warn("Tried to convert a null Recording to WebRecordingBasic");
                 return null;
+            }
 
             return new WebRecordingBasic
             {
@@ -431,5 +472,24 @@ namespace MPExtended.Services.TVAccessService
             return Recording.Retrieve(rec.Id);
         }
     }
-   
+
+    public static class WebChannelStateExtensionMethods
+    {
+        public static WebChannelState ToWebChannelState(this ChannelState state)
+        {
+            switch (state)
+            {
+                case ChannelState.tunable:
+                    return WebChannelState.Tunable;
+                case ChannelState.timeshifting:
+                    return WebChannelState.Timeshifting;
+                case ChannelState.recording:
+                    return WebChannelState.Recording;
+                case ChannelState.nottunable:
+                    return WebChannelState.NotTunable;
+                default:
+                    return WebChannelState.Tunable;
+            }
+        }
+    }
 }

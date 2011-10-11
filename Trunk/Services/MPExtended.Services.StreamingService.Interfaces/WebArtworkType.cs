@@ -19,6 +19,8 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [EnumMember]
         Poster = 3,
         [EnumMember]
-        Cover = 4
+        Cover = 4,
+        [EnumMember]
+        Logo = 5
     }
 }

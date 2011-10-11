@@ -25,11 +25,12 @@ using System.Linq;
 using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -106,6 +107,46 @@ namespace MPExtended.Services.StreamingService.Code
 
         public static Stream GetImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
         {
+            // handle tv and recordings specially
+            if (mediatype == WebStreamMediaType.TV || mediatype == WebStreamMediaType.Recording)
+            {
+                if (artworktype != WebArtworkType.Logo)
+                {
+                    Log.Info("Requested invalid artwork mediatype={0} artworktype={1}", mediatype, artworktype);
+                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                    return null;
+                }
+
+                // get display name
+                int idChannel = mediatype == WebStreamMediaType.TV ? 
+                    Int32.Parse(id) : 
+                    MPEServices.NetPipeTVAccessService.GetRecordingById(Int32.Parse(id)).IdChannel;
+                string channelName = MPEServices.NetPipeTVAccessService.GetChannelBasicById(idChannel).DisplayName;
+
+                // find directory
+                string tvLogoDir = Config.GetTVLogoDirectory();
+                if (!Directory.Exists(tvLogoDir))
+                {
+                    Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
+                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                    return null;
+                }
+
+                // find image
+                DirectoryInfo dirinfo = new DirectoryInfo(Config.GetTVLogoDirectory());
+                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelName.ToLowerInvariant());
+                if(matched.Count() == 0)
+                {
+                    Log.Debug("Did not find tv logo for channel {0}", channelName);
+                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                    return null;
+                }
+
+                // stream it
+                return StreamImage(matched.First().FullName);
+            }
+
+            // handle all 'standard' media cases
             // validate arguments
             var pathlist = MPEServices.NetPipeMediaAccessService.GetPathList((WebMediaType)mediatype, (WebFileType)artworktype, id);
             if (pathlist == null || pathlist.Count <= offset)

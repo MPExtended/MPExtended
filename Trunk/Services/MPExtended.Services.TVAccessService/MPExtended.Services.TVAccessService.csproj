@@ -90,6 +90,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="GentleProviders.cs" />
     <Compile Include="TVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
