@@ -8,6 +8,8 @@
     <enabled>false</enabled>
     <pcname /><!-- Automatically detected when empty -->
   </bonjour>
+  <port>4322</port>
+  <enableIPv6>false</enableIPv6>
   <disabledServices>
     <!--
       You can disable individual services (for debugging) here. Enter the assembly name in a <service> tag:

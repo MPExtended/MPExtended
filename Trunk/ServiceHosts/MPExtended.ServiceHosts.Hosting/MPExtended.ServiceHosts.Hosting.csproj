@@ -49,9 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyLoader.cs" />
+    <Compile Include="BaseAddresses.cs" />
     <Compile Include="MPExtendedHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />
+    <Compile Include="ServiceHostConfig.cs" />
     <Compile Include="ServiceList.cs" />
     <Compile Include="WCFHost.cs" />
     <Compile Include="Zeroconf.cs" />

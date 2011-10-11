@@ -37,7 +37,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         public void PublishServices(List<Service> services)
         {
-            if (!CheckBonjourEnabled() || !CheckBonjourInstallation())
+            if (!ServiceHostConfig.BonjourEnabled || !CheckBonjourInstallation())
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace MPExtended.ServiceHosts.Hosting
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = GetHardwareAddresses();
 
-                NetService net = new NetService(DOMAIN, srv.ServiceType, serviceName, srv.Port);
+                NetService net = new NetService(DOMAIN, srv.ServiceType, serviceName, ServiceHostConfig.Port);
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidNotPublishService += new NetService.ServiceNotPublished(FailedToPublishService);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -75,7 +75,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         private string GetServiceName()
         {
-            string value = XElement.Load(Configuration.GetPath("Services.xml")).Element("bonjour").Element("pcname").Value;
+            string value = ServiceHostConfig.BonjourServiceName;
             if (!String.IsNullOrWhiteSpace(value))
             {
                 return value;
@@ -120,12 +120,6 @@ namespace MPExtended.ServiceHosts.Hosting
         private void PublishedService(NetService service)
         {
             Log.Debug("Published service {0}", service.Name);
-        }
-
-        private bool CheckBonjourEnabled()
-        {
-            XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
-            return file.Element("bonjour").Element("enabled").Value == "true";
         }
     }
 }

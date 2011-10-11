@@ -29,7 +29,7 @@ namespace MPExtended.ServiceHosts.Hosting
         public bool IsInstalled { get; set; }
         public string Assembly { get; set; }
         public string ServiceType { get; set; }
-        public int Port { get; set; }
+        public string Name { get; set; }
 
         public string AssemblyPath
         {
@@ -55,12 +55,12 @@ namespace MPExtended.ServiceHosts.Hosting
             }
         }
 
-        public Service(string assembly, string implementationName, string serviceType, int port, bool isInstalled)
+        public Service(string name, string assembly, string implementationName, string serviceType, bool isInstalled)
         {
+            this.Name = name;
             this.Assembly = assembly;
             this.ImplementationName = implementationName;
             this.ServiceType = serviceType;
-            this.Port = port;
             this.IsInstalled = isInstalled;
         }
     }
