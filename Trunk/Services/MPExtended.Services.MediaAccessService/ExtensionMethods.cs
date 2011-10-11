@@ -32,13 +32,15 @@ namespace MPExtended.Services.MediaAccessService
     internal static class IEnumerableExtensionMethods
     {
         // Missing in IList for some reason, but let's just implement it for all IEnumerables
-        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> source, int index, int count)
+        public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
         {
+            int count = end - start + 1;
+
             if (source is List<T>)
-                return ((List<T>)source).GetRange(index, count);
+                return ((List<T>)source).GetRange(start, count);
             if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).GetRange(index, count);
-            return source.Skip(index).Take(count);
+                return ((ILazyQuery<T>)source).GetRange(start, count);
+            return source.Skip(start).Take(count);
         }
 
         // Take advantage of lazy queries

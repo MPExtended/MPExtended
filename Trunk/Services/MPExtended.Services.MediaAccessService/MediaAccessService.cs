@@ -269,12 +269,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMovies().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMovieLibrary.GetAllMovies().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebMovieDetailed> GetMoviesDetailedByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMovieLibrary.GetAllMoviesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -336,12 +336,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllTracks().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMusicLibrary.GetAllTracks().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllTracksDetailed().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMusicLibrary.GetAllTracksDetailed().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -376,7 +376,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllAlbums().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMusicLibrary.GetAllAlbums().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
@@ -391,7 +391,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMusicLibrary.GetAllArtists().SortMediaItemList(sort, order).GetRange(start, end).ToList();
+            return ChosenMusicLibrary.GetAllArtists().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public WebMusicArtistBasic GetMusicArtistBasicById(string id)
@@ -515,12 +515,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebTVShowBasic> GetTVShowsBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetAllTVShowsBasic().SortMediaItemList(sort, order).GetRange(start, end - start).ToList();
+            return ChosenTVShowLibrary.GetAllTVShowsBasic().SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
         }
 
         public IList<WebTVShowDetailed> GetTVShowsDetailedByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetAllTVShowsDetailed().SortMediaItemList(sort, order).GetRange(start, end - start).ToList();
+            return ChosenTVShowLibrary.GetAllTVShowsDetailed().SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
         }
 
         public WebTVShowDetailed GetTVShowDetailedById(string id)
@@ -565,12 +565,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).GetRange(start, end - start).ToList();
+            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).GetRange(start, end - start).ToList();
+            return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
