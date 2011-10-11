@@ -34,6 +34,37 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
+    internal class ImageSource
+    {
+        public Stream Data { get; set; }
+        public string Path { get; set; }
+
+        public ImageSource(string path) {
+            this.Path = path;
+        }
+
+        public ImageSource(Stream data)
+        {
+            this.Data = data;
+        }
+
+        public ImageSource(string path, Stream data)
+        {
+            this.Path = path;
+            this.Data = data;
+        }
+
+        public Stream GetDataStream()
+        {
+            if (Data == null)
+            {
+                return File.OpenRead(Path);
+            }
+
+            return Data;
+        }
+    }
+
     internal static class Images
     {
         public static Stream ExtractImage(MediaSource source, int startPosition, int? maxWidth, int? maxHeight)
@@ -71,7 +102,7 @@ namespace MPExtended.Services.StreamingService.Code
             proc.Start();
             proc.WaitForExit();
 
-            return StreamImage(tempFile);
+            return StreamImage(new ImageSource(tempFile));
         }
 
         public static Stream GetResizedImage(WebStreamMediaType mediatype, string id, int maxWidth, int maxHeight)
@@ -81,6 +112,14 @@ namespace MPExtended.Services.StreamingService.Code
 
         public static Stream GetResizedImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
         {
+            // load file
+            ImageSource src = ConvertToImageSource(mediatype, artworktype, id, offset);
+            if (src == null)
+            {
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
+
             // create cache path
             string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
             if (!Directory.Exists(tmpDir))
@@ -90,14 +129,14 @@ namespace MPExtended.Services.StreamingService.Code
             // check for existence on disk
             if (!File.Exists(cachedPath))
             {
-                Image orig = Image.FromStream(MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset));
+                Image orig = Image.FromStream(src.GetDataStream());
                 if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
                 {
                     return null;
                 }
             }
 
-            return StreamImage(cachedPath);
+            return StreamImage(new ImageSource(cachedPath));
         }
 
         public static Stream GetImage(WebStreamMediaType mediatype, string id)
@@ -107,13 +146,24 @@ namespace MPExtended.Services.StreamingService.Code
 
         public static Stream GetImage(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
         {
+            ImageSource source = ConvertToImageSource(mediatype, artworktype, id, offset);
+            if (source == null)
+            {
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
+
+            return StreamImage(source);
+        }
+
+        private static ImageSource ConvertToImageSource(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
+        {
             // handle tv and recordings specially
             if (mediatype == WebStreamMediaType.TV || mediatype == WebStreamMediaType.Recording)
             {
                 if (artworktype != WebArtworkType.Logo)
                 {
                     Log.Info("Requested invalid artwork mediatype={0} artworktype={1}", mediatype, artworktype);
-                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                     return null;
                 }
 
@@ -128,7 +178,6 @@ namespace MPExtended.Services.StreamingService.Code
                 if (!Directory.Exists(tvLogoDir))
                 {
                     Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
-                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                     return null;
                 }
 
@@ -138,12 +187,11 @@ namespace MPExtended.Services.StreamingService.Code
                 if(matched.Count() == 0)
                 {
                     Log.Debug("Did not find tv logo for channel {0}", channelName);
-                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                     return null;
                 }
 
-                // stream it
-                return StreamImage(matched.First().FullName);
+                // great, return it
+                return new ImageSource(matched.First().FullName);
             }
 
             // handle all 'standard' media cases
@@ -151,7 +199,7 @@ namespace MPExtended.Services.StreamingService.Code
             var pathlist = MPEServices.NetPipeMediaAccessService.GetPathList((WebMediaType)mediatype, (WebFileType)artworktype, id);
             if (pathlist == null || pathlist.Count <= offset)
             {
-                Log.Info("Requested unavailable artwork mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
+                Log.Info("Requested unavailable artwork (offset not found) mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                 return null;
             }
@@ -161,19 +209,21 @@ namespace MPExtended.Services.StreamingService.Code
             WebFileInfo info = MPEServices.NetPipeMediaAccessService.GetFileInfo((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
             if (!info.Exists)
             {
-                Log.Info("Requested unavailable artwork mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                Log.Info("Requested unavailable artwork (file not found) mediatype={0} artworktype={1} id={2} offset={3}", mediatype, artworktype, id, offset);
                 return null;
             }
             else if (!info.IsLocalFile)
             {
                 data = MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)mediatype, (WebFileType)artworktype, id, offset);
+                return new ImageSource(data);
             }
-
-            return StreamImage(path, data);
+            else
+            {
+                return new ImageSource(path);
+            }
         }
 
-        private static Stream StreamImage(string path, Stream data = null)
+        private static Stream StreamImage(ImageSource src) 
         {
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
                 { ".jpeg", "image/jpeg" },
@@ -182,19 +232,11 @@ namespace MPExtended.Services.StreamingService.Code
                 { ".gif", "image/gif" },
                 { ".bmp", "image/x-ms-bmp" },
             };
-            string extension = Path.GetExtension(path);
+            string extension = src.Path != null ? Path.GetExtension(src.Path) : "";
             string mime = commonMimeTypes.ContainsKey(extension) ? commonMimeTypes[extension] : "application/octet-stream";
             WebOperationContext.Current.OutgoingResponse.ContentType = mime;
 
-            if (data == null)
-            {
-                FileStream fs = File.OpenRead(path);
-                return fs;
-            }
-            else
-            {
-                return data;
-            }
+            return src.GetDataStream();
         }
 
         private static bool ResizeImage(Image origImage, string newFile, int maxWidth, int maxHeight)
