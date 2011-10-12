@@ -33,11 +33,11 @@
                     <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="8,9,0,0" Name="label2" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
                     <Label Content="Username" Height="28" HorizontalAlignment="Left" Margin="6,38,0,0" Name="label3" VerticalAlignment="Top" FontWeight="Bold" />
                     <Label Content="Password" Height="28" HorizontalAlignment="Left" Margin="6,72,0,0" Name="label4" VerticalAlignment="Top" FontWeight="Bold" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="85,9,0,0" Name="txtServicePort" VerticalAlignment="Top" Width="83" Text="44321" IsReadOnly="True" IsEnabled="False" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="85,9,0,0" Name="txtServicePort" VerticalAlignment="Top" Width="83" Text="44321" IsReadOnly="False" IsEnabled="True" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="85,43,0,0" Name="txtUsername" VerticalAlignment="Top" Width="137" Text="admin" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="85,74,0,0" Name="txtUserPassword" VerticalAlignment="Top" Width="137" Text="admin" />
                     <Button Content="Save" x:Name="btnUpdateConfig" MinWidth="80" Margin="85,114,0,0" MinHeight="23" Click="cmdUpdateConfig_Click" HorizontalAlignment="Left" Width="211" Height="23" VerticalAlignment="Top" />
-                    <Label Content="ZeroConf Name" Height="28" HorizontalAlignment="Left" Margin="247,9,0,0" Name="label14" VerticalAlignment="Top" FontWeight="Bold" />
+                    <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="247,9,0,0" Name="label14" VerticalAlignment="Top" FontWeight="Bold" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="352,11,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="181" />
                     <CheckBox Content="Enable Autodetection via ZeroConf/Bonjour" Height="16" HorizontalAlignment="Left" Margin="249,50,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
                 </Grid>
@@ -46,7 +46,7 @@
                 <Grid Background="{x:Null}">
                     <Label Content="QR Code" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
                     <Image Margin="10,85,6,31" Name="imgQRCode" Stretch="Uniform" StretchDirection="Both" HorizontalAlignment="Stretch" OpacityMask="White" />
-                    <CheckBox Content="Include Authentication" HorizontalAlignment="Left" Margin="10,0,0,6" Name="checkBox1" Height="19" VerticalAlignment="Bottom" />
+                    <CheckBox Content="Include Authentication" HorizontalAlignment="Left" Margin="10,0,0,6" Name="checkBox1" Height="19" VerticalAlignment="Bottom" Checked="checkBox1_Checked" />
                     <Label Content="You can scan the QR code with supported clients to add this MediaPortal automatically." Height="28" HorizontalAlignment="Left" Margin="10,44,0,0" Name="label16" VerticalAlignment="Top" />
                     <Button Content="Save To File" Margin="0,0,6,6" Name="btnSaveToFile" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="132" Click="btnSaveToFile_Click" />
                 </Grid>

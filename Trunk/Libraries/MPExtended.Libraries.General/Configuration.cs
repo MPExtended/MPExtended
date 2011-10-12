@@ -77,5 +77,41 @@ namespace MPExtended.Libraries.General
                 return false;
             }
         }
+
+        public static bool SetPort(int _port)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(GetPath("Services.xml"));
+                XmlNode portNode = doc.SelectSingleNode("/serviceconfig/port");
+                portNode.InnerText = _port.ToString();
+
+                doc.Save(GetPath("Services.xml"));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Couldn't set port in " + GetPath("Services.xml"), ex);
+                return false;
+            }
+        }
+
+        public static int GetPort()
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(GetPath("Services.xml"));
+                XmlNode portNode = doc.SelectSingleNode("/serviceconfig/port");
+                String portString = portNode.InnerText;
+                return Int32.Parse(portString);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Couldn't load port from " + GetPath("Services.xml"), ex);
+                return -99;
+            }
+        }
     }
 }

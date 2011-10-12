@@ -56,7 +56,7 @@ namespace MPExtended.Services.TVAccessService
                 Priority = card.Priority,
                 RecordingFolder = card.RecordingFolder,
                 RecordingFormat = card.RecordingFormat,
-                supportSubChannels = card.supportSubChannels,
+                SupportSubChannels = card.supportSubChannels,
                 TimeShiftFolder = card.TimeShiftFolder
             };
         }

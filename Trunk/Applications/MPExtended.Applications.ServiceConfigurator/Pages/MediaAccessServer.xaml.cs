@@ -76,10 +76,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             InitializeComponent();
 
             SetConfigLocation();
-            GenerateBarcode();
+            GenerateBarcode(checkBox1.IsChecked == true);
 
             InitLogFiles();
 
+            txtServiceName.Text = GetServiceName();
+
+            InitServiceConfiguration();
 
             try
             {
@@ -253,6 +256,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             txtUsername.Text = user;
             txtUserPassword.Text = pass;
+
+            txtServicePort.Text = Configuration.GetPort().ToString();
         }
 
         #region Logging Tab
@@ -704,7 +709,33 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void cmdUpdateConfig_Click(object sender, RoutedEventArgs e)
         {
-            if (Configuration.SetCredentials(txtUsername.Text, txtUserPassword.Text))
+            String user = null;
+            String pass = null;
+            Configuration.GetCredentials(out user, out pass, true);
+
+            bool needsRestart = false;
+            if (!txtUsername.Text.Equals(user) || !txtUserPassword.Text.Equals(pass))
+            {
+                if (!Configuration.SetCredentials(txtUsername.Text, txtUserPassword.Text))
+                {
+                    MessageBox.Show("Error updating config");
+                    return;
+                }
+                
+                needsRestart = true;
+            }
+
+            if (!txtServicePort.Text.Equals(Configuration.GetPort().ToString()))
+            {
+                if (!Configuration.SetPort(Int32.Parse(txtServicePort.Text)))
+                {
+                    MessageBox.Show("Error updating config");
+                    return;
+                }
+            }
+
+
+            if (needsRestart)
             {
                 MessageBoxResult res = MessageBox.Show("Successfully updated config, restart service now?", "Config", MessageBoxButton.YesNo);
 
@@ -719,10 +750,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                         RestartService(5000);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Error updating config");
             }
         }
 
@@ -762,14 +789,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        private void checkBox1_Checked(object sender, RoutedEventArgs e)
+        {
+            GenerateBarcode(checkBox1.IsChecked == true);
+        }
+
         /// <summary>
         /// Generate a QR Barcode with the server information
         /// </summary>
-        private void GenerateBarcode()
+        private void GenerateBarcode(bool _includeAuth)
         {
             try
             {
                 ServerDescription desc = new ServerDescription();
+                desc.GeneratorApp = "ServiceConfigurator";
+                desc.ServiceType = "Client";
+                
                 desc.Port = Int32.Parse(txtServicePort.Text);
                 desc.Name = txtServiceName.Text;
                 desc.HardwareAddresses = GetHardwareAddresses();
@@ -781,7 +816,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 host = Dns.GetHostEntry(Dns.GetHostName());
                 foreach (IPAddress ip in host.AddressList)
                 {
-                    if (ip.AddressFamily == AddressFamily.InterNetwork || ip.AddressFamily == AddressFamily.InterNetworkV6)
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
                     {
                         // Single address field
                         localIP = ip.ToString();
@@ -796,9 +831,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     }
                 }
 
-                desc.Addresses = localIP;
                 desc.Addresses = (localIPs.Length > 0) ? localIPs.ToString() : "?";
 
+                if (_includeAuth)
+                {
+                    desc.User = txtUsername.Text;
+                    desc.Password = txtUserPassword.Text;
+                    desc.AuthOptions = 1;//username/password
+                }
 
                 Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
                 imgQRCode.Source = bm.ToWpfBitmap();
@@ -863,6 +903,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
             bool success = MPEServices.NetPipeWebStreamService.FinishStream(session.Identifier);
         }
+
+
 
 
 

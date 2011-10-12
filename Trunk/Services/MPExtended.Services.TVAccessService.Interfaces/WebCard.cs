@@ -24,7 +24,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int Priority { get; set; }
         public string RecordingFolder { get; set; }
         public int RecordingFormat { get; set; }
-        public bool supportSubChannels { get; set; }
+        public bool SupportSubChannels { get; set; }
         public string TimeShiftFolder { get; set; }
         #endregion
     }

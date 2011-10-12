@@ -150,6 +150,7 @@ namespace MPExtended.Services.StreamingService
             {
                 if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
                 {
+                    Log.Info("Cancel timeshifting with identifier {0}",  identifier);
                     MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
                     _timeshiftings.Remove(identifier);
                 }

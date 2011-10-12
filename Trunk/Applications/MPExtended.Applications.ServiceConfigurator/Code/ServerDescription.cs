@@ -11,6 +11,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     /// </summary>
     public class ServerDescription
     {
+        [DataMember(Name = "ServiceType")]
+        public String ServiceType { get; set; }
+
+        [DataMember(Name = "GeneratorApp")]
+        public String GeneratorApp { get; set; }
+
         [DataMember(Name = "Addresses")]
         public String Addresses { get; set; }
 
