@@ -81,5 +81,10 @@ namespace MPExtended.Services.MediaAccessService
         /// Type of the config item
         /// </summary>
         public ConfigType ConfigType { get; set; }
+
+        /// <summary>
+        /// Tag object to store additional meta-information
+        /// </summary>
+        public Object Tag { get; set; }
     }
 }

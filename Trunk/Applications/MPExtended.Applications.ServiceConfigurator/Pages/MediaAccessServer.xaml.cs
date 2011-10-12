@@ -69,6 +69,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         Dictionary<String, Dictionary<String, PluginConfigItem>> PluginConfigurations { get; set; }
 
+        private XElement mConfigFile;
+
         private string mSelectedLog;
 
         public MediaAccessServer()
@@ -101,14 +103,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
             try
             {
-                var config = XElement.Load(Configuration.GetPath("MediaAccess.xml")).Element("pluginConfiguration").Elements("plugin");
+                mConfigFile = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
+                var config = mConfigFile.Element("pluginConfiguration").Elements("plugin");
 
                 foreach (var p in config)
                 {
                     Dictionary<String, PluginConfigItem> props = new Dictionary<String, PluginConfigItem>();
                     foreach (var p2 in p.Descendants())
                     {
-                        props.Add(p2.Name.LocalName, new PluginConfigItem(p2));
+                        props.Add(p2.Name.LocalName, new PluginConfigItem(p2) { Tag = p2 });
                         //.ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
                     }
                     PluginConfigurations.Add(p.Attribute("name").Value, props);
@@ -761,7 +764,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Dictionary<String, PluginConfigItem> selected = (Dictionary<String, PluginConfigItem>)cbPluginConfigs.SelectedValue;
-            sectionPluginSettings.SetPluginConfig(selected);
+            sectionPluginSettings.SetPluginConfig(mConfigFile, selected);
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -909,5 +912,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
 
 
+
+        
     }
 }
