@@ -19,15 +19,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
-namespace MPExtended.Applications.WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public static class Util
+    public class EpisodeModel
     {
-        public static string FormatDataString(string data)
-        {
-            string[] items = data.Split('|');
-            return String.Join(" - ", items.Skip(1).Take(items.Count() - 2));
-        }
+        public WebTVEpisodeDetailed Episode { get; set; }
+        public WebTVSeasonDetailed Season { get; set; }
+        public WebTVShowDetailed Show { get; set; }
     }
 }

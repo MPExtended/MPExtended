@@ -552,6 +552,16 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenTVShowLibrary.GetSeasonBasic(id);
         }
 
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllEpisodesBasic().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+        }
+
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        {
+            return ChosenTVShowLibrary.GetAllEpisodesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+        }
+
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).ToList();

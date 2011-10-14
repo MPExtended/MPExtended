@@ -39,51 +39,36 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             return View();
         }
-        public ActionResult NewEpisodes()
-        {
-            return PartialView();
-        }
 
         public ActionResult NewMovies()
         {
-            try
+             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(0, 3, SortBy.DateAdded, OrderBy.Desc);
+             return PartialView(tmp);
+        }
+
+        public ActionResult NewEpisodes()
+        {
+            var tmp = MPEServices.NetPipeMediaAccessService.GetTVEpisodesDetailedByRange(0, 3, SortBy.TVDateAired, OrderBy.Desc);
+            var list = tmp.Select(x => new EpisodeModel
             {
-             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(1, 4, SortBy.DateAdded, OrderBy.Desc);
-                return PartialView(tmp);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Home.NewMovies" + ex.ToString(), ex);
-            }
-            return PartialView("Error");
+                Episode = x,
+                Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(x.SeasonId),
+                Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(x.ShowId)
+            });
+
+            return PartialView(list);
         }
 
         public ActionResult NewRecordings()
         {
-            try
-            {
-                List<WebRecordingBasic> tmp = MPEServices.NetPipeTVAccessService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
-                return PartialView(tmp.GetRange(0, tmp.Count / 10));
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Home.NewRecordings" + ex.ToString(), ex);
-            }
-            return PartialView("Error");
+            List<WebRecordingBasic> tmp = MPEServices.NetPipeTVAccessService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
+            return PartialView(tmp.Count > 4 ? tmp.GetRange(0, 4) : tmp);
         }
 
         public ActionResult CurrentSchedules()
         {
-            try
-            {
-                var tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
-                return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Home.CurrentSchedules" + ex.ToString(), ex);
-            }
-            return PartialView("Error");
+            var tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
+            return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
         }
     }
 }

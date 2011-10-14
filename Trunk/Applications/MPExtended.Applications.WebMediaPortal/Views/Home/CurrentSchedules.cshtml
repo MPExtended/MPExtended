@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebScheduleBasic>
 @{
     ViewBag.Title = "CurrentSchedules";
-
 }
-
 
 @{
     if (@Model != null && @Model.Count(p => p.ProgramName != "") > 0)
@@ -18,6 +16,5 @@
             }
         </ul>
     </div>
-    }
-    
+    }   
 }

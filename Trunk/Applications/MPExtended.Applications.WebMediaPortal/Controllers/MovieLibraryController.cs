@@ -17,13 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -31,79 +28,46 @@ using MPExtended.Services.StreamingService.Interfaces;
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [Authorize]
-    public class MovieLibraryController : Controller
+    public class MovieLibraryController : BaseController
     {
         //
         // GET: /MovieLibrary/
         public ActionResult Index()
         {
-
-            try
+            var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(SortBy.Title, OrderBy.Asc);
+            if (movieList != null)
             {
-                var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(SortBy.Title, OrderBy.Asc);
-                if (movieList != null)
-                {
-                    return View(movieList);
-                }
+                return View(movieList);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MovieLibrary.Index", ex);
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult Details(string movie)
         {
-
-            try
+            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
+            if (fullMovie != null)
             {
-                var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
-                if (fullMovie != null)
-                {
-                    return View(fullMovie);
-                }
+                return View(fullMovie);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MovieLibrary.Details", ex);
-                return View("Error");
-
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult Play(string movie)
         {
-
-            try
+            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
+            if (fullMovie != null)
             {
-                var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
-                if (fullMovie != null)
-                {
-                    return View(fullMovie);
-                }
+                return View(fullMovie);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MovieLibrary.Details", ex);
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult Image(string movie)
         {
-            try
+            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.Movie, WebArtworkType.Cover, movie, 0);
+            if (image != null)
             {
-                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.Movie, WebArtworkType.Banner, movie, 0);
-                if (image != null)
-                {
-                    return File(image, "image/jpg");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MovieLibrary.Image", ex);
+                return File(image, "image/jpg");
             }
             return null;
         }

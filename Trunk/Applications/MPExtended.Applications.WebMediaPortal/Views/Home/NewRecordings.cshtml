@@ -1,8 +1,7 @@
-﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecording>
+﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
 @{
     ViewBag.Title = "NewRecordings";
 }
-
 
 @{
     if (@Model != null && @Model.Count(p => p.Title != "") > 0)
@@ -18,4 +17,4 @@
         </ul>
     </div>
     }
-    }
+}

@@ -60,4 +60,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         DateTime DateTaken { get; set; }
     }
+
+    public interface ITVDateAiredSortable
+    {
+        DateTime FirstAired { get; set; }
+    }
 }

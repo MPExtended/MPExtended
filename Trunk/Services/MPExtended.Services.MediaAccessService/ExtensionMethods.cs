@@ -123,6 +123,8 @@ namespace MPExtended.Services.MediaAccessService
                         return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonId, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
                     case SortBy.TVSeasonNumber:
                         return list.OrderBy(x => ((ITVSeasonNumberSortable)x).SeasonNumber, order);
+                    case SortBy.TVDateAired:
+                        return list.OrderBy(x => ((ITVDateAiredSortable)x).FirstAired, order);
 
                     // picture
                     case SortBy.PictureDateTaken:

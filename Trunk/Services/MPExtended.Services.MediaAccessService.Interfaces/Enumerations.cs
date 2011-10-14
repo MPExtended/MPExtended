@@ -77,6 +77,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         TVSeasonNumber = 9,
         [EnumMember]
-        PictureDateTaken = 10
+        PictureDateTaken = 10,
+        [EnumMember]
+        TVDateAired = 11
     }
 }

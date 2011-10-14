@@ -1,15 +1,14 @@
-﻿
-@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.WebSeries>
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.TVShow.WebTVShowBasic>
 @{
-    ViewBag.Title = "TV Series";
+    ViewBag.Title = "TV Shows";
 }
 
 <h2>Your tv series</h2>
 <div class="column">
 <ul>
-    @foreach (var serie in Model)
+    @foreach (var show in Model)
     {
-        <li>@Html.ActionLink(serie.PrettyName , "Seasons", new { serie = serie.Id })</li>       
+        <li>@Html.ActionLink(show.Title, "Seasons", new { show = show.Id })</li>       
     }
 </ul>
 </div>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.WebEpisode>
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.TVShow.WebTVEpisodeBasic>
 @{
     ViewBag.Title = "Episodes";
 }
@@ -16,14 +16,14 @@
 <h2>
     Episodes</h2>
 <div class="column">
-    <img class="img" src="@Url.Action("Image", new { serie = @Model.ElementAt(0).IdSerie, season = @Model.ElementAt(0).SeasonNumber })" alt="" />
+    <img class="img" src="@Url.Action("Image", new { season = @Model.ElementAt(0).SeasonId })" alt="" />
 </div>
 <div class="column">
     <ul>
         @foreach (var episode in Model)
         {
            
-            <li>@Html.ActionLink("Episode " + episode.EpisodeNumber + " - " + episode.Name, "Details", new { episode = episode.Id })
+            <li>@Html.ActionLink("Episode " + episode.EpisodeNumber + " - " + episode.Title, "Details", new { episode = episode.Id })
             </li>
             
         }
