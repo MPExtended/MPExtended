@@ -30,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Code
     internal class MediaSource
     {
         public WebStreamMediaType MediaType { get; set; }
-        public string Id { get; set; }
+        public string Id { get; set; } // path to tsbuffer for TV
         public int Offset { get; set; }
 
         public bool IsLocalFile
@@ -86,7 +86,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             if (MediaType == WebStreamMediaType.TV)
             {
-                return new TsBuffer(Id).GetCurrentFilePath();
+                return Id;
             }
 
             return MPEServices.NetPipeMediaAccessService.GetMediaItem((WebMediaType)MediaType, Id).Path[Offset];

@@ -30,20 +30,31 @@ namespace MPExtended.Services.StreamingService.MediaInfo
     internal static class MediaInfoWrapper
     {
         private static Dictionary<string, WebMediaInfo> Cache = new Dictionary<string, WebMediaInfo>();
+        private static Dictionary<string, Tuple<DateTime, WebMediaInfo>> TvCache = new Dictionary<string, Tuple<DateTime, WebMediaInfo>>();
 
         public static WebMediaInfo GetMediaInfo(MediaSource source)
         {
             if (source.MediaType == WebStreamMediaType.TV)
             {
+                // cache tv files for 10 seconds
+                if (TvCache.ContainsKey(source.Id) && TvCache[source.Id].Item1.AddSeconds(10).CompareTo(DateTime.Now) > 0)
+                {
+                    // cache is valid, use it
+                    return TvCache[source.Id].Item2;
+                }
+
+                // get media info and save it to the cache
                 TsBuffer buf = new TsBuffer(source.Id);
-                return GetMediaInfo(buf.GetCurrentFilePath(), true);
+                WebMediaInfo info = GetMediaInfo(buf.GetCurrentFilePath(), true);
+                TvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
+                return info;
             }
             else if (source.IsLocalFile)
             {
                 return GetMediaInfo(source.GetPath(), false);
             }
             else 
-            { 
+            {
                 // not (yet?) supported
                 throw new NotSupportedException(); 
             }

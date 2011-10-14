@@ -83,7 +83,12 @@ namespace MPExtended.Services.TVAccessService
 
         private IUser GetUserByUserName(string userName, bool create = false)
         {
-            if (!_tvUsers.ContainsKey(userName) && !create)
+            if (userName == null)
+            {
+                Log.Warn("Used user with null name");
+                return null;
+            }
+            else if (!_tvUsers.ContainsKey(userName) && !create)
             {
                 return null;
             }
@@ -160,10 +165,8 @@ namespace MPExtended.Services.TVAccessService
         public void StartRecordingManual(string userName, int channelId, string title)
         {
             Log.Debug("Start recording manual on channel " + channelId + ", userName: " + userName);
-
             AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
         }
-
 
         public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType)
         {
@@ -172,6 +175,7 @@ namespace MPExtended.Services.TVAccessService
 
         public void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
         {
+            Log.Debug("Adding schedulw on channel {0} for {1}, {2}-{3}, type {4}", channelId, title, startTime, endTime, scheduleType);
             ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
             Schedule schedule = _tvBusiness.AddSchedule(channelId, title, startTime, endTime, (int)scheduleRecType);
 
@@ -250,7 +254,7 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Channels
-        #region tv specific
+        #region TV specific
         public IList<WebChannelGroup> GetGroups()
         {
             return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
@@ -312,10 +316,8 @@ namespace MPExtended.Services.TVAccessService
             }
 
             return webChannelStates;
-        }
-
-        public Dictionary<int, WebChannelState> GetAllChannelStatesForGroupOld(int groupId, string userName)
-        {
+        
+            /* This is the old implementation which doesn't work due to a NullReferenceException in TvService
             Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName, true));
             Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
             if (channelStates != null && channelStates.Count > 0)
@@ -327,11 +329,12 @@ namespace MPExtended.Services.TVAccessService
             }
 
             return webChannelStates;
+             */
         }
 
         #endregion
 
-        #region radio specific
+        #region Radio specific
         public IList<WebChannelGroup> GetRadioGroups()
         {
             return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
@@ -412,8 +415,6 @@ namespace MPExtended.Services.TVAccessService
             Log.Trace("ChannelId: " + channelId + ", State: " + state.ToString());
             return state.ToWebChannelState(channelId);
         }
-
-
         #endregion
 
         #region Timeshifting

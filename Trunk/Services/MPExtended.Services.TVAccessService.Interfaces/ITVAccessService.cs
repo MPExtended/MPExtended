@@ -120,10 +120,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        Dictionary<int, WebChannelState> GetAllChannelStatesForGroupOld(int groupId, string userName);
         #endregion
 
         #region Radio specific

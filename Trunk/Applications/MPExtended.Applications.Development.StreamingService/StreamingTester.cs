@@ -187,6 +187,7 @@ namespace MPExtended.Applications.Development.StreamingService
             Log("Init Stream with id " + txtItemId.Text + " (type: " + cbItemType.SelectedItem + ")");
             bool success = mWebStreamClient.InitStream((WebStreamMediaType)cbItemType.SelectedItem, txtItemId.Text, CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
+            Thread.Sleep(500); // wait a bit till the stream has populated
             LoadMediaInfo(mWebStreamClient.GetMediaInfo((WebStreamMediaType)cbItemType.SelectedItem, txtItemId.Text));
         }
 
