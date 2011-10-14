@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
@@ -75,6 +76,16 @@ namespace MPExtended.Libraries.General
             return true;
 #else
             return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", service + "Installed");
+#endif
+        }
+
+        public static string GetRootDirectory()
+        {
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+#if DEBUG
+            return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
+#else
+            return Path.GetFullPath(curDir);
 #endif
         }
 

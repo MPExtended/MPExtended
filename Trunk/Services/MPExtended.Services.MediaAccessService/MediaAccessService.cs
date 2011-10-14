@@ -130,7 +130,7 @@ namespace MPExtended.Services.MediaAccessService
                 catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
 #if DEBUG
                 string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string pluginRoot = Path.Combine(currentDirectory, "..", "..", "..", "..", "PlugIns");
+                string pluginRoot = Path.Combine(Installation.GetRootDirectory(), "PlugIns");
                 foreach (string pdir in Directory.GetDirectories(pluginRoot))
                 {
                     string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
@@ -138,8 +138,7 @@ namespace MPExtended.Services.MediaAccessService
                         catalog.Catalogs.Add(new DirectoryCatalog(dir));
                 }
 #else
-                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string extensionDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "Extensions"));
+                string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetRootDirectory(), "Extensions"));
                 catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
 #endif
 
