@@ -134,7 +134,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string sql = 
                     "SELECT DISTINCT s.ID, l.Parsed_Name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
                         "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
-                        "s.IMDB_ID " +
+                        "s.IMDB_ID, s.added " +
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
@@ -158,6 +158,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "AirsTime", "AirsTime", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "IMDB_ID", "IMDBId", DataReaders.ReadString),
+                new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime)
             }, delegate(T obj)
             {
                 // cannot rely on information provided by MPTVSeries here because they count different

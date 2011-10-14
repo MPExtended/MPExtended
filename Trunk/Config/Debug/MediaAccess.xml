@@ -10,8 +10,10 @@
   <pluginConfiguration>
     <plugin name="MPExtended.PlugIns.MAS.MPTVSeries">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
-      <banner type="folder" displayname="Banner Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Banner</banner>
+      <banner type="folder" displayname="Banner Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
       <fanart type="folder" displayname="Fanart Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
+      
+      <!-- This is just a demo -->
       <showall type="boolean" displayname="Show all">True</showall>
       <version type="number" displayname="Version (number)">21312312</version>
       <description type="text" displayname="Description (text)">Description text test</description>
