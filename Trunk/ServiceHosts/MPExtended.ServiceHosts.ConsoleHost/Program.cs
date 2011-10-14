@@ -41,7 +41,6 @@ namespace MPExtended.ServiceHosts.ConsoleHost
 #endif
             host.Open();
 
-            Console.WriteLine("Press key to close...");
             Console.ReadKey();
             host.Close();
         }

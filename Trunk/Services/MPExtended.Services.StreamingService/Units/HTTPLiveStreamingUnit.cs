@@ -95,16 +95,17 @@ namespace MPExtended.Services.StreamingService.Units
                     {
                         try
                         {
-                            Log.Info("SMON: is running {0}", !segmenterApplication.HasExited);
-                            Log.Info("SMON: stderr: {0}", segmenterApplication.StandardError.ReadLine());
+                            Log.Info("HTTPLiveSegmenter: is running {0}", !segmenterApplication.HasExited);
+                            Log.Info("HTTPLiveSegmenter: stderr: {0}", segmenterApplication.StandardError.ReadLine());
                         }
                         catch (Exception ex)
                         {
-                            Log.Info("SMON: failed", ex);
+                            Log.Info("HTTPLiveSegmenter: failed", ex);
                         }
                     }
-                    Log.Info("SMON: is running end {0}", !segmenterApplication.HasExited);
+                    Log.Info("HTTPLiveSegmenter: is running end {0}", !segmenterApplication.HasExited);
                 });
+            monitorThread.Name = "HTTPLiveSegmenter";
 
             try
             {

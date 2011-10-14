@@ -50,6 +50,7 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 ParseOutputStream(InputStream, data, LogMessages, LogProgress);
             }));
+            processThread.Name = "FFMpegLogParsing";
             processThread.Start();
             return true;
         }

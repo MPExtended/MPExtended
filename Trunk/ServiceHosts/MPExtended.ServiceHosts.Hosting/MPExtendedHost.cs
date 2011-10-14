@@ -31,6 +31,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         public MPExtendedHost()
         {
+            System.Threading.Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
             zeroconf = new Zeroconf();
         }

@@ -48,6 +48,7 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 ParseOutputStream(InputStream, data, false);
             }));
+            processThread.Name = "VLCLogParsing";
             processThread.Start();
             return true;
         }

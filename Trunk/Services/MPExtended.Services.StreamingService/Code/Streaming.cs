@@ -61,6 +61,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             sharing = new WatchSharing();
             timeoutWorker = new Thread(TimeoutStreamsWorker);
+            timeoutWorker.Name = "StreamTimeout";
             timeoutWorker.Start();
         }
 

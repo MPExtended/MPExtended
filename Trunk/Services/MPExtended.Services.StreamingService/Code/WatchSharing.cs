@@ -145,6 +145,7 @@ namespace MPExtended.Services.StreamingService.Code
                 streams[identifier] = state;
 
                 state.BackgroundThread = new Thread(new ParameterizedThreadStart(this.BackgroundWorker));
+                state.BackgroundThread.Name = "WatchWorker";
                 state.BackgroundThread.Start(identifier);
             }
             else
