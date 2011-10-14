@@ -60,7 +60,7 @@ namespace MPExtended.Services.TVAccessService
             {
                 // read Gentle configuration from CommonAppData
                 string gentleConfigFile = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), 
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                     "Team MediaPortal", "MediaPortal TV Server", "Gentle.config"
                 );
 
@@ -157,6 +157,14 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Schedules
+        public void StartRecordingManual(string userName, int channelId, string title)
+        {
+            Log.Debug("Start recording manual on channel " + channelId + ", userName: " + userName);
+
+            AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
+        }
+
+
         public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType)
         {
             AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
@@ -242,6 +250,7 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Channels
+        #region tv specific
         public IList<WebChannelGroup> GetGroups()
         {
             return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
@@ -293,6 +302,100 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
+        {
+            IList<WebChannelBasic> list = GetChannelsBasic(groupId);
+            IList<WebChannelState> webChannelStates = new List<WebChannelState>();
+            foreach (WebChannelBasic entry in list)
+            {
+                webChannelStates.Add(GetChannelState(entry.Id, userName));
+            }
+
+            return webChannelStates;
+        }
+
+        public Dictionary<int, WebChannelState> GetAllChannelStatesForGroupOld(int groupId, string userName)
+        {
+            Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName, true));
+            Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
+            if (channelStates != null && channelStates.Count > 0)
+            {
+                foreach (var entry in channelStates)
+                {
+                    webChannelStates.Add(entry.Key, entry.Value.ToWebChannelState(entry.Key));
+                }
+            }
+
+            return webChannelStates;
+        }
+
+        #endregion
+
+        #region radio specific
+        public IList<WebChannelGroup> GetRadioGroups()
+        {
+            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+        }
+
+        public WebChannelGroup GetRadioGroupById(int groupId)
+        {
+            return RadioChannelGroup.Retrieve(groupId).ToWebChannelGroup();
+        }
+
+        public int GetRadioChannelCount(int groupId)
+        {
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count;
+        }
+
+        public IList<WebChannelBasic> GetRadioChannelsBasic(int groupId)
+        {
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
+        }
+
+        public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int startIndex, int count)
+        {
+            try
+            {
+                return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelBasic()).ToList();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Log.Warn("Invalid indexes passed to GetRadioChannelsBasicByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
+                return null;
+            }
+        }
+
+        public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId)
+        {
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
+        }
+
+        public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int startIndex, int count)
+        {
+            try
+            {
+                return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Log.Warn("Invalid indexes passed to GetRadioChannelsDetailedByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
+                return null;
+            }
+        }
+
+        public IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName)
+        {
+            IList<WebChannelBasic> list = GetRadioChannelsBasic(groupId);
+            IList<WebChannelState> webChannelStates = new List<WebChannelState>();
+            foreach (WebChannelBasic entry in list)
+            {
+                webChannelStates.Add(GetChannelState(entry.Id, userName));
+            }
+
+            return webChannelStates;
+        }
+        #endregion
+
         public WebChannelBasic GetChannelBasicById(int channelId)
         {
             return Channel.Retrieve(channelId).ToWebChannelBasic();
@@ -305,23 +408,12 @@ namespace MPExtended.Services.TVAccessService
 
         public WebChannelState GetChannelState(int channelId, string userName)
         {
-            return _tvControl.GetChannelState(channelId, GetUserByUserName(userName)).ToWebChannelState();
+            ChannelState state = _tvControl.GetChannelState(channelId, GetUserByUserName(userName, true));
+            Log.Trace("ChannelId: " + channelId + ", State: " + state.ToString());
+            return state.ToWebChannelState(channelId);
         }
 
-        public Dictionary<int, WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
-        {
-            Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName));
-            Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
-            if (channelStates != null && channelStates.Count > 0)
-            {
-                foreach (var entry in channelStates)
-                {
-                    webChannelStates.Add(entry.Key, entry.Value.ToWebChannelState());
-                }
-            }
 
-            return webChannelStates;
-        }
         #endregion
 
         #region Timeshifting

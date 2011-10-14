@@ -215,7 +215,9 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelBasic
             {
                 DisplayName = ch.DisplayName,
-                Id = ch.IdChannel
+                Id = ch.IdChannel,
+                IsRadio = ch.IsRadio,
+                IsTv = ch.IsTv
             };
         }
 
@@ -272,7 +274,28 @@ namespace MPExtended.Services.TVAccessService
                 GroupName = group.GroupName,
                 Id = group.IdGroup,
                 IsChanged = group.IsChanged,
-                SortOrder = group.SortOrder
+                SortOrder = group.SortOrder,
+                IsRadio = false,
+                IsTv = true
+            };
+        }
+
+        public static WebChannelGroup ToWebChannelGroup(this RadioChannelGroup group)
+        {
+            if (group == null)
+            {
+                Log.Warn("Tried to convert a null ChannelGroup to WebChannelGroup");
+                return null;
+            }
+
+            return new WebChannelGroup
+            {
+                GroupName = group.GroupName,
+                Id = group.IdGroup,
+                IsChanged = group.IsChanged,
+                SortOrder = group.SortOrder,
+                IsRadio = true,
+                IsTv = false
             };
         }
 
@@ -282,6 +305,14 @@ namespace MPExtended.Services.TVAccessService
                 return null;
 
             return ChannelGroup.Retrieve(group.Id);
+        }
+
+        public static RadioChannelGroup ToRadioChannelGroup(this WebChannelGroup group)
+        {
+            if (group == null)
+                return null;
+
+            return RadioChannelGroup.Retrieve(group.Id);
         }
     }
 
@@ -475,21 +506,30 @@ namespace MPExtended.Services.TVAccessService
 
     public static class WebChannelStateExtensionMethods
     {
-        public static WebChannelState ToWebChannelState(this ChannelState state)
+        public static WebChannelState ToWebChannelState(this ChannelState state, int channelId)
         {
+            WebChannelState newState = new WebChannelState();
+            newState.ChannelId = channelId;
             switch (state)
             {
                 case ChannelState.tunable:
-                    return WebChannelState.Tunable;
+                    newState.State = WebChannelState.States.Tunable;
+                    break;
                 case ChannelState.timeshifting:
-                    return WebChannelState.Timeshifting;
+                    newState.State = WebChannelState.States.Timeshifting;
+                    break;
                 case ChannelState.recording:
-                    return WebChannelState.Recording;
+                    newState.State = WebChannelState.States.Recording;
+                    break;
                 case ChannelState.nottunable:
-                    return WebChannelState.NotTunable;
+                    newState.State = WebChannelState.States.NotTunable;
+                    break;
                 default:
-                    return WebChannelState.Tunable;
+                    newState.State = WebChannelState.States.Unknown;
+                    break;
             }
+
+            return newState;
         }
     }
 }

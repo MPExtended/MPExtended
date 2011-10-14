@@ -12,6 +12,8 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int Id { get; set; }
         public bool IsChanged { get; set; }
         public int SortOrder { get; set; }
+        public bool IsRadio { get; set; }
+        public bool IsTv { get; set; }
         #endregion
     }
 }

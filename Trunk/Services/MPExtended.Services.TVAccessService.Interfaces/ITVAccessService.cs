@@ -49,6 +49,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region Schedules
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        void StartRecordingManual(string userName, int channelId, string title);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType);
 
         [OperationContract]
@@ -83,6 +87,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #endregion
 
         #region Channels
+        #region Tv specific
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebChannelGroup> GetGroups();
@@ -114,6 +119,50 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        Dictionary<int, WebChannelState> GetAllChannelStatesForGroupOld(int groupId, string userName);
+        #endregion
+
+        #region Radio specific
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelGroup> GetRadioGroups();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebChannelGroup GetRadioGroupById(int groupId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        int GetRadioChannelCount(int groupId);
+
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelBasic> GetRadioChannelsBasic(int groupId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int startIndex, int count);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int startIndex, int count);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName);
+        #endregion
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebChannelBasic GetChannelBasicById(int channelId);
 
         [OperationContract]
@@ -124,10 +173,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebChannelState GetChannelState(int channelId, string userName);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        Dictionary<int, WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName);
         #endregion
 
         #region Timeshifting

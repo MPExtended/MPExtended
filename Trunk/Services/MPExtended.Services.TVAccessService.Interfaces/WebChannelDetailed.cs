@@ -16,8 +16,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public bool GrabEpg { get; set; }
         public IList<string> GroupNames { get; set; }
         public bool IsChanged { get; set; }
-        public bool IsRadio { get; set; }
-        public bool IsTv { get; set; }
         public DateTime LastGrabTime { get; set; }
         public int SortOrder { get; set; }
         public int TimesWatched { get; set; }

@@ -6,16 +6,26 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-    [DataContract]
-    public enum WebChannelState
+    public class WebChannelState
     {
-        [EnumMember]
-        NotTunable = 0,
-        [EnumMember]
-        Tunable = 1,
-        [EnumMember]
-        Timeshifting = 2,
-        [EnumMember]
-        Recording = 3
+        [DataContract]
+        public enum States
+        {
+            [EnumMember]
+            Unknown = -1,
+            [EnumMember]
+            NotTunable = 0,
+            [EnumMember]
+            Tunable = 1,
+            [EnumMember]
+            Timeshifting = 2,
+            [EnumMember]
+            Recording = 3
+        }
+
+        public int ChannelId { get; set; }
+        public States State { get; set; }
     }
+
+
 }
