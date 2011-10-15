@@ -67,7 +67,7 @@
     <Compile Include="WebChannelDetailed.cs" />
     <Compile Include="WebChannelGroup.cs" />
     <Compile Include="WebChannelState.cs" />
-    <Compile Include="WebFileInfo.cs" />
+    <Compile Include="WebRecordingFileInfo.cs" />
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />
     <Compile Include="WebRecordingBasic.cs" />

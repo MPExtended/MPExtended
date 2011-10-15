@@ -507,9 +507,9 @@ namespace MPExtended.Services.TVAccessService
             return Recording.Retrieve(recordingId).ToWebRecording();
         }
 
-        public WebFileInfo GetFileInfo(int recordingId)
+        public WebRecordingFileInfo GetFileInfo(int recordingId)
         {
-            return new WebFileInfo(GetRecordingById(recordingId).FileName);
+            return new WebRecordingFileInfo(GetRecordingById(recordingId).FileName);
         }
         #endregion
 

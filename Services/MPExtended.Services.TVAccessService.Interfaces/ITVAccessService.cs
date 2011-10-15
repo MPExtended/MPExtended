@@ -87,7 +87,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebFileInfo GetFileInfo(int recordingId);
+        WebRecordingFileInfo GetFileInfo(int recordingId);
         #endregion
 
         #region Channels

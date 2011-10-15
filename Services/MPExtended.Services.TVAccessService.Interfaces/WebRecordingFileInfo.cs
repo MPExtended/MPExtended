@@ -6,16 +6,16 @@ using System.Text;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-    public class WebFileInfo
+    public class WebRecordingFileInfo
     {
-        public WebFileInfo()
+        public WebRecordingFileInfo()
         {
             LastAccessTime = new DateTime(1970, 1, 1);
             LastModifiedTime = new DateTime(1970, 1, 1);
             Exists = false;
         }
 
-        public WebFileInfo(FileInfo info)
+        public WebRecordingFileInfo(FileInfo info)
             : this()
         {
             if (info != null)
@@ -32,7 +32,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
             }
         }
 
-        public WebFileInfo(string path)
+        public WebRecordingFileInfo(string path)
             : this(File.Exists(path) ? new FileInfo(path) : null)
         {
         }
