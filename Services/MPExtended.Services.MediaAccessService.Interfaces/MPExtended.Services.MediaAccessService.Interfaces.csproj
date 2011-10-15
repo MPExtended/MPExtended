@@ -88,6 +88,7 @@
     <Compile Include="Shared\WebGenre.cs" />
     <Compile Include="Shared\WebItemCount.cs" />
     <Compile Include="Shared\WebMediaItem.cs" />
+    <Compile Include="Shared\WebSearchResult.cs" />
     <Compile Include="SortInterfaces.cs" />
     <Compile Include="TVShow\WebTVSeasonDetailed.cs" />
     <Compile Include="TVShow\WebTVEpisodeBasic.cs" />

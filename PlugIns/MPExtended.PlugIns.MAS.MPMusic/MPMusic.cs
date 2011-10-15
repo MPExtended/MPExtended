@@ -157,6 +157,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return GetAllArtists().Where(x => x.Id == artistId).First();
         }
 
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            return new List<WebSearchResult>();
+        }
+
         public IEnumerable<WebGenre> GetAllGenres()
         {
             string sql = "SELECT DISTINCT strGenre FROM tracks";

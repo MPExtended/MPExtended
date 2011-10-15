@@ -233,6 +233,16 @@ namespace MPExtended.Services.MediaAccessService
                     throw new ArgumentException();
             }
         }
+
+        public IList<WebSearchResult> Search(string text)
+        {
+            return ChosenMovieLibrary.Search(text)
+                .Union(ChosenMusicLibrary.Search(text))
+                .Union(ChosenPictureLibrary.Search(text))
+                .Union(ChosenTVShowLibrary.Search(text))
+                .Union(ChosenFileSystemLibrary.Search(text))
+                .ToList();
+        }
         #endregion
 
         #region Movies

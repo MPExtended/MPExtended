@@ -77,5 +77,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

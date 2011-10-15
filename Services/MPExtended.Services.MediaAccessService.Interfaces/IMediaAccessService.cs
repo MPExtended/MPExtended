@@ -36,6 +36,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]        
         ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]  
+        IList<WebSearchResult> Search(string text);
         #endregion
 
         #region Movies

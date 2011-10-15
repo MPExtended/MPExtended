@@ -157,6 +157,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         }
         #endregion
 
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            return new List<WebSearchResult>();
+        }
 
         internal void dirSearchWebPictureBasic(string strDir)
         {

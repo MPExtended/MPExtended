@@ -104,6 +104,20 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return GetAllMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
         }
 
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            string showSql = "SELECT id, title FROM movie_info WHERE title LIKE @search";
+            return ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
+            {
+                return new WebSearchResult()
+                {
+                    Type = WebMediaType.Movie,
+                    Id = reader.ReadIntAsString(0),
+                    Title = reader.ReadString(1),
+                };
+            }, new SQLiteParameter("@search", "%" + text + "%"));
+        }
+
         public IEnumerable<WebGenre> GetAllGenres()
         {
             string sql = "SELECT DISTINCT genres FROM movie_info";

@@ -159,6 +159,11 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            return new List<WebSearchResult>();
+        }
+
         private string GetPath(string id)
         {
             if (id.StartsWith("s"))

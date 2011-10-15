@@ -54,10 +54,21 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.parameters = parameters;
         }
 
+        public LazyQuery(Database db, string sql, SQLiteParameter parameter, IEnumerable<SQLFieldMapping> mapping)
+            : this(db, sql, mapping)
+        {
+            this.parameters = new SQLiteParameter[] { parameter };
+        }
+
         public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
             : this(db, sql, parameters, mapping)
         {
             this.finalize = finalize;
+        }
+
+        public LazyQuery(Database db, string sql, SQLiteParameter parameter, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
+            : this(db, sql, new SQLiteParameter[] { parameter }, mapping, finalize)
+        {
         }
 
         public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)

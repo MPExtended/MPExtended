@@ -90,6 +90,11 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
                 };
         }
 
+        public IEnumerable<WebSearchResult> Search(string text)
+        {
+            return new List<WebSearchResult>();
+        }
+
         public WebFileInfo GetFileInfo(string path)
         {
             return new WebFileInfo(new FileInfo(path));
