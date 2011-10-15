@@ -1,0 +1,9 @@
+[Bb]in
+[Oo]bj
+*.suo
+*.user
+*.log
+[Tt]humbs.db
+*.resharper
+*~
+*.vssscc
