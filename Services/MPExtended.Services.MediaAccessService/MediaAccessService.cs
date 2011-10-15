@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ namespace MPExtended.Services.MediaAccessService
                 ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, ref pictureLibraryName, "picture", PictureLibraries);
                 ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, ref tvShowLibraryName, "tvShow", TVShowLibraries);
                 ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(config, ref fileSystemLibraryName, "filesystem", FileSystemLibraries);
-            }                        
+            }
             catch (Exception ex)
             {
                 Log.Error("Failed to create backends", ex);
@@ -134,7 +134,7 @@ namespace MPExtended.Services.MediaAccessService
                 foreach (string pdir in Directory.GetDirectories(pluginRoot))
                 {
                     string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-                    if(Directory.Exists(dir))
+                    if (Directory.Exists(dir))
                         catalog.Catalogs.Add(new DirectoryCatalog(dir));
                 }
 #else
@@ -241,49 +241,29 @@ namespace MPExtended.Services.MediaAccessService
             return ChosenMovieLibrary.GetAllCategories().ToList();
         }
 
-        public WebItemCount GetMovieCount()
+        public WebItemCount GetMovieCount(string genre, string category)
         {
-            return new WebItemCount() { Count = ChosenMovieLibrary.GetAllMovies().Count() };
+            return new WebItemCount() { Count = ChosenMovieLibrary.GetAllMovies().Where(x => (category == null || x.UserDefinedCategories.Contains(category)) && (genre == null || x.Genres.Contains(genre))).Count() };
         }
 
-        public IList<WebMovieBasic> GetAllMoviesBasic(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetAllMoviesBasic(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
             return ChosenMovieLibrary.GetAllMovies().SortMediaItemList(sort, order).ToList();
         }
 
-        public IList<WebMovieDetailed> GetAllMoviesDetailed(SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieDetailed> GetAllMoviesDetailed(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().SortMediaItemList(sort, order).ToList();
+            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(x => (category == null || x.UserDefinedCategories.Contains(category)) && (genre == null || x.Genres.Contains(genre))).SortMediaItemList(sort, order).ToList();
         }
 
-        public IList<WebMovieBasic> GetMoviesBasicForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetMoviesBasicByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMovies().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
+            return ChosenMovieLibrary.GetAllMovies().Where(x => (category == null || x.UserDefinedCategories.Contains(category)) && (genre == null || x.Genres.Contains(genre))).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
-        public IList<WebMovieDetailed> GetMoviesDetailedForCategory(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieDetailed> GetMoviesDetailedByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(x => x.UserDefinedCategories.Contains(category)).SortMediaItemList(sort, order).ToList();
-        }
-
-        public IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMovieLibrary.GetAllMovies().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
-        }
-
-        public IList<WebMovieDetailed> GetMoviesDetailedByRange(int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
-        }
-
-        public IList<WebMovieBasic> GetMoviesBasicByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMovieLibrary.GetAllMovies().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
-        }
-
-        public IList<WebMovieDetailed> GetMoviesDetailedByGenre(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {
-            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(p => p.Genres.Contains(genre)).SortMediaItemList(sort, order).ToList();
+            return ChosenMovieLibrary.GetAllMoviesDetailed().Where(x => (category == null || x.UserDefinedCategories.Contains(category)) && (genre == null || x.Genres.Contains(genre))).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebGenre> GetAllMovieGenres()
@@ -588,7 +568,7 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
-        {           
+        {
             return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).ToList();
         }
 

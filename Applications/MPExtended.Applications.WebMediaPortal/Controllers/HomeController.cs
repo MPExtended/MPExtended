@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewMovies()
         {
-             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(0, 3, SortBy.DateAdded, OrderBy.Desc);
+             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(null, null, 0, 3, SortBy.DateAdded, OrderBy.Desc);
              return PartialView(tmp);
         }
 

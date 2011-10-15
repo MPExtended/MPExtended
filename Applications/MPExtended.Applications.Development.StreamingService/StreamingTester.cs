@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ namespace MPExtended.Applications.Development.StreamingService
             try
             {
                 cbMovies.Items.Clear();
-                mMovies = mServiceClient.GetAllMoviesDetailed();
+                mMovies = mServiceClient.GetAllMoviesDetailed(null, null);
                 foreach (WebMovieDetailed movie in mMovies)
                 {
                     cbMovies.Items.Add(movie.Title);
