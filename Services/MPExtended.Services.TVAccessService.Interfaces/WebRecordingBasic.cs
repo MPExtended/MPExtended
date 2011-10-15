@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebRecordingBasic
     {
-        #region Properties
         public string Description { get; set; }
         public DateTime EndTime { get; set; }
         public string EpisodeName { get; set; }
@@ -18,7 +17,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string Genre { get; set; }
         public int IdChannel { get; set; }
         public int Id { get; set; }
-        public int Idschedule { get; set; }
+        public int IdSchedule { get; set; }
         public int IdServer { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
@@ -31,6 +30,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int StopTime { get; set; }
         public int TimesWatched { get; set; }
         public string Title { get; set; }
-        #endregion
     }
 }

@@ -479,7 +479,7 @@ namespace MPExtended.Services.TVAccessService
                 Genre = rec.Genre,
                 IdChannel = rec.IdChannel,
                 Id = rec.IdRecording,
-                Idschedule = rec.Idschedule,
+                IdSchedule = rec.Idschedule,
                 IdServer = rec.IdServer,
                 IsChanged = rec.IsChanged,
                 IsManual = rec.IsManual,

@@ -501,9 +501,15 @@ namespace MPExtended.Services.TVAccessService
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
         }
+
         public WebRecordingBasic GetRecordingById(int recordingId)
         {
-            return Recording.ListAll().First(p => p.IdRecording == recordingId).ToWebRecording();
+            return Recording.Retrieve(recordingId).ToWebRecording();
+        }
+
+        public WebFileInfo GetFileInfo(int recordingId)
+        {
+            return new WebFileInfo(GetRecordingById(recordingId).FileName);
         }
         #endregion
 
