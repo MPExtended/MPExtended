@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {
-    [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.com")]
     public interface IUserSessionService
     {
         [OperationContract]

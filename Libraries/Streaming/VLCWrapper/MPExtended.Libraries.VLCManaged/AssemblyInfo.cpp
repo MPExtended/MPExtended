@@ -16,10 +16,10 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
-[assembly:AssemblyCompanyAttribute("mpextended.codeplex.com")];
+[assembly:AssemblyCompanyAttribute("mpextended.github.com")];
 [assembly:AssemblyCopyrightAttribute("Copyright (c) 2011 MPExtended")];
 [assembly:AssemblyTrademarkAttribute("")];
-[assembly:AssemblyConfigurationAttribute("Debug")];
+[assembly:AssemblyConfigurationAttribute("Release")];
 
 //
 // Version information for an assembly consists of the following four values:

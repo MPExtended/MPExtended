@@ -1,6 +1,6 @@
 ﻿#region Copyright (C) 2010-2011 TV4Home, 2011 MPExtended
 // Copyright (C) 2010-2011 TV4Home, http://tv4home.codeplex.com/
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

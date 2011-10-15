@@ -20,7 +20,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     // from the interfaces described in MediaInterfaces, which are the interfaces used
     // for internal communication, but they have to use the same known media descriptions.
 
-    [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.com")]
     public interface IMediaAccessService
     {
 

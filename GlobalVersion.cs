@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Author information
-[assembly: AssemblyCompany("mpextended.codeplex.com")]
+[assembly: AssemblyCompany("mpextended.github.com")]
 [assembly: AssemblyCopyright("Copyright © 2011 MPExtended")]
 [assembly: AssemblyTrademark("")]
 

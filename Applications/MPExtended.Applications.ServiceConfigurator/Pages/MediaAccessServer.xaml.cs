@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.codeplex.com/
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -758,7 +758,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private static void ExceptionMessageBox(string exMessage)
         {
-            MessageBox.Show("An unexpected error occured please file an issue on mpextended.codeplex.com with the service's log files attached", exMessage);
+            MessageBox.Show("An unexpected error occured. Please file a bugreport with the service's log files attached", exMessage);
         }
 
         private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
