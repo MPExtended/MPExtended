@@ -127,6 +127,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             cbPluginConfigs.DisplayMemberPath = "Key";
             cbPluginConfigs.SelectedValuePath = "Value";
 
+            if (PluginConfigurations.Count > 0)
+            {
+                cbPluginConfigs.SelectedIndex = 0;
+            }
+
             if (!isServiceAvailable(mServiceController))
             {
                 mServiceController = null;
