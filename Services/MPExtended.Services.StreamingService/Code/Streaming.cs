@@ -180,10 +180,9 @@ namespace MPExtended.Services.StreamingService.Code
                     else if (audioId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Config.GetDefaultStream("audio");
-                        var acceptableList = info.AudioStreams.Where(x => x.Language == preferredLanguage);
-                        if (acceptableList.Count() > 0)
+                        if (info.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
-                            defAudioId = acceptableList.First().ID;
+                            defAudioId = info.AudioStreams.First(x => x.Language == preferredLanguage).ID;
                         }
                         else if (preferredLanguage != "none" && info.AudioStreams.Count() > 0)
                         {
@@ -196,15 +195,18 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         defSubtitleId = info.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
                     }
-                    else if (audioId == STREAM_DEFAULT)
+                    else if (subtitleId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Config.GetDefaultStream("subtitle");
-                        var acceptableList = info.SubtitleStreams.Where(x => x.Language == preferredLanguage);
-                        if (acceptableList.Count() > 0)
+                        if (info.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
-                            defSubtitleId = acceptableList.First().ID;
+                            defSubtitleId = info.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage != "none" && info.SubtitleStreams.Count() > 0)
+                        else if (preferredLanguage == "external" && info.SubtitleStreams.Count(x => x.Filename != null) > 0)
+                        {
+                            defSubtitleId = info.SubtitleStreams.First(x => x.Filename != null).ID;
+                        }
+                        else if (preferredLanguage == "first" && info.SubtitleStreams.Count() > 0)
                         {
                             defSubtitleId = info.SubtitleStreams.First().ID;
                         }
