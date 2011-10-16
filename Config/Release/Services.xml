@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <serviceconfig>
-  <config>
-    <username>admin</username>
-    <password>admin</password>
-  </config>
+  <users>
+    <user>
+      <username>admin</username>
+      <password>admin</password>
+    </user>
+  </users>
+
   <bonjour>
     <enabled>false</enabled>
     <pcname /><!-- Automatically detected when empty -->

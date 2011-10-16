@@ -42,6 +42,7 @@ using System.Security.Principal;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Net.Sockets;
+using System.Linq;
 using System.Windows.Media;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
@@ -258,13 +259,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void InitServiceConfiguration()
         {
-            String user = null;
-            String pass = null;
-            Configuration.GetCredentials(out user, out pass, true);
-
-            txtUsername.Text = user;
-            txtUserPassword.Text = pass;
-
             txtServicePort.Text = Configuration.GetPort().ToString();
         }
 
@@ -717,21 +711,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void cmdUpdateConfig_Click(object sender, RoutedEventArgs e)
         {
-            String user = null;
-            String pass = null;
-            Configuration.GetCredentials(out user, out pass, true);
-
             bool needsRestart = false;
-            if (!txtUsername.Text.Equals(user) || !txtUserPassword.Text.Equals(pass))
-            {
-                if (!Configuration.SetCredentials(txtUsername.Text, txtUserPassword.Text))
-                {
-                    MessageBox.Show("Error updating config");
-                    return;
-                }
-                
-                needsRestart = true;
-            }
 
             if (!txtServicePort.Text.Equals(Configuration.GetPort().ToString()))
             {
@@ -740,6 +720,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     MessageBox.Show("Error updating config");
                     return;
                 }
+
+                needsRestart = true;
             }
 
 
@@ -843,8 +825,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 if (_includeAuth)
                 {
-                    desc.User = txtUsername.Text;
-                    desc.Password = txtUserPassword.Text;
+                    desc.User = Configuration.GetCredentials().First().Item1;
+                    desc.Password = Configuration.GetCredentials().First().Item2;
                     desc.AuthOptions = 1;//username/password
                 }
 

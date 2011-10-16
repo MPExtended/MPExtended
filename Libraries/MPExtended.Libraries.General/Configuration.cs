@@ -27,8 +27,7 @@ namespace MPExtended.Libraries.General
 {
     public class Configuration
     {
-        private static string cachedUsername;
-        private static string cachedPassword;
+        private static List<Tuple<string, string>> cachedUserList;
 
         public static string GetPath(string filename)
         {
@@ -41,19 +40,18 @@ namespace MPExtended.Libraries.General
             return Path.Combine(basedir, filename);
         }
 
-        public static void GetCredentials(out string username, out string password, bool overwriteCached)
+        public static List<Tuple<string, string>> GetCredentials(bool overwriteCached = false)
         {
-            if (overwriteCached || cachedUsername == null || cachedPassword == null)
+            if (overwriteCached || cachedUserList == null)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(GetPath("Services.xml"));
-                XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
-                XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
-                cachedUsername = userNode.InnerText;
-                cachedPassword = passNode.InnerText;
+                cachedUserList = XElement.Load(GetPath("Services.xml"))
+                    .Element("users")
+                    .Elements("user")
+                    .Select(x => new Tuple<string, string>(x.Element("username").Value, x.Element("password").Value))
+                    .ToList();
             }
-            username = cachedUsername;
-            password = cachedPassword;
+
+            return cachedUserList;
         }
 
         public static bool SetCredentials(string username, string password)

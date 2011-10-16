@@ -21,6 +21,8 @@ using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using MPExtended.Libraries.General;
 
@@ -28,27 +30,24 @@ namespace MPExtended.Libraries.ServiceLib
 {
     public class WcfUsernameValidator : UserNamePasswordValidator
     {
-        public static String UserName { get; set; }
-        public static String Password { get; set; }
+        private static List<Tuple<string, string>> Users { get; set; }
 
         public static void Init()
         {
-            string username;
-            string password;
-            Configuration.GetCredentials(out username, out password, false);
-            UserName = username;
-            Password = password;
+            Users = Configuration.GetCredentials(false);
         }
 
         public override void Validate(string userName, string password)
         {
-            // This isn't secure, though
-            if ((WcfUsernameValidator.UserName != null && WcfUsernameValidator.Password != null) &&
-                (userName != WcfUsernameValidator.UserName || password != WcfUsernameValidator.Password))
+            if(Users.Count(x => x.Item1 == userName && x.Item2 == password) == 0)
             {
+                Log.Info("Request with invalid username {0} with password {1}", userName, password);
+
                 SecurityTokenException ex = new SecurityTokenException("Validation Failed!");
-                //needs ms fix -> http://blogs.msdn.com/b/drnick/archive/2010/02/02/fix-to-allow-customizing-the-status-code-when-validation-fails.aspx
+
+                // Doesn't always work: http://blogs.msdn.com/b/drnick/archive/2010/02/02/fix-to-allow-customizing-the-status-code-when-validation-fails.aspx
                 ex.Data["HttpStatusCode"] = HttpStatusCode.Unauthorized;
+
                 throw ex;
             }
         }

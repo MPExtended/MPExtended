@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="361" d:DesignWidth="697"
+      d:DesignHeight="450" d:DesignWidth="697"
 	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}" Loaded="Page_Loaded">
 
     <Grid Width="AUTO">
@@ -31,15 +31,15 @@
             <TabItem Header="General" Width="140">
                 <Grid>
                     <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="8,9,0,0" Name="label2" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
-                    <Label Content="Username" Height="28" HorizontalAlignment="Left" Margin="6,38,0,0" Name="label3" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="Password" Height="28" HorizontalAlignment="Left" Margin="6,72,0,0" Name="label4" VerticalAlignment="Top" FontWeight="Bold" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="85,9,0,0" Name="txtServicePort" VerticalAlignment="Top" Width="83" Text="44321" IsReadOnly="False" IsEnabled="True" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="85,43,0,0" Name="txtUsername" VerticalAlignment="Top" Width="137" Text="admin" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="85,74,0,0" Name="txtUserPassword" VerticalAlignment="Top" Width="137" Text="admin" />
-                    <Button Content="Save" x:Name="btnUpdateConfig" MinWidth="80" Margin="85,114,0,0" MinHeight="23" Click="cmdUpdateConfig_Click" HorizontalAlignment="Left" Width="211" Height="23" VerticalAlignment="Top" />
+                    <Button Content="Save" x:Name="btnUpdateConfig" MinWidth="80" Margin="8,46,0,0" MinHeight="23" Click="cmdUpdateConfig_Click" HorizontalAlignment="Left" Width="211" Height="23" VerticalAlignment="Top" />
                     <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="247,9,0,0" Name="label14" VerticalAlignment="Top" FontWeight="Bold" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="352,11,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="181" />
                     <CheckBox Content="Enable Autodetection via ZeroConf/Bonjour" Height="16" HorizontalAlignment="Left" Margin="249,50,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Authentication" Width="140">
+                <Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="QR Code" Name="tabItem1">
