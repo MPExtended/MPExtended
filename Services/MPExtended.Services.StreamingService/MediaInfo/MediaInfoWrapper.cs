@@ -151,7 +151,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     });
                 }
 
-                // only support usual convention naming convention for external files for now
+                // only support usual naming convention for external files for now
                 string subfile = Path.Combine(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".srt");
                 if (File.Exists(subfile))
                 {

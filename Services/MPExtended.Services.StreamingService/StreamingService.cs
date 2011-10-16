@@ -122,6 +122,7 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
+            Log.Info("Called InitStream with type={0}; itemId={1}; clientDescription={2}; identifier={3}", type, itemId, clientDescription, identifier);
             return _stream.InitStream(identifier, clientDescription, new MediaSource(type, itemId));
         }
 

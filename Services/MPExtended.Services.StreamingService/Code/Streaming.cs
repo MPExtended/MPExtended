@@ -303,6 +303,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
                 return Streams[identifier].TranscodingInfo;
 
+            Log.Warn("Requested transcoding info for unknown identifier {0}", identifier);
             return null;
         }
 
