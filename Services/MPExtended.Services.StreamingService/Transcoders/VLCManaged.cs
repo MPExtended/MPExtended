@@ -27,21 +27,16 @@ using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class VLCManaged : ITranscoder
+    internal class VLCManaged : VLCBaseTranscoder
     {
-        public TranscoderProfile Profile { get; set; }
-        public MediaSource Source { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
-        public string Identifier { get; set; }
-
         protected bool readOutputStream = true;
 
-        public virtual string GetStreamURL()
+        public override string GetStreamURL()
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public virtual void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public override void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             SetupAssemblyLoader();
 
@@ -52,44 +47,19 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             }
 
-            // arguments and audio track
-            List<string> arguments = Profile.CodecParameters["options"].Split(' ').ToList();
-            if (audioId != null)
-            {
-                arguments.Add("--audio-track " + MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().Index);
-            }
-
-            // subtitle selection
-            string subtitleTranscoder = "";
-            if (subtitleId != null)
-            {
-                WebSubtitleStream stream = MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First();
-                if (stream.Filename != null)
-                {
-                    arguments.Add("--sub-file=" + stream.Filename);
-                }
-                else
-                {
-                    arguments.Add("--sub-track " + stream.Index);
-                }
-                subtitleTranscoder += ",soverlay";
-            }
-
-            // create parameters
-            string sout = 
-                "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}" 
-                + Profile.CodecParameters["muxer"];
+            // get parameters
+            VLCParameters vlcparam = GenerateVLCParameters(outputSize, audioId, subtitleId);
             float percentage = position / MediaInfo.Duration;            
 
             // add the unit
             VLCManagedEncoder unit;
             if (doInputReader)
             {
-                unit = new VLCManagedEncoder(sout, arguments.ToArray(), percentage, einfo, VLCManagedEncoder.InputMethod.NamedPipe);
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, percentage, einfo, VLCManagedEncoder.InputMethod.NamedPipe);
             }
             else
             {
-                unit = new VLCManagedEncoder(sout, arguments.ToArray(), percentage, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, percentage, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
             }
             pipeline.AddDataUnit(unit, 5);
         }

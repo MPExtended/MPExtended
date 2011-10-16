@@ -26,21 +26,16 @@ using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class VLC : ITranscoder
+    internal class VLC : VLCBaseTranscoder
     {
-        public TranscoderProfile Profile { get; set; }
-        public MediaSource Source { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
-        public string Identifier { get; set; }
-
         protected bool readOutputStream = true;
 
-        public virtual string GetStreamURL()
+        public override string GetStreamURL()
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public virtual void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public override void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
         {
             // VLC doesn't support output parsing, but subclasses do
             AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.None);
@@ -55,35 +50,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             }
 
-            // audio language selection
-            string audioTrack = "";
-            if (audioId != null)
-                audioTrack = "--audio-track " + MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().Index;
+            // get parameters
+            VLCParameters vlcparam = GenerateVLCParameters(outputSize, audioId, subtitleId);
 
-            // subtitle selection
-            string subtitleTranscoder = "";
-            string subtitleArguments = "";
-            if (subtitleId != null)
-            {
-                WebSubtitleStream stream = MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First();
-                if (stream.Filename != null)
-                {
-                    subtitleArguments = "--sub-file=" + stream.Filename;
-                }
-                else
-                {
-                    subtitleArguments = "--sub-track " + stream.Index;
-                }
-                subtitleTranscoder += ",soverlay";
-            }
-
-            // prepare output path (some trickying for VLC to accept named pipes)
+            // prepare vlc arguments
             string path = @"\#OUT#";
-            string muxer = Profile.CodecParameters["muxer"].Replace("#OUT#", path);
-
-            // arguments
-            string sout = "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + subtitleTranscoder + "}" + muxer;
-            string arguments = GenerateArguments("#IN#", sout, subtitleArguments + " " + audioTrack + " " + Profile.CodecParameters["options"]);
+            string sout = vlcparam.Sout.Replace("#OUT#", path);
+            string arguments = GenerateArguments("#IN#", sout, String.Join(" ", vlcparam.Arguments));
             if(!doInputReader)
                 arguments = arguments.Replace("#IN#", Source.GetPath());
 

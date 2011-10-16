@@ -90,6 +90,7 @@
     <Compile Include="Transcoders\ICustomActionTranscoder.cs" />
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
+    <Compile Include="Transcoders\VLCBaseTranscoder.cs" />
     <Compile Include="Transcoders\VLCManaged.cs" />
     <Compile Include="Transcoders\VLCWrapper.cs" />
     <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
