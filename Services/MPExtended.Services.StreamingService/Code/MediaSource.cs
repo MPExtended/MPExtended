@@ -119,37 +119,49 @@ namespace MPExtended.Services.StreamingService.Code
 
         public string GetDisplayName()
         {
-            var mas = MPEServices.NetPipeMediaAccessService;
-            var tas = MPEServices.NetPipeTVAccessService;
-            switch (MediaType)
+            try
             {
-                case WebStreamMediaType.File:
-                    return mas.GetFileSystemFileBasicById(Id).Name;
-                case WebStreamMediaType.Movie:
-                    return mas.GetMovieBasicById(Id).Title;
-                case WebStreamMediaType.MusicAlbum:
-                    return mas.GetMusicAlbumBasicById(Id).Title;
-                case WebStreamMediaType.MusicTrack:
-                    return mas.GetMusicTrackBasicById(Id).Title;
-                case WebStreamMediaType.Picture:
-                    return mas.GetPictureBasicById(Id).Title;
-                case WebStreamMediaType.Recording:
-                    return "TODO";
-                case WebStreamMediaType.TV:
-                    return tas.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
-                case WebStreamMediaType.TVEpisode:
-                    var ep = mas.GetTVEpisodeBasicById(Id);
-                    var season = mas.GetTVSeasonBasicById(ep.SeasonId);
-                    var show = mas.GetTVShowBasicById(ep.ShowId);
-                    return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
-                case WebStreamMediaType.TVSeason:
-                    var season2 = mas.GetTVSeasonDetailedById(Id);
-                    var show2 = mas.GetTVShowBasicById(season2.ShowId);
-                    return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
-                case WebStreamMediaType.TVShow:
-                    return mas.GetTVShowBasicById(Id).Title;
+                var mas = MPEServices.NetPipeMediaAccessService;
+                var tas = MPEServices.NetPipeTVAccessService;
+                switch (MediaType)
+                {
+                    case WebStreamMediaType.File:
+                        return mas.GetFileSystemFileBasicById(Id).Name;
+                    case WebStreamMediaType.Movie:
+                        return mas.GetMovieBasicById(Id).Title;
+                    case WebStreamMediaType.MusicAlbum:
+                        return mas.GetMusicAlbumBasicById(Id).Title;
+                    case WebStreamMediaType.MusicTrack:
+                        return mas.GetMusicTrackBasicById(Id).Title;
+                    case WebStreamMediaType.Picture:
+                        return mas.GetPictureBasicById(Id).Title;
+                    case WebStreamMediaType.Recording:
+                        return tas.GetRecordingById(Int32.Parse(Id)).Title;
+                    case WebStreamMediaType.TV:
+                        return tas.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
+                    case WebStreamMediaType.TVEpisode:
+                        var ep = mas.GetTVEpisodeBasicById(Id);
+                        var season = mas.GetTVSeasonBasicById(ep.SeasonId);
+                        var show = mas.GetTVShowBasicById(ep.ShowId);
+                        return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
+                    case WebStreamMediaType.TVSeason:
+                        var season2 = mas.GetTVSeasonDetailedById(Id);
+                        var show2 = mas.GetTVShowBasicById(season2.ShowId);
+                        return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
+                    case WebStreamMediaType.TVShow:
+                        return mas.GetTVShowBasicById(Id).Title;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Could not load display name of media", ex);
             }
             return "";
+        }
+
+        public string GetInternalName()
+        {
+            return String.Format("{0}_{1}", MediaType, Id);
         }
 
         public override string ToString()

@@ -71,7 +71,8 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (!source.IsLocalFile)
             {
-                Log.Warn("ExtractImage: Source " + source + " is not supported");
+                Log.Warn("ExtractImage: Source type={0} id={1} is not supported yet", source.MediaType, source.Id);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotImplemented);
                 return null;
             }
 
@@ -89,19 +90,34 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 Directory.CreateDirectory(tempDir);
             }
+            string filename = String.Format("ex_{0}_{1}_{2}_{3}.jpg", source.GetInternalName(), startPosition, 
+                maxWidth == null ? "null" : maxWidth.ToString(), maxHeight == null ? "null" : maxHeight.ToString());
+            string tempFile = Path.Combine(tempDir, filename);
 
-            string tempFile = Path.Combine(tempDir, Guid.NewGuid().ToString() + ".jpg");
+            // maybe it exists
+            if (File.Exists(tempFile))
+            {
+                return StreamImage(new ImageSource(tempFile));
+            }
 
             // execute it
             ProcessStartInfo info = new ProcessStartInfo();
             info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
             info.FileName = Config.GetFFMpegPath();
+            info.CreateNoWindow = true;
             info.UseShellExecute = false;
             Process proc = new Process();
             proc.StartInfo = info;
             proc.Start();
             proc.WaitForExit();
 
+            // log when failed
+            if (!File.Exists(tempFile))
+            {
+                Log.Warn("Failed to extract image to temporary file {0}", tempFile);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
+                return null;
+            }
             return StreamImage(new ImageSource(tempFile));
         }
 
@@ -124,7 +140,7 @@ namespace MPExtended.Services.StreamingService.Code
             string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
             if (!Directory.Exists(tmpDir))
                 Directory.CreateDirectory(tmpDir);
-            string cachedPath = Path.Combine(tmpDir, String.Format("{0}_{1}_{2}_{3}_{4}.jpg", mediatype, artworktype, id, maxWidth, maxHeight));
+            string cachedPath = Path.Combine(tmpDir, String.Format("rs_{0}_{1}_{2}_{3}_{4}.jpg", mediatype, artworktype, id, maxWidth, maxHeight));
 
             // check for existence on disk
             if (!File.Exists(cachedPath))

@@ -179,71 +179,32 @@ namespace MPExtended.Services.StreamingService
         #region Images
         public Stream ExtractImage(WebStreamMediaType type, string itemId, int position)
         {
-            return WrapInErrorHandler(delegate()
-            {
-                return Images.ExtractImage(new MediaSource(type, itemId), position, null, null);
-            });
+             return Images.ExtractImage(new MediaSource(type, itemId), position, null, null);
         }
 
         public Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight)
         {
-            return WrapInErrorHandler(delegate()
-            {
-                return Images.ExtractImage(new MediaSource(type, itemId), position, maxWidth, maxHeight);
-            });
+             return Images.ExtractImage(new MediaSource(type, itemId), position, maxWidth, maxHeight);
         }
 
         public Stream GetImage(WebStreamMediaType type, string id)
         {
-            return WrapInErrorHandler(delegate()
-            {
-                return Images.GetImage(type, id);
-            });
+             return Images.GetImage(type, id);
         }
 
         public Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight)
         {
-            return WrapInErrorHandler(delegate()
-            {
-                return Images.GetResizedImage(type, id, maxWidth, maxHeight);
-            });
+             return Images.GetResizedImage(type, id, maxWidth, maxHeight);
         }
 
         public Stream GetArtwork(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
-        {
-            return WrapInErrorHandler(delegate() 
-            { 
-                return Images.GetImage(mediatype, artworktype, id, offset); 
-            });
+        { 
+             return Images.GetImage(mediatype, artworktype, id, offset); 
         }
 
         public Stream GetArtworkResized(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
         {
-            return WrapInErrorHandler(delegate()
-            {
-                return Images.GetResizedImage(mediatype, artworktype, id, offset, maxWidth, maxHeight);
-            });
-        }
-
-        private delegate Stream DoOperation();
-        private Stream WrapInErrorHandler(DoOperation operation)
-        {
-            try
-            {
-                return operation.Invoke();
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                Log.Info("Didn't found image", ex);
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
-                Log.Warn("Exception while trying to do image operation", ex);
-                return null;
-            }
+             return Images.GetResizedImage(mediatype, artworktype, id, offset, maxWidth, maxHeight);
         }
         #endregion
     }
