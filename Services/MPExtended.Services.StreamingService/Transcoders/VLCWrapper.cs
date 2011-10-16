@@ -32,7 +32,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             base.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.StandardOut);
 
             // setup output parsing
-            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo);
+            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo, position);
             pipeline.AddLogUnit(logunit, 6);
         }
 

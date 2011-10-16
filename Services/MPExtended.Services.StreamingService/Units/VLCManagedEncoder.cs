@@ -148,18 +148,13 @@ namespace MPExtended.Services.StreamingService.Units
 
         private void InfoThread(object passedPosition)
         {
-            int startmsec = (int)passedPosition * 1000;
+            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
             while (true)
             {
                 try
                 {
-                    // FIXME: assuming 25fps here
-                    int msecs = transcoder.GetTime() / 1000 - startmsec; // GetTime() returns the value in microseconds, but convert it to milliseconds for our use
-                    int frames = msecs / 40; // 25fps gives a frame every 40 milliseconds
-
-                    info.Value.EncodingFPS = (frames - info.Value.EncodedFrames) / (1000 / POLL_DATA_TIME);
-                    info.Value.EncodedFrames = frames;
-                    info.Value.CurrentTime = msecs;
+                    calculator.NewData(transcoder.GetTime() / 1000); // vlc gives time in microseconds
+                    calculator.SetStats(info);
                 }
                 catch (ThreadAbortException)
                 {

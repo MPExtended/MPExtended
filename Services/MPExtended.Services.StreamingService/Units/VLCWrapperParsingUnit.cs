@@ -33,10 +33,12 @@ namespace MPExtended.Services.StreamingService.Units
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
         private bool vlcIsStarted;
+        private int position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, int position) 
         {
             data = save;
+            this.position = position;
         }
 
         public bool Setup() 
@@ -46,7 +48,7 @@ namespace MPExtended.Services.StreamingService.Units
             vlcIsStarted = false;
             processThread = new Thread(new ThreadStart(delegate()
             {
-                ParseOutputStream(InputStream, data, false);
+                ParseOutputStream(InputStream, data, false, this.position);
             }));
             processThread.Name = "VLCLogParsing";
             processThread.Start();
@@ -66,9 +68,10 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, bool logProgress)
+        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, bool logProgress, int position)
         {
             StreamReader reader = new StreamReader(stdoutStream);
+            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position * 1000, 25, 500); //VLCWrapper prints twice a second
 
             bool aborted = false;
             string line;
@@ -106,18 +109,9 @@ namespace MPExtended.Services.StreamingService.Units
                     // the actual progress parsing
                     if(line.StartsWith("P")) 
                     {
-                        // FIXME: hardcoded 25fps 
-
-                        int millisecs = Int32.Parse(line.Substring(2, line.IndexOf(",") - 2)) / 1000;
-                        Decimal percent = Decimal.Parse(line.Substring(line.IndexOf(",") + 1), System.Globalization.CultureInfo.InvariantCulture);
-                        int fps = (millisecs - data.Value.CurrentTime) / (1000 / 25) * 2;
-
-                        lock (data)
-                        {
-                            data.Value.CurrentTime = millisecs;
-                            data.Value.EncodingFPS = fps;
-                            data.Value.EncodedFrames = millisecs / (1000 / 25);
-                        }
+                        int msecs = Int32.Parse(line.Substring(2, line.IndexOf(",") - 2)) / 1000;
+                        calculator.NewData(msecs);
+                        calculator.SetStats(data);
                         continue;
                     }
 
