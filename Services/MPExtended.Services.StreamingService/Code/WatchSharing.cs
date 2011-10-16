@@ -55,7 +55,7 @@ namespace MPExtended.Services.StreamingService.Code
             public bool Canceled { get; set; }
             public bool Stale { get; set; }
             public int StartedPosition { get; set; } // in seconds
-            public int Runtime { get; set; }
+            public int Runtime { get; set; } // in minutes
             public Thread BackgroundThread { get; set; }
             public Reference<WebTranscodingInfo> TranscodingInfo { get; set; }
         }
@@ -299,7 +299,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static int CalculatePercent(int currentMinutes, int runtime)
         {
-            return (int)Math.Round(currentMinutes * 1.0 / runtime * 100);
+            return (int)Math.Round((currentMinutes * 1.0 / runtime) * 100);
         }
     }
 }

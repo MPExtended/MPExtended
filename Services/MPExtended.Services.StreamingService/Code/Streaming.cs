@@ -46,7 +46,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             public string Identifier { get; set; }
             public string ClientDescription { get; set; }
-            public DateTime StartTime { get; set; }
+            public DateTime StartTime { get; set; } // date the stream started, for cleanup
             public TranscoderProfile Profile { get; set; }
 
             public MediaSource Source { get; set; }

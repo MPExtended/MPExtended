@@ -39,7 +39,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     public class WebMediaInfo
     {
         // general properties
-        public long Duration { get; set; } // in seconds
+        public long Duration { get; set; } // in milliseconds
 
         // codecs
         public List<WebVideoStream> VideoStreams { get; set; }
