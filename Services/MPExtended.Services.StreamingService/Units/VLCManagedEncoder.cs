@@ -108,8 +108,6 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Start()
         {
-            transcoder.StartTranscoding();
-
             // delay start of next unit till our output stream is ready
             Log.Info("VLCManagedEncoder: Waiting till output named pipe is ready");
             ((NamedPipe)DataOutputStream).WaitTillReady();
