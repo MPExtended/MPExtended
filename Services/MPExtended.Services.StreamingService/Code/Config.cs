@@ -96,5 +96,10 @@ namespace MPExtended.Services.StreamingService.Code
         {
             return XElement.Load(Configuration.GetPath("Streaming.xml")).Element("tvLogoDirectory").Value.Trim();
         }
+
+        public static string GetDefaultStream(string type)
+        {
+            return XElement.Load(Configuration.GetPath("Streaming.xml")).Element("defaultStreams").Element(type).Value.Trim();
+        }
     }
 }

@@ -17,6 +17,11 @@
   </ffmpeg>
 
   <tvLogoDirectory>\\10.1.1.49\system\mpthumbs\tv\logos</tvLogoDirectory>
+
+  <defaultStreams>
+    <audio>en</audio>
+    <subtitle>none</subtitle>
+  </defaultStreams>
   
   <transcoders>
     <transcoder>

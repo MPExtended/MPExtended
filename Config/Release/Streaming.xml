@@ -17,6 +17,11 @@
   </ffmpeg>
 
   <tvLogoDirectory>C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\tv\logos</tvLogoDirectory>
+
+  <defaultStreams>
+    <audio>en</audio>
+    <subtitle>none</subtitle>
+  </defaultStreams>
   
   <transcoders>
     <transcoder>

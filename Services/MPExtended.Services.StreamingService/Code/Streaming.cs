@@ -127,7 +127,7 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_NONE)
+        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_DEFAULT)
         {
             // there's a theoretical race condition here between the insert in InitStream() and this, but the client should really, really
             // always have a positive result from InitStream() before continuing, so their bad that the stream failed. 
@@ -177,9 +177,18 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         defAudioId = info.AudioStreams.Where(x => x.ID == audioId).First().ID;
                     }
-                    else if (audioId == STREAM_DEFAULT && info.AudioStreams.Count > 0)
+                    else if (audioId == STREAM_DEFAULT)
                     {
-                        defAudioId = info.AudioStreams.First().ID;
+                        string preferredLanguage = Config.GetDefaultStream("audio");
+                        var acceptableList = info.AudioStreams.Where(x => x.Language == preferredLanguage);
+                        if (acceptableList.Count() > 0)
+                        {
+                            defAudioId = acceptableList.First().ID;
+                        }
+                        else if (preferredLanguage != "none" && info.AudioStreams.Count() > 0)
+                        {
+                            defAudioId = info.AudioStreams.First().ID;
+                        }
                     }
 
                     int? defSubtitleId = null;
@@ -187,10 +196,18 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         defSubtitleId = info.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
                     }
-                    else if (subtitleId == STREAM_DEFAULT && info.SubtitleStreams.Count > 0)
+                    else if (audioId == STREAM_DEFAULT)
                     {
-                        // TODO: allow to configure in config file
-                        defSubtitleId = info.SubtitleStreams.First().ID;
+                        string preferredLanguage = Config.GetDefaultStream("subtitle");
+                        var acceptableList = info.SubtitleStreams.Where(x => x.Language == preferredLanguage);
+                        if (acceptableList.Count() > 0)
+                        {
+                            defSubtitleId = acceptableList.First().ID;
+                        }
+                        else if (preferredLanguage != "none" && info.SubtitleStreams.Count() > 0)
+                        {
+                            defSubtitleId = info.SubtitleStreams.First().ID;
+                        }
                     }
                     Log.Debug("Final stream selection: audioId={0}, subtitleId={1}", defAudioId, defSubtitleId);
 
