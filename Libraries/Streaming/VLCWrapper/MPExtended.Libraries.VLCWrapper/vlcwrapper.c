@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
       fprintf(stdout, ENDLN("A %d %s"), i, vlc_argv[i]);
 
    // init vlc
-   vlc = libvlc_new(0, NULL);
+   vlc = libvlc_new(nr, vlc_argv);
    libvlc_set_user_agent(vlc, USER_AGENT, HTTP_USER_AGENT);
    
    // open log
