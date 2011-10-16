@@ -35,6 +35,8 @@ namespace MPExtended.Services.StreamingService.Code
 #else
         private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // in milliseconds, 2 minutes seams reasonable
 #endif
+        public const int STREAM_NONE = -2;
+        public const int STREAM_DEFAULT = -1;
 
         private WatchSharing sharing;
         private Thread timeoutWorker;
@@ -125,7 +127,7 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int? audioId = null, int? subtitleId = null)
+        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_NONE)
         {
             // there's a theoretical race condition here between the insert in InitStream() and this, but the client should really, really
             // always have a positive result from InitStream() before continuing, so their bad that the stream failed. 
@@ -169,16 +171,33 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Transcoder.MediaInfo = info;
                     stream.Transcoder.Identifier = identifier;
 
-                    // check for validness of ids
-                    if (info.AudioStreams.Where(x => x.ID == audioId).Count() == 0)
-                        audioId = null;
-                    if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() == 0)
-                        subtitleId = null;
+                    // get audio and subtitle id
+                    int? defAudioId = null;
+                    if (info.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
+                    {
+                        defAudioId = info.AudioStreams.Where(x => x.ID == audioId).First().ID;
+                    }
+                    else if (audioId == STREAM_DEFAULT && info.AudioStreams.Count > 0)
+                    {
+                        defAudioId = info.AudioStreams.First().ID;
+                    }
+
+                    int? defSubtitleId = null;
+                    if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() > 0)
+                    {
+                        defSubtitleId = info.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
+                    }
+                    else if (subtitleId == STREAM_DEFAULT && info.SubtitleStreams.Count > 0)
+                    {
+                        // TODO: allow to configure in config file
+                        defSubtitleId = info.SubtitleStreams.First().ID;
+                    }
+                    Log.Debug("Final stream selection: audioId={0}, subtitleId={1}", defAudioId, defSubtitleId);
 
                     // build the pipeline
                     stream.Pipeline = new Pipeline();
                     stream.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, infoRef, position, audioId, subtitleId);
+                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, infoRef, position, defAudioId, defSubtitleId);
 
                     // start the processes and retrieve output stream
                     stream.Pipeline.Assemble();

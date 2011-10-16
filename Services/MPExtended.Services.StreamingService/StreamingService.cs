@@ -129,7 +129,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, null, null);
+            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition);
         }
 
         public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
@@ -137,8 +137,7 @@ namespace MPExtended.Services.StreamingService
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition,
-                audioId == -1 ? (int?)null : audioId, subtitleId == -1 ? (int?)null : subtitleId);
+            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, audioId, subtitleId);
         }
 
         public bool FinishStream(string identifier)
