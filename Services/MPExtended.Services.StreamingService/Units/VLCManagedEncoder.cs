@@ -49,22 +49,24 @@ namespace MPExtended.Services.StreamingService.Units
         private string[] arguments;
         private InputMethod inputMethod;
         private string inputPath;
-        private float seek;
+        private int startPos; // in seconds
+        private int duration; // in seconds
         private VLCTranscoder transcoder;
         private Reference<WebTranscodingInfo> info;
         private Thread infoReader;
 
-        public VLCManagedEncoder(string sout, string[] arguments, float seek, Reference<WebTranscodingInfo> info, InputMethod inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, int startPos, int duration, Reference<WebTranscodingInfo> info, InputMethod inputMethod)
         {
             this.sout = sout;
             this.arguments = arguments;
             this.info = info;
             this.inputMethod = inputMethod;
-            this.seek = seek;
+            this.startPos = startPos;
+            this.duration = duration;
         }
 
-        public VLCManagedEncoder(string sout, string[] arguments, float seek, Reference<WebTranscodingInfo> info, InputMethod inputMethod, string input)
-            : this(sout, arguments, seek, info, inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, int startPos, int duration, Reference<WebTranscodingInfo> info, InputMethod inputMethod, string input)
+            : this(sout, arguments, startPos, duration, info, inputMethod)
         {
             this.inputPath = input;
         }
@@ -100,7 +102,8 @@ namespace MPExtended.Services.StreamingService.Units
 
             // start transcoding
             transcoder.StartTranscoding();
-            //transcoder.Seek(seek);
+            // doesn't work
+            //transcoder.Seek(startPos * 1.0 / duration);
             info.Value.Supported = true;
 
             return true;
@@ -112,10 +115,12 @@ namespace MPExtended.Services.StreamingService.Units
             Log.Info("VLCManagedEncoder: Waiting till output named pipe is ready");
             ((NamedPipe)DataOutputStream).WaitTillReady();
 
+            // TODO: wait for state machine
+
             // setup data thread
             infoReader = new Thread(InfoThread);
             infoReader.Name = "VLCInfoThread";
-            infoReader.Start();
+            infoReader.Start(startPos);
 
             return true;
         }
@@ -123,10 +128,6 @@ namespace MPExtended.Services.StreamingService.Units
         public bool Stop()
         {
             Log.Debug("VLCManagedEncoder: Stopping transcoding");
-            infoReader.Abort();
-            transcoder.StopTranscoding();
-            transcoder = null;
-
             try
             {
                 DataOutputStream.Close();
@@ -136,17 +137,25 @@ namespace MPExtended.Services.StreamingService.Units
                 Log.Info("VLCManagedEncoder: Failed to close data output stream", e);
             }
 
+            infoReader.Abort();
+            Log.Trace("VLCManagedEncoder: Trying to stop vlc");
+            transcoder.StopTranscoding();
+            transcoder = null;
+            Log.Debug("VLCManagedEncoder: Stopped transcoding");
+
             return true;
         }
 
-        private void InfoThread()
+        private void InfoThread(object passedPosition)
         {
+            int startmsec = (int)passedPosition * 1000;
             while (true)
             {
                 try
                 {
                     // FIXME: assuming too much here
-                    int msecs = transcoder.GetTime();
+                    //Log.Debug("X: {0} ms, {1}%", transcoder.GetTime(), transcoder.GetPosition());
+                    int msecs = transcoder.GetTime() / 1000 - startmsec;
                     int frames = msecs / 40; // 25fps gives a frame every 40 milliseconds
 
                     info.Value.EncodingFPS = (info.Value.EncodedFrames - frames) / (1000 / POLL_DATA_TIME);

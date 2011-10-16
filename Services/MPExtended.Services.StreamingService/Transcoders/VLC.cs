@@ -51,7 +51,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(outputSize, audioId, subtitleId);
+            VLCParameters vlcparam = GenerateVLCParameters(outputSize, position, audioId, subtitleId);
 
             // prepare vlc arguments
             string path = @"\#OUT#";

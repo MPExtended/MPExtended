@@ -39,9 +39,17 @@ namespace MPExtended.Services.StreamingService.Transcoders
             public string[] Arguments { get; set; }
         }
 
-        protected VLCParameters GenerateVLCParameters(WebResolution outputSize, int? audioId, int? subtitleId)
+        protected VLCParameters GenerateVLCParameters(WebResolution outputSize, int position, int? audioId, int? subtitleId)
         {
             List<string> arguments = Profile.CodecParameters["options"].Split(' ').ToList();
+
+            // position
+            if (position > 0)
+            {
+                // TODO: this breaks the android player
+                //arguments.Add("--input-fast-seek");
+                //arguments.Add("--start-time=" + position);
+            }
 
             // audio track 
             if (audioId != null)

@@ -48,18 +48,18 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(outputSize, audioId, subtitleId);
-            float percentage = position / MediaInfo.Duration;            
+            VLCParameters vlcparam = GenerateVLCParameters(outputSize, position, audioId, subtitleId);
+            int duration = (int)Math.Round((decimal)MediaInfo.Duration / 1000);
 
             // add the unit
             VLCManagedEncoder unit;
             if (doInputReader)
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, percentage, einfo, VLCManagedEncoder.InputMethod.NamedPipe);
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, duration, einfo, VLCManagedEncoder.InputMethod.NamedPipe);
             }
             else
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, percentage, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, duration, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
             }
             pipeline.AddDataUnit(unit, 5);
         }
