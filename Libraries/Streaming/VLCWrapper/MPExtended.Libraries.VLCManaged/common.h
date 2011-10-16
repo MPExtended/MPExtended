@@ -24,7 +24,22 @@
 // - Add the directory with the .lib file to the library directory
 // - Add the .lib file as an additional library
 
+#ifndef _common_h
+#define _common_h
+
 #define VERSION "0.1.0.0"
 
 #define USER_AGENT "VLC Wrapper for MPExtended"
 #define HTTP_USER_AGENT "MPExtended VLCManaged/0.1.0"
+
+// #define DEBUG_CPPCLI_CONSOLE 1
+
+#ifdef DEBUG_CPPCLI_CONSOLE
+	#define DEBUG(...) System::Console::WriteLine(__VA_ARGS__);
+#else
+	#define DEBUG(...)
+#endif
+
+#define gcstring(x) gcnew System::String(x)
+
+#endif

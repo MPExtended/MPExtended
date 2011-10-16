@@ -64,6 +64,10 @@ void VLCTranscoder::Seek(float position) {
 	vlc->seek(position);
 }
 
+PlayerState VLCTranscoder::GetPlayerState() {
+	return (PlayerState)vlc->getState();
+}
+
 float VLCTranscoder::GetPosition() {
 	return vlc->getPosition();
 }

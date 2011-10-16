@@ -23,6 +23,15 @@ using namespace System;
 namespace MPExtended {
 	namespace Libraries {
 		namespace VLCManaged {
+			public enum PlayerState {
+				New = 0,
+				Created = 1,
+				Started = 2,
+				Playing = 3,
+				Error = 4,
+				Finished = 5
+			};
+
 			public ref class VLCTranscoder sealed {
 			public:
 				VLCTranscoder();
@@ -35,6 +44,7 @@ namespace MPExtended {
 
 				void Seek(float position);
 
+				PlayerState GetPlayerState();
 				float GetPosition();
 				int GetTime();
 

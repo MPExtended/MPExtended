@@ -26,6 +26,15 @@ extern "C" {
 	#include <vlc/libvlc_vlm.h>
 }
 
+enum VLCNativeState {
+	NEW = 0,
+	CREATED = 1,
+	STARTED = 2,
+	PLAYING = 3,
+	ERROR = 4,
+	FINISHED = 5
+};
+
 public class VLCNative {
 public:
 	VLCNative();
@@ -36,6 +45,7 @@ public:
 	void setMediaName(const char *medianame);
 	void startTranscoding();
 
+	VLCNativeState getState();
 	void seek(float position);
 
 	float getPosition();
@@ -49,11 +59,15 @@ public:
 	void mediaInstanceStatusEnd(const libvlc_event_t *event_data);
 
 private:
+	void handleMessages();
+
 	const char *medianame;
 	const char *input;
 	const char *sout;
 	int argc;
 	char **argv;
+	float seekPosition;
+	VLCNativeState state;
 
 	libvlc_instance_t *vlc;
 	libvlc_log_t *log;
