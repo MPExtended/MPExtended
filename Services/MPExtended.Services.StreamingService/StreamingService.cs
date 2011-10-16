@@ -84,7 +84,15 @@ namespace MPExtended.Services.StreamingService
         {
             if (type == WebStreamMediaType.TV)
             {
-                itemId = _timeshiftings[itemId].TimeShiftFileName;
+                try
+                {
+                    itemId = _timeshiftings[itemId].TimeShiftFileName;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Log.Error("Client tried to get mediainfo for non-existing timeshifting {0}", itemId);
+                    return null;
+                }
             }
 
             return MediaInfo.MediaInfoWrapper.GetMediaInfo(new MediaSource(type, itemId));

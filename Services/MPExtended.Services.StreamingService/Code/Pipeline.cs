@@ -50,13 +50,13 @@ namespace MPExtended.Services.StreamingService.Code {
 
         public IProcessingUnit GetDataUnit(int position) {
             if (!dataUnits.ContainsKey(position))
-                throw new ArgumentException();
+                return null;
             return dataUnits[position];
         }
 
         public ILogProcessingUnit GetLogUnit(int position) {
             if (!logUnits.ContainsKey(position))
-                throw new ArgumentException();
+                return null;
             return logUnits[position];
         }
 

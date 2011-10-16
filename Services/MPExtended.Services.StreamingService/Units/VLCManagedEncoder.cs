@@ -48,12 +48,14 @@ namespace MPExtended.Services.StreamingService.Units
         private string sout;
         private string[] arguments;
         private InputMethod inputMethod;
-        private string inputPath;
+        private string inputPath = null;
         private int startPos; // in seconds
         private int duration; // in seconds
         private VLCTranscoder transcoder;
         private Reference<WebTranscodingInfo> info;
         private Thread infoReader;
+
+        private NamedPipe transcoderInputStream;
 
         public VLCManagedEncoder(string sout, string[] arguments, int startPos, int duration, Reference<WebTranscodingInfo> info, InputMethod inputMethod)
         {
@@ -92,10 +94,13 @@ namespace MPExtended.Services.StreamingService.Units
             transcoder.SetMediaName(Guid.NewGuid().ToString());
             transcoder.SetSout(realSout);
 
-            // generate url of input
-            if (inputMethod == InputMethod.NamedPipe) 
+            // setup input
+            if (inputMethod == InputMethod.NamedPipe)
             {
-                inputPath = ((NamedPipe)InputStream).Url;
+                transcoderInputStream = new NamedPipe();
+                Log.Info("VLCManagedEncoder: starting input named pipe {0}", transcoderInputStream);
+                ((NamedPipe)transcoderInputStream).Start(false);
+                inputPath = "stream://" + transcoderInputStream.Url; // use special syntax for VLC to pick up named pipe
             }
             Log.Debug("VLCManagedEncoder: input {0}", inputPath);
             transcoder.SetInput(inputPath);
@@ -111,6 +116,14 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Start()
         {
+            // setup input
+            if (inputMethod == InputMethod.NamedPipe)
+            {
+                ((NamedPipe)transcoderInputStream).WaitTillReady();
+                Log.Info("VLCManagedEncoder: Copy stream of type {0} into transcoder input pipe", InputStream.ToString());
+                StreamCopy.AsyncStreamCopy(InputStream, transcoderInputStream, "transinput");
+            }
+
             // delay start of next unit till our output stream is ready
             Log.Info("VLCManagedEncoder: Waiting till output named pipe is ready");
             ((NamedPipe)DataOutputStream).WaitTillReady();

@@ -42,7 +42,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         }
 
         public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId, EncoderUnit.LogStream output)
-        {
+        {            
             // input
             bool doInputReader = !Source.IsLocalFile;
             if(doInputReader)
@@ -51,14 +51,12 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(outputSize, position, audioId, subtitleId);
+            VLCParameters vlcparam = GenerateVLCParameters(pipeline, outputSize, position, audioId, subtitleId);
 
             // prepare vlc arguments
             string path = @"\#OUT#";
             string sout = vlcparam.Sout.Replace("#OUT#", path);
-            string arguments = GenerateArguments("#IN#", sout, String.Join(" ", vlcparam.Arguments));
-            if(!doInputReader)
-                arguments = arguments.Replace("#IN#", Source.GetPath());
+            string arguments = GenerateArguments(vlcparam.Input, sout, String.Join(" ", vlcparam.Arguments));
 
             // add the unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;

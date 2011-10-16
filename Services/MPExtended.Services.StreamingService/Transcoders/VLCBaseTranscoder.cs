@@ -36,12 +36,24 @@ namespace MPExtended.Services.StreamingService.Transcoders
         protected class VLCParameters
         {
             public string Sout { get; set; }
+            public string Input { get; set; }
             public string[] Arguments { get; set; }
         }
 
-        protected VLCParameters GenerateVLCParameters(WebResolution outputSize, int position, int? audioId, int? subtitleId)
+        protected VLCParameters GenerateVLCParameters(Pipeline pipeline, WebResolution outputSize, int position, int? audioId, int? subtitleId)
         {
             List<string> arguments = Profile.CodecParameters["options"].Split(' ').ToList();
+
+            // input
+            string inURL = "";
+            if (pipeline.GetDataUnit(1) != null && pipeline.GetDataUnit(1) is InputUnit)
+            {
+                inURL = "stream://#IN#";
+            }
+            else
+            {
+                inURL = Source.GetPath();
+            }
 
             // position
             if (position > 0)
@@ -90,7 +102,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return new VLCParameters()
             {
                 Sout = sout,
-                Arguments = arguments.ToArray()
+                Arguments = arguments.ToArray(),
+                Input = inURL
             };
         }
 

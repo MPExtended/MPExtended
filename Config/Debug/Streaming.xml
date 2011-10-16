@@ -128,6 +128,24 @@
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
+      <name>VLC Pure</name>
+      <description>VLC test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>android</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLC">
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\vlc.exe</path>
+        <options>--ffmpeg-hw</options>
+        <encoder>vcodec=h264,vb=512,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,audio-sync,channels=2,venc=x264{profile=baseline}</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
       <name>VLC Test</name>
       <description>VLC test profile</description>
       <bandwidth>1024</bandwidth>

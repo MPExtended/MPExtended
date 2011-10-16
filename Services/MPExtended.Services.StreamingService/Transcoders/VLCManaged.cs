@@ -48,7 +48,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(outputSize, position, audioId, subtitleId);
+            VLCParameters vlcparam = GenerateVLCParameters(pipeline, outputSize, position, audioId, subtitleId);
             int duration = (int)Math.Round((decimal)MediaInfo.Duration / 1000);
 
             // add the unit
