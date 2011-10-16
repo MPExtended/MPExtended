@@ -36,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var artistList = MPEServices.NetPipeMediaAccessService.GetAllMusicArtistsBasic(null);
+                var artistList = MPEServices.NetPipeMediaAccessService.GetAllMusicArtistsBasic();
                 if (artistList != null)
                 {
                     return View(artistList);

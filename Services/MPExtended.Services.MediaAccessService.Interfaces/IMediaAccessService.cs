@@ -45,23 +45,23 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Movies
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMovieCount(string genre, string category);
+        WebItemCount GetMovieCount(string genre = null, string category = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieBasic> GetAllMoviesBasic(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMovieBasic> GetAllMoviesBasic(string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieDetailed> GetAllMoviesDetailed(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMovieDetailed> GetAllMoviesDetailed(string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieBasic> GetMoviesBasicByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMovieBasic> GetMoviesBasicByRange(int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieDetailed> GetMoviesDetailedByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMovieDetailed> GetMoviesDetailedByRange(int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -83,15 +83,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Music
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicAlbumCount(string genre, string category);
+        WebItemCount GetMusicAlbumCount(string genre = null, string category = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -103,15 +103,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicArtistCount(string category);
+        WebItemCount GetMusicArtistCount(string category = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int start, int end, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -124,19 +124,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicTrackBasic> GetAllMusicTracksBasic(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicTrackBasic> GetAllMusicTracksBasic(string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(string genre, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(string genre, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int start, int end, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(string genre, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(int start, int end, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -213,7 +213,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVShowCount(string genre, string category);
+        WebItemCount GetTVShowCount(string genre = null, string category = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -222,19 +222,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVShowBasic> GetAllTVShowsBasic(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebTVShowBasic> GetAllTVShowsBasic(string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVShowDetailed> GetAllTVShowsDetailed(string genre, string category, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebTVShowDetailed> GetAllTVShowsDetailed(string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVShowBasic> GetTVShowsBasicByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebTVShowBasic> GetTVShowsBasicByRange(int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVShowDetailed> GetTVShowsDetailedByRange(string genre, string category, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebTVShowDetailed> GetTVShowsDetailedByRange(int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

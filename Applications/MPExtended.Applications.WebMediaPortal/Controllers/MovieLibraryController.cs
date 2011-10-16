@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index()
         {
-            var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(null, null, SortBy.Title, OrderBy.Asc);
+            var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(sort:SortBy.Title, order:OrderBy.Asc);
             if (movieList != null)
             {
                 return View(movieList);
