@@ -28,6 +28,7 @@ namespace MPExtended.Libraries.General
     public class Configuration
     {
         private static ServicesConfiguration serviceConfig = null;
+        private static MediaAccessConfiguration mediaConfig = null;
 
         public static ServicesConfiguration Services 
         {
@@ -37,6 +38,17 @@ namespace MPExtended.Libraries.General
                     serviceConfig = new ServicesConfiguration();
 
                 return serviceConfig;
+            }
+        }
+
+        public static MediaAccessConfiguration Media
+        {
+            get
+            {
+                if (mediaConfig == null)
+                    mediaConfig = new MediaAccessConfiguration();
+
+                return mediaConfig;
             }
         }
 

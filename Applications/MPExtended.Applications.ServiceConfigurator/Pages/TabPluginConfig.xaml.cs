@@ -39,40 +39,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabPluginConfig : Page
     {
-        private Dictionary<String, Dictionary<String, PluginConfigItem>> PluginConfigurations { get; set; }
-        private XElement mConfigFile;
+        private Dictionary<string, List<PluginConfigItem>> pluginConfigurations;
 
         public TabPluginConfig()
         {
             InitializeComponent();
-            PluginConfigurations = new Dictionary<String, Dictionary<String, PluginConfigItem>>();
-            try
-            {
-                mConfigFile = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
-                var config = mConfigFile.Element("pluginConfiguration").Elements("plugin");
 
-                foreach (var p in config)
-                {
-                    Dictionary<String, PluginConfigItem> props = new Dictionary<String, PluginConfigItem>();
-                    foreach (var p2 in p.Descendants())
-                    {
-                        props.Add(p2.Name.LocalName, new PluginConfigItem(p2) { Tag = p2 });
-                        //.ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
-                    }
-                    PluginConfigurations.Add(p.Attribute("name").Value, props);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error while loading plugin config");
-                Log.Error(ex.ToString());
-            }
+            pluginConfigurations = Configuration.Media.PluginConfiguration;
 
-            cbPluginConfigs.DataContext = PluginConfigurations;
+            cbPluginConfigs.DataContext = pluginConfigurations;
             cbPluginConfigs.DisplayMemberPath = "Key";
-            cbPluginConfigs.SelectedValuePath = "Value";
+            //cbPluginConfigs.SelectedValuePath = "Value";
 
-            if (PluginConfigurations.Count > 0)
+            if (pluginConfigurations.Count > 0)
             {
                 cbPluginConfigs.SelectedIndex = 0;
             }
@@ -80,8 +59,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Dictionary<String, PluginConfigItem> selected = (Dictionary<String, PluginConfigItem>)cbPluginConfigs.SelectedValue;
-            sectionPluginSettings.SetPluginConfig(XElement.Load(Configuration.GetPath("MediaAccess.xml")), selected);
+            KeyValuePair<string, List<PluginConfigItem>> item = (KeyValuePair<string, List<PluginConfigItem>>)cbPluginConfigs.SelectedValue;
+            sectionPluginSettings.SetPluginConfig(item.Key, item.Value);
         }
     }
 }

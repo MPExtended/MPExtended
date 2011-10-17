@@ -31,6 +31,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 {
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Name", "MP Shares")]
+    [ExportMetadata("Type", typeof(MPShares))]
     public class MPShares : IFileSystemLibrary
     {
         private IPluginData data;
@@ -42,6 +43,10 @@ namespace MPExtended.PlugIns.MAS.MPShares
             this.data = data;
         }
 
+        public void Init()
+        {
+        }
+
         public IEnumerable<WebDriveBasic> GetLocalDrives()
         {
             var localsharelist = new List<Share>();
@@ -49,7 +54,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             XElement root;
             try
             {
-                root = XElement.Load(this.data.Configuration["config"].ConfigValue);
+                root = XElement.Load(this.data.Configuration["config"]);
             }
             catch (FileNotFoundException)
             {

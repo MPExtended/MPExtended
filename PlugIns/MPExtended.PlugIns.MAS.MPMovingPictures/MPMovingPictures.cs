@@ -30,6 +30,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 {
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "Moving Pictures")]
+    [ExportMetadata("Type", typeof(MPMovingPictures))]
     public class MPMovingPictures : Database, IMovieLibrary
     {
         // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:
@@ -40,9 +41,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         private IPluginData data;
 
         [ImportingConstructor]
-        public MPMovingPictures(IPluginData data) : base(data.Configuration["database"].ConfigValue)
+        public MPMovingPictures(IPluginData data)
         {
             this.data = data;
+        }
+
+        public void Init()
+        {
+            DatabasePath = data.Configuration["database"];
         }
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()

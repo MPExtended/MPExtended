@@ -22,6 +22,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
@@ -29,13 +30,23 @@ namespace MPExtended.Services.MediaAccessService
     [Export(typeof(IPluginData))]
     public class PluginData : IPluginData
     {
-        private static Dictionary<string, Dictionary<string, PluginConfigItem>> cachedConfig = new Dictionary<string, Dictionary<string, PluginConfigItem>>();
+        internal static Dictionary<string, string> AssemblyNameMap { private get; set; }
 
-        public Dictionary<string, PluginConfigItem> Configuration
+        public Dictionary<string, string> Configuration
         {
             get
             {
-                return ReadConfig(Assembly.GetCallingAssembly());
+                string name = Assembly.GetCallingAssembly().FullName;
+                if (AssemblyNameMap.ContainsKey(name))
+                {
+                    string pluginname = AssemblyNameMap[name];
+                    if (MPExtended.Libraries.General.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
+                    {
+                        return MPExtended.Libraries.General.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
+                    }
+                }
+
+                return new Dictionary<string, string>();
             }
         }
 
@@ -45,33 +56,6 @@ namespace MPExtended.Services.MediaAccessService
             {
                 return new LogProxy();
             }
-        }
-
-        private Dictionary<string, PluginConfigItem> ReadConfig(Assembly forAssembly)
-        {
-            string name = forAssembly.GetName().Name;
-            if (!cachedConfig.ContainsKey(name))
-            {
-                var config = XElement.Load(MPExtended.Libraries.General.Configuration.GetPath("MediaAccess.xml"))
-                    .Element("pluginConfiguration")
-                    .Elements("plugin")
-                    .Where(p => p.Attribute("name").Value == name)
-                    .First()
-                    .Descendants()
-                    .Select(n => new KeyValuePair<string, PluginConfigItem>(n.Name.LocalName, new PluginConfigItem(n)))
-                    .ToDictionary(x => x.Key, x => PerformFolderSubstitution(x.Value));
-                cachedConfig[name] = config;
-            }
-
-            return cachedConfig[name];
-        }
-
-
-        private PluginConfigItem PerformFolderSubstitution(PluginConfigItem input)
-        {
-            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            input.ConfigValue = input.ConfigValue.Replace("%ProgramData%", cappdata);
-            return input;
         }
     }
 }

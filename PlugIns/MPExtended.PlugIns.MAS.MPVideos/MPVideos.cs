@@ -28,6 +28,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 {
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "MP MyVideo")]
+    [ExportMetadata("Type", typeof(MPVideos))]
     public class MPVideos : IMovieLibrary
     {
         private IPluginData data;
@@ -36,6 +37,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         public MPVideos(IPluginData data)
         {
             this.data = data;
+        }
+
+        public void Init()
+        {
         }
 
         public IEnumerable<WebMovieBasic> GetAllMovies()

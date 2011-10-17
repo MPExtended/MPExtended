@@ -28,6 +28,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             protected set;
         }
 
+        protected Database()
+        {
+        }
+
         protected Database(string databasePath)
         {
             DatabasePath = databasePath;

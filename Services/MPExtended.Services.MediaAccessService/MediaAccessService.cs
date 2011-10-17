@@ -83,12 +83,11 @@ namespace MPExtended.Services.MediaAccessService
 
             try
             {
-                var config = XElement.Load(Configuration.GetPath("MediaAccess.xml")).Element("plugins");
-                ChosenMovieLibrary = SelectLibrary<IMovieLibrary>(config, ref movieLibraryName, "movie", MovieLibraries);
-                ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(config, ref musicLibraryName, "music", MusicLibraries);
-                ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(config, ref pictureLibraryName, "picture", PictureLibraries);
-                ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(config, ref tvShowLibraryName, "tvShow", TVShowLibraries);
-                ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(config, ref fileSystemLibraryName, "filesystem", FileSystemLibraries);
+                ChosenMovieLibrary = SelectLibrary<IMovieLibrary>(ref movieLibraryName, Configuration.Media.MoviePlugin, MovieLibraries);
+                ChosenMusicLibrary = SelectLibrary<IMusicLibrary>(ref musicLibraryName, Configuration.Media.MusicPlugin, MusicLibraries);
+                ChosenPictureLibrary = SelectLibrary<IPictureLibrary>(ref pictureLibraryName, Configuration.Media.PicturePlugin, PictureLibraries);
+                ChosenTVShowLibrary = SelectLibrary<ITVShowLibrary>(ref tvShowLibraryName, Configuration.Media.TVShowPlugin, TVShowLibraries);
+                ChosenFileSystemLibrary = SelectLibrary<IFileSystemLibrary>(ref fileSystemLibraryName, Configuration.Media.FilesystemPlugin, FileSystemLibraries);
             }
             catch (Exception ex)
             {
@@ -97,27 +96,28 @@ namespace MPExtended.Services.MediaAccessService
 
         }
 
-        private T SelectLibrary<T>(XElement config, ref string savefield, string type, Lazy<T, IDictionary<string, object>>[] libraries)
+        private T SelectLibrary<T>(ref string savefield, string name, Lazy<T, IDictionary<string, object>>[] libraries) where T : ILibrary
         {
             try
             {
-                var configured = config.Elements(type).Where(x => x.Value.Length > 0);
+                savefield = null;
 
-                if (configured.Count() == 0)
+                if (String.IsNullOrEmpty(name))
                     return default(T);
 
-                string configuredName = configured.First().Value;
-                savefield = configuredName;
-
-                var list = libraries.Where(x => (string)x.Metadata["Name"] == configuredName);
+                var list = libraries.Where(x => (string)x.Metadata["Name"] == name);
                 if (list.Count() == 0)
                     return default(T);
 
-                return list.First().Value;
+                savefield = name;
+
+                ILibrary lib = (ILibrary)list.First().Value;
+                lib.Init();
+                return (T)lib;
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to select library for {0}", type), ex);
+                Log.Error(String.Format("Failed to select library {0}", name), ex);
                 return default(T);
             }
         }
@@ -145,6 +145,15 @@ namespace MPExtended.Services.MediaAccessService
                 CompositionContainer container = new CompositionContainer(catalog);
                 container.ComposeExportedValue(new PluginData());
                 container.ComposeParts(this);
+
+                // load configuration
+                var metadata = MovieLibraries.Select(x => x.Metadata)
+                    .Union(MusicLibraries.Select(x => x.Metadata))
+                    .Union(TVShowLibraries.Select(x => x.Metadata))
+                    .Union(FileSystemLibraries.Select(x => x.Metadata))
+                    .Union(PictureLibraries.Select(x => x.Metadata));
+                var map = metadata.ToDictionary(x => ((Type)x["Type"]).Assembly.FullName, x => x["Name"] as string);
+                PluginData.AssemblyNameMap = map;
 
                 return true;
             }

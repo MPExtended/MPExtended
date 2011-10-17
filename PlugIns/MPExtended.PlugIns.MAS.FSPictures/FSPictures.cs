@@ -30,6 +30,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 {
     [Export(typeof(IPictureLibrary))]
     [ExportMetadata("Name", "FS Pictures")]
+    [ExportMetadata("Type", typeof(FSPictures))]
     public class FSPictures : IPictureLibrary
     {
         List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();
@@ -44,13 +45,16 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public FSPictures(IPluginData data)
         {
             this.data = data;
+        }
 
+        public void Init()
+        {
         }
 
         public IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
             picturesBasic.Clear();
-            dirSearchWebPictureBasic(data.Configuration["root"].ConfigValue);
+            dirSearchWebPictureBasic(data.Configuration["root"]);
 
             return picturesBasic;
         }
@@ -58,7 +62,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public IEnumerable<WebPictureDetailed> GetAllPicturesDetailed()
         {
             picturesDetailed.Clear();
-            dirSearchWebPictureDetailed(data.Configuration["root"].ConfigValue);
+            dirSearchWebPictureDetailed(data.Configuration["root"]);
             return picturesDetailed;
         }
 
@@ -74,7 +78,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public IEnumerable<WebCategory> GetAllPictureCategoriesBasic()
         {
             categories.Clear();
-            var root = new DirectoryInfo(data.Configuration["root"].ConfigValue);
+            var root = new DirectoryInfo(data.Configuration["root"]);
 
             categories.Add(EncodeTo64(root.FullName), new WebCategory() { Title = root.Name, Id = EncodeTo64(root.FullName) });
             foreach (var dir in root.EnumerateDirectories())
