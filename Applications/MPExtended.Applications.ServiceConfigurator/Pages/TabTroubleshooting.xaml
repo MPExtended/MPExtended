@@ -1,0 +1,26 @@
+﻿<Page x:Class="MPExtended.Applications.ServiceConfigurator.Pages.TabTroubleshooting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="557"
+	Title="TabTroubleshooting">
+
+    <Grid>
+        <TextBox BorderThickness="0" Text="To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues)." TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
+        <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
+        <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" />
+        <Label Content="MediaAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,160,0,0" Name="label8" VerticalAlignment="Top" />
+        <TextBlock Height="23" Margin="168,165,6,0" VerticalAlignment="Top">
+                        <Hyperlink  Name="hlTestLinkMediaAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate">
+                            <TextBlock Name="tbTestLinkMediaAccessGeneral" Text="ServiceDescription.xml" />
+                        </Hyperlink>    
+                    </TextBlock>
+        <Label Content="Streaming General:" Height="28" HorizontalAlignment="Left" Margin="15,189,0,0" Name="label11" VerticalAlignment="Top" />
+        <TextBlock Height="23" Margin="168,194,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkStreamingGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkStreamingGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
+        <Label Content="TvAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,218,0,0" Name="label12" VerticalAlignment="Top" />
+        <TextBlock Height="23" Margin="168,223,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkTvAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkTvAccessGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
+    </Grid>
+</Page>
