@@ -35,6 +35,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
+using System.Collections.Generic;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -43,16 +44,43 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabBarcode : Page
     {
+        private Dictionary<string, User> Users;
+
         public TabBarcode()
         {
             InitializeComponent();
 
-            GenerateBarcode(cbIncludeAuth.IsChecked == true);
+            Users = Configuration.Services.Users.ToDictionary(x => x.Username, x => x);
+            cbUser.DataContext = Users;
+            cbUser.DisplayMemberPath = "Key";
+            cbUser.SelectedValuePath = "Value";
+            cbUser.SelectedIndex = 0;
+
+            GenerateBarcode(null);
         }
 
         private void cbIncludeAuth_Checked(object sender, RoutedEventArgs e)
         {
-            GenerateBarcode(cbIncludeAuth.IsChecked == true);
+            if (cbIncludeAuth.IsChecked == true)
+            {
+                GenerateBarcode((User)cbUser.SelectedValue);
+            } 
+            else 
+            {
+                GenerateBarcode(null);
+            }
+        }
+
+        private void cbUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbIncludeAuth.IsChecked == true)
+            {
+                GenerateBarcode((User)cbUser.SelectedValue);
+            }
+            else
+            {
+                GenerateBarcode(null);
+            }
         }
 
         /// <summary>
@@ -74,7 +102,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <summary>
         /// Generate a QR Barcode with the server information
         /// </summary>
-        private void GenerateBarcode(bool _includeAuth)
+        private void GenerateBarcode(User auth)
         {
             try
             {
@@ -110,12 +138,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 desc.Addresses = (localIPs.Length > 0) ? localIPs.ToString() : "?";
 
-                if (_includeAuth)
+                if (auth != null)
                 {
-                    // FIXME
-                    desc.User = Configuration.Services.Users.First().Username;
-                    desc.Password = Configuration.Services.Users.First().Password;
-                    desc.AuthOptions = 1; //username/password
+                    desc.User = auth.Username;
+                    desc.Password = auth.Password;
+                    desc.AuthOptions = 1;
                 }
 
                 Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
