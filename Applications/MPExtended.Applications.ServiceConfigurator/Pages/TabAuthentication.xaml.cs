@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -28,6 +29,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -36,9 +38,43 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabAuthentication : Page
     {
+        private ObservableCollection<User> users = new ObservableCollection<User>();
+
         public TabAuthentication()
         {
             InitializeComponent();
+            foreach(User u in Configuration.Services.Users) 
+            {
+                users.Add(u);
+            }
+
+            lvUsers.DataContext = users;
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Configuration.Services.Users = users.ToList();
+            if (Configuration.Services.Save())
+            {
+                MessageBox.Show("Updated users and passwords. Please restart the service for the changes to take effect.");
+            }
+            else
+            {
+                MessageBox.Show("Save failed");
+            }
+        }
+
+        private void miDelete_Click(object sender, RoutedEventArgs e)
+        {
+            users.Remove((User)lvUsers.SelectedItem);
+            lvUsers.DataContext = users;
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            users.Add(new User() { Username = txtUsername.Text, Password = txtPassword.Password });
+            txtUsername.Text = "";
+            txtPassword.Password = "";
         }
     }
 }
