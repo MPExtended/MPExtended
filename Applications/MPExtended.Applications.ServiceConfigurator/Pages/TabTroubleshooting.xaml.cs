@@ -40,15 +40,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabTroubleshooting : Page
     {
-        public TabTroubleshooting()
+        private class MyNetworkAddress
         {
-            InitializeComponent();
-        }
-
-        internal class MyNetworkAddress
-        {
-            internal NetworkInterface Interface { get; set; }
-            internal IPAddressInformation Address { get; set; }
+            public NetworkInterface Interface { get; set; }
+            public IPAddressInformation Address { get; set; }
 
             public override string ToString()
             {
@@ -56,9 +51,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        private Dictionary<string, MyNetworkAddress> networkAddresses;
+
+        public TabTroubleshooting()
+        {
+            InitializeComponent();
+            SetNetworkInterfaces();
+        }
+
         private void SetNetworkInterfaces()
         {
-            cbNetworkInterfaces.Items.Clear();
+            networkAddresses = new Dictionary<string,MyNetworkAddress>();
 
             foreach (NetworkInterface n in NetworkInterface.GetAllNetworkInterfaces())
             {
@@ -67,24 +70,32 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 foreach (IPAddressInformation unicast in properties.UnicastAddresses)
                 {
-                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork)
+                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork ||
+                        (unicast.Address.AddressFamily == AddressFamily.InterNetworkV6 && Configuration.Services.EnableIPv6))
                     {
                         Log.Debug("\tAvailable UniCast: {0}", unicast.Address);
-                        cbNetworkInterfaces.Items.Add(new MyNetworkAddress() { Interface = n, Address = unicast });
+                        MyNetworkAddress addr = new MyNetworkAddress() { Interface = n, Address = unicast };
+                        networkAddresses.Add(addr.ToString(), addr);
                     }
                 }
             }
 
-            SetTestLinks("localhost", 4322);
+            cbNetworkInterfaces.DataContext = networkAddresses;
+            cbNetworkInterfaces.DisplayMemberPath = "Key";
+            cbNetworkInterfaces.SelectedValuePath = "Value";
 
+            if(networkAddresses.Count > 0)
+            {
+                cbNetworkInterfaces.SelectedValue = networkAddresses.First().Value;
+            }
         }
 
         private void cbNetworkInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MyNetworkAddress addr = (MyNetworkAddress)cbNetworkInterfaces.SelectedItem;
+            MyNetworkAddress addr = (MyNetworkAddress)cbNetworkInterfaces.SelectedValue;
             if (addr != null)
             {
-                SetTestLinks(addr.Address.Address.ToString(), 4322);
+                SetTestLinks(addr.Address.Address.ToString(), Configuration.Services.Port);
             }
         }
 

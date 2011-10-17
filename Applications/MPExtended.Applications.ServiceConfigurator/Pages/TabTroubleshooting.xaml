@@ -11,7 +11,7 @@
         <TextBox BorderThickness="0" Text="To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues)." TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
         <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
         <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
         <Label Content="MediaAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,160,0,0" Name="label8" VerticalAlignment="Top" />
         <TextBlock Height="23" Margin="168,165,6,0" VerticalAlignment="Top">
                         <Hyperlink  Name="hlTestLinkMediaAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate">
