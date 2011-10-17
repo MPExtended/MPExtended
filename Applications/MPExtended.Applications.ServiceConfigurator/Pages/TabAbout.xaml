@@ -9,16 +9,17 @@
 
     <Grid>
         <Label Content="MPExtended" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
-        <TextBlock Margin="28,34,6,0" Name="tbAbout" VerticalAlignment="Top">
-                        MPExtended webservices<LineBreak/>
-                        let's you access all your local media through an api
-                        <LineBreak/><LineBreak/><LineBreak/>
-                        Contributors:<LineBreak/>
-                        - Tobi (project leader, developer)<LineBreak/>
-                        - DieBagger (developer)<LineBreak/>
-                        - Oxan (developer)<LineBreak/>
-
-
+        <TextBlock Margin="28,34,26,0" Name="tbAbout" VerticalAlignment="Top" TextWrapping="Wrap">
+            MPExtended is a project that aims at providing access to MediaPortal from all over the world, using clients for your webbrowser, Android, iOS, and more. <LineBreak />
+            <LineBreak />
+            Links:<LineBreak />
+            - http://mpextended.github.com/<LineBreak />
+            - Support forum<LineBreak />
+            <LineBreak />
+            Contributors:<LineBreak/>
+            - Tobi (developer)<LineBreak/>
+            - DieBagger (developer)<LineBreak/>
+            - Oxan (developer)<LineBreak/>
         </TextBlock>
     </Grid>
 </Page>

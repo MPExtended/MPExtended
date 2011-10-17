@@ -71,7 +71,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             e.Handled = true;
         }
 
-        void activeSessionWatcher_Tick(object sender, EventArgs e)
+        private void activeSessionWatcher_Tick(object sender, EventArgs e)
         {
             try
             {
@@ -80,10 +80,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 if (tmp != null)
                 {
                     mStreamingSessions.UpdateStreamingList(tmp);
-                    //lvActiveStreams.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate()
-                    //{
-                    //    lvActiveStreams.InvalidateProperty(ListView.ItemsSourceProperty);
-                    //}));
                 }
             }
             catch (CommunicationException)

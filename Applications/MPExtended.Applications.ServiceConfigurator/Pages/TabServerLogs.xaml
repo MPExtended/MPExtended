@@ -12,7 +12,7 @@
         <ListView Name="lvLogViewer" Margin="6,34,6,32" />
         <CheckBox Content="Scroll to End" HorizontalAlignment="Left" Margin="6,0,0,6" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
         <Label Content="Log Files from:" HorizontalAlignment="Left" Margin="128,0,0,-2" Name="label13" Height="28" VerticalAlignment="Bottom" />
-        <ComboBox HorizontalAlignment="Left" Margin="218,0,0,3" Name="cbLogFiles" Width="214" Height="23" VerticalAlignment="Bottom" ItemsSource="{Binding}" />
+        <ComboBox HorizontalAlignment="Left" Margin="218,0,0,3" Name="cbLogFiles" Width="214" Height="23" VerticalAlignment="Bottom" ItemsSource="{Binding}" SelectionChanged="cbLogFiles_SelectionChanged" />
         <Button Content="Save" Margin="0,0,8,3" Name="btnSaveLog" HorizontalAlignment="Right" Width="91" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
     </Grid>
 </Page>

@@ -30,6 +30,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -38,31 +40,80 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabServerLogs : Page
     {
-        public TabServerLogs()
-        {
-            InitializeComponent();
-        }
+        private string[] allLogFiles = new string[] { "Service.log", "ConsoleHost.log", "ServiceConfigurator.log", "WebMediaPortal.log" };
 
         private StreamReader mLogStreamReader = null;
         private long lastMaxOffset;
         private string mSelectedLog;
         private DispatcherTimer mLogUpdater;
 
-        private void InitLogTab(String _file)
+        public TabServerLogs()
+        {
+            InitializeComponent();
+
+            mLogUpdater = new DispatcherTimer();
+            mLogUpdater.Interval = TimeSpan.FromSeconds(2);
+            mLogUpdater.Tick += logUpdater_Tick;
+
+            String logRoot = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
+
+            foreach (string file in allLogFiles)
+            {
+                if (File.Exists(System.IO.Path.Combine(logRoot, file)))
+                {
+                    cbLogFiles.Items.Add(file);
+                }
+            }
+
+            if (cbLogFiles.Items.Count > 0)
+            {
+                cbLogFiles.SelectedIndex = 0;
+                LoadFile((string)cbLogFiles.SelectedItem);
+            }
+        }
+
+        private void cbLogFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadFile((string)cbLogFiles.SelectedItem);
+        }
+
+        private void LoadFile(string _file)
         {
             mSelectedLog = _file;
+
             if (mSelectedLog != null)
             {
                 lvLogViewer.Items.Clear();
-                LoadLogFiles(mSelectedLog);
+                string fullpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs", mSelectedLog);
 
-                String fileName = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
-                mLogStreamReader = new StreamReader(new FileStream(fileName,
-                         FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-                //start at the end of the file
-                lastMaxOffset = mLogStreamReader.BaseStream.Length;
+                if (File.Exists(fullpath))
+                {
+                    try
+                    {
+                        StreamReader re = File.OpenText(fullpath);
+                        string input = null;
+                        while ((input = re.ReadLine()) != null)
+                        {
+                            lvLogViewer.Items.Add(input);
+                        }
+                        re.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorHandling.ShowError(ex);
+                    }
 
-                mLogUpdater.Start();
+                    ScrollToLastItem(lvLogViewer);
+
+                    //start at the end of the file
+                    mLogStreamReader = new StreamReader(new FileStream(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                    lastMaxOffset = mLogStreamReader.BaseStream.Length;
+                    mLogUpdater.Start();
+                }
+                else
+                {
+                    Log.Warn("Selected non-existing file {0}", mSelectedLog);   
+                }
             }
         }
 
@@ -100,6 +151,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     }
                 }, line);
             }
+
             //update the last max offset
             lastMaxOffset = mLogStreamReader.BaseStream.Position;
         }
@@ -111,62 +163,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             dlg.Filter = "Log file (.log)|*.log";
             if (dlg.ShowDialog() == true)
             {
-                String logFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", mSelectedLog);
-
-                string newFileName = dlg.FileName;
-
-                File.Copy(logFile, newFileName);
-            }
-        }
-
-        private void LoadLogFiles(string fileName)
-        {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", fileName)))
-            {
-                try
-                {
-                    StreamReader re = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + String.Format(@"\MPExtended\Logs\{0}.log", fileName));
-                    string input = null;
-                    while ((input = re.ReadLine()) != null)
-                    {
-                        lvLogViewer.Items.Add(input);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //ExceptionMessageBox(ex.Message);
-                }
-
-                //scroll to last item
-                ScrollToLastItem(lvLogViewer);
+                string fullpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs", mSelectedLog);
+                File.Copy(fullpath, dlg.FileName);
             }
         }
 
         public void ScrollToLastItem(ListView lv)
         {
-
             lv.SelectedItem = lv.Items.GetItemAt(lv.Items.Count - 1);
             lv.ScrollIntoView(lv.SelectedItem);
             ListViewItem item = lv.ItemContainerGenerator.ContainerFromItem(lv.SelectedItem) as ListViewItem;
             if (item != null)
             {
                 item.Focus();
-            }
-        }
-
-        private void InitLogFiles()
-        {
-            String logRoot = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
-
-            if (File.Exists(System.IO.Path.Combine(logRoot, "Service.log")))
-            {
-                cbLogFiles.Items.Add("Service");
-            }
-
-            if (cbLogFiles.Items.Count > 0)
-            {
-                cbLogFiles.SelectedIndex = 0;
-                mSelectedLog = (String)cbLogFiles.SelectedItem;
             }
         }
     }
