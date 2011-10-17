@@ -69,6 +69,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtProvider = new System.Windows.Forms.TextBox();
             cmdStartStream = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -373,7 +375,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(178, 129);
+            this.label2.Location = new System.Drawing.Point(235, 128);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(16, 13);
             this.label2.TabIndex = 22;
@@ -381,9 +383,9 @@
             // 
             // txtItemId
             // 
-            this.txtItemId.Location = new System.Drawing.Point(222, 125);
+            this.txtItemId.Location = new System.Drawing.Point(259, 125);
             this.txtItemId.Name = "txtItemId";
-            this.txtItemId.Size = new System.Drawing.Size(100, 20);
+            this.txtItemId.Size = new System.Drawing.Size(63, 20);
             this.txtItemId.TabIndex = 23;
             // 
             // cbItemType
@@ -391,7 +393,7 @@
             this.cbItemType.FormattingEnabled = true;
             this.cbItemType.Location = new System.Drawing.Point(63, 124);
             this.cbItemType.Name = "cbItemType";
-            this.cbItemType.Size = new System.Drawing.Size(109, 21);
+            this.cbItemType.Size = new System.Drawing.Size(80, 21);
             this.cbItemType.TabIndex = 24;
             // 
             // label3
@@ -448,11 +450,29 @@
             this.label8.TabIndex = 25;
             this.label8.Text = "Profiles";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(149, 128);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(46, 13);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "Provider";
+            // 
+            // txtProvider
+            // 
+            this.txtProvider.Location = new System.Drawing.Point(201, 125);
+            this.txtProvider.Name = "txtProvider";
+            this.txtProvider.Size = new System.Drawing.Size(31, 20);
+            this.txtProvider.TabIndex = 28;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 675);
+            this.Controls.Add(this.txtProvider);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -543,6 +563,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtProvider;
     }
 }
 
