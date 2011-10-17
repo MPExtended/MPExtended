@@ -19,10 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
-    internal class LazyList<TKey, TValue, TMetadata> : IEnumerable<TValue>
+    internal class LazyList<TKey, TValue, TMetadata> : IEnumerable<TValue> where TValue : ILibrary
     {
         private IDictionary<TKey, Lazy<TValue, TMetadata>> items = new Dictionary<TKey, Lazy<TValue, TMetadata>>();
 
@@ -40,12 +41,19 @@ namespace MPExtended.Services.MediaAccessService
         {
             get
             {
-                return items[key].Value;
+                return GetValue(key);
             }
-            set
+        }
+
+        public TValue GetValue(TKey key)
+        {
+            if (!items[key].IsValueCreated)
             {
-                throw new NotSupportedException();
+                ILibrary item = (ILibrary)items[key].Value;
+                item.Init();
             }
+
+            return items[key].Value;
         }
 
         public int Count()
