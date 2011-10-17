@@ -33,22 +33,24 @@ namespace MPExtended.Services.StreamingService.Code
     public interface IWatchSharingService
     {
         int UpdateInterval { get; } // in minutes
+        IMediaAccessService MAS { get; set; }
 
-        bool StartWatchingMovie(WebMovieDetailed movie);
-        bool WatchingMovie(WebMovieDetailed movie, int progress);
-        bool FinishMovie(WebMovieDetailed movie);
-        bool CancelWatchingMovie(WebMovieDetailed movie);
+        bool StartWatchingMovie(int provider, WebMovieDetailed movie);
+        bool WatchingMovie(int provider, WebMovieDetailed movie, int progress);
+        bool FinishMovie(int provider, WebMovieDetailed movie);
+        bool CancelWatchingMovie(int provider, WebMovieDetailed movie);
 
-        bool StartWatchingEpisode(WebTVEpisodeDetailed episode);
-        bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress);
-        bool FinishEpisode(WebTVEpisodeDetailed episode);
-        bool CancelWatchingEpisode(WebTVEpisodeDetailed episode);
+        bool StartWatchingEpisode(int provider, WebTVEpisodeDetailed episode);
+        bool WatchingEpisode(int provider, WebTVEpisodeDetailed episode, int progress);
+        bool FinishEpisode(int provider,WebTVEpisodeDetailed episode);
+        bool CancelWatchingEpisode(int provider, WebTVEpisodeDetailed episode);
     }
 
     internal class WatchSharing
     {
         private class StreamState
         {
+            public int Provider { get; set; }
             public string Id { get; set; }
             public object MediaDescriptor { get; set; } // WebMovieDetailed or WebTVEpisodeDetailed
             public MediaSource Source { get; set; }
@@ -81,7 +83,10 @@ namespace MPExtended.Services.StreamingService.Code
             if (serviceName == "trakt")
             {
                 enabled = true;
-                service = new Trakt.TraktBridge(mas, serviceConfig);
+                service = new Trakt.TraktBridge(serviceConfig)
+                {
+                    MAS = mas
+                };
             }
             else if (serviceName == "debug")
             {
@@ -121,6 +126,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 StreamState state = new StreamState()
                 {
+                    Provider = source.Provider,
                     Id = identifier,
                     Source = source,
                     TranscodingInfo = infoRef,
@@ -131,14 +137,14 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (source.MediaType == WebStreamMediaType.TVEpisode)
                 {
-                    state.MediaDescriptor = mas.GetTVEpisodeDetailedById(source.Id);
-                    service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
-                    state.Runtime = mas.GetTVShowDetailedById(((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
+                    state.MediaDescriptor = mas.GetTVEpisodeDetailedById(source.Provider, source.Id);
+                    service.StartWatchingEpisode(state.Provider, (WebTVEpisodeDetailed)state.MediaDescriptor);
+                    state.Runtime = mas.GetTVShowDetailedById(source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
                 }
                 else if (source.MediaType == WebStreamMediaType.Movie)
                 {
-                    state.MediaDescriptor = mas.GetMovieDetailedById(source.Id);
-                    service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
+                    state.MediaDescriptor = mas.GetMovieDetailedById(source.Provider, source.Id);
+                    service.StartWatchingMovie(state.Provider, (WebMovieDetailed)state.MediaDescriptor);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime;
                 }
 
@@ -178,11 +184,11 @@ namespace MPExtended.Services.StreamingService.Code
                     // finished
                     if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
                     {
-                        service.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
+                        service.FinishEpisode(streams[identifier].Provider, (WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
                     }
                     else if (streams[identifier].Source.MediaType == WebStreamMediaType.Movie)
                     {
-                        service.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
+                        service.FinishMovie(streams[identifier].Provider, (WebMovieDetailed)streams[identifier].MediaDescriptor);
                     }
 
                     // kill it
@@ -221,11 +227,11 @@ namespace MPExtended.Services.StreamingService.Code
                             {
                                 if (streams[id].Source.MediaType == WebStreamMediaType.TVEpisode)
                                 {
-                                    service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor);
+                                    service.CancelWatchingEpisode(streams[id].Provider, (WebTVEpisodeDetailed)streams[id].MediaDescriptor);
                                 }
                                 else if (streams[id].Source.MediaType == WebStreamMediaType.Movie)
                                 {
-                                    service.CancelWatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor);
+                                    service.CancelWatchingMovie(streams[id].Provider, (WebMovieDetailed)streams[id].MediaDescriptor);
                                 }
                             }
 
@@ -253,11 +259,11 @@ namespace MPExtended.Services.StreamingService.Code
                         {
                             if (streams[id].Source.MediaType == WebStreamMediaType.TVEpisode)
                             {
-                                service.WatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
+                                service.WatchingEpisode(streams[id].Provider, (WebTVEpisodeDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
                             }
                             else if (streams[id].Source.MediaType == WebStreamMediaType.Movie)
                             {
-                                service.WatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
+                                service.WatchingMovie(streams[id].Provider, (WebMovieDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
                             }
                         }
                     }

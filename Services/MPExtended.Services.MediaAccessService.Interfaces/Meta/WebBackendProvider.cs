@@ -8,7 +8,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Meta
     public class WebBackendProvider
     {
         public string Name { get; set; }
-        public string Assembly { get; set; }
         public string Version { get; set; }
+        public int Id { get; set; }
     }
 }

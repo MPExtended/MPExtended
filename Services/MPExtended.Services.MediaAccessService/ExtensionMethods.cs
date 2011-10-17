@@ -165,7 +165,7 @@ namespace MPExtended.Services.MediaAccessService
             return new WebBackendProvider()
             {
                 Name = (string)lazy.Metadata["Name"],
-                Assembly = asm.GetName().Name,
+                Id = (int)lazy.Metadata["Id"],
                 Version = VersionUtil.GetBuildVersion(asm).ToString()
             };
         }

@@ -7,14 +7,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Meta
 {
     public class WebBackendConfiguration
     {
-        public List<WebBackendProvider> AvailableMovieProvider { get; set; }
-        public List<WebBackendProvider> AvailableMusicProvider { get; set; }
-        public List<WebBackendProvider> AvailablePictureProvider { get; set; }
-        public List<WebBackendProvider> AvailableTvShowProvider { get; set; }
-
-        public string CurrentMovieProvider { get; set; }
-        public string CurrentMusicProvider { get; set; }
-        public string CurrentPictureProvider { get; set; }
-        public string CurrentTvShowProvider { get; set; }
+        public List<WebBackendProvider> AvailableMovieLibraries { get; set; }
+        public List<WebBackendProvider> AvailableMusicLibraries { get; set; }
+        public List<WebBackendProvider> AvailablePictureLibraries { get; set; }
+        public List<WebBackendProvider> AvailableTvShowLibraries { get; set; }
+        public List<WebBackendProvider> AvailableFileSystemLibraries { get; set; }
     }
 }

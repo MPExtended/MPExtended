@@ -33,6 +33,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Name", "MP MyMusic")]
     [ExportMetadata("Type", typeof(MPMusic))]
+    [ExportMetadata("Id", 4)]
     public class MPMusic : Database, IMusicLibrary
     {
         private IPluginData data;

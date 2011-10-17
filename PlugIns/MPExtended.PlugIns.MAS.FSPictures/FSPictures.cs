@@ -31,6 +31,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
     [Export(typeof(IPictureLibrary))]
     [ExportMetadata("Name", "FS Pictures")]
     [ExportMetadata("Type", typeof(FSPictures))]
+    [ExportMetadata("Id", 1)]
     public class FSPictures : IPictureLibrary
     {
         List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();

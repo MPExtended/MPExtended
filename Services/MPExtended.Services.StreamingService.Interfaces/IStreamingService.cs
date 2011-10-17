@@ -13,7 +13,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetMediaItem(WebStreamMediaType type, string itemId);
+        Stream GetMediaItem(WebStreamMediaType type, int provider, string itemId);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
@@ -21,19 +21,19 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImage(WebStreamMediaType type, string itemId, int position);
+        Stream ExtractImage(WebStreamMediaType type, int provider, string itemId, int position);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight);
+        Stream ExtractImageResized(WebStreamMediaType type, int provider, string itemId, int position, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImage(WebStreamMediaType type, string id);
+        Stream GetImage(WebStreamMediaType type, int provider, string id);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight);
+        Stream GetImageResized(WebStreamMediaType type, int provider, string id, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
@@ -41,10 +41,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetArtwork(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset);
+        Stream GetArtwork(WebStreamMediaType mediatype, int provider, string id, WebArtworkType artworktype, int offset);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetArtworkResized(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight);
+        Stream GetArtworkResized(WebStreamMediaType mediatype, int provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight);
     }
 }

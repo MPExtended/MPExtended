@@ -63,6 +63,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="LazyList.cs" />
     <Compile Include="LogProxy.cs" />
     <Compile Include="MediaAccessService.cs" />
     <Compile Include="PluginData.cs" />

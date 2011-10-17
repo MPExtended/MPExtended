@@ -31,6 +31,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "Moving Pictures")]
     [ExportMetadata("Type", typeof(MPMovingPictures))]
+    [ExportMetadata("Id", 3)]
     public class MPMovingPictures : Database, IMovieLibrary
     {
         // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:

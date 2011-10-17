@@ -30,6 +30,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Name", "LocalFileSystem")]
     [ExportMetadata("Type", typeof(LocalFileSystem))]
+    [ExportMetadata("Id", 2)]
     public class LocalFileSystem : IFileSystemLibrary
     {
         public void Init() 

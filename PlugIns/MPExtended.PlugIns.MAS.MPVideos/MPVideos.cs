@@ -29,6 +29,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "MP MyVideo")]
     [ExportMetadata("Type", typeof(MPVideos))]
+    [ExportMetadata("Id", 7)]
     public class MPVideos : IMovieLibrary
     {
         private IPluginData data;
