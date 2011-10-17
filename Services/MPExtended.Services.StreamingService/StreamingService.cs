@@ -41,7 +41,6 @@ namespace MPExtended.Services.StreamingService
         public StreamingService()
         {
             _stream = new Streaming();
-            WcfUsernameValidator.Init();
         }
 
         public WebStreamServiceDescription GetServiceDescription()

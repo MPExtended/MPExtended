@@ -37,7 +37,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         public void PublishServices(List<Service> services)
         {
-            if (!ServiceHostConfig.BonjourEnabled || !CheckBonjourInstallation())
+            if (!Configuration.Services.BonjourEnabled || !CheckBonjourInstallation())
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace MPExtended.ServiceHosts.Hosting
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = GetHardwareAddresses();
 
-                NetService net = new NetService(DOMAIN, srv.ServiceType, serviceName, ServiceHostConfig.Port);
+                NetService net = new NetService(DOMAIN, srv.ServiceType, serviceName, Configuration.Services.Port);
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidNotPublishService += new NetService.ServiceNotPublished(FailedToPublishService);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -75,7 +75,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         private string GetServiceName()
         {
-            string value = ServiceHostConfig.BonjourServiceName;
+            string value = Configuration.Services.BonjourName;
             if (!String.IsNullOrWhiteSpace(value))
             {
                 return value;

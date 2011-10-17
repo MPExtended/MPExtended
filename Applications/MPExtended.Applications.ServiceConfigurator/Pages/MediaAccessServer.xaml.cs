@@ -259,7 +259,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void InitServiceConfiguration()
         {
-            txtServicePort.Text = Configuration.GetPort().ToString();
+            txtServicePort.Text = Configuration.Services.Port.ToString();
         }
 
         #region Logging Tab
@@ -713,9 +713,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             bool needsRestart = false;
 
-            if (!txtServicePort.Text.Equals(Configuration.GetPort().ToString()))
+            if (!txtServicePort.Text.Equals(Configuration.Services.Port.ToString()))
             {
-                if (!Configuration.SetPort(Int32.Parse(txtServicePort.Text)))
+                Configuration.Services.Port = Int32.Parse(txtServicePort.Text);
+                if(!Configuration.Services.Save())
                 {
                     MessageBox.Show("Error updating config");
                     return;
@@ -825,8 +826,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 if (_includeAuth)
                 {
-                    desc.User = Configuration.GetCredentials().First().Item1;
-                    desc.Password = Configuration.GetCredentials().First().Item2;
+                    desc.User = Configuration.Services.Users.First().Username;
+                    desc.Password = Configuration.Services.Users.First().Password;
                     desc.AuthOptions = 1;//username/password
                 }
 
