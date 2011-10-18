@@ -67,9 +67,11 @@ namespace MPExtended.Services.StreamingService.Transcoders
             // position
             if (position > 0)
             {
-                // TODO: this breaks the android player
-                //arguments.Add("--input-fast-seek");
-                //arguments.Add("--start-time=" + position);
+                // FIXME: temporary allow disabling it as it breaks some profiles
+                if (!context.Profile.CodecParameters.ContainsKey("disableSeeking") || context.Profile.CodecParameters["disableSeeking"] == "no")
+                {
+                    arguments.Add("--start-time=" + position);
+                }
             }
 
             // audio track 
