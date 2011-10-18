@@ -23,8 +23,6 @@ using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Meta;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
@@ -151,8 +149,9 @@ namespace MPExtended.Services.MediaAccessService
                 Id = item.Id,
                 DateAdded = item.DateAdded,
                 Path = item.Path,
-                Type = item.Type
+                PID = item.PID,
             };
+            x.SetMediaType(item.Type);
             return x;
         }
     }

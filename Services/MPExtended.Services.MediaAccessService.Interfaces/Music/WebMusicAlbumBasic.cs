@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicAlbumBasic : ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IMusicComposerSortable
+    public class WebMusicAlbumBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IMusicComposerSortable
     {
         public WebMusicAlbumBasic()
         {

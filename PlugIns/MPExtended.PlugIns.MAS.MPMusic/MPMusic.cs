@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using System.Data.SQLite;
 using MPExtended.Libraries.SQLitePlugin;
 using System.Security.Cryptography;

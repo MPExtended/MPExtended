@@ -24,7 +24,6 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.PlugIns.MAS.MPTVSeries

@@ -2,27 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, IRatingSortable, ICategorySortable
+    public class WebMovieBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, ICategorySortable
     {
         public WebMovieBasic()
         {
-            DateAdded = new DateTime(1970, 1, 1);
             Genres = new List<string>();
             CoverPaths = new List<string>();
-            Path = new List<string>();
             UserDefinedCategories = new List<string>();
         }
 
-        public string Id { get; set; }
         public bool IsProtected { get; set; }
-        public DateTime DateAdded { get; set; }
         public IList<string> Genres { get; set; }
         public IList<string> UserDefinedCategories { get; set; }
-        public IList<string> Path { get; set; }
         public IList<string> CoverPaths { get; set; }
 
         public string Title { get; set; }
@@ -32,7 +26,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string IMDBId { get; set; }
         public string TMDBId { get; set; }
 
-        public WebMediaType Type 
+        public override WebMediaType Type 
         {
             get
             {

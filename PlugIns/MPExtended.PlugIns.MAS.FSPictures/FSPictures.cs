@@ -24,7 +24,6 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
 {

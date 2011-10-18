@@ -75,19 +75,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
-    <Compile Include="Shared\ConcreteWebMediaItem.cs" />
-    <Compile Include="Meta\WebBackendProvider.cs" />
-    <Compile Include="Shared\WebCategory.cs" />
+    <Compile Include="WebBackendProvider.cs" />
+    <Compile Include="WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shared\WebActorBasic.cs" />
-    <Compile Include="Shared\WebActorDetailed.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="Shared\WebFileInfo.cs" />
-    <Compile Include="Shared\WebGenre.cs" />
-    <Compile Include="Shared\WebItemCount.cs" />
-    <Compile Include="Shared\WebMediaItem.cs" />
-    <Compile Include="Shared\WebSearchResult.cs" />
+    <Compile Include="WebFileInfo.cs" />
+    <Compile Include="WebGenre.cs" />
+    <Compile Include="WebObject.cs" />
+    <Compile Include="WebItemCount.cs" />
+    <Compile Include="WebMediaItem.cs" />
+    <Compile Include="WebSearchResult.cs" />
     <Compile Include="SortInterfaces.cs" />
     <Compile Include="TVShow\WebTVSeasonDetailed.cs" />
     <Compile Include="TVShow\WebTVEpisodeBasic.cs" />
@@ -96,8 +94,8 @@
     <Compile Include="TVShow\WebTVShowBasic.cs" />
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="FileSystem\WebDriveBasic.cs" />
-    <Compile Include="Meta\WebBackendConfiguration.cs" />
-    <Compile Include="Meta\WebMediaServiceDescription.cs" />
+    <Compile Include="WebBackendConfiguration.cs" />
+    <Compile Include="WebMediaServiceDescription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
