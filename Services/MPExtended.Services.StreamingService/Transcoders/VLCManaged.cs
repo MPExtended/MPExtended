@@ -61,6 +61,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             {
                 unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, duration, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
             }
+            unit.Media = MediaInfo;
             pipeline.AddDataUnit(unit, 5);
         }
 

@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
@@ -36,6 +37,8 @@ namespace MPExtended.Services.StreamingService.Code
         private int lastCountMilliseconds;
         private int calculatedFPS;
 
+        private long durationMilliseconds;
+
         /// <param name="startPosition">Start position in milliseconds</param>
         /// <param name="fps">The number of frames that are encoded per second</param>
         public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate)
@@ -45,7 +48,14 @@ namespace MPExtended.Services.StreamingService.Code
             this.SamplingRate = samplingRate;
         }
 
-        public void NewData(int newTime)
+        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long durationMilliseconds)
+            : this(startPosition, fps, samplingRate)
+        {
+            this.durationMilliseconds = durationMilliseconds;
+        }
+
+        /// <param name="newTime">New time there's transcoded to in milliseconds</param>
+        public void NewTime(int newTime)
         {
             int fpsCount = FPS_SAMPLING_RATE * 1000 / SamplingRate;
 
@@ -55,6 +65,17 @@ namespace MPExtended.Services.StreamingService.Code
                 calculatedFPS = ((newTime - lastCountMilliseconds) / (1000 / FPS)) / FPS_SAMPLING_RATE;
                 lastCountMilliseconds = newTime;
             }
+        }
+
+        public void NewPercentage(double percentage)
+        {
+            if (this.durationMilliseconds == null || this.durationMilliseconds == 0)
+            {
+                Log.Warn("Called NewPercentage({0}) but duration is unknown!", percentage);
+                return;
+            }
+
+            NewTime((int)Math.Round(percentage * this.durationMilliseconds));
         }
 
         public void SetStats(Reference<WebTranscodingInfo> output)

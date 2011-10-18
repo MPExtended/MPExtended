@@ -38,6 +38,8 @@ namespace MPExtended.Services.StreamingService.Units
             NamedPipe
         }
 
+        public WebMediaInfo Media { get; set; }
+
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -161,12 +163,29 @@ namespace MPExtended.Services.StreamingService.Units
 
         private void InfoThread(object passedPosition)
         {
-            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
+            TranscodingInfoCalculator calculator;
+            if (Media != null && Media.Duration > 0)
+            {
+                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
+            }
+            else
+            {
+                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, Media.Duration);
+            }
+
             while (true)
             {
                 try
                 {
-                    calculator.NewData(transcoder.GetTime() / 1000); // vlc gives time in microseconds
+                    int time = transcoder.GetTime();
+                    if(time != 0) 
+                    {
+                        calculator.NewTime(time / 1000); // vlc gives time in microseconds
+                    }
+                    else 
+                    {
+                        calculator.NewPercentage(transcoder.GetPosition());
+                    }
                     calculator.SetStats(info);
                 }
                 catch (ThreadAbortException)
