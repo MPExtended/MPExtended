@@ -201,6 +201,14 @@ namespace MPExtended.Libraries.General
         }
 
         /// <summary>
+        /// Flush all logs to disk
+        /// </summary>
+        public static void Flush()
+        {
+            NLog.LogManager.Flush();
+        }
+
+        /// <summary>
         /// Direct access to the NLog Logger instance (for advanced logging)
         /// </summary>
         public static Logger AdvancedLogger
