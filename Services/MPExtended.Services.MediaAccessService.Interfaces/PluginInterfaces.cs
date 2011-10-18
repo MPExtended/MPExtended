@@ -18,6 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface ILibrary
     {
+        void Init();
         WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);
@@ -111,7 +112,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IPluginData
     {
-        Dictionary<string, PluginConfigItem> Configuration { get; }
+        Dictionary<string, string> Configuration { get; }
         ILogger Log { get; }
     }
 

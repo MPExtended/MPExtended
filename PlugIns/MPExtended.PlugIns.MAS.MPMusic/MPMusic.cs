@@ -32,6 +32,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 {
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Name", "MP MyMusic")]
+    [ExportMetadata("Type", typeof(MPMusic))]
     public class MPMusic : Database, IMusicLibrary
     {
         private IPluginData data;
@@ -39,9 +40,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
-            : base(data.Configuration["database"].ConfigValue)
         {
             this.data = data;
+        }
+
+        public void Init()
+        {
+            DatabasePath = data.Configuration["database"];
         }
 
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()

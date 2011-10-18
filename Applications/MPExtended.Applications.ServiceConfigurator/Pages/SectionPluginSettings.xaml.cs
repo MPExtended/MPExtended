@@ -1,4 +1,21 @@
-﻿using System;
+﻿#region Copyright (C) 2011 MPExtended
+// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +28,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MPExtended.Services.MediaAccessService;
-using MPExtended.Services.MediaAccessService.Interfaces;
-using System.Xml.Linq;
 using MPExtended.Libraries.General;
+using MPExtended.Services.MediaAccessService;
+using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -23,45 +39,48 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class SectionPluginSettings : UserControl
     {
-        Dictionary<String, PluginConfigItem> mConfiguration;
-        List<Control> mControls;
-        XElement mConfig;
+        private Dictionary<string, PluginConfigItem> mConfiguration;
+        private List<Control> mControls;
+        private string mPlugin;
+
         public SectionPluginSettings()
         {
             InitializeComponent();
         }
 
-        public void SetPluginConfig(XElement config, Dictionary<String, PluginConfigItem> configuration)
+        public void SetPluginConfig(string plugin, List<PluginConfigItem> configuration)
         {
-            mConfiguration = configuration;
+            mPlugin = plugin;
+            mConfiguration = configuration.ToDictionary(x => x.Name, x => x);
             mControls = new List<Control>();
-            mConfig = config;
+
             ConfigurationItems.Children.Clear();
             int rowHeight = 10;
-            foreach (KeyValuePair<String, PluginConfigItem> kvp in configuration)
+
+            foreach (PluginConfigItem item in configuration)
             {               
                 Label text = new Label();
                 text.Margin = new Thickness(10, rowHeight - 2, 0, 0);
                 text.VerticalAlignment = VerticalAlignment.Top;
                 text.HorizontalAlignment = HorizontalAlignment.Left;
-                text.Content = kvp.Value.DisplayName;
+                text.Content = item.DisplayName;
                 text.FontWeight = FontWeights.Bold;
                 ConfigurationItems.Children.Add(text);
 
-                switch (kvp.Value.ConfigType)
+                switch (item.Type)
                 {
                     case ConfigType.File:
-                        CreateFileChooser(rowHeight, kvp);
+                        CreateFileChooser(rowHeight, item);
                         break;
                     case ConfigType.Folder:
-                        CreateFolderSelect(rowHeight, kvp);
+                        CreateFolderSelect(rowHeight, item);
                         break;
                     case ConfigType.Number:
                     case ConfigType.Text:
-                        CreateTextBox(rowHeight, kvp);
+                        CreateTextBox(rowHeight, item);
                         break;
                     case ConfigType.Boolean:
-                        CreateBoolean(rowHeight, kvp);
+                        CreateBoolean(rowHeight, item);
                         break;
                 }
                 
@@ -69,31 +88,25 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-        private void CreateBoolean(int rowHeight, KeyValuePair<string, PluginConfigItem> kvp)
+        private void CreateBoolean(int rowHeight, PluginConfigItem item)
         {
             CheckBox checkBox = new CheckBox();
-            checkBox.Click += new RoutedEventHandler(checkBox_Click);
             checkBox.Margin = new Thickness(130, rowHeight + 5, 0, 0);
             checkBox.VerticalAlignment = VerticalAlignment.Top;
             checkBox.HorizontalAlignment = HorizontalAlignment.Left;
-            checkBox.IsChecked = Boolean.Parse(kvp.Value.ConfigValue);
-            checkBox.Tag = kvp;
+            checkBox.IsChecked = Boolean.Parse(item.Value);
+            checkBox.Tag = item.Name;
             ConfigurationItems.Children.Add(checkBox);
             mControls.Add(checkBox);
         }
 
-        void checkBox_Click(object sender, RoutedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void CreateFolderSelect(int rowHeight, KeyValuePair<string, PluginConfigItem> kvp)
+        private void CreateFolderSelect(int rowHeight, PluginConfigItem item)
         {
             TextBox textbox = new TextBox();
             textbox.Margin = new Thickness(130, rowHeight, 110, 0);
-            textbox.Text = kvp.Value.ConfigValue;
+            textbox.Text = item.Value;
             textbox.VerticalAlignment = VerticalAlignment.Top;
-            textbox.Tag = kvp;
+            textbox.Tag = item.Name;
             ConfigurationItems.Children.Add(textbox);
             mControls.Add(textbox);
 
@@ -129,24 +142,24 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-        private void CreateTextBox(int rowHeight, KeyValuePair<string, PluginConfigItem> kvp)
+        private void CreateTextBox(int rowHeight, PluginConfigItem item)
         {
             TextBox textbox = new TextBox();
             textbox.Margin = new Thickness(130, rowHeight, 10, 0);
-            textbox.Text = kvp.Value.ConfigValue;
+            textbox.Text = item.Value;
             textbox.VerticalAlignment = VerticalAlignment.Top;
-            textbox.Tag = kvp;
+            textbox.Tag = item.Name;
             ConfigurationItems.Children.Add(textbox);
             mControls.Add(textbox);
         }
 
-        private void CreateFileChooser(int rowHeight, KeyValuePair<string, PluginConfigItem> kvp)
+        private void CreateFileChooser(int rowHeight, PluginConfigItem item)
         {
             TextBox textbox = new TextBox();
             textbox.Margin = new Thickness(130, rowHeight, 110, 0);
-            textbox.Text = kvp.Value.ConfigValue;
+            textbox.Text = item.Value;
             textbox.VerticalAlignment = VerticalAlignment.Top;
-            textbox.Tag = kvp;
+            textbox.Tag = item.Name;
             ConfigurationItems.Children.Add(textbox);
             mControls.Add(textbox);
 
@@ -177,74 +190,51 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 // Open document
                 string filename = dlg.FileName;
                 ((TextBox)o.Tag).Text = filename;
-
             }
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                bool hasChanged = false;
+                List<PluginConfigItem> newConfig = new List<PluginConfigItem>();
+
+                // save things here
                 foreach (Control c in mControls)
                 {
-                    KeyValuePair<String, PluginConfigItem> kvp = (KeyValuePair<String, PluginConfigItem>)c.Tag;
-                    if (c.GetType() == typeof(TextBox))
+                    string value = "";
+                    if (c is TextBox)
                     {
-                        String newValue = ((TextBox)c).Text;
-                        String oldValue = kvp.Value.ConfigValue;
-
-                        if (!oldValue.Equals(newValue))
-                        {
-                            if (kvp.Value.ConfigType == ConfigType.Number)
-                            {
-                                int newNumber;
-                                if (Int32.TryParse(newValue, out newNumber))
-                                {
-                                    ((XElement)kvp.Value.Tag).Value = newValue;
-                                    kvp.Value.ConfigValue = newValue;
-                                    hasChanged = true;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Invalid value: " + newValue);
-                                }
-                            }
-                            else
-                            {
-                                //TODO: check if directory/file exists
-                                ((XElement)kvp.Value.Tag).Value = newValue;
-                                kvp.Value.ConfigValue = newValue;
-                                hasChanged = true;
-                            }
- 
-                        }
+                        value = ((TextBox)c).Text;
                     }
-                    if (c.GetType() == typeof(CheckBox))
+                    else if (c is CheckBox)
                     {
-                        Boolean newValue = (Boolean)((CheckBox)c).IsChecked;
-                        Boolean oldValue = Boolean.Parse(kvp.Value.ConfigValue);
-
-                        if (!oldValue.Equals(newValue))
-                        {
-                            ((XElement)kvp.Value.Tag).Value = newValue.ToString();
-                            kvp.Value.ConfigValue = newValue.ToString();
-                            hasChanged = true;
-                        }
+                        value = ((CheckBox)c).IsChecked == true ? "true" : "false";
                     }
-                    //kvp.Value.Tag)
+                    else
+                    {
+                        continue;
+                    }
+
+                    newConfig.Add(new PluginConfigItem(mConfiguration[(string)c.Tag])
+                    {
+                        Value = value
+                    });
                 }
 
-                if (hasChanged)
+                Configuration.Media.PluginConfiguration[mPlugin] = newConfig;
+                if (Configuration.Media.Save())
                 {
-                    mConfig.Save(Configuration.GetPath("MediaAccess.xml"));
-                    MessageBox.Show("Successfully updated config, please restart service for the changes to take affect");
+                    MessageBox.Show("Successfully updated config, please restart service for the changes to take affect.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update config!");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error("Error updating config", ex);
-                MessageBox.Show("Error while updating config");
+                ErrorHandling.ShowError(ex);
             }
         }
     }

@@ -27,7 +27,30 @@ namespace MPExtended.Libraries.General
 {
     public class Configuration
     {
-        private static List<Tuple<string, string>> cachedUserList;
+        private static ServicesConfiguration serviceConfig = null;
+        private static MediaAccessConfiguration mediaConfig = null;
+
+        public static ServicesConfiguration Services 
+        {
+            get 
+            {
+                if (serviceConfig == null)
+                    serviceConfig = new ServicesConfiguration();
+
+                return serviceConfig;
+            }
+        }
+
+        public static MediaAccessConfiguration Media
+        {
+            get
+            {
+                if (mediaConfig == null)
+                    mediaConfig = new MediaAccessConfiguration();
+
+                return mediaConfig;
+            }
+        }
 
         public static string GetPath(string filename)
         {
@@ -38,78 +61,6 @@ namespace MPExtended.Libraries.General
             basedir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
 #endif
             return Path.Combine(basedir, filename);
-        }
-
-        public static List<Tuple<string, string>> GetCredentials(bool overwriteCached = false)
-        {
-            if (overwriteCached || cachedUserList == null)
-            {
-                cachedUserList = XElement.Load(GetPath("Services.xml"))
-                    .Element("users")
-                    .Elements("user")
-                    .Select(x => new Tuple<string, string>(x.Element("username").Value, x.Element("password").Value))
-                    .ToList();
-            }
-
-            return cachedUserList;
-        }
-
-        public static bool SetCredentials(string username, string password)
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(GetPath("Services.xml"));
-                XmlNode userNode = doc.SelectSingleNode("/serviceconfig/config/username");
-                userNode.InnerText = username;
-
-                XmlNode passNode = doc.SelectSingleNode("/serviceconfig/config/password");
-                passNode.InnerText = password;
-
-                doc.Save(GetPath("Services.xml"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Couldn't update credentials", ex);
-                return false;
-            }
-        }
-
-        public static bool SetPort(int _port)
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(GetPath("Services.xml"));
-                XmlNode portNode = doc.SelectSingleNode("/serviceconfig/port");
-                portNode.InnerText = _port.ToString();
-
-                doc.Save(GetPath("Services.xml"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Couldn't set port in " + GetPath("Services.xml"), ex);
-                return false;
-            }
-        }
-
-        public static int GetPort()
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(GetPath("Services.xml"));
-                XmlNode portNode = doc.SelectSingleNode("/serviceconfig/port");
-                String portString = portNode.InnerText;
-                return Int32.Parse(portString);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Couldn't load port from " + GetPath("Services.xml"), ex);
-                return -99;
-            }
         }
     }
 }

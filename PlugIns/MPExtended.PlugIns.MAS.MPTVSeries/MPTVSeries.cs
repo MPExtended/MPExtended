@@ -31,13 +31,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Name", "MP-TVSeries")]
+    [ExportMetadata("Type", typeof(MPTVSeries))]
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private IPluginData data;
         private SQLFieldMapping.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
-        public MPTVSeries(IPluginData data) : base(data.Configuration["database"].ConfigValue)
+        public MPTVSeries(IPluginData data)
         {
             this.data = data;
             this.fixBannerPathReader = delegate(SQLiteDataReader reader, int index)
@@ -46,9 +47,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             };
         }
 
+        public void Init()
+        {
+            DatabasePath = data.Configuration["database"];
+        }
+
         private string CreateImagePath(string type, string dbPath)
         {
-            string rootDir = data.Configuration[type].ConfigValue;
+            string rootDir = data.Configuration[type];
             return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
         }
 

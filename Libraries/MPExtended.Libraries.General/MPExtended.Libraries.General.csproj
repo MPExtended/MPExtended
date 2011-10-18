@@ -58,8 +58,10 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Installation.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MediaAccessConfiguration.cs" />
     <Compile Include="MPEServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServicesConfiguration.cs" />
     <Compile Include="VersionUtil.cs" />
   </ItemGroup>
   <ItemGroup>

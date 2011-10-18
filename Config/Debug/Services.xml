@@ -1,19 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <serviceconfig>
   <users>
     <user>
       <username>admin</username>
       <password>admin</password>
     </user>
-    <user>
-      <username>oxan</username>
-      <password>oxan</password>
-    </user>
   </users>
-  
   <bonjour>
     <enabled>false</enabled>
-    <pcname /><!-- Automatically detected when empty -->
+    <pcname></pcname>
+    <!-- Automatically detected when empty -->
   </bonjour>
   <port>4322</port>
   <enableIPv6>false</enableIPv6>

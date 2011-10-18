@@ -40,6 +40,8 @@ namespace MPExtended.Applications.ServiceConfigurator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const bool ONLY_CONFIGURATOR = true;
+
         private bool mIsAppExiting = false;
         private ServiceHost mUserSessionHost;
         private IUserSessionService mUserSessionService;
@@ -75,7 +77,9 @@ namespace MPExtended.Applications.ServiceConfigurator
                 MessageBox.Show(ex.ToString());
             }
 
-            Hide();
+            if (!ONLY_CONFIGURATOR)
+                Hide();
+
             HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }
 
@@ -89,12 +93,12 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //When the application is closed, check wether the application is
-            //exiting from menu or forms close button
-            if (!mIsAppExiting)
+            // When the application is closed, check whether the application is
+            // exiting from menu or forms close button
+            if (!mIsAppExiting && !ONLY_CONFIGURATOR)
             {
-                //if the forms close button is triggered, cancel the event and hide the form
-                //then show the notification ballon tip
+                // if the forms close button is triggered, cancel the event and hide the form
+                // then show the notification ballon tip
                 e.Cancel = true;
                 this.Hide();
             }

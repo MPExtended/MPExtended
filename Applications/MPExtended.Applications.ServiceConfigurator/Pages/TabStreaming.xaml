@@ -1,0 +1,35 @@
+﻿<Page x:Class="MPExtended.Applications.ServiceConfigurator.Pages.TabStreaming"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="557"
+	Title="TabStreaming">
+
+    <Grid>
+        <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="6,78,-6,214" Name="label1" />
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="0,102,6,6" Name="lvActiveStreams" VerticalAlignment="Stretch" Height="212">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Kick Session" Name="miKickUserSession" Click="miKickUserSession_Click" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="File" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="Progress" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label9" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label Content="To change the streaming profiles (advanced users only!!!) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="15,57,0,0" Name="textBlock1" VerticalAlignment="Top">
+                        <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
+                            <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
+                        </Hyperlink>    
+                    </TextBlock>
+    </Grid>
+</Page>

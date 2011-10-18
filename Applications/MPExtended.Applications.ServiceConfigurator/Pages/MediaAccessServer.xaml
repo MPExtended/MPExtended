@@ -5,12 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="697"
-	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}" Loaded="Page_Loaded">
+	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
     <Grid Width="AUTO">
         <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-250,-250" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Images/globe.png" Opacity="0.4" />
 
-        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="TabControl_SelectionChanged" Visibility="Visible" Background="{x:Null}">
+        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="tcMainTabs_SelectionChanged" Visibility="Visible" Background="{x:Null}">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Padding" Value="4" />
@@ -28,107 +28,21 @@
                 </Style>
             </TabControl.Resources>
 
-            <TabItem Header="General" Width="140">
-                <Grid>
-                    <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="8,9,0,0" Name="label2" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="85,9,0,0" Name="txtServicePort" VerticalAlignment="Top" Width="83" Text="44321" IsReadOnly="False" IsEnabled="True" />
-                    <Button Content="Save" x:Name="btnUpdateConfig" MinWidth="80" Margin="8,46,0,0" MinHeight="23" Click="cmdUpdateConfig_Click" HorizontalAlignment="Left" Width="211" Height="23" VerticalAlignment="Top" />
-                    <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="247,9,0,0" Name="label14" VerticalAlignment="Top" FontWeight="Bold" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="352,11,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="181" />
-                    <CheckBox Content="Enable Autodetection via ZeroConf/Bonjour" Height="16" HorizontalAlignment="Left" Margin="249,50,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
-                </Grid>
+            <TabItem Header="General" Width="140" Name="tiGeneral" Tag="Pages/TabGeneral.xaml">
             </TabItem>
-            <TabItem Header="Authentication" Width="140">
-                <Grid>
-                </Grid>
+            <TabItem Header="Authentication" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
             </TabItem>
-            <TabItem Header="QR Code" Name="tabItem1">
-                <Grid Background="{x:Null}">
-                    <Label Content="QR Code" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
-                    <Image Margin="10,85,6,31" Name="imgQRCode" Stretch="Uniform" StretchDirection="Both" HorizontalAlignment="Stretch" OpacityMask="White" />
-                    <CheckBox Content="Include Authentication" HorizontalAlignment="Left" Margin="10,0,0,6" Name="checkBox1" Height="19" VerticalAlignment="Bottom" Checked="checkBox1_Checked" />
-                    <Label Content="You can scan the QR code with supported clients to add this MediaPortal automatically." Height="28" HorizontalAlignment="Left" Margin="10,44,0,0" Name="label16" VerticalAlignment="Top" />
-                    <Button Content="Save To File" Margin="0,0,6,6" Name="btnSaveToFile" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="132" Click="btnSaveToFile_Click" />
-                </Grid>
+            <TabItem Header="QR Code" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
             </TabItem>
-            <TabItem Header="Plugin Config" Width="140" >
-                <Grid>
-                    <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,11,12,0" Name="cbPluginConfigs" VerticalAlignment="Top" Width="402" ItemsSource="{Binding}" SelectionChanged="cbPluginConfigs_SelectionChanged" />
-                    <Label Content="Plugins" Height="28" HorizontalAlignment="Left" Margin="7,9,0,0" Name="label5" VerticalAlignment="Top" Width="61" />
-                    <my:SectionPluginSettings Margin="7,43,12,7" x:Name="sectionPluginSettings" Background="{x:Null}" />
-                </Grid>
+            <TabItem Header="Plugin Config" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
             </TabItem>
-            <!--<TabItem Header="Paths"></TabItem>-->
-            <TabItem Name="tiTroubleShooting"  Header="Troubleshooting">
-                <Grid>
-                    <TextBox BorderThickness="0" Text="To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues)." TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
-                    <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
-                    <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" />
-                    <Label Content="MediaAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,160,0,0" Name="label8" VerticalAlignment="Top" />
-                    <TextBlock Height="23" Margin="168,165,6,0" VerticalAlignment="Top">
-                        <Hyperlink  Name="hlTestLinkMediaAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate">
-                            <TextBlock Name="tbTestLinkMediaAccessGeneral" Text="ServiceDescription.xml" />
-                        </Hyperlink>    
-                    </TextBlock>
-                    <Label Content="Streaming General:" Height="28" HorizontalAlignment="Left" Margin="15,189,0,0" Name="label11" VerticalAlignment="Top" />
-                    <TextBlock Height="23" Margin="168,194,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkStreamingGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkStreamingGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
-                    <Label Content="TvAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,218,0,0" Name="label12" VerticalAlignment="Top" />
-                    <TextBlock Height="23" Margin="168,223,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkTvAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkTvAccessGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
-                </Grid>
+            <TabItem Header="Troubleshooting" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
             </TabItem>
-            <TabItem Header="Streaming" Name="tiStreaming">
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="6,78,-6,214" Name="label1" />
-                    <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="0,102,6,6" Name="lvActiveStreams" VerticalAlignment="Stretch" Height="212">
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Kick Session" Name="miKickUserSession" Click="miKickUserSession_Click" />
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="File" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="Progress" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label9" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="To change the streaming profiles (advanced users only!!!) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
-                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="15,57,0,0" Name="textBlock1" VerticalAlignment="Top">
-                        <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
-                            <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
-                        </Hyperlink>    
-                    </TextBlock>
-                </Grid>
+            <TabItem Header="Streaming" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
             </TabItem>
-            <TabItem Header="Server Logs" Name="tiLogs">
-                <Grid>
-                    <Label Content="Service Log" Height="28" Name="lblLogs" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
-                    <ListView Name="lvLogViewer" Margin="6,34,6,32" />
-                    <CheckBox Content="Scroll to End" HorizontalAlignment="Left" Margin="6,0,0,6" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
-                    <Label Content="Log Files from:" HorizontalAlignment="Left" Margin="128,0,0,-2" Name="label13" Height="28" VerticalAlignment="Bottom" />
-                    <ComboBox HorizontalAlignment="Left" Margin="218,0,0,3" Name="cbLogFiles" Width="214" Height="23" VerticalAlignment="Bottom" ItemsSource="{Binding}" />
-                    <Button Content="Save" Margin="0,0,8,3" Name="btnSaveLog" HorizontalAlignment="Right" Width="91" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
-                </Grid>
+            <TabItem Header="Server Logs" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
             </TabItem>
-            <TabItem Header="About">
-                <Grid>
-                    <Label Content="MPExtended" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
-                    <TextBlock Margin="28,34,6,0" Name="tbAbout" VerticalAlignment="Top">
-                        MPExtended webservices<LineBreak/>
-                        let's you access all your local media through an api
-                        <LineBreak/><LineBreak/><LineBreak/>
-                        Contributors:<LineBreak/>
-                        - Tobi (project leader, developer)<LineBreak/>
-                        - DieBagger (developer)<LineBreak/>
-                        - Oxan (developer)<LineBreak/>
-
-
-                    </TextBlock>
-                </Grid>
+            <TabItem Header="About" Name="tiAbout" Tag="Pages/TabAbout.xaml">
             </TabItem>
 
         </TabControl>

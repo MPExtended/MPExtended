@@ -48,7 +48,6 @@ namespace MPExtended.Services.TVAccessService
         {
             _tvUsers = new Dictionary<string, IUser>();
             _tvBusiness = new TvBusinessLayer();
-            WcfUsernameValidator.Init();
 
             // try to initialize Gentle and TVE API
             InitializeGentleAndTVE();
@@ -94,7 +93,7 @@ namespace MPExtended.Services.TVAccessService
             }
             else if (!_tvUsers.ContainsKey(userName) && create)
             {
-                _tvUsers.Add(userName, new User(userName, false));
+                _tvUsers.Add(userName, new TvControl.User(userName, false));
             }
 
             return _tvUsers[userName];

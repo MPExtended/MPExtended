@@ -1,0 +1,25 @@
+﻿<Page x:Class="MPExtended.Applications.ServiceConfigurator.Pages.TabAbout"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="557"
+	Title="TabAbout">
+
+    <Grid>
+        <Label Content="MPExtended" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
+        <TextBlock Margin="28,34,26,0" Name="tbAbout" VerticalAlignment="Top" TextWrapping="Wrap">
+            MPExtended is a project that aims at providing access to MediaPortal from all over the world, using clients for your webbrowser, Android, iOS, and more. <LineBreak />
+            <LineBreak />
+            Links:<LineBreak />
+            - http://mpextended.github.com/<LineBreak />
+            - Support forum<LineBreak />
+            <LineBreak />
+            Contributors:<LineBreak/>
+            - Tobi (developer)<LineBreak/>
+            - DieBagger (developer)<LineBreak/>
+            - Oxan (developer)<LineBreak/>
+        </TextBlock>
+    </Grid>
+</Page>
