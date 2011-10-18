@@ -109,6 +109,12 @@ namespace MPExtended.Services.MediaAccessService
                 return Enumerable.ThenBy(source, comp);
             return Enumerable.ThenByDescending(source, comp);
         }
+    
+        // Fill the providerid field
+        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int providerId) where T : WebObject
+        {
+            return list.Select(x => { x.PID = providerId; return x; });
+        }
 
         // Allow easy sorting from MediaAccessService.cs
         public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy sort, OrderBy order)
@@ -174,6 +180,15 @@ namespace MPExtended.Services.MediaAccessService
             };
             x.SetMediaType(item.Type);
             return x;
+        }
+    }
+
+    internal static class WebObjectExtensionMethods
+    {
+        public static T SetProvider<T>(this T item, int provider) where T : WebObject
+        {
+            item.PID = provider;
+            return item;
         }
     }
 

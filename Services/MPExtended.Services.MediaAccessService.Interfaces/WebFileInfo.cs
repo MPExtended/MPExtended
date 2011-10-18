@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebFileInfo
+    public class WebFileInfo : WebObject
     {
         public WebFileInfo()
         {

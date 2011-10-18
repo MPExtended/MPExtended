@@ -185,15 +185,15 @@ namespace MPExtended.Services.MediaAccessService
             switch (type)
             {
                 case WebMediaType.Movie:
-                    return GetMovieDetailedById(provider, id).ToWebMediaItem();
+                    return GetMovieDetailedById(provider, id).SetProvider(provider).ToWebMediaItem();
                 case WebMediaType.MusicTrack:
-                    return GetMusicTrackDetailedById(provider, id).ToWebMediaItem();
+                    return GetMusicTrackDetailedById(provider, id).SetProvider(provider).ToWebMediaItem();
                 case WebMediaType.Picture:
-                    return GetPictureDetailedById(provider, id).ToWebMediaItem();
+                    return GetPictureDetailedById(provider, id).SetProvider(provider).ToWebMediaItem();
                 case WebMediaType.TVEpisode:
-                    return GetTVEpisodeDetailedById(provider, id).ToWebMediaItem();
+                    return GetTVEpisodeDetailedById(provider, id).SetProvider(provider).ToWebMediaItem();
                 case WebMediaType.File:
-                    return GetFileSystemFileBasicById(provider, id).ToWebMediaItem();
+                    return GetFileSystemFileBasicById(provider, id).SetProvider(provider).ToWebMediaItem();
                 default:
                     throw new ArgumentException();
             }
@@ -213,7 +213,7 @@ namespace MPExtended.Services.MediaAccessService
         #region Movies
         public IList<WebCategory> GetAllMovieCategories(int provider)
         {
-            return MovieLibraries[provider].GetAllCategories().ToList();
+            return MovieLibraries[provider].GetAllCategories().FillProvider(provider).ToList();
         }
 
         public WebItemCount GetMovieCount(int provider, string genre, string category)
@@ -223,44 +223,44 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMovieBasic> GetAllMoviesBasic(int provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MovieLibraries[provider].GetAllMovies().SortMediaItemList(sort, order).ToList();
+            return MovieLibraries[provider].GetAllMovies().SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMovieDetailed> GetAllMoviesDetailed(int provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MovieLibraries[provider].GetAllMoviesDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).ToList();
+            return MovieLibraries[provider].GetAllMoviesDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMovieBasic> GetMoviesBasicByRange(int provider, int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MovieLibraries[provider].GetAllMovies().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MovieLibraries[provider].GetAllMovies().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebMovieDetailed> GetMoviesDetailedByRange(int provider, int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MovieLibraries[provider].GetAllMoviesDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MovieLibraries[provider].GetAllMoviesDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebGenre> GetAllMovieGenres(int provider)
         {
-            return MovieLibraries[provider].GetAllGenres().ToList();
+            return MovieLibraries[provider].GetAllGenres().FillProvider(provider).ToList();
         }
 
         public WebMovieBasic GetMovieBasicById(int provider, string id)
         {
-            return MovieLibraries[provider].GetMovieBasicById(id);
+            return MovieLibraries[provider].GetMovieBasicById(id).SetProvider(provider);
         }
 
         public WebMovieDetailed GetMovieDetailedById(int provider, string id)
         {
-            return MovieLibraries[provider].GetMovieDetailedById(id);
+            return MovieLibraries[provider].GetMovieDetailedById(id).SetProvider(provider);
         }
         #endregion
 
         #region Music
         public IList<WebCategory> GetAllMusicCategories(int provider)
         {
-            return MusicLibraries[provider].GetAllCategories().ToList();
+            return MusicLibraries[provider].GetAllCategories().FillProvider(provider).ToList();
         }
 
         public WebItemCount GetMusicTrackCount(int provider, string genre = null)
@@ -280,99 +280,99 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(int provider, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracks().FilterGenre(genre).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllTracks().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(int provider, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracksDetailed().FilterGenre(genre).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllTracksDetailed().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicByRange(int provider, int start, int end, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracks().FilterGenre(genre).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MusicLibraries[provider].GetAllTracks().FilterGenre(genre).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedByRange(int provider, int start, int end, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracksDetailed().FilterGenre(genre).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MusicLibraries[provider].GetAllTracksDetailed().FilterGenre(genre).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public WebMusicTrackBasic GetMusicTrackBasicById(int provider, string id)
         {
-            return MusicLibraries[provider].GetAllTracks().Where(x => x.Id == id).First();
+            return MusicLibraries[provider].GetAllTracks().Where(x => x.Id == id).FillProvider(provider).First();
         }
 
         public IList<WebGenre> GetAllMusicGenres(int provider)
         {
-            return MusicLibraries[provider].GetAllGenres().ToList();
+            return MusicLibraries[provider].GetAllGenres().FillProvider(provider).ToList();
         }
 
         public WebMusicTrackDetailed GetMusicTrackDetailedById(int provider, string id)
         {
-            return MusicLibraries[provider].GetAllTracksDetailed().Where(p => p.Id == id).First();
+            return MusicLibraries[provider].GetAllTracksDetailed().Where(p => p.Id == id).FillProvider(provider).First();
         }
 
         public IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(int provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllAlbums().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllAlbums().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicByRange(int provider, int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllAlbums().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MusicLibraries[provider].GetAllAlbums().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(int provider, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllArtists().FilterCategory(category).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllArtists().FilterCategory(category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicArtistBasic> GetMusicArtistsBasicByRange(int provider, int start, int end, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllArtists().FilterCategory(category).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return MusicLibraries[provider].GetAllArtists().FilterCategory(category).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public WebMusicArtistBasic GetMusicArtistBasicById(int provider, string id)
         {
-            return MusicLibraries[provider].GetAllArtists().Where(p => p.Id == id).First();
+            return MusicLibraries[provider].GetAllArtists().Where(p => p.Id == id).FillProvider(provider).First();
         }
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracks().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllTracks().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllTracksDetailed().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllTracksDetailed().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public WebMusicAlbumBasic GetMusicAlbumBasicById(int provider, string id)
         {
-            return MusicLibraries[provider].GetAllAlbums().Where(p => p.Id == id).First();
+            return MusicLibraries[provider].GetAllAlbums().Where(p => p.Id == id).FillProvider(provider).First();
         }
 
         public IList<WebMusicAlbumBasic> GetMusicAlbumsBasicForArtist(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return MusicLibraries[provider].GetAllAlbums().Where(p => p.AlbumArtistId == id).SortMediaItemList(sort, order).ToList();
+            return MusicLibraries[provider].GetAllAlbums().Where(p => p.AlbumArtistId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
         #endregion
 
         #region Pictures
         public IList<WebPictureBasic> GetAllPicturesBasic(int provider, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return PictureLibraries[provider].GetAllPicturesBasic().SortMediaItemList(sort, order).ToList();
+            return PictureLibraries[provider].GetAllPicturesBasic().SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebPictureDetailed> GetAllPicturesDetailed(int provider, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return PictureLibraries[provider].GetAllPicturesDetailed().SortMediaItemList(sort, order).ToList();
+            return PictureLibraries[provider].GetAllPicturesDetailed().SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebCategory> GetAllPictureCategoriesBasic(int provider)
         {
-            return PictureLibraries[provider].GetAllPictureCategoriesBasic().ToList();
+            return PictureLibraries[provider].GetAllPictureCategoriesBasic().FillProvider(provider).ToList();
         }
 
         public WebItemCount GetPictureCount(int provider)
@@ -382,154 +382,154 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebPictureBasic> GetPicturesBasicByCategory(int provider, string id)
         {
-            return PictureLibraries[provider].GetPicturesBasicByCategory(id).ToList();
+            return PictureLibraries[provider].GetPicturesBasicByCategory(id).FillProvider(provider).ToList();
         }
 
         public IList<WebPictureDetailed> GetPicturesDetailedByCategory(int provider, string id)
         {
-            return PictureLibraries[provider].GetPicturesDetailedByCategory(id).ToList();
+            return PictureLibraries[provider].GetPicturesDetailedByCategory(id).FillProvider(provider).ToList();
         }
 
         public WebPictureBasic GetPictureBasicById(int provider, string id)
         {
-            return PictureLibraries[provider].GetAllPicturesBasic().Where(x => x.Id == id).First();
+            return PictureLibraries[provider].GetAllPicturesBasic().Where(x => x.Id == id).FillProvider(provider).First();
         }
 
         public WebPictureDetailed GetPictureDetailedById(int provider, string id)
         {
-            return PictureLibraries[provider].GetPictureDetailed(id);
+            return PictureLibraries[provider].GetPictureDetailed(id).SetProvider(provider);
         }
         #endregion
 
         #region TVShows
         public IList<WebCategory> GetAllTVShowCategories(int provider)
         {
-            return TVShowLibraries[provider].GetAllCategories().ToList();
+            return TVShowLibraries[provider].GetAllCategories().FillProvider(provider).ToList();
         }
 
         public IList<WebGenre> GetAllTVShowGenres(int provider)
         {
-            return TVShowLibraries[provider].GetAllGenres().ToList();
+            return TVShowLibraries[provider].GetAllGenres().FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowBasic> GetAllTVShowsBasic(int provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowDetailed> GetAllTVShowsDetailed(int provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowBasic> GetTVShowsBasicByCategory(int provider, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterCategory(category).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterCategory(category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowDetailed> GetTVShowsDetailedByCategory(int provider, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterCategory(category).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterCategory(category).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowBasic> GetTVShowsBasicByGenre(int provider, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenre(genre).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowDetailed> GetTVShowsDetailedByGenre(int provider, string genre = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenre(genre).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowBasic> GetTVShowsBasicByRange(int provider, int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
         }
 
         public IList<WebTVShowDetailed> GetTVShowsDetailedByRange(int provider, int start, int end, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
         }
 
         public WebTVShowDetailed GetTVShowDetailedById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetTVShowDetailed(id);
+            return TVShowLibraries[provider].GetTVShowDetailed(id).SetProvider(provider);
         }
 
         public WebTVShowBasic GetTVShowBasicById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().Where(x => x.Id == id).First();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().Where(x => x.Id == id).FillProvider(provider).First();
         }
 
         public IList<WebTVSeasonBasic> GetTVSeasonsBasicForTVShow(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllSeasonsBasic().Where(x => x.ShowId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllSeasonsBasic().Where(x => x.ShowId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVSeasonDetailed> GetTVSeasonsDetailedForTVShow(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllSeasonsDetailed().Where(x => x.ShowId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllSeasonsDetailed().Where(x => x.ShowId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public WebTVSeasonDetailed GetTVSeasonDetailedById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetSeasonDetailed(id);
+            return TVShowLibraries[provider].GetSeasonDetailed(id).SetProvider(provider);
         }
 
         public WebTVSeasonBasic GetTVSeasonBasicById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetSeasonBasic(id);
+            return TVShowLibraries[provider].GetSeasonBasic(id).SetProvider(provider);
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int provider, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesBasic().SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int provider, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShow(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int provider, string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int provider, string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).FillProvider(provider).ToList();
         }
 
         public WebTVEpisodeBasic GetTVEpisodeBasicById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(x => x.Id == id).First();
+            return TVShowLibraries[provider].GetEpisodeBasic(id).SetProvider(provider);
         }
 
         public WebTVEpisodeDetailed GetTVEpisodeDetailedById(int provider, string id)
         {
-            return TVShowLibraries[provider].GetEpisodeDetailed(id);
+            return TVShowLibraries[provider].GetEpisodeDetailed(id).SetProvider(provider);
         }
 
         public WebItemCount GetTVEpisodeCount(int provider)
@@ -547,7 +547,7 @@ namespace MPExtended.Services.MediaAccessService
             return new WebItemCount() { Count = TVShowLibraries[provider].GetAllEpisodesBasic().Where(e => e.SeasonId == id).Count() };
         }
 
-        public WebItemCount GetTVShowCount(string genre = null, string category = null)
+        public WebItemCount GetTVShowCount(int provider, string genre = null, string category = null)
         {
             return new WebItemCount() { Count = TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).Count() };
         }
@@ -561,22 +561,22 @@ namespace MPExtended.Services.MediaAccessService
         #region Filesystem
         public IList<WebDriveBasic> GetFileSystemDrives(int provider)
         {
-            return FileSystemLibraries[provider].GetLocalDrives().ToList();
+            return FileSystemLibraries[provider].GetLocalDrives().FillProvider(provider).ToList();
         }
 
         public IList<WebFolderBasic> GetFileSystemFoldersListing(int provider, string id)
         {
-            return FileSystemLibraries[provider].GetFoldersListing(id).ToList();
+            return FileSystemLibraries[provider].GetFoldersListing(id).FillProvider(provider).ToList();
         }
 
         public IList<WebFileBasic> GetFileSystemFilesListing(int provider, string id)
         {
-            return FileSystemLibraries[provider].GetFilesListing(id).ToList();
+            return FileSystemLibraries[provider].GetFilesListing(id).FillProvider(provider).ToList();
         }
 
         public WebFileBasic GetFileSystemFileBasicById(int provider, string id)
         {
-            return FileSystemLibraries[provider].GetFileBasic(id);
+            return FileSystemLibraries[provider].GetFileBasic(id).SetProvider(provider);
         }
         #endregion
 
@@ -622,7 +622,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             try
             {
-                return GetLibrary(provider, mediatype).GetFileInfo(GetPathList(provider, mediatype, filetype, id).ElementAt(offset));
+                return GetLibrary(provider, mediatype).GetFileInfo(GetPathList(provider, mediatype, filetype, id).ElementAt(offset)).SetProvider(provider);
             }
             catch (Exception ex)
             {

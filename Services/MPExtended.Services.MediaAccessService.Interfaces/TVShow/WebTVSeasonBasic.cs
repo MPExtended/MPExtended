@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVSeasonBasic : ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
+    public class WebTVSeasonBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
     {
         public WebTVSeasonBasic()
         {
