@@ -201,11 +201,11 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebSearchResult> Search(string text)
         {
-            return MovieLibraries.SelectMany(x => x.Search(text))
-                .Union(MusicLibraries.SelectMany(x => x.Search(text)))
-                .Union(PictureLibraries.SelectMany(x => x.Search(text)))
-                .Union(TVShowLibraries.SelectMany(x => x.Search(text)))
-                .Union(FileSystemLibraries.SelectMany(x => x.Search(text)))
+            return MovieLibraries.SearchAll(text)
+                .Union(MusicLibraries.SearchAll(text))
+                .Union(PictureLibraries.SearchAll(text))
+                .Union(TVShowLibraries.SearchAll(text))
+                .Union(FileSystemLibraries.SearchAll(text))
                 .ToList();
         }
         #endregion

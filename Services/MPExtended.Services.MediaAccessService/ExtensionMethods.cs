@@ -192,6 +192,14 @@ namespace MPExtended.Services.MediaAccessService
         }
     }
 
+    internal static class LazyListExtensionMethods
+    {
+        public static IEnumerable<WebSearchResult> SearchAll<TLibrary>(this LazyList<int, TLibrary, IDictionary<string, object>> list, string text) where TLibrary : ILibrary
+        {
+            return list.Keys.Select(key => list.GetValueAndMetadata(key)).SelectMany(x => x.Item1.Search(text).FillProvider((int)x.Item2["Id"]));
+        }
+    }
+
     internal static class LazyExtensionMethods
     {
         public static WebBackendProvider ToWebBackendProvider<T>(this Lazy<T, IDictionary<string, object>> lazy)

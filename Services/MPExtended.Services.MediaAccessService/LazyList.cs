@@ -45,6 +45,14 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
+        public ICollection<TKey> Keys
+        {
+            get
+            {
+                return items.Keys;
+            }
+        }
+
         public TValue GetValue(TKey key)
         {
             if (!items[key].IsValueCreated)
@@ -54,6 +62,11 @@ namespace MPExtended.Services.MediaAccessService
             }
 
             return items[key].Value;
+        }
+
+        public Tuple<TValue, TMetadata> GetValueAndMetadata(TKey key)
+        {
+            return new Tuple<TValue, TMetadata>(GetValue(key), items[key].Metadata);
         }
 
         public int Count()
