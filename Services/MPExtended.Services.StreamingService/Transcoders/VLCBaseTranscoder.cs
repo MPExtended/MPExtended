@@ -45,7 +45,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         protected VLCParameters GenerateVLCParameters(StreamContext context, int position)
         {
-            List<string> arguments = context.Profile.CodecParameters["options"].Split(' ').ToList();
+            List<string> arguments = context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList();
 
             // input
             string inURL = "";
@@ -56,6 +56,12 @@ namespace MPExtended.Services.StreamingService.Transcoders
             else
             {
                 inURL = context.Source.GetPath();
+            }
+
+            // add tv options if specified
+            if (context.IsTv && context.Profile.CodecParameters.ContainsKey("tvOptions") && context.Profile.CodecParameters["tvOptions"].Length > 0)
+            {
+                arguments.AddRange(context.Profile.CodecParameters["tvOptions"].Split(' ').Where(x => x.Length > 0));
             }
 
             // position

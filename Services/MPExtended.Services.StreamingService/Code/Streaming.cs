@@ -119,6 +119,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.StartTime = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
+            stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
 
             lock (Streams)
             {
