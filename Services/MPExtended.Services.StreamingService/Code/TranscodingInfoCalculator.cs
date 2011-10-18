@@ -69,7 +69,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public void NewPercentage(double percentage)
         {
-            if (this.durationMilliseconds == null || this.durationMilliseconds == 0)
+            if (this.durationMilliseconds == 0)
             {
                 Log.Warn("Called NewPercentage({0}) but duration is unknown!", percentage);
                 return;

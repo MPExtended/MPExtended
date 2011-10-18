@@ -171,7 +171,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (streams[identifier].TranscodingInfo != null && streams[identifier].TranscodingInfo.Value != null)
             {
                 int progress = CalculateWatchPosition(identifier);
-                if (progress != null && progress >= 95)
+                if (progress >= 95)
                 {
                     Log.Debug("WatchSharing: seeing {0}% as finished for {1}", progress, identifier);
 
@@ -281,7 +281,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             // calculate progress
             int transcodedValue = 0;
-            if (streams[id].TranscodingInfo != null && streams[id].TranscodingInfo.Value != null && streams[id].TranscodingInfo.Value.CurrentTime != null)
+            if (streams[id].TranscodingInfo != null && streams[id].TranscodingInfo.Value != null)
             {
                 transcodedValue = streams[id].TranscodingInfo.Value.CurrentTime;
             }

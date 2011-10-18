@@ -161,7 +161,7 @@ namespace MPExtended.Services.StreamingService.Units
         {
             var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
             TranscodingInfoCalculator calculator;
-            if (context.MediaInfo.Duration != null && context.MediaInfo.Duration > 0)
+            if (context.MediaInfo.Duration > 0)
             {
                 calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
             }
