@@ -29,7 +29,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         public override void BuildPipeline(StreamContext context, int position)
         {
-            base.BuildPipeline(context, position);
+            base.BuildPipeline(context, position, EncoderUnit.LogStream.StandardOut);
 
             // setup output parsing
             var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
