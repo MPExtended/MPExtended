@@ -28,8 +28,6 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class WatchSharingDebug : IWatchSharingService
     {
-        public IMediaAccessService MAS { get; set; }
-
         public int UpdateInterval
         {
             get
@@ -38,49 +36,49 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public bool StartWatchingMovie(int provider, WebMovieDetailed movie)
+        public bool StartWatchingMovie(WebMovieDetailed movie)
         {
             Log.Debug("WSD: Start watching movie {0}", movie.Title);
             return true;
         }
 
-        public bool WatchingMovie(int provider, WebMovieDetailed movie, int progress)
+        public bool WatchingMovie(WebMovieDetailed movie, int progress)
         {
             Log.Debug("WSD: Watching movie {0} ({1}%)", movie.Title, progress);
             return true;
         }
 
-        public bool FinishMovie(int provider, WebMovieDetailed movie)
+        public bool FinishMovie(WebMovieDetailed movie)
         {
             Log.Debug("WSD: Finished movie {0}", movie.Title);
             return true;
         }
 
-        public bool CancelWatchingMovie(int provider, WebMovieDetailed movie)
+        public bool CancelWatchingMovie(WebMovieDetailed movie)
         {
             Log.Debug("WSD: Canceled movie {0}", movie.Title);
             return true;
         }
 
-        public bool StartWatchingEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Start watching episode {0}, season {1}, show {2}", episode.Title, episode.SeasonId, episode.ShowId);
             return true;
         }
 
-        public bool WatchingEpisode(int provider, WebTVEpisodeDetailed episode, int progress)
+        public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
         {
             Log.Debug("WSD: Watching episode {0} ({1}%)", episode.Title, progress);
             return true;
         }
 
-        public bool FinishEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool FinishEpisode(WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Finished episode {0}", episode.Title);
             return true;
         }
 
-        public bool CancelWatchingEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Canceled episode {0}", episode.Title);
             return true;

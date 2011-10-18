@@ -30,13 +30,13 @@ namespace MPExtended.Services.StreamingService.Trakt
 {
     internal class TraktBridge : IWatchSharingService
     {
-        public IMediaAccessService MAS { get; set; }
-
+        private IMediaAccessService service;
         private string username;
         private string password;
 
-        public TraktBridge(Dictionary<string, string> config)
+        public TraktBridge(IMediaAccessService service, Dictionary<string, string> config)
         {
+            this.service = service;
             this.username = config["username"];
             this.password = config["password"];
         }
@@ -57,17 +57,17 @@ namespace MPExtended.Services.StreamingService.Trakt
             return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
         }
 
-        public bool StartWatchingMovie(int provider, WebMovieDetailed movie)
+        public bool StartWatchingMovie(WebMovieDetailed movie)
         {
             return true;
         }
 
-        public bool WatchingMovie(int provider, WebMovieDetailed movie, int progress)
+        public bool WatchingMovie(WebMovieDetailed movie, int progress)
         {
             return CallMovieAPI(movie, TraktScrobbleState.watching, progress);
         }
 
-        public bool FinishMovie(int provider, WebMovieDetailed movie)
+        public bool FinishMovie(WebMovieDetailed movie)
         {
             return CallMovieAPI(movie, TraktScrobbleState.scrobble, 100);
         }
@@ -104,7 +104,7 @@ namespace MPExtended.Services.StreamingService.Trakt
             }
         }
 
-        public bool CancelWatchingMovie(int provider, WebMovieDetailed movie)
+        public bool CancelWatchingMovie(WebMovieDetailed movie)
         {
             TraktResponse response = TraktAPI.ScrobbleMovie(null, TraktScrobbleState.cancelwatching);
             if (response.Status != "success")
@@ -118,25 +118,25 @@ namespace MPExtended.Services.StreamingService.Trakt
             }
         }
 
-        public bool StartWatchingEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
         {
             return true;
         }
 
-        public bool WatchingEpisode(int provider, WebTVEpisodeDetailed episode, int progress)
+        public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
         {
-            return CallShowAPI(provider, episode, TraktScrobbleState.watching, progress);
+            return CallShowAPI(episode, TraktScrobbleState.watching, progress);
         }
 
-        public bool FinishEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool FinishEpisode(WebTVEpisodeDetailed episode)
         {
-            return CallShowAPI(provider, episode, TraktScrobbleState.scrobble, 100);
+            return CallShowAPI(episode, TraktScrobbleState.scrobble, 100);
         }
 
-        private bool CallShowAPI(int provider, WebTVEpisodeBasic episode, TraktScrobbleState state, int progress)
+        private bool CallShowAPI(WebTVEpisodeBasic episode, TraktScrobbleState state, int progress)
         {
-            WebTVShowDetailed show = MAS.GetTVShowDetailedById(provider, episode.ShowId);
-            WebTVSeasonDetailed season = MAS.GetTVSeasonDetailedById(provider, episode.SeasonId);
+            WebTVShowDetailed show = service.GetTVShowDetailedById(episode.PID, episode.ShowId);
+            WebTVSeasonDetailed season = service.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
 
             TraktEpisodeScrobble data = new TraktEpisodeScrobble()
             {
@@ -170,7 +170,7 @@ namespace MPExtended.Services.StreamingService.Trakt
             }
         }
 
-        public bool CancelWatchingEpisode(int provider, WebTVEpisodeDetailed episode)
+        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
         {
             TraktResponse response = TraktAPI.ScrobbleEpisodeState(null, TraktScrobbleState.cancelwatching);
             if (response.Status != "success")
