@@ -69,6 +69,7 @@
     <Compile Include="Code\Pipeline.cs" />
     <Compile Include="Code\Config.cs" />
     <Compile Include="Code\ReadTrackingStreamWrapper.cs" />
+    <Compile Include="Code\StreamContext.cs" />
     <Compile Include="Code\Streaming.cs" />
     <Compile Include="Code\TranscodingInfoCalculator.cs" />
     <Compile Include="Code\WatchSharing.cs" />

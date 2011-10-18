@@ -38,21 +38,21 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void BuildPipeline(StreamContext context, int position)
         {
             // add input
             bool doInputReader = !Source.IsLocalFile;
             if (doInputReader)
             {
-                pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+                context.Pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             }
 
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
             string mappings = "";
-            if (audioId != null)
+            if (context.AudioTrackId != null)
             {
                 // do audio stream index + 1 because the video stream always has index = 1
-                mappings = String.Format("-map 0:0 -map 0:{0}", MediaInfo.AudioStreams.First(x => x.ID == audioId).Index + 1);
+                mappings = String.Format("-map 0:0 -map 0:{0}", MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index + 1);
             }
 
             // calculate full argument string
@@ -62,7 +62,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
                     position != 0 ? "-ss " + position : "",
-                    outputSize, outputSize.Width, outputSize.Height,
+                    context.OutputSize, context.OutputSize.Width, context.OutputSize.Height,
                     mappings, Profile.CodecParameters["codecParameters"]
                 );
             }
@@ -83,13 +83,14 @@ namespace MPExtended.Services.StreamingService.Transcoders
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
             unit.DebugOutput = false; // change this for debugging
-            pipeline.AddDataUnit(unit, 5);
+            context.Pipeline.AddDataUnit(unit, 5);
 
             // setup output parsing
+            var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
             FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
-            pipeline.AddLogUnit(logunit, 6);
+            context.Pipeline.AddLogUnit(logunit, 6);
         }
     }
 }

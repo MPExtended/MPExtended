@@ -31,38 +31,32 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override string GetStreamURL()
-        {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
-        }
-
-        public override void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public override void BuildPipeline(StreamContext context, int position)
         {
             SetupAssemblyLoader();
 
             // input
-            bool doInputReader = !Source.IsLocalFile;
+            bool doInputReader = !context.Source.IsLocalFile;
             if (doInputReader)
             {
-                pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(pipeline, outputSize, position, audioId, subtitleId);
-            int duration = (int)Math.Round((decimal)MediaInfo.Duration / 1000);
+            VLCParameters vlcparam = GenerateVLCParameters(context, position);
+            int duration = (int)Math.Round((decimal)context.MediaInfo.Duration / 1000);
 
             // add the unit
             VLCManagedEncoder unit;
             if (doInputReader)
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, duration, einfo, VLCManagedEncoder.InputMethod.NamedPipe);
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, context, VLCManagedEncoder.InputMethod.NamedPipe);
             }
             else
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, duration, einfo, VLCManagedEncoder.InputMethod.File, Source.GetPath());
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, context, VLCManagedEncoder.InputMethod.File, context.Source.GetPath());
             }
-            unit.Media = MediaInfo;
-            pipeline.AddDataUnit(unit, 5);
+            context.Pipeline.AddDataUnit(unit, 5);
         }
 
         private void SetupAssemblyLoader()

@@ -38,8 +38,6 @@ namespace MPExtended.Services.StreamingService.Units
             NamedPipe
         }
 
-        public WebMediaInfo Media { get; set; }
-
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -49,28 +47,26 @@ namespace MPExtended.Services.StreamingService.Units
 
         private string sout;
         private string[] arguments;
+        private int startPos; // in seconds
+        private StreamContext context;
         private InputMethod inputMethod;
         private string inputPath = null;
-        private int startPos; // in seconds
-        private int duration; // in seconds
-        private VLCTranscoder transcoder;
-        private Reference<WebTranscodingInfo> info;
+        private VLCTranscoder transcoder; // VLCNative object, not ITranscoder
         private Thread infoReader;
 
         private NamedPipe transcoderInputStream;
 
-        public VLCManagedEncoder(string sout, string[] arguments, int startPos, int duration, Reference<WebTranscodingInfo> info, InputMethod inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, int startPos, StreamContext context, InputMethod inputMethod)
         {
             this.sout = sout;
             this.arguments = arguments;
-            this.info = info;
             this.inputMethod = inputMethod;
             this.startPos = startPos;
-            this.duration = duration;
+            this.context = context;
         }
 
-        public VLCManagedEncoder(string sout, string[] arguments, int startPos, int duration, Reference<WebTranscodingInfo> info, InputMethod inputMethod, string input)
-            : this(sout, arguments, startPos, duration, info, inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, int startPos, StreamContext context, InputMethod inputMethod, string input)
+            : this(sout, arguments, startPos, context, inputMethod)
         {
             this.inputPath = input;
         }
@@ -110,9 +106,9 @@ namespace MPExtended.Services.StreamingService.Units
             // start transcoding
             transcoder.StartTranscoding();
             // doesn't work
-            //transcoder.Seek(startPos * 1.0 / duration);
-            info.Value.Supported = true;
+            //transcoder.Seek(startPos * 1.0 / context.MediaInfo.Duration * 1000);
 
+            context.TranscodingInfo.Supported = true;
             return true;
         }
 
@@ -163,14 +159,15 @@ namespace MPExtended.Services.StreamingService.Units
 
         private void InfoThread(object passedPosition)
         {
+            var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
             TranscodingInfoCalculator calculator;
-            if (Media != null && Media.Duration > 0)
+            if (context.MediaInfo.Duration != null && context.MediaInfo.Duration > 0)
             {
                 calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
             }
             else
             {
-                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, Media.Duration);
+                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
             }
 
             while (true)
@@ -186,7 +183,7 @@ namespace MPExtended.Services.StreamingService.Units
                     {
                         calculator.NewPercentage(transcoder.GetPosition());
                     }
-                    calculator.SetStats(info);
+                    calculator.SetStats(einfo);
                 }
                 catch (ThreadAbortException)
                 {

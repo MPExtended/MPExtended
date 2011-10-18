@@ -30,28 +30,23 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override string GetStreamURL()
-        {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
-        }
-
-        public override void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public override void BuildPipeline(StreamContext context, int position)
         {
             // VLC doesn't support output parsing, but subclasses do
-            AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId, EncoderUnit.LogStream.None);
+            BuildPipeline(context, position, EncoderUnit.LogStream.None);
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId, EncoderUnit.LogStream output)
+        public void BuildPipeline(StreamContext context, int position, EncoderUnit.LogStream log)
         {            
             // input
-            bool doInputReader = !Source.IsLocalFile;
+            bool doInputReader = !context.Source.IsLocalFile;
             if(doInputReader)
             {
-                pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(pipeline, outputSize, position, audioId, subtitleId);
+            VLCParameters vlcparam = GenerateVLCParameters(context, position);
 
             // prepare vlc arguments
             string path = @"\#OUT#";
@@ -63,9 +58,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             EncoderUnit.TransportMethod outputMethod = readOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
             // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).
-            EncoderUnit unit = new EncoderUnit(Profile.CodecParameters["path"], arguments, input, outputMethod, output);
+            EncoderUnit unit = new EncoderUnit(context.Profile.CodecParameters["path"], arguments, input, outputMethod, log);
             unit.DebugOutput = false; // change this for debugging
-            pipeline.AddDataUnit(unit, 5);
+            context.Pipeline.AddDataUnit(unit, 5);
         }
 
         protected virtual string GenerateArguments(string input, string sout, string args)

@@ -36,7 +36,6 @@ namespace MPExtended.Services.StreamingService.Code
         {
             // For now only support files in current assembly
             ITranscoder inst = (ITranscoder)Activator.CreateInstance(Type.GetType(TranscoderImplementationClass));
-            inst.Profile = this;
             return inst;
         }
 

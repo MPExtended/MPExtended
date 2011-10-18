@@ -37,11 +37,11 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void BuildPipeline(StreamContext context, int position)
         {
             // we ignore our arguments :)
-            einfo.Value.Supported = false;
-            pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+            context.TranscodingInfo.Supported = false;
+            context.Pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
             return;
         }
     }
