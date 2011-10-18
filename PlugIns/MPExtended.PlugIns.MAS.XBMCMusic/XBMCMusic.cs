@@ -24,7 +24,6 @@ using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 #if false
 namespace MPExtended.PlugIns.MAS.XBMCMusic

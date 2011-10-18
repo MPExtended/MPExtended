@@ -28,10 +28,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMediaServiceDescription GetServiceDescription();
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBackendConfiguration GetBackendConfiguration();
-
-        [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]        
         WebMediaItem GetMediaItem(int provider, WebMediaType type, string id);
 

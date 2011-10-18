@@ -151,18 +151,6 @@ namespace MPExtended.Services.MediaAccessService
                     throw new ArgumentException();
             }
         }
-
-        public WebBackendConfiguration GetBackendConfiguration()
-        {
-            return new WebBackendConfiguration()
-            {
-                AvailableFileSystemLibraries = FileSystemLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableMovieLibraries = MovieLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableMusicLibraries = MusicLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailablePictureLibraries = PictureLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableTvShowLibraries = TVShowLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-            };
-        }
         #endregion
 
         #region General
@@ -176,7 +164,13 @@ namespace MPExtended.Services.MediaAccessService
                 TvShowsApiVersion = TVSHOWS_API,
                 FilesystemApiVersion = FILESYSTEM_API,
 
-                ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
+                ServiceVersion = VersionUtil.GetVersionName(),
+
+                AvailableFileSystemLibraries = FileSystemLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableMovieLibraries = MovieLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableMusicLibraries = MusicLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailablePictureLibraries = PictureLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableTvShowLibraries = TVShowLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
             };
         }
 

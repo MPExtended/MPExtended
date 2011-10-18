@@ -14,5 +14,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public int FilesystemApiVersion { get; set; }
 
         public string ServiceVersion { get; set; }
+
+        public List<WebBackendProvider> AvailableMovieLibraries { get; set; }
+        public List<WebBackendProvider> AvailableMusicLibraries { get; set; }
+        public List<WebBackendProvider> AvailablePictureLibraries { get; set; }
+        public List<WebBackendProvider> AvailableTvShowLibraries { get; set; }
+        public List<WebBackendProvider> AvailableFileSystemLibraries { get; set; }
     }
 }
