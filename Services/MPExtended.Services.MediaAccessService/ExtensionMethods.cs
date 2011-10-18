@@ -31,7 +31,7 @@ namespace MPExtended.Services.MediaAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        // Missing in IList for some reason, but let's just implement it for all IEnumerables
+        // Take a range from the list for returning
         public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
         {
             int count = end - start + 1;
@@ -43,6 +43,28 @@ namespace MPExtended.Services.MediaAccessService
             return source.Skip(start).Take(count);
         }
 
+        // Some special filter methods
+        public static IEnumerable<T> FilterGenre<T>(this IEnumerable<T> list, string genre) where T : IGenreSortable
+        {
+            if (genre != null)
+                return Where(list, x => ((IGenreSortable)x).Genres.Contains(genre));
+
+            return list;
+        }
+
+        public static IEnumerable<T> FilterCategory<T>(this IEnumerable<T> list, string category) where T : ICategorySortable
+        {
+            if (category != null)
+                return Where(list, x => ((ICategorySortable)x).UserDefinedCategories.Contains(category));
+
+            return list;
+        }
+
+        public static IEnumerable<T> FilterGenreCategory<T>(this IEnumerable<T> list, string genre, string category) where T : IGenreSortable, ICategorySortable
+        {
+            return FilterCategory(FilterGenre(list, genre), category);
+        }
+
         // Take advantage of lazy queries
         public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Expression<Func<T, bool>> predicate)
         {
@@ -51,7 +73,6 @@ namespace MPExtended.Services.MediaAccessService
             return Enumerable.Where(source, predicate.Compile());
         }
 
-        // Take advantage of lazy queries
         public static int Count<T>(this IEnumerable<T> source)
         {
             if (source is ILazyQuery<T>)
