@@ -32,49 +32,50 @@ namespace MPExtended.Libraries.SQLitePlugin
         private SQLiteParameter[] parameters;
         private IEnumerable<SQLFieldMapping> mapping;
         private ObjectFactory<T> factory;
-
         private Delegates<T>.FinalizeObject finalize;
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqltext, descending
         private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
         private Tuple<int, int> range = null;
 
-        public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping)
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.CreateMethod createmethod, Delegates<T>.FinalizeObject finalize)
         {
             this.db = db;
             this.inputQuery = sql;
             this.mapping = mapping;
             this.parameters = new SQLiteParameter[] { };
-            this.factory = ObjectFactory<T>.FromCreate(new AutoFiller<T>(mapping).AutoCreate);
-        }
-
-        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping)
-            : this(db, sql, mapping)
-        {
-            this.parameters = parameters;
-        }
-
-        public LazyQuery(Database db, string sql, SQLiteParameter parameter, IEnumerable<SQLFieldMapping> mapping)
-            : this(db, sql, mapping)
-        {
-            this.parameters = new SQLiteParameter[] { parameter };
-        }
-
-        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
-            : this(db, sql, parameters, mapping)
-        {
+            this.factory = ObjectFactory<T>.FromCreate(createmethod);
             this.finalize = finalize;
         }
 
-        public LazyQuery(Database db, string sql, SQLiteParameter parameter, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
-            : this(db, sql, new SQLiteParameter[] { parameter }, mapping, finalize)
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.CreateMethod createmethod)
+            : this(db, sql, parameters, mapping, createmethod, null)
+        {
+        }
+
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
+            : this(db, sql, parameters, mapping, new AutoFiller<T>(mapping).AutoCreate, finalize)
+        {
+        }
+
+        public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.CreateMethod createmethod)
+            : this(db, sql, new SQLiteParameter[] { }, mapping, createmethod)
         {
         }
 
         public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.FinalizeObject finalize)
-            : this(db, sql, mapping)
+            : this(db, sql, new SQLiteParameter[] { }, mapping, finalize)
         {
-            this.finalize = finalize;
+        }
+
+        public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping)
+            : this(db, sql, parameters, mapping, (Delegates<T>.FinalizeObject)null)
+        {
+        }
+
+        public LazyQuery(Database db, string sql, IEnumerable<SQLFieldMapping> mapping)
+            : this(db, sql, mapping, (Delegates<T>.FinalizeObject)null)
+        {
         }
 
         IEnumerator IEnumerable.GetEnumerator()

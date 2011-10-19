@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
-    internal class AutoFiller<T> where T : new()
+    public class AutoFiller<T> where T : new()
     {
         private IEnumerable<SQLFieldMapping> mapping;
         private Dictionary<SQLFieldMapping, int> autofillMapping;
