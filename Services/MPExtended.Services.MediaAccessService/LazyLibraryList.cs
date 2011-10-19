@@ -27,6 +27,7 @@ namespace MPExtended.Services.MediaAccessService
     internal class LazyLibraryList<T> : IEnumerable<T> where T : ILibrary
     {
         private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
+        private IDictionary<int, bool> didInitialize = new Dictionary<int, bool>();
 
         public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict) 
         {
@@ -62,12 +63,13 @@ namespace MPExtended.Services.MediaAccessService
                 return default(T);
             }
 
-            lock (items)
+            lock (didInitialize)
             {
-                if (!items[key].IsValueCreated)
+                if (!didInitialize.ContainsKey(key) || !didInitialize[key]) 
                 {
                     ILibrary item = (ILibrary)(items[key].Value);
                     item.Init();
+                    didInitialize[key] = true;
                 }
             }
 
