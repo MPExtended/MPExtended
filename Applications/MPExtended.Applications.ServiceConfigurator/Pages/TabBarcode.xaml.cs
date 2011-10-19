@@ -35,7 +35,6 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
-using System.Collections.Generic;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

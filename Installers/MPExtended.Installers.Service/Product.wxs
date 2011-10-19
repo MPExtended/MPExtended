@@ -25,7 +25,7 @@
     Language="1033"
     Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
     Manufacturer="MPExtended">
-    <Package Manufacturer="MPExtended" InstallerVersion="200" Compressed="yes" />
+    <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
     <!-- Project general -->
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />

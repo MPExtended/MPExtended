@@ -46,6 +46,9 @@
         
         <Component Id="Component_Streaming_VLC" Guid="867bac19-d289-4893-875d-6f3bff560b5e">
           <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe" />
+          <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.pdb" />
+          <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCManaged.dll" />
+          <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCManaged.pdb" />
 
           <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\AUTHORS.txt" />
           <File Source="$(var.SolutionDir)\Libraries\Streaming\vlc-1.1.11\COPYING.txt" />

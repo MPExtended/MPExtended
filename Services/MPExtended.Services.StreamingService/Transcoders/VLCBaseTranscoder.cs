@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Units;
@@ -28,9 +29,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     abstract class VLCBaseTranscoder : ITranscoder
     {
-        public TranscoderProfile Profile { get; set; }
-        public MediaSource Source { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
         protected class VLCParameters
@@ -40,33 +38,46 @@ namespace MPExtended.Services.StreamingService.Transcoders
             public string[] Arguments { get; set; }
         }
 
-        protected VLCParameters GenerateVLCParameters(Pipeline pipeline, WebResolution outputSize, int position, int? audioId, int? subtitleId)
+        public virtual string GetStreamURL()
         {
-            List<string> arguments = Profile.CodecParameters["options"].Split(' ').ToList();
+            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+        }
+
+        protected VLCParameters GenerateVLCParameters(StreamContext context, int position)
+        {
+            List<string> arguments = context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList();
 
             // input
             string inURL = "";
-            if (pipeline.GetDataUnit(1) != null && pipeline.GetDataUnit(1) is InputUnit)
+            if (context.Pipeline.GetDataUnit(1) != null && context.Pipeline.GetDataUnit(1) is InputUnit)
             {
                 inURL = "stream://#IN#";
             }
             else
             {
-                inURL = Source.GetPath();
+                inURL = context.Source.GetPath();
+            }
+
+            // add tv options if specified
+            if (context.IsTv && context.Profile.CodecParameters.ContainsKey("tvOptions") && context.Profile.CodecParameters["tvOptions"].Length > 0)
+            {
+                arguments.AddRange(context.Profile.CodecParameters["tvOptions"].Split(' ').Where(x => x.Length > 0));
             }
 
             // position
             if (position > 0)
             {
-                // TODO: this breaks the android player
-                //arguments.Add("--input-fast-seek");
-                //arguments.Add("--start-time=" + position);
+                // FIXME: temporary allow disabling it as it breaks some profiles
+                if (!context.Profile.CodecParameters.ContainsKey("disableSeeking") || context.Profile.CodecParameters["disableSeeking"] == "no")
+                {
+                    arguments.Add("--start-time=" + position);
+                }
             }
 
             // audio track 
-            if (audioId != null)
+            if (context.AudioTrackId != null)
             {
-                arguments.Add("--audio-track=" + MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().Index);
+                arguments.Add("--audio-track=" + context.MediaInfo.AudioStreams.Where(x => x.ID == context.AudioTrackId).First().Index);
             }
             else
             {
@@ -75,13 +86,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // subtitle selection
             string subtitleTranscoder;
-            if (subtitleId == null)
+            if (context.SubtitleTrackId == null)
             {
                 subtitleTranscoder = "scodec=none";
             } 
             else
             {
-                WebSubtitleStream stream = MediaInfo.SubtitleStreams.First(x => x.ID == subtitleId);
+                WebSubtitleStream stream = context.MediaInfo.SubtitleStreams.First(x => x.ID == context.SubtitleTrackId);
                 if (stream.Filename != null)
                 {
                     arguments.Add("--sub-file=" + stream.Filename);
@@ -95,8 +106,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // create parameters
             string sout =
-                "#transcode{" + Profile.CodecParameters["encoder"] + ",width=" + outputSize.Width + ",height=" + outputSize.Height + "," + subtitleTranscoder + "}"
-                + Profile.CodecParameters["muxer"];
+                "#transcode{" + context.Profile.CodecParameters["encoder"] + 
+                ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height + "," + subtitleTranscoder + "}" +
+                context.Profile.CodecParameters["muxer"];
 
             // return
             return new VLCParameters()
@@ -107,8 +119,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
             };
         }
 
-
-        public abstract void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId);
-        public abstract string GetStreamURL();
+        public abstract void BuildPipeline(StreamContext context, int position);
     }
 }

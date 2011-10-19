@@ -30,27 +30,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal abstract class HTTPLiveTranscoderWrapper : ITranscoder, ICustomActionTranscoder
     {
-        public TranscoderProfile Profile
-        {
-            get { return obj.Profile; }
-            set { obj.Profile = value; }
-        }
-        public MediaSource Source
-        {
-            get { return obj.Source; }
-            set { obj.Source = value; }
-        }
-        public WebMediaInfo MediaInfo
-        {
-            get { return obj.MediaInfo; }
-            set { obj.MediaInfo = value; }
-        }
         public string Identifier
         {
             get { return obj.Identifier; }
             set { obj.Identifier = value; }
         }
 
+        private StreamContext context;
         private ITranscoder obj;
         private HTTPLiveStreamingUnit segmenterUnit;
 
@@ -64,14 +50,15 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?parameters=&action=playlist&identifier=" + Identifier;
         }
 
-        public void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId)
+        public void BuildPipeline(StreamContext context, int position)
         {
-            obj.AlterPipeline(pipeline, outputSize, einfo, position, audioId, subtitleId);
+            this.context = context;
+            obj.BuildPipeline(context, position);
 
             segmenterUnit = new HTTPLiveStreamingUnit(Identifier);
             segmenterUnit.DebugOutput = false; // change for debugging
 
-            pipeline.AddDataUnit(segmenterUnit, 20);
+            context.Pipeline.AddDataUnit(segmenterUnit, 20);
         }
 
         public Stream DoAction(string action, string param)
@@ -79,7 +66,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             switch (action)
             {
                 case "segment":
-                    WebOperationContext.Current.OutgoingResponse.ContentType = Profile.MIME;
+                    WebOperationContext.Current.OutgoingResponse.ContentType = context.Profile.MIME;
                     string segmentPath = Path.Combine(segmenterUnit.TemporaryDirectory, Path.GetFileName(param));
                     if (!File.Exists(segmentPath))
                     {

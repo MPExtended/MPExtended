@@ -47,16 +47,11 @@ namespace MPExtended.Services.StreamingService.Code
             public string Identifier { get; set; }
             public string ClientDescription { get; set; }
             public DateTime StartTime { get; set; } // date the stream started, for cleanup
-            public TranscoderProfile Profile { get; set; }
-
-            public MediaSource Source { get; set; }
-            public Resolution OutputSize { get; set; }
 
             public ITranscoder Transcoder { get; set; }
-            public Pipeline Pipeline { get; set; }
-            public WebTranscodingInfo TranscodingInfo { get; set; }
-
             public ReadTrackingStreamWrapper OutputStream { get; set; }
+
+            public StreamContext Context { get; set; }
         }
 
         public Streaming()
@@ -72,6 +67,10 @@ namespace MPExtended.Services.StreamingService.Code
             try
             {
                 timeoutWorker.Abort();
+                foreach (string identifier in Streams.Keys)
+                {
+                    EndStream(identifier);
+                }
             }
             catch (Exception)
             {
@@ -117,8 +116,10 @@ namespace MPExtended.Services.StreamingService.Code
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
-            stream.Source = source;
             stream.StartTime = DateTime.Now;
+            stream.Context = new StreamContext();
+            stream.Context.Source = source;
+            stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
 
             lock (Streams)
             {
@@ -147,81 +148,68 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier]) 
                 {
+                    // initialize stream and context
                     ActiveStream stream = Streams[identifier];
-                    stream.Profile = profile;
-                    stream.OutputSize = CalculateSize(stream.Profile, stream.Source);
-                    Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.TranscodingInfo, x => { stream.TranscodingInfo = x; });
-                    Log.Trace("Using {0} as output size for stream {1}", stream.OutputSize, identifier);
-
-                    // get media info
-                    WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(stream.Source);
-
-                    // share it
-                    sharing.StartStream(stream.Source, infoRef, position);
+                    stream.Context.Profile = profile;
+                    stream.Context.MediaInfo = MediaInfoWrapper.GetMediaInfo(stream.Context.Source);
+                    stream.Context.OutputSize = CalculateSize(stream.Context.Profile, stream.Context.Source);
+                    Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
+                    Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
+                    sharing.StartStream(stream.Context.Source, infoRef, position);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
-                    stream.Transcoder.Source = stream.Source;
-                    stream.Transcoder.MediaInfo = info;
-                    stream.Transcoder.Identifier = identifier;
-
-                    // get transcoder
-                    stream.Transcoder = profile.GetTranscoder();
-                    stream.Transcoder.Source = stream.Source;
-                    stream.Transcoder.MediaInfo = info;
                     stream.Transcoder.Identifier = identifier;
 
                     // get audio and subtitle id
-                    int? defAudioId = null;
-                    if (info.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
+                    if (stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
                     {
-                        defAudioId = info.AudioStreams.Where(x => x.ID == audioId).First().ID;
+                        stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().ID;
                     }
                     else if (audioId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Config.GetDefaultStream("audio");
-                        if (info.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
-                            defAudioId = info.AudioStreams.First(x => x.Language == preferredLanguage).ID;
+                            stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage != "none" && info.AudioStreams.Count() > 0)
+                        else if (preferredLanguage != "none" && stream.Context.MediaInfo.AudioStreams.Count() > 0)
                         {
-                            defAudioId = info.AudioStreams.First().ID;
+                            stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First().ID;
                         }
                     }
 
-                    int? defSubtitleId = null;
-                    if (info.SubtitleStreams.Where(x => x.ID == subtitleId).Count() > 0)
+                    if (stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).Count() > 0)
                     {
-                        defSubtitleId = info.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
+                        stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
                     }
                     else if (subtitleId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Config.GetDefaultStream("subtitle");
-                        if (info.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
-                            defSubtitleId = info.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
+                            stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage == "external" && info.SubtitleStreams.Count(x => x.Filename != null) > 0)
+                        else if (preferredLanguage == "external" && stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Filename != null) > 0)
                         {
-                            defSubtitleId = info.SubtitleStreams.First(x => x.Filename != null).ID;
+                            stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Filename != null).ID;
                         }
-                        else if (preferredLanguage == "first" && info.SubtitleStreams.Count() > 0)
+                        else if (preferredLanguage == "first" && stream.Context.MediaInfo.SubtitleStreams.Count() > 0)
                         {
-                            defSubtitleId = info.SubtitleStreams.First().ID;
+                            stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First().ID;
                         }
                     }
-                    Log.Debug("Final stream selection: audioId={0}, subtitleId={1}", defAudioId, defSubtitleId);
+                    Log.Debug("Final stream selection: audioId={0}, subtitleId={1}", stream.Context.AudioTrackId, stream.Context.SubtitleTrackId);
 
                     // build the pipeline
-                    stream.Pipeline = new Pipeline();
-                    stream.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.AlterPipeline(stream.Pipeline, stream.OutputSize, infoRef, position, defAudioId, defSubtitleId);
+                    stream.Context.Pipeline = new Pipeline();
+                    stream.Context.TranscodingInfo = new WebTranscodingInfo();
+                    stream.Transcoder.BuildPipeline(stream.Context, position);
 
                     // start the processes and retrieve output stream
-                    stream.Pipeline.Assemble();
-                    stream.Pipeline.Start();
-                    Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(Streams[identifier].Pipeline.GetFinalStream());
+                    stream.Context.Pipeline.Assemble();
+                    stream.Context.Pipeline.Start();
+                    Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(Streams[identifier].Context.Pipeline.GetFinalStream());
 
                     Log.Info("Started stream with identifier " + identifier);
                     return stream.Transcoder.GetStreamURL();
@@ -238,7 +226,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             lock (Streams[identifier])
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Profile.MIME;
+                WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Context.Profile.MIME;
                 return Streams[identifier].OutputStream;
             }
         }
@@ -256,7 +244,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public void EndStream(string identifier)
         {
-            if (!Streams.ContainsKey(identifier) || Streams[identifier] == null || Streams[identifier].Pipeline == null || !Streams[identifier].Pipeline.IsStarted)
+            if (!Streams.ContainsKey(identifier) || Streams[identifier] == null || Streams[identifier].Context.Pipeline == null || !Streams[identifier].Context.Pipeline.IsStarted)
                 return;
 
             try
@@ -264,9 +252,9 @@ namespace MPExtended.Services.StreamingService.Code
                 lock (Streams[identifier])
                 {
                     Log.Debug("Stopping stream with identifier " + identifier);
-                    sharing.EndStream(Streams[identifier].Source);
-                    Streams[identifier].Pipeline.Stop();
-                    Streams[identifier].Pipeline = null;
+                    sharing.EndStream(Streams[identifier].Context.Source);
+                    Streams[identifier].Context.Pipeline.Stop();
+                    Streams[identifier].Context.Pipeline = null;
                 }
             }
             catch (Exception ex)
@@ -291,19 +279,19 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 ClientDescription = s.ClientDescription,
                 Identifier = s.Identifier,
-                SourceType = s.Source.MediaType,
-                SourceId = s.Source.Id,
-                Profile = s.Profile != null ? s.Profile.Name : null,
-                TranscodingInfo = s.TranscodingInfo != null ? s.TranscodingInfo : null,
+                SourceType = s.Context.Source.MediaType,
+                SourceId = s.Context.Source.Id,
+                Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
+                TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
                 StartTime = s.StartTime,
-                DisplayName = s.Source.GetDisplayName()
+                DisplayName = s.Context.Source.GetDisplayName()
             }).ToList();
         }
 
         public WebTranscodingInfo GetEncodingInfo(string identifier) 
         {
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
-                return Streams[identifier].TranscodingInfo;
+                return Streams[identifier].Context.TranscodingInfo;
 
             Log.Warn("Requested transcoding info for unknown identifier {0}", identifier);
             return null;

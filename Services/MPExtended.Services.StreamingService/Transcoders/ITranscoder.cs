@@ -26,13 +26,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal interface ITranscoder
     {
-        TranscoderProfile Profile { get; set; }
-        MediaSource Source { get; set; }
-        WebMediaInfo MediaInfo { get; set; }
         string Identifier { get; set; }
 
         // position is in seconds
-        void AlterPipeline(Pipeline pipeline, WebResolution outputSize, Reference<WebTranscodingInfo> einfo, int position, int? audioId, int? subtitleId);
+        void BuildPipeline(StreamContext context, int position);
         string GetStreamURL();
     }
 }

@@ -192,7 +192,12 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
-            return new List<string>() { (string)ReadString(reader, idx) };
+            string data = (string)ReadString(reader, idx);
+            if (data.Trim().Length == 0)
+            {
+                return new List<string>();
+            }
+            return new List<string>() { data };
         }
     }
 }

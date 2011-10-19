@@ -143,7 +143,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                     subCategories.Add(EncodeTo64(folder.FullName), new WebCategory() { Title = folder.Name, Id = EncodeTo64(folder.FullName) });
                 }
             }            }
-            catch (Exception ex)
+            catch (Exception)
             {
                 data.Log.Warn("exception in GetSubCategoriesBasicById");
             }
@@ -184,7 +184,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                     dirSearchWebPictureBasic(strDirectory);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 data.Log.Warn("exception in recursiv picture lookup");
             }
@@ -208,7 +208,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                     dirSearchWebPictureDetailed(strDirectory);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 data.Log.Warn("exception in recursiv picture lookup");
             }

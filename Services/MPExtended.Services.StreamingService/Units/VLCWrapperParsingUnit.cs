@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,14 +32,16 @@ namespace MPExtended.Services.StreamingService.Units
     {
         public Stream InputStream { get; set; }
         private Reference<WebTranscodingInfo> data;
+        private WebMediaInfo info;
         private Thread processThread;
         private bool vlcIsStarted;
         private int position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, int position) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, int position) 
         {
             data = save;
             this.position = position;
+            this.info = info;
         }
 
         public bool Setup() 
@@ -71,7 +74,7 @@ namespace MPExtended.Services.StreamingService.Units
         private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, bool logProgress, int position)
         {
             StreamReader reader = new StreamReader(stdoutStream);
-            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position * 1000, 25, 500); //VLCWrapper prints twice a second
+            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position * 1000, 25, 500, info.Duration); //VLCWrapper prints twice a second
 
             bool aborted = false;
             string line;
@@ -110,7 +113,15 @@ namespace MPExtended.Services.StreamingService.Units
                     if(line.StartsWith("P")) 
                     {
                         int msecs = Int32.Parse(line.Substring(2, line.IndexOf(",") - 2)) / 1000;
-                        calculator.NewData(msecs);
+                        if (msecs != 0)
+                        {
+                            calculator.NewTime(msecs);
+                        }
+                        else
+                        {
+                            double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
+                            calculator.NewPercentage(percentage);
+                        }
                         calculator.SetStats(data);
                         continue;
                     }

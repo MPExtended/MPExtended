@@ -128,7 +128,7 @@
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
-      <name>VLC Pure</name>
+      <name>VLC Pure Test</name>
       <description>VLC test profile</description>
       <bandwidth>1024</bandwidth>
       <target>android</target>
@@ -139,14 +139,16 @@
       <maxOutputHeight>600</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLC">
+        <disableSeeking>yes</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\vlc.exe</path>
         <options>--ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
         <encoder>vcodec=h264,vb=512,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,audio-sync,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
-      <name>VLC Test</name>
+      <name>VLC Wrapper Test</name>
       <description>VLC test profile</description>
       <bandwidth>1024</bandwidth>
       <target>android</target>
@@ -157,8 +159,10 @@
       <maxOutputHeight>600</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>yes</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
         <encoder>vcodec=h264,vb=512,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,audio-sync,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -175,8 +179,30 @@
       <maxOutputHeight>600</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCManaged">
+        <disableSeeking>yes</disableSeeking>
         <options>--ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
         <encoder>vcodec=h264,vb=512,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,audio-sync,channels=2,venc=x264{profile=baseline}</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>VLC Long Profile Wrapper Test</name>
+      <description>VLC test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>android</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
+        <encoder>vcodec=h264,vb=512,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,channels=2,audio-sync,venc=x264{profile=baseline,level=3,keyint=50,bframes=0,no-cabac,ref=1,no-interlaced,vbv-maxrate=512,vbv-bufsize=256,aq-mode=0,no-mbtree,partitions=none,no-weightb,weightp=0,me=dia,subme=0,no-mixed-refs,no-8x8dct,trellis=0}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
@@ -209,26 +235,9 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLive">
         <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--no-ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
         <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
-      </transcoderConfiguration>
-    </transcoder>
-    <transcoder>
-      <name>VLC RTSP Test</name>
-      <description>VLC RTSP test profile</description>
-      <bandwidth>1024</bandwidth>
-      <target>android</target>
-      <transport>http</transport>
-      <mime>video/MP2T</mime>
-      <videoStream>true</videoStream>
-      <maxOutputWidth>800</maxOutputWidth>
-      <maxOutputHeight>600</maxOutputHeight>
-
-      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP">
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--no-ffmpeg-hw</options>
-        <encoder>vcodec=h264,vb=768,acodec=mp4a,channels=2,venc=x264{profile=baseline}</encoder>
-        <muxer>:rtp{sdp=rtsp://:5544/stream.ts,mux=ts}</muxer>
       </transcoderConfiguration>
     </transcoder>
   </transcoders>
