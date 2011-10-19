@@ -19,25 +19,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
-    internal class LazyList<TKey, TValue, TMetadata> : IEnumerable<TValue> where TValue : ILibrary
+    internal class LazyLibraryList<T> : IEnumerable<T> where T : ILibrary
     {
-        private IDictionary<TKey, Lazy<TValue, TMetadata>> items = new Dictionary<TKey, Lazy<TValue, TMetadata>>();
+        private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
 
-        public LazyList(IDictionary<TKey, Lazy<TValue, TMetadata>> dict) 
+        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict) 
         {
             items = dict;
         }
 
-        public void Add(TKey key, Lazy<TValue, TMetadata> value) 
+        public void Add(int key, Lazy<T, IDictionary<string, object>> value) 
         {
             items[key] = value;
         }
 
-        public TValue this[TKey key]
+        public T this[int key]
         {
             get
             {
@@ -45,7 +46,7 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        public ICollection<TKey> Keys
+        public ICollection<int> Keys
         {
             get
             {
@@ -53,20 +54,29 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        public TValue GetValue(TKey key)
+        public T GetValue(int key)
         {
-            if (!items[key].IsValueCreated)
+            if (!items.ContainsKey(key))
             {
-                ILibrary item = (ILibrary)items[key].Value;
-                item.Init();
+                Log.Error("Tried to get library for unknown id {0}", key);
+                return default(T);
+            }
+
+            lock (items)
+            {
+                if (!items[key].IsValueCreated)
+                {
+                    ILibrary item = (ILibrary)(items[key].Value);
+                    item.Init();
+                }
             }
 
             return items[key].Value;
         }
 
-        public Tuple<TValue, TMetadata> GetValueAndMetadata(TKey key)
+        public Tuple<T, IDictionary<string, object>> GetValueAndMetadata(int key)
         {
-            return new Tuple<TValue, TMetadata>(GetValue(key), items[key].Metadata);
+            return new Tuple<T, IDictionary<string, object>>(GetValue(key), items[key].Metadata);
         }
 
         public int Count()
@@ -74,9 +84,9 @@ namespace MPExtended.Services.MediaAccessService
             return items.Count;
         }
 
-        public IEnumerator<TValue> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            return items.Select(x => x.Value.Value).GetEnumerator();
+            return items.Select(x => GetValue(x.Key)).GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

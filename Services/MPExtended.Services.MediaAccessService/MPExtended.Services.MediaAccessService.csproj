@@ -64,7 +64,7 @@
     </Compile>
     <Compile Include="ConcreteWebMediaItem.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="LazyList.cs" />
+    <Compile Include="LazyLibraryList.cs" />
     <Compile Include="LogProxy.cs" />
     <Compile Include="MediaAccessService.cs" />
     <Compile Include="PluginData.cs" />

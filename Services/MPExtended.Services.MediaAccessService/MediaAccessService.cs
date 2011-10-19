@@ -60,11 +60,11 @@ namespace MPExtended.Services.MediaAccessService
         [ImportMany]
         private Lazy<IFileSystemLibrary, IDictionary<string, object>>[] FileSystemLibrariesLoaded { get; set; }
 
-        private LazyList<int, IMovieLibrary, IDictionary<string, object>> MovieLibraries { get; set; }
-        private LazyList<int, ITVShowLibrary, IDictionary<string, object>> TVShowLibraries { get; set; }
-        private LazyList<int, IMusicLibrary, IDictionary<string, object>> MusicLibraries { get; set; }
-        private LazyList<int, IPictureLibrary, IDictionary<string, object>> PictureLibraries { get; set; }
-        private LazyList<int, IFileSystemLibrary, IDictionary<string, object>> FileSystemLibraries { get; set; }
+        private LazyLibraryList<IMovieLibrary> MovieLibraries { get; set; }
+        private LazyLibraryList<ITVShowLibrary> TVShowLibraries { get; set; }
+        private LazyLibraryList<IMusicLibrary> MusicLibraries { get; set; }
+        private LazyLibraryList<IPictureLibrary> PictureLibraries { get; set; }
+        private LazyLibraryList<IFileSystemLibrary> FileSystemLibraries { get; set; }
 
         public MediaAccessService()
         {
@@ -75,11 +75,11 @@ namespace MPExtended.Services.MediaAccessService
 
             try
             {
-                MovieLibraries = new LazyList<int, IMovieLibrary, IDictionary<string, object>>(MovieLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                MusicLibraries = new LazyList<int, IMusicLibrary, IDictionary<string, object>>(MusicLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                TVShowLibraries = new LazyList<int, ITVShowLibrary, IDictionary<string, object>>(TVShowLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                PictureLibraries = new LazyList<int, IPictureLibrary, IDictionary<string, object>>(PictureLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                FileSystemLibraries = new LazyList<int, IFileSystemLibrary, IDictionary<string, object>>(FileSystemLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
+                MovieLibraries = new LazyLibraryList<IMovieLibrary>(MovieLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
+                MusicLibraries = new LazyLibraryList< IMusicLibrary>(MusicLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
+                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(TVShowLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
+                PictureLibraries = new LazyLibraryList<IPictureLibrary>(PictureLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
+                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(FileSystemLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
             }
             catch (Exception ex)
             {
@@ -120,6 +120,7 @@ namespace MPExtended.Services.MediaAccessService
                     .Union(PictureLibrariesLoaded.Select(x => x.Metadata));
                 var map = metadata.ToDictionary(x => ((Type)x["Type"]).Assembly.FullName, x => x["Name"] as string);
                 PluginData.AssemblyNameMap = map;
+                Log.Trace("Loaded plugin configuration");
 
                 return true;
             }

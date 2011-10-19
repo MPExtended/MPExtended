@@ -194,7 +194,7 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class LazyListExtensionMethods
     {
-        public static IEnumerable<WebSearchResult> SearchAll<TLibrary>(this LazyList<int, TLibrary, IDictionary<string, object>> list, string text) where TLibrary : ILibrary
+        public static IEnumerable<WebSearchResult> SearchAll<TLibrary>(this LazyLibraryList<TLibrary> list, string text) where TLibrary : ILibrary
         {
             return list.Keys.Select(key => list.GetValueAndMetadata(key)).SelectMany(x => x.Item1.Search(text).FillProvider((int)x.Item2["Id"]));
         }
