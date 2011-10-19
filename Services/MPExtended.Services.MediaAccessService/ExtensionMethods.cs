@@ -191,26 +191,4 @@ namespace MPExtended.Services.MediaAccessService
             return item;
         }
     }
-
-    internal static class LazyListExtensionMethods
-    {
-        public static IEnumerable<WebSearchResult> SearchAll<TLibrary>(this LazyLibraryList<TLibrary> list, string text) where TLibrary : ILibrary
-        {
-            return list.Keys.Select(key => list.GetValueAndMetadata(key)).SelectMany(x => x.Item1.Search(text).FillProvider((int)x.Item2["Id"]));
-        }
-    }
-
-    internal static class LazyExtensionMethods
-    {
-        public static WebBackendProvider ToWebBackendProvider<T>(this Lazy<T, IDictionary<string, object>> lazy)
-        {
-            Assembly asm = lazy.Value.GetType().Assembly;
-            return new WebBackendProvider()
-            {
-                Name = (string)lazy.Metadata["Name"],
-                Id = (int)lazy.Metadata["Id"],
-                Version = VersionUtil.GetBuildVersion(asm).ToString()
-            };
-        }
-    }
 }

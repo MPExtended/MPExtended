@@ -167,11 +167,11 @@ namespace MPExtended.Services.MediaAccessService
 
                 ServiceVersion = VersionUtil.GetVersionName(),
 
-                AvailableFileSystemLibraries = FileSystemLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableMovieLibraries = MovieLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableMusicLibraries = MusicLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailablePictureLibraries = PictureLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
-                AvailableTvShowLibraries = TVShowLibrariesLoaded.Select(x => x.ToWebBackendProvider()).ToList(),
+                AvailableFileSystemLibraries = FileSystemLibraries.GetAllAsBackendProvider(),
+                AvailableMovieLibraries = MovieLibraries.GetAllAsBackendProvider(),
+                AvailableMusicLibraries = MusicLibraries.GetAllAsBackendProvider(),
+                AvailablePictureLibraries = PictureLibraries.GetAllAsBackendProvider(),
+                AvailableTvShowLibraries = TVShowLibraries.GetAllAsBackendProvider()
             };
         }
 

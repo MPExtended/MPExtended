@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
@@ -94,6 +95,27 @@ namespace MPExtended.Services.MediaAccessService
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        // more specific methods below
+        public List<WebBackendProvider> GetAllAsBackendProvider()
+        {
+            List<WebBackendProvider> ret = new List<WebBackendProvider>();
+            foreach (int key in items.Keys)
+            {
+                ret.Add(new WebBackendProvider()
+                {
+                    Name = (string)items[key].Metadata["Name"],
+                    Id = (int)items[key].Metadata["Id"],
+                    Version = VersionUtil.GetBuildVersion(((Type)(items[key].Metadata["Type"])).Assembly).ToString()
+                });
+            }
+            return ret;
+        }
+
+        public IEnumerable<WebSearchResult> SearchAll(string text)
+        {
+            return items.Keys.SelectMany(key => GetValue(key).Search(text).FillProvider((int)items[key].Metadata["Id"]));
         }
     }
 }
