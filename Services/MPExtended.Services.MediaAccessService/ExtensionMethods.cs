@@ -169,16 +169,16 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class WebMediaItemExtensionMethods
     {
-        public static ConcreteWebMediaItem ToWebMediaItem(this WebMediaItem item)
+        public static WebMediaItem ToWebMediaItem(this WebMediaItem item)
         {
-            var x = new ConcreteWebMediaItem
+            var x = new WebMediaItem
             {
                 Id = item.Id,
                 DateAdded = item.DateAdded,
                 Path = item.Path,
                 PID = item.PID,
+                Type = item.Type
             };
-            x.SetMediaType(item.Type);
             return x;
         }
     }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public abstract class WebMediaItem : WebObject, IDateAddedSortable
+    public class WebMediaItem : WebObject, IDateAddedSortable
     {
         public WebMediaItem()
         {
@@ -16,6 +16,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public string Id { get; set; }
         public IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
-        public abstract WebMediaType Type { get; }
+        public virtual WebMediaType Type { get; set; }
     }
 }

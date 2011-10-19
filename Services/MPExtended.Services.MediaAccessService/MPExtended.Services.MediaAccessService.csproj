@@ -62,7 +62,6 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="ConcreteWebMediaItem.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="LazyLibraryList.cs" />
     <Compile Include="LogProxy.cs" />
