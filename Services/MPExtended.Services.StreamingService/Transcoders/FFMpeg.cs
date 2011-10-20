@@ -28,9 +28,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal class FFMpeg : ITranscoder
     {
-        public TranscoderProfile Profile { get; set; }
-        public MediaSource Source { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
         public string GetStreamURL()
@@ -41,10 +38,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public void BuildPipeline(StreamContext context, int position)
         {
             // add input
-            bool doInputReader = !Source.IsLocalFile;
+            bool doInputReader = !context.Source.IsLocalFile;
             if (doInputReader)
             {
-                context.Pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
             }
 
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
@@ -52,18 +49,18 @@ namespace MPExtended.Services.StreamingService.Transcoders
             if (context.AudioTrackId != null)
             {
                 // do audio stream index + 1 because the video stream always has index = 1
-                mappings = String.Format("-map 0:0 -map 0:{0}", MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index + 1);
+                mappings = String.Format("-map 0:0 -map 0:{0}", context.MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index + 1);
             }
 
             // calculate full argument string
             string arguments;
-            if (Profile.HasVideoStream)
+            if (context.Profile.HasVideoStream)
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
                     position != 0 ? "-ss " + position : "",
                     context.OutputSize, context.OutputSize.Width, context.OutputSize.Height,
-                    mappings, Profile.CodecParameters["codecParameters"]
+                    mappings, context.Profile.CodecParameters["codecParameters"]
                 );
             }
             else
@@ -71,13 +68,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
                     position != 0 ? "-ss " + position : "",
-                    mappings, Profile.CodecParameters["codecParameters"]
+                    mappings, context.Profile.CodecParameters["codecParameters"]
                 );
             }
 
             // fix input thing
             if (!doInputReader)
-                arguments = arguments.Replace("#IN#", Source.GetPath());
+                arguments = arguments.Replace("#IN#", context.Source.GetPath());
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
