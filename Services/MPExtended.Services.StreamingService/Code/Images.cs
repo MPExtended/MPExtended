@@ -80,8 +80,15 @@ namespace MPExtended.Services.StreamingService.Code
             string ffmpegResize = "";
             if (maxWidth != null && maxHeight != null)
             {
-                decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
-                ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
+                try
+                {
+                    decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
+                    ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error while getting resolution of video stream", ex);
+                }
             }
             
             // get temporary filename
