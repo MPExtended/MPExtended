@@ -70,7 +70,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             {
                 return new DirectoryInfo(path).GetDirectories().Select(dir => new WebFolderBasic()
                 {
-                    Title = dir.Name,
+                    Name = dir.Name,
                     Path = dir.FullName,
                     DateAdded = dir.CreationTime,
                     Id = EncodeTo64(dir.FullName),

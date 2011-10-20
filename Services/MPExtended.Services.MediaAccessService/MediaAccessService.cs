@@ -499,20 +499,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int provider, string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-<<<<<<< HEAD
             return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
-=======
-            return ChosenTVShowLibrary.GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
->>>>>>> master
         }
 
         public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int provider, string id, int start, int end, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
         {
-<<<<<<< HEAD
             return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).FillProvider(provider).ToList();
-=======
-            return ChosenTVShowLibrary.GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end).ToList();
->>>>>>> master
         }
 
         public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int provider, string id, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)

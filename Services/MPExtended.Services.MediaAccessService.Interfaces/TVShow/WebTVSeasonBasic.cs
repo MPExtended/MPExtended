@@ -10,6 +10,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public WebTVSeasonBasic()
         {
             BannerPaths = new List<string>();
+            DateAdded = new DateTime(1970, 1, 1);
         }
 
         public string Id { get; set; }
