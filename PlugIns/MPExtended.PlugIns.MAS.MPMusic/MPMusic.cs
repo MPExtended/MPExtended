@@ -129,6 +129,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("composer", "Composer", DataReaders.ReadPipeList),
                 new SQLFieldMapping("date", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("year", "Year", DataReaders.ReadInt32)
+            }, delegate(WebMusicAlbumBasic album)
+            {
+                if(album.Artists.Count() > 0) 
+                {
+                    album.CoverPaths.Add(GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title));
+                }
+                return album;
             });
         }
 
@@ -215,6 +222,24 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             var artists = (List<string>)DataReaders.ReadPipeList(reader, index);
             return artists.Select(x => GenerateHash(x)).ToList();
+        }
+
+        private string GetLargeAlbumCover(string artistName, string albumName)
+        {
+            if (String.IsNullOrEmpty(artistName) || String.IsNullOrEmpty(albumName))
+                return string.Empty;
+
+            artistName = artistName.Trim(new char[] { '|', ' ' });
+            albumName = albumName.Replace(":", "_");
+
+            foreach (char ch in Path.GetInvalidFileNameChars())
+            {
+                artistName = artistName.Replace(ch, '_');
+                albumName = albumName.Replace(ch, '_');
+            }
+
+            string thumbDir = data.Configuration["cover"];
+            return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
         }
     }
 }

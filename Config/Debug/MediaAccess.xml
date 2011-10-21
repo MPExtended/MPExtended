@@ -22,6 +22,7 @@
     </plugin>
     <plugin assembly="MPExtended.PlugIns.MAS.MPMusic" name="MP MyMusic">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
+      <cover type="folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
     </plugin>
     <plugin assembly="MPExtended.PlugIns.MAS.FSPictures" name="FS Pictures">
       <root type="folder" displayname="Root Folder">E:\Pictures</root>
