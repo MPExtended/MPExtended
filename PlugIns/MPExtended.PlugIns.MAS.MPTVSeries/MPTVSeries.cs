@@ -279,6 +279,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", ReadSeasonID),
+                new SQLFieldMapping("e", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),

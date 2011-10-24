@@ -20,6 +20,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public string Title { get; set; }
         public int EpisodeNumber { get; set; }
         public string SeasonId { get; set; }
+        public int SeasonNumber { get; set; }
         public IList<string> Path { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
