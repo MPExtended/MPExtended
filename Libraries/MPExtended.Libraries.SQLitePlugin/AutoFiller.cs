@@ -74,7 +74,17 @@ namespace MPExtended.Libraries.SQLitePlugin
             foreach (KeyValuePair<SQLFieldMapping, int> item in autofillMapping)
             {
                 object res = item.Key.Reader.Invoke(reader, item.Value);
-                autofillProperties[item.Key.PropertyName].SetValue(obj, res, null);
+                if (Attribute.IsDefined(item.Key.Reader.Method, typeof(MergeListReaderAttribute)))
+                {
+                    foreach (object row in (IEnumerable)res)
+                    {
+                        (autofillProperties[item.Key.PropertyName].GetValue(obj, null) as IList).Add(row);
+                    }
+                }
+                else
+                {
+                    autofillProperties[item.Key.PropertyName].SetValue(obj, res, null);
+                }
             }
 
             return obj;

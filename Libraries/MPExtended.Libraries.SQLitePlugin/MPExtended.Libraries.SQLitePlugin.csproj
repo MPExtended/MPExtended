@@ -68,6 +68,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="LazyQuery.cs" />
+    <Compile Include="MergeListReaderAttribute.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
