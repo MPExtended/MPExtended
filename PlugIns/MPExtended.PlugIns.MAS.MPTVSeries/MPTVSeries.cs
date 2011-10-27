@@ -35,7 +35,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     {
         private IPluginData data;
         private Dictionary<string, string> configuration;
-        private SQLFieldMapping.ReadValue fixBannerPathReader;
+        private Delegates.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
         public MPTVSeries(IPluginData data)
@@ -119,7 +119,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             });
 
 
-            SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
+            Delegates.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
             {
                 // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
                 // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
@@ -129,7 +129,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 return reader.ReadString(index - 1);
             };
 
-            SQLFieldMapping.ReadValue fixFanartPathReader = delegate(SQLiteDataReader reader, int index)
+            Delegates.ReadValue fixFanartPathReader = delegate(SQLiteDataReader reader, int index)
             {
                 return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("fanart", x)).ToList();
             };

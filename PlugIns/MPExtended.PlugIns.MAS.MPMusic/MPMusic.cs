@@ -97,7 +97,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
-            SQLFieldMapping.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
+            Delegates.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
             {
                 var list = (List<string>)ArtistIdReader(reader, index);
                 if (list.Count > 0)
