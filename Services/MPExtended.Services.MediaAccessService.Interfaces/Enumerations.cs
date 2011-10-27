@@ -25,6 +25,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         TVSeason = 6,
         [EnumMember]
         MusicAlbum = 7,
+        [EnumMember]
+        MusicArtist = 8
     }
 
     [DataContract]
