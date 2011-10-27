@@ -144,9 +144,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                 streams[identifier] = state;
 
-                state.BackgroundThread = new Thread(new ParameterizedThreadStart(this.BackgroundWorker));
-                state.BackgroundThread.Name = "WatchWorker";
-                state.BackgroundThread.Start(identifier);
+                state.BackgroundThread = ThreadManager.Start("WatchWorker", new ParameterizedThreadStart(this.BackgroundWorker), identifier);
             }
             else
             {
@@ -187,6 +185,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                     // kill it
                     streams[identifier].BackgroundThread.Abort();
+                    ThreadManager.Remove(streams[identifier].BackgroundThread);
                     streams.Remove(identifier);
                     return;
                 }

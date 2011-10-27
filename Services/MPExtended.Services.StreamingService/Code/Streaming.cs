@@ -39,7 +39,6 @@ namespace MPExtended.Services.StreamingService.Code
         public const int STREAM_DEFAULT = -1;
 
         private WatchSharing sharing;
-        private Thread timeoutWorker;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
 
         private class ActiveStream
@@ -57,16 +56,14 @@ namespace MPExtended.Services.StreamingService.Code
         public Streaming()
         {
             sharing = new WatchSharing();
-            timeoutWorker = new Thread(TimeoutStreamsWorker);
-            timeoutWorker.Name = "StreamTimeout";
-            timeoutWorker.Start();
+            ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
         }
 
         ~Streaming()
         {
             try
             {
-                timeoutWorker.Abort();
+                ThreadManager.Abort("StreamTimeout");
                 foreach (string identifier in Streams.Keys)
                 {
                     EndStream(identifier);

@@ -49,12 +49,10 @@ namespace MPExtended.Services.StreamingService.Units
             data.Value.Supported = true;
             data.Value.Failed = false;
             vlcIsStarted = false;
-            processThread = new Thread(new ThreadStart(delegate()
+            processThread = ThreadManager.Start("VLCLogParsing", delegate()
             {
                 ParseOutputStream(InputStream, data, false, this.position);
-            }));
-            processThread.Name = "VLCLogParsing";
-            processThread.Start();
+            });
             return true;
         }
 
