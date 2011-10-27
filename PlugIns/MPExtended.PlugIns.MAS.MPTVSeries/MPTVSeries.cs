@@ -218,7 +218,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "WHERE %where " +
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("s", "SeasonIndex", "Id", ReadSeasonID),
+                new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
@@ -230,14 +230,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 return obj;
             });
         }
-
-        [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
-        [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
-        private string ReadSeasonID(SQLiteDataReader reader, int offset)
-        {
-            return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
-        }
-
 
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
@@ -292,6 +284,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
             });
         }
+
+        [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
+        [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
+        private string ReadSeasonID(SQLiteDataReader reader, int offset)
+        {
+            return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
+        }
+
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
