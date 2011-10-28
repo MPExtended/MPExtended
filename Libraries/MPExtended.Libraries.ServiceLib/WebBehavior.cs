@@ -25,10 +25,11 @@ using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Text;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Libraries.ServiceLib
 {
-    public class WebHttpWithCustomExceptionHandling : WebHttpBehavior, IErrorHandler
+    public class WebExceptionHandling : WebHttpBehavior, IErrorHandler
     {
         protected override void AddServerErrorHandlers(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
         {
@@ -43,6 +44,7 @@ namespace MPExtended.Libraries.ServiceLib
 
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
+            Log.Error("Unhandled exception in service (JSON interface)", error);
             JsonError errorObject = new JsonError { ExceptionType = error.GetType().ToString(), Message = error.Message, StackTrace = error.StackTrace };
 
             // format the exception/message with JSON
@@ -58,17 +60,16 @@ namespace MPExtended.Libraries.ServiceLib
         }
     }
 
-    public class WebHttpWithCustomExceptionHandlingBehavior : BehaviorExtensionElement
-    {
-        protected override object CreateBehavior() { return new WebHttpWithCustomExceptionHandling(); }
-
-        public override Type BehaviorType { get { return typeof(WebHttpWithCustomExceptionHandling); } }
-    }
-
     public class JsonError
     {
         public string ExceptionType { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
+    }
+
+    public class WebBehavior : BehaviorExtensionElement
+    {
+        protected override object CreateBehavior() { return new WebExceptionHandling(); }
+        public override Type BehaviorType { get { return typeof(WebExceptionHandling); } }
     }
 }

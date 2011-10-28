@@ -79,8 +79,15 @@ namespace MPExtended.Services.StreamingService.Code
             string ffmpegResize = "";
             if (maxWidth != null && maxHeight != null)
             {
-                decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
-                ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
+                try
+                {
+                    decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
+                    ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error while getting resolution of video stream", ex);
+                }
             }
             
             // get temporary filename
@@ -102,7 +109,7 @@ namespace MPExtended.Services.StreamingService.Code
             // execute it
             ProcessStartInfo info = new ProcessStartInfo();
             info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
-            info.FileName = Config.GetFFMpegPath();
+            info.FileName = Configuration.Streaming.FFMpegPath;
             info.CreateNoWindow = true;
             info.UseShellExecute = false;
             Process proc = new Process();
@@ -189,7 +196,7 @@ namespace MPExtended.Services.StreamingService.Code
                 string channelName = MPEServices.NetPipeTVAccessService.GetChannelBasicById(idChannel).DisplayName;
 
                 // find directory
-                string tvLogoDir = Config.GetTVLogoDirectory();
+                string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
                 if (!Directory.Exists(tvLogoDir))
                 {
                     Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
@@ -197,7 +204,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
 
                 // find image
-                DirectoryInfo dirinfo = new DirectoryInfo(Config.GetTVLogoDirectory());
+                DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
                 var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelName.ToLowerInvariant());
                 if(matched.Count() == 0)
                 {

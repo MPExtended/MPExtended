@@ -21,6 +21,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);
+        WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id);
     }
 
     public interface IMusicLibrary : ILibrary

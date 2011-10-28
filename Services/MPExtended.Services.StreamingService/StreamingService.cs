@@ -59,22 +59,21 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            // apparantly you can't serialize a derived classes to a parent class. That sucks.
-            return Config.GetTranscoderProfiles().Select(x => x.CopyToWebTranscoderProfile()).ToList();
+            return Configuration.Streaming.Transcoders.Select(x => x.CopyToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return Config.GetTranscoderProfiles().Where(s => s.Target == target).Select(x => x.CopyToWebTranscoderProfile()).ToList();
+            return GetTranscoderProfiles().Where(x => x.Target == target).ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)
         {
-            TranscoderProfile profile = Config.GetTranscoderProfileByName(name);
-            if (profile == null)
+            var list = GetTranscoderProfiles().Where(x => x.Name == name);
+            if(list.Count() == 0)
                 return null;
 
-            return profile.CopyToWebTranscoderProfile();
+            return list.First();
         }
         #endregion
 
@@ -109,7 +108,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebResolution GetStreamSize(WebStreamMediaType type, int provider, string itemId, string profile)
         {
-            return _stream.CalculateSize(Config.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
+            return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
         #endregion
 
@@ -137,7 +136,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition);
+            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition);
         }
 
         public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
@@ -145,7 +144,7 @@ namespace MPExtended.Services.StreamingService
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Config.GetTranscoderProfileByName(profileName), startPosition, audioId, subtitleId);
+            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition, audioId, subtitleId);
         }
 
         public bool FinishStream(string identifier)

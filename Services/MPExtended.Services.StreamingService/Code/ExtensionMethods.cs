@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
+using MPExtended.Services.StreamingService.Transcoders;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
@@ -31,6 +33,33 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 Width = res.Width,
                 Height = res.Height
+            };
+        }
+    }
+
+    internal static class TranscoderProfileExtensionMethods
+    {
+        public static ITranscoder GetTranscoder(this TranscoderProfile profile)
+        {
+            // For now only support files in current assembly
+            ITranscoder inst = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.TranscoderImplementationClass));
+            return inst;
+        }
+
+        public static WebTranscoderProfile CopyToWebTranscoderProfile(this TranscoderProfile profile)
+        {
+            // WCF sucks a bit with returning child classes
+            return new WebTranscoderProfile()
+            {
+                Bandwidth = profile.Bandwidth,
+                Description = profile.Description,
+                HasVideoStream = profile.HasVideoStream,
+                MaxOutputHeight = profile.MaxOutputHeight,
+                MaxOutputWidth = profile.MaxOutputWidth,
+                MIME = profile.MIME,
+                Name = profile.Name,
+                Target = profile.Target,
+                Transport = profile.Transport
             };
         }
     }

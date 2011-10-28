@@ -203,6 +203,11 @@ namespace MPExtended.Services.MediaAccessService
                 .Union(FileSystemLibraries.SearchAll(text))
                 .ToList();
         }
+
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            return GetLibrary(type).GetExternalMediaInfo(type, id);
+        }
         #endregion
 
         #region Movies

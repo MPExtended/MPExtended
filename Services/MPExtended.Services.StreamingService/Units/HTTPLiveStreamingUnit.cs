@@ -88,31 +88,12 @@ namespace MPExtended.Services.StreamingService.Units
 
             Log.Info("HTTPLiveStreaming: segmenter arguments: {0}", arguments);
 
-            // TODO: separate class or something
-            monitorThread = new Thread(delegate()
-                {
-                    while (!segmenterApplication.HasExited)
-                    {
-                        try
-                        {
-                            Log.Info("HTTPLiveSegmenter: is running {0}", !segmenterApplication.HasExited);
-                            Log.Info("HTTPLiveSegmenter: stderr: {0}", segmenterApplication.StandardError.ReadLine());
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Info("HTTPLiveSegmenter: failed", ex);
-                        }
-                    }
-                    Log.Info("HTTPLiveSegmenter: is running end {0}", !segmenterApplication.HasExited);
-                });
-            monitorThread.Name = "HTTPLiveSegmenter";
-
             try
             {
                 segmenterApplication = new Process();
                 segmenterApplication.StartInfo = start;
                 segmenterApplication.Start();
-                monitorThread.Start();
+                ThreadManager.Start("HTTPLiveSegmenter", MonitorThread);
             }
             catch (Exception ex)
             {
@@ -121,6 +102,23 @@ namespace MPExtended.Services.StreamingService.Units
             }
 
             return true;
+        }
+
+        private void MonitorThread()
+        {
+            while (!segmenterApplication.HasExited)
+            {
+                try
+                {
+                    Log.Info("HTTPLiveSegmenter: is running {0}", !segmenterApplication.HasExited);
+                    Log.Info("HTTPLiveSegmenter: stderr: {0}", segmenterApplication.StandardError.ReadLine());
+                }
+                catch (Exception ex)
+                {
+                    Log.Info("HTTPLiveSegmenter: failed", ex);
+                }
+            }
+            Log.Info("HTTPLiveSegmenter: is running end {0}", !segmenterApplication.HasExited);
         }
 
         public bool Start()
@@ -146,7 +144,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
 
             // this really, really isn't the best way to do it but it's the easiest
-            new Thread(new ThreadStart(delegate()
+            ThreadManager.Start("HTTPLiveCleanup", delegate()
             {
                 try
                 {
@@ -157,7 +155,7 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     Log.Warn("HTTPLiveStreaming: failed to delete temporary directory", ex);
                 }
-            })).Start();
+            });
 
             return true;
         }

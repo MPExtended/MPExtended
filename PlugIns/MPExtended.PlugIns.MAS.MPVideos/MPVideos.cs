@@ -88,5 +88,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             throw new NotImplementedException();
         }
+
+
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

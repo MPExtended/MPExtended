@@ -129,6 +129,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("composer", "Composer", DataReaders.ReadPipeList),
                 new SQLFieldMapping("date", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("year", "Year", DataReaders.ReadInt32)
+            }, delegate(WebMusicAlbumBasic album)
+            {
+                if(album.Artists.Count() > 0) 
+                {
+                    album.CoverPaths.Add(GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title));
+                }
+                return album;
             });
         }
 
@@ -195,6 +202,38 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            if (type == WebMediaType.MusicAlbum)
+            {
+                var album = GetAlbumBasicById(id);
+                return new WebExternalMediaInfoAlbum()
+                {
+                    Type = "mpmusic album",
+                    Album = album.Title,
+                    Artist = album.AlbumArtist
+                };
+            }
+            else if (type == WebMediaType.MusicTrack)
+            {
+                return new WebExternalMediaInfoId()
+                {
+                    Type = "mpmusic track",
+                    Id = GetTrackBasicById(id).Id
+                };
+            }
+            else if (type == WebMediaType.MusicArtist)
+            {
+                return new WebExternalMediaInfoArtist()
+                {
+                    Type = "mpmusic album",
+                    Artist = GetArtistBasicById(id).Title
+                };
+            }
+
+            throw new ArgumentException();
+        }
+
         private string GenerateHash(string text)
         {
             if (md5 == null)
@@ -215,6 +254,24 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             var artists = (List<string>)DataReaders.ReadPipeList(reader, index);
             return artists.Select(x => GenerateHash(x)).ToList();
+        }
+
+        private string GetLargeAlbumCover(string artistName, string albumName)
+        {
+            if (String.IsNullOrEmpty(artistName) || String.IsNullOrEmpty(albumName))
+                return string.Empty;
+
+            artistName = artistName.Trim(new char[] { '|', ' ' });
+            albumName = albumName.Replace(":", "_");
+
+            foreach (char ch in Path.GetInvalidFileNameChars())
+            {
+                artistName = artistName.Replace(ch, '_');
+                albumName = albumName.Replace(ch, '_');
+            }
+
+            string thumbDir = data.Configuration["cover"];
+            return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
         }
     }
 }

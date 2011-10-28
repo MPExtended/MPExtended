@@ -151,5 +151,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
+
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            return new WebExternalMediaInfoId()
+            {
+                Type = "moving pictures",
+                Id = id
+            };
+        }
     }
 }

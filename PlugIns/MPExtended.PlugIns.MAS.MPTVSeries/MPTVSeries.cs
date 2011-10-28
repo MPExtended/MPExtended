@@ -218,7 +218,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "WHERE %where " +
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("s", "SeasonIndex", "Id", ReadSeasonID),
+                new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
@@ -230,14 +230,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 return obj;
             });
         }
-
-        [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
-        [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
-        private string ReadSeasonID(SQLiteDataReader reader, int offset)
-        {
-            return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
-        }
-
 
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
@@ -279,6 +271,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", ReadSeasonID),
+                new SQLFieldMapping("e", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
@@ -291,6 +284,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
             });
         }
+
+        [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
+        [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
+        private string ReadSeasonID(SQLiteDataReader reader, int offset)
+        {
+            return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
+        }
+
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
@@ -346,6 +347,26 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         public Stream GetFile(string path)
         {
             return new FileStream(path, FileMode.Open);
+        }
+
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            if (type == WebMediaType.TVSeason)
+            {
+                var season = GetSeasonBasic(id);
+                return new WebExternalMediaInfoSeason()
+                {
+                    Type = "mptvseries season",
+                    SeasonIndex = season.SeasonNumber,
+                    ShowId = Int32.Parse(season.ShowId)
+                };
+            }
+
+            return new WebExternalMediaInfoId()
+            {
+                Type = type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode",
+                Id = id
+            };
         }
     }
 }

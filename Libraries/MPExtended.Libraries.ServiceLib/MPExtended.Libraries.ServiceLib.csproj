@@ -64,9 +64,10 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoapBehavior.cs" />
     <Compile Include="WcfUsernameValidator.cs" />
     <Compile Include="WCFUtil.cs" />
-    <Compile Include="WebHttpWithCustomExceptionHandling.cs" />
+    <Compile Include="WebBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">

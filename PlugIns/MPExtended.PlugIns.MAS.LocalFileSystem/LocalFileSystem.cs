@@ -110,6 +110,15 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            return new WebExternalMediaInfoFile()
+            {
+                Type = "file",
+                Path = GetFileBasic(id).Path.First()
+            };
+        }
+
         static private string EncodeTo64(string toEncode)
         {
             byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);

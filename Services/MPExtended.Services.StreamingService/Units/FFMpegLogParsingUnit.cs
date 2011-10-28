@@ -46,12 +46,10 @@ namespace MPExtended.Services.StreamingService.Units
             // this might be better placed in the Start() method, but EncoderUnit.Start() depends on this
             data.Value.Supported = true;
             data.Value.Failed = false;
-            processThread = new Thread(new ThreadStart(delegate()
+            processThread = ThreadManager.Start("FFMpegLogParsing", delegate()
             {
                 ParseOutputStream(InputStream, data, LogMessages, LogProgress);
-            }));
-            processThread.Name = "FFMpegLogParsing";
-            processThread.Start();
+            });
             return true;
         }
 
@@ -62,7 +60,7 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Stop() 
         {
-            processThread.Abort();
+            ThreadManager.Abort(processThread);
             return true;
         }
 

@@ -129,10 +129,7 @@ namespace MPExtended.Services.StreamingService.Units
             // TODO: wait for state machine
 
             // setup data thread
-            infoReader = new Thread(InfoThread);
-            infoReader.Name = "VLCInfoThread";
-            infoReader.Start(startPos);
-
+            infoReader = ThreadManager.Start("VLCInfoThread", InfoThread, startPos);
             return true;
         }
 
