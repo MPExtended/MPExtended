@@ -57,6 +57,8 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="FSPictures.cs" />
+    <Compile Include="MPPictureShares.cs" />
+    <Compile Include="PictureLibraryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
