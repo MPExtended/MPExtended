@@ -97,7 +97,7 @@ namespace MPExtended.Applications.Development.StreamingService
             Log("Initialized");
 
             // providers
-            var config = mServiceClient.GetBackendConfiguration();
+            var config = mServiceClient.GetServiceDescription();
             movieProvider = config.AvailableMovieLibraries.First().Id;
             fileProvider = config.AvailableFileSystemLibraries.First().Id;
 
@@ -176,16 +176,6 @@ namespace MPExtended.Applications.Development.StreamingService
             bool success = mWebStreamClient.InitStream(WebStreamMediaType.TV, 0, channel.Id.ToString(), CLIENT_NAME, mIdentifier);
             Log("Success = " + success);
             LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.TV, 0, mIdentifier));
-        }
-
-        private void cmdInitFile_Click(object sender, EventArgs e)
-        {
-            mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
-            mName = new FileInfo(txtFileName.Text).Name;
-            Log("Init Stream with file " + txtFileName.Text);
-            bool success = mWebStreamClient.InitStream(WebStreamMediaType.File, fileProvider, txtFileName.Text, CLIENT_NAME, mIdentifier);
-            Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.File, fileProvider, txtFileName.Text));
         }
 
         private void cmdInitIdTypeStreaming_Click(object sender, EventArgs e)
