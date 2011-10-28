@@ -42,8 +42,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         ConcreteWebMediaItem GetMediaItem(WebMediaType type, string id);
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]  
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebSearchResult> Search(string text);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]  
+        IList<WebSearchResult> SearchResultsByRange(string text, int start, int end);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

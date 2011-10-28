@@ -299,22 +299,26 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string showSql = "SELECT ID, Pretty_Name FROM online_series WHERE Pretty_Name LIKE @search";
             IEnumerable<WebSearchResult> shows = ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
             {
+                string title = reader.ReadString(1);
                 return new WebSearchResult()
                 {
                     Type = WebMediaType.TVShow,
                     Id = reader.ReadIntAsString(0),
-                    Title = reader.ReadString(1),
+                    Title = title,
+                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
                 };
             }, param);
 
             string episodeSql = "SELECT CompositeID, EpisodeName FROM online_episodes WHERE EpisodeName LIKE @search";
             IEnumerable<WebSearchResult> episodes = ReadList<WebSearchResult>(episodeSql, delegate(SQLiteDataReader reader)
             {
+                string title = reader.ReadString(1);
                 return new WebSearchResult()
                 {
                     Type = WebMediaType.TVEpisode,
                     Id = reader.ReadString(0),
-                    Title = reader.ReadString(1),
+                    Title = title,
+                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
                 };
             }, param);
 

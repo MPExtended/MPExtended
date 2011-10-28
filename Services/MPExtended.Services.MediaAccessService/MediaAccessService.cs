@@ -246,11 +246,17 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebSearchResult> Search(string text)
         {
             return ChosenMovieLibrary.Search(text)
-                .Union(ChosenMusicLibrary.Search(text))
-                .Union(ChosenPictureLibrary.Search(text))
-                .Union(ChosenTVShowLibrary.Search(text))
-                .Union(ChosenFileSystemLibrary.Search(text))
+                .Concat(ChosenMusicLibrary.Search(text))
+                .Concat(ChosenPictureLibrary.Search(text))
+                .Concat(ChosenTVShowLibrary.Search(text))
+                .Concat(ChosenFileSystemLibrary.Search(text))
+                .OrderByDescending(x => x.Score)
                 .ToList();
+        }
+
+        public IList<WebSearchResult> SearchResultsByRange(string text, int start, int end)
+        {
+            return Search(text).TakeRange(start, end).ToList();
         }
 
         public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)

@@ -10,5 +10,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
         public WebMediaType Type { get; set; }
         public string Id { get; set; }
         public string Title { get; set; }
+        public int Score { get; set; }
     }
 }

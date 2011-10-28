@@ -171,7 +171,46 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
-            return new List<WebSearchResult>();
+            SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
+            string artistSql = "SELECT DISTINCT strArtist FROM tracks WHERE strArtist LIKE @search";
+            IEnumerable<WebSearchResult> artists = ReadList<IEnumerable<WebSearchResult>>(artistSql, delegate(SQLiteDataReader reader)
+            {
+                return reader.ReadPipeList(0).Select(name => new WebSearchResult()
+                {
+                    Type = WebMediaType.MusicArtist,
+                    Id = GenerateHash(name),
+                    Title = name,
+                    Score = (int)Math.Round((decimal)text.Length / name.Length * 100)
+                });
+            }, param).SelectMany(x => x);
+
+            string songSql = "SELECT DISTINCT idTrack, strTitle FROM tracks WHERE strTitle LIKE @search";
+            IEnumerable<WebSearchResult> songs = ReadList<WebSearchResult>(songSql, delegate(SQLiteDataReader reader)
+            {
+                string title = reader.ReadString(1);
+                return new WebSearchResult()
+                {
+                    Type = WebMediaType.MusicTrack,
+                    Id = reader.ReadIntAsString(0),
+                    Title = title,
+                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
+                };
+            }, param);
+
+            string albumsSql = "SELECT DISTINCT strAlbumArtist, strAlbum FROM tracks WHERE strAlbum LIKE @search";
+            IEnumerable<WebSearchResult> albums = ReadList<WebSearchResult>(albumsSql, delegate(SQLiteDataReader reader)
+            {
+                string title = reader.ReadString(1);
+                return new WebSearchResult()
+                {
+                    Type = WebMediaType.MusicTrack,
+                    Id = (string)AlbumIdReader(reader, 1),
+                    Title = title,
+                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
+                };
+            }, param);
+
+            return artists.Concat(songs).Concat(albums);
         }
 
         public IEnumerable<WebGenre> GetAllGenres()
