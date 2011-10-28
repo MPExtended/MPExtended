@@ -21,6 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.General;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
@@ -33,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategoriesBasic();
+                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategoriesBasic(Settings.ActiveSettings.PicturesProvider);
                 if (categories != null)
                 {
                     return View(categories);
@@ -51,7 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var images = MPEServices.NetPipeMediaAccessService.GetPicturesBasicByCategory(category);
+                var images = MPEServices.NetPipeMediaAccessService.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
                 if (images != null)
                 {
                     return View(images);
@@ -68,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {         
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(WebMediaType.Picture, WebFileType.Content, id, 0);
+                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(Settings.ActiveSettings.PicturesProvider, WebMediaType.Picture, WebFileType.Content, id, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

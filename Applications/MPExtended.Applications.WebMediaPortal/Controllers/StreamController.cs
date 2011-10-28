@@ -40,10 +40,36 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
+        private int GetProvider(WebStreamMediaType type)
+        {
+            switch (type)
+            {
+                case WebStreamMediaType.File:
+                    return Settings.ActiveSettings.FileSystemProvider;
+                case WebStreamMediaType.Movie:
+                    return Settings.ActiveSettings.MovieProvider;
+                case WebStreamMediaType.MusicAlbum:
+                case WebStreamMediaType.MusicTrack:
+                    return Settings.ActiveSettings.MusicProvider;
+                case WebStreamMediaType.Picture:
+                    return Settings.ActiveSettings.PicturesProvider;
+                case WebStreamMediaType.Recording:
+                case WebStreamMediaType.TV:
+                    return 0;
+                case WebStreamMediaType.TVEpisode:
+                case WebStreamMediaType.TVSeason:
+                case WebStreamMediaType.TVShow:
+                    return Settings.ActiveSettings.TVShowProvider;
+                default:
+                    // this cannot happen
+                    return 0;
+            }
+        }
+
         private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
         {
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!MPEServices.NetPipeWebStreamService.InitStream((WebStreamMediaType)type, itemId, "WebMediaPortal", identifier))
+            if (!MPEServices.NetPipeWebStreamService.InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
@@ -143,7 +169,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             } 
             else
             {
-                playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebStreamMediaType)type, itemId, profile.Name);
+                playerSize = MPEServices.NetPipeWebStreamService.GetStreamSize((WebStreamMediaType)type, GetProvider((WebStreamMediaType)type), itemId, profile.Name);
             }
 
             // generate url

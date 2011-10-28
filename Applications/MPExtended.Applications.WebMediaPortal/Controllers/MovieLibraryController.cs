@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index()
         {
-            var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(sort:SortBy.Title, order:OrderBy.Asc);
+            var movieList = MPEServices.NetPipeMediaAccessService.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort:SortBy.Title, order:OrderBy.Asc);
             if (movieList != null)
             {
                 return View(movieList);
@@ -44,7 +44,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Details(string movie)
         {
-            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
+            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
             if (fullMovie != null)
             {
                 return View(fullMovie);
@@ -54,7 +54,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Play(string movie)
         {
-            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(movie);
+            var fullMovie = MPEServices.NetPipeMediaAccessService.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
             if (fullMovie != null)
             {
                 return View(fullMovie);
@@ -64,7 +64,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string movie)
         {
-            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.Movie, WebArtworkType.Cover, movie, 0);
+            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0);
             if (image != null)
             {
                 return File(image, "image/jpg");

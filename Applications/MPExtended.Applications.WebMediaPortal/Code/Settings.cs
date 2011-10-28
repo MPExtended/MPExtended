@@ -28,6 +28,19 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Settings
     {
+        public static SettingModel ActiveSettings
+        {
+            get
+            {
+                return LoadSettings();
+            }
+
+            set
+            {
+                SaveSettings(value);
+            }
+        }
+
         public static SettingModel GlobalSettings
         {
             get

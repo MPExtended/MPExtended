@@ -36,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var artistList = MPEServices.NetPipeMediaAccessService.GetAllMusicArtistsBasic();
+                var artistList = MPEServices.NetPipeMediaAccessService.GetAllMusicArtistsBasic(Settings.ActiveSettings.MusicProvider);
                 if (artistList != null)
                 {
                     return View(artistList);
@@ -54,7 +54,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var albumList = MPEServices.NetPipeMediaAccessService.GetMusicAlbumsBasicForArtist(id);
+                var albumList = MPEServices.NetPipeMediaAccessService.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, id);
                 if (albumList != null)
                 {
                     return View(albumList);
@@ -71,7 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var trackList = MPEServices.NetPipeMediaAccessService.GetMusicTracksBasicForAlbum(id, SortBy.Title, OrderBy.Asc);
+                var trackList = MPEServices.NetPipeMediaAccessService.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, id, SortBy.Title, OrderBy.Asc);
                 if (trackList != null)
                 {
                     return View(trackList);
@@ -88,7 +88,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var musicTrack = MPEServices.NetPipeMediaAccessService.GetMusicTrackDetailedById(id);
+                var musicTrack = MPEServices.NetPipeMediaAccessService.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id);
                 if (musicTrack != null)
                 {
                     return View(musicTrack);
@@ -104,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.MusicAlbum, WebArtworkType.Cover, id, 0);
+                var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, id, WebArtworkType.Cover, 0);
                 return File(image, "image/jpg");
             }
             catch (Exception ex)
