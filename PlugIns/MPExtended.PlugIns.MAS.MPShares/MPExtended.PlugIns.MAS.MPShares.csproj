@@ -52,7 +52,11 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="MPShares.cs" />
+    <Compile Include="AllShares.cs" />
+    <Compile Include="MovieShares.cs" />
+    <Compile Include="PictureShares.cs" />
+    <Compile Include="ShareLibrary.cs" />
+    <Compile Include="MusicShares.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Share.cs" />

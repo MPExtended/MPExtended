@@ -39,7 +39,10 @@
     <plugin name="MP MyVideo">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
-    <plugin name="MP Shares">
+    <plugin name="MP Music Shares">
+      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
+    </plugin>
+    <plugin name="MP Movie Shares">
       <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
     </plugin>
   </pluginConfiguration>
