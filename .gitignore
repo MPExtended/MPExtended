@@ -9,4 +9,6 @@
 *.vssscc
 [Dd]ebug
 [Rr]elease
+!Config/Debug
+!Config/Release
 Libraries/Streaming/vlc*/plugins/*.dat
