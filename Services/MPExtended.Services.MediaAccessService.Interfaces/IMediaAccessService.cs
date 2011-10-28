@@ -193,7 +193,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebCategory> GetAllPictureCategoriesBasic(int? provider);
+        IList<WebCategory> GetAllPictureCategories(int? provider);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebCategory> GetPictureSubCategories(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

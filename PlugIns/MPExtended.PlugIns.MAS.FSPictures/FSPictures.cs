@@ -33,14 +33,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
     [ExportMetadata("Id", 1)]
     public class FSPictures : IPictureLibrary
     {
-        List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();
-        List<WebPictureDetailed> picturesDetailed = new List<WebPictureDetailed>();
-        Dictionary<string, WebCategory> categories = new Dictionary<string, WebCategory>();
-        Dictionary<string, WebCategory> subCategories = new Dictionary<string, WebCategory>();
-
         private IPluginData data;
-        private string[] extensions = { ".jpg", ".png", ".bmp" };
-        #region public
+        private string[] extensions = { ".jpg", ".png", ".bmp", };
+
         [ImportingConstructor]
         public FSPictures(IPluginData data)
         {
@@ -53,101 +48,55 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
-            picturesBasic.Clear();
-            dirSearchWebPictureBasic(data.Configuration["root"]);
-
-            return picturesBasic;
+            return SearchPictures(data.Configuration["root"], true, GetWebPictureBasic);
         }
 
         public IEnumerable<WebPictureDetailed> GetAllPicturesDetailed()
         {
-            picturesDetailed.Clear();
-            dirSearchWebPictureDetailed(data.Configuration["root"]);
-            return picturesDetailed;
+            return SearchPictures(data.Configuration["root"], true, GetWebPictureDetailed);
+        }
+
+        public WebPictureBasic GetPictureBasic(string pictureId)
+        {
+            return GetWebPictureBasic(IdToPath(pictureId));
         }
 
         public WebPictureDetailed GetPictureDetailed(string pictureId)
         {
-            if (picturesDetailed != null && picturesDetailed.Count > 0)
-            {
-                picturesDetailed.Single(p => p.Id == pictureId);
-            }
-            return null;
+            return GetWebPictureDetailed(IdToPath(pictureId));
         }
 
-        public IEnumerable<WebCategory> GetAllPictureCategoriesBasic()
+        public IEnumerable<WebCategory> GetAllPictureCategories()
         {
-            categories.Clear();
+            var list = new List<WebCategory>();
             var root = new DirectoryInfo(data.Configuration["root"]);
-
-            categories.Add(EncodeTo64(root.FullName), new WebCategory() { Title = root.Name, Id = EncodeTo64(root.FullName) });
+            list.Add(new WebCategory() { Title = root.Name, Id = PathToId(root.FullName) });
             foreach (var dir in root.EnumerateDirectories())
             {
-                categories.Add(EncodeTo64(dir.FullName), new WebCategory() { Title = dir.Name, Id = EncodeTo64(dir.FullName) });
+                list.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
             }
-            return categories.Values;
+            return list;
+        }
+
+        public IEnumerable<WebCategory> GetSubCategoriesById(string categoryId)
+        {
+            var list = new List<WebCategory>();
+            var root = new DirectoryInfo(IdToPath(categoryId));
+            foreach (var folder in root.EnumerateDirectories())
+            {
+                list.Add(new WebCategory() { Title = folder.Name, Id = PathToId(folder.FullName) });
+            }
+            return list;
         }
 
         public IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id)
         {
-            List<WebPictureBasic> list = new List<WebPictureBasic>();
-            WebCategory dir;
-            if (!categories.TryGetValue(id, out dir))
-            {
-                subCategories.TryGetValue(id, out dir);
-            }
-            foreach (string strFile in Directory.GetFiles(DecodeFrom64(dir.Id)))
-            {
-                var file = new FileInfo(strFile);
-                if (extensions.Contains(file.Extension.ToLowerInvariant()))
-                {
-                    picturesBasic.Add(GetWebPictureBasic(file.FullName));
-                }
-            }
-            return list;
+            return SearchPictures(IdToPath(id), false, GetWebPictureBasic);
         }
 
         public IEnumerable<WebPictureDetailed> GetPicturesDetailedByCategory(string id)
         {
-            List<WebPictureDetailed> list = new List<WebPictureDetailed>();
-            WebCategory dir;
-            if (!categories.TryGetValue(id, out dir))
-            {
-                subCategories.TryGetValue(id, out dir);
-            }
-            foreach (string strFile in Directory.GetFiles(DecodeFrom64(dir.Id)))
-            {
-                var file = new FileInfo(strFile);
-                if (extensions.Contains(file.Extension.ToLowerInvariant()))
-                {
-                    picturesBasic.Add(GetWebPictureDetailed(file.FullName));
-                }
-            }
-            return list;
-        }
-        public IEnumerable<WebCategory> GetSubCategoriesBasicById(string categoryId)
-        {
-            List<WebCategory> list = new List<WebCategory>();
-            WebCategory dir;
-            if (!categories.TryGetValue(categoryId, out dir))
-            {
-                subCategories.TryGetValue(categoryId, out dir);
-            }
-            try
-            {
-            var root = new DirectoryInfo(DecodeFrom64(dir.Id));
-            foreach (var folder in root.EnumerateDirectories())
-            {
-                if (!subCategories.ContainsKey(EncodeTo64(folder.FullName)))
-                {
-                    subCategories.Add(EncodeTo64(folder.FullName), new WebCategory() { Title = folder.Name, Id = EncodeTo64(folder.FullName) });
-                }
-            }            }
-            catch (Exception)
-            {
-                data.Log.Warn("exception in GetSubCategoriesBasicById");
-            }
-            return list;
+            return SearchPictures(IdToPath(id), false, GetWebPictureDetailed);
         }
 
         public WebFileInfo GetFileInfo(string path)
@@ -160,135 +109,137 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
-        {
-            return new WebExternalMediaInfoFile()
-            {
-                Type = "file",
-                Path = GetPictureDetailed(id).Path.First(),
-            };
-        }
-        #endregion
-
         public IEnumerable<WebSearchResult> Search(string text)
         {
             return new List<WebSearchResult>();
         }
 
-        internal void dirSearchWebPictureBasic(string strDir)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        {
+            return new WebExternalMediaInfoFile()
+            {
+                Type = "file",
+                Path = GetPictureBasic(id).Path.First(),
+            };
+        }
+
+        private delegate T CreatePicture<T>(string path);
+        private List<T> SearchPictures<T>(string strDir, bool recursive, CreatePicture<T> creator)
         {
             try
             {
+                List<T> output = new List<T>();
                 foreach (string strFile in Directory.GetFiles(strDir))
                 {
                     var file = new FileInfo(strFile);
                     if (extensions.Contains(file.Extension.ToLowerInvariant()))
                     {
-                        picturesBasic.Add(GetWebPictureBasic(file.FullName));
+                        output.Add(creator.Invoke(file.FullName));
                     }
                 }
 
-                foreach (string strDirectory in Directory.GetDirectories(strDir))
+                if (recursive)
                 {
-                    dirSearchWebPictureBasic(strDirectory);
-                }
-            }
-            catch (Exception)
-            {
-                data.Log.Warn("exception in recursiv picture lookup");
-            }
-        }
-
-        internal void dirSearchWebPictureDetailed(string strDir)
-        {
-            try
-            {
-                foreach (string strFile in Directory.GetFiles(strDir))
-                {
-                    var file = new FileInfo(strFile);
-                    if (extensions.Contains(file.Extension.ToLowerInvariant()))
+                    foreach (string strDirectory in Directory.GetDirectories(strDir))
                     {
-                        picturesDetailed.Add(GetWebPictureDetailed(file.FullName));
+                        output.AddRange(SearchPictures(strDirectory, true, creator));
                     }
                 }
 
-                foreach (string strDirectory in Directory.GetDirectories(strDir))
-                {
-                    dirSearchWebPictureDetailed(strDirectory);
-                }
+                return output;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                data.Log.Warn("exception in recursiv picture lookup");
+                data.Log.Warn("Failed in recursive picture search", ex);
+                return new List<T>();
             }
         }
 
-        internal WebPictureDetailed GetWebPictureDetailed(string path)
+        private WebPictureDetailed GetWebPictureDetailed(string path)
         {
             WebPictureDetailed pic = new WebPictureDetailed();
-            BitmapSource img = BitmapFrame.Create(new Uri(path));
-            pic.Id = EncodeTo64(path);
+            pic.Id = PathToId(path);
+            pic.Path.Add(path);
 
-            /* Image data */
+            // Image data
+            BitmapSource img = BitmapFrame.Create(new Uri(path));
             pic.Mpixel = (img.PixelHeight * img.PixelWidth) / (double)1000000;
             pic.Width = Convert.ToString(img.PixelWidth);
             pic.Height = Convert.ToString(img.PixelHeight);
             pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
 
-            /* Image metadata */
+            // Image metadata
             BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
-                pic.Title = String.Format("{0}", meta.Title);
-                //pic.Comment  = String.Format("{0}", meta.Subject);
-                pic.Comment = String.Format("{0}", meta.Comment);
+                pic.Title = meta.Title.Trim();
+                pic.Comment = meta.Comment;
                 pic.DateTaken = DateTime.Parse(meta.DateTaken);
-                pic.CameraManufacturer = String.Format("{0}", meta.CameraManufacturer);
-                pic.CameraModel = String.Format("{0}", meta.CameraModel);
-                pic.Copyright = String.Format("{0}", meta.Copyright);
+                pic.CameraManufacturer = meta.CameraManufacturer;
+                pic.CameraModel = meta.CameraModel;
+                pic.Copyright = meta.Copyright;
                 pic.Rating = (float)meta.Rating;
             }
             catch (Exception ex)
             {
-                data.Log.Error("Error reading picture metadata for " + path, ex);
+                data.Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
-            pic.Path.Add(path);
+
             return pic;
         }
 
-        internal WebPictureBasic GetWebPictureBasic(string path)
+        private WebPictureBasic GetWebPictureBasic(string path)
         {
             WebPictureBasic pic = new WebPictureBasic();
-            BitmapSource img = BitmapFrame.Create(new Uri(path));
+            pic.Id = PathToId(path);
+            pic.Path.Add(path);
 
-            pic.Id = EncodeTo64(path);
-            /* Image metadata */
+            // Image metadata
+            BitmapSource img = BitmapFrame.Create(new Uri(path));
             BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
-                pic.Title = String.Format("{0}", meta.Title);
+                pic.Title = meta.Title.Trim();
                 pic.DateTaken = DateTime.Parse(meta.DateTaken);
-
             }
             catch (Exception ex)
             {
-                data.Log.Error("Error reading picture metadata for " + path, ex);
+                data.Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
-            pic.Path.Add(path);
+
             return pic;
         }
 
-        static private string EncodeTo64(string toEncode)
+        private string PathToId(string fullpath)
         {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
+            string root = Path.GetFullPath(data.Configuration["root"]);
+            fullpath = Path.GetFullPath(fullpath);
+            if (!fullpath.StartsWith(root))
+            {
+                data.Log.Error("Got path {0} that doesn't start with the root {1}", fullpath, root);
+                return "";
+            }
+
+            if (fullpath == root)
+            {
+                return "_root";
+            }
+
+            string text = fullpath.Substring(root.Length + 1);
+            byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(text);
+            return Convert.ToBase64String(toEncodeAsBytes);
         }
-        static private string DecodeFrom64(string encodedData)
+
+        private string IdToPath(string id)
         {
-            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
+            if (id == "_root")
+            {
+                return data.Configuration["root"];
+            }
+
+            byte[] encodedDataAsBytes = Convert.FromBase64String(id);
+            string path = ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            return Path.Combine(data.Configuration["root"], path);
         }
     }
 }

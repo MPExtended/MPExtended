@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategoriesBasic(Settings.ActiveSettings.PicturesProvider);
+                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategories(Settings.ActiveSettings.PicturesProvider);
                 if (categories != null)
                 {
                     return View(categories);

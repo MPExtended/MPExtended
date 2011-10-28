@@ -286,6 +286,11 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Pictures
+        public WebItemCount GetPictureCount(int? provider)
+        {
+            return new WebItemCount() { Count = PictureLibraries[provider].GetAllPicturesBasic().Count() };
+        }
+
         public IList<WebPictureBasic> GetAllPicturesBasic(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return PictureLibraries[provider].GetAllPicturesBasic().SortMediaItemList(sort, order).FillProvider(provider, ProviderType.Picture).ToList();
@@ -296,14 +301,14 @@ namespace MPExtended.Services.MediaAccessService
             return PictureLibraries[provider].GetAllPicturesDetailed().SortMediaItemList(sort, order).FillProvider(provider, ProviderType.Picture).ToList();
         }
 
-        public IList<WebCategory> GetAllPictureCategoriesBasic(int? provider)
+        public IList<WebCategory> GetAllPictureCategories(int? provider)
         {
-            return PictureLibraries[provider].GetAllPictureCategoriesBasic().FillProvider(provider, ProviderType.Picture).ToList();
+            return PictureLibraries[provider].GetAllPictureCategories().FillProvider(provider, ProviderType.Picture).ToList();
         }
 
-        public WebItemCount GetPictureCount(int? provider)
+        public IList<WebCategory> GetPictureSubCategories(int? provider, string id)
         {
-            return new WebItemCount() { Count = PictureLibraries[provider].GetAllPicturesBasic().Count() };
+            return PictureLibraries[provider].GetSubCategoriesById(id).FillProvider(provider, ProviderType.Picture).ToList();
         }
 
         public IList<WebPictureBasic> GetPicturesBasicByCategory(int? provider, string id)
@@ -318,7 +323,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebPictureBasic GetPictureBasicById(int? provider, string id)
         {
-            return PictureLibraries[provider].GetAllPicturesBasic().Where(x => x.Id == id).FillProvider(provider, ProviderType.Picture).First();
+            return PictureLibraries[provider].GetPictureBasic(id).SetProvider(provider, ProviderType.Picture);
         }
 
         public WebPictureDetailed GetPictureDetailedById(int? provider, string id)
