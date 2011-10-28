@@ -115,11 +115,13 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             string showSql = "SELECT id, title FROM movie_info WHERE title LIKE @search";
             return ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
             {
+                string title = reader.ReadString(1);
                 return new WebSearchResult()
                 {
                     Type = WebMediaType.Movie,
                     Id = reader.ReadIntAsString(0),
-                    Title = reader.ReadString(1),
+                    Title = title,
+                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
                 };
             }, new SQLiteParameter("@search", "%" + text + "%"));
         }
