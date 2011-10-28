@@ -101,19 +101,7 @@ namespace MPExtended.Services.MediaAccessService
 #endif
 
                 CompositionContainer container = new CompositionContainer(catalog);
-                container.ComposeExportedValue(new PluginData());
                 container.ComposeParts(this);
-
-                // load configuration
-                var metadata = MovieLibrariesLoaded.Select(x => x.Metadata)
-                    .Union(MusicLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(TVShowLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(FileSystemLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(PictureLibrariesLoaded.Select(x => x.Metadata));
-                var map = metadata.ToDictionary(x => ((Type)x["Type"]).Assembly.FullName, x => x["Name"] as string);
-                PluginData.AssemblyNameMap = map;
-                Log.Trace("Loaded plugin configuration");
-
                 return true;
             }
             catch (Exception ex)

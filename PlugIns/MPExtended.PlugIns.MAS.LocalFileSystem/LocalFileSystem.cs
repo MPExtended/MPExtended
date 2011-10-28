@@ -32,10 +32,6 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
     [ExportMetadata("Id", 2)]
     public class LocalFileSystem : IFileSystemLibrary
     {
-        public void Init() 
-        {
-        }
-
         public IEnumerable<WebDriveBasic> GetLocalDrives()
         {
             return DriveInfo.GetDrives().Select(x => new WebDriveBasic()

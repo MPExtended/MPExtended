@@ -38,17 +38,10 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         // - it's less code for us
         // - we can more easily add new features (see for example the horrible TMDB implementation below)
 
-        private IPluginData data;
-
         [ImportingConstructor]
         public MPMovingPictures(IPluginData data)
         {
-            this.data = data;
-        }
-
-        public void Init()
-        {
-            DatabasePath = data.Configuration["database"];
+            DatabasePath = data.GetConfiguration("Moving Pictures")["database"];
         }
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()

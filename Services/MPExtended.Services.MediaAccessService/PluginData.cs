@@ -30,24 +30,14 @@ namespace MPExtended.Services.MediaAccessService
     [Export(typeof(IPluginData))]
     public class PluginData : IPluginData
     {
-        internal static Dictionary<string, string> AssemblyNameMap { private get; set; }
-
-        public Dictionary<string, string> Configuration
+        public Dictionary<string, string> GetConfiguration(string pluginname)
         {
-            get
+            if (MPExtended.Libraries.General.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
             {
-                string name = Assembly.GetCallingAssembly().FullName;
-                if (AssemblyNameMap.ContainsKey(name))
-                {
-                    string pluginname = AssemblyNameMap[name];
-                    if (MPExtended.Libraries.General.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
-                    {
-                        return MPExtended.Libraries.General.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
-                    }
-                }
-
-                return new Dictionary<string, string>();
+                return MPExtended.Libraries.General.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
             }
+
+            return new Dictionary<string, string>();
         }
 
         public ILogger Log

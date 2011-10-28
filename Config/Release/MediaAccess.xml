@@ -12,32 +12,34 @@
   <disabledPlugins>
     <disabled>MP MyVideo</disabled>
   </disabledPlugins>
-  
+
   <pluginConfiguration>
-    <plugin assembly="MPExtended.PlugIns.MAS.MPTVSeries" name="MP-TVSeries">
+    <plugin name="MP-TVSeries">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
       <banner type="folder" displayname="Banner Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
       <fanart type="folder" displayname="Fanart Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
-
       <!-- This is just a demo -->
-      <showall type="boolean" displayname="Show all">True</showall>
-      <version type="number" displayname="Version (number)">21312312</version>
-      <description type="text" displayname="Description (text)">Description text test</description>
+      <showall type="boolean" displayname="Show all">false</showall>
+      <version type="number" displayname="Version (number)">12</version>
+      <description type="text" displayname="Description (text)">abcd</description>
     </plugin>
-    <plugin assembly="MPExtended.PlugIns.MAS.MPMovingPictures" name="Moving Pictures">
+    <plugin name="Moving Pictures">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
     </plugin>
-    <plugin assembly="MPExtended.PlugIns.MAS.MPMusic" name="MP MyMusic">
+    <plugin name="MP MyMusic">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
       <cover type="folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
     </plugin>
-    <plugin assembly="MPExtended.PlugIns.MAS.FSPictures" name="FS Pictures">
-      <root type="folder" displayname="Root Folder">E:\Pictures</root>
+    <plugin name="FS Pictures">
+      <root type="folder" displayname="Root Folder">\\10.1.1.49\fotos</root>
     </plugin>
-    <plugin assembly="MPExtended.PlugIns.MAS.MPVideos" name="MP MyVideo">
+    <plugin name="MP Picture Shares">
+      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
+    </plugin>
+    <plugin name="MP MyVideo">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
-    <plugin assembly="MPExtended.PlugIns.MAS.MPShares" name="MP Shares">
+    <plugin name="MP Shares">
       <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
     </plugin>
   </pluginConfiguration>

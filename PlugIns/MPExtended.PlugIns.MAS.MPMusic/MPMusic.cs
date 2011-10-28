@@ -35,18 +35,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [ExportMetadata("Id", 4)]
     public class MPMusic : Database, IMusicLibrary
     {
-        private IPluginData data;
+        private Dictionary<string, string> configuration;
         private MD5 md5;
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
         {
-            this.data = data;
-        }
-
-        public void Init()
-        {
-            DatabasePath = data.Configuration["database"];
+            configuration = data.GetConfiguration("MP MyMusic");
+            DatabasePath = configuration["database"];
         }
 
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
@@ -309,7 +305,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 albumName = albumName.Replace(ch, '_');
             }
 
-            string thumbDir = data.Configuration["cover"];
+            string thumbDir = configuration["cover"];
             return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
         }
     }

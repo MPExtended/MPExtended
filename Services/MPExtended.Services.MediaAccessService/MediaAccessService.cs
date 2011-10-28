@@ -353,26 +353,6 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).FillProvider(provider, ProviderType.TVShow).ToList();
         }
 
-        public IList<WebTVShowBasic> GetTVShowsBasicByCategory(int? provider, string category = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
-        {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterCategory(category).SortMediaItemList(sort, order).FillProvider(provider, ProviderType.TVShow).ToList();
-        }
-
-        public IList<WebTVShowDetailed> GetTVShowsDetailedByCategory(int? provider, string category = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
-        {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterCategory(category).SortMediaItemList(sort, order).FillProvider(provider, ProviderType.TVShow).ToList();
-        }
-
-        public IList<WebTVShowBasic> GetTVShowsBasicByGenre(int? provider, string genre = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
-        {
-            return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider, ProviderType.TVShow).ToList();
-        }
-
-        public IList<WebTVShowDetailed> GetTVShowsDetailedByGenre(int? provider, string genre = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
-        {
-            return TVShowLibraries[provider].GetAllTVShowsDetailed().FilterGenre(genre).SortMediaItemList(sort, order).FillProvider(provider, ProviderType.TVShow).ToList();
-        }
-
         public IList<WebTVShowBasic> GetTVShowsBasicByRange(int? provider, int start, int end, string genre = null, string category = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return TVShowLibraries[provider].GetAllTVShowsBasic().FilterGenreCategory(genre, category).SortMediaItemList(sort, order).TakeRange(start, end).FillProvider(provider, ProviderType.TVShow).ToList();

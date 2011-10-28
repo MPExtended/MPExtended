@@ -29,7 +29,6 @@ namespace MPExtended.Services.MediaAccessService
     {
         private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
         private ProviderType type;
-        private IDictionary<int, bool> didInitialize = new Dictionary<int, bool>();
 
         public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict, ProviderType type) 
         {
@@ -66,16 +65,6 @@ namespace MPExtended.Services.MediaAccessService
             {
                 Log.Error("Tried to get library for unknown id {0}", key);
                 return default(T);
-            }
-
-            lock (didInitialize)
-            {
-                if (!didInitialize.ContainsKey(key) || !didInitialize[key]) 
-                {
-                    ILibrary item = (ILibrary)(items[key].Value);
-                    item.Init();
-                    didInitialize[key] = true;
-                }
             }
 
             return items[key].Value;

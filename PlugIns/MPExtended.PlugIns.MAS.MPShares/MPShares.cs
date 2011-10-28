@@ -35,16 +35,14 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class MPShares : IFileSystemLibrary
     {
         private IPluginData data;
+        private Dictionary<string, string> configuration;
         private List<Share> shares = null;
 
         [ImportingConstructor]
         public MPShares(IPluginData data)
         {
             this.data = data;
-        }
-
-        public void Init()
-        {
+            this.configuration = data.GetConfiguration("MP Shares");
         }
 
         public IEnumerable<WebDriveBasic> GetLocalDrives()
@@ -54,7 +52,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             XElement root;
             try
             {
-                root = XElement.Load(this.data.Configuration["config"]);
+                root = XElement.Load(configuration["config"]);
             }
             catch (FileNotFoundException)
             {

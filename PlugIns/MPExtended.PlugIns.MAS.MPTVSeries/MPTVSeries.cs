@@ -35,26 +35,24 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private IPluginData data;
+        private Dictionary<string, string> configuration;
         private SQLFieldMapping.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
         public MPTVSeries(IPluginData data)
         {
             this.data = data;
+            this.configuration = data.GetConfiguration("MP-TVSeries");
+            this.DatabasePath = configuration["database"];
             this.fixBannerPathReader = delegate(SQLiteDataReader reader, int index)
             {
                 return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("banner", x)).ToList();
             };
         }
 
-        public void Init()
-        {
-            DatabasePath = data.Configuration["database"];
-        }
-
         private string CreateImagePath(string type, string dbPath)
         {
-            string rootDir = data.Configuration[type];
+            string rootDir = configuration[type];
             return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
         }
 
