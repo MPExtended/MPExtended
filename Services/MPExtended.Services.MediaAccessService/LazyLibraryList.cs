@@ -25,14 +25,16 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
-    internal class LazyLibraryList<T> : IEnumerable<T> where T : ILibrary
+    internal class LazyLibraryList<T> : ILibraryList<T> where T : ILibrary
     {
         private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
+        private ProviderType type;
         private IDictionary<int, bool> didInitialize = new Dictionary<int, bool>();
 
-        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict) 
+        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict, ProviderType type) 
         {
             items = dict;
+            this.type = type;
         }
 
         public void Add(int key, Lazy<T, IDictionary<string, object>> value) 
@@ -40,7 +42,7 @@ namespace MPExtended.Services.MediaAccessService
             items[key] = value;
         }
 
-        public T this[int key]
+        public T this[int? key]
         {
             get
             {
@@ -56,8 +58,10 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        public T GetValue(int key)
+        public T GetValue(int? passedId)
         {
+            int key = passedId.HasValue ? passedId.Value : ProviderHandler.GetDefaultProvider(type);
+
             if (!items.ContainsKey(key))
             {
                 Log.Error("Tried to get library for unknown id {0}", key);
@@ -98,6 +102,17 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // more specific methods below
+        public int GetKeyByName(string name)
+        {
+            var list = items.Where(x => (string)x.Value.Metadata["Name"] == name);
+            if (list.Count() > 0)
+            {
+                return list.First().Key;
+            }
+
+            return 0;
+        }
+
         public List<WebBackendProvider> GetAllAsBackendProvider()
         {
             List<WebBackendProvider> ret = new List<WebBackendProvider>();
@@ -115,7 +130,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
-            return items.Keys.SelectMany(key => GetValue(key).Search(text).FillProvider((int)items[key].Metadata["Id"]));
+            return items.Keys.SelectMany(key => GetValue(key).Search(text).FillProvider((int)items[key].Metadata["Id"], type));
         }
     }
 }

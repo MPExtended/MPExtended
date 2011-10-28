@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <appconfig>
-  <plugins>
-    <tvShow>MP-TVSeries</tvShow>
+  <defaultPlugins>
+    <tvshow>MP-TVSeries</tvshow>
     <movie>Moving Pictures</movie>
     <music>MP MyMusic</music>
     <picture>FS Pictures</picture>
     <filesystem>MP Shares</filesystem>
-  </plugins>
+  </defaultPlugins>
+  
   <pluginConfiguration>
     <plugin assembly="MPExtended.PlugIns.MAS.MPTVSeries" name="MP-TVSeries">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>

@@ -17,13 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.ServiceModel;
-using System.Xml.Linq;
+using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -40,96 +37,14 @@ namespace MPExtended.Services.MediaAccessService
     // sorting.
 
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class MediaAccessService : IMediaAccessService
+    public sealed class MediaAccessService : ProviderHandler, IMediaAccessService
     {
-        #region Service
+        #region General
         private const int MOVIE_API = 3;
         private const int MUSIC_API = 3;
         private const int PICTURES_API = 3;
         private const int TVSHOWS_API = 3;
         private const int FILESYSTEM_API = 3;
-
-        [ImportMany]
-        private Lazy<IMovieLibrary, IDictionary<string, object>>[] MovieLibrariesLoaded { get; set; }
-        [ImportMany]
-        private Lazy<ITVShowLibrary, IDictionary<string, object>>[] TVShowLibrariesLoaded { get; set; }
-        [ImportMany]
-        private Lazy<IPictureLibrary, IDictionary<string, object>>[] PictureLibrariesLoaded { get; set; }
-        [ImportMany]
-        private Lazy<IMusicLibrary, IDictionary<string, object>>[] MusicLibrariesLoaded { get; set; }
-        [ImportMany]
-        private Lazy<IFileSystemLibrary, IDictionary<string, object>>[] FileSystemLibrariesLoaded { get; set; }
-
-        private LazyLibraryList<IMovieLibrary> MovieLibraries { get; set; }
-        private LazyLibraryList<ITVShowLibrary> TVShowLibraries { get; set; }
-        private LazyLibraryList<IMusicLibrary> MusicLibraries { get; set; }
-        private LazyLibraryList<IPictureLibrary> PictureLibraries { get; set; }
-        private LazyLibraryList<IFileSystemLibrary> FileSystemLibraries { get; set; }
-
-        public MediaAccessService()
-        {
-            if (!Compose())
-            {
-                return;
-            }
-
-            try
-            {
-                MovieLibraries = new LazyLibraryList<IMovieLibrary>(MovieLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                MusicLibraries = new LazyLibraryList< IMusicLibrary>(MusicLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(TVShowLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                PictureLibraries = new LazyLibraryList<IPictureLibrary>(PictureLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(FileSystemLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x));
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to create backends", ex);
-            }
-
-        }
-
-        private bool Compose()
-        {
-            try
-            {
-                AggregateCatalog catalog = new AggregateCatalog();
-                catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-#if DEBUG
-                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string pluginRoot = Path.Combine(Installation.GetRootDirectory(), "PlugIns");
-                foreach (string pdir in Directory.GetDirectories(pluginRoot))
-                {
-                    string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-                    if (Directory.Exists(dir))
-                        catalog.Catalogs.Add(new DirectoryCatalog(dir));
-                }
-#else
-                string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetRootDirectory(), "Extensions"));
-                catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
-#endif
-
-                CompositionContainer container = new CompositionContainer(catalog);
-                container.ComposeExportedValue(new PluginData());
-                container.ComposeParts(this);
-
-                // load configuration
-                var metadata = MovieLibrariesLoaded.Select(x => x.Metadata)
-                    .Union(MusicLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(TVShowLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(FileSystemLibrariesLoaded.Select(x => x.Metadata))
-                    .Union(PictureLibrariesLoaded.Select(x => x.Metadata));
-                var map = metadata.ToDictionary(x => ((Type)x["Type"]).Assembly.FullName, x => x["Name"] as string);
-                PluginData.AssemblyNameMap = map;
-                Log.Trace("Loaded plugin configuration");
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to create MEF service", ex);
-                return false;
-            }
-        }
 
         private ILibrary GetLibrary(int provider, WebMediaType type)
         {
@@ -152,9 +67,7 @@ namespace MPExtended.Services.MediaAccessService
                     throw new ArgumentException();
             }
         }
-        #endregion
 
-        #region General
         public WebMediaServiceDescription GetServiceDescription()
         {
             return new WebMediaServiceDescription()
