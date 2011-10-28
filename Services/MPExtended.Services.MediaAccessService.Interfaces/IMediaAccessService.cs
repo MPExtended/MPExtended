@@ -41,7 +41,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id);
+        WebExternalMediaInfo GetExternalMediaInfo(int provider, WebMediaType type, string id);
         #endregion
 
         #region Movies

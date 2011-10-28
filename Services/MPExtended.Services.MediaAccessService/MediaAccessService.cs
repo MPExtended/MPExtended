@@ -204,9 +204,9 @@ namespace MPExtended.Services.MediaAccessService
                 .ToList();
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(int provider, WebMediaType type, string id)
         {
-            return GetLibrary(type).GetExternalMediaInfo(type, id);
+            return GetLibrary(provider, type).GetExternalMediaInfo(type, id);
         }
         #endregion
 
