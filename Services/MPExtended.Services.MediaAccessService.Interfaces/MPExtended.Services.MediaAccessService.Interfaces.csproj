@@ -98,7 +98,7 @@
     <Compile Include="FileSystem\WebDriveBasic.cs" />
     <Compile Include="Meta\WebBackendConfiguration.cs" />
     <Compile Include="Meta\WebMediaServiceDescription.cs" />
-    <Compile Include="WebMediaportalMedia.cs" />
+    <Compile Include="WebExternalMediaInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
