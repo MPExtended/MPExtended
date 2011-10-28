@@ -349,12 +349,12 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new FileStream(path, FileMode.Open);
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.TVSeason)
             {
                 var season = GetSeasonBasic(id);
-                return new WebMediaportalMediaTVSeason()
+                return new WebExternalMediaInfoSeason()
                 {
                     Type = "mptvseries season",
                     SeasonIndex = season.SeasonNumber,
@@ -362,7 +362,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 };
             }
 
-            return new WebMediaportalMediaId()
+            return new WebExternalMediaInfoId()
             {
                 Type = type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode",
                 Id = id

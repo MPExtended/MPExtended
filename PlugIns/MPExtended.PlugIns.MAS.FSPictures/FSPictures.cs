@@ -160,9 +160,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebMediaportalMediaFile()
+            return new WebExternalMediaInfoFile()
             {
                 Type = "file",
                 Path = GetPictureDetailed(id).Path.First(),

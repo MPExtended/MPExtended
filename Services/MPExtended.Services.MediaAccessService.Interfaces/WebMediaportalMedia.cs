@@ -6,37 +6,37 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public interface WebMediaportalMedia
+    public interface WebExternalMediaInfo
     {
         string Type { get; }
     }
 
-    public class WebMediaportalMediaId : WebMediaportalMedia
+    public class WebExternalMediaInfoId : WebExternalMediaInfo
     {
         public string Type { get; set; }
         public string Id { get; set; }
     }
 
-    public class WebMediaportalMediaAlbum : WebMediaportalMedia
+    public class WebExternalMediaInfoAlbum : WebExternalMediaInfo
     {
         public string Type { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
     }
 
-    public class WebMediaportalMediaArtist : WebMediaportalMedia
+    public class WebExternalMediaInfoArtist : WebExternalMediaInfo
     {
         public string Type { get; set; }
         public string Artist { get; set; }
     }
 
-    public class WebMediaportalMediaFile : WebMediaportalMedia
+    public class WebExternalMediaInfoFile : WebExternalMediaInfo
     {
         public string Type { get; set; }
         public string Path { get; set; }
     }
 
-    public class WebMediaportalMediaTVSeason : WebMediaportalMedia
+    public class WebExternalMediaInfoSeason : WebExternalMediaInfo
     {
         public string Type { get; set; }
         public int ShowId { get; set; }

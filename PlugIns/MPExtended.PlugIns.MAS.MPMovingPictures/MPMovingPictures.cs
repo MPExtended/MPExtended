@@ -152,9 +152,9 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebMediaportalMediaId()
+            return new WebExternalMediaInfoId()
             {
                 Type = "moving pictures",
                 Id = id

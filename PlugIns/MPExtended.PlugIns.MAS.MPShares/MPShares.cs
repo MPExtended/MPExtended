@@ -169,9 +169,9 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebSearchResult>();
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebMediaportalMediaFile()
+            return new WebExternalMediaInfoFile()
             {
                 Type = "file",
                 Path = GetFileBasic(id).Path.First()

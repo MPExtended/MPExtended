@@ -110,9 +110,9 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebMediaportalMediaFile()
+            return new WebExternalMediaInfoFile()
             {
                 Type = "file",
                 Path = GetFileBasic(id).Path.First()

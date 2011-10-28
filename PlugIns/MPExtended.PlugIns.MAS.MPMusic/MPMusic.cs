@@ -202,12 +202,12 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.MusicAlbum)
             {
                 var album = GetAlbumBasicById(id);
-                return new WebMediaportalMediaAlbum()
+                return new WebExternalMediaInfoAlbum()
                 {
                     Type = "mpmusic album",
                     Album = album.Title,
@@ -216,7 +216,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
             else if (type == WebMediaType.MusicTrack)
             {
-                return new WebMediaportalMediaId()
+                return new WebExternalMediaInfoId()
                 {
                     Type = "mpmusic track",
                     Id = GetTrackBasicById(id).Id
@@ -224,7 +224,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
             else if (type == WebMediaType.MusicArtist)
             {
-                return new WebMediaportalMediaArtist()
+                return new WebExternalMediaInfoArtist()
                 {
                     Type = "mpmusic album",
                     Artist = GetArtistBasicById(id).Title

@@ -90,7 +90,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         }
 
 
-        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
         {
             throw new NotImplementedException();
         }
