@@ -252,6 +252,11 @@ namespace MPExtended.Services.MediaAccessService
                 .Union(ChosenFileSystemLibrary.Search(text))
                 .ToList();
         }
+
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            return GetLibrary(type).GetMediaportalMedia(type, id);
+        }
         #endregion
 
         #region Movies

@@ -169,6 +169,15 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebSearchResult>();
         }
 
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            return new WebMediaportalMediaFile()
+            {
+                Type = "file",
+                Path = GetFileBasic(id).Path.First()
+            };
+        }
+
         private string GetPath(string id)
         {
             if (id.StartsWith("s"))

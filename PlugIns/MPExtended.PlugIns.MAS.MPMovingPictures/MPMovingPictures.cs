@@ -151,5 +151,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
+
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            return new WebMediaportalMediaId()
+            {
+                Type = "moving pictures",
+                Id = id
+            };
+        }
     }
 }

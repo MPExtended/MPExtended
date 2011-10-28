@@ -22,6 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);
+        WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id);
     }
 
     public interface IMusicLibrary : ILibrary

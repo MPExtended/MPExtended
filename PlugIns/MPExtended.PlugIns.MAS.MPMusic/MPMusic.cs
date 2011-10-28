@@ -202,6 +202,38 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            if (type == WebMediaType.MusicAlbum)
+            {
+                var album = GetAlbumBasicById(id);
+                return new WebMediaportalMediaAlbum()
+                {
+                    Type = "mpmusic album",
+                    Album = album.Title,
+                    Artist = album.AlbumArtist
+                };
+            }
+            else if (type == WebMediaType.MusicTrack)
+            {
+                return new WebMediaportalMediaId()
+                {
+                    Type = "mpmusic track",
+                    Id = GetTrackBasicById(id).Id
+                };
+            }
+            else if (type == WebMediaType.MusicArtist)
+            {
+                return new WebMediaportalMediaArtist()
+                {
+                    Type = "mpmusic album",
+                    Artist = GetArtistBasicById(id).Title
+                };
+            }
+
+            throw new ArgumentException();
+        }
+
         private string GenerateHash(string text)
         {
             if (md5 == null)

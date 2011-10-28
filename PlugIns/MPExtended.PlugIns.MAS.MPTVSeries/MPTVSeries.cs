@@ -348,5 +348,25 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             return new FileStream(path, FileMode.Open);
         }
+
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            if (type == WebMediaType.TVSeason)
+            {
+                var season = GetSeasonBasic(id);
+                return new WebMediaportalMediaTVSeason()
+                {
+                    Type = "mptvseries season",
+                    SeasonIndex = season.SeasonNumber,
+                    ShowId = Int32.Parse(season.ShowId)
+                };
+            }
+
+            return new WebMediaportalMediaId()
+            {
+                Type = type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode",
+                Id = id
+            };
+        }
     }
 }

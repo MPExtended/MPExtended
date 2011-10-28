@@ -88,5 +88,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             throw new NotImplementedException();
         }
+
+
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

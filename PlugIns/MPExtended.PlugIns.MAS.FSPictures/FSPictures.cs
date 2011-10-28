@@ -159,6 +159,15 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
+
+        public WebMediaportalMedia GetMediaportalMedia(WebMediaType type, string id)
+        {
+            return new WebMediaportalMediaFile()
+            {
+                Type = "file",
+                Path = GetPictureDetailed(id).Path.First(),
+            };
+        }
         #endregion
 
         public IEnumerable<WebSearchResult> Search(string text)
