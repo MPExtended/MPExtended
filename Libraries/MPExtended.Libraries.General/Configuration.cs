@@ -29,6 +29,7 @@ namespace MPExtended.Libraries.General
     {
         private static ServicesConfiguration serviceConfig = null;
         private static MediaAccessConfiguration mediaConfig = null;
+        private static StreamingConfiguration streamConfig = null;
 
         public static ServicesConfiguration Services 
         {
@@ -49,6 +50,17 @@ namespace MPExtended.Libraries.General
                     mediaConfig = new MediaAccessConfiguration();
 
                 return mediaConfig;
+            }
+        }
+
+        public static StreamingConfiguration Streaming
+        {
+            get
+            {
+                if (streamConfig == null)
+                    streamConfig = new StreamingConfiguration();
+
+                return streamConfig;
             }
         }
 

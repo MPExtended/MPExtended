@@ -168,7 +168,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
                     else if (audioId == STREAM_DEFAULT)
                     {
-                        string preferredLanguage = Config.GetDefaultStream("audio");
+                        string preferredLanguage = Configuration.Streaming.DefaultAudioStream;
                         if (stream.Context.MediaInfo.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
                             stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.Language == preferredLanguage).ID;
@@ -185,7 +185,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
                     else if (subtitleId == STREAM_DEFAULT)
                     {
-                        string preferredLanguage = Config.GetDefaultStream("subtitle");
+                        string preferredLanguage = Configuration.Streaming.DefaultSubtitleStream;
                         if (stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
@@ -303,7 +303,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return new Resolution(0, 0);
 
             decimal aspect;
-            if (source.MediaType == WebStreamMediaType.TV)
+            if (source.MediaType == WebStreamMediaType.TV || profile == null)
             {
                 // FIXME: we might want to support TV with other aspect ratios
                 aspect = (decimal)16 / 9;

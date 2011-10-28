@@ -2,18 +2,16 @@
 <appconfig>
   <watchsharing>
     <type>debug</type>
-    <!-- not tested yet
-    <type>trakt</type>
+    <!-- trakt is not tested yet -->
     <trakt>
       <username>bladiebla</username>
       <password>bladiebla</password>
     </trakt>
-    -->
   </watchsharing>
 
   <ffmpeg>
-    <!-- TODO: add info about libav/ffmpeg and version (call api) here -->
     <path>..\..\..\..\Libraries\Streaming\ffmpeg.exe</path>
+    <api>ffmpeg</api>
   </ffmpeg>
 
   <tvLogoDirectory>\\10.1.1.49\system\mpthumbs\tv\logos</tvLogoDirectory>

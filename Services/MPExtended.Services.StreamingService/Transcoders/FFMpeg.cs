@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -78,7 +79,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Config.GetFFMpegPath(), arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
+            EncoderUnit unit = new EncoderUnit(Configuration.Streaming.FFMpegPath, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
             unit.DebugOutput = false; // change this for debugging
             context.Pipeline.AddDataUnit(unit, 5);
 
