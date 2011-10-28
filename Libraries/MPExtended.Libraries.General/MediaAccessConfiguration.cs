@@ -45,15 +45,20 @@ namespace MPExtended.Libraries.General
         }
     }
 
+    public class DefaultPluginConfiguration
+    {
+        public string TVShow { get; set; }
+        public string Movie { get; set; }
+        public string Music { get; set; }
+        public string Picture { get; set; }
+        public string Filesystem { get; set; }
+    }
+
     public class MediaAccessConfiguration
     {
-        public string TVShowPlugin { get; set; }
-        public string MoviePlugin { get; set; }
-        public string MusicPlugin { get; set; }
-        public string PicturePlugin { get; set; }
-        public string FilesystemPlugin { get; set; }
-
+        public DefaultPluginConfiguration DefaultPlugins { get; set; }
         public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
+        public List<string> DisabledPlugins { get; set; }
 
         public MediaAccessConfiguration()
         {
@@ -61,11 +66,16 @@ namespace MPExtended.Libraries.General
             {
                 XElement file = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
 
-                TVShowPlugin = file.Element("plugins").Element("tvShow").Value;
-                MoviePlugin = file.Element("plugins").Element("movie").Value;
-                MusicPlugin = file.Element("plugins").Element("music").Value;
-                PicturePlugin = file.Element("plugins").Element("picture").Value;
-                FilesystemPlugin = file.Element("plugins").Element("filesystem").Value;
+                DefaultPlugins = new DefaultPluginConfiguration()
+                {
+                    Filesystem = file.Element("defaultPlugins").Element("filesystem").Value,
+                    Movie = file.Element("defaultPlugins").Element("movie").Value,
+                    Music = file.Element("defaultPlugins").Element("music").Value,
+                    Picture = file.Element("defaultPlugins").Element("picture").Value,
+                    TVShow = file.Element("defaultPlugins").Element("tvshow").Value,
+                };
+
+                DisabledPlugins = file.Element("disabledPlugins").Elements("disabled").Select(x => x.Value).ToList();
 
                 PluginConfiguration = new Dictionary<string, List<PluginConfigItem>>();
 
@@ -92,11 +102,17 @@ namespace MPExtended.Libraries.General
             {
                 XElement file = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
 
-                file.Element("plugins").Element("tvShow").Value = TVShowPlugin;
-                file.Element("plugins").Element("movie").Value = MoviePlugin;
-                file.Element("plugins").Element("music").Value = MusicPlugin;
-                file.Element("plugins").Element("picture").Value = PicturePlugin;
-                file.Element("plugins").Element("filesystem").Value = FilesystemPlugin;
+                file.Element("defaultPlugins").Element("tvshow").Value = DefaultPlugins.TVShow;
+                file.Element("defaultPlugins").Element("movie").Value = DefaultPlugins.Movie;
+                file.Element("defaultPlugins").Element("music").Value = DefaultPlugins.Music;
+                file.Element("defaultPlugins").Element("picture").Value = DefaultPlugins.Picture;
+                file.Element("defaultPlugins").Element("filesystem").Value = DefaultPlugins.Filesystem;
+
+                file.Element("disabledPlugins").Elements("disabled").Remove();
+                foreach (string item in DisabledPlugins)
+                {
+                    file.Element("disabledPlugins").Add(new XElement("disabled", item));
+                }
 
                 foreach (var pluginElement in file.Element("pluginConfiguration").Elements("plugin"))
                 {

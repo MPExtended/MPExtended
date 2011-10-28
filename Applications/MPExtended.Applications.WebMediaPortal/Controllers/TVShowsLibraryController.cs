@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
-            var series = MPEServices.NetPipeMediaAccessService.GetAllTVShowsBasic(null, null, SortBy.Title, OrderBy.Asc);
+            var series = MPEServices.NetPipeMediaAccessService.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider, null, null, SortBy.Title, OrderBy.Asc);
             if (series != null)
             {
                 return View(series);
@@ -45,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Seasons(string show)
         {
-            var seasons = MPEServices.NetPipeMediaAccessService.GetTVSeasonsBasicForTVShow(show, SortBy.TVSeasonNumber, OrderBy.Asc);
+            var seasons = MPEServices.NetPipeMediaAccessService.GetTVSeasonsBasicForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
             if (seasons != null)
             {
                 return View(seasons);
@@ -55,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Episodes(string season)
         {
-            var episodes = MPEServices.NetPipeMediaAccessService.GetTVEpisodesBasicForSeason(season, SortBy.TVEpisodeNumber, OrderBy.Asc);
+            var episodes = MPEServices.NetPipeMediaAccessService.GetTVEpisodesBasicForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
             if (episodes != null)
             {
                 return View(episodes);
@@ -65,7 +65,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season)
         {
-            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVSeason, WebArtworkType.Banner, season, 0);
+            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0);
             if (image != null)
             {
                 return File(image, "image/jpg");
@@ -75,7 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult EpisodeImage(string episode)
         {
-            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVEpisode, WebArtworkType.Banner, episode, 0);
+            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0);
             if (image != null)
             {
                 return File(image, "image/jpg");
@@ -85,7 +85,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult SeriesFanart(string show)
         {
-            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVShow, WebArtworkType.Backdrop, show, 0);
+            var image = MPEServices.NetPipeStreams.GetArtwork(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0);
             if (image != null)
             {
                 return File(image, "image/jpg");
@@ -95,7 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Details(string episode)
         {
-            var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(episode);
+            var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
             if (fullEpisode != null)
             {
                 ViewBag.ShowPlay = fullEpisode.Path != null;
@@ -106,14 +106,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Play(string episode)
         {
-            var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(episode);
+            var fullEpisode = MPEServices.NetPipeMediaAccessService.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
             if (fullEpisode != null)
             {
                 EpisodeModel model = new EpisodeModel()
                 {
                     Episode = fullEpisode,
-                    Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(fullEpisode.ShowId),
-                    Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(fullEpisode.SeasonId)
+                    Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(fullEpisode.PID, fullEpisode.ShowId),
+                    Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(fullEpisode.PID, fullEpisode.SeasonId)
                 };
                 return View(model);
             }

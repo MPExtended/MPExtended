@@ -5,12 +5,12 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVSeasonBasic : ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
+    public class WebTVSeasonBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
     {
         public WebTVSeasonBasic()
         {
-            DateAdded = new DateTime(1970, 1, 1);
             BannerPaths = new List<string>();
+            DateAdded = new DateTime(1970, 1, 1);
         }
 
         public string Id { get; set; }

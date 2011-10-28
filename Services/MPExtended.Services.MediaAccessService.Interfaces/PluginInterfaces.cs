@@ -7,7 +7,6 @@ using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 

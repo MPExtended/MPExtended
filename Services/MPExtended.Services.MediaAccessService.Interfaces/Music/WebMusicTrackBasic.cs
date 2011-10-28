@@ -2,33 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, IMusicTrackNumberSortable
+    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IMusicTrackNumberSortable
     {
         public WebMusicTrackBasic()
         {
-            DateAdded = new DateTime(1970, 1, 1);
-            Path = new List<string>();
             ArtistId = new List<string>();
             Genres = new List<string>();
         }
 
-        public string Id { get; set; }
         public IList<string> Artist { get; set; }
         public IList<string> ArtistId { get; set; }
         public string Album { get; set; }
         public string AlbumId { get; set; }
         public string Title { get; set; }
         public int TrackNumber { get; set; }
-        public IList<string> Path { get; set; }
         public int Year { get; set; }
-        public DateTime DateAdded { get; set; }
         public IList<string> Genres { get; set; }
 
-        public WebMediaType Type
+        public override WebMediaType Type
         {
             get
             {

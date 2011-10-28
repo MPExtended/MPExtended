@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appconfig>
-  <plugins>
-    <tvShow>MP-TVSeries</tvShow>
+  <defaultPlugins>
+    <tvshow>MP-TVSeries</tvshow>
     <movie>Moving Pictures</movie>
     <music>MP MyMusic</music>
     <picture>FS Pictures</picture>
     <filesystem>MP Shares</filesystem>
-  </plugins>
+  </defaultPlugins>
+
+  <!-- You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash it's safe to disable it here. -->
+  <disabledPlugins>
+    <disabled>MP MyVideo</disabled>
+  </disabledPlugins>
+  
   <pluginConfiguration>
     <plugin assembly="MPExtended.PlugIns.MAS.MPTVSeries" name="MP-TVSeries">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>

@@ -23,8 +23,6 @@ using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Meta;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
@@ -111,10 +109,31 @@ namespace MPExtended.Services.MediaAccessService
                 return Enumerable.ThenBy(source, comp);
             return Enumerable.ThenByDescending(source, comp);
         }
+    
+        // Fill the providerid field
+        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
+        {
+            return list.Select(x => { x.PID = ProviderHandler.GetProviderId(type, providerId); return x; });
+        }
+
+        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
+        {
+            return list.Select(x => { x.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), providerId); return x; });
+        }
 
         // Allow easy sorting from MediaAccessService.cs
-        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy sort, OrderBy order)
+        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput)
         {
+            // parse arguments
+            if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
+            {
+                Log.Warn("Invalid OrderBy value {0} given", orderInput);
+                throw new Exception("Invalid OrderBy value specified");
+            }
+            SortBy sort = sortInput.HasValue ? sortInput.Value : SortBy.Title;
+            OrderBy order = orderInput.HasValue ? orderInput.Value : Interfaces.OrderBy.Asc;
+
+            // do the actual sorting
             try
             {
                 switch (sort)
@@ -150,12 +169,13 @@ namespace MPExtended.Services.MediaAccessService
                     // picture
                     case SortBy.PictureDateTaken:
                         return list.OrderBy(x => ((IPictureDateTakenSortable)x).DateTaken, order);
-                }
 
-                // this can't be reached but the compiler is stupid
-                throw new Exception();
+                    default:
+                        Log.Warn("Invalid SortBy value {0}", sortInput);
+                        throw new Exception("Sorting on this property is not supported for this media type");
+                }
             }
-            catch (InvalidCastException ex)
+            catch (Exception ex)
             {
                 Log.Warn("Tried to do invalid sorting", ex);
                 throw new Exception("Sorting on this property is not supported for this media type");
@@ -165,30 +185,58 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class WebMediaItemExtensionMethods
     {
-        public static ConcreteWebMediaItem ToWebMediaItem(this WebMediaItem item)
+        public static WebMediaItem ToWebMediaItem(this WebMediaItem item)
         {
-            var x = new ConcreteWebMediaItem
+            var x = new WebMediaItem
             {
                 Id = item.Id,
                 DateAdded = item.DateAdded,
                 Path = item.Path,
+                PID = item.PID,
                 Type = item.Type
             };
             return x;
         }
     }
 
-    internal static class LazyExtensionMethods
+    internal static class WebObjectExtensionMethods
     {
-        public static WebBackendProvider ToWebBackendProvider<T>(this Lazy<T, IDictionary<string, object>> lazy)
+        public static T SetProvider<T>(this T item, int? provider, ProviderType type) where T : WebObject
         {
-            Assembly asm = lazy.Value.GetType().Assembly;
-            return new WebBackendProvider()
+            item.PID = ProviderHandler.GetProviderId(type, provider);
+            return item;
+        }
+
+        public static T SetProvider<T>(this T item, int? provider, WebMediaType mediatype) where T : WebObject
+        {
+            item.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), provider);
+            return item;
+        }
+    }
+
+    internal static class WebMediaTypeExtensionMethods
+    {
+        public static ProviderType ToProviderType(this WebMediaType mediatype)
+        {
+            switch (mediatype)
             {
-                Name = (string)lazy.Metadata["Name"],
-                Assembly = asm.GetName().Name,
-                Version = VersionUtil.GetBuildVersion(asm).ToString()
-            };
+                case WebMediaType.File:
+                    return ProviderType.Filesystem;
+                case WebMediaType.Movie:
+                    return ProviderType.Movie;
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicArtist:
+                case WebMediaType.MusicTrack:
+                    return ProviderType.Music;
+                case WebMediaType.Picture:
+                    return ProviderType.Picture;
+                case WebMediaType.TVEpisode:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVShow:
+                    return ProviderType.TVShow;
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

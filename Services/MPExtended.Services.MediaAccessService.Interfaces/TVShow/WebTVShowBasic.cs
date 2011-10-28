@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVShowBasic : ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IRatingSortable
+    public class WebTVShowBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IRatingSortable
     {
         public WebTVShowBasic()
         {

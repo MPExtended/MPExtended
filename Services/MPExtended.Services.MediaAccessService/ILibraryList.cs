@@ -20,21 +20,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
-namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
+namespace MPExtended.Services.MediaAccessService
 {
-    public class ConcreteWebMediaItem : WebMediaItem
+    public interface ILibraryList<T> : IEnumerable<T> where T : ILibrary
     {
-        public ConcreteWebMediaItem()
-        {
-            Path = new List<string>();
-            DateAdded = new DateTime(1970, 1, 1);
-        }
-
-        public string Id { get; set; }
-        public IList<string> Path { get; set; }
-        public DateTime DateAdded { get; set; }
-        public WebMediaType Type { get; set; }
+        void Add(int key, Lazy<T, IDictionary<string, object>> value);
+        int Count();
+        List<WebBackendProvider> GetAllAsBackendProvider();
+        int GetKeyByName(string name);
+        T GetValue(int? passedId);
+        Tuple<T, IDictionary<string, object>> GetValueAndMetadata(int key);
+        ICollection<int> Keys { get; }
+        IEnumerable<WebSearchResult> SearchAll(string text);
+        T this[int? key] { get; }
     }
 }

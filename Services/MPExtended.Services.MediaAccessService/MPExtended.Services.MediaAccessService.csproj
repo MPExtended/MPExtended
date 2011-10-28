@@ -63,10 +63,13 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ILibraryList.cs" />
+    <Compile Include="LazyLibraryList.cs" />
     <Compile Include="LogProxy.cs" />
     <Compile Include="MediaAccessService.cs" />
     <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">

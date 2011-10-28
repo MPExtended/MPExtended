@@ -131,13 +131,13 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (source.MediaType == WebStreamMediaType.TVEpisode)
                 {
-                    state.MediaDescriptor = mas.GetTVEpisodeDetailedById(source.Id);
+                    state.MediaDescriptor = mas.GetTVEpisodeDetailedById(source.Provider, source.Id);
                     service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
-                    state.Runtime = mas.GetTVShowDetailedById(((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
+                    state.Runtime = mas.GetTVShowDetailedById(source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
                 }
                 else if (source.MediaType == WebStreamMediaType.Movie)
                 {
-                    state.MediaDescriptor = mas.GetMovieDetailedById(source.Id);
+                    state.MediaDescriptor = mas.GetMovieDetailedById(source.Provider, source.Id);
                     service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime;
                 }

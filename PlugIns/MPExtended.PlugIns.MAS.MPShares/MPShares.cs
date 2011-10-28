@@ -25,13 +25,13 @@ using System.Text;
 using System.Xml.Linq;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.MPShares
 {
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Name", "MP Shares")]
     [ExportMetadata("Type", typeof(MPShares))]
+    [ExportMetadata("Id", 5)]
     public class MPShares : IFileSystemLibrary
     {
         private IPluginData data;

@@ -78,7 +78,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Info methods
-        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, string itemId)
+        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, int? provider, string itemId)
         {
             if (type == WebStreamMediaType.TV)
             {
@@ -93,7 +93,7 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            return MediaInfo.MediaInfoWrapper.GetMediaInfo(new MediaSource(type, itemId));
+            return MediaInfo.MediaInfoWrapper.GetMediaInfo(new MediaSource(type, provider, itemId));
         }
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier)
@@ -106,14 +106,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.GetStreamingSessions();
         }
 
-        public WebResolution GetStreamSize(WebStreamMediaType type, string itemId, string profile)
+        public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
         {
-            return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, itemId)).ToWebResolution();
+            return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
         #endregion
 
         #region Streaming
-        public bool InitStream(WebStreamMediaType type, string itemId, string clientDescription, string identifier)
+        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier)
         {
             if (type == WebStreamMediaType.TV)
             {
@@ -128,8 +128,8 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            Log.Info("Called InitStream with type={0}; itemId={1}; clientDescription={2}; identifier={3}", type, itemId, clientDescription, identifier);
-            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, itemId));
+            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}", type, provider, itemId, clientDescription, identifier);
+            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId));
         }
 
         public string StartStream(string identifier, string profileName, int startPosition)
@@ -170,9 +170,9 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(WebStreamMediaType type, string itemId)
+        public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
-            MediaSource source = new MediaSource(type, itemId);
+            MediaSource source = new MediaSource(type, provider, itemId);
             return source.Retrieve();
         }
 
@@ -183,34 +183,34 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Images
-        public Stream ExtractImage(WebStreamMediaType type, string itemId, int position)
+        public Stream ExtractImage(WebStreamMediaType type, int? provider, string itemId, int position)
         {
-             return Images.ExtractImage(new MediaSource(type, itemId), position, null, null);
+             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
         }
 
-        public Stream ExtractImageResized(WebStreamMediaType type, string itemId, int position, int maxWidth, int maxHeight)
+        public Stream ExtractImageResized(WebStreamMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
         {
-             return Images.ExtractImage(new MediaSource(type, itemId), position, maxWidth, maxHeight);
+             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, maxWidth, maxHeight);
         }
 
-        public Stream GetImage(WebStreamMediaType type, string id)
+        public Stream GetImage(WebStreamMediaType type, int? provider, string id)
         {
-             return Images.GetImage(type, id);
+            return Images.GetImage(new MediaSource(type, provider, id));
         }
 
-        public Stream GetImageResized(WebStreamMediaType type, string id, int maxWidth, int maxHeight)
+        public Stream GetImageResized(WebStreamMediaType type, int? provider, string id, int maxWidth, int maxHeight)
         {
-             return Images.GetResizedImage(type, id, maxWidth, maxHeight);
+             return Images.GetResizedImage(new MediaSource(type, provider, id), maxWidth, maxHeight);
         }
 
-        public Stream GetArtwork(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset)
+        public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
         { 
-             return Images.GetImage(mediatype, artworktype, id, offset); 
+             return Images.GetImage(new MediaSource(mediatype, provider, id, offset), artworktype);
         }
 
-        public Stream GetArtworkResized(WebStreamMediaType mediatype, WebArtworkType artworktype, string id, int offset, int maxWidth, int maxHeight)
+        public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
         {
-             return Images.GetResizedImage(mediatype, artworktype, id, offset, maxWidth, maxHeight);
+            return Images.GetResizedImage(new MediaSource(mediatype, provider, id, offset), artworktype, maxWidth, maxHeight);
         }
         #endregion
     }

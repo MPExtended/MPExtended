@@ -31,6 +31,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public WebStreamMediaType MediaType { get; set; }
         public string Id { get; set; } // path to tsbuffer for TV
+        public int? Provider { get; set; } // for MAS
         public int Offset { get; set; }
 
         public bool IsLocalFile
@@ -47,32 +48,34 @@ namespace MPExtended.Services.StreamingService.Code
                     return false;
                 }
 
-                return MPEServices.NetPipeMediaAccessService.IsLocalFile((WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                return MPEServices.NetPipeMediaAccessService.IsLocalFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
             }
         }
 
-        public MediaSource(WebMediaType type, string id)
+        public MediaSource(WebMediaType type, int? provider, string id)
         {
             this.MediaType = (WebStreamMediaType)type;
             this.Id = id;
             this.Offset = 0;
+            this.Provider = provider;
         }
 
-        public MediaSource(WebMediaType type, string id, int offset)
-            : this(type, id)
+        public MediaSource(WebMediaType type, int? provider, string id, int offset)
+            : this(type, provider, id)
         {
             this.Offset = offset;
         }
 
-        public MediaSource(WebStreamMediaType type, string id)
+        public MediaSource(WebStreamMediaType type, int? provider, string id)
         {
             this.MediaType = type;
             this.Id = id;
             this.Offset = 0;
+            this.Provider = provider;
         }
 
-        public MediaSource(WebStreamMediaType type, string id, int offset)
-            : this(type, id)
+        public MediaSource(WebStreamMediaType type, int? provider, string id, int offset)
+            : this(type, provider, id)
         {
             this.Offset = offset;
         }
@@ -89,7 +92,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return Id;
             }
 
-            return MPEServices.NetPipeMediaAccessService.GetMediaItem((WebMediaType)MediaType, Id).Path[Offset];
+            return MPEServices.NetPipeMediaAccessService.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
         }
 
         public Stream Retrieve()
@@ -104,7 +107,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return new TsBuffer(Id);
             }
 
-            return MPEServices.NetPipeMediaAccessService.RetrieveFile((WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+            return MPEServices.NetPipeMediaAccessService.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
         }
 
         public IProcessingUnit GetInputReaderUnit()
@@ -126,30 +129,30 @@ namespace MPExtended.Services.StreamingService.Code
                 switch (MediaType)
                 {
                     case WebStreamMediaType.File:
-                        return mas.GetFileSystemFileBasicById(Id).Name;
+                        return mas.GetFileSystemFileBasicById(Provider, Id).Name;
                     case WebStreamMediaType.Movie:
-                        return mas.GetMovieBasicById(Id).Title;
+                        return mas.GetMovieBasicById(Provider, Id).Title;
                     case WebStreamMediaType.MusicAlbum:
-                        return mas.GetMusicAlbumBasicById(Id).Title;
+                        return mas.GetMusicAlbumBasicById(Provider, Id).Title;
                     case WebStreamMediaType.MusicTrack:
-                        return mas.GetMusicTrackBasicById(Id).Title;
+                        return mas.GetMusicTrackBasicById(Provider, Id).Title;
                     case WebStreamMediaType.Picture:
-                        return mas.GetPictureBasicById(Id).Title;
+                        return mas.GetPictureBasicById(Provider, Id).Title;
                     case WebStreamMediaType.Recording:
                         return tas.GetRecordingById(Int32.Parse(Id)).Title;
                     case WebStreamMediaType.TV:
                         return tas.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
                     case WebStreamMediaType.TVEpisode:
-                        var ep = mas.GetTVEpisodeBasicById(Id);
-                        var season = mas.GetTVSeasonBasicById(ep.SeasonId);
-                        var show = mas.GetTVShowBasicById(ep.ShowId);
+                        var ep = mas.GetTVEpisodeBasicById(Provider, Id);
+                        var season = mas.GetTVSeasonBasicById(Provider, ep.SeasonId);
+                        var show = mas.GetTVShowBasicById(Provider, ep.ShowId);
                         return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
                     case WebStreamMediaType.TVSeason:
-                        var season2 = mas.GetTVSeasonDetailedById(Id);
-                        var show2 = mas.GetTVShowBasicById(season2.ShowId);
+                        var season2 = mas.GetTVSeasonDetailedById(Provider, Id);
+                        var show2 = mas.GetTVShowBasicById(Provider, season2.ShowId);
                         return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
                     case WebStreamMediaType.TVShow:
-                        return mas.GetTVShowBasicById(Id).Title;
+                        return mas.GetTVShowBasicById(Provider, Id).Title;
                 }
             }
             catch (Exception ex)
@@ -159,9 +162,14 @@ namespace MPExtended.Services.StreamingService.Code
             return "";
         }
 
-        public string GetInternalName()
+        public string GetUniqueIdentifier()
         {
-            return String.Format("{0}_{1}", MediaType, Id);
+            return String.Format("{0}-{1}-{2}", MediaType, Provider, Id);
+        }
+
+        public string GetDebugName()
+        {
+            return String.Format("mediatype={0} provider={1} id={2} offset={3}", MediaType, Provider, Id, Offset);
         }
 
         public override string ToString()

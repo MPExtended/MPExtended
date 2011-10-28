@@ -135,8 +135,8 @@ namespace MPExtended.Services.StreamingService.Trakt
 
         private bool CallShowAPI(WebTVEpisodeBasic episode, TraktScrobbleState state, int progress)
         {
-            WebTVShowDetailed show = service.GetTVShowDetailedById(episode.ShowId);
-            WebTVSeasonDetailed season = service.GetTVSeasonDetailedById(episode.SeasonId);
+            WebTVShowDetailed show = service.GetTVShowDetailedById(episode.PID, episode.ShowId);
+            WebTVSeasonDetailed season = service.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
 
             TraktEpisodeScrobble data = new TraktEpisodeScrobble()
             {

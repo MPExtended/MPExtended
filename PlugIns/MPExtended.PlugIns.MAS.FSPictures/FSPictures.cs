@@ -24,13 +24,13 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
 {
     [Export(typeof(IPictureLibrary))]
     [ExportMetadata("Name", "FS Pictures")]
     [ExportMetadata("Type", typeof(FSPictures))]
+    [ExportMetadata("Id", 1)]
     public class FSPictures : IPictureLibrary
     {
         List<WebPictureBasic> picturesBasic = new List<WebPictureBasic>();

@@ -48,9 +48,7 @@
             this.cmdSeek3600 = new System.Windows.Forms.Button();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.txtFileSize = new System.Windows.Forms.TextBox();
-            this.txtFileName = new System.Windows.Forms.TextBox();
             this.cbMovies = new System.Windows.Forms.ComboBox();
-            this.cmdInitFile = new System.Windows.Forms.Button();
             this.cbChannels = new System.Windows.Forms.ComboBox();
             this.cmdInitChannel = new System.Windows.Forms.Button();
             this.cmdPlayInVlc = new System.Windows.Forms.Button();
@@ -67,16 +65,17 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtProvider = new System.Windows.Forms.TextBox();
             cmdStartStream = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdStartStream
             // 
-            cmdStartStream.Location = new System.Drawing.Point(10, 234);
+            cmdStartStream.Location = new System.Drawing.Point(11, 207);
             cmdStartStream.Name = "cmdStartStream";
-            cmdStartStream.Size = new System.Drawing.Size(359, 23);
+            cmdStartStream.Size = new System.Drawing.Size(356, 23);
             cmdStartStream.TabIndex = 5;
             cmdStartStream.Text = "Start Stream";
             cmdStartStream.UseVisualStyleBackColor = true;
@@ -84,7 +83,7 @@
             // 
             // cmdSeekToPos
             // 
-            this.cmdSeekToPos.Location = new System.Drawing.Point(292, 328);
+            this.cmdSeekToPos.Location = new System.Drawing.Point(293, 301);
             this.cmdSeekToPos.Name = "cmdSeekToPos";
             this.cmdSeekToPos.Size = new System.Drawing.Size(75, 23);
             this.cmdSeekToPos.TabIndex = 0;
@@ -94,14 +93,14 @@
             // 
             // txtStartPos
             // 
-            this.txtStartPos.Location = new System.Drawing.Point(10, 328);
+            this.txtStartPos.Location = new System.Drawing.Point(11, 301);
             this.txtStartPos.Name = "txtStartPos";
             this.txtStartPos.Size = new System.Drawing.Size(276, 20);
             this.txtStartPos.TabIndex = 2;
             // 
             // cmdInitMovie
             // 
-            this.cmdInitMovie.Location = new System.Drawing.Point(328, 94);
+            this.cmdInitMovie.Location = new System.Drawing.Point(329, 67);
             this.cmdInitMovie.Name = "cmdInitMovie";
             this.cmdInitMovie.Size = new System.Drawing.Size(41, 23);
             this.cmdInitMovie.TabIndex = 3;
@@ -111,7 +110,7 @@
             // 
             // cmdFinishStreaming
             // 
-            this.cmdFinishStreaming.Location = new System.Drawing.Point(11, 386);
+            this.cmdFinishStreaming.Location = new System.Drawing.Point(12, 359);
             this.cmdFinishStreaming.Name = "cmdFinishStreaming";
             this.cmdFinishStreaming.Size = new System.Drawing.Size(356, 23);
             this.cmdFinishStreaming.TabIndex = 3;
@@ -131,7 +130,7 @@
             // 
             // cmdSeek0
             // 
-            this.cmdSeek0.Location = new System.Drawing.Point(30, 263);
+            this.cmdSeek0.Location = new System.Drawing.Point(31, 236);
             this.cmdSeek0.Name = "cmdSeek0";
             this.cmdSeek0.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek0.TabIndex = 6;
@@ -141,7 +140,7 @@
             // 
             // cmdSeek100
             // 
-            this.cmdSeek100.Location = new System.Drawing.Point(82, 263);
+            this.cmdSeek100.Location = new System.Drawing.Point(83, 236);
             this.cmdSeek100.Name = "cmdSeek100";
             this.cmdSeek100.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek100.TabIndex = 6;
@@ -151,7 +150,7 @@
             // 
             // cmdSeek200
             // 
-            this.cmdSeek200.Location = new System.Drawing.Point(134, 263);
+            this.cmdSeek200.Location = new System.Drawing.Point(135, 236);
             this.cmdSeek200.Name = "cmdSeek200";
             this.cmdSeek200.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek200.TabIndex = 6;
@@ -161,7 +160,7 @@
             // 
             // cmdSeek300
             // 
-            this.cmdSeek300.Location = new System.Drawing.Point(186, 263);
+            this.cmdSeek300.Location = new System.Drawing.Point(187, 236);
             this.cmdSeek300.Name = "cmdSeek300";
             this.cmdSeek300.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek300.TabIndex = 6;
@@ -171,7 +170,7 @@
             // 
             // cmdSeek400
             // 
-            this.cmdSeek400.Location = new System.Drawing.Point(238, 263);
+            this.cmdSeek400.Location = new System.Drawing.Point(239, 236);
             this.cmdSeek400.Name = "cmdSeek400";
             this.cmdSeek400.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek400.TabIndex = 6;
@@ -181,7 +180,7 @@
             // 
             // cmdSeek500
             // 
-            this.cmdSeek500.Location = new System.Drawing.Point(290, 263);
+            this.cmdSeek500.Location = new System.Drawing.Point(291, 236);
             this.cmdSeek500.Name = "cmdSeek500";
             this.cmdSeek500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek500.TabIndex = 6;
@@ -191,7 +190,7 @@
             // 
             // cmdSeek1000
             // 
-            this.cmdSeek1000.Location = new System.Drawing.Point(30, 292);
+            this.cmdSeek1000.Location = new System.Drawing.Point(31, 265);
             this.cmdSeek1000.Name = "cmdSeek1000";
             this.cmdSeek1000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek1000.TabIndex = 6;
@@ -201,7 +200,7 @@
             // 
             // cmdSeek1500
             // 
-            this.cmdSeek1500.Location = new System.Drawing.Point(82, 292);
+            this.cmdSeek1500.Location = new System.Drawing.Point(83, 265);
             this.cmdSeek1500.Name = "cmdSeek1500";
             this.cmdSeek1500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek1500.TabIndex = 6;
@@ -211,7 +210,7 @@
             // 
             // cmdSeek2000
             // 
-            this.cmdSeek2000.Location = new System.Drawing.Point(134, 292);
+            this.cmdSeek2000.Location = new System.Drawing.Point(135, 265);
             this.cmdSeek2000.Name = "cmdSeek2000";
             this.cmdSeek2000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek2000.TabIndex = 6;
@@ -221,7 +220,7 @@
             // 
             // cmdSeek2500
             // 
-            this.cmdSeek2500.Location = new System.Drawing.Point(186, 292);
+            this.cmdSeek2500.Location = new System.Drawing.Point(187, 265);
             this.cmdSeek2500.Name = "cmdSeek2500";
             this.cmdSeek2500.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek2500.TabIndex = 6;
@@ -231,7 +230,7 @@
             // 
             // cmdSeek3000
             // 
-            this.cmdSeek3000.Location = new System.Drawing.Point(238, 292);
+            this.cmdSeek3000.Location = new System.Drawing.Point(239, 265);
             this.cmdSeek3000.Name = "cmdSeek3000";
             this.cmdSeek3000.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek3000.TabIndex = 6;
@@ -241,7 +240,7 @@
             // 
             // cmdSeek3600
             // 
-            this.cmdSeek3600.Location = new System.Drawing.Point(290, 292);
+            this.cmdSeek3600.Location = new System.Drawing.Point(291, 265);
             this.cmdSeek3600.Name = "cmdSeek3600";
             this.cmdSeek3600.Size = new System.Drawing.Size(46, 23);
             this.cmdSeek3600.TabIndex = 6;
@@ -252,54 +251,37 @@
             // lbLog
             // 
             this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(11, 415);
+            this.lbLog.Location = new System.Drawing.Point(12, 388);
             this.lbLog.Name = "lbLog";
             this.lbLog.Size = new System.Drawing.Size(353, 225);
             this.lbLog.TabIndex = 7;
             // 
             // txtFileSize
             // 
-            this.txtFileSize.Location = new System.Drawing.Point(11, 646);
+            this.txtFileSize.Location = new System.Drawing.Point(12, 619);
             this.txtFileSize.Name = "txtFileSize";
             this.txtFileSize.Size = new System.Drawing.Size(353, 20);
             this.txtFileSize.TabIndex = 9;
             // 
-            // txtFileName
-            // 
-            this.txtFileName.Location = new System.Drawing.Point(62, 70);
-            this.txtFileName.Name = "txtFileName";
-            this.txtFileName.Size = new System.Drawing.Size(260, 20);
-            this.txtFileName.TabIndex = 11;
-            // 
             // cbMovies
             // 
             this.cbMovies.FormattingEnabled = true;
-            this.cbMovies.Location = new System.Drawing.Point(63, 96);
+            this.cbMovies.Location = new System.Drawing.Point(64, 69);
             this.cbMovies.Name = "cbMovies";
-            this.cbMovies.Size = new System.Drawing.Size(259, 21);
+            this.cbMovies.Size = new System.Drawing.Size(258, 21);
             this.cbMovies.TabIndex = 12;
-            // 
-            // cmdInitFile
-            // 
-            this.cmdInitFile.Location = new System.Drawing.Point(328, 68);
-            this.cmdInitFile.Name = "cmdInitFile";
-            this.cmdInitFile.Size = new System.Drawing.Size(41, 23);
-            this.cmdInitFile.TabIndex = 13;
-            this.cmdInitFile.Text = "Init Streaming";
-            this.cmdInitFile.UseVisualStyleBackColor = true;
-            this.cmdInitFile.Click += new System.EventHandler(this.cmdInitFile_Click);
             // 
             // cbChannels
             // 
             this.cbChannels.FormattingEnabled = true;
-            this.cbChannels.Location = new System.Drawing.Point(62, 151);
+            this.cbChannels.Location = new System.Drawing.Point(63, 124);
             this.cbChannels.Name = "cbChannels";
             this.cbChannels.Size = new System.Drawing.Size(259, 21);
             this.cbChannels.TabIndex = 14;
             // 
             // cmdInitChannel
             // 
-            this.cmdInitChannel.Location = new System.Drawing.Point(327, 149);
+            this.cmdInitChannel.Location = new System.Drawing.Point(328, 122);
             this.cmdInitChannel.Name = "cmdInitChannel";
             this.cmdInitChannel.Size = new System.Drawing.Size(41, 23);
             this.cmdInitChannel.TabIndex = 15;
@@ -309,7 +291,7 @@
             // 
             // cmdPlayInVlc
             // 
-            this.cmdPlayInVlc.Location = new System.Drawing.Point(292, 359);
+            this.cmdPlayInVlc.Location = new System.Drawing.Point(293, 332);
             this.cmdPlayInVlc.Name = "cmdPlayInVlc";
             this.cmdPlayInVlc.Size = new System.Drawing.Size(75, 23);
             this.cmdPlayInVlc.TabIndex = 16;
@@ -320,7 +302,7 @@
             // cbStartAutoPlayback
             // 
             this.cbStartAutoPlayback.AutoSize = true;
-            this.cbStartAutoPlayback.Location = new System.Drawing.Point(11, 361);
+            this.cbStartAutoPlayback.Location = new System.Drawing.Point(12, 334);
             this.cbStartAutoPlayback.Name = "cbStartAutoPlayback";
             this.cbStartAutoPlayback.Size = new System.Drawing.Size(157, 17);
             this.cbStartAutoPlayback.TabIndex = 17;
@@ -330,9 +312,9 @@
             // cbLanguage
             // 
             this.cbLanguage.FormattingEnabled = true;
-            this.cbLanguage.Location = new System.Drawing.Point(63, 179);
+            this.cbLanguage.Location = new System.Drawing.Point(64, 152);
             this.cbLanguage.Name = "cbLanguage";
-            this.cbLanguage.Size = new System.Drawing.Size(305, 21);
+            this.cbLanguage.Size = new System.Drawing.Size(303, 21);
             this.cbLanguage.TabIndex = 18;
             // 
             // cbProfiles
@@ -340,20 +322,20 @@
             this.cbProfiles.FormattingEnabled = true;
             this.cbProfiles.Location = new System.Drawing.Point(63, 41);
             this.cbProfiles.Name = "cbProfiles";
-            this.cbProfiles.Size = new System.Drawing.Size(305, 21);
+            this.cbProfiles.Size = new System.Drawing.Size(304, 21);
             this.cbProfiles.TabIndex = 19;
             // 
             // cbSubtitle
             // 
             this.cbSubtitle.FormattingEnabled = true;
-            this.cbSubtitle.Location = new System.Drawing.Point(62, 207);
+            this.cbSubtitle.Location = new System.Drawing.Point(63, 180);
             this.cbSubtitle.Name = "cbSubtitle";
-            this.cbSubtitle.Size = new System.Drawing.Size(305, 21);
+            this.cbSubtitle.Size = new System.Drawing.Size(304, 21);
             this.cbSubtitle.TabIndex = 20;
             // 
             // cmdInitIdTypeStreaming
             // 
-            this.cmdInitIdTypeStreaming.Location = new System.Drawing.Point(328, 120);
+            this.cmdInitIdTypeStreaming.Location = new System.Drawing.Point(329, 93);
             this.cmdInitIdTypeStreaming.Name = "cmdInitIdTypeStreaming";
             this.cmdInitIdTypeStreaming.Size = new System.Drawing.Size(41, 23);
             this.cmdInitIdTypeStreaming.TabIndex = 21;
@@ -364,7 +346,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 128);
+            this.label1.Location = new System.Drawing.Point(10, 101);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 22;
@@ -373,7 +355,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(178, 129);
+            this.label2.Location = new System.Drawing.Point(236, 101);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(16, 13);
             this.label2.TabIndex = 22;
@@ -381,23 +363,23 @@
             // 
             // txtItemId
             // 
-            this.txtItemId.Location = new System.Drawing.Point(222, 125);
+            this.txtItemId.Location = new System.Drawing.Point(259, 98);
             this.txtItemId.Name = "txtItemId";
-            this.txtItemId.Size = new System.Drawing.Size(100, 20);
+            this.txtItemId.Size = new System.Drawing.Size(63, 20);
             this.txtItemId.TabIndex = 23;
             // 
             // cbItemType
             // 
             this.cbItemType.FormattingEnabled = true;
-            this.cbItemType.Location = new System.Drawing.Point(63, 124);
+            this.cbItemType.Location = new System.Drawing.Point(64, 97);
             this.cbItemType.Name = "cbItemType";
-            this.cbItemType.Size = new System.Drawing.Size(109, 21);
+            this.cbItemType.Size = new System.Drawing.Size(80, 21);
             this.cbItemType.TabIndex = 24;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 210);
+            this.label3.Location = new System.Drawing.Point(10, 183);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 25;
@@ -406,7 +388,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 182);
+            this.label4.Location = new System.Drawing.Point(10, 155);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 26;
@@ -415,7 +397,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 154);
+            this.label5.Location = new System.Drawing.Point(10, 127);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(51, 13);
             this.label5.TabIndex = 25;
@@ -424,38 +406,46 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 99);
+            this.label6.Location = new System.Drawing.Point(10, 72);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 13);
             this.label6.TabIndex = 25;
             this.label6.Text = "Movie";
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 73);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 13);
-            this.label7.TabIndex = 25;
-            this.label7.Text = "FileName";
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 44);
+            this.label8.Location = new System.Drawing.Point(10, 44);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 13);
             this.label8.TabIndex = 25;
             this.label8.Text = "Profiles";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(150, 101);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(46, 13);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "Provider";
+            // 
+            // txtProvider
+            // 
+            this.txtProvider.Location = new System.Drawing.Point(202, 98);
+            this.txtProvider.Name = "txtProvider";
+            this.txtProvider.Size = new System.Drawing.Size(31, 20);
+            this.txtProvider.TabIndex = 28;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 675);
+            this.Controls.Add(this.txtProvider);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
@@ -471,9 +461,7 @@
             this.Controls.Add(this.cmdPlayInVlc);
             this.Controls.Add(this.cmdInitChannel);
             this.Controls.Add(this.cbChannels);
-            this.Controls.Add(this.cmdInitFile);
             this.Controls.Add(this.cbMovies);
-            this.Controls.Add(this.txtFileName);
             this.Controls.Add(this.txtFileSize);
             this.Controls.Add(this.lbLog);
             this.Controls.Add(this.cmdSeek3600);
@@ -522,9 +510,7 @@
         private System.Windows.Forms.Button cmdSeek3600;
         private System.Windows.Forms.ListBox lbLog;
         private System.Windows.Forms.TextBox txtFileSize;
-        private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.ComboBox cbMovies;
-        private System.Windows.Forms.Button cmdInitFile;
         private System.Windows.Forms.ComboBox cbChannels;
         private System.Windows.Forms.Button cmdInitChannel;
         private System.Windows.Forms.Button cmdPlayInVlc;
@@ -541,8 +527,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtProvider;
     }
 }
 

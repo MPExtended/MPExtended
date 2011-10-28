@@ -24,13 +24,13 @@ using System.Linq;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 
 namespace MPExtended.PlugIns.MAS.MovingPictures
 {
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "Moving Pictures")]
     [ExportMetadata("Type", typeof(MPMovingPictures))]
+    [ExportMetadata("Id", 3)]
     public class MPMovingPictures : Database, IMovieLibrary
     {
         // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:

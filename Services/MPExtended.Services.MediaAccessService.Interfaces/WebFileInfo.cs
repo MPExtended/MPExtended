@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.MediaAccessService.Interfaces.Shared
+namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebFileInfo
+    public class WebFileInfo : WebObject
     {
         public WebFileInfo()
         {

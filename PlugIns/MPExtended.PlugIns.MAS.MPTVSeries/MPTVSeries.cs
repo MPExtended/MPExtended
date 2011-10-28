@@ -24,7 +24,6 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.PlugIns.MAS.MPTVSeries
@@ -32,6 +31,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Name", "MP-TVSeries")]
     [ExportMetadata("Type", typeof(MPTVSeries))]
+    [ExportMetadata("Id", 6)]
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private IPluginData data;

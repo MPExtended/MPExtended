@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MPExtended.Services.MediaAccessService.Interfaces.Shared;
 using System.Data.SQLite;
 using MPExtended.Libraries.SQLitePlugin;
 using System.Security.Cryptography;
@@ -33,6 +32,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Name", "MP MyMusic")]
     [ExportMetadata("Type", typeof(MPMusic))]
+    [ExportMetadata("Id", 4)]
     public class MPMusic : Database, IMusicLibrary
     {
         private IPluginData data;

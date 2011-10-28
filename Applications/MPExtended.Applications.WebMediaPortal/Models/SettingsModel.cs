@@ -29,5 +29,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public bool UseLocalServices { get; set; }
         public string RemoteTVServiceURL { get; set; }
         public string RemoteMediaServiceURL { get; set; }
+
+        public int TVShowProvider { get; set; }
+        public int MovieProvider { get; set; }
+        public int MusicProvider { get; set; }
+        public int PicturesProvider { get; set; }
+        public int FileSystemProvider { get; set; }
     }
 }

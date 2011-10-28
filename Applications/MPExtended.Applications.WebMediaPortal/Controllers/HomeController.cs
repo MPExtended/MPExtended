@@ -42,18 +42,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewMovies()
         {
-             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(0, 3, sort:SortBy.DateAdded, order:OrderBy.Desc);
+             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort:SortBy.DateAdded, order:OrderBy.Desc);
              return PartialView(tmp);
         }
 
         public ActionResult NewEpisodes()
         {
-            var tmp = MPEServices.NetPipeMediaAccessService.GetTVEpisodesDetailedByRange(0, 3, SortBy.TVDateAired, OrderBy.Desc);
+            var tmp = MPEServices.NetPipeMediaAccessService.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
             var list = tmp.Select(x => new EpisodeModel
             {
                 Episode = x,
-                Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(x.SeasonId),
-                Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(x.ShowId)
+                Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(x.PID, x.SeasonId),
+                Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(x.PID, x.ShowId)
             });
 
             return PartialView(list);
