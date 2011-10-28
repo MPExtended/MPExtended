@@ -84,7 +84,13 @@ namespace MPExtended.Services.MediaAccessService
                 AvailableMovieLibraries = MovieLibraries.GetAllAsBackendProvider(),
                 AvailableMusicLibraries = MusicLibraries.GetAllAsBackendProvider(),
                 AvailablePictureLibraries = PictureLibraries.GetAllAsBackendProvider(),
-                AvailableTvShowLibraries = TVShowLibraries.GetAllAsBackendProvider()
+                AvailableTvShowLibraries = TVShowLibraries.GetAllAsBackendProvider(),
+
+                DefaultFileSystemLibrary = ProviderHandler.GetDefaultProvider(ProviderType.Filesystem),
+                DefaultMovieLibrary = ProviderHandler.GetDefaultProvider(ProviderType.Movie),
+                DefaultMusicLibrary = ProviderHandler.GetDefaultProvider(ProviderType.Music),
+                DefaultPictureLibrary = ProviderHandler.GetDefaultProvider(ProviderType.Picture),
+                DefaultTvShowLibrary = ProviderHandler.GetDefaultProvider(ProviderType.TVShow),
             };
         }
 

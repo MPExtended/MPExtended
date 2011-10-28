@@ -20,5 +20,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public List<WebBackendProvider> AvailablePictureLibraries { get; set; }
         public List<WebBackendProvider> AvailableTvShowLibraries { get; set; }
         public List<WebBackendProvider> AvailableFileSystemLibraries { get; set; }
+
+        public int DefaultMovieLibrary { get; set; }
+        public int DefaultMusicLibrary { get; set; }
+        public int DefaultPictureLibrary { get; set; }
+        public int DefaultTvShowLibrary { get; set; }
+        public int DefaultFileSystemLibrary { get; set; }
     }
 }
