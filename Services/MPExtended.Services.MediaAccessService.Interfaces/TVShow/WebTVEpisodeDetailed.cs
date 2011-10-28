@@ -7,7 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
     public class WebTVEpisodeDetailed : WebTVEpisodeBasic
     {
-        public WebTVEpisodeDetailed()
+        public WebTVEpisodeDetailed() : base()
         {
             GuestStars = new List<string>();
             Directors = new List<string>();
