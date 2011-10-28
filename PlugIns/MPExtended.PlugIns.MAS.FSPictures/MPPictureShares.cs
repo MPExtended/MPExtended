@@ -28,7 +28,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 {
     [Export(typeof(IPictureLibrary))]
     [ExportMetadata("Name", "MP Picture Shares")]
-    [ExportMetadata("Type", typeof(MPPictureShares))]
     [ExportMetadata("Id", 8)]
     public class MPPictureShares : PictureLibraryBase
     {

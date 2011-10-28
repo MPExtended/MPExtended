@@ -30,7 +30,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Name", "MP-TVSeries")]
-    [ExportMetadata("Type", typeof(MPTVSeries))]
     [ExportMetadata("Id", 6)]
     public class MPTVSeries : Database, ITVShowLibrary
     {

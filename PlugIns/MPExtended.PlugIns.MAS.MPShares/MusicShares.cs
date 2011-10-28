@@ -26,7 +26,6 @@ namespace MPExtended.PlugIns.MAS.MPShares
 {
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Name", "MP Music Shares")]
-    [ExportMetadata("Type", typeof(MusicShares))]
     [ExportMetadata("Id", 9)]
     public class MusicShares : ShareLibrary
     {

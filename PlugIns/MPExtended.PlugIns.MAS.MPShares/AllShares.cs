@@ -26,7 +26,6 @@ namespace MPExtended.PlugIns.MAS.MPShares
 {
     [Export(typeof(IFileSystemLibrary))]
     [ExportMetadata("Name", "MP Shares")]
-    [ExportMetadata("Type", typeof(AllShares))]
     [ExportMetadata("Id", 5)]
     public class AllShares : ShareLibrary
     {

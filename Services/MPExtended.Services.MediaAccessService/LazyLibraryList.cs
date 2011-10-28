@@ -111,7 +111,7 @@ namespace MPExtended.Services.MediaAccessService
                 {
                     Name = (string)items[key].Metadata["Name"],
                     Id = (int)items[key].Metadata["Id"],
-                    Version = VersionUtil.GetBuildVersion(((Type)(items[key].Metadata["Type"])).Assembly).ToString()
+                    Version = VersionUtil.GetBuildVersion(items[key].Value.GetType().Assembly).ToString()
                 });
             }
             return ret;
