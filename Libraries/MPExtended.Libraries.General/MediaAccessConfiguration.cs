@@ -58,6 +58,7 @@ namespace MPExtended.Libraries.General
     {
         public DefaultPluginConfiguration DefaultPlugins { get; set; }
         public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
+        public List<string> DisabledPlugins { get; set; }
 
         public MediaAccessConfiguration()
         {
@@ -73,6 +74,8 @@ namespace MPExtended.Libraries.General
                     Picture = file.Element("defaultPlugins").Element("picture").Value,
                     TVShow = file.Element("defaultPlugins").Element("tvshow").Value,
                 };
+
+                DisabledPlugins = file.Element("disabledPlugins").Elements("disabled").Select(x => x.Value).ToList();
 
                 PluginConfiguration = new Dictionary<string, List<PluginConfigItem>>();
 
@@ -104,6 +107,12 @@ namespace MPExtended.Libraries.General
                 file.Element("defaultPlugins").Element("music").Value = DefaultPlugins.Music;
                 file.Element("defaultPlugins").Element("picture").Value = DefaultPlugins.Picture;
                 file.Element("defaultPlugins").Element("filesystem").Value = DefaultPlugins.Filesystem;
+
+                file.Element("disabledPlugins").Elements("disabled").Remove();
+                foreach (string item in DisabledPlugins)
+                {
+                    file.Element("disabledPlugins").Add(new XElement("disabled", item));
+                }
 
                 foreach (var pluginElement in file.Element("pluginConfiguration").Elements("plugin"))
                 {

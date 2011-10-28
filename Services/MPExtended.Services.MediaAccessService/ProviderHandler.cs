@@ -66,11 +66,11 @@ namespace MPExtended.Services.MediaAccessService
 
             try
             {
-                MovieLibraries = new LazyLibraryList<IMovieLibrary>(MovieLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Movie);
-                MusicLibraries = new LazyLibraryList<IMusicLibrary>(MusicLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Music);
-                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(TVShowLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.TVShow);
-                PictureLibraries = new LazyLibraryList<IPictureLibrary>(PictureLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Picture);
-                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(FileSystemLibrariesLoaded.ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Filesystem);
+                MovieLibraries = new LazyLibraryList<IMovieLibrary>(FilterDisabled(MovieLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Movie);
+                MusicLibraries = new LazyLibraryList<IMusicLibrary>(FilterDisabled(MusicLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Music);
+                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(FilterDisabled(TVShowLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.TVShow);
+                PictureLibraries = new LazyLibraryList<IPictureLibrary>(FilterDisabled(PictureLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Picture);
+                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(FilterDisabled(FileSystemLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Filesystem);
             }
             catch (Exception ex)
             {
@@ -121,6 +121,11 @@ namespace MPExtended.Services.MediaAccessService
                 Log.Error("Failed to create MEF service", ex);
                 return false;
             }
+        }
+
+        private IEnumerable<Lazy<T, IDictionary<string, object>>> FilterDisabled<T>(Lazy<T, IDictionary<string, object>>[] list) 
+        {
+            return list.Where(x => !Configuration.Media.DisabledPlugins.Contains((string)x.Metadata["Name"]));
         }
         #endregion
 
