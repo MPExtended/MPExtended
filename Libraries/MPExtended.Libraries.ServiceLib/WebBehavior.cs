@@ -37,6 +37,11 @@ namespace MPExtended.Libraries.ServiceLib
             endpointDispatcher.ChannelDispatcher.ErrorHandlers.Add(this);
         }
 
+        protected override QueryStringConverter GetQueryStringConverter(OperationDescription operationDescription)
+        {
+            return new CustomQueryStringConverter();
+        }
+
         public bool HandleError(Exception error)
         {
             return true;
