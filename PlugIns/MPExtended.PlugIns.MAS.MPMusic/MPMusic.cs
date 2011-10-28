@@ -128,7 +128,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 if(album.Artists.Count() > 0) 
                 {
-                    album.CoverPaths.Add(GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title));
+                    string path = GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title);
+                    if (File.Exists(path))
+                    {
+                        album.Artwork.Add(new WebArtworkDetailed()
+                        {
+                            Type = WebFileType.Cover,
+                            Offset = 0,
+                            Path = path
+                        });
+                    }
                 }
                 return album;
             });
