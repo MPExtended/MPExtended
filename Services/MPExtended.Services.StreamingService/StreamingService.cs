@@ -78,7 +78,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Info methods
-        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, int provider, string itemId)
+        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, int? provider, string itemId)
         {
             if (type == WebStreamMediaType.TV)
             {
@@ -106,14 +106,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.GetStreamingSessions();
         }
 
-        public WebResolution GetStreamSize(WebStreamMediaType type, int provider, string itemId, string profile)
+        public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
         {
             return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
         #endregion
 
         #region Streaming
-        public bool InitStream(WebStreamMediaType type, int provider, string itemId, string clientDescription, string identifier)
+        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier)
         {
             if (type == WebStreamMediaType.TV)
             {
@@ -170,7 +170,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(WebStreamMediaType type, int provider, string itemId)
+        public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
             MediaSource source = new MediaSource(type, provider, itemId);
             return source.Retrieve();
@@ -183,32 +183,32 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Images
-        public Stream ExtractImage(WebStreamMediaType type, int provider, string itemId, int position)
+        public Stream ExtractImage(WebStreamMediaType type, int? provider, string itemId, int position)
         {
              return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
         }
 
-        public Stream ExtractImageResized(WebStreamMediaType type, int provider, string itemId, int position, int maxWidth, int maxHeight)
+        public Stream ExtractImageResized(WebStreamMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
         {
              return Images.ExtractImage(new MediaSource(type, provider, itemId), position, maxWidth, maxHeight);
         }
 
-        public Stream GetImage(WebStreamMediaType type, int provider, string id)
+        public Stream GetImage(WebStreamMediaType type, int? provider, string id)
         {
             return Images.GetImage(new MediaSource(type, provider, id));
         }
 
-        public Stream GetImageResized(WebStreamMediaType type, int provider, string id, int maxWidth, int maxHeight)
+        public Stream GetImageResized(WebStreamMediaType type, int? provider, string id, int maxWidth, int maxHeight)
         {
              return Images.GetResizedImage(new MediaSource(type, provider, id), maxWidth, maxHeight);
         }
 
-        public Stream GetArtwork(WebStreamMediaType mediatype, int provider, string id, WebArtworkType artworktype, int offset)
+        public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
         { 
              return Images.GetImage(new MediaSource(mediatype, provider, id, offset), artworktype);
         }
 
-        public Stream GetArtworkResized(WebStreamMediaType mediatype, int provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
+        public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
         {
             return Images.GetResizedImage(new MediaSource(mediatype, provider, id, offset), artworktype, maxWidth, maxHeight);
         }

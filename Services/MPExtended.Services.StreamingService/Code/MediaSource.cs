@@ -31,7 +31,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public WebStreamMediaType MediaType { get; set; }
         public string Id { get; set; } // path to tsbuffer for TV
-        public int Provider { get; set; } // for MAS
+        public int? Provider { get; set; } // for MAS
         public int Offset { get; set; }
 
         public bool IsLocalFile
@@ -52,7 +52,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public MediaSource(WebMediaType type, int provider, string id)
+        public MediaSource(WebMediaType type, int? provider, string id)
         {
             this.MediaType = (WebStreamMediaType)type;
             this.Id = id;
@@ -60,13 +60,13 @@ namespace MPExtended.Services.StreamingService.Code
             this.Provider = provider;
         }
 
-        public MediaSource(WebMediaType type, int provider, string id, int offset)
+        public MediaSource(WebMediaType type, int? provider, string id, int offset)
             : this(type, provider, id)
         {
             this.Offset = offset;
         }
 
-        public MediaSource(WebStreamMediaType type, int provider, string id)
+        public MediaSource(WebStreamMediaType type, int? provider, string id)
         {
             this.MediaType = type;
             this.Id = id;
@@ -74,7 +74,7 @@ namespace MPExtended.Services.StreamingService.Code
             this.Provider = provider;
         }
 
-        public MediaSource(WebStreamMediaType type, int provider, string id, int offset)
+        public MediaSource(WebStreamMediaType type, int? provider, string id, int offset)
             : this(type, provider, id)
         {
             this.Offset = offset;

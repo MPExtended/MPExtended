@@ -111,9 +111,14 @@ namespace MPExtended.Services.MediaAccessService
         }
     
         // Fill the providerid field
-        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int providerId) where T : WebObject
+        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
-            return list.Select(x => { x.PID = providerId; return x; });
+            return list.Select(x => { x.PID = ProviderHandler.GetProviderId(type, providerId); return x; });
+        }
+
+        public static IEnumerable<T> FillProvider<T>(this IEnumerable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
+        {
+            return list.Select(x => { x.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), providerId); return x; });
         }
 
         // Allow easy sorting from MediaAccessService.cs
@@ -185,10 +190,42 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class WebObjectExtensionMethods
     {
-        public static T SetProvider<T>(this T item, int provider) where T : WebObject
+        public static T SetProvider<T>(this T item, int? provider, ProviderType type) where T : WebObject
         {
-            item.PID = provider;
+            item.PID = ProviderHandler.GetProviderId(type, provider);
             return item;
+        }
+
+        public static T SetProvider<T>(this T item, int? provider, WebMediaType mediatype) where T : WebObject
+        {
+            item.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), provider);
+            return item;
+        }
+    }
+
+    internal static class WebMediaTypeExtensionMethods
+    {
+        public static ProviderType ToProviderType(this WebMediaType mediatype)
+        {
+            switch (mediatype)
+            {
+                case WebMediaType.File:
+                    return ProviderType.Filesystem;
+                case WebMediaType.Movie:
+                    return ProviderType.Movie;
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicArtist:
+                case WebMediaType.MusicTrack:
+                    return ProviderType.Music;
+                case WebMediaType.Picture:
+                    return ProviderType.Picture;
+                case WebMediaType.TVEpisode:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVShow:
+                    return ProviderType.TVShow;
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }
