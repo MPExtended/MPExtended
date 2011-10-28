@@ -27,7 +27,7 @@ namespace MPExtended.Libraries.ServiceLib
     {
         public override bool CanConvert(Type type)
         {
-            if (type == typeof(int?))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 return true;
             }
@@ -37,17 +37,14 @@ namespace MPExtended.Libraries.ServiceLib
 
         public override object ConvertStringToValue(string parameter, Type parameterType)
         {
-            if(parameterType == typeof(int?)) 
+            if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                int outval;
-                if (!String.IsNullOrWhiteSpace(parameter) && Int32.TryParse(parameter, out outval))
-                {
-                    return outval;
-                }
-                else
+                if (String.IsNullOrWhiteSpace(parameter))
                 {
                     return null;
                 }
+
+                parameterType = parameterType.GetGenericArguments().First();
             }
 
             return base.ConvertStringToValue(parameter, parameterType);
@@ -55,10 +52,14 @@ namespace MPExtended.Libraries.ServiceLib
 
         public override string ConvertValueToString(object parameter, Type parameterType)
         {
-            if (parameterType == typeof(int?))
+            if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                int? value = (int?)parameter;
-                return value.HasValue ? value.Value.ToString() : "";
+                if (parameter == null)
+                {
+                    return "";
+                }
+
+                parameterType = parameterType.GetGenericArguments().First();
             }
 
             return base.ConvertValueToString(parameter, parameterType);

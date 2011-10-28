@@ -122,8 +122,18 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // Allow easy sorting from MediaAccessService.cs
-        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy sort, OrderBy order)
+        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput)
         {
+            // parse arguments
+            if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
+            {
+                Log.Warn("Invalid OrderBy value {0} given", orderInput);
+                throw new Exception("Invalid OrderBy value specified");
+            }
+            SortBy sort = sortInput.HasValue ? sortInput.Value : SortBy.Title;
+            OrderBy order = orderInput.HasValue ? orderInput.Value : Interfaces.OrderBy.Asc;
+
+            // do the actual sorting
             try
             {
                 switch (sort)
@@ -159,12 +169,13 @@ namespace MPExtended.Services.MediaAccessService
                     // picture
                     case SortBy.PictureDateTaken:
                         return list.OrderBy(x => ((IPictureDateTakenSortable)x).DateTaken, order);
-                }
 
-                // this can't be reached but the compiler is stupid
-                throw new Exception();
+                    default:
+                        Log.Warn("Invalid SortBy value {0}", sortInput);
+                        throw new Exception("Sorting on this property is not supported for this media type");
+                }
             }
-            catch (InvalidCastException ex)
+            catch (Exception ex)
             {
                 Log.Warn("Tried to do invalid sorting", ex);
                 throw new Exception("Sorting on this property is not supported for this media type");

@@ -51,7 +51,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc);
+        IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string genre = null, string category = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

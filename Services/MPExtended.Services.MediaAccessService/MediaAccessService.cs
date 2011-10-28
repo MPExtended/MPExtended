@@ -134,7 +134,7 @@ namespace MPExtended.Services.MediaAccessService
             return new WebItemCount() { Count = MovieLibraries[provider].GetAllMovies().FilterGenreCategory(genre, category).Count() };
         }
 
-        public IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string genre = null, string category = null, SortBy sort = SortBy.Title, OrderBy order = OrderBy.Asc)
+        public IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string genre = null, string category = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return MovieLibraries[provider].GetAllMovies().SortMediaItemList(sort, order).FillProvider(provider, ProviderType.Movie).ToList();
         }
