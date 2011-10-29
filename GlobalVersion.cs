@@ -35,11 +35,13 @@ using System.Runtime.InteropServices;
 // the assembly is replaced with an assembly with a different AssemblyVersion attribute. 
 [assembly: AssemblyVersion("0.4.0.0")]
 
-// This reflects the version of this unique build, and should be changed with each build. I hoped that this was possible
-// using the TFS revision number but apparantly that's only possible with an add-in for Visual Studio. So instead, we
-// put a static version here and hope people don't mess around too much with our assemblies. I use the .9.x release of 
-// the previous version for beta and dev versions: 0.3.9.0 is a dev version of 0.4
-[assembly: AssemblyFileVersion("0.3.9.0")]
+// This reflects the version of this unique build, and should be changed with each build. Sadly it's not easily possible
+// to let this change with each build in Visual Studio, so we don't have that in our version numbers now and hope people
+// don't mess around too much with our builds. For stable releases, this is of the format major.minor.bugfix.0. For new 
+// minor versions we use major.prev-minor.99.x, with x incrementing with each alpha/beta/RC release. For test versions of
+// bugfix releases this is major.minor.prev-bugfix.x, with x incrementing with each alpha/beta/RC release. This number
+// is also used to check for new versions in the configurator, so please follow this scheme strictly. 
+[assembly: AssemblyFileVersion("0.3.99.0")]
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.

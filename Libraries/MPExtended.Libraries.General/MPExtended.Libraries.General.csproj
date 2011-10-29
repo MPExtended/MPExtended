@@ -64,6 +64,7 @@
     <Compile Include="ServicesConfiguration.cs" />
     <Compile Include="ThreadManager.cs" />
     <Compile Include="StreamingConfiguration.cs" />
+    <Compile Include="UpdateChecker.cs" />
     <Compile Include="VersionUtil.cs" />
   </ItemGroup>
   <ItemGroup>

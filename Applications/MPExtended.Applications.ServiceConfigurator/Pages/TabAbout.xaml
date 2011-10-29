@@ -21,5 +21,6 @@
             - DieBagger (developer)<LineBreak/>
             - Oxan (developer)<LineBreak/>
         </TextBlock>
+        <Label Content="Checking version information..." Height="28" HorizontalAlignment="Left" Margin="12,0,0,12" Name="lblVersion" VerticalAlignment="Bottom" />
     </Grid>
 </Page>

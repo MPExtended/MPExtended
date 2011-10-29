@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -28,6 +29,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -36,9 +38,36 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabAbout : Page
     {
+        private BackgroundWorker versionChecker;
+
         public TabAbout()
         {
             InitializeComponent();
+            versionChecker = new BackgroundWorker();
+            versionChecker.DoWork += delegate(object s, DoWorkEventArgs args)
+            {
+                string text = String.Format("You're currently using version {0}. ", VersionUtil.GetVersionName());
+                if (!UpdateChecker.IsWorking())
+                {
+                    text += "Failed to retrieve update information.";
+                } 
+                else if (UpdateChecker.IsUpdateAvailable())
+                {
+                    text += String.Format("Update available: version {0}, released on {1:dd MMM yyyy}.",
+                        UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
+                }
+                else
+                {
+                    text += "No update available.";
+                }
+
+                args.Result = text;
+            };
+            versionChecker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
+            {
+                lblVersion.Content = args.Result as string;
+            };
+            versionChecker.RunWorkerAsync();
         }
     }
 }

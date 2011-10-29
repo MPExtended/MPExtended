@@ -25,6 +25,19 @@ using System.IO;
 
 namespace MPExtended.Libraries.General
 {
+    /// <summary>
+    /// Utility to parse version information from MPExtended and MediaPortal
+    /// 
+    /// We differentiate between 3 different versions for MPExtended:
+    /// - The API version, defined by AssemblyVersion in GlobalVersion.cs. This is retrieved with GetVersion() and changes only
+    ///   with new feature releases (minor/major). Only the first two numbers are relevant here.
+    /// - The version name, defined by AssemblyInformationalVersion in GlobalVersion.cs. This is retrieved with GetVersioName()
+    ///   and is different for each release. It isn't of a fixed format, and should only be displayed to the user and/or printed
+    ///   to logs. Has no technical meaning.
+    /// - The build version, defined by AssemblyFileVersion in GlobalVersion.cs. This is retrieved with GetBuildVersion() and
+    ///   changes with each release. As opposed to AssemblyInformationalVersion, this number always increments and has a meaning.
+    ///   It is the number that is used for checking for updates. 
+    /// </summary>
     public class VersionUtil
     {
         public enum MediaPortalVersion 
