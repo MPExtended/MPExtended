@@ -22,5 +22,6 @@
         <TextBlock Height="23" Margin="168,194,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkStreamingGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkStreamingGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
         <Label Content="TvAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,218,0,0" Name="label12" VerticalAlignment="Top" />
         <TextBlock Height="23" Margin="168,223,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkTvAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkTvAccessGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
+        <Button Content="Export logs and configuration" Height="23" HorizontalAlignment="Left" Margin="15,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
     </Grid>
 </Page>

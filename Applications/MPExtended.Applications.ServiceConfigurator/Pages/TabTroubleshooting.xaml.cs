@@ -31,6 +31,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -120,6 +121,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".zip";
+            dlg.Filter = "Log and configuration archive (.zip)|*.zip";
+            if (dlg.ShowDialog() == true)
+            {
+                LogExporter.Export(dlg.FileName);
+                MessageBox.Show(String.Format("Exported logs and configuration data to {0}", dlg.FileName), "Export", MessageBoxButton.OK);
+            }
         }
     }
 }

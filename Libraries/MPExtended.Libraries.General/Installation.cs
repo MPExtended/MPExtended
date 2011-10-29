@@ -89,6 +89,20 @@ namespace MPExtended.Libraries.General
 #endif
         }
 
+        public static string GetConfigurationDirectory()
+        {
+#if DEBUG
+            return Path.Combine(GetRootDirectory(), "Config", "Debug");
+#else
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
+#endif
+        }
+
+        public static string GetLogDirectory()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
+        }
+
         private static bool CheckRegistryKey(RegistryKey reg, string key, string name)
         {
             RegistryKey regkey = reg.OpenSubKey(key);

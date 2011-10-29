@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Code\ErrorHandling.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
+    <Compile Include="Code\LogExporter.cs" />
     <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />
