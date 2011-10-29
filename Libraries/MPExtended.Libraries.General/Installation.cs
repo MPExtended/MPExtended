@@ -24,52 +24,8 @@ using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
-    public enum InstallationType
-    {
-        Client,
-        Server,
-        Singleseat
-    }
-
     public static class Installation
     {
-        public static bool HasLocalTAS
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public static bool HasLocalMAS
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public static string MASAddress
-        {
-            get
-            {
-                return "127.0.0.1";
-            }
-        }
-
-        public static string TASAddress
-        {
-            get
-            {
-                return "127.0.0.1";
-            }
-        }
-
-        public static InstallationType GetInstallationType()
-        {
-            return InstallationType.Singleseat;
-        }
-
         public static bool CheckInstalled(string service)
         {
 #if DEBUG

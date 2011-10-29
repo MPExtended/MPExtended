@@ -25,4 +25,10 @@
         <service>MPExtended.Services.UserSessionService</service>
     -->
   </disabledServices>
+
+  <!-- If you've have multiseat setup you can specify different hosts for the other host here. This is picked up by WebMP and in the future also by WSS -->
+  <connections>
+    <mas>auto://127.0.0.1:4322</mas>
+    <tas>auto://127.0.0.1:4322</tas>
+  </connections>
 </serviceconfig>

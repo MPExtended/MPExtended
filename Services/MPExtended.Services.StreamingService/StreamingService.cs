@@ -45,10 +45,10 @@ namespace MPExtended.Services.StreamingService
 
         public WebStreamServiceDescription GetServiceDescription()
         {
-            bool hasTv = MPEServices.HasTVAccessConnection; // takes a while so don't execute it twice
+            bool hasTv = MPEServices.HasTASConnection; // takes a while so don't execute it twice
             return new WebStreamServiceDescription()
             {
-                SupportsMedia = MPEServices.HasMediaAccessConnection,
+                SupportsMedia = MPEServices.HasMASConnection,
                 SupportsRecordings = hasTv,
                 SupportsTV = hasTv,
                 ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
@@ -121,7 +121,7 @@ namespace MPExtended.Services.StreamingService
                 lock (_timeshiftings)
                 {
                     Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
-                    var card = MPEServices.NetPipeTVAccessService.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
+                    var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
                     Log.Debug("Timeshifting started!");
                     _timeshiftings[identifier] = card;
                     itemId = card.TimeShiftFileName;
@@ -157,7 +157,7 @@ namespace MPExtended.Services.StreamingService
                 if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
                 {
                     Log.Info("Cancel timeshifting with identifier {0}",  identifier);
-                    MPEServices.NetPipeTVAccessService.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
+                    MPEServices.TAS.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
                     _timeshiftings.Remove(identifier);
                 }
             }

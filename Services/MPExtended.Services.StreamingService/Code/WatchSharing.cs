@@ -68,7 +68,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public WatchSharing()
         {
-            mas = MPEServices.NetPipeMediaAccessService;
+            mas = MPEServices.MAS;
 
             XElement config = XElement.Load(Configuration.GetPath("Streaming.xml")).Element("watchsharing");
             string serviceName = config.Element("type").Value;

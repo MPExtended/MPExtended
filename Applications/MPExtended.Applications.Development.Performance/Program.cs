@@ -28,6 +28,7 @@ namespace MPExtended.Applications.Development.Performance
     {
         static void Main(string[] args)
         {
+            bool bla = MPEServices.HasMASConnection;
             /*
             Console.WriteLine("MPExtended performance test tool");
             Console.WriteLine("");

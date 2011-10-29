@@ -48,7 +48,7 @@ namespace MPExtended.Services.StreamingService.Code
                     return false;
                 }
 
-                return MPEServices.NetPipeMediaAccessService.IsLocalFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                return MPEServices.MAS.IsLocalFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
             }
         }
 
@@ -84,7 +84,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (MediaType == WebStreamMediaType.Recording)
             {
-                return MPEServices.NetPipeTVAccessService.GetRecordings().Where(r => r.Id == Int32.Parse(Id)).Select(r => r.FileName).FirstOrDefault();
+                return MPEServices.TAS.GetRecordings().Where(r => r.Id == Int32.Parse(Id)).Select(r => r.FileName).FirstOrDefault();
             }
 
             if (MediaType == WebStreamMediaType.TV)
@@ -92,7 +92,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return Id;
             }
 
-            return MPEServices.NetPipeMediaAccessService.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
+            return MPEServices.MAS.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
         }
 
         public Stream Retrieve()
@@ -107,7 +107,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return new TsBuffer(Id);
             }
 
-            return MPEServices.NetPipeMediaAccessService.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+            return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
         }
 
         public IProcessingUnit GetInputReaderUnit()
@@ -124,8 +124,8 @@ namespace MPExtended.Services.StreamingService.Code
         {
             try
             {
-                var mas = MPEServices.NetPipeMediaAccessService;
-                var tas = MPEServices.NetPipeTVAccessService;
+                var mas = MPEServices.MAS;
+                var tas = MPEServices.TAS;
                 switch (MediaType)
                 {
                     case WebStreamMediaType.File:

@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var categories = MPEServices.NetPipeMediaAccessService.GetAllPictureCategories(Settings.ActiveSettings.PicturesProvider);
+                var categories = MPEServices.MAS.GetAllPictureCategories(Settings.ActiveSettings.PicturesProvider);
                 if (categories != null)
                 {
                     return View(categories);
@@ -52,7 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             try
             {
-                var images = MPEServices.NetPipeMediaAccessService.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
+                var images = MPEServices.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
                 if (images != null)
                 {
                     return View(images);
@@ -69,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {         
             try
             {
-                var image = MPEServices.NetPipeMediaAccessService.RetrieveFile(Settings.ActiveSettings.PicturesProvider, WebMediaType.Picture, WebFileType.Content, id, 0);
+                var image = MPEServices.MAS.RetrieveFile(Settings.ActiveSettings.PicturesProvider, WebMediaType.Picture, WebFileType.Content, id, 0);
                 if (image != null)
                 {
                     return File(image, "image/jpg");

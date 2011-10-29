@@ -46,7 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var profile in MPEServices.NetPipeWebStreamService.GetTranscoderProfiles())
+                foreach (var profile in MPEServices.MASStreamControl.GetTranscoderProfiles())
                 {
                     _profiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
 
@@ -59,7 +59,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var group in MPEServices.NetPipeTVAccessService.GetGroups())
+                foreach (var group in MPEServices.TAS.GetGroups())
                 {
                     _groups.Add(new SelectListItem() { Text = group.GroupName, Value = group.Id.ToString() });
 

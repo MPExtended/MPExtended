@@ -37,6 +37,9 @@ namespace MPExtended.Libraries.General
         public int Port { get; set; }
         public bool EnableIPv6 { get; set; }
 
+        public string MASConnection { get; set; }
+        public string TASConnection { get; set; }
+
         public List<User> Users { get; set; }
 
         public ServicesConfiguration()
@@ -48,6 +51,9 @@ namespace MPExtended.Libraries.General
 
             Port = Int32.Parse(file.Element("port").Value);
             EnableIPv6 = file.Element("enableIPv6").Value == "true";
+
+            MASConnection = file.Element("connections").Element("mas").Value;
+            TASConnection = file.Element("connections").Element("tas").Value;
 
             Users = file.Element("users").Elements("user").Select(x => new User()
             {
@@ -67,6 +73,9 @@ namespace MPExtended.Libraries.General
 
                 file.Element("port").Value = Port.ToString();
                 file.Element("enableIPv6").Value = EnableIPv6 ? "true" : "false";
+
+                file.Element("connections").Element("mas").Value = MASConnection;
+                file.Element("connections").Element("tas").Value = TASConnection;
 
                 file.Element("users").Elements().Remove();
                 foreach(User u in Users) {

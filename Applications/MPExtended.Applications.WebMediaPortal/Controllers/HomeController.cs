@@ -42,18 +42,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewMovies()
         {
-             var tmp = MPEServices.NetPipeMediaAccessService.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort:SortBy.DateAdded, order:OrderBy.Desc);
+             var tmp = MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort:SortBy.DateAdded, order:OrderBy.Desc);
              return PartialView(tmp);
         }
 
         public ActionResult NewEpisodes()
         {
-            var tmp = MPEServices.NetPipeMediaAccessService.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
+            var tmp = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
             var list = tmp.Select(x => new EpisodeModel
             {
                 Episode = x,
-                Season = MPEServices.NetPipeMediaAccessService.GetTVSeasonDetailedById(x.PID, x.SeasonId),
-                Show = MPEServices.NetPipeMediaAccessService.GetTVShowDetailedById(x.PID, x.ShowId)
+                Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),
+                Show = MPEServices.MAS.GetTVShowDetailedById(x.PID, x.ShowId)
             });
 
             return PartialView(list);
@@ -61,13 +61,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewRecordings()
         {
-            List<WebRecordingBasic> tmp = MPEServices.NetPipeTVAccessService.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
+            List<WebRecordingBasic> tmp = MPEServices.TAS.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
             return PartialView(tmp.Count > 4 ? tmp.GetRange(0, 4) : tmp);
         }
 
         public ActionResult CurrentSchedules()
         {
-            var tmp = MPEServices.NetPipeTVAccessService.GetSchedules();
+            var tmp = MPEServices.TAS.GetSchedules();
             return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
         }
     }

@@ -25,111 +25,6 @@ namespace MPExtended.Libraries.General
 {
     public static class MPEServices
     {
-        private static IMediaAccessService _mediaService;
-        private static ITVAccessService _tvService;
-        private static IWebStreamingService _webStreamService;
-        private static IStreamingService _streamService;
-
-        public static IMediaAccessService NetPipeMediaAccessService
-        {
-            get
-            {
-                if (_mediaService == null || ((ICommunicationObject)_mediaService).State == CommunicationState.Faulted)
-                {
-                    _mediaService = ChannelFactory<IMediaAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/MediaAccessService"));
-                }
-
-                return _mediaService;
-            }
-        }
-
-        public static bool HasMediaAccessConnection
-        {
-            get
-            {
-                try
-                {
-                    NetPipeMediaAccessService.GetServiceDescription();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
-
-        public static ITVAccessService NetPipeTVAccessService
-        {
-            get
-            {
-                if (_tvService == null || ((ICommunicationObject)_tvService).State == CommunicationState.Faulted)
-                {
-                    _tvService = ChannelFactory<ITVAccessService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/TVAccessService"));
-                }
-                return _tvService;
-            }
-        }
-
-        public static bool HasTVAccessConnection
-        {
-            get
-            {
-                try
-                {
-                    return NetPipeTVAccessService.TestConnectionToTVService();
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
-
-        public static IWebStreamingService NetPipeWebStreamService
-        {
-            get
-            {
-                if (_webStreamService == null || ((ICommunicationObject)_webStreamService).State == CommunicationState.Faulted)
-                {
-                    _webStreamService = ChannelFactory<IWebStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
-                }
-
-                return _webStreamService;
-            }
-        }
-
-        public static IStreamingService NetPipeStreams
-        {
-            get
-            {
-                if (_streamService == null || ((ICommunicationObject)_streamService).State == CommunicationState.Faulted)
-                {
-                    _streamService = ChannelFactory<IStreamingService>.CreateChannel(new NetNamedPipeBinding() { MaxReceivedMessageSize = 10000000 }, new EndpointAddress("net.pipe://localhost/MPExtended/StreamingService"));
-                }
-
-                return _streamService;
-            }
-        }
-
-        public static bool HasStreamConnection
-        {
-            get
-            {
-                try
-                {
-                    NetPipeWebStreamService.GetServiceDescription();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
-
-
-        /////// ======================================================================= \\\\\\\
         private static IMediaAccessService MASConnection;
         private static IWebStreamingService WSSForMAS;
         private static IStreamingService StreamForMAS;
@@ -143,10 +38,26 @@ namespace MPExtended.Libraries.General
             {
                 if (MASConnection == null || ((ICommunicationObject)MASConnection).State == CommunicationState.Faulted)
                 {
-                    MASConnection = CreateConnection<IMediaAccessService>(Installation.MASAddress, 4322, "MediaAccessService");
+                    MASConnection = CreateConnection<IMediaAccessService>(Configuration.Services.MASConnection, "MediaAccessService");
                 }
 
                 return MASConnection;
+            }
+        }
+
+        public static bool HasMASConnection
+        {
+            get
+            {
+                try
+                {
+                    MAS.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
 
@@ -156,7 +67,7 @@ namespace MPExtended.Libraries.General
             {
                 if (WSSForMAS == null || ((ICommunicationObject)WSSForMAS).State == CommunicationState.Faulted)
                 {
-                    WSSForMAS = CreateConnection<IWebStreamingService>(Installation.MASAddress, 4322, "StreamingService");
+                    WSSForMAS = CreateConnection<IWebStreamingService>(Configuration.Services.MASConnection, "StreamingService");
                 }
 
                 return WSSForMAS;
@@ -169,10 +80,26 @@ namespace MPExtended.Libraries.General
             {
                 if (StreamForMAS == null || ((ICommunicationObject)StreamForMAS).State == CommunicationState.Faulted)
                 {
-                    StreamForMAS = CreateConnection<IStreamingService>(Installation.MASAddress, 4322, "StreamingService");
+                    StreamForMAS = CreateConnection<IStreamingService>(Configuration.Services.MASConnection, "StreamingService");
                 }
 
                 return StreamForMAS;
+            }
+        }
+
+        public static bool HasMASStreamConnection
+        {
+            get
+            {
+                try
+                {
+                    MASStreamControl.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
 
@@ -182,10 +109,25 @@ namespace MPExtended.Libraries.General
             {
                 if (TASConnection == null || ((ICommunicationObject)TASConnection).State == CommunicationState.Faulted)
                 {
-                    TASConnection = CreateConnection<ITVAccessService>(Installation.TASAddress, 4321, "TVAccessService");
+                    TASConnection = CreateConnection<ITVAccessService>(Configuration.Services.TASConnection, "TVAccessService");
                 }
 
                 return TASConnection;
+            }
+        }
+
+        public static bool HasTASConnection
+        {
+            get
+            {
+                try
+                {
+                    return TAS.TestConnectionToTVService();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
 
@@ -195,7 +137,7 @@ namespace MPExtended.Libraries.General
             {
                 if (WSSForTAS == null || ((ICommunicationObject)WSSForTAS).State == CommunicationState.Faulted)
                 {
-                    WSSForTAS = CreateConnection<IWebStreamingService>(Installation.TASAddress, 4321, "StreamingService");
+                    WSSForTAS = CreateConnection<IWebStreamingService>(Configuration.Services.TASConnection, "StreamingService");
                 }
 
                 return WSSForTAS;
@@ -208,29 +150,52 @@ namespace MPExtended.Libraries.General
             {
                 if (StreamForTAS == null || ((ICommunicationObject)StreamForTAS).State == CommunicationState.Faulted)
                 {
-                    StreamForTAS = CreateConnection<IStreamingService>(Installation.TASAddress, 4321, "StreamingService");
+                    StreamForTAS = CreateConnection<IStreamingService>(Configuration.Services.TASConnection, "StreamingService");
                 }
 
                 return StreamForTAS;
             }
         }
 
-
-        private static T CreateConnection<T>(string address, int port, string service)
+        public static bool HasTASStreamConnection
         {
-            // TODO: Use System.Uri
-            if (address == "127.0.0.1" || address == "localhost")
+            get
+            {
+                try
+                {
+                    TASStreamControl.GetServiceDescription();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        private static T CreateConnection<T>(string address, string service)
+        {
+            Uri addr = new Uri(address);
+
+            // This allows us to introduce for example mas04://127.0.0.1/ in the future to allow communication with an older version of the services. 
+            if (addr.Scheme != "auto")
+            {
+                Log.Error("Encountered unknown protocol while setting up {0} connection to {1}", service, address);
+                return default(T);
+            }
+
+            if (addr.IsLoopback)
             {
                 return ChannelFactory<T>.CreateChannel(
                     new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },
-                    new EndpointAddress(String.Format("net.pipe://{0}/MPExtended/{1}", address, service))
+                    new EndpointAddress(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", service))
                 );
             }
             else
             {
                 return ChannelFactory<T>.CreateChannel(
                     new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
-                    new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", address, port, service))
+                    new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", addr.Host, addr.Port, service))
                 );
             }
         }

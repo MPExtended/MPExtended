@@ -75,7 +75,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                List<WebStreamingSession> tmp = MPEServices.NetPipeWebStreamService.GetStreamingSessions();
+                List<WebStreamingSession> tmp = MPEServices.MASStreamControl.GetStreamingSessions();
 
                 if (tmp != null)
                 {
@@ -92,7 +92,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void miKickUserSession_Click(object sender, RoutedEventArgs e)
         {
             WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
-            bool success = MPEServices.NetPipeWebStreamService.FinishStream(session.Identifier);
+            bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
         }
     }
 }

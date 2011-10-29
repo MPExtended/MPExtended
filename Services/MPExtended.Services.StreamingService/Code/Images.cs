@@ -192,8 +192,8 @@ namespace MPExtended.Services.StreamingService.Code
                 // get display name
                 int idChannel = source.MediaType == WebStreamMediaType.TV ? 
                     Int32.Parse(source.Id) : 
-                    MPEServices.NetPipeTVAccessService.GetRecordingById(Int32.Parse(source.Id)).IdChannel;
-                string channelName = MPEServices.NetPipeTVAccessService.GetChannelBasicById(idChannel).DisplayName;
+                    MPEServices.TAS.GetRecordingById(Int32.Parse(source.Id)).IdChannel;
+                string channelName = MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName;
 
                 // find directory
                 string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
@@ -218,7 +218,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             // handle all 'standard' media cases
             // validate arguments
-            var pathlist = MPEServices.NetPipeMediaAccessService.GetPathList(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id);
+            var pathlist = MPEServices.MAS.GetPathList(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id);
             if (pathlist == null || pathlist.Count <= source.Offset)
             {
                 Log.Info("Requested unavailable artwork (offset not found) artworktype={0} {1}", artworktype, source.GetDebugName());
@@ -228,7 +228,7 @@ namespace MPExtended.Services.StreamingService.Code
             string path = pathlist.ElementAt(source.Offset);
 
             Stream data = null;
-            WebFileInfo info = MPEServices.NetPipeMediaAccessService.GetFileInfo(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
+            WebFileInfo info = MPEServices.MAS.GetFileInfo(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
             if (!info.Exists)
             {
                 Log.Info("Requested unavailable artwork (file not found) artworktype={0} {1}", artworktype, source.GetDebugName());
@@ -236,7 +236,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else if (!info.IsLocalFile)
             {
-                data = MPEServices.NetPipeMediaAccessService.RetrieveFile(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
+                data = MPEServices.MAS.RetrieveFile(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
                 return new ImageSource(data);
             }
             else
