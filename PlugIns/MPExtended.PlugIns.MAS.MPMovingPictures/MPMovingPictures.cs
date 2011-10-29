@@ -51,7 +51,10 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             {
                 Offset = i++,
                 Type = WebFileType.Cover,
-                Path = x
+                Path = x,
+                Id = x.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(x).Substring(1),
+                Rating = 1
             }).ToList();
         }
 
@@ -63,7 +66,10 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             {
                 Offset = i++,
                 Type = WebFileType.Backdrop,
-                Path = x
+                Path = x,
+                Id = x.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(x).Substring(1),
+                Rating = 1
             }).ToList();
         }
 

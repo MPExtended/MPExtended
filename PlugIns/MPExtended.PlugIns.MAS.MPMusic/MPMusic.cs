@@ -135,7 +135,10 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         {
                             Type = WebFileType.Cover,
                             Offset = 0,
-                            Path = path
+                            Path = path,
+                            Rating = 1,
+                            Id = path.GetHashCode().ToString(),
+                            Filetype = Path.GetExtension(path).Substring(1)
                         });
                     }
                 }

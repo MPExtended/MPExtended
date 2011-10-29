@@ -223,7 +223,10 @@ namespace MPExtended.Services.MediaAccessService
                 (item as IArtwork).Artwork = (item as IArtwork).Artwork.Select(x => new WebArtwork()
                 {
                     Offset = x.Offset,
-                    Type = x.Type
+                    Type = x.Type,
+                    Filetype = x.Filetype,
+                    Id = x.Id,
+                    Rating = x.Rating
                 }).ToList();
             }
 

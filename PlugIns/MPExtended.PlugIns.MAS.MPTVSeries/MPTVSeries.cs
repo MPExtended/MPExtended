@@ -48,11 +48,17 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private List<WebArtworkDetailed> ArtworkReader(SQLiteDataReader reader, int index, WebFileType type, string dirname)
         {
             int i = 0;
-            return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => new WebArtworkDetailed() 
-            {
-                Type = type,
-                Path = Path.Combine(configuration[dirname], x.Replace('/', '\\')),
-                Offset = i++
+            return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => {
+                string path = Path.Combine(configuration[dirname], x.Replace('/', '\\'));
+                return new WebArtworkDetailed() 
+                {
+                    Type = type,
+                    Path = path,
+                    Offset = i++,
+                    Filetype = Path.GetExtension(path).Substring(1),
+                    Rating = 1,
+                    Id = path.GetHashCode().ToString()
+                };
             }).ToList();
         }
 
