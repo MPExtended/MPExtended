@@ -23,6 +23,11 @@ using System.Data.SQLite;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
+    public static class Delegates
+    {
+        public delegate object ReadValue(SQLiteDataReader reader, int index);
+    }
+
     public static class Delegates<T>
     {
         public delegate T CreateMethod(SQLiteDataReader reader);

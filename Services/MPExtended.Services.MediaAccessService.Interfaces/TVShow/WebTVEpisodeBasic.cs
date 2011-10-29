@@ -5,11 +5,11 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IRatingSortable, ITVEpisodeNumberSortable, ITVDateAiredSortable
+    public class WebTVEpisodeBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IRatingSortable, ITVEpisodeNumberSortable, ITVDateAiredSortable, IArtwork
     {
         public WebTVEpisodeBasic()
         {
-            BannerPaths = new List<string>();
+            Artwork = new List<WebArtwork>();
         }
 
         public string ShowId { get; set; }
@@ -19,7 +19,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public bool IsProtected { get; set; }
         public bool Watched { get; set; }
         public float Rating { get; set; }
-        public IList<string> BannerPaths { get; set; }
+        public IList<WebArtwork> Artwork { get; set; }
         public DateTime FirstAired { get; set; }
         public string IMDBId { get; set; }
         public string TVDBId { get; set; }

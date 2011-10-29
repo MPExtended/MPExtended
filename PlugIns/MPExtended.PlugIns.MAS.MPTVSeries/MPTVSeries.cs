@@ -35,7 +35,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     {
         private IPluginData data;
         private Dictionary<string, string> configuration;
-        private SQLFieldMapping.ReadValue fixBannerPathReader;
+        private Delegates.ReadValue fixBannerPathReader;
 
         [ImportingConstructor]
         public MPTVSeries(IPluginData data)
@@ -43,16 +43,41 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             this.data = data;
             this.configuration = data.GetConfiguration("MP-TVSeries");
             this.DatabasePath = configuration["database"];
-            this.fixBannerPathReader = delegate(SQLiteDataReader reader, int index)
-            {
-                return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("banner", x)).ToList();
-            };
         }
 
-        private string CreateImagePath(string type, string dbPath)
+        private List<WebArtworkDetailed> ArtworkReader(SQLiteDataReader reader, int index, WebFileType type, string dirname)
         {
-            string rootDir = configuration[type];
-            return Path.Combine(rootDir, dbPath.Replace('/', '\\'));
+            int i = 0;
+            return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => {
+                string path = Path.Combine(configuration[dirname], x.Replace('/', '\\'));
+                return new WebArtworkDetailed() 
+                {
+                    Type = type,
+                    Path = path,
+                    Offset = i++,
+                    Filetype = Path.GetExtension(path).Substring(1),
+                    Rating = 1,
+                    Id = path.GetHashCode().ToString()
+                };
+            }).ToList();
+        }
+
+        [MergeListReader]
+        private List<WebArtworkDetailed> BannerPathReader(SQLiteDataReader reader, int index)
+        {
+            return ArtworkReader(reader, index, WebFileType.Banner, "banner");
+        }
+
+        [MergeListReader]
+        private List<WebArtworkDetailed> PosterPathReader(SQLiteDataReader reader, int index)
+        {
+            return ArtworkReader(reader, index, WebFileType.Poster, "banner");
+        }
+
+        [MergeListReader]
+        private List<WebArtworkDetailed> FanartPathReader(SQLiteDataReader reader, int index)
+        {
+            return ArtworkReader(reader, index, WebFileType.Backdrop, "fanart");
         }
 
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()
@@ -119,7 +144,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             });
 
 
-            SQLFieldMapping.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
+            Delegates.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
             {
                 // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
                 // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
@@ -127,11 +152,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 if(data.Length > 0)
                     return data;
                 return reader.ReadString(index - 1);
-            };
-
-            SQLFieldMapping.ReadValue fixFanartPathReader = delegate(SQLiteDataReader reader, int index)
-            {
-                return ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x => this.CreateImagePath("fanart", x)).ToList();
             };
 
             string sql = 
@@ -147,10 +167,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "ID", "TVDBId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("s", "Pretty_Name", "Title", fixNameReader),
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
-                new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader),
+                new SQLFieldMapping("s", "BannerFileNames", "Artwork", BannerPathReader),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "PosterFileNames", "PosterPaths", fixBannerPathReader),
-                new SQLFieldMapping("s", "fanart", "BackdropPaths", fixFanartPathReader),
+                new SQLFieldMapping("s", "PosterFileNames", "Artwork", PosterPathReader),
+                new SQLFieldMapping("s", "fanart", "Artwork", FanartPathReader),
                 new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("s", "ContentRating", "ContentRating", DataReaders.ReadString),
@@ -162,7 +182,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "IMDB_ID", "IMDBId", DataReaders.ReadString),
                 new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime)
-            }, delegate(T obj)
+            }, delegate (T obj) 
             {
                 // cannot rely on information provided by MPTVSeries here because they count different
                 var eps = (LazyQuery<WebTVEpisodeBasic>)(GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.Id)); // and the nice way is... ? 
@@ -195,6 +215,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         private LazyQuery<T> GetAllSeasons<T>() where T : WebTVSeasonBasic, new()
         {
+            // preload watched count
             string csql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes GROUP BY SeriesID, SeasonIndex";
             var episodeCountTable = ReadList<KeyValuePair<string, int>>(csql, delegate(SQLiteDataReader reader)
             {
@@ -214,19 +235,22 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "INNER JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
                     "WHERE %where " +
                     "%order";
+
+
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
+
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "BannerFileNames", "BannerPaths", fixBannerPathReader)
-            }, delegate(T obj)
-            {
+                new SQLFieldMapping("s", "BannerFileNames", "Artwork", BannerPathReader)
+            }, delegate (T obj) {
                 obj.EpisodeCount = episodeCountTable.ContainsKey(obj.Id) ? episodeCountTable[obj.Id] : 0;
                 obj.UnwatchedEpisodeCount = episodeUnwatchedCountTable.ContainsKey(obj.Id) ? episodeUnwatchedCountTable[obj.Id] : 0;
                 return obj;
             });
         }
+
 
         public IEnumerable<WebTVEpisodeBasic> GetAllEpisodesBasic()
         {
@@ -273,7 +297,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("e", "Rating", "Rating", DataReaders.ReadFloat),
-                new SQLFieldMapping("e", "thumbFilename", "BannerPaths", fixBannerPathReader),
+                new SQLFieldMapping("e", "thumbFilename", "Artwork", BannerPathReader),
                 new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),

@@ -119,7 +119,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
-            return items.Keys.SelectMany(key => GetValue(key).Search(text).FillProvider((int)items[key].Metadata["Id"], type));
+            return items.Keys.SelectMany(key => GetValue(key).Search(text).Finalize((int)items[key].Metadata["Id"], type));
         }
     }
 }

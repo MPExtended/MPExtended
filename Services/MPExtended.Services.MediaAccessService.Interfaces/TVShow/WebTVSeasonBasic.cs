@@ -5,12 +5,12 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVSeasonBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable
+    public class WebTVSeasonBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, ITVSeasonNumberSortable, IArtwork
     {
         public WebTVSeasonBasic()
         {
-            BannerPaths = new List<string>();
             DateAdded = new DateTime(1970, 1, 1);
+            Artwork = new List<WebArtwork>();
         }
 
         public string Id { get; set; }
@@ -22,7 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public int EpisodeCount { get; set; }
         public int UnwatchedEpisodeCount { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> BannerPaths { get; set; }
+        public IList<WebArtwork> Artwork { get; set; }
 
         public override string ToString()
         {

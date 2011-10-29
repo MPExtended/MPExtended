@@ -96,6 +96,7 @@
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="FileSystem\WebDriveBasic.cs" />
     <Compile Include="WebMediaServiceDescription.cs" />
+    <Compile Include="WebArtwork.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

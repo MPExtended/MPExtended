@@ -43,6 +43,36 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             DatabasePath = data.GetConfiguration("Moving Pictures")["database"];
         }
 
+        [MergeListReader]
+        private List<WebArtworkDetailed> CoverReader(SQLiteDataReader reader, int idx)
+        {
+            int i = 0;
+            return (DataReaders.ReadPipeList(reader, idx) as List<string>).Select(x => new WebArtworkDetailed()
+            {
+                Offset = i++,
+                Type = WebFileType.Cover,
+                Path = x,
+                Id = x.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(x).Substring(1),
+                Rating = 1
+            }).ToList();
+        }
+
+        [MergeListReader]
+        private List<WebArtworkDetailed> BackdropReader(SQLiteDataReader reader, int idx)
+        {
+            int i = 0;
+            return (DataReaders.ReadStringAsList(reader, idx) as List<string>).Select(x => new WebArtworkDetailed()
+            {
+                Offset = i++,
+                Type = WebFileType.Backdrop,
+                Path = x,
+                Id = x.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(x).Substring(1),
+                Rating = 1
+            }).ToList();
+        }
+
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
@@ -64,8 +94,8 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("m", "id", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("m", "date_added", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("m", "backdropfullpath", "BackdropPaths", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("m", "alternatecovers", "CoverPaths", DataReaders.ReadPipeList),
+                new SQLFieldMapping("m", "backdropfullpath", "Artwork", BackdropReader),
+                new SQLFieldMapping("m", "alternatecovers", "Artwork", CoverReader),
                 new SQLFieldMapping("m", "genres", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "score", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("m", "runtime", "Runtime", DataReaders.ReadInt32),

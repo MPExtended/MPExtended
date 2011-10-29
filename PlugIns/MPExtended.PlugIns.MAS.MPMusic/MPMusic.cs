@@ -97,7 +97,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
-            SQLFieldMapping.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
+            Delegates.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
             {
                 var list = (List<string>)ArtistIdReader(reader, index);
                 if (list.Count > 0)
@@ -128,7 +128,19 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 if(album.Artists.Count() > 0) 
                 {
-                    album.CoverPaths.Add(GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title));
+                    string path = GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title);
+                    if (File.Exists(path))
+                    {
+                        album.Artwork.Add(new WebArtworkDetailed()
+                        {
+                            Type = WebFileType.Cover,
+                            Offset = 0,
+                            Path = path,
+                            Rating = 1,
+                            Id = path.GetHashCode().ToString(),
+                            Filetype = Path.GetExtension(path).Substring(1)
+                        });
+                    }
                 }
                 return album;
             });

@@ -7,18 +7,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
     public class WebMovieDetailed : WebMovieBasic
     {
-        public WebMovieDetailed()
+        public WebMovieDetailed() : base()
         {
             Directors = new List<string>();
             Writers = new List<string>();
             Actors = new List<string>();
-            BackdropPaths = new List<string>();
         }
 
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
         public IList<string> Actors { get; set; }
-        public IList<string> BackdropPaths { get; set; }
         public string Summary { get; set; }       
     
         // use ISO short name (en, nl, de, etc)

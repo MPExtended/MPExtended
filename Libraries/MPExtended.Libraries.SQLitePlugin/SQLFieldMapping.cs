@@ -25,12 +25,10 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public class SQLFieldMapping
     {
-        public delegate object ReadValue(SQLiteDataReader reader, int index);
-
         public string Table { get; set; }
         public string Field { get; set; }
         public string PropertyName { get; set; }
-        public ReadValue Reader { get; set; }
+        public Delegates.ReadValue Reader { get; set; }
 
         public string FullSQLName
         {
@@ -44,7 +42,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
         }
 
-        public SQLFieldMapping(string field, string propertyname, ReadValue reader)
+        public SQLFieldMapping(string field, string propertyname, Delegates.ReadValue reader)
         {
             this.Table = string.Empty;
             this.Field = field;
@@ -52,7 +50,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.Reader = reader;
         }
 
-        public SQLFieldMapping(string table, string field, string propertyname, ReadValue reader)
+        public SQLFieldMapping(string table, string field, string propertyname, Delegates.ReadValue reader)
         {
             this.Table = table;
             this.Field = field;
