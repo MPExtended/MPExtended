@@ -236,32 +236,32 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.MusicAlbum)
             {
                 var album = GetAlbumBasicById(id);
-                return new WebExternalMediaInfoAlbum()
+                return new SerializableDictionary<string>()
                 {
-                    Type = "mpmusic album",
-                    Album = album.Title,
-                    Artist = album.AlbumArtist
+                    { "Type", "mpmusic album" },
+                    { "Album", album.Title },
+                    { "Artist", album.AlbumArtist }
                 };
             }
             else if (type == WebMediaType.MusicTrack)
             {
-                return new WebExternalMediaInfoId()
+                return new SerializableDictionary<string>()
                 {
-                    Type = "mpmusic track",
-                    Id = GetTrackBasicById(id).Id
+                    { "Type", "mpmusic track" },
+                    { "Id", GetTrackBasicById(id).Id }
                 };
             }
             else if (type == WebMediaType.MusicArtist)
             {
-                return new WebExternalMediaInfoArtist()
+                return new SerializableDictionary<string>()
                 {
-                    Type = "mpmusic album",
-                    Artist = GetArtistBasicById(id).Title
+                    { "Type", "mpmusic album" },
+                    { "Artist", GetArtistBasicById(id).Title }
                 };
             }
 

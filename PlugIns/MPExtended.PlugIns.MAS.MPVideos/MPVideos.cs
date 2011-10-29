@@ -89,7 +89,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         }
 
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             throw new NotImplementedException();
         }

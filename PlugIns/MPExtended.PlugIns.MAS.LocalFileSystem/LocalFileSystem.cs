@@ -105,12 +105,12 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebExternalMediaInfoFile()
+            return new SerializableDictionary<string>()
             {
-                Type = "file",
-                Path = GetFileBasic(id).Path.First()
+                { "Type", "file" },
+                { "Path", GetFileBasic(id).Path.First() }
             };
         }
 

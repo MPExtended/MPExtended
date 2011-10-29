@@ -19,11 +19,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     // for internal communication, but they have to use the same known media descriptions.
 
     [ServiceContract(Namespace = "http://mpextended.codeplex.com")]
-    [ServiceKnownType(typeof(WebExternalMediaInfoId))]
-    [ServiceKnownType(typeof(WebExternalMediaInfoAlbum))]
-    [ServiceKnownType(typeof(WebExternalMediaInfoArtist))]
-    [ServiceKnownType(typeof(WebExternalMediaInfoFile))]
-    [ServiceKnownType(typeof(WebExternalMediaInfoSeason))]
     public interface IMediaAccessService
     {
         #region Global
@@ -45,7 +40,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebExternalMediaInfo GetExternalMediaInfo(int? provider, WebMediaType type, string id);
+        SerializableDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id);
         #endregion
 
         #region Movies

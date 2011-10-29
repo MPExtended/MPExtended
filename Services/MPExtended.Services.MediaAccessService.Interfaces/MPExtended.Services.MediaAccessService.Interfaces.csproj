@@ -75,6 +75,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
+    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="TVShow\WebTVShowDetailed.cs" />
     <Compile Include="FileSystem\WebDriveBasic.cs" />
     <Compile Include="WebMediaServiceDescription.cs" />
-    <Compile Include="WebExternalMediaInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

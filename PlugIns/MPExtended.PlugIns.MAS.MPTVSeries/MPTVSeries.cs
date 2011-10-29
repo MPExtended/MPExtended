@@ -350,23 +350,23 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new FileStream(path, FileMode.Open);
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.TVSeason)
             {
                 var season = GetSeasonBasic(id);
-                return new WebExternalMediaInfoSeason()
+                return new SerializableDictionary<string>()
                 {
-                    Type = "mptvseries season",
-                    SeasonIndex = season.SeasonNumber,
-                    ShowId = Int32.Parse(season.ShowId)
+                    { "Type", "mptvseries season" },
+                    { "SeasonIndex", season.SeasonNumber.ToString() },
+                    { "ShowId", season.ShowId },
                 };
             }
 
-            return new WebExternalMediaInfoId()
+            return new SerializableDictionary<string>()
             {
-                Type = type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode",
-                Id = id
+                { "Type", type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode" },
+                { "Id", id.ToString() }
             };
         }
     }

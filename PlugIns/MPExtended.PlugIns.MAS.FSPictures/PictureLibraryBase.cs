@@ -94,12 +94,12 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return new List<WebSearchResult>();
         }
 
-        public WebExternalMediaInfo GetExternalMediaInfo(WebMediaType type, string id)
+        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new WebExternalMediaInfoFile()
+            return new SerializableDictionary<string>()
             {
-                Type = "file",
-                Path = GetPictureBasic(id).Path.First(),
+                { "Type", "file" },
+                { "Path", GetPictureBasic(id).Path.First() },
             };
         }
 
