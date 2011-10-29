@@ -113,12 +113,12 @@ namespace MPExtended.Services.MediaAccessService
         // Finalize it
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
-            return list.Select(x => x.Finalize(providerId, type)).ToList();
+            return Finalization.ForList(list, providerId, type);
         }
 
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
         {
-            return list.Select(x => x.Finalize(providerId, mediatype)).ToList();
+            return Finalization.ForList(list, providerId, mediatype);
         }
 
         // Allow easy sorting from MediaAccessService.cs
@@ -185,15 +185,27 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class IOrderedEnumerableExtensionMethods
     {
-        // Finalize it
         public static List<T> Finalize<T>(this IOrderedEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
-            return list.Select(x => x.Finalize(providerId, type)).ToList();
+            return Finalization.ForList(list, providerId, type);
         }
 
         public static List<T> Finalize<T>(this IOrderedEnumerable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
         {
-            return list.Select(x => x.Finalize(providerId, mediatype)).ToList();
+            return Finalization.ForList(list, providerId, mediatype);
+        }
+    }
+
+    internal static class WebObjectExtensionMethods
+    {
+        public static T Finalize<T>(this T item, int? provider, ProviderType type) where T : WebObject
+        {
+            return Finalization.ForItem(item, provider, type);
+        }
+
+        public static T Finalize<T>(this T item, int? provider, WebMediaType mediatype) where T : WebObject
+        {
+            return Finalization.ForItem(item, provider, mediatype);
         }
     }
 
@@ -210,42 +222,6 @@ namespace MPExtended.Services.MediaAccessService
                 Type = item.Type
             };
             return x;
-        }
-    }
-
-    internal static class WebObjectExtensionMethods
-    {
-        public static T Finalize<T>(this T item, int? provider, ProviderType type) where T : WebObject
-        {
-            item.PID = ProviderHandler.GetProviderId(type, provider);
-            if (item is IArtwork)
-            {
-                (item as IArtwork).Artwork = (item as IArtwork).Artwork.Select(x => new WebArtwork()
-                {
-                    Offset = x.Offset,
-                    Type = x.Type,
-                    Filetype = x.Filetype,
-                    Id = x.Id,
-                    Rating = x.Rating
-                }).ToList();
-            }
-
-            return item;
-        }
-
-        public static T Finalize<T>(this T item, int? provider, WebMediaType mediatype) where T : WebObject
-        {
-            item.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), provider);
-            if (item is IArtwork)
-            {
-                (item as IArtwork).Artwork = (item as IArtwork).Artwork.Select(x => new WebArtwork()
-                {
-                    Offset = x.Offset,
-                    Type = x.Type
-                }).ToList();
-            }
-
-            return item;
         }
     }
 
