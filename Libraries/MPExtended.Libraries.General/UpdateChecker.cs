@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.General
 
     public class UpdateChecker
     {
-        private const string UPDATE_URL = "http://mpextended.github.com/lastversion.txt";
+        private const string UPDATE_URL = "http://mpextended.github.com/lastversion.txt?version={0}";
         private static List<ReleasedVersion> versionInfoCache = null;
 
         public static ReleasedVersion GetLastReleasedVersion()
@@ -70,10 +70,11 @@ namespace MPExtended.Libraries.General
 
             try
             {
-                Log.Debug("Downloading update information from {0}", UPDATE_URL);
+                string updateUrl = String.Format(UPDATE_URL, VersionUtil.GetBuildVersion().ToString());
+                Log.Debug("Downloading update information from {0}", updateUrl);
                 using (WebClient client = new WebClient())
                 {
-                    data = client.DownloadString(UPDATE_URL);
+                    data = client.DownloadString(updateUrl);
                 }
             }
             catch (Exception ex)
