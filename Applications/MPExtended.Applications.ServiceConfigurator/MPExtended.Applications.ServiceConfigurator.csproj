@@ -45,7 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icons\TrayIcon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
@@ -234,14 +235,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\TrayIcon.ico" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Resource Include="Images\MpExtl_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\globe.png" />
+    <Resource Include="..\..\Libraries\Artwork\globe.png">
+      <Link>Artwork\globe.png</Link>
+    </Resource>
+    <Resource Include="..\..\Libraries\Artwork\MpExtl_Icon.png">
+      <Link>Artwork\MpExtl_Icon.png</Link>
+    </Resource>
+    <Resource Include="..\..\Libraries\Artwork\TrayIcon.ico">
+      <Link>Artwork\TrayIcon.ico</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

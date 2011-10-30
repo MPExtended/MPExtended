@@ -28,13 +28,17 @@
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
     <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
-    <Property Id="MSIFASTINSTALL" Value="3" />
+    <!-- <Property Id="MSIFASTINSTALL" Value="3" /> -->
     
     <!-- Project general -->
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
     <!-- TODO: do we really want to disallow downgrades? -->
     <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+    
+    <!-- The stupid icon -->
+    <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\producticon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="MPExtendedIcon" />
 
     <!-- Require .net 4 -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
