@@ -34,6 +34,20 @@ namespace MPExtended.Services.StreamingService.Code
         public int? Provider { get; set; } // for MAS
         public int Offset { get; set; }
 
+        private WebFileInfo fileInfoCache;
+        private WebFileInfo FileInfo
+        {
+            get
+            {
+                if (fileInfoCache == null)
+                {
+                    fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                }
+
+                return fileInfoCache;
+            }
+        }
+
         public bool IsLocalFile
         {
             get
@@ -48,7 +62,7 @@ namespace MPExtended.Services.StreamingService.Code
                     return false;
                 }
 
-                return MPEServices.MAS.IsLocalFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                return FileInfo.IsLocalFile;
             }
         }
 
@@ -92,7 +106,8 @@ namespace MPExtended.Services.StreamingService.Code
                 return Id;
             }
 
-            return MPEServices.MAS.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
+            return FileInfo.Path;
+            //return MPEServices.MAS.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
         }
 
         public Stream Retrieve()
@@ -124,35 +139,33 @@ namespace MPExtended.Services.StreamingService.Code
         {
             try
             {
-                var mas = MPEServices.MAS;
-                var tas = MPEServices.TAS;
                 switch (MediaType)
                 {
                     case WebStreamMediaType.File:
-                        return mas.GetFileSystemFileBasicById(Provider, Id).Name;
+                        return MPEServices.MAS.GetFileSystemFileBasicById(Provider, Id).Name;
                     case WebStreamMediaType.Movie:
-                        return mas.GetMovieBasicById(Provider, Id).Title;
+                        return MPEServices.MAS.GetMovieBasicById(Provider, Id).Title;
                     case WebStreamMediaType.MusicAlbum:
-                        return mas.GetMusicAlbumBasicById(Provider, Id).Title;
+                        return MPEServices.MAS.GetMusicAlbumBasicById(Provider, Id).Title;
                     case WebStreamMediaType.MusicTrack:
-                        return mas.GetMusicTrackBasicById(Provider, Id).Title;
+                        return MPEServices.MAS.GetMusicTrackBasicById(Provider, Id).Title;
                     case WebStreamMediaType.Picture:
-                        return mas.GetPictureBasicById(Provider, Id).Title;
+                        return MPEServices.MAS.GetPictureBasicById(Provider, Id).Title;
                     case WebStreamMediaType.Recording:
-                        return tas.GetRecordingById(Int32.Parse(Id)).Title;
+                        return MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).Title;
                     case WebStreamMediaType.TV:
-                        return tas.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
+                        return MPEServices.TAS.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
                     case WebStreamMediaType.TVEpisode:
-                        var ep = mas.GetTVEpisodeBasicById(Provider, Id);
-                        var season = mas.GetTVSeasonBasicById(Provider, ep.SeasonId);
-                        var show = mas.GetTVShowBasicById(Provider, ep.ShowId);
+                        var ep = MPEServices.MAS.GetTVEpisodeBasicById(Provider, Id);
+                        var season = MPEServices.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);
+                        var show = MPEServices.MAS.GetTVShowBasicById(Provider, ep.ShowId);
                         return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
                     case WebStreamMediaType.TVSeason:
-                        var season2 = mas.GetTVSeasonDetailedById(Provider, Id);
-                        var show2 = mas.GetTVShowBasicById(Provider, season2.ShowId);
+                        var season2 = MPEServices.MAS.GetTVSeasonDetailedById(Provider, Id);
+                        var show2 = MPEServices.MAS.GetTVShowBasicById(Provider, season2.ShowId);
                         return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
                     case WebStreamMediaType.TVShow:
-                        return mas.GetTVShowBasicById(Provider, Id).Title;
+                        return MPEServices.MAS.GetTVShowBasicById(Provider, Id).Title;
                 }
             }
             catch (Exception ex)
