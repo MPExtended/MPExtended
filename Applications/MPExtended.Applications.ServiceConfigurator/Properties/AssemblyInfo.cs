@@ -9,7 +9,7 @@ using System.Windows;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Applications.ServiceConfigurator")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Applications.ServiceConfigurator")]
+[assembly: AssemblyProduct("MPExtended Configurator")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
