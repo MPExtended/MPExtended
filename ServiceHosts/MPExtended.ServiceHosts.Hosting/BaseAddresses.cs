@@ -42,7 +42,7 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 addr = "127.0.0.1";
             }
-            ret.Add(new Uri(String.Format("http://{0}:{1}/MPExtended/{2}", addr, Configuration.Services.Port, serviceName)));
+            ret.Add(new Uri(String.Format("http://{0}:{1}/MPExtended/{2}/", addr, Configuration.Services.Port, serviceName)));
 
             // local net.pipe binding
             ret.Add(new Uri(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", serviceName)));
