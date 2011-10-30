@@ -27,6 +27,9 @@
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
+    <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
+    <Property Id="MSIFASTINSTALL" Value="3" />
+    
     <!-- Project general -->
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
@@ -39,13 +42,15 @@
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>
     
-    <!-- WifiRemote installer (FIXME: not working)
-    <Binary Id="WifiRemoteInstallerBin" SourceFile="..\..\Libraries\Installer\WifiRemote.0.4.1_rc1.mpe1" />
-    <CustomAction Id="WifiRemoteInstaller" BinaryKey="WifiRemoteInstallerBin" ExeCommand="" Return="ignore" />
+    <!-- Include custom action library -->
+    <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
+    
+    <!-- WifiRemote installer -->
+    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.4.2.mpe1" />
+    <CustomAction Id="WifiRemoteInstaller" BinaryKey="CustomActionLibrary" DllEntry="InstallWifiRemote" Execute="immediate" Return="check" />
     <InstallExecuteSequence>
-      <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3) AND NOT(!Feature_WifiRemote=3)]]></Custom>
+      <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
     </InstallExecuteSequence>
-    -->
 
     <!-- Service -->
     <DirectoryRef Id="InstallDirectory">
@@ -92,6 +97,8 @@
 
     <!-- User interface -->
     <UI>
+      <ProgressText Action="WifiRemoteInstaller">Installing WifiRemote plugin for MediaPortal...</ProgressText>
+      
       <!-- Based upon WiX source code. -->
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />

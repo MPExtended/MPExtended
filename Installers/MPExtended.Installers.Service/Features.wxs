@@ -62,6 +62,20 @@
       <ComponentRef Id="Component_Configurator_Binaries"/>
     </ComponentGroup>
   </Fragment>
+  
+  <!--
+    The default installation level is always 5. This means that things with a level
+    lower then 5 get installed by default, while other things don't. 
+    
+    The service host and other general libraries are installed by default with a
+    level of 1. The service configurator and the streaming service also get installed
+    by default but can be disabled when using a custom setup (set to level 3). All 
+    other features are set to level 10 (so they won't be installed by defualt), but are
+    enabled by the UI logic in SetupType.wxs.
+    
+    Using a Condition element here to change the level of the features doesn't work
+    as described here: http://www.joyofsetup.com/2007/05/30/feature-conditions-and-ui/
+  -->
 
   <Fragment>
     <!-- Reference components -->
@@ -71,17 +85,20 @@
       <ComponentGroupRef Id="Component_General" />
       <ComponentRef Id="Component_Service" />
 
-      <Feature Id="Feature_Client"  Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Client"  Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
                Title="Client service"
                Description="Access to the MediaPortal media databases and shares. Select if you have the MediaPortal client installed.">
-        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "Client"</Condition>
         <ComponentGroupRef Id="Component_MAS"/>
       </Feature>
 
-      <Feature Id="Feature_Server" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_WifiRemote" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+               Title="WifiRemote"
+               Description="Install the WifiRemote remote control plugin for the MediaPortal client.">
+      </Feature>
+
+      <Feature Id="Feature_Server" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
                Title="Server service"
                Description="Access to the MediaPortal TV Server. Select if you have the MediaPortal TV Server installed.">
-        <Condition Level="3">InstallType = "Custom" OR InstallType = "Singleseat" OR InstallType = "TV"</Condition>
         <ComponentGroupRef Id="Component_TAS"/>
       </Feature>
 
@@ -99,13 +116,6 @@
         <ComponentGroupRef Id="Component_WSS"/>
         <MergeRef Id="VC2010Redist"/>
       </Feature>
-      
-      <!--
-      <Feature Id="Feature_WifiRemote" Level="15" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="WifiRemote"
-               Description="Install the WifiRemote remote control plugin for the MediaPortal client.">
-      </Feature>
-      -->
     </Feature>
   </Fragment>
 </Wix>

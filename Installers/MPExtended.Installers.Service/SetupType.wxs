@@ -15,24 +15,29 @@
     <UI>
       <Dialog Id="CustomSetupTypeDlg" Width="370" Height="270" Title="!(loc.SetupTypeDlg_Title)">
         <Control Id="ClientButton" Type="PushButton" X="30" Y="65" Width="80" Height="17" ToolTip="Client installation" Default="yes" Text="&amp;Client">
-          <Publish Property="InstallType" Value="Client">1</Publish>
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_WifiRemote">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Client">1</Publish>
         </Control>
 
         <Control Id="TVButton" Type="PushButton" X="30" Y="100" Width="80" Height="17" ToolTip="TV installation" Default="yes" Text="&amp;TV">
-          <Publish Property="InstallType" Value="TV">1</Publish>
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
         <Control Id="SingleseatButton" Type="PushButton" X="30" Y="135" Width="80" Height="17" ToolTip="Singleseat installation" Default="yes" Text="&amp;Singleseat">
-          <Publish Property="InstallType" Value="Singleseat">1</Publish>
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_WifiRemote">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Client">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
         <Control Id="CustomButton" Type="PushButton" X="30" Y="170" Width="80" Height="17" ToolTip="Custom installation" Text="C&amp;ustom">
           <Publish Property="WixUI_InstallMode" Value="InstallCustom">1</Publish>
-          <Publish Property="InstallType" Value="Custom">1</Publish>
-          <Publish Event="SetInstallLevel" Value="12">1</Publish>
+          <Publish Event="SetInstallLevel" Value="5">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_WifiRemote">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Client">1</Publish>
+          <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
         <Control Id="ClientText" Type="Text" X="120" Y="67" Width="280" Height="20" Text="Install only client software." />
