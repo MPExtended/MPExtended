@@ -88,6 +88,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                                 "WHERE si.providertype LIKE 'MediaPortal.Plugins.MovingPictures.DataProviders.TheMovieDbProvider, MovingPictures, %' " + 
                                 "GROUP BY smi.movie, smi.identifier) AS s " +
                             "ON s.movie = m.id AND s.identifier != '' " +
+                         "WHERE %where " + 
                          "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "m.directors, m.writers, m.actors, m.summary, m.language, s.identifier " +
                          "%order";
