@@ -55,7 +55,7 @@ namespace MPExtended.Applications.Development.DocGen
                 { 2, "Movie" },
                 { 3, "Music" },
                 { 4, "Picture" },
-                { 5, "TV" },
+                { 5, "TVShow" },
                 { 6, "FileSystem" },
             };
         }

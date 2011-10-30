@@ -54,6 +54,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="TASGenerator.cs" />
     <Compile Include="DocGenItem.cs" />
     <Compile Include="WSSGenerator.cs" />
     <Compile Include="Generator.cs" />

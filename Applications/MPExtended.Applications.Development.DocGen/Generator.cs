@@ -161,7 +161,7 @@ namespace MPExtended.Applications.Development.DocGen
             {
                 Output.WriteLine(String.Format("<dt>Returns</dt><dd><strong>{0}</strong><br />", itemType.Name));
             }
-            if (itemType != null)
+            if (itemType != null && !IsUndocumentableType(itemType))
             {
                 GenerateReturnDocumentation(method, itemType);
             }
@@ -180,7 +180,19 @@ namespace MPExtended.Applications.Development.DocGen
             Output.WriteLine("<ul>");
             foreach (var param in method.GetParameters())
             {
-                Output.WriteLine("<li><strong>{0}</strong> ({1})", param.Name, GenerateTypeNameLink(method, param.ParameterType));
+                if (param.IsOptional && param.RawDefaultValue == null)
+                {
+                    Output.WriteLine("<li><strong>{0}</strong> (nullable {1})", param.Name, GenerateTypeNameLink(method, param.ParameterType));
+                } 
+                else if (param.ParameterType.IsGenericType && param.ParameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    Type realType = param.ParameterType.GetGenericArguments().First();
+                    Output.WriteLine("<li><strong>{0}</strong> (nullable {1})", param.Name, GenerateTypeNameLink(method, realType));
+                }
+                else
+                {
+                    Output.WriteLine("<li><strong>{0}</strong> ({1})", param.Name, GenerateTypeNameLink(method, param.ParameterType));
+                }
             }
             Output.WriteLine("</ul>");
         }
@@ -246,6 +258,16 @@ namespace MPExtended.Applications.Development.DocGen
             }
 
             return isList;
+        }
+
+        protected bool IsUndocumentableType(Type type)
+        {
+            if (type == typeof(string) || type == typeof(char) || type == typeof(Stream))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

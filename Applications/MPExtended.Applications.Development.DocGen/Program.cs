@@ -32,11 +32,11 @@ namespace MPExtended.Applications.Development.DocGen
 
             // let's start with MAS
             Assembly mas = Assembly.LoadFrom(Path.Combine(rootpath, "Services", "MPExtended.Services.MediaAccessService.Interfaces", "bin", "Debug", "MPExtended.Services.MediaAccessService.Interfaces.dll"));
-            Generator g = new MASGenerator(mas)
+            Generator g1 = new MASGenerator(mas)
             {
                 Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-mas.txt")
             };
-            g.Generate();
+            g1.Generate();
 
             // continue with WSS
             Assembly wss = Assembly.LoadFrom(Path.Combine(rootpath, "Services", "MPExtended.Services.StreamingService.Interfaces", "bin", "Debug", "MPExtended.Services.StreamingService.Interfaces.dll"));
@@ -45,6 +45,14 @@ namespace MPExtended.Applications.Development.DocGen
                 Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-wss.txt")
             };
             g2.Generate();
+
+            // and finish with TAS
+            Assembly tas = Assembly.LoadFrom(Path.Combine(rootpath, "Services", "MPExtended.Services.TVAccessService.Interfaces", "bin", "Debug", "MPExtended.Services.TVAccessService.Interfaces.dll"));
+            Generator g3 = new TASGenerator(tas)
+            {
+                Output = new StreamWriter(@"C:\Users\Oxan\Downloads\api-doc-tas.txt")
+            };
+            g3.Generate();
 
             // finish
             Console.ReadKey();
