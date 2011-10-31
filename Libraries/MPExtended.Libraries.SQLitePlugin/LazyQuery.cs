@@ -38,6 +38,8 @@ namespace MPExtended.Libraries.SQLitePlugin
         private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
         private Tuple<int, int> range = null;
 
+        private List<T> result = null;
+
         public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.CreateMethod createmethod, Delegates<T>.FinalizeObject finalize)
         {
             this.db = db;
@@ -122,10 +124,15 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private List<T> ExecuteQuery()
         {
-            Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
+            // don't execute queries twice
+            if (result != null)
+            {
+                return result;
+            }
 
             // execute query
-            List<T> ret = new List<T>();
+            Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
+            result = new List<T>();
             using (Query query = new Query(db.DatabasePath, prepared.Item1, prepared.Item2))
             {
                 while (query.Reader.Read())
@@ -135,17 +142,19 @@ namespace MPExtended.Libraries.SQLitePlugin
                     {
                         obj = finalize(obj);
                     }
-                    ret.Add(obj);
+                    result.Add(obj);
                 }
             }
 
-            return ret;
+            return result;
         }
 
         private IEnumerable<T> SmartWhere(Expression<Func<T, bool>> predicate)
         {
-            // make sure query is valid
+            // make sure query is valid and not yet executed
             if (!this.inputQuery.Contains("%where"))
+                return null;
+            if (result != null)
                 return null;
 
             // validate the parameter
@@ -212,6 +221,10 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private IOrderedEnumerable<T> SmartAddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
         {
+            // don't execute query twice
+            if (result != null)
+                return null;
+
             // validate the parameter
             if (keySelector.Parameters.Count != 1)
                 return null;
@@ -292,12 +305,24 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public IEnumerable<T> GetRange(int index, int count)
         {
+            // don't execute query twice
+            if (result != null)
+            {
+                return result.GetRange(index, count);
+            }
+
             range = new Tuple<int, int>(index, count);
             return this;
         }
 
         public int Count()
         {
+            // if we already know it, just return that instead of querying again
+            if (result != null)
+            {
+                return result.Count;
+            }
+
             Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
             string sql = "SELECT COUNT(*) AS count FROM (" + prepared.Item1 + ") tbl";
             using (Query query = new Query(db.DatabasePath, sql, prepared.Item2))
