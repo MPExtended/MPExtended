@@ -54,6 +54,7 @@ namespace MPExtended.Services.MediaAccessService
                     return MovieLibraries[provider];
                 case WebMediaType.MusicTrack:
                 case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicArtist:
                     return MusicLibraries[provider];
                 case WebMediaType.Picture:
                     return PictureLibraries[provider];
