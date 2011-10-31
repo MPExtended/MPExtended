@@ -28,32 +28,27 @@ namespace MPExtended.Applications.Development.Performance
     {
         static void Main(string[] args)
         {
-            bool bla = MPEServices.HasMASConnection;
-            /*
-            Console.WriteLine("MPExtended performance test tool");
-            Console.WriteLine("");
-            Console.WriteLine("First Test");
-            Console.WriteLine("GetItemCount based on .Net");
-            try
-            {
-                MPEServices.NetPipeMediaAccessService.GetAllVideos();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
             Stopwatch watch = new Stopwatch();
+            MPEServices.MAS.GetServiceDescription();
+
+            // load all movies
+            //int count = MPEServices.MAS.GetMovieCount(null).Count;
+            int count = 8000;
+            Console.WriteLine("Loading all movies, 1000 at a time...");
             watch.Start();
-            Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMovieCount());
+            for (int i = 0; i < count; )
+            {
+                int limit = Math.Min(i + 1000, count);
+                var list = MPEServices.MAS.GetMoviesBasicByRange(null, i, limit);
+                i = limit;
+                Console.WriteLine("Finished iteration, {0}ms elapsed", watch.ElapsedMilliseconds);
+                break;
+            }
             watch.Stop();
-            Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
-            Console.WriteLine("GetItemCount based on SQL");
-            watch.Start();
-            Console.WriteLine(MPEServices.NetPipeMediaAccessService.GetMusicTracksCount());
-            watch.Stop();
-            Console.WriteLine("Time: " + watch.ElapsedMilliseconds);
-            Console.Read();
-            */
+            Console.WriteLine("That took {0} milliseconds", watch.ElapsedMilliseconds);
+
+            // return
+            Console.ReadKey();
         }
     }
 }

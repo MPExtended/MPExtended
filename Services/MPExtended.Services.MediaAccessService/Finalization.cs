@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
@@ -27,14 +28,17 @@ namespace MPExtended.Services.MediaAccessService
     {
         public static List<T> ForList<T>(IEnumerable<T> list, int? provider, ProviderType providerType) where T : WebObject
         {
-            if (list.Count() == 0)
+            // special-case LazyQuery here again: execute the query just once instead of a lot of times
+            var operList = list.ToList();
+
+            if (operList.Count() == 0)
                 return new List<T>();
 
             int realProvider = ProviderHandler.GetProviderId(providerType, provider);
-            bool isArtwork = list.First() is IArtwork;
+            bool isArtwork = operList.First() is IArtwork;
 
             List<T> retlist = new List<T>();
-            foreach (T item in list)
+            foreach (T item in operList)
             {
                 item.PID = realProvider;
                 if (isArtwork)
