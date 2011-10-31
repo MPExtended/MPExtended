@@ -74,9 +74,10 @@ Database/MySql.Data.dll:
 - Source code available from http://www.mysql.com/
 - Version 5.1.7 (version from MediaPortal)
 
-Database/System.Data.SQLite.dll:
+Database/System.Data.SQLite:
 - Public domain
-- Version 1.0.65.0
+- Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
+- Version 1.0.76.0, SQLite 3.7.8
 
 Database/Gentle*:
 - Copyright (C) Morten Mertner, http://sourceforge.net/projects/gopf/
