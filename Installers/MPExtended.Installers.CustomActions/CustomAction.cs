@@ -28,26 +28,27 @@ namespace MPExtended.Installers.CustomActions
         [CustomAction]
         public static ActionResult InstallWifiRemote(Session session)
         {
-            session.Log("WifiRemote: Entered InstallWifiRemote");
+            Log.Session = session;
+            Log.Write("WifiRemote: Entered InstallWifiRemote");
 
             try
             {
                 if (WifiRemote.Install(session))
                 {
-                    session.Log("WifiRemote: Installed successfully");
+                    Log.Write("WifiRemote: Installed successfully");
                     return ActionResult.Success;
                 }
                 else
                 {
-                    session.Log("WifiRemote: Failed to install");
+                    Log.Write("WifiRemote: Failed to install");
                 }
             }
             catch (Exception ex)
             {
-                session.Log("WifiRemote: Exception during installation", ex);
+                Log.Write("WifiRemote: Exception during installation: {0}", ex.Message);
             }
 
-            session.Log("WifiRemote: Leave InstallWifiRemote");
+            Log.Write("WifiRemote: Leave InstallWifiRemote");
             return ActionResult.Failure;
         }
     }

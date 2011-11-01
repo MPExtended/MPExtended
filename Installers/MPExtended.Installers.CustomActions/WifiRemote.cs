@@ -36,54 +36,54 @@ namespace MPExtended.Installers.CustomActions
         {
             // download WifiRemote MPEI package
             string tempFile = Path.GetTempFileName();
-            if (!DownloadWifiRemote(session, tempFile))
+            if (!DownloadWifiRemote(tempFile))
             {
                 if(File.Exists(tempFile)) 
                 {
                     File.Delete(tempFile);
                 }
 
-                session.Log("WifiRemote: failed to download it, try packaged version");
+                Log.Write("WifiRemote: failed to download it, try packaged version");
                 if (!BinaryData.ExtractToFile(session, "WifiRemoteInstallerBin", tempFile))
                 {
-                    session.Log("WifiRemote: extracting packaged version also failed, giving up");
+                    Log.Write("WifiRemote: extracting packaged version also failed, giving up");
                     return false;
                 }
             }
-            session.Log("WifiRemote: extracted WifiRemote to {0}", tempFile);
+            Log.Write("WifiRemote: extracted WifiRemote to {0}", tempFile);
 
             // lookup MPEI installer location
-            string mpei = LookupMPEI(session);
+            string mpei = LookupMPEI();
             if (mpei == null)
             {
                 return false;
             }
-            session.Log("WifiRemote: found MPEI at {0}", mpei);
+            Log.Write("WifiRemote: found MPEI at {0}", mpei);
 
             // execute
             ProcessStartInfo param = new ProcessStartInfo();
             param.FileName = mpei;
             param.Arguments = tempFile + " /S";
-            session.Log("WifiRemote: starting MPEI with arguments {0}", param.Arguments);
+            Log.Write("WifiRemote: starting MPEI with arguments {0}", param.Arguments);
             Process proc = new Process();
             proc.StartInfo = param;
             proc.Start();
             proc.WaitForExit();
-            session.Log("WifiRemote: MPEI finished with exit code {0}", proc.ExitCode);
+            Log.Write("WifiRemote: MPEI finished with exit code {0}", proc.ExitCode);
 
             // cleanup
             File.Delete(tempFile);
             return true;
         }
 
-        private static bool DownloadWifiRemote(Session session, string tempPath)
+        private static bool DownloadWifiRemote(string tempPath)
         {
             string xmlData;
 
             // download update.xml
             try
             {
-                session.Log("WifiRemote: Downloading update.xml from {0}", UPDATE_FILE);
+                Log.Write("WifiRemote: Downloading update.xml from {0}", UPDATE_FILE);
                 using (WebClient client = new WebClient())
                 {
                     xmlData = client.DownloadString(UPDATE_FILE);
@@ -91,7 +91,7 @@ namespace MPExtended.Installers.CustomActions
             }
             catch (Exception ex)
             {
-                session.Log("WifiRemote: Failed to download update.xml: {0}", ex.Message);
+                Log.Write("WifiRemote: Failed to download update.xml: {0}", ex.Message);
                 return false;
             }
 
@@ -105,14 +105,14 @@ namespace MPExtended.Installers.CustomActions
             }
             catch (Exception ex)
             {
-                session.Log("WifiRemote: Failed to parse update.xml: {0}", ex.Message);
+                Log.Write("WifiRemote: Failed to parse update.xml: {0}", ex.Message);
                 return false;
             }
 
             // download it
             try
             {
-                session.Log("WifiRemote: Downloading from {0}", file.ToString());
+                Log.Write("WifiRemote: Downloading from {0}", file.ToString());
                 using (WebClient client = new WebClient())
                 {
                     client.DownloadFile(file, tempPath);
@@ -121,12 +121,12 @@ namespace MPExtended.Installers.CustomActions
             }
             catch (Exception ex)
             {
-                session.Log("WifiRemote: Failed to download WifiRemote", ex.Message);
+                Log.Write("WifiRemote: Failed to download WifiRemote", ex.Message);
                 return false;
             }
         }
 
-        private static string LookupMPEI(Session session)
+        private static string LookupMPEI()
         {
             try
             {
@@ -136,14 +136,14 @@ namespace MPExtended.Installers.CustomActions
                 RegistryKey key = Registry.LocalMachine.OpenSubKey(keyPath);
                 if (key == null)
                 {
-                    session.Log("WifiRemote: Could not find MediaPortal installation path key");
+                    Log.Write("WifiRemote: Could not find MediaPortal installation path key");
                     return null;
                 }
 
                 object value = key.GetValue("InstallPath", null);
                 if (value == null)
                 {
-                    session.Log("WifiRemote: Could not find MediaPortal installation path value");
+                    Log.Write("WifiRemote: Could not find MediaPortal installation path value");
                     return null;
                 }
 
@@ -151,7 +151,7 @@ namespace MPExtended.Installers.CustomActions
                 string mpei = Path.Combine(path, "MpeInstaller.exe");
                 if (!File.Exists(mpei))
                 {
-                    session.Log("WifiRemote: MPEI path {0} does not exists", mpei);
+                    Log.Write("WifiRemote: MPEI path {0} does not exists", mpei);
                     return null;
                 }
 
@@ -159,7 +159,7 @@ namespace MPExtended.Installers.CustomActions
             }
             catch (Exception ex)
             {
-                session.Log("WifiRemote: Failed to lookup MPEI path", ex);
+                Log.Write("WifiRemote: Failed to lookup MPEI path", ex);
                 return null;
             }
         }
