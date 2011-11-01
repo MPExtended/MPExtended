@@ -32,29 +32,55 @@ namespace MPExtended.Installers.CustomActions
     {
         private const string UPDATE_FILE = @"http://wifiremote.googlecode.com/svn/trunk/Installer/update.xml";
 
+        private enum WifiRemoteState
+        {
+            Error,
+            NewerVersionAvailable,
+            SameVersion,
+            OlderVersionAvailable,
+        }
+
         public static bool Install(Session session)
         {
-            // download WifiRemote MPEI package
-            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote installer...", "xxx"));
-            string tempFile = Path.GetTempFileName();
-            if (!DownloadWifiRemote(tempFile))
-            {
-                if(File.Exists(tempFile)) 
-                {
-                    File.Delete(tempFile);
-                }
+            // download WifiRemote update information
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote update information...", ""));
+            Uri downloadUri;
+            WifiRemoteState infoState = GetWifiRemoteVersionInfo(session, out downloadUri);
+            Dictionary<WifiRemoteState, string> messages = new Dictionary<WifiRemoteState,string>() {
+                { WifiRemoteState.Error, "WifiRemote: failed to download update information, using packaged version" },
+                { WifiRemoteState.OlderVersionAvailable, "WifiRemote: older version available online then we shipped... strange, using packaged version" },
+                { WifiRemoteState.SameVersion, "WifiRemote: last version packaged, installing from MSI" },
+                { WifiRemoteState.NewerVersionAvailable, "WifiRemote: newer version available, downloading it" }
+            };
+            Log.Write(messages[infoState]);
 
-                Log.Write("WifiRemote: failed to download it, try packaged version");
-                if (!BinaryData.ExtractToFile(session, "WifiRemoteInstallerBin", tempFile))
+            // download newer WifiRemote if needed
+            string mpeiPackagePath = Path.GetTempFileName();
+            bool downloadFailed = false;
+            if (infoState == WifiRemoteState.NewerVersionAvailable)
+            {
+                session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote installer...", ""));
+                if (!DownloadWifiRemote(downloadUri, mpeiPackagePath))
                 {
-                    Log.Write("WifiRemote: extracting packaged version also failed, giving up");
+                    Log.Write("WifiRemote: failed to download it, continuing with extracting from MSI");
+                    downloadFailed = true;
+                }
+            }
+
+            // else extract from package
+            if(infoState != WifiRemoteState.NewerVersionAvailable || downloadFailed)
+            {
+                Log.Write("WifiRemote: extracting package from MSI");
+                if (!InstallerDatabase.ExtractBinaryToFile(session, "WifiRemoteInstallerBin", mpeiPackagePath))
+                {
+                    Log.Write("WifiRemote: failed to extract from MSI");
                     return false;
                 }
             }
-            Log.Write("WifiRemote: extracted WifiRemote to {0}", tempFile);
+            Log.Write("WifiRemote: got WifiRemote installer in {0}", mpeiPackagePath);
 
             // lookup MPEI installer location
-            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Installing WifiRemote MediaPortal plugin with MPEI...", "xxx"));
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Installing WifiRemote MediaPortal plugin with MPEI...", ""));
             string mpei = LookupMPEI();
             if (mpei == null)
             {
@@ -65,7 +91,7 @@ namespace MPExtended.Installers.CustomActions
             // execute
             ProcessStartInfo param = new ProcessStartInfo();
             param.FileName = mpei;
-            param.Arguments = tempFile + " /S";
+            param.Arguments = mpeiPackagePath + " /S";
             Log.Write("WifiRemote: starting MPEI with arguments {0}", param.Arguments);
             Process proc = new Process();
             proc.StartInfo = param;
@@ -74,12 +100,13 @@ namespace MPExtended.Installers.CustomActions
             Log.Write("WifiRemote: MPEI finished with exit code {0}", proc.ExitCode);
 
             // cleanup
-            File.Delete(tempFile);
+            File.Delete(mpeiPackagePath);
             return true;
         }
 
-        private static bool DownloadWifiRemote(string tempPath)
+        private static WifiRemoteState GetWifiRemoteVersionInfo(Session session, out Uri downloadLast)
         {
+            downloadLast = null;
             string xmlData;
 
             // download update.xml
@@ -94,30 +121,51 @@ namespace MPExtended.Installers.CustomActions
             catch (Exception ex)
             {
                 Log.Write("WifiRemote: Failed to download update.xml: {0}", ex.Message);
-                return false;
+                return WifiRemoteState.Error;
             }
 
             // parse it
-            Uri file;
             try
             {
                 XElement updateFile = XElement.Parse(xmlData);
+
+                // set uri
                 string uri = updateFile.Element("Items").Element("PackageClass").Element("GeneralInfo").Element("OnlineLocation").Value.ToString();
-                file = new Uri(uri);
+                downloadLast = new Uri(uri);
+                
+                // get wifiremote version
+                XElement versionNode = updateFile.Element("Items").Element("PackageClass").Element("GeneralInfo").Element("Version");
+                Version remoteVersion = new Version(
+                    Int32.Parse(versionNode.Element("Major").Value),
+                    Int32.Parse(versionNode.Element("Minor").Value),
+                    Int32.Parse(versionNode.Element("Build").Value),
+                    Int32.Parse(versionNode.Element("Revision").Value)
+                );
+                Version ourVersion = new Version(InstallerDatabase.GetProductProperty(session, "WifiRemotePackagedVersion"));
+                Log.Write("WifiRemote: We packaged {0} and {1} is available online", ourVersion.ToString(), remoteVersion.ToString());
+
+                // compare and return
+                int compare = ourVersion.CompareTo(remoteVersion);
+                if (compare == 0)
+                    return WifiRemoteState.SameVersion;
+                return compare < 0 ? WifiRemoteState.NewerVersionAvailable : WifiRemoteState.OlderVersionAvailable;
             }
             catch (Exception ex)
             {
-                Log.Write("WifiRemote: Failed to parse update.xml: {0}", ex.Message);
-                return false;
+                Log.Write("WifiRemote: Failed to parse update.xml: {0}\r\n{1}\r\n{2}", ex.Message, ex.ToString(), ex.StackTrace.ToString());
+                return WifiRemoteState.Error;
             }
+        }
 
+        private static bool DownloadWifiRemote(Uri url, string tempPath)
+        {
             // download it
             try
             {
-                Log.Write("WifiRemote: Downloading from {0}", file.ToString());
+                Log.Write("WifiRemote: Downloading from {0}", url.ToString());
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadFile(file, tempPath);
+                    client.DownloadFile(url, tempPath);
                 }
                 return true;
             }
