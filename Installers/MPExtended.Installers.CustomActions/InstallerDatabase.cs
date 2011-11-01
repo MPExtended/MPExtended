@@ -23,9 +23,9 @@ using Microsoft.Deployment.WindowsInstaller;
 
 namespace MPExtended.Installers.CustomActions
 {
-    internal static class BinaryData
+    internal static class InstallerDatabase
     {
-        public static bool ExtractToFile(Session session, string name, string path)
+        public static bool ExtractBinaryToFile(Session session, string name, string path)
         {
             try
             {
@@ -43,8 +43,29 @@ namespace MPExtended.Installers.CustomActions
             }
             catch (Exception ex)
             {
-                session.Log(String.Format("Extracting binary data {0} to file {1} failed", name, path), ex);
+                session.Log("Extracting binary data {0} to file {1} failed: {2}", name, path, ex.Message);
                 return false;
+            }
+        }
+
+        public static string GetProductProperty(Session session, string name)
+        {
+            try
+            {
+                string sql = "SELECT `Property`.`Value` FROM `Property` WHERE `Property`.`Property` = '" + name + "'";
+                using (View binView = session.Database.OpenView(sql))
+                {
+                    binView.Execute();
+                    using (Record binRecord = binView.Fetch())
+                    {
+                        return binRecord.GetString(1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                session.Log("Loading product property {0} failed: {1}", name, ex.Message);
+                return null;
             }
         }
     }
