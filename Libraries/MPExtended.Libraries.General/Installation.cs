@@ -17,9 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
+using System.Xml.Linq;
 using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
@@ -89,6 +90,26 @@ namespace MPExtended.Libraries.General
             }
 
             return value.ToString() == "true";
+        }
+
+        public static List<Service> GetInstalledServices()
+        {
+            List<Service> allServices = new List<Service>()
+            {
+                new Service(MPExtendedService.MediaAccessService, "MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp"),
+                new Service(MPExtendedService.TVAccessService, "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp"),
+                new Service(MPExtendedService.StreamingService, "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp"),
+                new Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp")
+            };
+
+            string[] disabled =
+                XElement.Load(Configuration.GetPath("Services.xml"))
+                .Element("disabledServices")
+                .Elements("service")
+                .Select(x => x.Value)
+                .ToArray();
+
+            return allServices.Where(x => x.IsInstalled && !disabled.Contains(x.Assembly)).ToList();
         }
     }
 }

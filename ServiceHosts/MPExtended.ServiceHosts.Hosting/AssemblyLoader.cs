@@ -38,7 +38,7 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             if (directories == null)
             {
-                directories = ServiceList.GetAvailableServices().Select(x => Path.GetDirectoryName(x.AssemblyPath)).ToList();
+                directories = Installation.GetInstalledServices().Select(x => Path.GetDirectoryName(x.AssemblyPath)).ToList();
             }
 
             AssemblyName name = new AssemblyName(args.Name);
