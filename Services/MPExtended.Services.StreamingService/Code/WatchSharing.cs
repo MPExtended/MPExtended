@@ -70,32 +70,20 @@ namespace MPExtended.Services.StreamingService.Code
         {
             mas = MPEServices.MAS;
 
-            XElement config = XElement.Load(Configuration.GetPath("Streaming.xml")).Element("watchsharing");
-            string serviceName = config.Element("type").Value;
-            Dictionary<string, string> serviceConfig = new Dictionary<string, string>();
-            if (config.Element(serviceName) != null)
+            switch (Configuration.Streaming.WatchSharing)
             {
-                serviceConfig = config.Element(serviceName).Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
-            }
-
-            if (serviceName == "trakt")
-            {
-                enabled = true;
-                service = new Trakt.TraktBridge(mas, serviceConfig);
-            }
-            else if (serviceName == "debug")
-            {
-                enabled = true;
-                service = new WatchSharingDebug();
-            }
-            else if (serviceName == "none")
-            {
-                enabled = false;
-            }
-            else
-            {
-                Log.Warn("Disabling watch sharing because of unknown service {0}", serviceName);
-                enabled = false;
+                case WatchService.Trakt:
+                    enabled = true;
+                    service = new Trakt.TraktBridge(mas, Configuration.Streaming.TraktConfiguration);
+                    break;
+                case WatchService.Debug:
+                    enabled = true;
+                    service = new WatchSharingDebug();
+                    break;
+                case WatchService.None:
+                default:
+                    enabled = false;
+                    break;
             }
         }
 
