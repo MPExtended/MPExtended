@@ -101,7 +101,7 @@
 
     <!-- User interface -->
     <UI>
-      <ProgressText Action="WifiRemoteInstaller">Installing WifiRemote plugin for MediaPortal...</ProgressText>
+      <ProgressText Action="WifiRemoteInstaller">Installing WifiRemote...</ProgressText>
       
       <!-- Based upon WiX source code. -->
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />

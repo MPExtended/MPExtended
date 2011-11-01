@@ -35,6 +35,7 @@ namespace MPExtended.Installers.CustomActions
         public static bool Install(Session session)
         {
             // download WifiRemote MPEI package
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote installer...", "xxx"));
             string tempFile = Path.GetTempFileName();
             if (!DownloadWifiRemote(tempFile))
             {
@@ -53,6 +54,7 @@ namespace MPExtended.Installers.CustomActions
             Log.Write("WifiRemote: extracted WifiRemote to {0}", tempFile);
 
             // lookup MPEI installer location
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Installing WifiRemote MediaPortal plugin with MPEI...", "xxx"));
             string mpei = LookupMPEI();
             if (mpei == null)
             {
