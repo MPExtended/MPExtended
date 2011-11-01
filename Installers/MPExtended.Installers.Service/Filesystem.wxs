@@ -45,7 +45,7 @@
             <!-- MAS registry -->
             <Component Id="Component_MAS_Registry" Guid="c9e2ad15-09dd-4f8f-b3be-c24a8cb01379">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="MASInstalled" Value="true" />
+                <RegistryValue Type="string" Name="MediaAccessServiceInstalled" Value="true" />
               </RegistryKey>
             </Component>
 
@@ -83,7 +83,7 @@
             <!-- TAS registry -->
             <Component Id="Component_TAS_Registry" Guid="ee36481d-d196-40b5-bac4-0a6100811738">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="TASInstalled" Value="true" />
+                <RegistryValue Type="string" Name="TVAccessServiceInstalled" Value="true" />
               </RegistryKey>
             </Component>
 
@@ -96,7 +96,7 @@
             <!-- USS registry -->
             <Component Id="Component_USS_Registry" Guid="7ca76699-1f6f-4e64-a5f9-63c2fb65b3d7">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="USSInstalled" Value="true" />
+                <RegistryValue Type="string" Name="UserSessionServiceInstalled" Value="true" />
               </RegistryKey>
             </Component>
 
@@ -120,7 +120,7 @@
             <!-- WSS registry -->
             <Component Id="Component_WSS_Registry" Guid="6af94ecd-b794-46c6-a780-28d2c0a653eb">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="WSSInstalled" Value="true" />
+                <RegistryValue Type="string" Name="StreamingServiceInstalled" Value="true" />
               </RegistryKey>
             </Component>
 

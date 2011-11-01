@@ -24,14 +24,29 @@ using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
+    public enum MPExtendedService
+    {
+        MediaAccessService,
+        TVAccessService,
+        StreamingService,
+        UserSessionService,
+        WifiRemote
+    }
+
     public static class Installation
     {
-        public static bool CheckInstalled(string service)
+        public static bool CheckInstalled(MPExtendedService service)
         {
+            if (service == MPExtendedService.WifiRemote)
+            {
+                // TODO: FIXME
+                return false;
+            }
+
 #if DEBUG
             return true;
 #else
-            return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", service + "Installed");
+            return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", service.ToString() + "Installed");
 #endif
         }
 

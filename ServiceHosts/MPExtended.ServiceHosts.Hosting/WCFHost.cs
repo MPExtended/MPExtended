@@ -49,14 +49,14 @@ namespace MPExtended.ServiceHosts.Hosting
                     Log.Debug("Loading service {0}", srv.ImplementationName);
                     if (types.ContainsKey(srv.ImplementationName))
                     {
-                        hosts.Add(new ServiceHost(types[srv.ImplementationName], BaseAddresses.GetForService(srv.Name)));
+                        hosts.Add(new ServiceHost(types[srv.ImplementationName], BaseAddresses.GetForService(srv.ServiceName)));
                     }
                     else if (File.Exists(srv.AssemblyPath))
                     {
                         Log.Trace("Assembly path: {0}", srv.AssemblyPath);
                         Assembly asm = Assembly.LoadFrom(srv.AssemblyPath);
                         Type t = asm.GetType(srv.FullTypeName);
-                        hosts.Add(new ServiceHost(t, BaseAddresses.GetForService(srv.Name)));
+                        hosts.Add(new ServiceHost(t, BaseAddresses.GetForService(srv.ServiceName)));
                     }
                     else
                     {

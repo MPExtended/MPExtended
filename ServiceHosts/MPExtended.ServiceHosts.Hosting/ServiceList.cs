@@ -30,10 +30,10 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             List<Service> allServices = new List<Service>()
             {
-                new Service("MediaAccessService", "MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp", Installation.CheckInstalled("MAS")),
-                new Service("TVAccessService", "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp", Installation.CheckInstalled("TAS")),
-                new Service("StreamingService", "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp", Installation.CheckInstalled("WSS")),
-                new Service("UserSessionService", "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp", Installation.CheckInstalled("USS")),
+                new Service(MPExtendedService.MediaAccessService, "MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp"),
+                new Service(MPExtendedService.TVAccessService, "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp"),
+                new Service(MPExtendedService.StreamingService, "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp"),
+                new Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp")
             };
 
             string[] disabled =

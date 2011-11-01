@@ -17,19 +17,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.ServiceHosts.Hosting
 {
     internal class Service
     {
+        public MPExtendedService ServiceName { get; set; }
         public string ImplementationName { get; set; }
-        public bool IsInstalled { get; set; }
         public string Assembly { get; set; }
-        public string ServiceType { get; set; }
-        public string Name { get; set; }
+        public string ZeroconfServiceType { get; set; }
+
+        public bool IsInstalled
+        {
+            get
+            {
+                return Installation.CheckInstalled(ServiceName);
+            }
+        }
 
         public string AssemblyPath
         {
@@ -55,13 +63,12 @@ namespace MPExtended.ServiceHosts.Hosting
             }
         }
 
-        public Service(string name, string assembly, string implementationName, string serviceType, bool isInstalled)
+        public Service(MPExtendedService srv, string assembly, string implementationName, string serviceType)
         {
-            this.Name = name;
+            this.ServiceName = srv;
             this.Assembly = assembly;
             this.ImplementationName = implementationName;
-            this.ServiceType = serviceType;
-            this.IsInstalled = isInstalled;
+            this.ZeroconfServiceType = serviceType;
         }
     }
 }
