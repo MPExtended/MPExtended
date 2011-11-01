@@ -20,7 +20,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 
@@ -28,14 +30,25 @@ namespace MPExtended.Installers.CustomActions
 {
     internal static class WifiRemote
     {
+        private const string UPDATE_FILE = @"http://wifiremote.googlecode.com/svn/trunk/Installer/update.xml";
+
         public static bool Install(Session session)
         {
-            
-            // get wifiremote MPEI package
+            // download WifiRemote MPEI package
             string tempFile = Path.GetTempFileName();
-            if (!BinaryData.ExtractToFile(session, "WifiRemoteInstallerBin", tempFile))
+            if (!DownloadWifiRemote(session, tempFile))
             {
-                return false;
+                if(File.Exists(tempFile)) 
+                {
+                    File.Delete(tempFile);
+                }
+
+                session.Log("WifiRemote: failed to download it, try packaged version");
+                if (!BinaryData.ExtractToFile(session, "WifiRemoteInstallerBin", tempFile))
+                {
+                    session.Log("WifiRemote: extracting packaged version also failed, giving up");
+                    return false;
+                }
             }
             session.Log("WifiRemote: extracted WifiRemote to {0}", tempFile);
 
@@ -61,6 +74,56 @@ namespace MPExtended.Installers.CustomActions
             // cleanup
             File.Delete(tempFile);
             return true;
+        }
+
+        private static bool DownloadWifiRemote(Session session, string tempPath)
+        {
+            string xmlData;
+
+            // download update.xml
+            try
+            {
+                session.Log("WifiRemote: Downloading update.xml from {0}", UPDATE_FILE);
+                using (WebClient client = new WebClient())
+                {
+                    xmlData = client.DownloadString(UPDATE_FILE);
+                }
+            }
+            catch (Exception ex)
+            {
+                session.Log("WifiRemote: Failed to download update.xml: {0}", ex.Message);
+                return false;
+            }
+
+            // parse it
+            Uri file;
+            try
+            {
+                XElement updateFile = XElement.Parse(xmlData);
+                string uri = updateFile.Element("Items").Element("PackageClass").Element("GeneralInfo").Element("OnlineLocation").Value.ToString();
+                file = new Uri(uri);
+            }
+            catch (Exception ex)
+            {
+                session.Log("WifiRemote: Failed to parse update.xml: {0}", ex.Message);
+                return false;
+            }
+
+            // download it
+            try
+            {
+                session.Log("WifiRemote: Downloading from {0}", file.ToString());
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(file, tempPath);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                session.Log("WifiRemote: Failed to download WifiRemote", ex.Message);
+                return false;
+            }
         }
 
         private static string LookupMPEI(Session session)
