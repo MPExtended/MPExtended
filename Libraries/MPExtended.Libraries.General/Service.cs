@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
@@ -30,15 +31,35 @@ namespace MPExtended.Libraries.General
         public string Assembly { get; set; }
         public string ZeroconfServiceType { get; set; }
 
-        public bool IsInstalled
+        public virtual bool HostAsWCF
         {
             get
             {
-                return Installation.CheckInstalled(ServiceName);
+                return true;
             }
         }
 
-        public string AssemblyPath
+        public virtual bool IsInstalled
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", ServiceName.ToString() + "Installed");
+#endif
+            }
+        }
+
+        public virtual int Port
+        {
+            get
+            {
+                return Configuration.Services.Port;
+            }
+        }
+
+        public virtual string AssemblyPath
         {
             get
             {
@@ -68,6 +89,29 @@ namespace MPExtended.Libraries.General
             this.Assembly = assembly;
             this.ImplementationName = implementationName;
             this.ZeroconfServiceType = serviceType;
+        }
+
+        public virtual void GetUsernameAndPassword(User user, out string username, out string password)
+        {
+            username = user.Username;
+            password = user.Password;
+        }
+
+        private static bool CheckRegistryKey(RegistryKey reg, string key, string name)
+        {
+            RegistryKey regkey = reg.OpenSubKey(key);
+            if (regkey == null)
+            {
+                return false;
+            }
+
+            object value = regkey.GetValue(name);
+            if (value == null)
+            {
+                return false;
+            }
+
+            return value.ToString() == "true";
         }
     }
 }
