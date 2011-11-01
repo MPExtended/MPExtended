@@ -33,20 +33,8 @@
     <plugin name="FS Pictures">
       <root type="folder" displayname="Root Folder">\\10.1.1.49\fotos</root>
     </plugin>
-    <plugin name="MP Picture Shares">
-      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
-    </plugin>
     <plugin name="MP MyVideo">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
-    </plugin>
-    <plugin name="MP Music Shares">
-      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
-    </plugin>
-    <plugin name="MP Movie Shares">
-      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
-    </plugin>
-    <plugin name="MP Shares">
-      <config type="file" displayname="Configuration File">C:\ProgramData\Team MediaPortal\MediaPortal\MediaPortal.xml</config>
     </plugin>
   </pluginConfiguration>
 </appconfig>

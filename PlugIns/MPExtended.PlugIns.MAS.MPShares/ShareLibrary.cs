@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
@@ -43,25 +44,9 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public IEnumerable<WebDriveBasic> GetLocalDrives()
         {
             var localsharelist = new List<Share>();
-            XElement root;
-            try
-            {
-                root = XElement.Load(configuration["config"]);
-            }
-            catch (FileNotFoundException)
-            {
-                data.Log.Warn("Couldn't load MediaPortal configuration file");
-                return new List<WebDriveBasic>() { };
-            }
-
             foreach (string section in Sections)
             {
-                IEnumerable<KeyValuePair<string, string>> list = root
-                    .Elements("section")
-                    .Where(x => (string)x.Attribute("name") == section)
-                    .Elements("entry")
-                    .Select(x => new KeyValuePair<string, string>((string)x.Attribute("name"), x.Value));
-
+                IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile(section);
                 string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
                 int count = list.Where(x => x.Key.StartsWith("sharename")).Count();
 

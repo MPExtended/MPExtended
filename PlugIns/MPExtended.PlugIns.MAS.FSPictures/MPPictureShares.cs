@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
@@ -44,14 +45,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         [ImportingConstructor]
         public MPPictureShares(IPluginData data) : base(data)
         {
-            this.config = data.GetConfiguration("MP Picture Shares")["config"];
-
-            XElement root = XElement.Load(this.config);
-            IEnumerable<KeyValuePair<string, string>> list = root
-                .Elements("section")
-                .Where(x => (string)x.Attribute("name") == "pictures")
-                .Elements("entry")
-                .Select(x => new KeyValuePair<string, string>((string)x.Attribute("name"), x.Value));
+            IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile("pictures");
 
             Extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
 

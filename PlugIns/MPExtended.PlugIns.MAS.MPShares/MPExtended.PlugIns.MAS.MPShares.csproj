@@ -62,6 +62,10 @@
     <Compile Include="Share.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
+      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
+      <Name>MPExtended.Libraries.General</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
