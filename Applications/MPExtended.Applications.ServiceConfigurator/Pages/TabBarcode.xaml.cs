@@ -58,25 +58,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             GenerateBarcode(null);
         }
 
-        private void cbIncludeAuth_Checked(object sender, RoutedEventArgs e)
+        private void updateBarcode(object sender, EventArgs e)
         {
             if (cbIncludeAuth.IsChecked == true)
             {
                 GenerateBarcode((User)cbUser.SelectedValue);
             } 
             else 
-            {
-                GenerateBarcode(null);
-            }
-        }
-
-        private void cbUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cbIncludeAuth.IsChecked == true)
-            {
-                GenerateBarcode((User)cbUser.SelectedValue);
-            }
-            else
             {
                 GenerateBarcode(null);
             }
@@ -106,42 +94,28 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 ServerDescription desc = new ServerDescription();
-                desc.GeneratorApp = "ServiceConfigurator";
-                desc.ServiceType = "Client";
-
-                desc.Port = Configuration.Services.Port;
-                desc.Name = Configuration.Services.BonjourName;
-                desc.HardwareAddresses = GetHardwareAddresses();
+                desc.MACAddresses = GetHardwareAddresses();
+                desc.Addresses = GetIPAddresses();
                 desc.Hostname = GetServiceName();
 
-                IPHostEntry host;
-                String localIP = "?";
-                StringBuilder localIPs = new StringBuilder();
-                host = Dns.GetHostEntry(Dns.GetHostName());
-                foreach (IPAddress ip in host.AddressList)
+                desc.Services = new List<ServiceDescription>();
+                foreach (var srv in Installation.GetInstalledServices())
                 {
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    var srvdesc = new ServiceDescription()
                     {
-                        // Single address field
-                        localIP = ip.ToString();
+                        Name = srv.ServiceName.ToString(),
+                        Port = srv.Port
+                    };
 
-                        // Multiple addresses field
-                        if (localIPs.Length > 0)
-                        {
-                            localIPs.Append(";");
-                        }
-
-                        localIPs.Append(ip.ToString());
+                    if (auth != null)
+                    {
+                        string usernameOut, passwordOut;
+                        srv.GetUsernameAndPassword(auth, out usernameOut, out passwordOut);
+                        srvdesc.User = usernameOut;
+                        srvdesc.Password = passwordOut;
                     }
-                }
 
-                desc.Addresses = (localIPs.Length > 0) ? localIPs.ToString() : "?";
-
-                if (auth != null)
-                {
-                    desc.User = auth.Username;
-                    desc.Password = auth.Password;
-                    desc.AuthOptions = 1;
+                    desc.Services.Add(srvdesc);
                 }
 
                 Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
@@ -153,43 +127,23 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-
-        private static String GetHardwareAddresses()
+        private static List<string> GetIPAddresses()
         {
-            StringBuilder hardwareAddresses = new StringBuilder();
-            try
-            {
-                NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-                foreach (NetworkInterface adapter in nics)
-                {
-                    if (adapter.OperationalStatus == OperationalStatus.Up)
-                    {
-                        String hardwareAddress = adapter.GetPhysicalAddress().ToString();
-                        if (!hardwareAddress.Equals(String.Empty) && hardwareAddress.Length == 12)
-                        {
-                            if (hardwareAddresses.Length > 0)
-                            {
-                                hardwareAddresses.Append(";");
-                            }
+            var addr = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+            return addr.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Select(x => x.ToString()).ToList();
+        }
 
-                            hardwareAddresses.Append(hardwareAddress);
-                        }
-                    }
-                }
-            }
-            catch (NetworkInformationException e)
-            {
-                Log.Warn("Could not get hardware address", e);
-            }
-
-            return hardwareAddresses.ToString();
+        private static List<string> GetHardwareAddresses()
+        {
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            var available = nics.Where(x => x.OperationalStatus == OperationalStatus.Up);
+            return available.Select(x => x.GetPhysicalAddress().ToString()).Where(x => !String.IsNullOrEmpty(x) && x.Length == 12).ToList();
         }
 
         /// <summary>
         /// Get the machine name or a fallback
         /// </summary>
-        /// <returns></returns>
-        public static string GetServiceName()
+        private static string GetServiceName()
         {
             try
             {
