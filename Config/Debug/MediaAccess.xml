@@ -8,9 +8,16 @@
     <filesystem>MP Shares</filesystem>
   </defaultPlugins>
 
-  <!-- You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash it's safe to disable it here. -->
   <disabledPlugins>
-    <disabled>MP MyVideo</disabled>
+    <!-- 
+    
+    You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash 
+    it's safe to disable it here. You can also use this to prevent services from showing up in the provider list on 
+    clients.
+    
+      <disabled>MP MyVideo</disabled>
+    
+    -->
   </disabledPlugins>
 
   <pluginConfiguration>
@@ -22,6 +29,9 @@
       <showall type="boolean" displayname="Show all">false</showall>
       <version type="number" displayname="Version (number)">12</version>
       <description type="text" displayname="Description (text)">abcd</description>
+    </plugin>
+    <plugin name="MP MyVideo">
+      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
     <plugin name="Moving Pictures">
       <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>

@@ -8,9 +8,17 @@
     <filesystem>MP Shares</filesystem>
   </defaultPlugins>
 
-  <!-- You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash it's safe to disable it here. -->
+
   <disabledPlugins>
-    <disabled>MP MyVideo</disabled>
+    <!-- 
+    
+    You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash 
+    it's safe to disable it here. You can also use this to prevent services from showing up in the provider list on 
+    clients.
+    
+      <disabled>MP MyVideo</disabled>
+    
+    -->  
   </disabledPlugins>
 
   <pluginConfiguration>
