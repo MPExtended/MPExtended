@@ -37,9 +37,12 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public Stream Data { get; set; }
         public string Path { get; set; }
+        public string Extension { get; set; }
 
-        public ImageSource(string path) {
+        public ImageSource(string path) 
+        {
             this.Path = path;
+            this.Extension = System.IO.Path.GetExtension(path);
         }
 
         public ImageSource(Stream data)
@@ -47,10 +50,9 @@ namespace MPExtended.Services.StreamingService.Code
             this.Data = data;
         }
 
-        public ImageSource(string path, Stream data)
+        public ImageSource(Stream data, string extension) : this(data)
         {
-            this.Path = path;
-            this.Data = data;
+            this.Extension = extension;
         }
 
         public Stream GetDataStream()
@@ -237,7 +239,7 @@ namespace MPExtended.Services.StreamingService.Code
             else if (!info.IsLocalFile)
             {
                 data = MPEServices.MAS.RetrieveFile(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
-                return new ImageSource(data);
+                return new ImageSource(data, info.Extension);
             }
             else
             {
@@ -254,8 +256,7 @@ namespace MPExtended.Services.StreamingService.Code
                 { ".gif", "image/gif" },
                 { ".bmp", "image/x-ms-bmp" },
             };
-            string extension = src.Path != null ? Path.GetExtension(src.Path) : "";
-            string mime = commonMimeTypes.ContainsKey(extension) ? commonMimeTypes[extension] : "application/octet-stream";
+            string mime = commonMimeTypes.ContainsKey(src.Extension) ? commonMimeTypes[src.Extension] : "application/octet-stream";
             WebOperationContext.Current.OutgoingResponse.ContentType = mime;
 
             return src.GetDataStream();
