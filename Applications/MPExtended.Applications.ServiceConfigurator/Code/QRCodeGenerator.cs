@@ -40,7 +40,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             QRCodeWriter writer = new QRCodeWriter();
             ByteMatrix matrix = writer.encode(_message,
-                BarcodeFormat.QR_CODE, 240, 240, null);
+                BarcodeFormat.QR_CODE, 200, 200, null);
             sbyte[][] img = matrix.Array;
             Bitmap bmp = new Bitmap(matrix.Width, matrix.Height);
             Graphics g = Graphics.FromImage(bmp);
