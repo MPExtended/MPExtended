@@ -97,6 +97,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 desc.MACAddresses = GetHardwareAddresses();
                 desc.Addresses = GetIPAddresses();
                 desc.Hostname = GetServiceName();
+                desc.QRVersion = 1;
 
                 desc.Services = new List<ServiceDescription>();
                 foreach (var srv in Installation.GetInstalledServices())

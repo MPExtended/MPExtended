@@ -38,6 +38,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     public class ServerDescription
     {
         [DataMember]
+        public int QRVersion { get; set; }
+        [DataMember]
         public List<String> Addresses { get; set; }
         [DataMember]
         public List<String> MACAddresses { get; set; }
