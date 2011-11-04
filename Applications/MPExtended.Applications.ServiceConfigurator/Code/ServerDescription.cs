@@ -23,43 +23,29 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    /// <summary>
-    /// Class for holding basic information about this htpc
-    /// </summary>
+    public class ServiceDescription
+    {
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public int Port { get; set; }
+        [DataMember]
+        public string User { get; set; }
+        [DataMember]
+        public string Password { get; set; }
+    }
+
     public class ServerDescription
     {
-        [DataMember(Name = "ServiceType")]
-        public String ServiceType { get; set; }
-
-        [DataMember(Name = "GeneratorApp")]
-        public String GeneratorApp { get; set; }
-
-        [DataMember(Name = "Addresses")]
-        public String Addresses { get; set; }
-
-        [DataMember(Name = "Port")]
-        public int Port { get; set; }
-
-        [DataMember(Name = "Hostname")]
-        public String Hostname { get; set; }
-
-        [DataMember(Name = "HardwareAddresses")]
-        public String HardwareAddresses { get; set; }
-
-        [DataMember(Name = "Name")]
-        public String Name { get; set; }
-
-        [DataMember(Name = "User")]
-        public String User { get; set; }
-
-        [DataMember(Name = "Password")]
-        public String Password { get; set; }
-
-        [DataMember(Name = "Passcode")]
-        public String Passcode { get; set; }
-
-        [DataMember(Name = "AuthOptions")]
-        public int AuthOptions { get; set; }
-
+        [DataMember]
+        public int QRVersion { get; set; }
+        [DataMember]
+        public List<String> Addresses { get; set; }
+        [DataMember]
+        public List<String> MACAddresses { get; set; }
+        [DataMember]
+        public string Hostname { get; set; }
+        [DataMember]
+        public List<ServiceDescription> Services { get; set; }
     }
 }

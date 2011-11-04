@@ -21,7 +21,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
@@ -36,21 +35,6 @@ namespace MPExtended.Libraries.General
 
     public static class Installation
     {
-        public static bool CheckInstalled(MPExtendedService service)
-        {
-            if (service == MPExtendedService.WifiRemote)
-            {
-                // TODO: FIXME
-                return false;
-            }
-
-#if DEBUG
-            return true;
-#else
-            return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", service.ToString() + "Installed");
-#endif
-        }
-
         public static string GetRootDirectory()
         {
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -75,23 +59,6 @@ namespace MPExtended.Libraries.General
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
         }
 
-        private static bool CheckRegistryKey(RegistryKey reg, string key, string name)
-        {
-            RegistryKey regkey = reg.OpenSubKey(key);
-            if (regkey == null)
-            {
-                return false;
-            }
-
-            object value = regkey.GetValue(name);
-            if (value == null)
-            {
-                return false;
-            }
-
-            return value.ToString() == "true";
-        }
-
         public static List<Service> GetInstalledServices()
         {
             List<Service> allServices = new List<Service>()
@@ -99,7 +66,8 @@ namespace MPExtended.Libraries.General
                 new Service(MPExtendedService.MediaAccessService, "MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp"),
                 new Service(MPExtendedService.TVAccessService, "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp"),
                 new Service(MPExtendedService.StreamingService, "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp"),
-                new Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp")
+                new Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp"),
+                new WifiRemoteService()
             };
 
             string[] disabled =
