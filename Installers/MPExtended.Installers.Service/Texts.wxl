@@ -33,4 +33,31 @@
   <String Id="ProgressDlgTitleRepairing"></String>
   <String Id="ProgressDlgTitleRemoving"></String>
   <String Id="ProgressDlgTitleUpdating"></String>
+  
+  <!-- Texts for setup dialog-->
+  <String Id="SetupTypeTitle">Select which type of MPExtended installation you want.</String>
+  <String Id="SetupTypeClient">Client</String>
+  <String Id="SetupTypeClientTooltip">Install client services</String>
+  <String Id="SetupTypeClientDescription">Install the services for MediaPortal and its plugins. Select if you've installed only MediaPortal on this computer.</String>
+  <String Id="SetupTypeServer">Server</String>
+  <String Id="SetupTypeServerTooltip">Install server services</String>
+  <String Id="SetupTypeServerDescription">Install the services for the MediaPortal TV Server. Select if you've installed the MediaPortal TV Server but not MediaPortal on this computer.</String>
+  <String Id="SetupTypeSingleseat">Singleseat</String>
+  <String Id="SetupTypeSingleseatTooltip">Install singleseat services</String>
+  <String Id="SetupTypeSingleseatDescription">Install the services for MediaPortal, its plugins and the MediaPortal TV Server. Select if you've installed MediaPortal and the TV Server on this computer.</String>
+  <String Id="SetupTypeCustom">Custom</String>
+  <String Id="SetupTypeCustomTooltip">Customize your installation</String>
+  <String Id="SetupTypeCustomDescription">Select the components to install by hand. Only for advanced users.</String>
+  
+  <!-- Custom dialog -->
+  <String Id="FeatureClient">Client service</String>
+  <String Id="FeatureClientDescription">Provides the MediaAccessService to access the databases of MediaPortal and its plugins.</String>
+  <String Id="FeatureWifiRemote">WifiRemote</String>
+  <String Id="FeatureWifiRemoteDescription">Install the WifiRemote plugin for MediaPortal.</String>
+  <String Id="FeatureServer">Server service</String>
+  <String Id="FeatureServerDescription">Provides the access to the MediaPortal TV Server.</String>
+  <String Id="FeatureStreaming">Streaming service</String>
+  <String Id="FeatureStreamingDescription">Stream and your (optionally transcoded) media files to clients. Also provides access to artwork and images.</String>
+  <String Id="FeatureConfigurator">Configuration interface</String>
+  <String Id="FeatureConfiguratorDescription">Graphical interface to the configuration of MPExtended. Also offers support to remotely start/stop MediaPortal.</String>
 </WixLocalization>

@@ -86,32 +86,32 @@
       <ComponentRef Id="Component_Service" />
 
       <Feature Id="Feature_Client"  Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Client service"
-               Description="Access to the MediaPortal media databases and shares. Select if you have the MediaPortal client installed.">
+               Title="!(loc.FeatureClient)"
+               Description="!(loc.FeatureClientDescription)">
         <ComponentGroupRef Id="Component_MAS"/>
       </Feature>
 
       <Feature Id="Feature_WifiRemote" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="WifiRemote"
-               Description="Install the WifiRemote remote control plugin for the MediaPortal client.">
+               Title="!(loc.FeatureWifiRemote)"
+               Description="!(loc.FeatureWifiRemoteDescription)">
       </Feature>
 
       <Feature Id="Feature_Server" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Server service"
-               Description="Access to the MediaPortal TV Server. Select if you have the MediaPortal TV Server installed.">
+               Title="!(loc.FeatureServer)"
+               Description="!(loc.FeatureServerDescription)">
         <ComponentGroupRef Id="Component_TAS"/>
       </Feature>
 
       <Feature Id="Feature_Configurator" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Configuration tool"
-               Description="A graphical configuration tool for the services. Also allows to remotely start/stop MediaPortal.">
+               Title="!(loc.FeatureConfigurator)"
+               Description="!(loc.FeatureConfiguratorDescription)">
         <ComponentGroupRef Id="Component_USS"/>
         <ComponentGroupRef Id="Component_Configurator"/>
       </Feature>
 
       <Feature Id="Feature_Streaming" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
-               Title="Streaming service"
-               Description="Transcodes and streams your media files to clients.">
+               Title="!(loc.FeatureStreaming)"
+               Description="!(loc.FeatureStreamingDescription)">
         <ComponentGroupRef Id="Component_Streaming"/>
         <ComponentGroupRef Id="Component_WSS"/>
         <MergeRef Id="VC2010Redist"/>

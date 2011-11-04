@@ -14,20 +14,20 @@
   <Fragment>
     <UI>
       <Dialog Id="CustomSetupTypeDlg" Width="370" Height="270" Title="!(loc.SetupTypeDlg_Title)">
-        <Control Id="ClientButton" Type="PushButton" X="30" Y="65" Width="80" Height="17" ToolTip="Client installation" Default="yes" Text="&amp;Client">
+        <Control Id="ClientButton" Type="PushButton" X="10" Y="65" Width="80" Height="17" ToolTip="!(loc.SetupTypeClientTooltip)" Default="yes" Text="!(loc.SetupTypeClient)">
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
           <Publish Property="InstallType" Value="Client">1</Publish>
           <Publish Event="AddLocal" Value="Feature_WifiRemote">1</Publish>
           <Publish Event="AddLocal" Value="Feature_Client">1</Publish>
         </Control>
 
-        <Control Id="TVButton" Type="PushButton" X="30" Y="100" Width="80" Height="17" ToolTip="TV installation" Default="yes" Text="&amp;TV">
+        <Control Id="TVButton" Type="PushButton" X="10" Y="100" Width="80" Height="17" ToolTip="!(loc.SetupTypeServerTooltip)" Default="yes" Text="!(loc.SetupTypeServer)">
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
           <Publish Property="InstallType" Value="TV">1</Publish>
           <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
-        <Control Id="SingleseatButton" Type="PushButton" X="30" Y="135" Width="80" Height="17" ToolTip="Singleseat installation" Default="yes" Text="&amp;Singleseat">
+        <Control Id="SingleseatButton" Type="PushButton" X="10" Y="135" Width="80" Height="17" ToolTip="!(loc.SetupTypeSingleseatTooltip)" Default="yes" Text="!(loc.SetupTypeSingleseat)">
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
           <Publish Property="InstallType" Value="Singleseat">1</Publish>
           <Publish Event="AddLocal" Value="Feature_WifiRemote">1</Publish>
@@ -35,7 +35,7 @@
           <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
-        <Control Id="CustomButton" Type="PushButton" X="30" Y="170" Width="80" Height="17" ToolTip="Custom installation" Text="C&amp;ustom">
+        <Control Id="CustomButton" Type="PushButton" X="10" Y="170" Width="80" Height="17" ToolTip="!(loc.SetupTypeCustomTooltip)" Text="!(loc.SetupTypeCustom)">
           <Publish Property="WixUI_InstallMode" Value="InstallCustom">1</Publish>
           <Publish Event="SetInstallLevel" Value="5">1</Publish>
           <Publish Property="InstallType" Value="Custom">1</Publish>
@@ -44,10 +44,10 @@
           <Publish Event="AddLocal" Value="Feature_Server">1</Publish>
         </Control>
 
-        <Control Id="ClientText" Type="Text" X="120" Y="67" Width="280" Height="20" Text="Install only client software." />
-        <Control Id="TVText" Type="Text" X="120" Y="102" Width="280" Height="30" Text="Install only TV Server service." />
-        <Control Id="SingleseatText" Type="Text" X="120" Y="137" Width="280" Height="20" Text="Install both features." />
-        <Control Id="CustomText" Type="Text" X="120" Y="172" Width="280" Height="20" Text="Customize your installation." />
+        <Control Id="ClientText" Type="Text" X="95" Y="67" Width="270" Height="20" Text="!(loc.SetupTypeClientDescription)" />
+        <Control Id="TVText" Type="Text" X="95" Y="102" Width="270" Height="30" Text="!(loc.SetupTypeServerDescription)" />
+        <Control Id="SingleseatText" Type="Text" X="95" Y="137" Width="270" Height="20" Text="!(loc.SetupTypeSingleseatDescription)" />
+        <Control Id="CustomText" Type="Text" X="95" Y="172" Width="270" Height="20" Text="!(loc.SetupTypeCustomDescription)" />
         
         <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUINext)" />
