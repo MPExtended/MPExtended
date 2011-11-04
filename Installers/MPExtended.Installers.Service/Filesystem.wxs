@@ -57,6 +57,7 @@
                 <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
 
                 <!-- all plugins for release -->
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
