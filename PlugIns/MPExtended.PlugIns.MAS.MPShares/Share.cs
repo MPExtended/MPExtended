@@ -35,9 +35,11 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             return new WebDriveBasic()
             {
-                Name = this.Name,
-                Path = this.Path,
+                Title = this.Name,
+                Path = new List<string>() { this.Path },
                 Id = this.Id,
+                LastModifiedTime = DateTime.Now,
+                LastAccessTime = DateTime.Now
             };
         }
     }

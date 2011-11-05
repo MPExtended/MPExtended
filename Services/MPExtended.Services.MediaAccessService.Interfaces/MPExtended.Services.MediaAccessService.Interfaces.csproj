@@ -63,6 +63,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="FileSystem\WebFileBasic.cs" />
+    <Compile Include="FileSystem\WebFilesystemItem.cs" />
     <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="PluginInterfaces.cs" />

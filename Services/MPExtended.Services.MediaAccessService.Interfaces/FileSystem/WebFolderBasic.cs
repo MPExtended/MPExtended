@@ -5,16 +5,14 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebFolderBasic : WebObject, IDateAddedSortable
+    public class WebFolderBasic : WebFilesystemItem
     {
-        public WebFolderBasic()
+        public override WebMediaType Type
         {
-            DateAdded = new DateTime(1970, 1, 1);
+            get
+            {
+                return WebMediaType.Folder;
+            }
         }
-
-        public string Id { get; set; }
-        public string Path { get; set; }
-        public string Name { get; set; }
-        public DateTime DateAdded { get; set; }
     }
 }

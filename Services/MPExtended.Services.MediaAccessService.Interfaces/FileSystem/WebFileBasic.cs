@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebFileBasic : WebMediaItem
+    public class WebFileBasic : WebFilesystemItem
     {
-        public string Name { get; set; }
+        public long Size { get; set; }
 
         public override WebMediaType Type
         {

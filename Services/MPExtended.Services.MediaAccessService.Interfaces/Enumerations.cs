@@ -26,7 +26,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         MusicAlbum = 7,
         [EnumMember]
-        MusicArtist = 8
+        MusicArtist = 8,
+        [EnumMember]
+        Folder = 9,
+        [EnumMember]
+        Drive = 10
     }
 
     [DataContract]

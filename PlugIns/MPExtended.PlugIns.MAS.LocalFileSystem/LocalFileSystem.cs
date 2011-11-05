@@ -36,8 +36,10 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             return DriveInfo.GetDrives().Select(x => new WebDriveBasic()
             {
                 Id = EncodeTo64(x.RootDirectory.Name),
-                Name = x.Name,
-                Path = x.RootDirectory.FullName
+                Title = x.Name,
+                Path = new List<string>() { x.RootDirectory.FullName },
+                LastAccessTime = DateTime.Now,
+                LastModifiedTime = DateTime.Now
             });
         }
 
@@ -46,13 +48,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             string path = DecodeFrom64(id);
             if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
             {
-                return new DirectoryInfo(path).GetFiles().Select(file => new WebFileBasic()
-                {
-                    Name = file.Name,
-                    Path = new List<string>() { file.FullName },
-                    DateAdded = file.CreationTime,
-                    Id = EncodeTo64(file.FullName)
-                });
+                return new DirectoryInfo(path).GetFiles().Select(file => ConvertFileInfoToFileBasic(file));
             }
 
             return new List<WebFileBasic>();
@@ -65,10 +61,12 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             {
                 return new DirectoryInfo(path).GetDirectories().Select(dir => new WebFolderBasic()
                 {
-                    Name = dir.Name,
-                    Path = dir.FullName,
+                    Title = dir.Name,
+                    Path = new List<string>() { dir.FullName },
                     DateAdded = dir.CreationTime,
                     Id = EncodeTo64(dir.FullName),
+                    LastAccessTime = dir.LastAccessTime,
+                    LastModifiedTime = dir.LastWriteTime
                 });
             }
 
@@ -80,14 +78,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             string path = DecodeFrom64(id);
             if (!File.Exists(path))
                 return null;
-            FileInfo file = new FileInfo(path);
-            return new WebFileBasic()
-                {
-                    Name = file.Name,
-                    Path = new List<string>() { file.FullName },
-                    DateAdded = file.CreationTime,
-                    Id = EncodeTo64(file.FullName)
-                };
+            return ConvertFileInfoToFileBasic(new FileInfo(path));
         }
 
         public IEnumerable<WebSearchResult> Search(string text)
@@ -114,13 +105,28 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             };
         }
 
-        static private string EncodeTo64(string toEncode)
+        private static WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
+        {
+            return new WebFileBasic()
+            {
+                Title = file.Name,
+                Path = new List<string>() { file.FullName },
+                DateAdded = file.CreationTime,
+                Id = EncodeTo64(file.FullName),
+                LastAccessTime = file.LastAccessTime,
+                LastModifiedTime = file.LastWriteTime,
+                Size = file.Length
+            };
+        }
+
+        private static string EncodeTo64(string toEncode)
         {
             byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
             string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
             return returnValue;
         }
-        static private string DecodeFrom64(string encodedData)
+
+        private static string DecodeFrom64(string encodedData)
         {
             byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
             string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);

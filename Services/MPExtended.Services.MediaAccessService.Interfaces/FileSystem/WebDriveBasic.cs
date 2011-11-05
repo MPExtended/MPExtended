@@ -5,10 +5,14 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public class WebDriveBasic : WebObject
+    public class WebDriveBasic : WebFilesystemItem
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
+        public override WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Drive;
+            }
+        }
     }
 }

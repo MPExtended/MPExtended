@@ -142,7 +142,7 @@ namespace MPExtended.Services.StreamingService.Code
                 switch (MediaType)
                 {
                     case WebStreamMediaType.File:
-                        return MPEServices.MAS.GetFileSystemFileBasicById(Provider, Id).Name;
+                        return MPEServices.MAS.GetFileSystemFileBasicById(Provider, Id).Title;
                     case WebStreamMediaType.Movie:
                         return MPEServices.MAS.GetMovieBasicById(Provider, Id).Title;
                     case WebStreamMediaType.MusicAlbum:
