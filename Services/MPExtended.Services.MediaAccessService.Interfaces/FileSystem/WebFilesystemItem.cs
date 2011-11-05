@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.FileSystem
 {
-    public abstract class WebFilesystemItem : WebMediaItem, ITitleSortable
+    public class WebFilesystemItem : WebMediaItem, ITitleSortable
     {
         public string Title { get; set; }
         public DateTime LastAccessTime { get; set; }

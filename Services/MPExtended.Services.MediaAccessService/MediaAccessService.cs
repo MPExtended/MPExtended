@@ -476,7 +476,7 @@ namespace MPExtended.Services.MediaAccessService
             return new WebItemCount() { Count = FileSystemLibraries[provider].GetLocalDrives().Count() };
         }
 
-        public IList<WebDriveBasic> GetFileSystemDrives(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebDriveBasic> GetAllFileSystemDrives(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
@@ -486,24 +486,38 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFolderBasic> GetFileSystemFoldersListing(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebFolderBasic> GetAllFileSystemFolders(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFoldersListing(id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFolderBasic> GetFileSystemFoldersListingByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebFolderBasic> GetFileSystemFoldersByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFoldersListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFileBasic> GetFileSystemFilesListing(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebFileBasic> GetAllFileSystemFiles(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFileBasic> GetFileSystemFilesListingByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebFileBasic> GetFileSystemFilesByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFilesystemItem> GetAllFileSystemFilesAndFolders(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            var listA = FileSystemLibraries[provider].GetFilesListing(id).Select(x => x.ToWebFilesystemItem());
+            var listB = FileSystemLibraries[provider].GetFoldersListing(id).Select(x => x.ToWebFilesystemItem());
+            return listA.Concat(listB).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFilesystemItem> GetFileSystemFilesAndFoldersByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            var listA = FileSystemLibraries[provider].GetFilesListing(id).Select(x => x.ToWebFilesystemItem());
+            var listB = FileSystemLibraries[provider].GetFoldersListing(id).Select(x => x.ToWebFilesystemItem());
+            return listA.Concat(listB).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
         public WebFileBasic GetFileSystemFileBasicById(int? provider, string id)

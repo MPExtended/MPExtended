@@ -23,7 +23,8 @@ using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+//using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -222,6 +223,24 @@ namespace MPExtended.Services.MediaAccessService
                 Type = item.Type
             };
             return x;
+        }
+    }
+
+    internal static class WebFilesystemItemExtensionMethods
+    {
+        public static WebFilesystemItem ToWebFilesystemItem(this WebFilesystemItem item)
+        {
+            return new WebFilesystemItem()
+            {
+                DateAdded = item.DateAdded,
+                Id = item.Id,
+                LastAccessTime = item.LastAccessTime,
+                LastModifiedTime = item.LastModifiedTime,
+                Path = item.Path,
+                PID = item.PID,
+                Title = item.Title,
+                Type = item.Type
+            };
         }
     }
 
