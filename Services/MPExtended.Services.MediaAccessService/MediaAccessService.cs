@@ -471,19 +471,39 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Filesystem
-        public IList<WebDriveBasic> GetFileSystemDrives(int? provider)
+        public WebItemCount GetFileSystemDriveCount(int? provider)
         {
-            return FileSystemLibraries[provider].GetLocalDrives().Finalize(provider, ProviderType.Filesystem).ToList();
+            return new WebItemCount() { Count = FileSystemLibraries[provider].GetLocalDrives().Count() };
         }
 
-        public IList<WebFolderBasic> GetFileSystemFoldersListing(int? provider, string id)
+        public IList<WebDriveBasic> GetFileSystemDrives(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
-            return FileSystemLibraries[provider].GetFoldersListing(id).Finalize(provider, ProviderType.Filesystem).ToList();
+            return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFileBasic> GetFileSystemFilesListing(int? provider, string id)
+        public IList<WebDriveBasic> GetFileSystemDrivesByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
-            return FileSystemLibraries[provider].GetFilesListing(id).Finalize(provider, ProviderType.Filesystem).ToList();
+            return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFolderBasic> GetFileSystemFoldersListing(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return FileSystemLibraries[provider].GetFoldersListing(id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFolderBasic> GetFileSystemFoldersListingByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return FileSystemLibraries[provider].GetFoldersListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFileBasic> GetFileSystemFilesListing(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public IList<WebFileBasic> GetFileSystemFilesListingByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
         public WebFileBasic GetFileSystemFileBasicById(int? provider, string id)
