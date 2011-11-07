@@ -103,7 +103,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
             string path = GetPath(id);
             if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
             {
-                return new DirectoryInfo(path).GetFiles().Select(file => ConvertFileInfoToFileBasic(file));
+                Share share = GetShare(id);
+                return new DirectoryInfo(path).GetFiles().Select(file => ConvertFileInfoToFileBasic(file, share));
             }
 
             return new List<WebFileBasic>();
@@ -159,28 +160,28 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
-        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
+        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file, Share share = null)
         {
             return new WebFileBasic()
             {
                 Title = file.Name,
                 Path = new List<string>() { file.FullName },
                 DateAdded = file.CreationTime,
-                Id = PathToIdentifier(file.FullName),
+                Id = PathToIdentifier(file, share),
                 LastAccessTime = file.LastAccessTime,
                 LastModifiedTime = file.LastWriteTime,
                 Size = file.Length
             };
         }
 
-        private WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir)
+        private WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir, Share share = null)
         {
             return new WebFolderBasic()
             {
                 Title = dir.Name,
                 Path = new List<string>() { dir.FullName },
                 DateAdded = dir.CreationTime,
-                Id = PathToIdentifier(dir.FullName),
+                Id = PathToIdentifier(dir, share),
                 LastAccessTime = dir.LastAccessTime,
                 LastModifiedTime = dir.LastWriteTime
             };
@@ -238,7 +239,27 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
         }
 
-        private string PathToIdentifier(string path)
+        private string PathToIdentifier(FileInfo info, Share useShare = null)
+        {
+            if(useShare == null)
+            {
+                return PathToIdentifier(info.FullName, useShare);
+            }
+            
+            return "f" + useShare.Id + "_" + EncodeTo64(info.FullName.Substring(useShare.Path.Length + 1));
+        }
+
+        private string PathToIdentifier(DirectoryInfo info, Share useShare = null)
+        {
+            if (useShare == null)
+            {
+                return PathToIdentifier(info.FullName, useShare);
+            }
+
+            return "d" + useShare.Id + "_" + EncodeTo64(info.FullName.Substring(useShare.Path.Length + 1));
+        }
+
+        private string PathToIdentifier(string path, Share useShare = null)
         {
             foreach (Share share in shares)
             {
