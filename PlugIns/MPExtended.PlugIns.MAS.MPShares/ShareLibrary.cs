@@ -104,7 +104,10 @@ namespace MPExtended.PlugIns.MAS.MPShares
             if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
             {
                 Share share = GetShare(id);
-                return new DirectoryInfo(path).GetFiles().Select(file => ConvertFileInfoToFileBasic(file, share));
+                return new DirectoryInfo(path)
+                    .GetFiles()
+                    .Where(file => share.Extensions.Contains(file.Extension))
+                    .Select(file => ConvertFileInfoToFileBasic(file, share));
             }
 
             return new List<WebFileBasic>();
