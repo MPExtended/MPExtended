@@ -180,7 +180,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             else
             {
-                return DecodeFrom64(id);
+                // malformed identifier, do not decode it as a path here because that would give access to arbitrary files
+                return null;
             }
         }
 
@@ -209,7 +210,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Title = file.Name,
                 Path = new List<string>() { file.FullName },
                 DateAdded = file.CreationTime,
-                Id = EncodeTo64(file.FullName),
+                Id = PathToIdentifier(file.FullName),
                 LastAccessTime = file.LastAccessTime,
                 LastModifiedTime = file.LastWriteTime,
                 Size = file.Length
