@@ -95,7 +95,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
-            string sql = "SELECT DISTINCT t.strAlbumArtist AS albumArtist, t.strAlbum AS album, " +
+            string sql = "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
                             "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
                             "MIN(dateAdded) AS date, MIN(iYear) AS year " +
                          "FROM tracks t " +
@@ -103,10 +103,10 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                          "GROUP BY strAlbum, strAlbumArtist ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("t", "album", "Id", AlbumIdReader),
-                new SQLFieldMapping("t", "album", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("t", "albumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
-                new SQLFieldMapping("t", "albumArtist", "AlbumArtistId", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("t", "strAlbum", "Id", AlbumIdReader),
+                new SQLFieldMapping("t", "strAlbum", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtistId", DataReaders.ReadPipeListAsString),
                 new SQLFieldMapping("t", "artists", "Artists", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "artists", "ArtistsId", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "genre", "Genres", DataReaders.ReadPipeList),
@@ -269,7 +269,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             throw new ArgumentException();
         }
 
-        [AllowSQLCompare("trim(%table.strAlbum || '_MPE_' || %table.strAlbumArtist) = %prepared")]
+        [AllowSQLCompare("trim(%table.strAlbum || '_MPE_' || %table.strAlbumArtist) = trim(%prepared)")]
         private object AlbumIdReader(SQLiteDataReader reader, int index)
         {
             // make sure you always select strAlbumArtist, strAlbum when using this method
