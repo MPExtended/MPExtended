@@ -65,4 +65,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         DateTime FirstAired { get; set; }
     }
+
+    public interface ITypeSortable
+    {
+        WebMediaType Type { get; set; }
+    }
 }

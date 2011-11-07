@@ -152,6 +152,8 @@ namespace MPExtended.Services.MediaAccessService
                         return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
                     case SortBy.UserDefinedCategories:
                         return list.OrderBy(x => ((ICategorySortable)x).UserDefinedCategories.First(), order);
+                    case SortBy.Type:
+                        return list.OrderBy(x => ((ITypeSortable)x).Type, order);
 
                     // music
                     case SortBy.MusicTrackNumber:

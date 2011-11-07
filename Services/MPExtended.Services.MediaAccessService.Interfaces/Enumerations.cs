@@ -85,6 +85,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         PictureDateTaken = 10,
         [EnumMember]
-        TVDateAired = 11
+        TVDateAired = 11,
+        [EnumMember]
+        Type = 12
     }
 }
