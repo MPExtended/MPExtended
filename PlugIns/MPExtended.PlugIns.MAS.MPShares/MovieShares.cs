@@ -33,10 +33,5 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public MovieShares(IPluginData data) : base (data, "movies")
         {
         }
-
-        protected new string GetExtensionsString(String id)
-        {
-            return ".avi|.mpg|.mpeg|.mp4|.wmv|.mkv";
-        }
     }
 }

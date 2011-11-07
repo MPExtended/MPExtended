@@ -33,10 +33,5 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public MusicShares(IPluginData data) : base (data, "music")
         {
         }
-
-        protected new string GetExtensionsString(String id)
-        {
-            return ".mp3|.wav|.wma";
-        }
     }
 }

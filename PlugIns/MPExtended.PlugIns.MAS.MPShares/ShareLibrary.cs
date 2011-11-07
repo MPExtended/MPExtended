@@ -150,11 +150,12 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
+            string path = GetPath(id);
             return new SerializableDictionary<string>()
             {
-                { "Type", "file" },
-                { "Path", GetFileBasic(id).Path.First() },
-                { "Extensions", GetExtensionsString(id) }
+                { "Type", File.Exists(path) ? "file" : "folder" },
+                { "Path", path },
+                { "Extensions", String.Join("|", GetShare(id).Extensions) }
             };
         }
 
@@ -185,31 +186,21 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
-        /// <summary>
-        /// Returns a list of valid extension for this item
-        /// </summary>
-        /// <param name="id">id of item</param>
-        /// <returns>a list of valid extensions, divided by "|"</returns>
-        public virtual string GetExtensionsString(String id)
-        {
-            return ".*";
-        }
-
         private string GetPath(string id)
         {
             if (id.StartsWith("s"))
             {
-                return GetDriveListing().Where(x => x.Id == id).First().Path.First();
+                return GetShare(id).Path;
             }
             else if (id.StartsWith("d") || id.StartsWith("f"))
             {
-                string sid = id.Substring(1, id.IndexOf("_") - 1);
+                Share share = GetShare(id);
                 string reldir = DecodeFrom64(id.Substring(id.IndexOf("_") + 1));
-                if (!String.IsNullOrEmpty(reldir) && !String.IsNullOrEmpty(sid))
+                if (!String.IsNullOrEmpty(reldir) && share != null)
                 {
-                    string path = Path.GetFullPath(Path.Combine(shares.Where(x => x.Id == sid).First().Path, reldir));
+                    string path = Path.GetFullPath(Path.Combine(share.Path, reldir));
 
-                    // it is possible that someone tricks us into looking out of the shareroot by a /../ path
+                    // it is possible that someone tricks us into looking outside of the shareroot by a /../ path
                     if (Security.IsAllowedPath(data.Log, path, shares))
                     {
                         return path;
@@ -221,6 +212,28 @@ namespace MPExtended.PlugIns.MAS.MPShares
             else
             {
                 // malformed identifier, do not decode it as a path here because that would give access to arbitrary files
+                return null;
+            }
+        }
+
+        private Share GetShare(string id)
+        {
+            if (id.StartsWith("s"))
+            {
+                return shares.Where(x => x.Id == id).First();
+            }
+            else if (id.StartsWith("d") || id.StartsWith("f"))
+            {
+                string sid = id.Substring(1, id.IndexOf("_") - 1);
+                if (!String.IsNullOrEmpty(sid))
+                {
+                    return shares.FirstOrDefault(x => x.Id == sid);
+                }
+
+                return null;
+            }
+            else
+            {
                 return null;
             }
         }

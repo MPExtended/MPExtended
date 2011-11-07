@@ -111,10 +111,12 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
+            string path = GetFileBasic(id).Path.First();
             return new SerializableDictionary<string>()
             {
-                { "Type", "file" },
-                { "Path", GetFileBasic(id).Path.First() }
+                { "Type", File.Exists(path) ? "file" : "folder" },
+                { "Path", path },
+                { "Extensions", ".*" }
             };
         }
 
