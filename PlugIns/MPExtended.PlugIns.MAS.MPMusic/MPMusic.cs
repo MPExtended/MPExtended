@@ -18,14 +18,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using System.Data.SQLite;
-using MPExtended.Libraries.SQLitePlugin;
-using System.Security.Cryptography;
 
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
@@ -35,7 +35,6 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     public class MPMusic : Database, IMusicLibrary
     {
         private Dictionary<string, string> configuration;
-        private MD5 md5;
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
@@ -48,22 +47,21 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
-
             string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre " +
                          "FROM tracks t " + 
                          "WHERE %where";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
-                new SQLFieldMapping("", "idTrack", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("", "strArtist", "Artist", DataReaders.ReadPipeList),
-                new SQLFieldMapping("", "strArtist", "ArtistId", ArtistIdReader),
-                new SQLFieldMapping("", "strAlbum", "Album", DataReaders.ReadString),
-                new SQLFieldMapping("", "strAlbum", "AlbumId", AlbumIdReader),
-                new SQLFieldMapping("", "strTitle", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("", "iTrack", "TrackNumber", DataReaders.ReadInt32),
-                new SQLFieldMapping("", "strPath", "Path", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("", "strGenre", "Genres", DataReaders.ReadPipeList),
-                new SQLFieldMapping("", "iYear", "Year", DataReaders.ReadInt32),
-                new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+                new SQLFieldMapping("t", "idTrack", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("t", "strArtist", "Artist", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "strArtist", "ArtistId", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "strAlbum", "Album", DataReaders.ReadString),
+                new SQLFieldMapping("t", "strAlbum", "AlbumId", AlbumIdReader),
+                new SQLFieldMapping("t", "strTitle", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("t", "iTrack", "TrackNumber", DataReaders.ReadInt32),
+                new SQLFieldMapping("t", "strPath", "Path", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("t", "strGenre", "Genres", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "iYear", "Year", DataReaders.ReadInt32),
+                new SQLFieldMapping("t", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
             }, delegate(T item)
             {
                 if (item is WebMusicTrackDetailed)
@@ -97,33 +95,24 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
-            Delegates.ReadValue singleArtistIdReader = delegate(SQLiteDataReader reader, int index)
-            {
-                var list = (List<string>)ArtistIdReader(reader, index);
-                if (list.Count > 0)
-                {
-                    return list.First();
-                }
-                return null;
-            };
-
             string sql = "SELECT DISTINCT t.strAlbumArtist AS albumArtist, t.strAlbum AS album, " +
                             "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
                             "MIN(dateAdded) AS date, MIN(iYear) AS year " +
                          "FROM tracks t " +
+                         "WHERE %where " + 
                          "GROUP BY strAlbum, strAlbumArtist ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("album", "Id", AlbumIdReader),
-                new SQLFieldMapping("album", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("albumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
-                new SQLFieldMapping("albumArtist", "AlbumArtistId", singleArtistIdReader),
-                new SQLFieldMapping("artists", "Artists", DataReaders.ReadPipeList),
-                new SQLFieldMapping("artists", "ArtistsId", ArtistIdReader),
-                new SQLFieldMapping("genre", "Genres", DataReaders.ReadPipeList),
-                new SQLFieldMapping("composer", "Composer", DataReaders.ReadPipeList),
-                new SQLFieldMapping("date", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("year", "Year", DataReaders.ReadInt32)
+                new SQLFieldMapping("t", "album", "Id", AlbumIdReader),
+                new SQLFieldMapping("t", "album", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("t", "albumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("t", "albumArtist", "AlbumArtistId", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("t", "artists", "Artists", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "artists", "ArtistsId", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "genre", "Genres", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "composer", "Composer", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "date", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("t", "year", "Year", DataReaders.ReadInt32)
             }, delegate(WebMusicAlbumBasic album)
             {
                 if(album.Artists.Count() > 0) 
@@ -165,7 +154,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 .OrderBy(x => x)
                 .Select(x => new WebMusicArtistBasic()
                 {
-                    Id = GenerateHash(x),
+                    Id = x,
                     Title = x,
                     UserDefinedCategories = new List<string>()
                 }).ToList();
@@ -185,7 +174,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 return reader.ReadPipeList(0).Select(name => new WebSearchResult()
                 {
                     Type = WebMediaType.MusicArtist,
-                    Id = GenerateHash(name),
+                    Id = name,
                     Title = name,
                     Score = (int)Math.Round((decimal)text.Length / name.Length * 100)
                 });
@@ -280,26 +269,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             throw new ArgumentException();
         }
 
-        private string GenerateHash(string text)
-        {
-            if (md5 == null)
-                md5 = new MD5CryptoServiceProvider();
-
-            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
-            return Convert.ToBase64String(data).ToLower().Substring(0, 10);
-        }
-
+        [AllowSQLCompare("trim(%table.strAlbum || '_MPE_' || %table.strAlbumArtist) = %prepared")]
         private object AlbumIdReader(SQLiteDataReader reader, int index)
         {
             // make sure you always select strAlbumArtist, strAlbum when using this method
-            string text = reader.ReadString(index) + "_MPExtended_" + reader.ReadString(index - 1);
-            return GenerateHash(text);
-        }
-
-        private object ArtistIdReader(SQLiteDataReader reader, int index)
-        {
-            var artists = (List<string>)DataReaders.ReadPipeList(reader, index);
-            return artists.Select(x => GenerateHash(x)).ToList();
+            return reader.ReadString(index) + "_MPE_" + reader.ReadString(index - 1);
         }
 
         private string GetLargeAlbumCover(string artistName, string albumName)
@@ -318,6 +292,25 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             string thumbDir = configuration["cover"];
             return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
+        }
+
+        private string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
+            return Convert.ToBase64String(toEncodeAsBytes);
+        }
+
+        private string DecodeFrom64(string encodedData)
+        {
+            try
+            {
+                byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
+                return Encoding.ASCII.GetString(encodedDataAsBytes);
+            }
+            catch (FormatException)
+            {
+                return String.Empty;
+            }
         }
     }
 }
