@@ -201,7 +201,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     string path = Path.GetFullPath(Path.Combine(share.Path, reldir));
 
                     // it is possible that someone tricks us into looking outside of the shareroot by a /../ path
-                    if (Security.IsAllowedPath(data.Log, path, shares))
+                    if (Security.IsInShare(data.Log, path, share))
                     {
                         return path;
                     }

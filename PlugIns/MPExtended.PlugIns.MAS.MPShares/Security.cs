@@ -74,5 +74,41 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             return false;
         }
+
+        public static bool IsInShare(ILogger log, string path, Share share)
+        {
+            try
+            {
+                // non-existent files don't yield results anyway, we might need to have them existent for the checks here later
+                if (!File.Exists(path) && !Directory.Exists(path))
+                    return false;
+
+                // we should only get rooted paths, but check anyway
+                if (!Path.IsPathRooted(path))
+                    return false;
+
+                // only check on parent directory path
+                if (File.Exists(path))
+                    path = Path.GetDirectoryName(path);
+
+                // if share doesn't exist don't allow access
+                if (!Directory.Exists(share.Path))
+                    return false;
+
+                // check if it's a subdir and log fails
+                bool retval = IsSubdir(share.Path, path);
+                if (!retval)
+                {
+                    log.Warn("Tried to access file {0} outside share {1}", path, share.Path);
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error(String.Format("Exception druing IsInShare with path = {0}", path), ex);
+            }
+            return false;
+        }
     }
 }
