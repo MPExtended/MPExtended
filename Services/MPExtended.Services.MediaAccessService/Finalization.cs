@@ -65,6 +65,9 @@ namespace MPExtended.Services.MediaAccessService
 
         public static T ForItem<T>(T item, int? provider, ProviderType providerType) where T : WebObject
         {
+            if (item == null)
+                return null;
+
             item.PID = ProviderHandler.GetProviderId(providerType, provider);
             if (item is IArtwork)
             {
