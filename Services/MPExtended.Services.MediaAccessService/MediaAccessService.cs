@@ -496,6 +496,13 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetFoldersListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
+        public WebItemCount GetFileSystemFoldersCount(int? provider, string id)
+        {
+            var listA = FileSystemLibraries[provider].GetFoldersListing(id);
+            int count = listA.Count();
+            return new WebItemCount() { Count = count };
+        }
+
         public IList<WebFileBasic> GetAllFileSystemFiles(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
@@ -504,6 +511,13 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebFileBasic> GetFileSystemFilesByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return FileSystemLibraries[provider].GetFilesListing(id).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+        
+        public WebItemCount GetFileSystemFilesCount(int? provider, string id)
+        {
+            var listA = FileSystemLibraries[provider].GetFilesListing(id);
+            int count = listA.Count();
+            return new WebItemCount() { Count = count };
         }
 
         public IList<WebFilesystemItem> GetAllFileSystemFilesAndFolders(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -518,6 +532,14 @@ namespace MPExtended.Services.MediaAccessService
             var listA = FileSystemLibraries[provider].GetFilesListing(id).Select(x => x.ToWebFilesystemItem());
             var listB = FileSystemLibraries[provider].GetFoldersListing(id).Select(x => x.ToWebFilesystemItem());
             return listA.Concat(listB).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+        }
+
+        public WebItemCount GetFileSystemFilesAndFoldersCount(int? provider, string id)
+        {
+            var listA = FileSystemLibraries[provider].GetFilesListing(id).Select(x => x.ToWebFilesystemItem());
+            var listB = FileSystemLibraries[provider].GetFoldersListing(id).Select(x => x.ToWebFilesystemItem());
+            int count = listA.Count() + listB.Count();
+            return new WebItemCount() { Count = count };
         }
 
         public WebFileBasic GetFileSystemFileBasicById(int? provider, string id)

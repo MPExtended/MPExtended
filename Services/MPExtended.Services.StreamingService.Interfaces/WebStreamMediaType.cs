@@ -30,5 +30,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
         TVSeason = 6,
         [EnumMember]
         MusicAlbum = 7,
+        [EnumMember]
+        MusicArtist = 8,
+        [EnumMember]
+        Folder = 9,
+        [EnumMember]
+        Drive = 10
     }
 }

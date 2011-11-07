@@ -27,7 +27,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMediaServiceDescription GetServiceDescription();
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]        
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMediaItem GetMediaItem(int? provider, WebMediaType type, string id);
 
         [OperationContract]
@@ -35,7 +35,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebSearchResult> Search(string text);
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]  
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebSearchResult> SearchResultsByRange(string text, int start, int end);
 
         [OperationContract]
@@ -351,6 +351,18 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebFilesystemItem> GetFileSystemFilesAndFoldersByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebItemCount GetFileSystemFilesAndFoldersCount(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebItemCount GetFileSystemFilesCount(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebItemCount GetFileSystemFoldersCount(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

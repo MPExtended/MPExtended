@@ -169,7 +169,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             else
             {
-                return null;
+                return DecodeFrom64(id);
             }
         }
 
