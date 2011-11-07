@@ -63,6 +63,8 @@ namespace MPExtended.Services.MediaAccessService
                 case WebMediaType.TVEpisode:
                     return TVShowLibraries[provider];
                 case WebMediaType.File:
+                case WebMediaType.Folder:
+                case WebMediaType.Drive:
                     return FileSystemLibraries[provider];
                 default:
                     throw new ArgumentException();
@@ -107,6 +109,10 @@ namespace MPExtended.Services.MediaAccessService
                     return GetPictureDetailedById(provider, id).Finalize(provider, ProviderType.Picture).ToWebMediaItem();
                 case WebMediaType.TVEpisode:
                     return GetTVEpisodeDetailedById(provider, id).Finalize(provider, ProviderType.TVShow).ToWebMediaItem();
+                case WebMediaType.Drive:
+                    return GetFileSystemDriveBasicById(provider, id).Finalize(provider, ProviderType.Filesystem).ToWebMediaItem();
+                case WebMediaType.Folder:
+                    return GetFileSystemFolderBasicById(provider, id).Finalize(provider, ProviderType.Filesystem).ToWebMediaItem();
                 case WebMediaType.File:
                     return GetFileSystemFileBasicById(provider, id).Finalize(provider, ProviderType.Filesystem).ToWebMediaItem();
                 default:
@@ -473,17 +479,17 @@ namespace MPExtended.Services.MediaAccessService
         #region Filesystem
         public WebItemCount GetFileSystemDriveCount(int? provider)
         {
-            return new WebItemCount() { Count = FileSystemLibraries[provider].GetLocalDrives().Count() };
+            return new WebItemCount() { Count = FileSystemLibraries[provider].GetDriveListing().Count() };
         }
 
         public IList<WebDriveBasic> GetAllFileSystemDrives(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
-            return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
+            return FileSystemLibraries[provider].GetDriveListing().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
         public IList<WebDriveBasic> GetFileSystemDrivesByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
-            return FileSystemLibraries[provider].GetLocalDrives().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
+            return FileSystemLibraries[provider].GetDriveListing().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
         public IList<WebFolderBasic> GetAllFileSystemFolders(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -540,6 +546,16 @@ namespace MPExtended.Services.MediaAccessService
             var listB = FileSystemLibraries[provider].GetFoldersListing(id).Select(x => x.ToWebFilesystemItem());
             int count = listA.Count() + listB.Count();
             return new WebItemCount() { Count = count };
+        }
+
+        public WebDriveBasic GetFileSystemDriveBasicById(int? provider, string id)
+        {
+            return FileSystemLibraries[provider].GetDriveBasic(id).Finalize(provider, ProviderType.Filesystem);
+        }
+
+        public WebFolderBasic GetFileSystemFolderBasicById(int? provider, string id)
+        {
+            return FileSystemLibraries[provider].GetFolderBasic(id).Finalize(provider, ProviderType.Filesystem);
         }
 
         public WebFileBasic GetFileSystemFileBasicById(int? provider, string id)

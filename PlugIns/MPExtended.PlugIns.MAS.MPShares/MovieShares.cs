@@ -30,9 +30,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class MovieShares : ShareLibrary
     {
         [ImportingConstructor]
-        public MovieShares(IPluginData data) : base (data)
+        public MovieShares(IPluginData data) : base (data, "movies")
         {
-            Sections = new string[] { "movies" };
         }
 
         protected new string GetExtensionsString(String id)

@@ -31,7 +31,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
     [ExportMetadata("Id", 2)]
     public class LocalFileSystem : IFileSystemLibrary
     {
-        public IEnumerable<WebDriveBasic> GetLocalDrives()
+        public IEnumerable<WebDriveBasic> GetDriveListing()
         {
             return DriveInfo.GetDrives().Select(x => new WebDriveBasic()
             {
@@ -71,6 +71,19 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             }
 
             return new List<WebFolderBasic>();
+        }
+
+        public WebDriveBasic GetDriveBasic(string id)
+        {
+            return GetDriveListing().First(x => x.Id == id);
+        }
+
+        public WebFolderBasic GetFolderBasic(string id)
+        {
+            string path = DecodeFrom64(id);
+            if (!Directory.Exists(id))
+                return null;
+            return ConvertDirectoryInfoToFolderBasic(new DirectoryInfo(path));
         }
 
         public WebFileBasic GetFileBasic(string id)
@@ -116,6 +129,19 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
                 LastAccessTime = file.LastAccessTime,
                 LastModifiedTime = file.LastWriteTime,
                 Size = file.Length
+            };
+        }
+
+        private static WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir)
+        {
+            return new WebFolderBasic()
+            {
+                Title = dir.Name,
+                Path = new List<string>() { dir.FullName },
+                DateAdded = dir.CreationTime,
+                Id = EncodeTo64(dir.FullName),
+                LastAccessTime = dir.LastAccessTime,
+                LastModifiedTime = dir.LastWriteTime
             };
         }
 

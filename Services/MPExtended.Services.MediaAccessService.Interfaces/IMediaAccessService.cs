@@ -366,6 +366,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebDriveBasic GetFileSystemDriveBasicById(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebFolderBasic GetFileSystemFolderBasicById(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebFileBasic GetFileSystemFileBasicById(int? provider, string id);
         #endregion
 

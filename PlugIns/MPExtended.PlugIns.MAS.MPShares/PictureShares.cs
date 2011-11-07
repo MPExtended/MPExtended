@@ -30,9 +30,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class PictureShares : ShareLibrary
     {
         [ImportingConstructor]
-        public PictureShares(IPluginData data) : base (data)
+        public PictureShares(IPluginData data) : base (data, "pictures")
         {
-            Sections = new string[] { "pictures" };
         }
     }
 }

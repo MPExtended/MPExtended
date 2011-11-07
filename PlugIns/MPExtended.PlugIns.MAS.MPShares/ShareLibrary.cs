@@ -33,18 +33,14 @@ namespace MPExtended.PlugIns.MAS.MPShares
         private IPluginData data;
         private Dictionary<string, string> configuration;
         private List<Share> shares = null;
-        protected string[] Sections { get; set; }
 
-        public ShareLibrary(IPluginData data)
+        public ShareLibrary(IPluginData data, string[] sections)
         {
             this.data = data;
             this.configuration = data.GetConfiguration("MP Shares");
-        }
 
-        public IEnumerable<WebDriveBasic> GetLocalDrives()
-        {
             var localsharelist = new List<Share>();
-            foreach (string section in Sections)
+            foreach (string section in sections)
             {
                 IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile(section);
                 string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
@@ -79,7 +75,27 @@ namespace MPExtended.PlugIns.MAS.MPShares
             {
                 share.Id = "s" + (shareNr++);
             }
+        }
+
+        public ShareLibrary(IPluginData data, string section)
+            : this(data, new string[] { section })
+        {
+        }
+
+        public IEnumerable<WebDriveBasic> GetDriveListing()
+        {
             return shares.Select(x => x.ToWebDriveBasic());
+        }
+
+        public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
+        {
+            string path = GetPath(id);
+            if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
+            {
+                return new DirectoryInfo(path).GetDirectories().Select(dir => ConvertDirectoryInfoToFolderBasic(dir));
+            }
+
+            return new List<WebFolderBasic>();
         }
 
         public IEnumerable<WebFileBasic> GetFilesListing(string id)
@@ -93,23 +109,20 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebFileBasic>();
         }
 
-        public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
+        public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
-            {
-                return new DirectoryInfo(path).GetDirectories().Select(dir => new WebFolderBasic()
-                {
-                    Title = dir.Name,
-                    Path = new List<string>() { dir.FullName },
-                    DateAdded = dir.CreationTime,
-                    Id = PathToIdentifier(dir.FullName),
-                    LastAccessTime = dir.LastAccessTime,
-                    LastModifiedTime = dir.LastWriteTime
-                });
-            }
+            return shares.First(x => x.Path == path).ToWebDriveBasic();
+        }
 
-            return new List<WebFolderBasic>();
+        public WebFolderBasic GetFolderBasic(string id)
+        {
+            string path = GetPath(id);
+            if (Directory.Exists(path))
+            {
+                return ConvertDirectoryInfoToFolderBasic(new DirectoryInfo(path));
+            }
+            return null;
         }
 
         public WebFileBasic GetFileBasic(string id)
@@ -145,6 +158,33 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
+        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
+        {
+            return new WebFileBasic()
+            {
+                Title = file.Name,
+                Path = new List<string>() { file.FullName },
+                DateAdded = file.CreationTime,
+                Id = PathToIdentifier(file.FullName),
+                LastAccessTime = file.LastAccessTime,
+                LastModifiedTime = file.LastWriteTime,
+                Size = file.Length
+            };
+        }
+
+        private WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir)
+        {
+            return new WebFolderBasic()
+            {
+                Title = dir.Name,
+                Path = new List<string>() { dir.FullName },
+                DateAdded = dir.CreationTime,
+                Id = PathToIdentifier(dir.FullName),
+                LastAccessTime = dir.LastAccessTime,
+                LastModifiedTime = dir.LastWriteTime
+            };
+        }
+
         /// <summary>
         /// Returns a list of valid extension for this item
         /// </summary>
@@ -159,7 +199,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             if (id.StartsWith("s"))
             {
-                return GetLocalDrives().Where(x => x.Id == id).First().Path.First();
+                return GetDriveListing().Where(x => x.Id == id).First().Path.First();
             }
             else if (id.StartsWith("d") || id.StartsWith("f"))
             {
@@ -201,20 +241,6 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
 
             return String.Empty;
-        }
-
-        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
-        {
-            return new WebFileBasic()
-            {
-                Title = file.Name,
-                Path = new List<string>() { file.FullName },
-                DateAdded = file.CreationTime,
-                Id = PathToIdentifier(file.FullName),
-                LastAccessTime = file.LastAccessTime,
-                LastModifiedTime = file.LastWriteTime,
-                Size = file.Length
-            };
         }
 
         private string EncodeTo64(string toEncode)

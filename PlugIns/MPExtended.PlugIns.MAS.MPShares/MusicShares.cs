@@ -30,9 +30,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class MusicShares : ShareLibrary
     {
         [ImportingConstructor]
-        public MusicShares(IPluginData data) : base (data)
+        public MusicShares(IPluginData data) : base (data, "music")
         {
-            Sections = new string[] { "music" };
         }
 
         protected new string GetExtensionsString(String id)

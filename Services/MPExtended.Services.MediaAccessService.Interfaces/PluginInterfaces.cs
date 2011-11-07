@@ -82,10 +82,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IFileSystemLibrary : ILibrary
     {
-        IEnumerable<WebDriveBasic> GetLocalDrives();
+        IEnumerable<WebDriveBasic> GetDriveListing();
         IEnumerable<WebFileBasic> GetFilesListing(string id);
         IEnumerable<WebFolderBasic> GetFoldersListing(string id);
         WebFileBasic GetFileBasic(string id);
+        WebFolderBasic GetFolderBasic(string id);
+        WebDriveBasic GetDriveBasic(string id);
     }
 
     public interface ILogger

@@ -30,9 +30,9 @@ namespace MPExtended.PlugIns.MAS.MPShares
     public class AllShares : ShareLibrary
     {
         [ImportingConstructor]
-        public AllShares(IPluginData data) : base (data)
+        public AllShares(IPluginData data) :
+            base(data, new string[] { "movies", "music", "pictures" })
         {
-            Sections = new string[] { "movies", "music", "pictures" };
         }
     }
 }
