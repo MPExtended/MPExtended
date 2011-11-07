@@ -34,5 +34,10 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             Sections = new string[] { "music" };
         }
+
+        protected new string GetExtensionsString(String id)
+        {
+            return ".mp3|.wav|.wma";
+        }
     }
 }

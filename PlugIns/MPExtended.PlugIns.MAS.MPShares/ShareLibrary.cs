@@ -140,8 +140,19 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new SerializableDictionary<string>()
             {
                 { "Type", "file" },
-                { "Path", GetFileBasic(id).Path.First() }
+                { "Path", GetFileBasic(id).Path.First() },
+                { "Extensions", GetExtensionsString(id) }
             };
+        }
+
+        /// <summary>
+        /// Returns a list of valid extension for this item
+        /// </summary>
+        /// <param name="id">id of item</param>
+        /// <returns>a list of valid extensions, divided by "|"</returns>
+        public virtual string GetExtensionsString(String id)
+        {
+            return ".*";
         }
 
         private string GetPath(string id)

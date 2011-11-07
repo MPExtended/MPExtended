@@ -34,5 +34,10 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             Sections = new string[] { "movies" };
         }
+
+        protected new string GetExtensionsString(String id)
+        {
+            return ".avi|.mpg|.mpeg|.mp4|.wmv|.mkv";
+        }
     }
 }
