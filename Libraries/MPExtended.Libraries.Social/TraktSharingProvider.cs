@@ -33,17 +33,6 @@ namespace MPExtended.Libraries.Social
         public IMediaAccessService MediaService { get; set; }
         public Dictionary<string,string> Configuration { get; set; }
 
-        private IMediaAccessService service;
-        private string username;
-        private string password;
-
-        public TraktSharingProvider(IMediaAccessService service, Dictionary<string, string> config)
-        {
-            this.service = service;
-            this.username = config["username"];
-            this.password = config["password"];
-        }
-
         public int UpdateInterval
         {
             get
@@ -55,7 +44,7 @@ namespace MPExtended.Libraries.Social
         private string GetPasswordHash()
         {
             // TODO: save password encrypted instead of in plaintext
-            byte[] data = Encoding.ASCII.GetBytes(password);
+            byte[] data = Encoding.ASCII.GetBytes(Configuration["password"]);
             byte[] hash = SHA1Managed.Create().ComputeHash(data);
             return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
         }
@@ -84,7 +73,7 @@ namespace MPExtended.Libraries.Social
                 MediaCenterVersion = TraktConfig.MediaCenterVersion,
                 PluginVersion = TraktConfig.PluginVersion,
                 Password = GetPasswordHash(),
-                UserName = username,
+                UserName = Configuration["username"],
 
                 Duration = movie.Runtime.ToString(),
                 IMDBID = movie.IMDBId,
@@ -143,8 +132,8 @@ namespace MPExtended.Libraries.Social
 
         private bool CallShowAPI(WebTVEpisodeBasic episode, TraktWatchStatus state, int progress)
         {
-            WebTVShowDetailed show = service.GetTVShowDetailedById(episode.PID, episode.ShowId);
-            WebTVSeasonDetailed season = service.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
+            WebTVShowDetailed show = MediaService.GetTVShowDetailedById(episode.PID, episode.ShowId);
+            WebTVSeasonDetailed season = MediaService.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
 
             var data = new TraktEpisodeScrobbleData()
             {
@@ -153,7 +142,7 @@ namespace MPExtended.Libraries.Social
                 MediaCenterVersion = TraktConfig.MediaCenterVersion,
                 PluginVersion = TraktConfig.PluginVersion,
                 Password = GetPasswordHash(),
-                UserName = username,
+                UserName = Configuration["username"],
 
                 Duration = show.Runtime.ToString(),
                 Episode = episode.EpisodeNumber.ToString(),

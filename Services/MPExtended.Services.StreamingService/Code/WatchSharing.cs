@@ -23,6 +23,7 @@ using System.Xml.Linq;
 using System.Threading;
 using MPExtended.Libraries.General;
 using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.Social;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -30,21 +31,6 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    public interface IWatchSharingService
-    {
-        int UpdateInterval { get; } // in minutes
-
-        bool StartWatchingMovie(WebMovieDetailed movie);
-        bool WatchingMovie(WebMovieDetailed movie, int progress);
-        bool FinishMovie(WebMovieDetailed movie);
-        bool CancelWatchingMovie(WebMovieDetailed movie);
-
-        bool StartWatchingEpisode(WebTVEpisodeDetailed episode);
-        bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress);
-        bool FinishEpisode(WebTVEpisodeDetailed episode);
-        bool CancelWatchingEpisode(WebTVEpisodeDetailed episode);
-    }
-
     internal class WatchSharing
     {
         private class StreamState
@@ -62,29 +48,28 @@ namespace MPExtended.Services.StreamingService.Code
 
         private bool enabled;
         private IWatchSharingService service;
-        private IMediaAccessService mas;
-
         private Dictionary<string, StreamState> streams = new Dictionary<string, StreamState>();
 
         public WatchSharing()
         {
-            mas = MPEServices.MAS;
+            if(Configuration.Streaming.WatchSharing == WatchService.None)
+            {
+                enabled = false;
+                return;
+            }
 
             switch (Configuration.Streaming.WatchSharing)
             {
                 case WatchService.Trakt:
-                    enabled = true;
-                    service = new Trakt.TraktBridge(mas, Configuration.Streaming.TraktConfiguration);
+                    service = new TraktSharingProvider();
+                    service.Configuration = Configuration.Streaming.TraktConfiguration;
                     break;
                 case WatchService.Debug:
-                    enabled = true;
                     service = new WatchSharingDebug();
                     break;
-                case WatchService.None:
-                default:
-                    enabled = false;
-                    break;
             }
+
+            service.MediaService = MPEServices.MAS;
         }
 
         public void StartStream(MediaSource source, Reference<WebTranscodingInfo> infoRef, int position)
@@ -119,13 +104,13 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (source.MediaType == WebStreamMediaType.TVEpisode)
                 {
-                    state.MediaDescriptor = mas.GetTVEpisodeDetailedById(source.Provider, source.Id);
+                    state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(source.Provider, source.Id);
                     service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
-                    state.Runtime = mas.GetTVShowDetailedById(source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
+                    state.Runtime = MPEServices.MAS.GetTVShowDetailedById(source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
                 }
                 else if (source.MediaType == WebStreamMediaType.Movie)
                 {
-                    state.MediaDescriptor = mas.GetMovieDetailedById(source.Provider, source.Id);
+                    state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(source.Provider, source.Id);
                     service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime;
                 }

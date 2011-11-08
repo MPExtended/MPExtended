@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.Social;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -35,6 +36,9 @@ namespace MPExtended.Services.StreamingService.Code
                 return 1;
             }
         }
+
+        public IMediaAccessService MediaService { get; set; }
+        public Dictionary<string, string> Configuration { get; set; }
 
         public bool StartWatchingMovie(WebMovieDetailed movie)
         {

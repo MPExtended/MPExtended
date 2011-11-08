@@ -78,13 +78,6 @@
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
     <Compile Include="StreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Trakt\ExtensionMethods.cs" />
-    <Compile Include="Trakt\TraktAPI.cs" />
-    <Compile Include="Trakt\TraktBridge.cs" />
-    <Compile Include="Trakt\TraktConfig.cs" />
-    <Compile Include="Trakt\TraktEpisodeScrobble.cs" />
-    <Compile Include="Trakt\TraktMovieScrobble.cs" />
-    <Compile Include="Trakt\TraktResponse.cs" />
     <Compile Include="Transcoders\Direct.cs" />
     <Compile Include="Transcoders\FFMpeg.cs" />
     <Compile Include="Transcoders\FFMpegHTTPLive.cs" />
@@ -123,6 +116,10 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.ServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Social\MPExtended.Libraries.Social.csproj">
+      <Project>{504A098A-8141-418A-9FC5-C7870C68C716}</Project>
+      <Name>MPExtended.Libraries.Social</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
