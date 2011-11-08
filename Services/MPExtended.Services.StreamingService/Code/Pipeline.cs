@@ -119,6 +119,11 @@ namespace MPExtended.Services.StreamingService.Code
                     Stop(true);
                     return false;
                 }
+                else
+                {
+                    Log.Debug("Setted up data unit {0}", i);
+                }
+
                 if (dataConnections.ContainsKey(i))
                     dataUnits[dataConnections[i]].InputStream = dataUnits[i].DataOutputStream;
             }
@@ -128,6 +133,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (logConnections.ContainsKey(i))
                     logUnits[i].InputStream = dataUnits[logConnections[i]].LogOutputStream;
                 logUnits[i].Setup();
+                Log.Debug("Setted up log unit {0}", i);
             }
 
             Log.Info("Pipeline assembled");

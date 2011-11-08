@@ -145,6 +145,8 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier]) 
                 {
+                    Log.Trace("StartStream called with identifier {0}", identifier);
+
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
                     stream.Context.Profile = profile;

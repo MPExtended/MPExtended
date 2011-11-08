@@ -166,6 +166,7 @@ namespace MPExtended.Services.StreamingService.Units {
 
             // delay start of next unit till our output stream is ready
             if (DataOutputStream is NamedPipe && (outputMethod == TransportMethod.NamedPipe || outputMethod == TransportMethod.StandardOut)) {
+                Log.Trace("Transcoder running: {0}", !transcoderApplication.HasExited);
                 Log.Info("Encoding: Waiting till output named pipe is ready");
                 ((NamedPipe)DataOutputStream).WaitTillReady();
             }
