@@ -160,11 +160,13 @@ namespace MPExtended.Services.StreamingService.Units
             TranscodingInfoCalculator calculator;
             if (context.MediaInfo.Duration > 0)
             {
-                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
+                Log.Trace("VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
+                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
             }
             else
             {
-                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
+                Log.Trace("VLCManagedInfo: duration unknown");
+                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
             }
 
             while (true)
@@ -174,11 +176,14 @@ namespace MPExtended.Services.StreamingService.Units
                     int time = transcoder.GetTime();
                     if(time != 0) 
                     {
+                        Log.Trace("VLCManagedInfo: calling NewTime with time {0} milliseconds", time / 1000);
                         calculator.NewTime(time / 1000); // vlc gives time in microseconds
                     }
                     else 
                     {
-                        calculator.NewPercentage(transcoder.GetPosition());
+                        float position = transcoder.GetPosition();
+                        Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
+                        calculator.NewPercentage(position);
                     }
                     calculator.SetStats(einfo);
                 }
