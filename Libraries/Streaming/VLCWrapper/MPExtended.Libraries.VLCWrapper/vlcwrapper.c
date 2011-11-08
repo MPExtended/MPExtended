@@ -132,9 +132,9 @@ int main(int argc, char **argv) {
 
    // arguments (you shouldn't need these in normal usage; but we don't support all arguments by ourself yet)
    nr = argc - 3;
-   vlc_argv = (char**)malloc(sizeof(char)*nr);
+   vlc_argv = (char**)malloc(sizeof(char*)*nr);
    for(i = 3; i < argc; i++) {
-      vlc_argv[i-3] = (char*)malloc(sizeof(char)*strlen(argv[i]));
+      vlc_argv[i-3] = (char*)malloc(sizeof(char)* (strlen(argv[i]) + 1));
       strcpy(vlc_argv[i-3], argv[i]);
    }
    for(i = 0; i < nr; i++)
