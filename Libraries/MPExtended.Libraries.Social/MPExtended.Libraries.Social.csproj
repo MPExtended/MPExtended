@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FollwitSharingProvider.cs" />
+    <Compile Include="Follwit\DataStructures.cs" />
+    <Compile Include="Follwit\FollwitAPI.cs" />
+    <Compile Include="Follwit\FollwitConfig.cs" />
     <Compile Include="JSONUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocialInterfaces.cs" />

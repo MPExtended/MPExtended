@@ -21,37 +21,11 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
 
-namespace MPExtended.Libraries.Social.Trakt
+namespace MPExtended.Libraries.Social.Follwit
 {
-    internal class TraktConfig
+    internal class FollwitConfig
     {
         private const string ApiKey = "abcd";
-
-        public static string MediaCenter { get { return "Mediaportal"; } }
-
-        public static string MediaCenterVersion 
-        { 
-            get 
-            {
-                return VersionUtil.GetCompleteMediaPortalVersion().ToString();
-            } 
-        }
-
-        public static string MediaCenterDate 
-        { 
-            get 
-            {
-                return String.Empty;
-            } 
-        }
-
-        public static string PluginVersion 
-        { 
-            get 
-            {
-                return String.Format("{0} ({1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion().ToString());
-            } 
-        }
 
         public static string UserAgent
         {
@@ -63,8 +37,8 @@ namespace MPExtended.Libraries.Social.Trakt
 
         internal static class URL
         {
-            public const string ScrobbleShow = @"http://api.trakt.tv/show/{0}/" + ApiKey;
-            public const string ScrobbleMovie = @"http://api.trakt.tv/movie/{0}/" + ApiKey;
+            public const string WatchEpisode = @"http://follw.it/api/3/" + ApiKey + "/episode.{0}";
+            public const string WatchMovie = @"http://follw.it/api/3/" + ApiKey + "/movie.{0}";
         }
     }
 }
