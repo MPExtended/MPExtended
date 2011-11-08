@@ -112,16 +112,11 @@ namespace MPExtended.Services.StreamingService.Units
                     // the actual progress parsing
                     if(line.StartsWith("P")) 
                     {
-                        int msecs = Int32.Parse(line.Substring(2, line.IndexOf(",") - 2)) / 1000;
-                        if (msecs != 0)
-                        {
-                            calculator.NewTime(msecs);
-                        }
-                        else
-                        {
-                            double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
-                            calculator.NewPercentage(percentage);
-                        }
+                        // the format is 'P [time in microseconds] [percentage of file]'. Sadly we can't use the way more detailed time in microseconds
+                        // because the VLC guys decided it would be a good idea to convert it to a 32-bit integer before returning it, as opposed to
+                        // returning libvlc_time_t or a int64_t. And since it's in microseconds it gets big very fast, so it's absolutely useless.
+                        double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
+                        calculator.NewPercentage(percentage);
                         calculator.SetStats(data);
                         continue;
                     }

@@ -276,10 +276,10 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 Log.Info("WatchSharing: transcoded time of stream {0} not known", id);
             }
-            int transcodedSeconds = transcodedValue / 1000 + streams[id].StartedPosition;
-            int progress = CalculatePercent(transcodedSeconds / 60, streams[id].Runtime);
-            Log.Debug("WatchSharing: transcoded {0} ms, position {1} seconds, runtime {2}, progress {3}%",
-                transcodedValue, transcodedSeconds, streams[id].Runtime, progress);
+            int watchPosition = transcodedValue / 1000;
+            int progress = CalculatePercent(watchPosition / 60, streams[id].Runtime);
+            Log.Debug("WatchSharing: start position {0} seconds, transcoding position {1} ms, position {2} seconds, runtime {3} min, progress {4}%",
+                streams[id].StartedPosition, transcodedValue, watchPosition, streams[id].Runtime, progress);
 
             return progress;
         }

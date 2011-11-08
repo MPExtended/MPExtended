@@ -173,18 +173,10 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 try
                 {
-                    int time = transcoder.GetTime();
-                    if(time != 0) 
-                    {
-                        Log.Trace("VLCManagedInfo: calling NewTime with time {0} milliseconds", time / 1000);
-                        calculator.NewTime(time / 1000); // vlc gives time in microseconds
-                    }
-                    else 
-                    {
-                        float position = transcoder.GetPosition();
-                        Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
-                        calculator.NewPercentage(position);
-                    }
+                    // let's ignore the time here, for reasons detailed in VLCWrapperParsingUnit.cs around line 115
+                    float position = transcoder.GetPosition();
+                    Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
+                    calculator.NewPercentage(position);
                     calculator.SetStats(einfo);
                 }
                 catch (ThreadAbortException)
