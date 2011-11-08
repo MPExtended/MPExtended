@@ -52,24 +52,25 @@ namespace MPExtended.Services.StreamingService.Code
 
         public WatchSharing()
         {
-            if(Configuration.Streaming.WatchSharing == WatchService.None)
+            switch (Configuration.Streaming.WatchSharing["type"])
             {
-                enabled = false;
-                return;
-            }
-
-            switch (Configuration.Streaming.WatchSharing)
-            {
-                case WatchService.Trakt:
+                case "trakt":
                     service = new TraktSharingProvider();
-                    service.Configuration = Configuration.Streaming.TraktConfiguration;
                     break;
-                case WatchService.Debug:
+                case "follwit":
+                    service = new FollwitSharingProvider();
+                    break;
+                case "debug":
                     service = new WatchSharingDebug();
                     break;
+                case "none": // no reason that's explicitely listed here
+                default:
+                    enabled = false;
+                    return;
             }
 
             service.MediaService = MPEServices.MAS;
+            service.Configuration = Configuration.Streaming.WatchSharing;
         }
 
         public void StartStream(MediaSource source, Reference<WebTranscodingInfo> infoRef, int position)

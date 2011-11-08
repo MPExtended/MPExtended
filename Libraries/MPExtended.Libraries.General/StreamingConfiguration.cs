@@ -23,13 +23,6 @@ using System.Xml.Linq;
 
 namespace MPExtended.Libraries.General
 {
-    public enum WatchService
-    {
-        None,
-        Debug,
-        Trakt
-    }
-
     public class TranscoderProfile
     {
         public string Name { get; set; }
@@ -59,8 +52,7 @@ namespace MPExtended.Libraries.General
         public string FFMpegPath { get; set; }
         public string FFMpegAPI { get; set; }
 
-        public WatchService WatchSharing { get; set; }
-        public Dictionary<string, string> TraktConfiguration { get; set; }
+        public Dictionary<string, string> WatchSharing { get; set; }
 
         public List<TranscoderProfile> Transcoders { get; set; }
 
@@ -76,8 +68,7 @@ namespace MPExtended.Libraries.General
             FFMpegPath = file.Element("ffmpeg").Element("path").Value;
             FFMpegAPI = file.Element("ffmpeg").Element("api").Value;
 
-            WatchSharing = (WatchService)Enum.Parse(typeof(WatchService), file.Element("watchsharing").Element("type").Value, true);
-            TraktConfiguration = file.Element("watchsharing").Element("trakt").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
+            WatchSharing = file.Element("watchsharing").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
 
             Transcoders = file.Element("transcoders").Elements("transcoder").Select(x => new TranscoderProfile()
             {
@@ -121,11 +112,10 @@ namespace MPExtended.Libraries.General
                 file.Element("ffmpeg").Element("path").Value = FFMpegPath;
                 file.Element("ffmpeg").Element("api").Value = FFMpegAPI;
 
-                file.Element("watchsharing").Element("type").Value = WatchSharing.ToString().ToLower();
-                file.Element("watchsharing").Element("trakt").Elements().Remove();
-                foreach (KeyValuePair<string, string> kvp in TraktConfiguration)
+                file.Element("watchsharing").Elements().Remove();
+                foreach (KeyValuePair<string, string> kvp in WatchSharing)
                 {
-                    file.Element("watchsharing").Element("trakt").Add(new XElement(kvp.Key, kvp.Value));
+                    file.Element("watchsharing").Add(new XElement(kvp.Key, kvp.Value));
                 }
 
                 file.Element("transcoders").Elements("transcoder").Remove();

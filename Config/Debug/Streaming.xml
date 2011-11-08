@@ -1,12 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <watchsharing>
-    <type>debug</type>
-    <!-- trakt is not tested yet -->
-    <trakt>
-      <username>bladiebla</username>
-      <password>bladiebla</password>
-    </trakt>
+    <type>debug</type> <!-- one of debug, none, follwit and trakt. not tested yet -->
+    <username>test</username>
+    <password>test</password>
   </watchsharing>
   
   <ffmpeg>

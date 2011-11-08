@@ -27,7 +27,7 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Libraries.Social
 {
-    class FollwitSharingProvider : IWatchSharingService
+    public class FollwitSharingProvider : IWatchSharingService
     {
         public int UpdateInterval
         {
