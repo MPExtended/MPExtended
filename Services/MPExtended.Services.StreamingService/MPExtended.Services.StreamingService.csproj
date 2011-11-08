@@ -73,6 +73,7 @@
     <Compile Include="Code\TranscodingInfoCalculator.cs" />
     <Compile Include="Code\WatchSharing.cs" />
     <Compile Include="Code\WatchSharingDebug.cs" />
+    <Compile Include="Code\MediaInfoHelper.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
     <Compile Include="StreamingService.cs" />
@@ -142,7 +143,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -148,8 +148,8 @@ namespace MPExtended.Services.StreamingService.Code
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
                     stream.Context.Profile = profile;
-                    stream.Context.MediaInfo = MediaInfoWrapper.GetMediaInfo(stream.Context.Source);
-                    stream.Context.OutputSize = CalculateSize(stream.Context.Profile, stream.Context.Source);
+                    stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
+                    stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
                     sharing.StartStream(stream.Context.Source, infoRef, position);
@@ -294,7 +294,7 @@ namespace MPExtended.Services.StreamingService.Code
             return null;
         }
 
-        public Resolution CalculateSize(TranscoderProfile profile, MediaSource source)
+        public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
             if (!profile.HasVideoStream)
                 return new Resolution(0, 0);
@@ -307,10 +307,18 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else
             {
-                WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(source);
+                if (info != null)
+                {
+                    info = MediaInfoWrapper.GetMediaInfo(source);
+                }
                 aspect = info.VideoStreams.First().DisplayAspectRatio;
             }
             return Resolution.Calculate(aspect, new Resolution(profile.MaxOutputWidth, profile.MaxOutputHeight), 2);
+        }
+
+        public Resolution CalculateSize(StreamContext context)
+        {
+            return CalculateSize(context.Profile, context.Source, context.MediaInfo);
         }
     }
 }
