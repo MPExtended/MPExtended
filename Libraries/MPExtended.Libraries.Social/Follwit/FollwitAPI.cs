@@ -27,6 +27,10 @@ namespace MPExtended.Libraries.Social.Follwit
 {
     internal class FollwitAPI
     {
+        // This implementation is based upon the one from the follw.it guys theirselves, which can be found 
+        // here: http://svn.follw.it/api/trunk/. The authentication code is literally copied from their
+        // apidocs: http://follw.it/apidocs/authentication
+
         public static string GeneratePasswordHash(string password)
         {
             // salt + hash

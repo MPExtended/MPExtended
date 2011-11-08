@@ -24,6 +24,9 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Libraries.Social.Trakt
 {
+    // This implementation is inspired by the TraktAPI part of the Trakt for MediaPortal plugin, as can be found
+    // here: https://github.com/Technicolour/Trakt-for-Mediaportal. Thanks a lot!
+
     internal class TraktAPI
     {
         public static TraktResponse ScrobbleMovie(TraktMovieScrobbleData data, TraktWatchStatus status)
