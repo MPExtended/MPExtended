@@ -60,6 +60,9 @@
     <!-- Configurator -->
     <ComponentGroup Id="Component_Configurator">
       <ComponentRef Id="Component_Configurator_Binaries"/>
+      <ComponentRef Id="Component_Configurator_StartMenu"/>
+      <ComponentRef Id="Component_Configurator_Desktop"/>
+      <ComponentRef Id="Component_Configurator_Autostart"/>
     </ComponentGroup>
   </Fragment>
   

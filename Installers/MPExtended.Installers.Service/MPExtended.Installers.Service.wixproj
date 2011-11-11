@@ -31,9 +31,12 @@
   <ItemGroup>
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
-    <Compile Include="SetupType.wxs" />
+    <Compile Include="UI_Control.wxs" />
+    <Compile Include="UI_ExitDialog.wxs" />
+    <Compile Include="UI_SetupType.wxs" />
     <Compile Include="StreamBinaries.wxs" />
     <Compile Include="Features.wxs" />
+    <Compile Include="UI_Configurator.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Applications\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj">
@@ -174,6 +177,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>

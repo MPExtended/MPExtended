@@ -19,6 +19,7 @@
   <Fragment>
     <!-- Directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Program files -->
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="Service">
@@ -103,7 +104,7 @@
 
             <!-- Configurator -->
             <Component Id="Component_Configurator_Binaries" Guid="b35532af-5cc4-41a7-9bce-03175b3d8f92">
-              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" Id="ConfiguratorExecutable" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe.config" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
@@ -132,6 +133,7 @@
         </Directory>
       </Directory>
 
+      <!-- ProgramData -->
       <Directory Id="CommonAppDataFolder">
         <Directory Id="ConfigDirectory" Name="MPExtended">
           <!-- General config -->
@@ -167,6 +169,32 @@
             </Component>
           </Directory>
         </Directory>
+      </Directory>
+      
+      <!-- Start menu -->
+      <Directory Id="ProgramMenuFolder">
+        <Component Id="Component_Configurator_StartMenu" Guid="369aaf32-18db-4562-bc51-7557f0544ebf">
+          <Condition><![CDATA[INSTALLCONFIGURATORSTARTMENU]]></Condition>
+          <Shortcut Id="StartMenuShortcut" Name="!(loc.ConfiguratorShortcutName)" Description="!(loc.ConfiguratorShortcutDescription)"
+                    Target="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" WorkingDirectory="MPEXTENDEDDIRECTORY" Icon="MPExtendedIcon" />
+          <RegistryValue Root="HKCU" Key="Software\MPExtended" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+
+        <Component Id="Component_Configurator_Autostart" Guid="e10e2230-c5f9-4c10-b7c7-5d881c953715">
+          <Condition><![CDATA[INSTALLCONFIGURATORAUTOSTART]]></Condition>
+          <RegistryValue Id="Autostart" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="!(loc.ConfiguratorAutorunName)"
+                         Value="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" Type="string" KeyPath="yes" />
+        </Component>
+      </Directory>
+      
+      <!-- Desktop -->
+      <Directory Id="DesktopFolder">
+        <Component Id="Component_Configurator_Desktop" Guid="956ece35-9156-440a-8e8a-213a1f729d2f">
+          <Condition><![CDATA[INSTALLCONFIGURATORDESKTOP]]></Condition>
+          <Shortcut Id="DesktopShortcut" Name="!(loc.ConfiguratorShortcutName)" Description="!(loc.ConfiguratorShortcutDescription)"
+                    Target="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" WorkingDirectory="MPEXTENDEDDIRECTORY" Icon="MPExtendedIcon" />
+          <RegistryValue Root="HKCU" Key="Software\MPExtended" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />          
+        </Component>
       </Directory>
     </Directory>
   </Fragment>
