@@ -62,11 +62,19 @@ namespace MPExtended.Libraries.Social
         {
             try
             {
+                // create movie
+                if (movie.ExternalId.Count(x => x.Site == "IMDB") == 0)
+                {
+                    Log.Info("Follwit: IMDB id of movie {0} unknown, not sending", movie.Title);
+                    return false;
+                }
+            
+                // and send it
                 var fm = new FollwitMovie()
                 {
                     Username = Configuration["username"],
                     Password = FollwitAPI.GeneratePasswordHash(Configuration["password"]),
-                    IMDBId = movie.IMDBId
+                    IMDBId = movie.ExternalId.First(x => x.Site == "IMDB").Id
                 };
 
                 var ret = FollwitAPI.UpdateMovieState(fm, state);
@@ -109,11 +117,17 @@ namespace MPExtended.Libraries.Social
         {
             try
             {
+                if (episode.ExternalId.Count(x => x.Site == "TVDB") == 0)
+                {
+                    Log.Info("Follwit: TVDB id of episode {0} unknown, not sending", episode.Title);
+                    return false;
+                }
+
                 var fm = new FollwitEpisode()
                 {
                     Username = Configuration["username"],
                     Password = FollwitAPI.GeneratePasswordHash(Configuration["password"]),
-                    TVDBId = episode.TVDBId
+                    TVDBId = episode.ExternalId.First(x => x.Site == "TVDB").Id
                 };
 
                 var ret = FollwitAPI.UpdateEpisodeState(fm, state);

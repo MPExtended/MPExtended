@@ -85,6 +85,11 @@ namespace MPExtended.Libraries.Social
                 data.IMDBID = movie.ExternalId.First(x => x.Site == "IMDB").Id;
             if (movie.ExternalId.Count(x => x.Site == "TMDB") > 0)
                 data.TMDBID = movie.ExternalId.First(x => x.Site == "TMDB").Id;
+            if (data.IMDBID == null && data.TMDBID == null)
+            {
+                Log.Info("Trakt: IMDB and TMDB unknown of movie {0}, not sending", movie.Title);
+                return false;
+            }
 
             try
             {
@@ -159,6 +164,11 @@ namespace MPExtended.Libraries.Social
                 data.IMDBID = show.ExternalId.First(x => x.Site == "IMDB").Id;
             if (show.ExternalId.Count(x => x.Site == "TVDB") > 0)
                 data.TVDBID = show.ExternalId.First(x => x.Site == "TVDB").Id;
+            if (data.IMDBID == null && data.TVDBID == null)
+            {
+                Log.Info("Trakt: IMDB and TVDB unknown of episode {0}, not sending", episode.Title);
+                return false;
+            }
 
             TraktResponse response = TraktAPI.ScrobbleEpisode(data, state);
 
