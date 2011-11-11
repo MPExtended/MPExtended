@@ -73,6 +73,25 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 try
                 {
+                    // configure security if needed
+                    if (Configuration.Services.AuthenticationEnabled)
+                    {
+                        foreach (var endpoint in host.Description.Endpoints)
+                        {
+                            if (endpoint.Binding is BasicHttpBinding)
+                            {
+                                ((BasicHttpBinding)endpoint.Binding).Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
+                                ((BasicHttpBinding)endpoint.Binding).Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
+                            }
+                            else if (endpoint.Binding is WebHttpBinding)
+                            {
+                                ((WebHttpBinding)endpoint.Binding).Security.Mode = WebHttpSecurityMode.TransportCredentialOnly;
+                                ((WebHttpBinding)endpoint.Binding).Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
+                            }
+                        }
+                    }
+
+                    // and open host
                     host.Open();
                 }
                 catch (Exception ex)

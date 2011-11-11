@@ -440,7 +440,7 @@ namespace MPExtended.Services.TVAccessService
                 throw new ArgumentNullException("userName");
             }
 
-            Log.Debug("Starting timeshifiting with username {0} on channel id {1}", userName, channelId);
+            Log.Debug("Starting timeshifting with username {0} on channel id {1}", userName, channelId);
             IUser currentUser = GetUserByUserName(userName, true);
 
             VirtualCard tvCard;

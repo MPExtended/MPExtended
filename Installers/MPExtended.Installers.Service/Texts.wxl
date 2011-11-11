@@ -49,7 +49,7 @@
   <String Id="SetupTypeCustomTooltip">Customize your installation</String>
   <String Id="SetupTypeCustomDescription">Select the components to install by hand. Only for advanced users.</String>
   
-  <!-- Custom dialog -->
+  <!-- Custom feature selection dialog -->
   <String Id="FeatureClient">Client service</String>
   <String Id="FeatureClientDescription">Provides the MediaAccessService to access the databases of MediaPortal and its plugins.</String>
   <String Id="FeatureWifiRemote">WifiRemote</String>
@@ -60,4 +60,17 @@
   <String Id="FeatureStreamingDescription">Stream and your (optionally transcoded) media files to clients. Also provides access to artwork and images.</String>
   <String Id="FeatureConfigurator">Configuration interface</String>
   <String Id="FeatureConfiguratorDescription">Graphical interface to the configuration of MPExtended. Also offers support to remotely start/stop MediaPortal.</String>
+  
+  <!-- Configurator shortcuts dialog -->
+  <String Id="ConfiguratorMainText">You can select the install options for the configuration program. Note that the configuration program is also used to start MediaPortal from (mobile) clients, so you may want to have it running always.</String>
+  <String Id="ConfiguratorStartMenu">Create shortcut in start menu.</String>
+  <String Id="ConfiguratorDesktop">Create shortcut on desktop.</String>
+  <String Id="ConfiguratorAutostart">Automatically start on boot.</String>
+  <String Id="ConfiguratorShortcutName">MPExtended Configuration</String>
+  <String Id="ConfiguratorShortcutDescription">MPExtended configuration program</String>
+  <String Id="ConfiguratorAutorunName">MPExtended Configurator</String>
+  <String Id="ConfiguratorAutorunDescription">MPExtended</String>
+  
+  <!-- Finish dialog -->
+  <String Id="LaunchConfiguratorText">Launch configurator</String>
 </WixLocalization>

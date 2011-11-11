@@ -49,7 +49,7 @@ namespace MPExtended.ServiceHosts.Hosting
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = GetHardwareAddresses();
 
-                NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, Configuration.Services.Port);
+                NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, srv.Port);
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidNotPublishService += new NetService.ServiceNotPublished(FailedToPublishService);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);

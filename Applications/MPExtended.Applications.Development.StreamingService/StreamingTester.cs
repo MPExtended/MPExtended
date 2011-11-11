@@ -192,11 +192,20 @@ namespace MPExtended.Applications.Development.StreamingService
 
         private void LoadMediaInfo(WebMediaInfo info)
         {
+            if (info == null)
+            {
+                Log("No MediaInfo available");
+                return;
+            }
+
             mInfo = info;
             Log(String.Format("MediaInfo: streams: {0} video, {1} audio, {2} subtitle", 
                 info.VideoStreams.Count, info.AudioStreams.Count, info.SubtitleStreams.Count));
-            WebVideoStream vid = info.VideoStreams.First();
-            Log(String.Format("MediaInfo: video {0}x{1}; {2}; {3}", vid.Width, vid.Height, vid.DisplayAspectRatioString, vid.Codec));
+            if (info.VideoStreams.Count() > 0)
+            {
+                WebVideoStream vid = info.VideoStreams.First();
+                Log(String.Format("MediaInfo: video {0}x{1}; {2}; {3}", vid.Width, vid.Height, vid.DisplayAspectRatioString, vid.Codec));
+            }
 
             // audio
             cbLanguage.Items.Clear();
@@ -279,12 +288,16 @@ namespace MPExtended.Applications.Development.StreamingService
 
             mDlThread = new Thread(new ThreadStart(delegate()
             {
-                Stream webstream = WebRequest.Create(url).GetResponse().GetResponseStream();
-                FileStream file = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                mCurrentFile = file;
-                CopyStream(webstream, file);
-                mCurrentFile = null;
-                file.Close();
+                using(WebClient cl = new WebClient())
+                {
+                    cl.Credentials = new NetworkCredential("admin", "admin");
+                    FileStream file = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                    mCurrentFile = file;
+                    Stream webstream = cl.OpenRead(url);
+                    CopyStream(webstream, file);
+                    mCurrentFile = null;
+                    file.Close();
+                }
             }));
 
             mDlThread.Start();

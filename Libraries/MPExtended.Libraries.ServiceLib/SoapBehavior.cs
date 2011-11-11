@@ -73,7 +73,6 @@ namespace MPExtended.Libraries.ServiceLib
 
         public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
         {
-
             endpointDispatcher.ChannelDispatcher.ErrorHandlers.Clear();
             endpointDispatcher.ChannelDispatcher.ErrorHandlers.Add(this);
         }

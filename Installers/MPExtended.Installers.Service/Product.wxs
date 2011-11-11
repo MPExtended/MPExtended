@@ -28,7 +28,7 @@
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
     <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
-    <!-- <Property Id="MSIFASTINSTALL" Value="3" /> -->
+    <Property Id="MSIFASTINSTALL" Value="3" />
     
     <!-- Project general -->
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
@@ -36,7 +36,7 @@
     <!-- Disallow downgrades and support upgrades -->
     <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
     <Upgrade Id="21ae5680-f56d-4bb6-8835-87b5081b156d">
-      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="9.9.9.9" />
+      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.General.dll)" />
     </Upgrade>
     
     <!-- The stupid icon -->
@@ -59,7 +59,11 @@
     <InstallExecuteSequence>
       <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
     </InstallExecuteSequence>
-
+    
+    <!-- Run configurator after installation -->
+    <Property Id="WixShellExecTarget" Value="[#ConfiguratorExecutable]" />
+    <CustomAction Id="LaunchConfigurator" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    
     <!-- Service -->
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_Service" Guid="bec0610f-43c4-4a1d-840b-6beeb1259a62">
@@ -102,62 +106,20 @@
           Program="[#MainService]" />
       </Component>
     </DirectoryRef>
-
+    
     <!-- User interface -->
-    <UI>
-      <ProgressText Action="WifiRemoteInstaller">Installing WifiRemote...</ProgressText>
-      
-      <!-- Based upon WiX source code. -->
-      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
-      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
-      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
-
-      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
-      <Property Id="WixUI_Mode" Value="FeatureTree" />
-
-      <DialogRef Id="ErrorDlg" />
-      <DialogRef Id="FatalError" />
-      <DialogRef Id="FilesInUse" />
-      <DialogRef Id="MsiRMFilesInUse" />
-      <DialogRef Id="PrepareDlg" />
-      <DialogRef Id="ProgressDlg" />
-      <DialogRef Id="ResumeDlg" />
-      <DialogRef Id="UserExit" />
-
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomSetupTypeDlg">NOT Installed AND NOT PATCH</Publish>
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
-
-      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
-
-      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
-      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
-
-      <Publish Dialog="CustomSetupTypeDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="ClientButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="TVButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="SingleseatButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="CustomButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
-
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">WixUI_InstallMode = "Change"</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="CustomSetupTypeDlg" Order="2">WixUI_InstallMode = "InstallCustom"</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">InstallType = "Custom"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomSetupTypeDlg" Order="2">InstallType = "TV" OR InstallType = "Singleseat" OR InstallType = "Client"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="3">WixUI_InstallMode = "Change"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="4">WixUI_InstallMode = "Repair" OR WixUI_InstallMode = "Remove"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">WixUI_InstallMode = "Update"</Publish>
-
-      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
-    </UI>
+    <UIRef Id="GeneralUI"/>
     <UIRef Id="WixUI_Common" />
     <UIRef Id="WixUI_ErrorProgressText" />
+    
+    <!-- Configurator program -->
+    <Property Id="INSTALLCONFIGURATORSTARTMENU">1</Property>
+    <Property Id="INSTALLCONFIGURATORAUTOSTART">1</Property>
     
     <!-- Custom images -->
     <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />
+    <Binary Id="ExitDialogBitmap" SourceFile="$(var.SolutionDir)\Libraries\Installer\exitdialog.bmp" />
 
     <FeatureRef Id="Feature_All" />
   </Product>

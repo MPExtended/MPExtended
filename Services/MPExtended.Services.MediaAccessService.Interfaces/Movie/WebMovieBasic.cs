@@ -12,19 +12,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
             Genres = new List<string>();
             UserDefinedCategories = new List<string>();
             Artwork = new List<WebArtwork>();
+            ExternalId = new List<WebExternalId>();
         }
 
         public bool IsProtected { get; set; }
         public IList<string> Genres { get; set; }
         public IList<string> UserDefinedCategories { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
+        public IList<WebExternalId> ExternalId { get; set; }
 
         public string Title { get; set; }
         public int Year { get; set; }
         public float Rating { get; set; }
         public int Runtime { get; set; }
-        public string IMDBId { get; set; }
-        public string TMDBId { get; set; }
 
         public override WebMediaType Type 
         {
