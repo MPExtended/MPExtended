@@ -180,5 +180,20 @@ namespace MPExtended.Applications.ServiceConfigurator
         {
             mUserSessionService.SetPowerMode(WebPowerMode.PowerOff);
         }
+
+        private void MenuPowermodeLock_Click(object sender, RoutedEventArgs e)
+        {
+            mUserSessionService.SetPowerMode(WebPowerMode.Lock);
+        }
+
+        private void MenuPowermodeMonitorOff_Click(object sender, RoutedEventArgs e)
+        {
+            mUserSessionService.SetPowerMode(WebPowerMode.ScreenOff);
+        }
+
+        private void MenuPowermodeScreensaverOn_Click(object sender, RoutedEventArgs e)
+        {
+            mUserSessionService.SetPowerMode(WebPowerMode.Screensaver);
+        }
     }
 }

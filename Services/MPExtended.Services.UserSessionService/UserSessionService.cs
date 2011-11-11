@@ -33,7 +33,7 @@ namespace MPExtended.Services.UserSessionService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class UserSessionService : IUserSessionService
-    {     
+    {
         /// <summary>
         /// The SetSuspendState function suspends the system by shutting power down. Depending on the Hibernate parameter, the system either enters a suspend (sleep) state or hibernation (S4). If the ForceFlag parameter is TRUE, the system suspends operation immediately; if it is FALSE, the system requests permission from all applications and device drivers before doing so.
         /// </summary>
@@ -43,6 +43,17 @@ namespace MPExtended.Services.UserSessionService
         /// <returns>If the function succeeds, the return value is nonzero.<br></br><br>If the function fails, the return value is zero. To get extended error information, call Marshal.GetLastWin32Error.</br></returns>
         [DllImport("powrprof.dll", EntryPoint = "SetSuspendState", CharSet = CharSet.Ansi)]
         private static extern int SetSuspendState(int Hibernate, int ForceCritical, int DisableWakeEvent);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool LockWorkStation();
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(int hWnd, int hMsg, int wParam, int lParam);
+
+        const int WM_SYSCOMMAND = 0x0112;
+        const int SC_MONITORPOWER = 0xF170;
+        const int HWND_BROADCAST = 0xFFFF;
+
 
         private string MPPath;
 
@@ -120,8 +131,27 @@ namespace MPExtended.Services.UserSessionService
         {
             try
             {
-                RestartOptions option = MapPowerMode(powerMode);
-                WindowsController.ExitWindows(option, false);
+                if (powerMode == WebPowerMode.Screensaver)
+                {
+                    ScreenSaver.StartScreenSaver();
+                }
+                else if (powerMode == WebPowerMode.Lock)
+                {
+                    LockWorkStation();
+                }
+                else if (powerMode == WebPowerMode.ScreenOff)
+                {
+                    SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, 2);
+                }
+                else if (powerMode == WebPowerMode.ScreenOn)
+                {
+
+                }
+                else
+                {
+                    RestartOptions option = MapPowerMode(powerMode);
+                    WindowsController.ExitWindows(option, false);
+                }
             }
             catch (InvalidCastException)
             {

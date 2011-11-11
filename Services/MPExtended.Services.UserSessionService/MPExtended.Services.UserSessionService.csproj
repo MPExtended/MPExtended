@@ -54,6 +54,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScreenSaver.cs" />
     <Compile Include="UserSessionProxyService.cs" />
     <Compile Include="UserSessionService.cs" />
     <Compile Include="WindowsController.cs" />

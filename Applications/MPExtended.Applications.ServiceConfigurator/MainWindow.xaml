@@ -30,6 +30,9 @@
                     <MenuItem Name="MenuOpenConfigurator" Header="Open MPExtended Configurator" Click="MenuOpenConfigurator_Click" />
                     <MenuItem Name="MenuStartCloseMp" Header="Start MediaPortal" Click="MenuStartCloseMp_Click"/>
                     <MenuItem Name="MenuPowermodes" Header="Powermodes">
+                        <MenuItem Name="MenuPowermodeScreensaverOn" Header="Screensaver" Click="MenuPowermodeScreensaverOn_Click"/>
+                        <MenuItem Name="MenuPowermodeMonitorOff" Header="Monitor Off" Click="MenuPowermodeMonitorOff_Click"/>
+                        <MenuItem Name="MenuPowermodeLock" Header="Lock" Click="MenuPowermodeLock_Click"/>
                         <MenuItem Name="MenuPowermodeLogoff" Header="LogOff" Click="MenuPowermodeLogoff_Click"/>
                         <MenuItem Name="MenuPowermodeSuspend" Header="Suspend" Click="MenuPowermodeSuspend_Click"/>
                         <MenuItem Name="MenuPowermodeHibernate" Header="Hibernate" Click="MenuPowermodeHibernate_Click"/>

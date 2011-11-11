@@ -44,5 +44,29 @@ namespace MPExtended.Services.UserSessionService.Interfaces
         /// </summary>
         [EnumMember]
         Hibernate = 5,
+
+        /// <summary>
+        /// Enables the screesaver.
+        /// </summary>
+        [EnumMember]
+        Screensaver = 6,
+
+        /// <summary>
+        /// Locks the workstation
+        /// </summary>
+        [EnumMember]
+        Lock = 7,
+
+        /// <summary>
+        /// Sends monitor into standby
+        /// </summary>
+        [EnumMember]
+        ScreenOff = 8,
+
+                /// <summary>
+        /// Sends monitor into standby
+        /// </summary>
+        [EnumMember]
+        ScreenOn = 9
     }
 }
