@@ -154,7 +154,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
-                    sharing.StartStream(stream.Context.Source, infoRef, position);
+                    sharing.StartStream(stream.Context, infoRef, position);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();

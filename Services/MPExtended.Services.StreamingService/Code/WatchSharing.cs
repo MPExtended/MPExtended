@@ -33,6 +33,8 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class WatchSharing
     {
+        private const int KEEP_ONLINE_ALIVE = 0; // synchronized cancelwatching events only after a delay between x and x+1 minutes (to support restarting the stream)
+
         private class StreamState
         {
             public string Id { get; set; }
@@ -41,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Code
             public bool Canceled { get; set; }
             public bool Stale { get; set; }
             public int StartedPosition { get; set; } // in seconds
-            public int Runtime { get; set; } // in minutes
+            public long Runtime { get; set; } // in seconds
             public Thread BackgroundThread { get; set; }
             public Reference<WebTranscodingInfo> TranscodingInfo { get; set; }
         }
@@ -69,14 +71,15 @@ namespace MPExtended.Services.StreamingService.Code
                     return;
             }
 
+            enabled = true;
             service.MediaService = MPEServices.MAS;
             service.Configuration = Configuration.Streaming.WatchSharing;
         }
 
-        public void StartStream(MediaSource source, Reference<WebTranscodingInfo> infoRef, int position)
+        public void StartStream(StreamContext context, Reference<WebTranscodingInfo> infoRef, int position)
         {
             // ignore when not needed
-            if (!enabled || (source.MediaType != WebStreamMediaType.Movie && source.MediaType != WebStreamMediaType.TVEpisode))
+            if (!enabled || (context.Source.MediaType != WebStreamMediaType.Movie && context.Source.MediaType != WebStreamMediaType.TVEpisode))
             {
                 return;
             }
@@ -88,7 +91,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // generate identifier
-            string identifier = Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
+            string identifier = Enum.GetName(typeof(WebStreamMediaType), context.Source.MediaType) + "_" + context.Source.Id;
 
             // start if non-existent            
             if (!streams.ContainsKey(identifier))
@@ -96,28 +99,35 @@ namespace MPExtended.Services.StreamingService.Code
                 StreamState state = new StreamState()
                 {
                     Id = identifier,
-                    Source = source,
+                    Source = context.Source,
                     TranscodingInfo = infoRef,
                     StartedPosition = position,
                     Canceled = false,
                     Stale = false
                 };
 
-                if (source.MediaType == WebStreamMediaType.TVEpisode)
+                // get mediadescriptor and rough runtime, and start the watching online
+                Log.Debug("WatchSharing: synchronizing start watching event to service");
+                if (context.Source.MediaType == WebStreamMediaType.TVEpisode)
                 {
-                    state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(source.Provider, source.Id);
+                    state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(context.Source.Provider, context.Source.Id);
                     service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
-                    state.Runtime = MPEServices.MAS.GetTVShowDetailedById(source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime;
+                    state.Runtime = MPEServices.MAS.GetTVShowDetailedById(context.Source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime * 60;
                 }
-                else if (source.MediaType == WebStreamMediaType.Movie)
+                else if (context.Source.MediaType == WebStreamMediaType.Movie)
                 {
-                    state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(source.Provider, source.Id);
+                    state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(context.Source.Provider, context.Source.Id);
                     service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
-                    state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime;
+                    state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime * 60;
+                }
+
+                // get exact runtime if available
+                if (context.MediaInfo.Duration > 60)
+                {
+                    state.Runtime = context.MediaInfo.Duration / 1000;
                 }
 
                 streams[identifier] = state;
-
                 state.BackgroundThread = ThreadManager.Start("WatchWorker", new ParameterizedThreadStart(this.BackgroundWorker), identifier);
             }
             else
@@ -176,6 +186,9 @@ namespace MPExtended.Services.StreamingService.Code
             int iteration = 0;
             int canceledWaitIterations = -1;
 
+            // we don't have to do anything immediately as we just sent the start watching event
+            Thread.Sleep(60000);
+
             while (true)
             {
                 try
@@ -184,12 +197,13 @@ namespace MPExtended.Services.StreamingService.Code
                     if (streams[id].Canceled)
                     {
                         Log.Debug("WatchSharing: stream {0} is canceled", streams[id].Id);
-                        canceledWaitIterations = canceledWaitIterations == -1 ? 3 : canceledWaitIterations - 1;
+                        canceledWaitIterations = canceledWaitIterations == -1 ? KEEP_ONLINE_ALIVE : canceledWaitIterations - 1;
 
                         // user definitely canceled
                         if (canceledWaitIterations == 0)
                         {
                             // notify service
+                            Log.Debug("WatchSharing: definitely killing stream {0} with cancelwatching event", streams[id].Id);
                             lock (service)
                             {
                                 if (streams[id].Source.MediaType == WebStreamMediaType.TVEpisode)
@@ -203,7 +217,6 @@ namespace MPExtended.Services.StreamingService.Code
                             }
 
                             // and kill us
-                            Log.Debug("WatchSharing: definitly killing stream {0}", streams[id].Id);
                             streams[id].Stale = true;
                             return;
                         }
@@ -217,11 +230,12 @@ namespace MPExtended.Services.StreamingService.Code
                     if (streams[id].Canceled)
                     {
                         Log.Trace("WatchSharing: stream canceled");
-                        // try again next iteration (iteration++ is NOT called this time)
+                        // try again next iteration (++iteration is NOT called this time so that we don't create a gap when the stream crashed)
                     } 
-                    else if (iteration++ % service.UpdateInterval == 0)
+                    else if (++iteration % service.UpdateInterval == 0)
                     {
                         // send position
+                        Log.Debug("WatchSharing: syncing status for {0}", streams[id].Id);
                         lock (service)
                         {
                             if (streams[id].Source.MediaType == WebStreamMediaType.TVEpisode)
@@ -263,16 +277,11 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Info("WatchSharing: transcoded time of stream {0} not known", id);
             }
             int watchPosition = transcodedValue / 1000;
-            int progress = CalculatePercent(watchPosition / 60, streams[id].Runtime);
+            int progress = (int)Math.Round((watchPosition * 1.0 / streams[id].Runtime) * 100);
             Log.Debug("WatchSharing: start position {0} seconds, transcoding position {1} ms, position {2} seconds, runtime {3} min, progress {4}%",
                 streams[id].StartedPosition, transcodedValue, watchPosition, streams[id].Runtime, progress);
 
             return progress;
-        }
-
-        private static int CalculatePercent(int currentMinutes, int runtime)
-        {
-            return (int)Math.Round((currentMinutes * 1.0 / runtime) * 100);
         }
     }
 }
