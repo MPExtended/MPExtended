@@ -30,12 +30,11 @@ namespace MPExtended.Libraries.ServiceLib
 {
     public class WcfUsernameValidator : UserNamePasswordValidator
     {
-        public static void Init()
-        {
-        }
-
         public override void Validate(string userName, string password)
         {
+            if (!Configuration.Services.AuthenticationEnabled)
+                return;
+
             if(Configuration.Services.Users.Count(x => x.Username == userName && x.Password == password) == 0)
             {
                 Log.Info("Request with invalid username {0} with password {1}", userName, password);

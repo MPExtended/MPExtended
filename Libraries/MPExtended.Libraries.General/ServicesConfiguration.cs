@@ -31,6 +31,8 @@ namespace MPExtended.Libraries.General
 
     public class ServicesConfiguration
     {
+        public bool AuthenticationEnabled { get; set; }
+
         public bool BonjourEnabled { get; set; }
         public string BonjourName { get; set; }
 
@@ -45,6 +47,8 @@ namespace MPExtended.Libraries.General
         public ServicesConfiguration()
         {
             XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
+
+            AuthenticationEnabled = file.Element("users").Attribute("authenticationEnabled").Value == "true";
 
             BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
             BonjourName = file.Element("bonjour").Element("pcname").Value;
@@ -67,6 +71,8 @@ namespace MPExtended.Libraries.General
             try
             {
                 XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
+
+                file.Element("users").Attribute("authenticationEnabled").Value = AuthenticationEnabled ? "true" : "false";
 
                 file.Element("bonjour").Element("enabled").Value = BonjourEnabled ? "true" : "false";
                 file.Element("bonjour").Element("pcname").Value = BonjourName;
