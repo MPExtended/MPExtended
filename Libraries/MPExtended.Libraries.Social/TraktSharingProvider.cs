@@ -76,12 +76,15 @@ namespace MPExtended.Libraries.Social
                 UserName = Configuration["username"],
 
                 Duration = movie.Runtime.ToString(),
-                IMDBID = movie.IMDBId,
                 Progress = progress.ToString(),
                 Title = movie.Title,
-                TMDBID = movie.TMDBId,
                 Year = movie.Year.ToString()
             };
+			
+			if (movie.ExternalId.Count(x => x.Site == "IMDB") > 0)
+                data.IMDBID = movie.ExternalId.First(x => x.Site == "IMDB").Id;
+            if (movie.ExternalId.Count(x => x.Site == "TMDB") > 0)
+                data.TMDBID = movie.ExternalId.First(x => x.Site == "TMDB").Id;
 
             try
             {
@@ -146,13 +149,16 @@ namespace MPExtended.Libraries.Social
 
                 Duration = show.Runtime.ToString(),
                 Episode = episode.EpisodeNumber.ToString(),
-                IMDBID = show.IMDBId,
                 Progress = progress.ToString(),
                 Season = season.SeasonNumber.ToString(),
                 Title = show.Title,
-                TVDBID = show.TVDBId,
                 Year = show.Year.ToString(),
             };
+			
+			if (show.ExternalId.Count(x => x.Site == "IMDB") > 0)
+                data.IMDBID = show.ExternalId.First(x => x.Site == "IMDB").Id;
+            if (show.ExternalId.Count(x => x.Site == "TVDB") > 0)
+                data.TVDBID = show.ExternalId.First(x => x.Site == "TVDB").Id;
 
             TraktResponse response = TraktAPI.ScrobbleEpisode(data, state);
 

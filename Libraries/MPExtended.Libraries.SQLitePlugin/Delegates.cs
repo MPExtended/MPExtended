@@ -26,6 +26,7 @@ namespace MPExtended.Libraries.SQLitePlugin
     public static class Delegates
     {
         public delegate object ReadValue(SQLiteDataReader reader, int index);
+        public delegate object ParameterizedReadValue(SQLiteDataReader reader, int index, object argument);
     }
 
     public static class Delegates<T>

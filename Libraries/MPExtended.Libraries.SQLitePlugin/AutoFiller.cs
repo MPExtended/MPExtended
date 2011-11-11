@@ -73,8 +73,22 @@ namespace MPExtended.Libraries.SQLitePlugin
             // loop through all properties and get the value for it
             foreach (KeyValuePair<SQLFieldMapping, int> item in autofillMapping)
             {
-                object res = item.Key.Reader.Invoke(reader, item.Value);
-                if (Attribute.IsDefined(item.Key.Reader.Method, typeof(MergeListReaderAttribute)))
+                // invoke
+                object res;
+                MethodInfo datareader;
+                if (item.Key.ParameterizedReader != null)
+                {
+                    datareader = item.Key.ParameterizedReader.Method;
+                    res = item.Key.ParameterizedReader.Invoke(reader, item.Value, item.Key.Parameter);
+                }
+                else
+                {
+                    datareader = item.Key.Reader.Method;
+                    res = item.Key.Reader.Invoke(reader, item.Value);
+                }
+
+                // set value
+                if (Attribute.IsDefined(datareader, typeof(MergeListReaderAttribute)))
                 {
                     foreach (object row in (IEnumerable)res)
                     {

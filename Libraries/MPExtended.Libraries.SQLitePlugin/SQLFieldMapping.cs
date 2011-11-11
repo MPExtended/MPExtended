@@ -29,6 +29,8 @@ namespace MPExtended.Libraries.SQLitePlugin
         public string Field { get; set; }
         public string PropertyName { get; set; }
         public Delegates.ReadValue Reader { get; set; }
+        public Delegates.ParameterizedReadValue ParameterizedReader { get; set; }
+        public object Parameter { get; set; }
 
         public string FullSQLName
         {
@@ -51,11 +53,16 @@ namespace MPExtended.Libraries.SQLitePlugin
         }
 
         public SQLFieldMapping(string table, string field, string propertyname, Delegates.ReadValue reader)
+            : this(field, propertyname, reader)
         {
             this.Table = table;
-            this.Field = field;
-            this.PropertyName = propertyname;
-            this.Reader = reader;
+        }
+
+        public SQLFieldMapping(string table, string field, string propertyname, Delegates.ParameterizedReadValue reader, object parameter)
+            : this(table, field, propertyname, null)
+        {
+            this.ParameterizedReader = reader;
+            this.Parameter = parameter;
         }
     }
 }

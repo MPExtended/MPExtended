@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel.Dispatcher;
+using System.Runtime.Serialization.Json;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Libraries.ServiceLib
 {
@@ -28,6 +30,11 @@ namespace MPExtended.Libraries.ServiceLib
         public override bool CanConvert(Type type)
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return true;
+            }
+
+            if (type == typeof(DateTime))
             {
                 return true;
             }
@@ -45,6 +52,34 @@ namespace MPExtended.Libraries.ServiceLib
                 }
 
                 parameterType = parameterType.GetGenericArguments().First();
+            }
+
+            if (parameterType == typeof(DateTime))
+            {
+                DateTime retval;
+                if (DateTime.TryParse(parameter, out retval))
+                {
+                    return retval;
+                }
+                else
+                {
+                    if (parameter.StartsWith("/Date(") && parameter.EndsWith(")/"))
+                    {
+                        string input = parameter.Substring(6, parameter.Length - 8);
+                        int offset = input.IndexOf("+") != -1 ? input.IndexOf("+") : input.IndexOf("-");
+                        string msecs = offset == -1 ? input : input.Substring(0, offset);
+                        DateTime date = new DateTime(1970, 1, 1, 0, 0, 0);
+                        try
+                        {
+                            return date.AddMilliseconds(Double.Parse(msecs));
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Info(String.Format("Failed to parse datetime {0}", parameter), ex);
+                            return null;
+                        }
+                    }
+                }
             }
 
             return base.ConvertStringToValue(parameter, parameterType);
