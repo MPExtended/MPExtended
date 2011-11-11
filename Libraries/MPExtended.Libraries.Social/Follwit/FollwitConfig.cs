@@ -25,7 +25,7 @@ namespace MPExtended.Libraries.Social.Follwit
 {
     internal class FollwitConfig
     {
-        private const string ApiKey = "abcd";
+        private const string ApiKey = "8YJvxv35baL6e";
 
         public static string UserAgent
         {
