@@ -39,6 +39,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private long durationMilliseconds;
         private bool loggedUnknownDuration = false;
+        private bool hasValidData = false;
 
         /// <param name="startPosition">Start position in milliseconds</param>
         /// <param name="fps">The number of frames that are encoded per second</param>
@@ -66,6 +67,8 @@ namespace MPExtended.Services.StreamingService.Code
                 calculatedFPS = ((newTime - lastCountMilliseconds) / (1000 / FPS)) / FPS_SAMPLING_RATE;
                 lastCountMilliseconds = newTime;
             }
+
+            hasValidData = true;
         }
 
         public void NewPercentage(double percentage)
@@ -87,6 +90,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             lock (output.Value)
             {
+                output.Value.Supported = hasValidData;
                 output.Value.EncodingFPS = calculatedFPS;
                 output.Value.EncodedFrames = (milliseconds - StartPosition) / (1000 / FPS);
                 output.Value.CurrentTime = milliseconds;

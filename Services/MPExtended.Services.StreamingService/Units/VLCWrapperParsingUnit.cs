@@ -46,7 +46,6 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Setup() 
         {
-            data.Value.Supported = true;
             data.Value.Failed = false;
             vlcIsStarted = false;
             processThread = ThreadManager.Start("VLCLogParsing", delegate()

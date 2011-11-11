@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -105,10 +106,12 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 for (int i = 0; i < videoStreams; i++)
                 {
                     retinfo.Duration = retinfo.Duration == 0 ? (long)StringToInt(info.Get(StreamKind.Video, i, "Duration")) : retinfo.Duration;
+
+                    string val = info.Get(StreamKind.Video, i, "DisplayAspectRatio");
                     retinfo.VideoStreams.Add(new WebVideoStream()
                     {
                         Codec = info.Get(StreamKind.Video, i, "Codec/String"),
-                        DisplayAspectRatio = Decimal.Parse(info.Get(StreamKind.Video, i, "DisplayAspectRatio"), System.Globalization.CultureInfo.InvariantCulture),
+                        DisplayAspectRatio = StringToDecimal(info.Get(StreamKind.Video, i, "DisplayAspectRatio")),
                         DisplayAspectRatioString = info.Get(StreamKind.Video, i, "DisplayAspectRatio/String"),
                         Width = StringToInt(info.Get(StreamKind.Video, i, "Width")),
                         Height = StringToInt(info.Get(StreamKind.Video, i, "Height")),
@@ -193,6 +196,18 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
             int result;
             if (!Int32.TryParse(data, out result))
+                return 0;
+
+            return result;
+        }
+
+        private static Decimal StringToDecimal(string data)
+        {
+            if (String.IsNullOrEmpty(data))
+                return 0;
+
+            Decimal result;
+            if (!Decimal.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
                 return 0;
 
             return result;

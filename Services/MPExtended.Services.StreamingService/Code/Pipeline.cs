@@ -115,13 +115,13 @@ namespace MPExtended.Services.StreamingService.Code
                 if (!dataUnits[i].Setup())
                 {
                     // it failed, stop and break out
-                    Log.Error("Setup of data unit {0} failed", i);
+                    Log.Error("Setting up data unit {0} failed", i);
                     Stop(true);
                     return false;
                 }
                 else
                 {
-                    Log.Debug("Setted up data unit {0}", i);
+                    Log.Debug("Setup data unit {0}", i);
                 }
 
                 if (dataConnections.ContainsKey(i))
@@ -133,7 +133,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (logConnections.ContainsKey(i))
                     logUnits[i].InputStream = dataUnits[logConnections[i]].LogOutputStream;
                 logUnits[i].Setup();
-                Log.Debug("Setted up log unit {0}", i);
+                Log.Debug("Setup log unit {0}", i);
             }
 
             Log.Info("Pipeline assembled");
