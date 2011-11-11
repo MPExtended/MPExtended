@@ -38,6 +38,7 @@ namespace MPExtended.Services.StreamingService.Code
         private int calculatedFPS;
 
         private long durationMilliseconds;
+        private bool loggedUnknownDuration = false;
 
         /// <param name="startPosition">Start position in milliseconds</param>
         /// <param name="fps">The number of frames that are encoded per second</param>
@@ -71,7 +72,11 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (this.durationMilliseconds == 0)
             {
-                Log.Warn("Called NewPercentage({0}) but duration is unknown!", percentage);
+                if (!loggedUnknownDuration)
+                {
+                    Log.Warn("Called NewPercentage({0}) but duration is unknown!", percentage);
+                }
+                loggedUnknownDuration = true;
                 return;
             }
 
