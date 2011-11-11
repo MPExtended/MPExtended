@@ -10,6 +10,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public WebTVEpisodeBasic()
         {
             Artwork = new List<WebArtwork>();
+            ExternalId = new List<WebExternalId>();
         }
 
         public string ShowId { get; set; }
@@ -21,8 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public float Rating { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
         public DateTime FirstAired { get; set; }
-        public string IMDBId { get; set; }
-        public string TVDBId { get; set; }
+        public IList<WebExternalId> ExternalId { get; set; }
 
         public override WebMediaType Type
         {

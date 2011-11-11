@@ -73,6 +73,22 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             }).ToList();
         }
 
+        [MergeListReader]
+        private List<WebExternalId> ExternalIdReader(SQLiteDataReader reader, int idx, object site)
+        {
+            List<WebExternalId> list = new List<WebExternalId>();
+            string val = (string)DataReaders.ReadString(reader, idx);
+            if(!String.IsNullOrEmpty(val))
+            {
+                list.Add(new WebExternalId()
+                {
+                    Site = (string)site,
+                    Id = val
+                });
+            }
+            return list;
+        }
+
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
@@ -108,8 +124,8 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("m", "actors", "Actors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "summary", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString),
-                new SQLFieldMapping("m", "imdb_id", "IMDBId", DataReaders.ReadString),
-                new SQLFieldMapping("s", "identifier", "TMDBId", DataReaders.ReadString)
+                new SQLFieldMapping("m", "imdb_id", "ExternalId", ExternalIdReader, "IMDB"),
+                new SQLFieldMapping("s", "identifier", "ExternalId", ExternalIdReader, "TMDB")
             });
         }
 

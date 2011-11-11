@@ -33,6 +33,19 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [ExportMetadata("Id", 6)]
     public class MPTVSeries : Database, ITVShowLibrary
     {
+        private struct ExternalSiteReaderArguments
+        {
+            public Delegates.ReadValue Reader { get; set; }
+            public string Site { get; set; }
+
+            public ExternalSiteReaderArguments(Delegates.ReadValue reader, string site)
+                : this()
+            {
+                this.Reader = reader;
+                this.Site = site;
+            }
+        }
+
         private IPluginData data;
         private Dictionary<string, string> configuration;
         private Delegates.ReadValue fixBannerPathReader;
@@ -78,6 +91,23 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private List<WebArtworkDetailed> FanartPathReader(SQLiteDataReader reader, int index)
         {
             return ArtworkReader(reader, index, WebFileType.Backdrop, "fanart");
+        }
+
+        [MergeListReader]
+        private List<WebExternalId> ExternalIdReader(SQLiteDataReader reader, int idx, object param)
+        {
+            ExternalSiteReaderArguments args = (ExternalSiteReaderArguments)param;
+            string val = (string)args.Reader.Invoke(reader, idx);
+            List<WebExternalId> list = new List<WebExternalId>();
+            if (!String.IsNullOrEmpty(val))
+            {
+                list.Add(new WebExternalId() 
+                {
+                        Site = args.Site,
+                        Id = val
+                });
+            }
+            return list;
         }
 
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()
@@ -164,7 +194,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("s", "ID", "TVDBId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("s", "ID", "ExternalId", ExternalIdReader, new ExternalSiteReaderArguments(DataReaders.ReadIntAsString, "TVDB")),
                 new SQLFieldMapping("s", "Pretty_Name", "Title", fixNameReader),
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "BannerFileNames", "Artwork", BannerPathReader),
@@ -180,7 +210,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "AirsDay", "AirsDay", DataReaders.ReadString),
                 new SQLFieldMapping("s", "AirsTime", "AirsTime", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
-                new SQLFieldMapping("s", "IMDB_ID", "IMDBId", DataReaders.ReadString),
+                new SQLFieldMapping("s", "IMDB_ID", "ExternalId", ExternalIdReader, new ExternalSiteReaderArguments(DataReaders.ReadString, "IMDB")),
                 new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime)
             }, delegate (T obj) 
             {
@@ -287,7 +317,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("e", "EpisodeID", "Id", DataReaders.ReadIntAsString),
-                new SQLFieldMapping("e", "EpisodeID", "TVDBId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "EpisodeID", "ExternalId", ExternalIdReader, new ExternalSiteReaderArguments(DataReaders.ReadIntAsString, "TVDB")),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
@@ -301,7 +331,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),
-                new SQLFieldMapping("e", "IMDB_ID", "IMDBId", DataReaders.ReadString),
+                new SQLFieldMapping("e", "IMDB_ID", "ExternalId", ExternalIdReader, new ExternalSiteReaderArguments(DataReaders.ReadString, "IMDB")),
                 new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
             });
         }

@@ -13,6 +13,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
             UserDefinedCategories = new List<string>();
             Genres = new List<string>();
             Artwork = new List<WebArtwork>();
+            ExternalId = new List<WebExternalId>();
         }
 
         public string Id { get; set; }
@@ -28,8 +29,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public int UnwatchedEpisodeCount { get; set; }
         public float Rating { get; set; }
         public string ContentRating { get; set; }
-        public string IMDBId { get; set; }
-        public string TVDBId { get; set; }
+        public IList<WebExternalId> ExternalId { get; set; }
 
         public override string ToString()
         {
