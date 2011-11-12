@@ -78,6 +78,12 @@ namespace MPExtended.ServiceHosts.Hosting
                     {
                         foreach (var endpoint in host.Description.Endpoints)
                         {
+                            // do not enable auth for stream endpoint
+                            if (endpoint.Name == "StreamEndpoint")
+                            {
+                                continue;
+                            }
+
                             if (endpoint.Binding is BasicHttpBinding)
                             {
                                 ((BasicHttpBinding)endpoint.Binding).Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
