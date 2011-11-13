@@ -40,7 +40,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         }
         private List<Share> shares;
         private Dictionary<string, Share> shareCache;
-        private string config;
 
         [ImportingConstructor]
         public MPPictureShares(IPluginData data) : base(data)

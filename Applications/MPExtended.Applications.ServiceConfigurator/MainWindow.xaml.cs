@@ -77,8 +77,10 @@ namespace MPExtended.Applications.ServiceConfigurator
                 MessageBox.Show(ex.ToString());
             }
 
+#pragma warning disable 0162
             if (!ONLY_CONFIGURATOR)
                 Hide();
+#pragma warning restore 0162
 
             HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }

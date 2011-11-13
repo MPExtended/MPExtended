@@ -88,10 +88,12 @@ namespace MPExtended.Applications.Development.StreamingService
             }
             else
             {
+#pragma warning disable 0162
                 mWebStreamClient = ChannelFactory<IWebStreamingService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
                 mStreamClient = ChannelFactory<IStreamingService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/StreamingService"));
                 mServiceClient = ChannelFactory<IMediaAccessService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/MediaAccessService"));
                 mTvClient = ChannelFactory<ITVAccessService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://" + CURRENT_IP + ":4321/MPExtended/TVAccessService"));
+#pragma warning restore 0162
             }
 
             Log("Initialized");

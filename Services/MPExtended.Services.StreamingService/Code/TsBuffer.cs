@@ -242,7 +242,7 @@ namespace MPExtended.Services.StreamingService.Code
                         Log.Warn("TsBuffer: Read inner exception: {0}", e);
                     }
 #else
-                    } catch (Exception e) { }
+                    } catch (Exception) { }
 #endif
 
                     // This is added because the CPU scans so bloody fast that the loop would be pointless without it.

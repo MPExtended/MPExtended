@@ -56,7 +56,7 @@ namespace MPExtended.Applications.Development.USSTest
                 {
                     WebResult res = service.SetPowerMode((WebPowerMode)cbPowerModes.SelectedItem);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Couldn't connect to service");
                 }
@@ -71,7 +71,7 @@ namespace MPExtended.Applications.Development.USSTest
                 {
                     WebResult res = service.StartMediaPortal();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Couldn't connect to service");
                 }
@@ -86,7 +86,7 @@ namespace MPExtended.Applications.Development.USSTest
                 {
                     WebResult res = service.CloseMediaPortal();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Couldn't connect to service");
                 }
@@ -109,7 +109,7 @@ namespace MPExtended.Applications.Development.USSTest
                         MessageBox.Show("MediaPortal is not running");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Couldn't connect to service");
                 }

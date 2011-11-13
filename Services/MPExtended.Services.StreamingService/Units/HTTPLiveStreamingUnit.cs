@@ -59,7 +59,6 @@ namespace MPExtended.Services.StreamingService.Units
         private string identifier;
         private Process segmenterApplication;
         private string siteRoot;
-        private Thread monitorThread;
 
         public HTTPLiveStreamingUnit(string identifier)
         {
@@ -124,7 +123,6 @@ namespace MPExtended.Services.StreamingService.Units
         public bool Start()
         {
             StreamCopy.AsyncStreamCopy(InputStream, segmenterApplication.StandardInput.BaseStream);
-
             return true;
         }
 
