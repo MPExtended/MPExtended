@@ -70,6 +70,13 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public static Stream ExtractImage(MediaSource source, int startPosition, int? maxWidth, int? maxHeight)
         {
+            if (!source.Exists)
+            {
+                Log.Warn("ExtractImage: Source {0} (resolved {1}) doesn't exists", source.GetDebugName(), source.GetPath());
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return null;
+            }
+
             if (!source.IsLocalFile)
             {
                 Log.Warn("ExtractImage: Source type={0} id={1} is not supported yet", source.MediaType, source.Id);

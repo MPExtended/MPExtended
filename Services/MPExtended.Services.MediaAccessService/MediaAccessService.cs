@@ -604,16 +604,25 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebFileInfo GetFileInfo(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
+            string path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
             try
             {
-                return GetLibrary(provider, mediatype).GetFileInfo(GetPathList(provider, mediatype, filetype, id).ElementAt(offset)).Finalize(provider, mediatype);
+                return GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
+            }
+            catch (FileNotFoundException)
+            {
+                Log.Info("Failed to load fileinfo for non-existing file mediatype={0}, filetype={1}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path);
             }
             catch (Exception ex)
             {
-                Log.Info("Failed to get file info for mediatype=" + mediatype + ", filetype=" + filetype + ", id=" + id + " and offset=" + offset, ex);
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return new WebFileInfo();
+                Log.Info(String.Format("Failed to load fileinfo for mediatype={0}, filetype={1}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path), ex);
             }
+
+            WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+            return new WebFileInfo()
+            {
+                Exists = false
+            };
         }
 
         public bool IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)

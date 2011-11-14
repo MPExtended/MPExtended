@@ -56,13 +56,34 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     return true;
                 }
-
-                if (MediaType == WebStreamMediaType.TV)
+                else if (MediaType == WebStreamMediaType.TV)
                 {
                     return false;
                 }
+                else
+                {
+                    return FileInfo.IsLocalFile;
+                }
+            }
+        }
 
-                return FileInfo.IsLocalFile;
+        public bool Exists
+        {
+            get
+            {
+                if (MediaType == WebStreamMediaType.Recording)
+                {
+                    string path = GetPath();
+                    return File.Exists(path);
+                }
+                else if (MediaType == WebStreamMediaType.TV)
+                {
+                    return true;
+                }
+                else
+                {
+                    return FileInfo.Exists;
+                }
             }
         }
 
@@ -107,11 +128,15 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             return FileInfo.Path;
-            //return MPEServices.MAS.GetMediaItem(Provider, (WebMediaType)MediaType, Id).Path[Offset];
         }
 
         public Stream Retrieve()
         {
+            if (!Exists)
+            {
+                throw new FileNotFoundException();
+            }
+
             if (IsLocalFile)
             {
                 return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -127,6 +152,11 @@ namespace MPExtended.Services.StreamingService.Code
 
         public IProcessingUnit GetInputReaderUnit()
         {
+            if (!Exists)
+            {
+                throw new FileNotFoundException();
+            }
+
             if (IsLocalFile || MediaType == WebStreamMediaType.TV)
             {
                 return new InputUnit(GetPath());

@@ -50,14 +50,18 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 TvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
                 return info;
             }
+            else if (!source.Exists)
+            {
+                throw new FileNotFoundException();
+            }
             else if (source.IsLocalFile)
             {
                 return GetMediaInfo(source.GetPath(), false);
             }
-            else 
+            else
             {
                 // not (yet?) supported
-                throw new NotSupportedException(); 
+                throw new NotSupportedException();
             }
         }
 
