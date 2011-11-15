@@ -111,13 +111,11 @@ namespace MPExtended.Services.StreamingService.Code
                 if (context.Source.MediaType == WebStreamMediaType.TVEpisode)
                 {
                     state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(context.Source.Provider, context.Source.Id);
-                    service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
                     state.Runtime = MPEServices.MAS.GetTVShowDetailedById(context.Source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime * 60;
                 }
                 else if (context.Source.MediaType == WebStreamMediaType.Movie)
                 {
                     state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(context.Source.Provider, context.Source.Id);
-                    service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime * 60;
                 }
 
@@ -157,20 +155,24 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     Log.Debug("WatchSharing: seeing {0}% as finished for {1}", progress, identifier);
 
-                    // finished
-                    if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
+                    // send the finished event in a background thread
+                    ThreadManager.Start("FinishWatching", delegate()
                     {
-                        service.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
-                    }
-                    else if (streams[identifier].Source.MediaType == WebStreamMediaType.Movie)
-                    {
-                        service.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
-                    }
+                        if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
+                        {
+                            service.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
+                        }
+                        else if (streams[identifier].Source.MediaType == WebStreamMediaType.Movie)
+                        {
+                            service.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
+                        }
 
-                    // kill it
-                    streams[identifier].BackgroundThread.Abort();
-                    ThreadManager.Remove(streams[identifier].BackgroundThread);
-                    streams.Remove(identifier);
+                        // kill it
+                        streams[identifier].BackgroundThread.Abort();
+                        ThreadManager.Remove(streams[identifier].BackgroundThread);
+                        streams.Remove(identifier);
+                        Log.Debug("WatchSharing: finished handling {0}", identifier);
+                    });
                     return;
                 }
             }
@@ -186,7 +188,17 @@ namespace MPExtended.Services.StreamingService.Code
             int iteration = 0;
             int canceledWaitIterations = -1;
 
-            // we don't have to do anything immediately as we just sent the start watching event
+            // start by sending the start watching event (which we do here so that it doesn't block starting the stream)
+            if (streams[id].Source.MediaType == WebStreamMediaType.TVEpisode)
+            {
+                service.StartWatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor);
+            }
+            else if (streams[id].Source.MediaType == WebStreamMediaType.Movie)
+            {
+                service.StartWatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor);
+            }
+
+            // and then we don't have to do anything immediately
             Thread.Sleep(60000);
 
             while (true)
