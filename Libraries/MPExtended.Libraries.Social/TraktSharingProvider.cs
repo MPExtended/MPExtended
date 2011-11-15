@@ -51,7 +51,7 @@ namespace MPExtended.Libraries.Social
 
         public bool StartWatchingMovie(WebMovieDetailed movie)
         {
-            return true;
+            return CallMovieAPI(movie, TraktWatchStatus.Watching, 0);
         }
 
         public bool WatchingMovie(WebMovieDetailed movie, int progress)
@@ -64,7 +64,12 @@ namespace MPExtended.Libraries.Social
             return CallMovieAPI(movie, TraktWatchStatus.Scrobble, 100);
         }
 
-        private bool CallMovieAPI(WebMovieBasic movie, TraktWatchStatus state, int progress) 
+        public bool CancelWatchingMovie(WebMovieDetailed movie)
+        {
+            return CallMovieAPI(movie, TraktWatchStatus.CancelWatching, null);
+        }
+
+        private bool CallMovieAPI(WebMovieBasic movie, TraktWatchStatus state, int? progress) 
         {
             var data = new TraktMovieScrobbleData()
             {
@@ -76,10 +81,12 @@ namespace MPExtended.Libraries.Social
                 UserName = Configuration["username"],
 
                 Duration = movie.Runtime.ToString(),
-                Progress = progress.ToString(),
                 Title = movie.Title,
                 Year = movie.Year.ToString()
             };
+
+            if (progress != null)
+                data.Progress = progress.Value.ToString();
 			
 			if (movie.ExternalId.Count(x => x.Site == "IMDB") > 0)
                 data.IMDBID = movie.ExternalId.First(x => x.Site == "IMDB").Id;
@@ -93,39 +100,25 @@ namespace MPExtended.Libraries.Social
 
             try
             {
+                Log.Debug("Trakt: calling service for movie {0} with progress {1} and state {2}", data.Title, data.Progress, state);
                 TraktResponse response = TraktAPI.ScrobbleMovie(data, state);
                 if (response.Status != "success")
                 {
                     Log.Warn("Trakt: failed to update watch status of movie '{0}' ({1}): {2}", movie.Title, movie.Id, response.Error);
                     return false;
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 Log.Warn("Trakt: failed to call service", ex);
                 return false;
             }
-
-            return true;
-        }
-
-        public bool CancelWatchingMovie(WebMovieDetailed movie)
-        {
-            TraktResponse response = TraktAPI.ScrobbleMovie(null, TraktWatchStatus.CancelWatching);
-            if (response.Status != "success")
-            {
-                Log.Warn("Trakt: failed to cancel watching movie: {0}", response.Error);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
 
         public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
         {
-            return true;
+            return CallShowAPI(episode, TraktWatchStatus.Watching, 0);
         }
 
         public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
@@ -138,7 +131,12 @@ namespace MPExtended.Libraries.Social
             return CallShowAPI(episode, TraktWatchStatus.Scrobble, 100);
         }
 
-        private bool CallShowAPI(WebTVEpisodeBasic episode, TraktWatchStatus state, int progress)
+        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
+        {
+            return CallShowAPI(episode, TraktWatchStatus.CancelWatching, null);
+        }
+
+        private bool CallShowAPI(WebTVEpisodeBasic episode, TraktWatchStatus state, int? progress)
         {
             WebTVShowDetailed show = MediaService.GetTVShowDetailedById(episode.PID, episode.ShowId);
             WebTVSeasonDetailed season = MediaService.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
@@ -154,11 +152,13 @@ namespace MPExtended.Libraries.Social
 
                 Duration = show.Runtime.ToString(),
                 Episode = episode.EpisodeNumber.ToString(),
-                Progress = progress.ToString(),
                 Season = season.SeasonNumber.ToString(),
                 Title = show.Title,
                 Year = show.Year.ToString(),
             };
+
+            if (progress == null)
+                data.Progress = progress.Value.ToString();
 			
 			if (show.ExternalId.Count(x => x.Site == "IMDB") > 0)
                 data.IMDBID = show.ExternalId.First(x => x.Site == "IMDB").Id;
@@ -170,30 +170,21 @@ namespace MPExtended.Libraries.Social
                 return false;
             }
 
-            TraktResponse response = TraktAPI.ScrobbleEpisode(data, state);
-
-            if (response.Status != "success")
+            try
             {
-                Log.Warn("Trakt: failed to update watch status of episode '{0}' ({1}): {2}", episode.Title, episode.Id, response.Error);
-                return false;
-            }
-            else
-            {
+                Log.Debug("Trakt: calling service for show {0} with progress {1} and state {2}", data.Title, data.Progress, state);
+                TraktResponse response = TraktAPI.ScrobbleEpisode(data, state);
+                if (response.Status != "success")
+                {
+                    Log.Warn("Trakt: failed to update watch status of episode '{0}' ({1}): {2}", episode.Title, episode.Id, response.Error);
+                    return false;
+                }
                 return true;
             }
-        }
-
-        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
-        {
-            TraktResponse response = TraktAPI.ScrobbleEpisode(null, TraktWatchStatus.CancelWatching);
-            if (response.Status != "success")
+            catch (Exception ex)
             {
-                Log.Warn("Trakt: failed to cancel watching episode: {0}", response.Error);
+                Log.Warn("Trakt: failed to call service", ex);
                 return false;
-            }
-            else
-            {
-                return true;
             }
         }
     }

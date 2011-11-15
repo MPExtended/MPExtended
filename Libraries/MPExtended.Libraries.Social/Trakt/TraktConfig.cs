@@ -25,9 +25,16 @@ namespace MPExtended.Libraries.Social.Trakt
 {
     internal class TraktConfig
     {
-        private const string ApiKey = "abcd";
+        private const string ApiKey = "dc2e63ec2918e23e24d8a4c2e3813fc7a4ad22d7";
+        private static string buildDate = null;
 
-        public static string MediaCenter { get { return "Mediaportal"; } }
+        public static string MediaCenter 
+        { 
+            get 
+            { 
+                return "MPExtended"; 
+            } 
+        }
 
         public static string MediaCenterVersion 
         { 
@@ -41,15 +48,21 @@ namespace MPExtended.Libraries.Social.Trakt
         { 
             get 
             {
-                return String.Empty;
+                if (buildDate == null)
+                {
+                    var info = new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    buildDate = info.LastWriteTime.ToString("yyyy-MM-dd");
+                }
+
+                return buildDate;
             } 
         }
 
-        public static string PluginVersion 
+        public static string PluginVersion
         { 
             get 
             {
-                return String.Format("{0} ({1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion().ToString());
+                return String.Format("{0} ({1}, MP {2})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion().ToString(), VersionUtil.GetMediaPortalBuildVersion().ToString());
             } 
         }
 
