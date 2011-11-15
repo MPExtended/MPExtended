@@ -33,7 +33,12 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class WatchSharing
     {
-        private const int KEEP_ONLINE_ALIVE = 0; // synchronized cancelwatching events only after a delay between x and x+1 minutes (to support restarting the stream)
+        // define the time to wait (which is actually between x and x+1 minutes) before synchronizing cancelwatching events to the watch service
+#if DEBUG
+        private const int KEEP_ONLINE_ALIVE = 0;
+#else
+        private const int KEEP_ONLINE_ALIVE = 5;
+#endif
 
         private class StreamState
         {
