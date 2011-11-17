@@ -309,7 +309,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     .SelectMany(x => x)
                     .Distinct()
                     .OrderBy(x => x)
-                    .Select(x => new WebGenre() { Name = x });
+                    .Select(x => new WebGenre() { Title = x });
         }
 
         public IEnumerable<WebCategory> GetAllCategories()

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebGenre : WebObject
+    public class WebGenre : WebObject, ITitleSortable
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
     }
 }
