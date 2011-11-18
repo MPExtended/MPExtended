@@ -648,7 +648,6 @@ namespace MPExtended.Services.MediaAccessService
                 Log.Info(String.Format("Failed to load fileinfo for mediatype={0}, filetype={1}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path), ex);
             }
 
-            WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
             return new WebFileInfo()
             {
                 Exists = false
