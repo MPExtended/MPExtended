@@ -14,9 +14,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
             return obj != null && obj is WebActor && (obj as WebActor).Name == this.Name;
         }
 
-        public bool Equals(WebActor actor)
+        public override int GetHashCode()
         {
-            return actor.Name == this.Name;
+            return Name.GetHashCode();
         }
     }
 }
