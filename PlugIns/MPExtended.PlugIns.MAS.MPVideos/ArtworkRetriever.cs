@@ -61,7 +61,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 LastModifiedTime = info.LastWriteTime,
                 Name = Path.GetFileName(fullUri.LocalPath),
                 Path = path,
-                Size = info.Length
+                Size = info.Length,
+                OnNetworkDrive = false
             };
         }
 

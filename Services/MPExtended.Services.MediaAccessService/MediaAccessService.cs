@@ -635,9 +635,28 @@ namespace MPExtended.Services.MediaAccessService
         public WebFileInfo GetFileInfo(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
             string path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
+
             try
             {
-                return GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
+                try
+                {
+                    // first try it the usual way
+                    return GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // access denied, try impersonation
+                    if (new Uri(path).IsUnc)
+                    {
+                        using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                        {
+                            var ret = new WebFileInfo(path);
+                            ret.IsLocalFile = false;
+                            ret.OnNetworkDrive = true;
+                            return ret;
+                        }
+                    }
+                }
             }
             catch (FileNotFoundException)
             {
@@ -664,14 +683,33 @@ namespace MPExtended.Services.MediaAccessService
         {
             try
             {
+                string path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
                 WebFileInfo info = GetFileInfo(provider, mediatype, filetype, id, offset);
-                if (!info.Exists)
+
+                // first try to read the file
+                if (info.IsLocalFile)
                 {
-                    Log.Warn("Requested non-existing file mediatype={0} filetype={1} id={2} offset={3}", mediatype, filetype, id, offset);
-                    return null;
+                    return new FileStream(path, FileMode.Open, FileAccess.Read);
                 }
 
-                return GetLibrary(provider, mediatype).GetFile(GetPathList(provider, mediatype, filetype, id).ElementAt(offset));
+                // maybe the plugin has some magic
+                if (info.Exists && !info.OnNetworkDrive)
+                {
+                    return GetLibrary(provider, mediatype).GetFile(path);
+                }
+
+                // try to load it from a network drive
+                if(info.OnNetworkDrive && info.Exists)
+                {
+                    using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                    {
+                        return new FileStream(path, FileMode.Open, FileAccess.Read);
+                    }
+                }
+
+                // fail
+                Log.Warn("Requested non-existing or non-accessible file mediatype={0} filetype={1} id={2} offset={3}", mediatype, filetype, id, offset);
+                return null;
             }
             catch (Exception ex)
             {

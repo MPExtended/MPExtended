@@ -29,6 +29,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
                 Extension = info.Extension;
                 IsReadOnly = info.IsReadOnly;
                 Exists = true;
+                OnNetworkDrive = new Uri(info.FullName).IsUnc;
             }
         }
 
@@ -46,6 +47,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public string Extension { get; set; }
         public bool IsReadOnly { get; set; }
         public bool Exists { get; set; }
+        public bool OnNetworkDrive { get; set; }
 
         public override string ToString()
         {
