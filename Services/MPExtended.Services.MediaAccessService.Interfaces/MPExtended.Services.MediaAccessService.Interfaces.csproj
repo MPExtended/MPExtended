@@ -66,6 +66,7 @@
     <Compile Include="FileSystem\WebFilesystemItem.cs" />
     <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="PluginInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
@@ -77,6 +78,7 @@
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
     <Compile Include="SerializableDictionary.cs" />
+    <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />

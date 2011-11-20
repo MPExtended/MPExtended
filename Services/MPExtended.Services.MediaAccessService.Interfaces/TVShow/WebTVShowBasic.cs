@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVShowBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IRatingSortable, IArtwork
+    public class WebTVShowBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IRatingSortable, IArtwork, IActors
     {
         public WebTVShowBasic()
         {
@@ -14,6 +14,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
             Genres = new List<string>();
             Artwork = new List<WebArtwork>();
             ExternalId = new List<WebExternalId>();
+            Actors = new List<WebActor>();
         }
 
         public string Id { get; set; }
@@ -22,6 +23,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public IList<string> UserDefinedCategories { get; set; }
         public IList<string> Genres { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
+        public IList<WebActor> Actors { get; set; }
 
         public string Title { get; set; }
         public int Year { get; set; }

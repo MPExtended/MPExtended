@@ -38,6 +38,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             DatabasePath = data.GetConfiguration("MP MyVideo")["database"];
         }
 
+        private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
+        {
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Name = x }).ToList();
+        }
+
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
             string sql =
@@ -59,7 +64,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             {
                 new SQLFieldMapping("m", "idMovie", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("fullpath", "Path", DataReaders.ReadPipeList),
-                new SQLFieldMapping("actors", "Actors", DataReaders.ReadPipeList),
+                new SQLFieldMapping("actors", "Actors", ActorReader),
                 new SQLFieldMapping("genres", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("i", "strPictureURL", "Artwork", ArtworkRetriever.ArtworkReader),
                 new SQLFieldMapping("i", "strTitle", "Title", DataReaders.ReadString),

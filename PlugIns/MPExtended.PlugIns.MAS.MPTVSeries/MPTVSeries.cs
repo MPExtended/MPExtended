@@ -133,7 +133,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
                 new SQLFieldMapping("s", "PosterFileNames", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Poster, configuration["banner"])),
                 new SQLFieldMapping("s", "fanart", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
-                new SQLFieldMapping("s", "Actors", "Actors", DataReaders.ReadPipeList),
+                new SQLFieldMapping("s", "Actors", "Actors", CustomReaders.ActorReader),
                 new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("s", "ContentRating", "ContentRating", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Summary", "Summary", DataReaders.ReadString),

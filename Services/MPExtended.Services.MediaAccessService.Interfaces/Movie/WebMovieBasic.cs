@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, ICategorySortable, IArtwork
+    public class WebMovieBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, ICategorySortable, IArtwork, IActors
     {
         public WebMovieBasic()
         {
@@ -13,6 +13,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
             UserDefinedCategories = new List<string>();
             Artwork = new List<WebArtwork>();
             ExternalId = new List<WebExternalId>();
+            Actors = new List<WebActor>();
         }
 
         public bool IsProtected { get; set; }
@@ -20,6 +21,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public IList<string> UserDefinedCategories { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
+        public IList<WebActor> Actors { get; set; }
 
         public string Title { get; set; }
         public int Year { get; set; }

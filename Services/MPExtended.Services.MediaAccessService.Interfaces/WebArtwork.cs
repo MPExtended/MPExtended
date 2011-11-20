@@ -6,11 +6,6 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public interface IArtwork
-    {
-        IList<WebArtwork> Artwork { get; set; }
-    }
-
     public class WebArtwork
     {
         public WebFileType Type { get; set; }

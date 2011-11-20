@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
-            var series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider, null, null, SortBy.Title, OrderBy.Asc);
+            var series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider, null, null, null, SortBy.Title, OrderBy.Asc);
             if (series != null)
             {
                 return View(series);

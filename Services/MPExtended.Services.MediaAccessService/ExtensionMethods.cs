@@ -59,9 +59,22 @@ namespace MPExtended.Services.MediaAccessService
             return list;
         }
 
-        public static IEnumerable<T> FilterGenreCategory<T>(this IEnumerable<T> list, string genre, string category) where T : IGenreSortable, ICategorySortable
+        public static IEnumerable<T> FilterActor<T>(this IEnumerable<T> list, string actor) where T : IActors
+        {
+            if (actor != null)
+                return Where(list, x => ((IActors)x).Actors.Contains(new WebActor() { Name = actor }));
+
+            return list;
+        }
+
+        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string category) where T : IGenreSortable, ICategorySortable
         {
             return FilterCategory(FilterGenre(list, genre), category);
+        }
+
+        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string category, string actor) where T : IGenreSortable, ICategorySortable, IActors
+        {
+            return FilterCategory(FilterGenre(FilterActor(list, actor), genre), category);
         }
 
         // Take advantage of lazy queries

@@ -89,6 +89,11 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return list;
         }
 
+        private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
+        {
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Name = x }).ToList();
+        }
+
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
@@ -121,7 +126,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("", "path", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "directors", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("m", "writers", "Writers", DataReaders.ReadPipeList),
-                new SQLFieldMapping("m", "actors", "Actors", DataReaders.ReadPipeList),
+                new SQLFieldMapping("m", "actors", "Actors", ActorReader),
                 new SQLFieldMapping("m", "summary", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString),
                 new SQLFieldMapping("m", "imdb_id", "ExternalId", ExternalIdReader, "IMDB"),

@@ -11,12 +11,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         {
             Directors = new List<string>();
             Writers = new List<string>();
-            Actors = new List<string>();
         }
 
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
-        public IList<string> Actors { get; set; }
         public string Summary { get; set; }       
     
         // use ISO short name (en, nl, de, etc)
