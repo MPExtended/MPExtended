@@ -24,13 +24,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
 
@@ -63,7 +56,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void SetNetworkInterfaces()
         {
             networkAddresses = new Dictionary<string,MyNetworkAddress>();
-
             foreach (NetworkInterface n in NetworkInterface.GetAllNetworkInterfaces())
             {
                 Log.Debug("Available Network Interface: {0}", n.Name);
@@ -102,19 +94,29 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void SetTestLinks(string _address, int _port)
         {
-            String baseAdress = "http://{0}:{1}/MPExtended/{2}/json/{3}";
+            var services = Installation.GetInstalledServices().Select(x => x.ServiceName);
+            string baseAdress = "http://{0}:{1}/MPExtended/{2}/json/{3}";
 
-            String mediaAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "MediaAccessService", "GetServiceDescription");
-            hlTestLinkMediaAccessGeneral.NavigateUri = new Uri(mediaAccessServiceDescriptionUrl);
-            tbTestLinkMediaAccessGeneral.Text = mediaAccessServiceDescriptionUrl;
+            if(services.Contains(MPExtendedService.MediaAccessService))
+            {
+                string mediaAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "MediaAccessService", "GetServiceDescription");
+                hlTestLinkMediaAccessGeneral.NavigateUri = new Uri(mediaAccessServiceDescriptionUrl);
+                tbTestLinkMediaAccessGeneral.Text = mediaAccessServiceDescriptionUrl;
+            }
 
-            String tvAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "TVAccessService", "GetServiceDescription");
-            hlTestLinkTvAccessGeneral.NavigateUri = new Uri(tvAccessServiceDescriptionUrl);
-            tbTestLinkTvAccessGeneral.Text = tvAccessServiceDescriptionUrl;
+            if(services.Contains(MPExtendedService.TVAccessService))
+            {
+                string tvAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "TVAccessService", "GetServiceDescription");
+                hlTestLinkTvAccessGeneral.NavigateUri = new Uri(tvAccessServiceDescriptionUrl);
+                tbTestLinkTvAccessGeneral.Text = tvAccessServiceDescriptionUrl;
+            }
 
-            String streamingServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "StreamingService", "GetServiceDescription");
-            hlTestLinkStreamingGeneral.NavigateUri = new Uri(streamingServiceDescriptionUrl);
-            tbTestLinkStreamingGeneral.Text = streamingServiceDescriptionUrl;
+            if(services.Contains(MPExtendedService.StreamingService))
+            {
+                string streamingServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "StreamingService", "GetServiceDescription");
+                hlTestLinkStreamingGeneral.NavigateUri = new Uri(streamingServiceDescriptionUrl);
+                tbTestLinkStreamingGeneral.Text = streamingServiceDescriptionUrl;
+            }
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)

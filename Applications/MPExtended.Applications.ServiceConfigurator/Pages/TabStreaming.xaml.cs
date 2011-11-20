@@ -24,13 +24,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
@@ -55,12 +49,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             InitializeComponent();
         }
 
-        private void DeInitStreamingTab()
-        {
-            mSessionWatcher.Stop();
-        }
-
-        private void InitStreamingTab()
+        private void Page_Initialized(object sender, EventArgs e)
         {
             mSessionWatcher.Start();
         }

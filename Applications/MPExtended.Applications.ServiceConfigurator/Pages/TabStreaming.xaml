@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="557"
-	Title="TabStreaming">
+	  Title="TabStreaming"
+      Initialized="Page_Initialized">
 
     <Grid>
         <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="6,78,-6,214" Name="label1" />
@@ -25,11 +26,11 @@
             </ListView.View>
         </ListView>
         <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label9" VerticalAlignment="Top" FontWeight="Bold" />
-        <Label Content="To change the streaming profiles (advanced users only!!!) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
+        <Label Content="To change the streaming profiles (advanced users only) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="15,57,0,0" Name="textBlock1" VerticalAlignment="Top">
-                        <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
-                            <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
-                        </Hyperlink>    
-                    </TextBlock>
+            <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
+                <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
+            </Hyperlink>    
+        </TextBlock>
     </Grid>
 </Page>

@@ -68,7 +68,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             try
             {
-                MainFrame.Navigate(new Pages.MediaAccessServer());
+                MainFrame.Navigate(new Pages.ServiceConfiguration());
             }
             catch (Exception ex)
             {

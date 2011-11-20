@@ -102,7 +102,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\MediaAccessServer.xaml">
+    <Page Include="Pages\ServiceConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,8 +144,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\MediaAccessServer.xaml.cs">
-      <DependentUpon>MediaAccessServer.xaml</DependentUpon>
+    <Compile Include="Pages\ServiceConfiguration.xaml.cs">
+      <DependentUpon>ServiceConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SectionPluginSettings.xaml.cs">
       <DependentUpon>SectionPluginSettings.xaml</DependentUpon>

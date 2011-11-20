@@ -22,13 +22,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
@@ -40,8 +33,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabServerLogs : Page
     {
-        private string[] allLogFiles = new string[] { "Service.log", "ConsoleHost.log", "ServiceConfigurator.log", "WebMediaPortal.log" };
-
         private StreamReader mLogStreamReader = null;
         private long lastMaxOffset;
         private string mSelectedLog;
@@ -55,14 +46,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             mLogUpdater.Interval = TimeSpan.FromSeconds(2);
             mLogUpdater.Tick += logUpdater_Tick;
 
-            String logRoot = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
-
-            foreach (string file in allLogFiles)
+            string logRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
+            foreach (string file in Directory.GetFiles(logRoot))
             {
-                if (File.Exists(System.IO.Path.Combine(logRoot, file)))
-                {
-                    cbLogFiles.Items.Add(file);
-                }
+                cbLogFiles.Items.Add(Path.GetFileName(file));
             }
 
             if (cbLogFiles.Items.Count > 0)
@@ -102,10 +89,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     {
                         ErrorHandling.ShowError(ex);
                     }
-
                     ScrollToLastItem(lvLogViewer);
 
-                    //start at the end of the file
+                    // start at the end of the file
                     mLogStreamReader = new StreamReader(new FileStream(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
                     lastMaxOffset = mLogStreamReader.BaseStream.Length;
                     mLogUpdater.Start();
