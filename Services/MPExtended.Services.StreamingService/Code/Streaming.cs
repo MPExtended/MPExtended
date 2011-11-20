@@ -288,6 +288,12 @@ namespace MPExtended.Services.StreamingService.Code
             }).ToList();
         }
 
+        public void SetPlayerPosition(string identifier, int playerPosition)
+        {
+            if(Streams.ContainsKey(identifier) && Streams[identifier] != null)
+                sharing.SetClientPlayerPosition(Streams[identifier].Context.Source, playerPosition);
+        }
+
         public WebTranscodingInfo GetEncodingInfo(string identifier) 
         {
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)

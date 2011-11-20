@@ -39,6 +39,8 @@ namespace MPExtended.Services.StreamingService.Code
 #else
         private const int KEEP_ONLINE_ALIVE = 5;
 #endif
+        // time after a client position sync during which it is assumed that the client's position is it's last synced value + time elapsed since the sync
+        private const int CLIENT_SYNC_VALID_DURATION = 30;
 
         private class StreamState
         {
@@ -48,9 +50,11 @@ namespace MPExtended.Services.StreamingService.Code
             public bool Canceled { get; set; }
             public bool Stale { get; set; }
             public int StartedPosition { get; set; } // in seconds
-            public long Runtime { get; set; } // in seconds
+            public int Runtime { get; set; } // in seconds
             public Thread BackgroundThread { get; set; }
             public Reference<WebTranscodingInfo> TranscodingInfo { get; set; }
+            public int ClientPlayerPosition { get; set; } // in seconds
+            public DateTime LastClientSync { get; set; }
         }
 
         private bool enabled;
@@ -105,7 +109,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // generate identifier
-            string identifier = Enum.GetName(typeof(WebStreamMediaType), context.Source.MediaType) + "_" + context.Source.Id;
+            string identifier = GetIdentifierFromMediaSource(context.Source);
 
             // start if non-existent            
             if (!streams.ContainsKey(identifier))
@@ -120,7 +124,7 @@ namespace MPExtended.Services.StreamingService.Code
                     Stale = false
                 };
 
-                // get mediadescriptor and rough runtime, and start the watching online
+                // get mediadescriptor and rough runtime
                 Log.Debug("WatchSharing: synchronizing start watching event to service");
                 if (context.Source.MediaType == WebStreamMediaType.TVEpisode)
                 {
@@ -136,7 +140,7 @@ namespace MPExtended.Services.StreamingService.Code
                 // get exact runtime if available
                 if (context.MediaInfo.Duration > 60)
                 {
-                    state.Runtime = context.MediaInfo.Duration / 1000;
+                    state.Runtime = (int)(context.MediaInfo.Duration / 1000);
                 }
 
                 streams[identifier] = state;
@@ -154,7 +158,7 @@ namespace MPExtended.Services.StreamingService.Code
         public void EndStream(MediaSource source, bool force = false)
         {
             // generate identifier
-            string identifier = Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
+            string identifier = GetIdentifierFromMediaSource(source);
 
             // ignore if not registered
             if (!enabled || !streams.ContainsKey(identifier))
@@ -213,6 +217,17 @@ namespace MPExtended.Services.StreamingService.Code
                     }
                 }
             }
+        }
+
+        public void SetClientPlayerPosition(MediaSource source, int playerPosition)
+        {
+            string identifier = GetIdentifierFromMediaSource(source);
+            lock (streams[identifier])
+            {
+                streams[identifier].ClientPlayerPosition = playerPosition;
+                streams[identifier].LastClientSync = DateTime.Now;
+            }
+            Log.Trace("Client synced position {0} at {1}", streams[identifier].ClientPlayerPosition, streams[identifier].LastClientSync);
         }
 
         private void BackgroundWorker(object identifier)
@@ -311,22 +326,38 @@ namespace MPExtended.Services.StreamingService.Code
 
         private int CalculateWatchPosition(string id)
         {
-            // calculate progress
-            int transcodedValue = 0;
-            if (streams[id].TranscodingInfo != null && streams[id].TranscodingInfo.Value != null)
+            int watchPosition; // in seconds
+            if (streams[id].LastClientSync > DateTime.Now.Subtract(new TimeSpan(0, 0, CLIENT_SYNC_VALID_DURATION)))
             {
-                transcodedValue = streams[id].TranscodingInfo.Value.CurrentTime;
+                watchPosition = streams[id].ClientPlayerPosition;
+                watchPosition += (int)((DateTime.Now - streams[id].LastClientSync).TotalSeconds);
             }
             else
             {
-                Log.Info("WatchSharing: transcoded time of stream {0} not known", id);
+                // calculate progress based upon transcoder
+                int transcodedValue = 0;
+                if (streams[id].TranscodingInfo != null && streams[id].TranscodingInfo.Value != null)
+                {
+                    transcodedValue = streams[id].TranscodingInfo.Value.CurrentTime;
+                }
+                else
+                {
+                    Log.Info("WatchSharing: transcoded time of stream {0} not known", id);
+                }
+                watchPosition = transcodedValue / 1000;
+                Log.Debug("WatchSharing: transcoding position {0} ms", transcodedValue);
             }
-            int watchPosition = transcodedValue / 1000;
+
             int progress = (int)Math.Round((watchPosition * 1.0 / streams[id].Runtime) * 100);
-            Log.Debug("WatchSharing: start position {0} seconds, transcoding position {1} ms, position {2} seconds, runtime {3} seconds, progress {4}%",
-                streams[id].StartedPosition, transcodedValue, watchPosition, streams[id].Runtime, progress);
+            Log.Debug("WatchSharing: start position {0} seconds, position {1} seconds, runtime {2} seconds, progress {3}%", 
+                streams[id].StartedPosition, watchPosition, streams[id].Runtime, progress);
 
             return progress;
+        }
+
+        private string GetIdentifierFromMediaSource(MediaSource source)
+        {
+            return Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
         }
     }
 }

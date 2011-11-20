@@ -30,9 +30,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMediaInfo GetMediaInfo(WebStreamMediaType type, int? provider, string itemId);
 
+        // playerPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebTranscodingInfo GetTranscodingInfo(string identifier);
+        WebTranscodingInfo GetTranscodingInfo(string identifier, int? playerPosition);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

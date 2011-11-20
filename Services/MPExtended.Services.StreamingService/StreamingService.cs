@@ -102,8 +102,12 @@ namespace MPExtended.Services.StreamingService
             return MediaInfo.MediaInfoWrapper.GetMediaInfo(new MediaSource(type, provider, itemId));
         }
 
-        public WebTranscodingInfo GetTranscodingInfo(string identifier)
+        public WebTranscodingInfo GetTranscodingInfo(string identifier, int? playerPosition)
         {
+            if (playerPosition.HasValue)
+            {
+                _stream.SetPlayerPosition(identifier, playerPosition.Value);
+            }
             return _stream.GetEncodingInfo(identifier);
         }
 
