@@ -70,4 +70,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         WebMediaType Type { get; set; }
     }
+
+    public interface INameSortable
+    {
+        string Name { get; set; }
+    }
 }

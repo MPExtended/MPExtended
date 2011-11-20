@@ -198,6 +198,22 @@ namespace MPExtended.Services.MediaAccessService
         {
             return MovieLibraries[provider].GetMovieDetailedById(id).Finalize(provider, ProviderType.Movie);
         }
+
+        public IList<WebActor> GetAllMovieActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
+        {
+            sort = sort.HasValue ? sort.Value : SortBy.Name;
+            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebActor> GetMovieActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
+        {
+            return GetAllMovieActors(provider, sort, order).TakeRange(start, end).ToList();
+        }
+
+        public WebItemCount GetMovieActorCount(int? provider)
+        {
+            return new WebItemCount() { Count = GetAllMovieActors(provider).Count };
+        }
         #endregion
 
         #region Music
@@ -503,6 +519,22 @@ namespace MPExtended.Services.MediaAccessService
         public WebItemCount GetTVSeasonCountForTVShow(int? provider, string id)
         {
             return new WebItemCount() { Count = TVShowLibraries[provider].GetAllSeasonsBasic().Where(x => x.ShowId == id).Count() };
+        }
+
+        public IList<WebActor> GetAllTVShowActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
+        {
+            sort = sort.HasValue ? sort.Value : SortBy.Name;
+            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).SortMediaItemList(sort, order).ToList();
+        }
+
+        public IList<WebActor> GetTVShowActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
+        {
+            return GetAllTVShowActors(provider, sort, order).TakeRange(start, end).ToList();
+        }
+
+        public WebItemCount GetTVShowActorCount(int? provider)
+        {
+            return new WebItemCount() { Count = GetAllTVShowActors(provider).Count };
         }
         #endregion
 
