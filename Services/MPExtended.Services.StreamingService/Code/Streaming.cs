@@ -28,7 +28,7 @@ using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    internal class Streaming
+    internal class Streaming : IDisposable
     {
 #if DEBUG
         private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // in milliseconds, use shorter time for debugging
@@ -59,19 +59,20 @@ namespace MPExtended.Services.StreamingService.Code
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
         }
 
-        ~Streaming()
+        public void Dispose()
         {
             try
             {
+                sharing.Dispose();
                 ThreadManager.Abort("StreamTimeout");
                 foreach (string identifier in Streams.Keys)
                 {
                     EndStream(identifier);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // we really don't care
+                Log.Info("Failed to dispose WSS", ex);
             }
         }
 
@@ -154,7 +155,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
-                    sharing.StartStream(stream.Context.Source, infoRef, position);
+                    sharing.StartStream(stream.Context, infoRef, position);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
