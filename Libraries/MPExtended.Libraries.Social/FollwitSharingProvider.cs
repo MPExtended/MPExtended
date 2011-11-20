@@ -29,13 +29,16 @@ namespace MPExtended.Libraries.Social
 {
     public class FollwitSharingProvider : IWatchSharingService
     {
-        public int UpdateInterval
-        {
-            get { return 1; }
-        }
-
         public IMediaAccessService MediaService { get; set; }
         public Dictionary<string, string> Configuration { get; set; }
+
+        public int UpdateInterval
+        {
+            get 
+            { 
+                return 1; 
+            }
+        }
 
         public bool StartWatchingMovie(WebMovieDetailed movie)
         {

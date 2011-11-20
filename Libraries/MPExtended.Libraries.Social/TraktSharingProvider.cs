@@ -107,6 +107,7 @@ namespace MPExtended.Libraries.Social
                     Log.Warn("Trakt: failed to update watch status of movie '{0}' ({1}): {2}", movie.Title, movie.Id, response.Error);
                     return false;
                 }
+                Log.Trace("Trakt: finished service call");
                 return true;
             }
             catch (Exception ex)
@@ -157,7 +158,7 @@ namespace MPExtended.Libraries.Social
                 Year = show.Year.ToString(),
             };
 
-            if (progress == null)
+            if (progress != null)
                 data.Progress = progress.Value.ToString();
 			
 			if (show.ExternalId.Count(x => x.Site == "IMDB") > 0)
@@ -172,13 +173,14 @@ namespace MPExtended.Libraries.Social
 
             try
             {
-                Log.Debug("Trakt: calling service for show {0} with progress {1} and state {2}", data.Title, data.Progress, state);
+                Log.Debug("Trakt: calling service for show {0} (episode {1}) with progress {2} and state {3}", data.Title, episode.Title, data.Progress, state.ToString());
                 TraktResponse response = TraktAPI.ScrobbleEpisode(data, state);
                 if (response.Status != "success")
                 {
                     Log.Warn("Trakt: failed to update watch status of episode '{0}' ({1}): {2}", episode.Title, episode.Id, response.Error);
                     return false;
                 }
+                Log.Trace("Trakt: finished service call");
                 return true;
             }
             catch (Exception ex)
