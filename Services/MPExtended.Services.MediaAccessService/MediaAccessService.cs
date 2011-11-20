@@ -202,7 +202,7 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebActor> GetAllMovieActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
             sort = sort.HasValue ? sort.Value : SortBy.Name;
-            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).SortMediaItemList(sort, order).ToList();
+            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
         }
 
         public IList<WebActor> GetMovieActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
@@ -524,7 +524,7 @@ namespace MPExtended.Services.MediaAccessService
         public IList<WebActor> GetAllTVShowActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
             sort = sort.HasValue ? sort.Value : SortBy.Name;
-            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).SortMediaItemList(sort, order).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
         }
 
         public IList<WebActor> GetTVShowActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)

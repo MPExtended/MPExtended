@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebActor : INameSortable
+    public class WebActor : WebObject, INameSortable
     {
         public string Name { get; set; }
 
