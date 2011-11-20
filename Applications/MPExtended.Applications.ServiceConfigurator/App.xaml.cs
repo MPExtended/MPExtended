@@ -21,6 +21,8 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using MPExtended.Libraries.General;
+using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {
@@ -29,5 +31,28 @@ namespace MPExtended.Applications.ServiceConfigurator
     /// </summary>
     public partial class App : Application
     {
+        private void OnStartup(object sender, StartupEventArgs e)
+        {
+            // defaults
+            StartupArguments.RunAsTrayApp = true;
+
+            // parse command line arguments
+            foreach (string arg in e.Args)
+            {
+                switch (arg)
+                {
+                    case "/Tray":
+                        StartupArguments.RunAsTrayApp = true;
+                        break;
+                    case "/NoTray":
+                    case "/OnlyConfigurator":
+                        StartupArguments.RunAsTrayApp = false;
+                        break;
+                    default:
+                        Log.Warn("Unknown command-line parameter {0}", arg);
+                        break;
+                }
+            }
+        }
     }
 }

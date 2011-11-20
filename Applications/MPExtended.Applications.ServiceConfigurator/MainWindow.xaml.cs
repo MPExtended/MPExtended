@@ -32,6 +32,7 @@ using System.Windows.Shapes;
 using MPExtended.Libraries.General;
 using MPExtended.Services.UserSessionService;
 using MPExtended.Services.UserSessionService.Interfaces;
+using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {
@@ -40,8 +41,6 @@ namespace MPExtended.Applications.ServiceConfigurator
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const bool ONLY_CONFIGURATOR = true;
-
         private bool mIsAppExiting = false;
         private ServiceHost mUserSessionHost;
         private IUserSessionService mUserSessionService;
@@ -77,10 +76,8 @@ namespace MPExtended.Applications.ServiceConfigurator
                 MessageBox.Show(ex.ToString());
             }
 
-#pragma warning disable 0162
-            if (!ONLY_CONFIGURATOR)
+            if (StartupArguments.RunAsTrayApp)
                 Hide();
-#pragma warning restore 0162
 
             HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
         }
@@ -95,12 +92,11 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // When the application is closed, check whether the application is
-            // exiting from menu or forms close button
-            if (!mIsAppExiting && !ONLY_CONFIGURATOR)
+            // When the application is closed, check whether the application is exiting from menu or forms close button
+            if (!mIsAppExiting && StartupArguments.RunAsTrayApp)
             {
-                // if the forms close button is triggered, cancel the event and hide the form
-                // then show the notification ballon tip
+                // If the form close button is triggered, cancel the event and hide the form,
+                // then show the notification ballon tip.
                 e.Cancel = true;
                 this.Hide();
             }
