@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebUser
     {
-        #region Properties
         public int CardId { get; set; }
         public DateTime HeartBeat { get; set; }
         public int IdChannel { get; set; }
@@ -15,6 +14,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string Name { get; set; }
         public int SubChannel { get; set; }
         public int TvStoppedReason { get; set; }
-        #endregion
     }
 }

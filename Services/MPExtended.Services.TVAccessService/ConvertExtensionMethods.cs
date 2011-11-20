@@ -217,7 +217,8 @@ namespace MPExtended.Services.TVAccessService
                 DisplayName = ch.DisplayName,
                 Id = ch.IdChannel,
                 IsRadio = ch.IsRadio,
-                IsTv = ch.IsTv
+                IsTv = ch.IsTv,
+                SortOrder = ch.SortOrder,
             };
         }
 

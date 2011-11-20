@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
@@ -31,6 +32,66 @@ namespace MPExtended.Services.TVAccessService
             if (source is List<T>)
                 return ((List<T>)source).GetRange(start, count);
             return source.Skip(start).Take(count);
+        }
+
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy? order)
+        {
+            if (order == MPExtended.Services.TVAccessService.Interfaces.OrderBy.Desc)
+                return Enumerable.OrderByDescending(source, keySelector);
+            return Enumerable.OrderBy(source, keySelector);
+        }
+
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy? order)
+        {
+            if (order == MPExtended.Services.TVAccessService.Interfaces.OrderBy.Desc)
+                return Enumerable.ThenByDescending(source, keySelector);
+            return Enumerable.ThenBy(source, keySelector);
+        }
+
+        public static IOrderedEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebChannelBasic
+        {
+            switch (sortInput)
+            {
+                case SortBy.Name:
+                default:
+                    return list.OrderBy(x => x.DisplayName, orderInput);
+            }
+        }
+
+        public static IOrderedEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebChannelGroup
+        {
+            switch (sortInput)
+            {
+                case SortBy.Name:
+                    return list.OrderBy(x => x.GroupName, orderInput);
+                case SortBy.User:
+                default:
+                    return list.OrderBy(x => x.SortOrder, orderInput);
+            }
+        }
+
+        public static IOrderedEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebScheduleBasic
+        {
+            switch (sortInput)
+            {
+                case SortBy.Name:
+                default:
+                    return list.OrderBy(x => x.ProgramName, orderInput);
+                case SortBy.Channel:
+                    return list.OrderBy(x => x.IdChannel, orderInput);
+            }
+        }
+
+        public static IOrderedEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebRecordingBasic
+        {
+            switch (sortInput)
+            {
+                case SortBy.Name:
+                default:
+                    return list.OrderBy(x => x.Title, orderInput);
+                case SortBy.Channel:
+                    return list.OrderBy(x => x.IdChannel, orderInput);
+            }
         }
     }
 }

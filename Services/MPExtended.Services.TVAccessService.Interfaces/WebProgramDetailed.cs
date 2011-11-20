@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebProgramDetailed : WebProgramBasic
     {
-        #region Properties
         public string Classification { get; set; }
         public string EpisodeName { get; set; }
         public string EpisodeNum { get; set; }
@@ -28,6 +27,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int ParentalRating { get; set; }
         public string SeriesNum { get; set; }
         public int StarRating { get; set; }
-        #endregion
     }
 }

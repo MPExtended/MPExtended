@@ -201,14 +201,14 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = Schedule.ListAll().Count };
         }
 
-        public IList<WebScheduleBasic> GetSchedules()
+        public IList<WebScheduleBasic> GetSchedules(SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).ToList();
+            return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).SortScheduleList(sort, order).ToList();
         }
 
-        public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end)
+        public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return Schedule.ListAll().TakeRange(start, end).Select(s => s.ToWebSchedule()).ToList();
+            return Schedule.ListAll().TakeRange(start, end).Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).ToList();
         }
 
         public WebScheduleBasic GetScheduleById(int scheduleId)
@@ -269,9 +269,9 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = ChannelGroup.ListAll().Count };
         }
 
-        public IList<WebChannelGroup> GetGroups()
+        public IList<WebChannelGroup> GetGroups(SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).SortGroupList(sort, order).ToList();
         }
 
         public IList<WebChannelGroup> GetGroupsByRange(int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
@@ -289,24 +289,24 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count };
         }
 
-        public IList<WebChannelBasic> GetChannelsBasic(int groupId)
+        public IList<WebChannelBasic> GetChannelsBasic(int groupId, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int start, int end)
+        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelDetailed> GetChannelsDetailed(int groupId)
+        public IList<WebChannelDetailed> GetChannelsDetailed(int groupId, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int start, int end)
+        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
@@ -343,9 +343,9 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = RadioChannelGroup.ListAll().Count };
         }
 
-        public IList<WebChannelGroup> GetRadioGroups()
+        public IList<WebChannelGroup> GetRadioGroups(SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).SortGroupList(sort, order).ToList();
         }
 
         public IList<WebChannelGroup> GetRadioGroupsByRange(int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
@@ -363,24 +363,24 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count };
         }
 
-        public IList<WebChannelBasic> GetRadioChannelsBasic(int groupId)
+        public IList<WebChannelBasic> GetRadioChannelsBasic(int groupId, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int start, int end)
+        public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId)
+        public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
-        public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int start, int end)
+        public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName)
@@ -499,14 +499,14 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = Recording.ListAll().Count };
         }
 
-        public IList<WebRecordingBasic> GetRecordings()
+        public IList<WebRecordingBasic> GetRecordings(SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
+            return Recording.ListAll().Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).ToList();
         }
 
-        public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end)
+        public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return Recording.ListAll().TakeRange(start, end).Select(rec => rec.ToWebRecording()).ToList();
+            return Recording.ListAll().TakeRange(start, end).Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).ToList();
         }
 
         public WebRecordingBasic GetRecordingById(int recordingId)

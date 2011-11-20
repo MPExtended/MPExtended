@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebProgramBasic
     {
-        #region Properties
         public string Description { get; set; }
         public DateTime EndTime { get; set; }
         public int IdChannel { get; set; }
@@ -18,6 +17,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         // additional properties
         public int DurationInMinutes { get; set; }
         public bool IsScheduled { get; set; }
-        #endregion
     }
 }

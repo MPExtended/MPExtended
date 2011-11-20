@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebVirtualCard
     {
-        #region Properties
         public int BitRateMode { get; set; }
         public string ChannelName { get; set; }
         public string Device { get; set; }
@@ -41,6 +40,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public DateTime TimeShiftStarted { get; set; }
         public int Type { get; set; }
         public WebUser User { get; set; }
-        #endregion
     }
 }

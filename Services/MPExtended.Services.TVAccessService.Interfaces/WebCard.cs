@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebCard
     {
-        #region Properties
         public bool CAM { get; set; }
         public int CamType { get; set; }
         public int DecryptLimit { get; set; }
@@ -26,6 +25,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int RecordingFormat { get; set; }
         public bool SupportSubChannels { get; set; }
         public string TimeShiftFolder { get; set; }
-        #endregion
     }
 }

@@ -7,7 +7,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebScheduleBasic
     {
-        #region Properties
         public int BitRateMode { get; set; }
         public DateTime Canceled { get; set; }
         public string Directory { get; set; }
@@ -31,6 +30,5 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int ScheduleType { get; set; }
         public bool Series { get; set; }
         public DateTime StartTime { get; set; }
-        #endregion
     }
 }
