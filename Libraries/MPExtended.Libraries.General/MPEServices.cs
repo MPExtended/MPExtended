@@ -61,6 +61,15 @@ namespace MPExtended.Libraries.General
             }
         }
 
+        public static bool IsMASLocal
+        {
+            get
+            {
+                Uri uri = new Uri(Configuration.Services.MASConnection);
+                return uri.IsLoopback;
+            }
+        }
+
         public static IWebStreamingService MASStreamControl
         {
             get
@@ -103,6 +112,15 @@ namespace MPExtended.Libraries.General
             }
         }
 
+        public static bool IsMASStreamLocal
+        {
+            get
+            {
+                Uri uri = new Uri(Configuration.Services.MASConnection);
+                return uri.IsLoopback;
+            }
+        }
+
         public static ITVAccessService TAS
         {
             get
@@ -128,6 +146,15 @@ namespace MPExtended.Libraries.General
                 {
                     return false;
                 }
+            }
+        }
+
+        public static bool IsTASLocal
+        {
+            get
+            {
+                Uri uri = new Uri(Configuration.Services.TASConnection);
+                return uri.IsLoopback;
             }
         }
 
@@ -170,6 +197,15 @@ namespace MPExtended.Libraries.General
                 {
                     return false;
                 }
+            }
+        }
+
+        public static bool IsTASStreamLocal
+        {
+            get
+            {
+                Uri uri = new Uri(Configuration.Services.TASConnection);
+                return uri.IsLoopback;
             }
         }
 

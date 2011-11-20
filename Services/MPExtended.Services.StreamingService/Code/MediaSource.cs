@@ -62,7 +62,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
                 else
                 {
-                    return FileInfo.IsLocalFile;
+                    return MPEServices.IsMASLocal && FileInfo.IsLocalFile;
                 }
             }
         }
