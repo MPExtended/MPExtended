@@ -29,6 +29,13 @@ namespace MPExtended.Libraries.General
         public string Password { get; set; }
     }
 
+    public class NetworkImpersonationConfiguration
+    {
+        public string Domain { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
     public class ServicesConfiguration
     {
         public bool AuthenticationEnabled { get; set; }
@@ -44,6 +51,8 @@ namespace MPExtended.Libraries.General
 
         public List<User> Users { get; set; }
 
+        public NetworkImpersonationConfiguration NetworkImpersonation { get; set; }
+
         public ServicesConfiguration()
         {
             XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
@@ -58,6 +67,13 @@ namespace MPExtended.Libraries.General
 
             MASConnection = file.Element("connections").Element("mas").Value;
             TASConnection = file.Element("connections").Element("tas").Value;
+
+            NetworkImpersonation = new NetworkImpersonationConfiguration()
+            {
+                Domain = file.Element("networkImpersonation").Element("domain").Value,
+                Username = file.Element("networkImpersonation").Element("username").Value,
+                Password = file.Element("networkImpersonation").Element("password").Value,
+            };
 
             Users = file.Element("users").Elements("user").Select(x => new User()
             {
@@ -82,6 +98,10 @@ namespace MPExtended.Libraries.General
 
                 file.Element("connections").Element("mas").Value = MASConnection;
                 file.Element("connections").Element("tas").Value = TASConnection;
+
+                file.Element("networkImpersonation").Element("domain").Value = NetworkImpersonation.Domain;
+                file.Element("networkImpersonation").Element("username").Value = NetworkImpersonation.Username;
+                file.Element("networkImpersonation").Element("password").Value = NetworkImpersonation.Password;
 
                 file.Element("users").Elements().Remove();
                 foreach(User u in Users) {

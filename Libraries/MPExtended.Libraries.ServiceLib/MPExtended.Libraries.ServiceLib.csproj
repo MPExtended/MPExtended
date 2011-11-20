@@ -64,6 +64,8 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="CustomQueryStringConverter.cs" />
+    <Compile Include="Impersonator.cs" />
+    <Compile Include="NetworkShareImpersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoapBehavior.cs" />
     <Compile Include="WcfUsernameValidator.cs" />

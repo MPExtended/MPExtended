@@ -7,6 +7,13 @@
     </user>
   </users>
 
+  <!-- Use this to use a different user for accessing network shares -->
+  <networkImpersonation>
+    <domain></domain>
+    <username></username>
+    <password></password>
+  </networkImpersonation>
+
   <bonjour>
     <enabled>false</enabled>
     <pcname /><!-- Automatically detected when empty -->
