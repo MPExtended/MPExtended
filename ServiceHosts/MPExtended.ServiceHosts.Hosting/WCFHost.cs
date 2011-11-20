@@ -86,7 +86,8 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             foreach (var host in hosts)
             {
-                host.Close();
+                // we have to indicate that it should hurry up with closing because it takes 10 seconds by default...
+                host.Close(new TimeSpan(0, 0, 0, 0, 250));
             }
         }
     }

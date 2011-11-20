@@ -41,6 +41,11 @@ namespace MPExtended.ServiceHosts.ConsoleHost
 #endif
             host.Open();
 
+            ExitDetector.Install(delegate()
+            {
+                host.Close();
+            });
+
             Console.ReadKey();
             host.Close();
         }
