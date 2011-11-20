@@ -565,7 +565,7 @@ namespace MPExtended.Services.TVAccessService
             }
             catch (Exception ex)
             {
-                Log.Warn(String.Format("Failed to read file for recording {0}", id), ex));
+                Log.Warn(String.Format("Failed to read file for recording {0}", id), ex);
                 return null;
             }
         }
