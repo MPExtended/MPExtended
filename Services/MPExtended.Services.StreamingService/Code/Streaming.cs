@@ -28,7 +28,7 @@ using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    internal class Streaming
+    internal class Streaming : IDisposable
     {
 #if DEBUG
         private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // in milliseconds, use shorter time for debugging
@@ -59,19 +59,20 @@ namespace MPExtended.Services.StreamingService.Code
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
         }
 
-        ~Streaming()
+        public void Dispose()
         {
             try
             {
+                sharing.Dispose();
                 ThreadManager.Abort("StreamTimeout");
                 foreach (string identifier in Streams.Keys)
                 {
                     EndStream(identifier);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // we really don't care
+                Log.Info("Failed to dispose WSS", ex);
             }
         }
 

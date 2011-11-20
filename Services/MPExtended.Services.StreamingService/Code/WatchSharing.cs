@@ -31,7 +31,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    internal class WatchSharing
+    internal class WatchSharing : IDisposable
     {
         // define the time to wait (which is actually between x and x+1 minutes) before synchronizing cancelwatching events to the watch service
 #if DEBUG
@@ -79,6 +79,15 @@ namespace MPExtended.Services.StreamingService.Code
             enabled = true;
             service.MediaService = MPEServices.MAS;
             service.Configuration = Configuration.Streaming.WatchSharing;
+        }
+
+        public void Dispose()
+        {
+            // cancel all streams
+            foreach (var kvp in streams)
+            {
+                EndStream(kvp.Value.Source, true);
+            }
         }
 
         public void StartStream(StreamContext context, Reference<WebTranscodingInfo> infoRef, int position)
@@ -142,7 +151,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public void EndStream(MediaSource source)
+        public void EndStream(MediaSource source, bool force = false)
         {
             // generate identifier
             string identifier = Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
@@ -183,8 +192,27 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // cancel it
-            Log.Debug("WatchSharing: canceling stream {0}", identifier);
-            streams[identifier].Canceled = true;
+            if (!force)
+            {
+                Log.Debug("WatchSharing: canceling stream {0}", identifier);
+                streams[identifier].Canceled = true;
+            }
+            else
+            {
+                // definitely cancel it
+                Log.Debug("WatchSharing: killing stream {0} because of forced EndStream", identifier);
+                lock (service)
+                {
+                    if (streams[identifier].Source.MediaType == WebStreamMediaType.TVEpisode)
+                    {
+                        service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
+                    }
+                    else if (streams[identifier].Source.MediaType == WebStreamMediaType.Movie)
+                    {
+                        service.CancelWatchingMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
+                    }
+                }
+            }
         }
 
         private void BackgroundWorker(object identifier)
@@ -295,7 +323,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             int watchPosition = transcodedValue / 1000;
             int progress = (int)Math.Round((watchPosition * 1.0 / streams[id].Runtime) * 100);
-            Log.Debug("WatchSharing: start position {0} seconds, transcoding position {1} ms, position {2} seconds, runtime {3} min, progress {4}%",
+            Log.Debug("WatchSharing: start position {0} seconds, transcoding position {1} ms, position {2} seconds, runtime {3} seconds, progress {4}%",
                 streams[id].StartedPosition, transcodedValue, watchPosition, streams[id].Runtime, progress);
 
             return progress;

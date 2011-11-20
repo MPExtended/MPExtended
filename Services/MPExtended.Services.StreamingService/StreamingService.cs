@@ -31,7 +31,7 @@ using MPExtended.Services.TVAccessService.Interfaces;
 namespace MPExtended.Services.StreamingService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class StreamingService : IWebStreamingService, IStreamingService
+    public class StreamingService : IWebStreamingService, IStreamingService, IDisposable
     {
         private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
         private const int API_VERSION = 2;
@@ -41,6 +41,12 @@ namespace MPExtended.Services.StreamingService
         public StreamingService()
         {
             _stream = new Streaming();
+        }
+
+        public void Dispose()
+        {
+            _stream.Dispose();
+            _stream = null;
         }
 
         public WebStreamServiceDescription GetServiceDescription()
