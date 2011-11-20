@@ -196,9 +196,19 @@ namespace MPExtended.Services.TVAccessService
             _tvControl.OnNewSchedule();
         }
 
+        public WebCount GetScheduleCount()
+        {
+            return new WebCount() { Count = Schedule.ListAll().Count };
+        }
+
         public IList<WebScheduleBasic> GetSchedules()
         {
             return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).ToList();
+        }
+
+        public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end)
+        {
+            return Schedule.ListAll().TakeRange(start, end).Select(s => s.ToWebSchedule()).ToList();
         }
 
         public WebScheduleBasic GetScheduleById(int scheduleId)
@@ -254,9 +264,19 @@ namespace MPExtended.Services.TVAccessService
 
         #region Channels
         #region TV specific
+        public WebCount GetGroupCount()
+        {
+            return new WebCount() { Count = ChannelGroup.ListAll().Count };
+        }
+
         public IList<WebChannelGroup> GetGroups()
         {
             return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+        }
+
+        public IList<WebChannelGroup> GetGroupsByRange(int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
+        {
+            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).TakeRange(start, end).SortGroupList(sort, order).ToList();
         }
 
         public WebChannelGroup GetGroupById(int groupId)
@@ -264,9 +284,9 @@ namespace MPExtended.Services.TVAccessService
             return ChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public int GetChannelCount(int groupId)
+        public WebCount GetChannelCount(int groupId)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
+            return new WebCount() { Count = _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count };
         }
 
         public IList<WebChannelBasic> GetChannelsBasic(int groupId)
@@ -274,17 +294,9 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
         }
 
-        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int start, int end)
         {
-            try
-            {
-                return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelBasic()).ToList();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Log.Warn("Invalid indexes passed to GetChannelsBasicByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
-                return null;
-            }
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).ToList();
         }
 
         public IList<WebChannelDetailed> GetChannelsDetailed(int groupId)
@@ -292,17 +304,9 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
-        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int start, int end)
         {
-            try
-            {
-                return _tvBusiness.GetTVGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Log.Warn("Invalid indexes passed to GetChannelsDetailedByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
-                return null;
-            }
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
         public IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
@@ -334,9 +338,19 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Radio specific
+        public WebCount GetRadioGroupCount()
+        {
+            return new WebCount() { Count = RadioChannelGroup.ListAll().Count };
+        }
+
         public IList<WebChannelGroup> GetRadioGroups()
         {
             return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).ToList();
+        }
+
+        public IList<WebChannelGroup> GetRadioGroupsByRange(int start, int end, SortBy? sort = SortBy.User, OrderBy? order = OrderBy.Asc)
+        {
+            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).TakeRange(start, end).SortGroupList(sort, order).ToList();
         }
 
         public WebChannelGroup GetRadioGroupById(int groupId)
@@ -344,9 +358,9 @@ namespace MPExtended.Services.TVAccessService
             return RadioChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public int GetRadioChannelCount(int groupId)
+        public WebCount GetRadioChannelCount(int groupId)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count;
+            return new WebCount() { Count = _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count };
         }
 
         public IList<WebChannelBasic> GetRadioChannelsBasic(int groupId)
@@ -354,17 +368,9 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).ToList();
         }
 
-        public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int start, int end)
         {
-            try
-            {
-                return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelBasic()).ToList();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Log.Warn("Invalid indexes passed to GetRadioChannelsBasicByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
-                return null;
-            }
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).ToList();
         }
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId)
@@ -372,17 +378,9 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
-        public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int startIndex, int count)
+        public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int start, int end)
         {
-            try
-            {
-                return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).GetRange(startIndex, count).Select(ch => ch.ToWebChannelDetailed()).ToList();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Log.Warn("Invalid indexes passed to GetRadioChannelsDetailedByRange: groupId={0} startIndex={1} count={2}", groupId, startIndex, count);
-                return null;
-            }
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).ToList();
         }
 
         public IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName)
@@ -410,7 +408,7 @@ namespace MPExtended.Services.TVAccessService
 
         public WebChannelState GetChannelState(int channelId, string userName)
         {
-            ChannelState state = _tvControl.GetChannelState(channelId, GetUserByUserName(userName, true));
+            TvControl.ChannelState state = _tvControl.GetChannelState(channelId, GetUserByUserName(userName, true));
             Log.Trace("ChannelId: " + channelId + ", State: " + state.ToString());
             return state.ToWebChannelState(channelId);
         }
@@ -496,9 +494,19 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Recordings
+        public WebCount GetRecordingCount()
+        {
+            return new WebCount() { Count = Recording.ListAll().Count };
+        }
+
         public IList<WebRecordingBasic> GetRecordings()
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).ToList();
+        }
+
+        public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end)
+        {
+            return Recording.ListAll().TakeRange(start, end).Select(rec => rec.ToWebRecording()).ToList();
         }
 
         public WebRecordingBasic GetRecordingById(int recordingId)
@@ -592,15 +600,31 @@ namespace MPExtended.Services.TVAccessService
             return Channel.Retrieve(channelId).NextProgram.ToWebProgramDetailed();
         }
 
+        public WebCount SearchProgramsCount(string searchTerm)
+        {
+            return new WebCount() { Count = _tvBusiness.SearchPrograms(searchTerm).Count };
+        }
+
         public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
         {
             return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).ToList();
+        }
+
+        public IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end)
+        {
+            return _tvBusiness.SearchPrograms(searchTerm).TakeRange(start, end).Select(p => p.ToWebProgramDetailed()).ToList();
         }
 
         public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm)
         {
             return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramBasic()).ToList();
         }
+
+        public IList<WebProgramBasic> SearchProgramsBasicByRange(string searchTerm, int start, int end)
+        {
+            return _tvBusiness.SearchPrograms(searchTerm).TakeRange(start, end).Select(p => p.ToWebProgramBasic()).ToList();
+        }
+
 
         public WebProgramBasic GetProgramBasicById(int programId)
         {
