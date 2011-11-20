@@ -24,6 +24,7 @@ using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Units;
+using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -39,7 +40,25 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                if (fileInfoCache == null)
+                if (fileInfoCache == null && MediaType == WebStreamMediaType.Recording)
+                {
+                    WebRecordingFileInfo info = MPEServices.TAS.GetRecordingFileInfo(Int32.Parse(Id));
+                    return new WebFileInfo()
+                    {
+                        Exists = info.Exists,
+                        Extension = info.Extension,
+                        IsLocalFile = info.IsLocalFile,
+                        IsReadOnly = info.IsReadOnly,
+                        LastAccessTime = info.LastAccessTime,
+                        LastModifiedTime = info.LastModifiedTime,
+                        Name = info.Name,
+                        OnNetworkDrive = info.OnNetworkDrive,
+                        Path = info.Path,
+                        PID = -1,
+                        Size = info.Size
+                    };
+                } 
+                else if(fileInfoCache == null)
                 {
                     fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
                 }
@@ -52,13 +71,13 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                if (MediaType == WebStreamMediaType.Recording)
-                {
-                    return true;
-                }
-                else if (MediaType == WebStreamMediaType.TV)
+                if (MediaType == WebStreamMediaType.TV)
                 {
                     return false;
+                }
+                else if (MediaType == WebStreamMediaType.Recording)
+                {
+                    return MPEServices.IsTASLocal && FileInfo.IsLocalFile;
                 }
                 else
                 {
@@ -71,12 +90,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                if (MediaType == WebStreamMediaType.Recording)
-                {
-                    string path = GetPath();
-                    return File.Exists(path);
-                }
-                else if (MediaType == WebStreamMediaType.TV)
+                if (MediaType == WebStreamMediaType.TV)
                 {
                     return true;
                 }
@@ -117,17 +131,14 @@ namespace MPExtended.Services.StreamingService.Code
 
         public string GetPath()
         {
-            if (MediaType == WebStreamMediaType.Recording)
-            {
-                return MPEServices.TAS.GetRecordings().Where(r => r.Id == Int32.Parse(Id)).Select(r => r.FileName).FirstOrDefault();
-            }
-
             if (MediaType == WebStreamMediaType.TV)
             {
                 return Id;
             }
-
-            return FileInfo.Path;
+            else
+            {
+                return FileInfo.Path;
+            }
         }
 
         public Stream Retrieve()
@@ -136,18 +147,22 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 throw new FileNotFoundException();
             }
-
-            if (IsLocalFile)
+            else if (IsLocalFile)
             {
                 return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             }
-
-            if (MediaType == WebStreamMediaType.TV)
+            else if (MediaType == WebStreamMediaType.TV)
             {
                 return new TsBuffer(Id);
             }
-
-            return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+            else if (MediaType == WebStreamMediaType.Recording)
+            {
+                return MPEServices.TAS.ReadRecordingFile(Int32.Parse(Id));
+            }
+            else
+            {
+                return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+            }
         }
 
         public IProcessingUnit GetInputReaderUnit()

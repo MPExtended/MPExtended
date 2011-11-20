@@ -506,9 +506,68 @@ namespace MPExtended.Services.TVAccessService
             return Recording.Retrieve(recordingId).ToWebRecording();
         }
 
-        public WebRecordingFileInfo GetFileInfo(int recordingId)
+        public WebRecordingFileInfo GetRecordingFileInfo(int id)
         {
-            return new WebRecordingFileInfo(GetRecordingById(recordingId).FileName);
+            try
+            {
+                string filename = GetRecordingById(id).FileName;
+                try
+                {
+                    return new WebRecordingFileInfo(new FileInfo(filename));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // access denied, try impersonation when on a network share
+                    if (new Uri(filename).IsUnc)
+                    {
+                        using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                        {
+                            var ret = new WebRecordingFileInfo(filename);
+                            ret.IsLocalFile = false;
+                            ret.OnNetworkDrive = true;
+                            return ret;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to load fileinfo for recording", ex);
+            }
+
+            return new WebRecordingFileInfo();
+        }
+
+        public Stream ReadRecordingFile(int id)
+        {
+            try
+            {
+                WebRecordingFileInfo info = GetRecordingFileInfo(id);
+
+                // return it as a simple file
+                if (info.IsLocalFile)
+                {
+                    return new FileStream(info.Path, FileMode.Open, FileAccess.Read);
+                }
+
+                // try to load it from a network drive
+                if (info.OnNetworkDrive && info.Exists)
+                {
+                    using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                    {
+                        return new FileStream(info.Path, FileMode.Open, FileAccess.Read);
+                    }
+                }
+
+                // failed
+                Log.Warn("No method to read file for recording {0}", id);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to read file for recording {0}", id), ex));
+                return null;
+            }
         }
         #endregion
 
