@@ -1,3 +1,13 @@
-﻿<h2>
+﻿@model Exception
+<h2>
     Sorry, an error occurred while processing your request.
 </h2>
+@{var exception = Model;}
+@while (exception != null)
+{
+    <p>@exception.Message</p>
+    <p>
+        <pre>@exception.StackTrace</pre>
+    </p>
+    exception = exception.InnerException;
+}

@@ -28,7 +28,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            if (filterContext.ExceptionHandled)
+            if (filterContext.ExceptionHandled || filterContext.IsChildAction)
             {
                 return;
             }
@@ -38,7 +38,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
             filterContext.Result = new ViewResult
             {
-                ViewName = "~/Views/Shared/Error.cshtml"
+                ViewName = "~/Views/Shared/Error.cshtml",
+                ViewData = new ViewDataDictionary()
+                {
+                    Model = filterContext.Exception
+                },
             };
             filterContext.ExceptionHandled = true;
         }
