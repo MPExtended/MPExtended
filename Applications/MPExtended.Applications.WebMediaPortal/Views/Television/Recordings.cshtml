@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecording>
+﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
 
 @{
     ViewBag.Title = "Recordings";
@@ -18,12 +18,12 @@
         
     }
 </style>
-<h2>
-    Your recordings</h2>
+<h2>Your recordings</h2>
+
 <ul class="recordingList">
     @foreach (var recording in Model)
     {
-        <li>@Html.ActionLink(recording.Title, "WatchRecording", new { recording = recording.IdRecording })</li>
+        <li>@Html.ActionLink(recording.Title, "WatchRecording", new { recording = recording.Id })</li>
     }
 </ul>
 

@@ -7,22 +7,21 @@
 <div id="TVGuidePrograms">
     @{ if (@Model != null)
        {
-           foreach (MPExtended.Services.TVAccessService.Interfaces.WebChannelBasic channel in @Model)
+           foreach (var channel in @Model)
            {
-        <div class="TVGuideRow">
-            <div class="TVGuideCellChannel">
-                <a href="@Url.Action("WatchLiveTV", new { channelId = channel.IdChannel })" style="display: inline-block; height: 100%; width: 100%; text-decoration: none;">
-                    <span id="lblChannelName" class="TVGuideCellChannelText">@channel.DisplayName</span>
-                </a>
-            </div>
-             <div class="TVGuideProgramsPanel">
-            @{Html.RenderAction("ProgramData","Television",new { channelid = channel.IdChannel}); }
-            </div>
-        </div>
-        <div class="TVGuideStandardSpacing">
-        </div>
-    
+               <div class="TVGuideRow">
+                   <div class="TVGuideCellChannel">
+                       <a href="@Url.Action("WatchLiveTV", new { channelId = channel.Id })" style="display: inline-block; height: 100%; width: 100%; text-decoration: none;">
+                           <span id="lblChannelName" class="TVGuideCellChannelText">@channel.DisplayName</span>
+                       </a>
+                   </div>
+                   <div class="TVGuideProgramsPanel">
+                       @{Html.RenderAction("ProgramData","Television",new { channelid = channel.Id}); }
+                   </div>
+               </div>
+               <div class="TVGuideStandardSpacing">
+               </div>
            }
-       }   
+       }
     }
 </div>

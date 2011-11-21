@@ -2,31 +2,25 @@
 <div id="result">
 </div>
 @{
-    
     if (Model == null || Model.Count() == 0)
     {
-    <div class="TVGuideProgramsPanel" style="margin: 0;">
-        <div class="TVGuideCellProgramNoEPG" style="width: 99%;">
-            <span class="TVGuideCellProgramTextNoEPG">Kein EPG verfügbar</span>
+        <div class="TVGuideProgramsPanel" style="margin: 0;">
+            <div class="TVGuideCellProgramNoEPG" style="width: 99%;">
+                <span class="TVGuideCellProgramTextNoEPG">Kein EPG verfügbar</span>
+            </div>
         </div>
-    </div>
     }
     else
     {
         foreach (var program in Model)
         {
-
-    <div class="@program.CssClass" style="width: @program.PercentageWidth">
-        <div class="TVGuideCellProgramLeftSeperator">
-        </div>
-        <div class="TVGuideCellProgramRightSeperator">
-        </div>
-        <a class="TVGuideCellProgramText" href="@Url.Action("ProgramDetails", "Television", new { programId = @program.IdProgram })">@program.Title</a>
-    </div>
-
+            <div class="@program.CssClass" style="width: @program.PercentageWidth">
+                <div class="TVGuideCellProgramLeftSeperator">
+                </div>
+                <div class="TVGuideCellProgramRightSeperator">
+                </div>
+                <a class="TVGuideCellProgramText" href="@Url.Action("ProgramDetails", "Television", new { programId = @program.IdProgram })">@program.Title</a>
+            </div>
         }
-
-    }
-           
-           
+    }  
 }

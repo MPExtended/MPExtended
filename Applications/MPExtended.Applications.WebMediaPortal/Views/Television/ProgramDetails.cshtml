@@ -10,14 +10,15 @@
   {
 
     <div class="TVProgramSchedule">
-        <a href="@Url.Action("DeleteSchedule", "Television", new { programId = @Model.IdProgram })">
+        <a href="@Url.Action("DeleteSchedule", "Television", new { programId = @Model.Id })">
         Cancel</a>
     </div>
   }
   else
   {
    <div class="TVProgramSchedule">
-        <a   href="@Url.Action("AddSchedule", "Television", new { programId = @Model.IdProgram })">
+        <a   href="@Url.Action("AddSchedule", "Television", new { programId = @Model.Id })">
         Schedule</a>
     </div>
-  }}
+  }
+}

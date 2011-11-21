@@ -42,7 +42,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         // URL: /Account/LogOn
         // **************************************
-
         public ActionResult LogOn()
         {
             return View();
@@ -124,7 +123,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         // URL: /Account/ChangePassword
         // **************************************
-
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -156,11 +154,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         // URL: /Account/ChangePasswordSuccess
         // **************************************
-
+        [Authorize]
         public ActionResult ChangePasswordSuccess()
         {
             return View();
         }
-
     }
 }

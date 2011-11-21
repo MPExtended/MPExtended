@@ -26,6 +26,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [Authorize]
     public class PictureController : BaseController
     {
         //

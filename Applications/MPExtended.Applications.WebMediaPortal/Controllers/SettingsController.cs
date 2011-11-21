@@ -25,6 +25,7 @@ using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [Authorize]
     public class SettingsController : BaseController
     {
         //

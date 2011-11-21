@@ -29,6 +29,7 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [Authorize]
     public class StreamController : BaseController
     {
         //

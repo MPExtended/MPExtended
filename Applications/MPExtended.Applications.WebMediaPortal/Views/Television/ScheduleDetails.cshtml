@@ -1,13 +1,10 @@
-﻿@model MPExtended.Services.TVAccessService.Interfaces.WebSchedule
+﻿@model MPExtended.Services.TVAccessService.Interfaces.WebScheduleBasic
 
 @{
     ViewBag.Title = "ScheduleDetails";
 }
 <h2>@Model.ProgramName </h2>
 
-
-
-    <div class="TVProgramSchedule">
-        <a href="@Url.Action("DeleteScheduleById", "Television", new { scheduleId = @Model.IdSchedule })">
-        Cancel</a>
-    </div>
+<div class="TVProgramSchedule">
+    @Html.ActionLink("Cancel", "DeleteScheduleById", "Television", new { scheduleId = @Model.Id })
+</div>
