@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SettingModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DefaultGroup>1</DefaultGroup>
+  <DefaultMediaProfile>Flash HQ</DefaultMediaProfile>
+  <DefaultTVProfile>Flash HQ</DefaultTVProfile>
+  <TVShowProvider xsi:nil="true" />
+  <MovieProvider xsi:nil="true" />
+  <MusicProvider xsi:nil="true" />
+  <PicturesProvider xsi:nil="true" />
+  <FileSystemProvider xsi:nil="true" />
+</SettingModel>

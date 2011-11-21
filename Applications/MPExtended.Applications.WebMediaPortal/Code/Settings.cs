@@ -63,7 +63,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 XmlSerializer SerializerObj = new XmlSerializer(typeof(SettingModel));
 
                 // Create a new file stream for reading the XML file
-                FileStream ReadFileStream = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\WebMediaPortal\Settings.xml", FileMode.Open, FileAccess.Read, FileShare.Read);
+                FileStream ReadFileStream = new FileStream(Configuration.GetPath("WebMediaPortal.xml"), FileMode.Open, FileAccess.Read, FileShare.Read);
 
                 // Load the object saved above by using the Deserialize function
                 loadedObj = (SettingModel)SerializerObj.Deserialize(ReadFileStream);
@@ -77,12 +77,16 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             {
                 Log.Debug("Exception in LoadSettings", ex);
             }
+
             if (loadedObj == null)
             {
+                // default values
                 loadedObj = new SettingModel();
                 loadedObj.DefaultGroup = 1;
-                loadedObj.TranscodingProfile = "Flash HQ";
+                loadedObj.DefaultMediaProfile = "Flash HQ";
+                loadedObj.DefaultTVProfile = "Flash HQ";
             }
+
             return loadedObj;
         }
 
@@ -92,7 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             XmlSerializer SerializerObj = new XmlSerializer(typeof(SettingModel));
 
             // Create a new file stream to write the serialized object to a file
-            TextWriter WriteFileStream = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\WebMediaPortal\Settings.xml");
+            TextWriter WriteFileStream = new StreamWriter(Configuration.GetPath("WebMediaPortal.xml"));
             SerializerObj.Serialize(WriteFileStream, settings);
 
             // Cleanup

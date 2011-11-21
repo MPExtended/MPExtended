@@ -22,36 +22,39 @@ using System.Linq;
 using System.Web;
 using System.Web.WebPages.Html;
 using MPExtended.Libraries.General;
+using MPExtended.Applications.WebMediaPortal.Code;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class SettingsViewModel
     {
-        private List<SelectListItem> _profiles = new List<SelectListItem>();
+        private List<SelectListItem> _mediaProfiles = new List<SelectListItem>();
+        private List<SelectListItem> _tvProfiles = new List<SelectListItem>();
         private List<SelectListItem> _groups = new List<SelectListItem>();
 
-        public SettingsViewModel()
-        {
-            SelectedGroup = Code.Settings.GlobalSettings.DefaultGroup.ToString();
-            SelectedProfile = Code.Settings.GlobalSettings.TranscodingProfile;
-        }
-
-        [Required(ErrorMessage = "Please select a group")]
-        public string SelectedGroup { get; set; }
-
-        [Required(ErrorMessage = "Please select a profile")]
-        public string SelectedProfile { get; set; }
-        public SettingModel Settings { get { return Code.Settings.GlobalSettings; } }
-        public List<SelectListItem> Profiles
+        public List<SelectListItem> MediaProfiles
         {
             get
             {
                 foreach (var profile in MPEServices.MASStreamControl.GetTranscoderProfiles())
                 {
-                    _profiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
-
+                    _mediaProfiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
                 }
-                return _profiles;
+
+                return _mediaProfiles;
+            }
+        }
+
+        public List<SelectListItem> TVProfiles
+        {
+            get
+            {
+                foreach (var profile in MPEServices.TASStreamControl.GetTranscoderProfiles())
+                {
+                    _tvProfiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
+                }
+
+                return _tvProfiles;
             }
         }
 
@@ -62,14 +65,34 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 foreach (var group in MPEServices.TAS.GetGroups())
                 {
                     _groups.Add(new SelectListItem() { Text = group.GroupName, Value = group.Id.ToString() });
-
                 }
 
                 return _groups;
             }
         }
-     
-    }
 
-    
+        public SettingModel Settings
+        {
+            get
+            {
+                return Code.Settings.GlobalSettings;
+            }
+        }
+
+        [Required(ErrorMessage = "Please select a group")]
+        public string SelectedGroup { get; set; }
+        
+        [Required(ErrorMessage = "Please select a media profile")]
+        public string SelectedMediaProfile { get; set; }
+
+        [Required(ErrorMessage = "Please select a tv profile")]
+        public string SelectedTVProfile { get; set; }
+
+        public SettingsViewModel()
+        {
+            SelectedGroup = Code.Settings.GlobalSettings.DefaultGroup.ToString();
+            SelectedMediaProfile = Code.Settings.GlobalSettings.DefaultMediaProfile;
+            SelectedTVProfile = Code.Settings.GlobalSettings.DefaultTVProfile;
+        }
+    }
 }

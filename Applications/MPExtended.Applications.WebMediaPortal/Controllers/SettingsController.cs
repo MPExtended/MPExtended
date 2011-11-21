@@ -34,13 +34,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(new SettingsViewModel());
         }
 
-        public ActionResult Update(string SelectedProfile, string SelectedGroup)
+        public ActionResult Update(string SelectedMediaProfile, string SelectedTVProfile, string SelectedGroup)
         {
             SettingModel settings = new SettingModel();
             settings.DefaultGroup = Int32.Parse(SelectedGroup);
-            settings.TranscodingProfile = SelectedProfile;
-            Settings.GlobalSettings = settings;
+            settings.DefaultMediaProfile = SelectedMediaProfile;
+            settings.DefaultTVProfile = SelectedTVProfile;
 
+            Settings.GlobalSettings = settings;
             return RedirectToAction("Index");
         }
     }

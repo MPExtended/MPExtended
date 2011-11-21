@@ -40,7 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        private int GetProvider(WebStreamMediaType type)
+        private int? GetProvider(WebStreamMediaType type)
         {
             switch (type)
             {

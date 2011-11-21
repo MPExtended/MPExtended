@@ -19,23 +19,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Xml;
-using System.Security.Cryptography;
+using System.Xml.Linq;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public class XMLMembershipProvider : MembershipProvider
     {
-        private struct User
+        private struct UserHolder
         {
-            public string passwordHash;
-            public MembershipUser user;
+            public string PasswordHash { get; set; }
+            public MembershipUser User { get; set; }
         }
 
         private NameValueCollection config;
-        private Dictionary<string, User> users;
+        private Dictionary<string, UserHolder> users;
 
         public override void Initialize(string name, NameValueCollection config)
         {
@@ -131,84 +134,57 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             if (users != null)
                 return;
 
-            users = new Dictionary<string, User>();
-            XmlDocument doc = new XmlDocument();
-            try
+            XElement file = XElement.Load(Configuration.GetPath("WebMediaPortalUsers.xml"));
+            users = new Dictionary<string, UserHolder>();
+
+            users = file.Element("users").Elements("user").Select(u => new UserHolder()
             {
-                doc.Load(AppDomain.CurrentDomain.BaseDirectory + "config.users.xml");
-            } catch (System.IO.FileNotFoundException)
-            {
-                return;
-            }
-            XmlNodeList readUsers = doc.SelectNodes("/webmediaportal/users/user");
-            foreach (XmlNode user in readUsers)
-            {
-                users[user.ChildNodes.GetFirstNode("username").InnerText] = new User()
-                {
-                    passwordHash = user.ChildNodes.GetFirstNode("password").InnerText,
-                    user = new MembershipUser(
-                        this.Name, 
-                        user.ChildNodes.GetFirstNode("username").InnerText,
-                        null,
-                        user.ChildNodes.GetFirstNode("email").InnerText,
-                        user.ChildNodes.GetFirstNode("passwordQuestion").InnerText,
-                        user.ChildNodes.GetFirstNode("comment").InnerText,
-                        true,
-                        false,
-                        DateTime.Parse(user.ChildNodes.GetFirstNode("creationDate").InnerText),
-                        DateTime.Parse(user.ChildNodes.GetFirstNode("lastLoginDate").InnerText),
-                        DateTime.Parse(user.ChildNodes.GetFirstNode("lastActivity").InnerText),
-                        DateTime.Parse(user.ChildNodes.GetFirstNode("lastPasswordChangedDate").InnerText),
-                        new DateTime()
-                    )
-                };
-            }
+                PasswordHash = u.Element("password").Value,
+                User = new MembershipUser(
+                    this.Name,
+                    u.Element("username").Value,
+                    null,
+                    u.Element("email").Value,
+                    u.Element("passwordQuestion").Value,
+                    u.Element("comment").Value,
+                    true,
+                    false,
+                    DateTime.Parse(u.Element("creationDate").Value),
+                    DateTime.Parse(u.Element("lastLoginDate").Value),
+                    DateTime.Parse(u.Element("lastActivity").Value),
+                    DateTime.Parse(u.Element("lastPasswordChangedDate").Value),
+                    new DateTime()                    
+                )
+            }).ToDictionary(x => x.User.UserName, x => x);
         }
 
-        // TODO: this needs to be done in the an appropriate config file
         protected void WriteData()
         {
-            XmlDocument doc = new XmlDocument();
-            XmlNode root = doc.CreateElement("webmediaportal");
-            XmlNode users = doc.CreateElement("users");
-            foreach (KeyValuePair<string, User> item in this.users)
+            string path = Configuration.GetPath("WebMediaPortalUsers.xml");
+            XElement file = XElement.Load(path);
+            file.Element("users").Elements().Remove();
+            foreach (KeyValuePair<string, UserHolder> item in this.users)
             {
-                User u = item.Value;
-                XmlNode user = doc.CreateElement("user");
-                AddChild(doc, user, "password", u.passwordHash);
-                AddChild(doc, user, "comment", u.user.Comment);
-                AddChild(doc, user, "creationDate", u.user.CreationDate);
-                AddChild(doc, user, "email", u.user.Email);
-                AddChild(doc, user, "isApproved", u.user.IsApproved ? "true" : "false");
-                AddChild(doc, user, "lastActivity", u.user.LastActivityDate);
-                AddChild(doc, user, "lastLoginDate", u.user.LastLoginDate);
-                AddChild(doc, user, "lastPasswordChangedDate", u.user.LastPasswordChangedDate);
-                AddChild(doc, user, "passwordQuestion", u.user.PasswordQuestion);
-                AddChild(doc, user, "username", u.user.UserName);
-                users.AppendChild(user);
+                file.Element("users").Add(new XElement("user",
+                    new XElement("password", item.Value.PasswordHash),
+                    new XElement("comment", item.Value.User.Comment),
+                    new XElement("creationDate", item.Value.User.CreationDate),
+                    new XElement("email", item.Value.User.Email),
+                    new XElement("isApproved", item.Value.User.IsApproved ? "true" : "false"),
+                    new XElement("lastActivity", item.Value.User.LastActivityDate),
+                    new XElement("lastLoginDate", item.Value.User.LastLoginDate),
+                    new XElement("lastPasswordChangedDate", item.Value.User.LastPasswordChangedDate),
+                    new XElement("passwordQuestion", item.Value.User.PasswordQuestion),
+                    new XElement("username", item.Value.User.UserName)
+                ));
             }
-            root.AppendChild(users);
-            doc.AppendChild(root);
-            doc.Save(AppDomain.CurrentDomain.BaseDirectory + "config.users.xml");
+            file.Save(path);
         }
 
-        private void AddChild(XmlDocument doc, XmlNode parent, string key, string value)
-        {
-            XmlNode node = doc.CreateElement(key);
-            node.InnerText = value;
-            parent.AppendChild(node);
-        }
-
-        private void AddChild(XmlDocument doc, XmlNode parent, string key, DateTime value)
-        {
-            AddChild(doc, parent, key, value.ToString("s"));
-        }
-
-        private string GenerateSHA1Hash(string input)
+        private string GeneratePasswordHash(string input)
         {
             SHA1Managed hashprovider = new SHA1Managed();
-            System.Text.ASCIIEncoding encoder = new System.Text.ASCIIEncoding();
-            byte[] bytes = encoder.GetBytes(input);
+            byte[] bytes = Encoding.ASCII.GetBytes(input);
             byte[] hash = hashprovider.ComputeHash(bytes);
             return BitConverter.ToString(hash).Replace("-", "");
         }
@@ -221,8 +197,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             if (!ValidateUser(username, oldPassword))
                 return false;
 
-            User u = users[username];
-            u.passwordHash = GenerateSHA1Hash(newPassword);
+            UserHolder u = users[username];
+            u.PasswordHash = GeneratePasswordHash(newPassword);
             users[username] = u;
 
             WriteData();
@@ -243,14 +219,14 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 return null;
             }
 
-            User u;
-            u.passwordHash = GenerateSHA1Hash(password);
-            u.user = new MembershipUser(this.Name, username, providerUserKey, email, passwordQuestion, "", isApproved, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, new DateTime());
+            UserHolder u = new UserHolder();
+            u.PasswordHash = GeneratePasswordHash(password);
+            u.User = new MembershipUser(this.Name, username, providerUserKey, email, passwordQuestion, "", isApproved, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, new DateTime());
             users.Add(username, u);
 
             WriteData();
             status = MembershipCreateStatus.Success;
-            return u.user;
+            return u.User;
         }
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -271,8 +247,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         public override void UpdateUser(MembershipUser user)
         {
             ReadData();
-            User u = users[user.UserName];
-            u.user = user;
+            UserHolder u = users[user.UserName];
+            u.User = user;
             users[user.UserName] = u;
             WriteData();
         }
@@ -281,12 +257,12 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         #region Find users
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            return FindUsersByCondition(u => u.Value.user.Email == emailToMatch, pageIndex, pageSize, out totalRecords);
+            return FindUsersByCondition(u => u.Value.User.Email == emailToMatch, pageIndex, pageSize, out totalRecords);
         }
 
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            return FindUsersByCondition(u => u.Value.user.UserName == usernameToMatch, pageIndex, pageSize, out totalRecords);
+            return FindUsersByCondition(u => u.Value.User.UserName == usernameToMatch, pageIndex, pageSize, out totalRecords);
         }
 
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
@@ -294,11 +270,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             return FindUsersByCondition(u => true, pageIndex, pageSize, out totalRecords);
         }
 
-        private MembershipUserCollection FindUsersByCondition(Func<KeyValuePair<string, User>, bool> condition, int pageIndex, int pageSize, out int totalRecords)
+        private MembershipUserCollection FindUsersByCondition(Func<KeyValuePair<string, UserHolder>, bool> condition, int pageIndex, int pageSize, out int totalRecords)
         {
             ReadData();
             MembershipUserCollection ret = new MembershipUserCollection();
-            List<MembershipUser> valid = users.Where(condition).Select(u => u.Value.user).ToList();
+            List<MembershipUser> valid = users.Where(condition).Select(u => u.Value.User).ToList();
             totalRecords = valid.Count;
             valid.Skip(pageIndex * pageSize).Take(pageSize).ToList().ForEach(u => ret.Add(u));
             return ret;
@@ -309,10 +285,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             return 0;
         }
 
-        private User? GetUser(Func<KeyValuePair<string, User>, bool> condition, bool userIsOnline)
+        private UserHolder? GetUser(Func<KeyValuePair<string, UserHolder>, bool> condition, bool userIsOnline)
         {
             ReadData();
-            User user;
+            UserHolder user;
             try
             {
                 user = users.Where(condition).First().Value;
@@ -323,38 +299,38 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
             if (userIsOnline)
             {
-                User u = users[user.user.UserName];
-                u.user.LastActivityDate = DateTime.Now;
+                UserHolder u = users[user.User.UserName];
+                u.User.LastActivityDate = DateTime.Now;
                 WriteData();
             }
             return user;
         }
 
-        private MembershipUser GetMembershipUser(Func<KeyValuePair<string, User>, bool> condition, bool userIsOnline)
+        private MembershipUser GetMembershipUser(Func<KeyValuePair<string, UserHolder>, bool> condition, bool userIsOnline)
         {
-            User? u = GetUser(condition, userIsOnline);
-            return u == null ? null : u.Value.user;
+            UserHolder? u = GetUser(condition, userIsOnline);
+            return u == null ? null : u.Value.User;
         }
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            return GetMembershipUser(u => u.Value.user.UserName == username, userIsOnline);
+            return GetMembershipUser(u => u.Value.User.UserName == username, userIsOnline);
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {
-            return GetMembershipUser(u => u.Value.user.ProviderUserKey == providerUserKey, userIsOnline);
+            return GetMembershipUser(u => u.Value.User.ProviderUserKey == providerUserKey, userIsOnline);
         }
 
         public override string GetUserNameByEmail(string email)
         {
-            MembershipUser user = GetMembershipUser(u => u.Value.user.Email == email, false);
+            MembershipUser user = GetMembershipUser(u => u.Value.User.Email == email, false);
             return user == null ? "" : user.UserName;
         }
 
         public override bool ValidateUser(string username, string password)
         {
-            return GetUser(u => u.Value.user.UserName == username && u.Value.passwordHash == GenerateSHA1Hash(password), false) != null;
+            return GetUser(u => u.Value.User.UserName == username && u.Value.PasswordHash == GeneratePasswordHash(password), false) != null;
         }
         #endregion
     }

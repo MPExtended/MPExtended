@@ -25,15 +25,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public class SettingModel
     {
         public int DefaultGroup { get; set; }
-        public string TranscodingProfile { get; set; }
-        public bool UseLocalServices { get; set; }
-        public string RemoteTVServiceURL { get; set; }
-        public string RemoteMediaServiceURL { get; set; }
 
-        public int TVShowProvider { get; set; }
-        public int MovieProvider { get; set; }
-        public int MusicProvider { get; set; }
-        public int PicturesProvider { get; set; }
-        public int FileSystemProvider { get; set; }
+        public string DefaultMediaProfile { get; set; }
+        public string DefaultTVProfile { get; set; }
+
+        public int? TVShowProvider { get; set; }
+        public int? MovieProvider { get; set; }
+        public int? MusicProvider { get; set; }
+        public int? PicturesProvider { get; set; }
+        public int? FileSystemProvider { get; set; }
     }
 }

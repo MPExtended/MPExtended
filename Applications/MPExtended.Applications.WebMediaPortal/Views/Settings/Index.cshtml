@@ -1,6 +1,6 @@
-﻿@model WebMediaPortal.Models.SettingsViewModel
+﻿@model MPExtended.Applications.WebMediaPortal.Models.SettingsViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Settings";
 }
 <h2>
     Index</h2>
@@ -19,15 +19,23 @@
         </tr>
         <tr>
             <td>
-                Default transcoding profile
+                Default media transcoding profile
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedProfile, new SelectList(Model.Profiles, "Value", "Text"), @Model.Settings.TranscodingProfile)
-                @Html.ValidationMessageFor(x => x.SelectedProfile)
+                @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"), @Model.Settings.DefaultMediaProfile)
+                @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Default TV transcoding profile
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedTVProfile, new SelectList(Model.TVProfiles, "Value", "Text"), @Model.Settings.DefaultTVProfile)
+                @Html.ValidationMessageFor(x => x.SelectedTVProfile)
             </td>
         </tr>
     </table>
     <input type="submit" value="Save" />
     </div>
-
 }

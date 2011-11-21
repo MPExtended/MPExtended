@@ -37,11 +37,20 @@ namespace MPExtended.Libraries.General
     {
         public static string GetRootDirectory()
         {
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 #if DEBUG
+            Uri originalPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(originalPath.LocalPath));
+            do
+            {
+                if (info.Name == "MPExtended")
+                    return info.FullName;
+                info = info.Parent;
+            } while (info != null);
+
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
 #else
-            return Path.GetFullPath(curDir);
+            return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 #endif
         }
 
