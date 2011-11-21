@@ -42,9 +42,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Albums(string id)
+        public ActionResult Albums(string artist)
         {
-            var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, id);
+            var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
             if (albumList != null)
             {
                 return View(albumList);
@@ -52,9 +52,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Tracks(string id)
+        public ActionResult Tracks(string album)
         {
-            var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, id, SortBy.Title, OrderBy.Asc);
+            var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
             if (trackList != null)
             {
                 return View(trackList);
@@ -62,18 +62,19 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Play(string id)
+        public ActionResult Play(string track)
         {
-            var musicTrack = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id);
+            var musicTrack = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
             if (musicTrack != null)
             {
                 return View(musicTrack);
             }
             return null;
         }
-        public ActionResult AlbumImage(string id)
+
+        public ActionResult AlbumImage(string album)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, id, WebArtworkType.Cover, 0);
+            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, album, WebArtworkType.Cover, 0);
             return File(image, "image/jpg");
         }
     }

@@ -171,9 +171,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MusicLibrary\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\MusicLibrary\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

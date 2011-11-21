@@ -23,7 +23,7 @@
       {
           foreach (var artist in Model)
           {
-        <li>@Html.ActionLink(artist.Title, "Albums", new { artist = Html.Encode(artist.Title) })</li>
+        <li>@Html.ActionLink(artist.Title, "Albums", new { artist = artist.Id })</li>
           }
       } }
 </ul>
