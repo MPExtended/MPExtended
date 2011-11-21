@@ -29,90 +29,52 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-     [Authorize]
-    public class MusicLibraryController : Controller
+    [Authorize]
+    public class MusicLibraryController : BaseController
     {
         public ActionResult Index()
         {
-            try
+            var artistList = MPEServices.MAS.GetAllMusicArtistsBasic(Settings.ActiveSettings.MusicProvider);
+            if (artistList != null)
             {
-                var artistList = MPEServices.MAS.GetAllMusicArtistsBasic(Settings.ActiveSettings.MusicProvider);
-                if (artistList != null)
-                {
-                    return View(artistList);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MusicLibrary.Index", ex);
-            }
-            return View("Error");
-
-        }
-
-        public ActionResult Albums(string id)
-        {
-            try
-            {
-                var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, id);
-                if (albumList != null)
-                {
-                    return View(albumList);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MusicLibrary.Albums", ex);
-            }
-            return View("Error");
-        }
-
-        public ActionResult Tracks(string id)
-        {
-            try
-            {
-                var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, id, SortBy.Title, OrderBy.Asc);
-                if (trackList != null)
-                {
-                    return View(trackList);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MusicLibrary.Tracks", ex);
-            }
-            return View("Error");
-        }
-
-        public ActionResult Play(string id)
-        {
-            try
-            {
-                var musicTrack = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id);
-                if (musicTrack != null)
-                {
-                    return View(musicTrack);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MusicLibrary.Play", ex);
-            }
-            return View("Error");
-        }
-        public ActionResult AlbumImage(string id)
-        {
-            try
-            {
-                var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, id, WebArtworkType.Cover, 0);
-                return File(image, "image/jpg");
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in MusicLibrary.Image", ex);
+                return View(artistList);
             }
             return null;
         }
 
+        public ActionResult Albums(string id)
+        {
+            var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, id);
+            if (albumList != null)
+            {
+                return View(albumList);
+            }
+            return null;
+        }
+
+        public ActionResult Tracks(string id)
+        {
+            var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, id, SortBy.Title, OrderBy.Asc);
+            if (trackList != null)
+            {
+                return View(trackList);
+            }
+            return null;
+        }
+
+        public ActionResult Play(string id)
+        {
+            var musicTrack = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id);
+            if (musicTrack != null)
+            {
+                return View(musicTrack);
+            }
+            return null;
+        }
+        public ActionResult AlbumImage(string id)
+        {
+            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, id, WebArtworkType.Cover, 0);
+            return File(image, "image/jpg");
+        }
     }
 }

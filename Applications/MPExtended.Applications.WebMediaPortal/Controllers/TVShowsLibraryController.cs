@@ -31,7 +31,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [Authorize]
-    public class TVShowsLibraryController : Controller
+    public class TVShowsLibraryController : BaseController
     {
         public ActionResult Index()
         {

@@ -27,11 +27,9 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-
     [Authorize]
-    public class TelevisionController : Controller
+    public class TelevisionController : BaseController
     {
-
         //
         // GET: /Television/
         public ActionResult Index()
@@ -39,78 +37,45 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View();
         }
 
+        public ActionResult Menu()
+        {
+            return PartialView();
+        }
+
         public ActionResult TVGuide()
         {
-            try
+            var channelList = MPEServices.TAS.GetChannelsBasic(1);
+            if (channelList != null)
             {
-                var channelList = MPEServices.TAS.GetChannelsBasic(1);
-                if (channelList != null)
-                {
-                    return View(channelList);
-                }
+                return View(channelList);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.TVGuide", ex);
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult WatchLiveTV(int channelId)
         {
-
-            try
+            var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
+            if (channel != null)
             {
-                var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
-                if (channel != null)
-                {
-                    return View(channel);
-                }
+                return View(channel);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.WatchLiveTV", ex);
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult WatchRecording(int recordingId)
         {
-            try
-            {
-                IEnumerable<WebRecordingBasic> recordings = MPEServices.TAS.GetRecordings().Where(r => r.Id == recordingId);
-                if (recordings.Count() > 0)
-                {
-                    return View(recordings.First());
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.WatchRecording", ex);
-            }
-            return View("Error");
+            var rec = MPEServices.TAS.GetRecordingById(recordingId);
+            return View(rec);
         }
 
         public ActionResult Recordings()
         {
-            try
+            var recordings = MPEServices.TAS.GetRecordings();
+            if (recordings != null)
             {
-                var recordings = MPEServices.TAS.GetRecordings();
-                if (recordings != null)
-                {
-                    return View(recordings);
-                }
+                return View(recordings);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.Recordings", ex);
-            }
-            return View("Error");
-        }
-
-        public ActionResult Menu()
-        {
-            return PartialView();
+            return null;
         }
 
         public ActionResult ProgramData(int channelId)
@@ -126,58 +91,43 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ProgramDetails(int programId)
         {
-            try
+            var program = MPEServices.TAS.GetProgramBasicById(programId);
+            if (program != null)
             {
-                var program = MPEServices.TAS.GetProgramBasicById(programId);
-                if (program != null)
-                {
-                    return View(program);
-                }
+                return View(program);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.ProgramDetails", ex);
-            }
-            return View("Error");
+            return null;
         }
 
         public ActionResult AddSchedule(int programId)
         {
             var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            MPEServices.TAS.AddScheduleDetailed(program.IdChannel, program.Title, program.StartTime, program.EndTime, 0, 10, 15, "", 0);
+            MPEServices.TAS.AddSchedule(program.IdChannel, program.Title, program.StartTime, program.EndTime, 0);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
         public ActionResult DeleteSchedule(int programId)
         {
             var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            int i = MPEServices.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).ElementAt(0).Id;
-            MPEServices.TAS.DeleteSchedule(i);
+            int id = MPEServices.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
+            MPEServices.TAS.DeleteSchedule(id);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
         public ActionResult DeleteScheduleById(int scheduleId)
         {
-
             MPEServices.TAS.DeleteSchedule(scheduleId);
             return RedirectToAction("TVGuide", "Television");
         }
 
         public ActionResult ScheduleDetails(int scheduleId)
         {
-            try
+            var schedule = MPEServices.TAS.GetScheduleById(scheduleId);
+            if (schedule != null)
             {
-                var schedule = MPEServices.TAS.GetScheduleById(scheduleId);
-                if (schedule != null)
-                {
-                    return View(schedule);
-                }
+                return View(schedule);
             }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in Television.ScheduleDetails", ex);
-            }
-            return View("Error");
+            return null;
         }
     }
 }

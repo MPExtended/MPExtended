@@ -25,7 +25,7 @@ using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    public class SettingsController : Controller
+    public class SettingsController : BaseController
     {
         //
         // GET: /Settings/

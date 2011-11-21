@@ -30,7 +30,7 @@ using MPExtended.Services.TVAccessService.Interfaces;
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         //
         // GET: /Home/

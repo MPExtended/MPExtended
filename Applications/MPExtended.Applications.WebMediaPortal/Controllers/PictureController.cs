@@ -26,58 +26,36 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    public class PictureController : Controller
+    public class PictureController : BaseController
     {
         //
         // GET: /Pictures/
         public ActionResult Index()
         {
-            try
+            var categories = MPEServices.MAS.GetAllPictureCategories(Settings.ActiveSettings.PicturesProvider);
+            if (categories != null)
             {
-                var categories = MPEServices.MAS.GetAllPictureCategories(Settings.ActiveSettings.PicturesProvider);
-                if (categories != null)
-                {
-                    return View(categories);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in PictureLibrary.Browse", ex);
+                return View(categories);
             }
             return null;
         }
 
         public ActionResult Browse(string category)
         {          
-
-            try
+            var images = MPEServices.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
+            if (images != null)
             {
-                var images = MPEServices.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
-                if (images != null)
-                {
-                    return View(images);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in PictureLibrary.Browse", ex);
+                return View(images);
             }
             return null;
         }
 
         public ActionResult Image(string id)
         {         
-            try
+            var image = MPEServices.MAS.RetrieveFile(Settings.ActiveSettings.PicturesProvider, WebMediaType.Picture, WebFileType.Content, id, 0);
+            if (image != null)
             {
-                var image = MPEServices.MAS.RetrieveFile(Settings.ActiveSettings.PicturesProvider, WebMediaType.Picture, WebFileType.Content, id, 0);
-                if (image != null)
-                {
-                    return File(image, "image/jpg");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception in PictureLibrary.Image", ex);
+                return File(image, "image/jpg");
             }
             return null;
         }

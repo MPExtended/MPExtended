@@ -29,7 +29,7 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    public class StreamController : Controller
+    public class StreamController : BaseController
     {
         //
         // GET: /Stream/
