@@ -14,7 +14,7 @@
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.TV,
-      itemId = @Model.IdChannel
+      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TV,
+      itemId = @Model.Id
   });}
 </div>

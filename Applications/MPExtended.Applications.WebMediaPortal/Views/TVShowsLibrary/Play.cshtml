@@ -3,7 +3,7 @@
     ViewBag.Title = "Play";
 }
 <h2>Play</h2>
-You are watching <strong>@Model.Show.Title - Season @ViewBag.Season.Number Episode @Model.Episode.EpisodeNumber - @Model.Episode.Title</strong>
+You are watching <strong>@Model.Show.Title - Season @Model.Season.SeasonNumber Episode @Model.Episode.EpisodeNumber - @Model.Episode.Title</strong>
 @{Html.RenderAction("Player", "Stream", new
   {
       type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TVEpisode,

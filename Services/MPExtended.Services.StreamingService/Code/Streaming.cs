@@ -308,20 +308,20 @@ namespace MPExtended.Services.StreamingService.Code
             if (!profile.HasVideoStream)
                 return new Resolution(0, 0);
 
-            decimal aspect;
-            if (source.MediaType == WebStreamMediaType.TV || profile == null)
+            decimal aspect = (decimal)16 / 9; // the default aspect ratio
+            if (source.MediaType != WebStreamMediaType.TV && profile != null)
             {
-                // FIXME: we might want to support TV with other aspect ratios
-                aspect = (decimal)16 / 9;
-            }
-            else
-            {
-                if (info != null)
+                if (info == null)
                 {
                     info = MediaInfoWrapper.GetMediaInfo(source);
                 }
-                aspect = info.VideoStreams.First().DisplayAspectRatio;
+
+                if (info.VideoStreams.Count > 0)
+                {
+                    aspect = info.VideoStreams.First().DisplayAspectRatio;
+                }
             }
+
             return Resolution.Calculate(aspect, new Resolution(profile.MaxOutputWidth, profile.MaxOutputHeight), 2);
         }
 

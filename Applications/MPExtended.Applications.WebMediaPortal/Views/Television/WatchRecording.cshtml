@@ -1,17 +1,17 @@
-﻿@model MPExtended.Services.TVAccessService.Interfaces.WebRecording
+﻿@model MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic
 
 @{
     ViewBag.Title = "Recording";
 }
 
 <div>
-    You are watching: <strong>@Model.Name</strong>
+    You are watching: <strong>@Model.Title</strong>
 </div>
 
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Recording,
-      itemId = @Model.IdRecording
+      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.Recording,
+      itemId = @Model.Id
   });}
 </div>

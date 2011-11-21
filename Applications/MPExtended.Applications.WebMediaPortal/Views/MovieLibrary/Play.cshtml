@@ -6,6 +6,6 @@
 You are watching <strong>@Model.Title</strong>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Applications.WebMediaPortal.Models.StreamMedia.Movie,
+      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.Movie,
       itemId = @Model.Id
   });}
