@@ -21,6 +21,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Threading;
 using MPExtended.Libraries.General;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
@@ -31,8 +32,18 @@ namespace MPExtended.Applications.ServiceConfigurator
     /// </summary>
     public partial class App : Application
     {
+        private static Mutex mutex = new Mutex(true, "{a7a5c7b7-4fa1-4e79-9568-634ff895afe4}");
+
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            // make sure to start only once
+            if (!mutex.WaitOne(TimeSpan.Zero, true))
+            {
+                UserServices.Private.OpenConfigurator();
+                this.Shutdown(0);
+                return;
+            }
+
             // defaults
             StartupArguments.RunAsTrayApp = true;
 
@@ -53,6 +64,9 @@ namespace MPExtended.Applications.ServiceConfigurator
                         break;
                 }
             }
+
+            // set startup form
+            this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
         }
     }
 }

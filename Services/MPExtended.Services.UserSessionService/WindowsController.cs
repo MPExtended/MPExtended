@@ -26,7 +26,6 @@ using System.Windows.Forms;
 using System.Threading;
 using MPExtended.Libraries.General;
 
-
 namespace MPExtended.Services.UserSessionService
 {
   /// <summary>

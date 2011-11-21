@@ -18,25 +18,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
-using System.Runtime.InteropServices;
+using System.Windows;
+using MPExtended.Services.UserSessionService.Interfaces;
 
-namespace MPExtended.Services.UserSessionService
+namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    internal class ScreenSaver
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
+    internal class PrivateUserSessionService : IPrivateUserSessionService
     {
-        [DllImport("user32.dll", EntryPoint = "GetDesktopWindow")]
-        private static extern IntPtr GetDesktopWindow();
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
-
-        private const int SC_SCREENSAVE = 0xF140;
-        private const int WM_SYSCOMMAND = 0x0112;
-
-        public static void StartScreenSaver()
+        public WebResult OpenConfigurator()
         {
-            SendMessage(GetDesktopWindow(), WM_SYSCOMMAND, SC_SCREENSAVE, 0);
+            Application.Current.MainWindow.Show();
+            return new WebResult(true);
         }
     }
 }

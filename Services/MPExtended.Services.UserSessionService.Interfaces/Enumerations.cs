@@ -63,7 +63,7 @@ namespace MPExtended.Services.UserSessionService.Interfaces
         [EnumMember]
         ScreenOff = 8,
 
-                /// <summary>
+        /// <summary>
         /// Sends monitor into standby
         /// </summary>
         [EnumMember]

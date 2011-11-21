@@ -93,10 +93,12 @@
     <Compile Include="Code\ErrorHandling.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\LogExporter.cs" />
+    <Compile Include="Code\PrivateUserSessionService.cs" />
     <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
     <Compile Include="Code\StartupArguments.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />
+    <Compile Include="Code\UserServices.cs" />
     <Compile Include="Code\WpfStreamingSession.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

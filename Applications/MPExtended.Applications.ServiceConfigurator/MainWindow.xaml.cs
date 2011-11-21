@@ -42,8 +42,9 @@ namespace MPExtended.Applications.ServiceConfigurator
     public partial class MainWindow : Window
     {
         private bool mIsAppExiting = false;
-        private ServiceHost mUserSessionHost;
-        private IUserSessionService mUserSessionService;
+        private ServiceHost ussHost;
+        private ServiceHost privateHost;
+        private UserSessionService userSessionService;
 
         public MainWindow()
         {
@@ -52,19 +53,20 @@ namespace MPExtended.Applications.ServiceConfigurator
             try
             {
                 Log.Debug("MPExtended.Applications.ServiceConfigurator starting...");
-                mUserSessionHost = new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionService));
-                Log.Debug("Opening ServiceHost...");
+                ussHost = new ServiceHost(typeof(MPExtended.Services.UserSessionService.UserSessionService));
+                privateHost = new ServiceHost(typeof(MPExtended.Applications.ServiceConfigurator.Code.PrivateUserSessionService));
 
-                mUserSessionHost.Open();
-                Log.Debug("Host opened");
+                Log.Debug("Opening ServiceHost...");
+                ussHost.Open();
+                privateHost.Open();
+
                 Log.Info("UserSessionService started...");
+                userSessionService = new UserSessionService();
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to start service", ex);
             }
-
-            mUserSessionService = new UserSessionService();
 
             try
             {
@@ -79,7 +81,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             if (StartupArguments.RunAsTrayApp)
                 Hide();
 
-            HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
+            HandleMpState(userSessionService.IsMediaPortalRunning().Status);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -102,7 +104,8 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
             else
             {
-                mUserSessionHost.Close();
+                ussHost.Close();
+                privateHost.Close();
             }
         }
 
@@ -114,15 +117,15 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void MenuStartCloseMp_Click(object sender, RoutedEventArgs e)
         {
-            bool isMpRunning = mUserSessionService.IsMediaPortalRunning().Status;
+            bool isMpRunning = UserServices.USS.IsMediaPortalRunning().Status;
             if (!isMpRunning)
             {
-                mUserSessionService.StartMediaPortal();
+                userSessionService.StartMediaPortal();
                 HandleMpState(true);
             }
             else
             {
-                mUserSessionService.CloseMediaPortal();
+                userSessionService.CloseMediaPortal();
                 HandleMpState(false);
             }
         }
@@ -141,7 +144,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            HandleMpState(mUserSessionService.IsMediaPortalRunning().Status);
+            HandleMpState(userSessionService.IsMediaPortalRunning().Status);
         }
 
         private void MenuOpenConfigurator_Click(object sender, RoutedEventArgs e)
@@ -156,42 +159,42 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void MenuPowermodeLogoff_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.LogOff);
+            userSessionService.SetPowerMode(WebPowerMode.LogOff);
         }
 
         private void MenuPowermodeSuspend_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.Suspend);
+            userSessionService.SetPowerMode(WebPowerMode.Suspend);
         }
 
         private void MenuPowermodeHibernate_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.Hibernate);
+            userSessionService.SetPowerMode(WebPowerMode.Hibernate);
         }
 
         private void MenuPowermodeReboot_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.Reboot);
+            userSessionService.SetPowerMode(WebPowerMode.Reboot);
         }
 
         private void MenuPowermodeShutdown_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.PowerOff);
+            userSessionService.SetPowerMode(WebPowerMode.PowerOff);
         }
 
         private void MenuPowermodeLock_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.Lock);
+            userSessionService.SetPowerMode(WebPowerMode.Lock);
         }
 
         private void MenuPowermodeMonitorOff_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.ScreenOff);
+            userSessionService.SetPowerMode(WebPowerMode.ScreenOff);
         }
 
         private void MenuPowermodeScreensaverOn_Click(object sender, RoutedEventArgs e)
         {
-            mUserSessionService.SetPowerMode(WebPowerMode.Screensaver);
+            userSessionService.SetPowerMode(WebPowerMode.Screensaver);
         }
     }
 }

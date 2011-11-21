@@ -4,8 +4,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using System.IO;
-using System.Runtime.Serialization;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {

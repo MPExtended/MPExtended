@@ -55,6 +55,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Enumerations.cs" />
+    <Compile Include="IPrivateUserSessionService.cs" />
     <Compile Include="IUserSessionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebResult.cs" />

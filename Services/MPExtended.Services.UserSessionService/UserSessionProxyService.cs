@@ -25,6 +25,7 @@ using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class UserSessionProxyService : IUserSessionService
     {
         private IUserSessionService proxy;
@@ -39,7 +40,6 @@ namespace MPExtended.Services.UserSessionService
             };
             binding.ReliableSession.Enabled = true;
             binding.ReliableSession.Ordered = true;
-
 
             proxy = ChannelFactory<IUserSessionService>.CreateChannel(
                 binding,

@@ -50,26 +50,20 @@ namespace MPExtended.Services.UserSessionService
         [DllImport("user32.dll")]
         private static extern int SendMessage(int hWnd, int hMsg, int wParam, int lParam);
 
-        const int WM_SYSCOMMAND = 0x0112;
-        const int SC_MONITORPOWER = 0xF170;
-        const int HWND_BROADCAST = 0xFFFF;
-
+        private const int WM_SYSCOMMAND = 0x0112;
+        private const int SC_MONITORPOWER = 0xF170;
+        private const int HWND_BROADCAST = 0xFFFF;
 
         private string MPPath;
 
         public UserSessionService()
         {
-            try
+            var mpdir = Mediaportal.GetClientInstallationDirectory();
+            if (mpdir == null)
             {
-                var key = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal");
-                var value = key.GetValue("InstallPath");
-                MPPath = Path.Combine(value.ToString(), "MediaPortal.exe");
+                mpdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal");
             }
-            catch (Exception e)
-            {
-                Log.Error("Failed to read MP installation path from registry", e);
-                MPPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal", "MediaPortal.exe");
-            }
+            MPPath = Path.Combine(mpdir, "MediaPortal.exe");
         }
 
         public WebResult TestConnection()
@@ -185,7 +179,6 @@ namespace MPExtended.Services.UserSessionService
         public WebResult CloseMediaPortal()
         {
             Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath));
-
             if (processes != null && processes.Length == 1)
             {
                 processes[0].CloseMainWindow();
