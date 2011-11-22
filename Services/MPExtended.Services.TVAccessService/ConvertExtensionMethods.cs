@@ -507,26 +507,26 @@ namespace MPExtended.Services.TVAccessService
 
     public static class WebChannelStateExtensionMethods
     {
-        public static WebChannelState ToWebChannelState(this ChannelState state, int channelId)
+        public static WebChannelState ToWebChannelState(this TvControl.ChannelState state, int channelId)
         {
             WebChannelState newState = new WebChannelState();
             newState.ChannelId = channelId;
             switch (state)
             {
-                case ChannelState.tunable:
-                    newState.State = WebChannelState.States.Tunable;
+                case TvControl.ChannelState.tunable:
+                    newState.State = Interfaces.ChannelState.Tunable;
                     break;
-                case ChannelState.timeshifting:
-                    newState.State = WebChannelState.States.Timeshifting;
+                case TvControl.ChannelState.timeshifting:
+                    newState.State = Interfaces.ChannelState.Timeshifting;
                     break;
-                case ChannelState.recording:
-                    newState.State = WebChannelState.States.Recording;
+                case TvControl.ChannelState.recording:
+                    newState.State = Interfaces.ChannelState.Recording;
                     break;
-                case ChannelState.nottunable:
-                    newState.State = WebChannelState.States.NotTunable;
+                case TvControl.ChannelState.nottunable:
+                    newState.State = Interfaces.ChannelState.NotTunable;
                     break;
                 default:
-                    newState.State = WebChannelState.States.Unknown;
+                    newState.State = Interfaces.ChannelState.Unknown;
                     break;
             }
 
