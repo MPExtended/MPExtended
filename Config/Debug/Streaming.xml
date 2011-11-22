@@ -11,7 +11,7 @@
     <api>ffmpeg</api>
   </ffmpeg>
 
-  <tvLogoDirectory>\\10.1.1.49\system\mpthumbs\tv\logos</tvLogoDirectory>
+  <tvLogoDirectory>C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\tv\logos</tvLogoDirectory>
 
   <defaultStreams>
     <audio>en</audio>
