@@ -27,7 +27,7 @@ namespace MPExtended.Services.TVAccessService
     {
         public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
         {
-            int count = end - start + 1;
+            int count = Math.Min(end - start + 1, source.Count() - start);
 
             if (source is List<T>)
                 return ((List<T>)source).GetRange(start, count);

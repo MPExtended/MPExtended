@@ -35,10 +35,10 @@ namespace MPExtended.Services.MediaAccessService
         {
             int count = end - start + 1;
 
-            if (source is List<T>)
-                return ((List<T>)source).GetRange(start, count);
             if (source is ILazyQuery<T>)
                 return ((ILazyQuery<T>)source).GetRange(start, count);
+            if (source is List<T>)
+                return ((List<T>)source).GetRange(start, Math.Min(count, source.Count() - start));
             return source.Skip(start).Take(count);
         }
 
