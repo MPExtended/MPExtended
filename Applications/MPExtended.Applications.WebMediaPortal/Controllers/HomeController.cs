@@ -42,8 +42,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewMovies()
         {
-             var tmp = MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort:SortBy.DateAdded, order:OrderBy.Desc);
-             return PartialView(tmp);
+            var tmp = MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort: SortBy.DateAdded, order: OrderBy.Desc);
+            return PartialView(tmp);
         }
 
         public ActionResult NewEpisodes()
@@ -61,8 +61,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewRecordings()
         {
-            List<WebRecordingBasic> tmp = MPEServices.TAS.GetRecordings().OrderByDescending(p => p.StartTime).ToList();
-            return PartialView(tmp.Count > 4 ? tmp.GetRange(0, 4) : tmp);
+            var tmp = MPEServices.TAS.GetRecordingsByRange(0, 4, SortField.StartTime, SortOrder.Desc);
+            return PartialView(tmp);
         }
 
         public ActionResult CurrentSchedules()

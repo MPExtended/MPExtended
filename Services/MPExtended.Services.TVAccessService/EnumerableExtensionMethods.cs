@@ -34,63 +34,67 @@ namespace MPExtended.Services.TVAccessService
             return source.Skip(start).Take(count);
         }
 
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy? order)
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, SortOrder? order)
         {
-            if (order == MPExtended.Services.TVAccessService.Interfaces.OrderBy.Desc)
+            if (order == MPExtended.Services.TVAccessService.Interfaces.SortOrder.Desc)
                 return Enumerable.OrderByDescending(source, keySelector);
             return Enumerable.OrderBy(source, keySelector);
         }
 
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, OrderBy? order)
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, SortOrder? order)
         {
-            if (order == MPExtended.Services.TVAccessService.Interfaces.OrderBy.Desc)
+            if (order == MPExtended.Services.TVAccessService.Interfaces.SortOrder.Desc)
                 return Enumerable.ThenByDescending(source, keySelector);
             return Enumerable.ThenBy(source, keySelector);
         }
 
-        public static IOrderedEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebChannelBasic
+        public static IOrderedEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelBasic
         {
             switch (sortInput)
             {
-                case SortBy.Name:
+                case SortField.Name:
                 default:
                     return list.OrderBy(x => x.DisplayName, orderInput);
             }
         }
 
-        public static IOrderedEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebChannelGroup
+        public static IOrderedEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelGroup
         {
             switch (sortInput)
             {
-                case SortBy.Name:
+                case SortField.Name:
                     return list.OrderBy(x => x.GroupName, orderInput);
-                case SortBy.User:
+                case SortField.User:
                 default:
                     return list.OrderBy(x => x.SortOrder, orderInput);
             }
         }
 
-        public static IOrderedEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebScheduleBasic
+        public static IOrderedEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduleBasic
         {
             switch (sortInput)
             {
-                case SortBy.Name:
+                case SortField.Name:
                 default:
                     return list.OrderBy(x => x.ProgramName, orderInput);
-                case SortBy.Channel:
+                case SortField.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
+                case SortField.StartTime:
+                    return list.OrderBy(x => x.StartTime, orderInput);
             }
         }
 
-        public static IOrderedEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput) where T : WebRecordingBasic
+        public static IOrderedEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebRecordingBasic
         {
             switch (sortInput)
             {
-                case SortBy.Name:
+                case SortField.Name:
                 default:
                     return list.OrderBy(x => x.Title, orderInput);
-                case SortBy.Channel:
+                case SortField.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
+                case SortField.StartTime:
+                    return list.OrderBy(x => x.StartTime, orderInput);
             }
         }
     }

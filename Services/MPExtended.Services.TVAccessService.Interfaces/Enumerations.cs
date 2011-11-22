@@ -22,7 +22,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     }
 
     [DataContract]
-    public enum OrderBy
+    public enum SortOrder
     {
         [EnumMember]
         Asc = 0,
@@ -31,13 +31,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     }
 
     [DataContract]
-    public enum SortBy
+    public enum SortField
     {
         [EnumMember]
         User = 0,
         [EnumMember]
         Name = 1,
         [EnumMember]
-        Channel = 2
+        Channel = 2,
+        [EnumMember]
+        StartTime = 3
     }
 }
