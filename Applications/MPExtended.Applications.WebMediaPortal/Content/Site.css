@@ -23,29 +23,23 @@ body
 	float: left;
 	width: 100%;
 	border-bottom: 1px dotted #5D5A53;
-	margin-bottom: 10px;
+	margin: 10px 0 10px 0;
 }
 
 #header h1
 {
-	font-size: 18px;
+	font-size: 22px;
 	float: left;
-	background: url(/content/Images/logo.png) no-repeat;
-	padding: 45px 0px 5px 0px;
-}
-#header subheader
-{
-	font-size: 12px;
-	float: left;
-	padding: 35px 0px 5px 0px;	
+	margin: 10px;
+	margin: 17px 0 0 20px;
 }
 
-
-#promotion
+#header #logo
 {
-	height: 300px; 
-	width: 700px; 
-	background: url(/content/Images/home-showcase.png) no-repeat;
+    background-image: url("/Content/Images/logomp-small.png"); 
+    height: 64px;
+    width: 64px;
+    float: left;
 }
 
 ul li a
@@ -82,16 +76,16 @@ ul
 }
 
 /******************** Top Navigation ************************/
-
-
 ul#navlist
 {
 	float: right;
 }
+
 ul#navlist li
 {
 	display: inline;
 }
+
 ul#navlist li a
 {
 	border-left: 1px dotted #8A8575;
@@ -106,14 +100,13 @@ ul#navlist li:first-child a
 {
 	border: none;
 }
+
 ul#navlist li a:hover
 {
 	color: #F6855E;
 }
 
-
 /******************** sub Navigation ************************/
-
 ul#subnavlist
 {
 	float: right;
@@ -146,9 +139,7 @@ ul#subnavlist li a:hover
 	color: #F6855E;
 }
 
-
 /********************* End top navigation ***************************/
-
 p
 {
 	margin-bottom: 15px;
@@ -200,7 +191,6 @@ a:active
 }
 
 /***************************** sidebar navigation ****************************/
-
 #categories
 {
 	font-family: Constantia, Georgia, serif;
@@ -293,8 +283,8 @@ tr:hover
 {
 	background-color: #fff;
 }
-/* MISC  
-----------------------------------------------------------*/
+
+/***** misc ******/
 .clear
 {
     clear: both;

@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Settings";
 }
-<h2>
-    Index</h2>
+<h2>Settings</h2>
 @using (Html.BeginForm("Update", "Settings"))
 {
     <div>
@@ -36,6 +35,14 @@
             </td>
         </tr>
     </table>
+    <br />
     <input type="submit" value="Save" />
     </div>
 }
+
+<br />
+<h2>Account management</h2>
+<ul>
+    <li>Change your @Html.ActionLink("password", "ChangePassword", "Account")</li>
+    <li>Register a @Html.ActionLink("new account", "Register", "Account")</li>
+</ul>
