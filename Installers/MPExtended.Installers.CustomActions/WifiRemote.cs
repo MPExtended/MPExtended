@@ -40,7 +40,7 @@ namespace MPExtended.Installers.CustomActions
             OlderVersionAvailable,
         }
 
-        public static bool Install(Session session)
+        public static ActionResult Install(Session session)
         {
             // download WifiRemote update information
             session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote update information...", ""));
@@ -74,7 +74,7 @@ namespace MPExtended.Installers.CustomActions
                 if (!InstallerDatabase.ExtractBinaryToFile(session, "WifiRemoteInstallerBin", mpeiPackagePath))
                 {
                     Log.Write("WifiRemote: failed to extract from MSI");
-                    return false;
+                    return ActionResult.Failure;
                 }
             }
             Log.Write("WifiRemote: got WifiRemote installer in {0}", mpeiPackagePath);
@@ -84,7 +84,7 @@ namespace MPExtended.Installers.CustomActions
             string mpei = LookupMPEI();
             if (mpei == null)
             {
-                return false;
+                return ActionResult.NotExecuted;
             }
             Log.Write("WifiRemote: found MPEI at {0}", mpei);
 
@@ -101,7 +101,7 @@ namespace MPExtended.Installers.CustomActions
 
             // cleanup
             File.Delete(mpeiPackagePath);
-            return true;
+            return ActionResult.Success;
         }
 
         private static WifiRemoteState GetWifiRemoteVersionInfo(Session session, out Uri downloadLast)

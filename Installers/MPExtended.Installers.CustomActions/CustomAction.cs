@@ -33,14 +33,16 @@ namespace MPExtended.Installers.CustomActions
 
             try
             {
-                if (WifiRemote.Install(session))
+                ActionResult ret = WifiRemote.Install(session);
+                if(ret == ActionResult.Success)
                 {
                     Log.Write("WifiRemote: Installed successfully");
                     return ActionResult.Success;
                 }
                 else
                 {
-                    Log.Write("WifiRemote: Failed to install");
+                    Log.Write("WifiRemote: Failed to install; result {0}", ret);
+                    return ret;
                 }
             }
             catch (Exception ex)
