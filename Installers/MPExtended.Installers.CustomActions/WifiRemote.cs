@@ -180,10 +180,20 @@ namespace MPExtended.Installers.CustomActions
         {
             try
             {
-                string keyPath = Environment.Is64BitOperatingSystem ?
-                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal" :
-                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal";
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(keyPath);
+                string[] keys = new string[] {
+                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal",
+                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal"
+                };
+                RegistryKey key = null;
+                foreach(var keyPath in keys)
+                {
+                    key = Registry.LocalMachine.OpenSubKey(keyPath);
+                    if (key != null)
+                    {
+                        break;
+                    }
+                }
+
                 if (key == null)
                 {
                     Log.Write("WifiRemote: Could not find MediaPortal installation path key");
