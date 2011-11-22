@@ -236,7 +236,7 @@ namespace MPExtended.Services.StreamingService.Code
             lock (Streams[identifier])
             {
                 if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
-                    return null;
+                    return Stream.Null;
 
                 return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
             }

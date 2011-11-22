@@ -74,14 +74,14 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 Log.Warn("ExtractImage: Source {0} (resolved {1}) doesn't exists", source.GetDebugName(), source.GetPath());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return null;
+                return Stream.Null;
             }
 
             if (!source.IsLocalFile)
             {
                 Log.Warn("ExtractImage: Source type={0} id={1} is not supported yet", source.MediaType, source.Id);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotImplemented);
-                return null;
+                return Stream.Null;
             }
 
             // calculate size
@@ -131,8 +131,9 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 Log.Warn("Failed to extract image to temporary file {0}", tempFile);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
-                return null;
+                return Stream.Null;
             }
+
             return StreamImage(new ImageSource(tempFile));
         }
 
@@ -148,7 +149,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (src == null)
             {
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return null;
+                return Stream.Null;
             }
 
             // create cache path
@@ -163,7 +164,7 @@ namespace MPExtended.Services.StreamingService.Code
                 Image orig = Image.FromStream(src.GetDataStream());
                 if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
                 {
-                    return null;
+                    return Stream.Null;
                 }
             }
 
@@ -181,7 +182,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (source == null)
             {
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return null;
+                return Stream.Null;
             }
 
             return StreamImage(source);
