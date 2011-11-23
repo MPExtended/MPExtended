@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Win32;
 
 namespace MPExtended.Libraries.General
 {
@@ -37,6 +38,8 @@ namespace MPExtended.Libraries.General
     {
         public static string GetRootDirectory()
         {
+            // FIXME: It's not really a good idea that this function has a totally different function in Debug and
+            // Release builds. 
 #if DEBUG
             // It's a bit tricky to find the root source directory for Debug builds. The assembly might be in a different
             // directory then where it's source tree is (which happens with WebMP for example), so we can't use the Location
@@ -58,7 +61,21 @@ namespace MPExtended.Libraries.General
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
 #else
-            return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            // By default we try to read it from the registry, where the install location is set during installation. If
+            // that fails, fall back to the parent directory of the currently executing assembly, which probably works good
+            // for 99% of the cases. 
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
+            if (key != null)
+            {
+                object value = key.GetValue("InstallLocation");
+                if (value != null)
+                {
+                    return value.ToString();
+                }
+            }
+
+            DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            return info.Parent.FullName;
 #endif
         }
 

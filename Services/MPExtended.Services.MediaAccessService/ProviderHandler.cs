@@ -96,7 +96,7 @@ namespace MPExtended.Services.MediaAccessService
                         catalog.Catalogs.Add(new DirectoryCatalog(dir));
                 }
 #else
-                string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetRootDirectory(), "Extensions"));
+                string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetRootDirectory(), "Service", "Extensions"));
                 catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
 #endif
 

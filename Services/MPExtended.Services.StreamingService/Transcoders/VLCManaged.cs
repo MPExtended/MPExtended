@@ -69,7 +69,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 #if DEBUG
                     string directory = System.IO.Path.Combine(Installation.GetRootDirectory(), "Libraries", "Streaming", "vlc-1.1.11");
 #else
-                    string directory = System.IO.Path.Combine(Installation.GetRootDirectory(), "Streaming", "vlc-1.1.11");
+                    string directory = System.IO.Path.Combine(Installation.GetRootDirectory(), "Service", "Streaming", "vlc-1.1.11");
 #endif
 
                     string asmPath = System.IO.Path.Combine(directory, "MPExtended.Libraries.VLCManaged.dll");

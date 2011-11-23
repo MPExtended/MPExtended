@@ -30,6 +30,13 @@
               <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
             </Component>
             
+            <!-- General registry (installation path) -->
+            <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
+              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                <RegistryValue Type="string" Name="InstallLocation" Value="[MPEXTENDEDDIRECTORY]" />
+              </RegistryKey>
+            </Component>
+            
             <!-- Interfaces -->
             <Component Id="Component_MAS_Interface" Guid="eb4bc4da-62e5-4978-9e58-89cbbcd6dc4d">
               <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
