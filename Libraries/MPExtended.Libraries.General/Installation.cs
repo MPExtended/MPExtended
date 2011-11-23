@@ -42,17 +42,16 @@ namespace MPExtended.Libraries.General
             // directory then where it's source tree is (which happens with WebMP for example), so we can't use the Location
             // of the current executing assembly. The CodeBase points to it's original location on compilation, but this 
             // doesn't work if you send files to other people (so don't do it!).
-            // Also, not everybody names the root directory MPExtended. So if we detect the Libraries folder (which should
-            // be the top level folder in the MPExtended folder), immediately use it's parent as the root. This isn't 100%
-            // reliable though, but it works. 
+            // Also, not everybody names the root directory MPExtended. Instead, we look for a directory with a child directory
+            // named Config, which has a Debug child directory. It's not 100% foolproof but it works good enough.
             Uri originalPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
             DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(originalPath.LocalPath));
             do
             {
-                if (info.Name == "Libraries")
-                    return info.Parent.FullName;
-                if (info.Name == "MPExtended")
+                if (Directory.Exists(Path.Combine(info.FullName, "Config")) && Directory.Exists(Path.Combine(info.FullName, "Config", "Debug")))
+                {
                     return info.FullName;
+                }
                 info = info.Parent;
             } while (info != null);
 
