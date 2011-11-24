@@ -38,8 +38,15 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                var config = Mediaportal.ReadSectionFromConfigFile("plugins");
-                return config.ContainsKey("WifiRemote") && config["WifiRemote"] == "yes";
+                try
+                {
+                    var config = Mediaportal.ReadSectionFromConfigFile("plugins");
+                    return config.ContainsKey("WifiRemote") && config["WifiRemote"] == "yes";
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
 
