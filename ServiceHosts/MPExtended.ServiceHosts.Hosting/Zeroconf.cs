@@ -50,6 +50,7 @@ namespace MPExtended.ServiceHosts.Hosting
                 additionalData["hwAddr"] = GetHardwareAddresses();
 
                 NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, srv.Port);
+                net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidNotPublishService += new NetService.ServiceNotPublished(FailedToPublishService);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -119,7 +120,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
         private void PublishedService(NetService service)
         {
-            Log.Debug("Published service {0}", service.Name);
+            Log.Debug("Published service {0}", service.Type);
         }
     }
 }

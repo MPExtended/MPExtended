@@ -16,7 +16,7 @@
   </networkImpersonation>
 
   <bonjour>
-    <enabled>false</enabled>
+    <enabled>true</enabled>
     <pcname /><!-- Automatically detected when empty -->
   </bonjour>
   
