@@ -62,12 +62,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // hide tabs not applicable for current situation
             if (!Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
             {
-                tiPlugin.Visibility = System.Windows.Visibility.Hidden;
-                tiSocial.Visibility = System.Windows.Visibility.Hidden;
+                tcMainTabs.Items.Remove(tiPlugin);
+                tcMainTabs.Items.Remove(tiSocial);
             }
             if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
             {
-                tiStreaming.Visibility = System.Windows.Visibility.Hidden;
+                tcMainTabs.Items.Remove(tiStreaming);
             }
         }
 
