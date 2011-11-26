@@ -182,8 +182,17 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
-            MediaSource source = new MediaSource(type, provider, itemId);
-            return source.Retrieve();
+            try
+            {
+                MediaSource source = new MediaSource(type, provider, itemId);
+                return source.Retrieve();
+            }
+            catch (Exception)
+            {
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                Log.Info("GetMediaItem() called for unknown mediaitem type={0}, provider={1}, itemId={2}", type, provider, itemId);
+                return Stream.Null;
+            }
         }
 
         public Stream CustomTranscoderData(string identifier, string action, string parameters)

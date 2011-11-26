@@ -22,6 +22,7 @@ using System.Linq;
 using System.ServiceModel.Web;
 using System.Threading;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Transcoders;
@@ -227,6 +228,12 @@ namespace MPExtended.Services.StreamingService.Code
             lock (Streams[identifier])
             {
                 WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Context.Profile.MIME;
+                if(Streams[identifier].OutputStream == null)
+                {
+                    Log.Warn("Encountered null stream in RetrieveStream for identifier {0}", identifier);
+                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                    return Stream.Null;
+                }
                 return Streams[identifier].OutputStream;
             }
         }

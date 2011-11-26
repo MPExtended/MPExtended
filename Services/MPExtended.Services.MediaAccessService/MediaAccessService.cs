@@ -741,13 +741,14 @@ namespace MPExtended.Services.MediaAccessService
 
                 // fail
                 Log.Warn("Requested non-existing or non-accessible file mediatype={0} filetype={1} id={2} offset={3}", mediatype, filetype, id, offset);
-                return null;
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return Stream.Null;
             }
             catch (Exception ex)
             {
                 Log.Info("Failed to retrieve file for mediatype=" + mediatype + ", filetype=" + filetype + ", id=" + id + " and offset=" + offset, ex);
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return null;
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
+                return Stream.Null;
             }
         }
         #endregion

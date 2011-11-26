@@ -95,7 +95,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("Error while getting resolution of video stream", ex);
+                    Log.Error("Error while getting resolution of video stream, not resizing", ex);
                 }
             }
             
@@ -109,7 +109,7 @@ namespace MPExtended.Services.StreamingService.Code
                 maxWidth == null ? "null" : maxWidth.ToString(), maxHeight == null ? "null" : maxHeight.ToString());
             string tempFile = Path.Combine(tempDir, filename);
 
-            // maybe it exists
+            // maybe it exists in cache, return that then
             if (File.Exists(tempFile))
             {
                 return StreamImage(new ImageSource(tempFile));
@@ -164,6 +164,7 @@ namespace MPExtended.Services.StreamingService.Code
                 Image orig = Image.FromStream(src.GetDataStream());
                 if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
                 {
+                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                     return Stream.Null;
                 }
             }

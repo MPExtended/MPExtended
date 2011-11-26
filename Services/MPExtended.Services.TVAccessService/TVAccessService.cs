@@ -569,12 +569,14 @@ namespace MPExtended.Services.TVAccessService
 
                 // failed
                 Log.Warn("No method to read file for recording {0}", id);
-                return null;
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return Stream.Null;
             }
             catch (Exception ex)
             {
                 Log.Warn(String.Format("Failed to read file for recording {0}", id), ex);
-                return null;
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
+                return Stream.Null;
             }
         }
         #endregion
