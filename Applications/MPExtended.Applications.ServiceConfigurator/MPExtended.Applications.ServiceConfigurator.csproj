@@ -136,6 +136,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\TabSocial.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TabStreaming.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +173,9 @@
     </Compile>
     <Compile Include="Pages\TabServerLogs.xaml.cs">
       <DependentUpon>TabServerLogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TabSocial.xaml.cs">
+      <DependentUpon>TabSocial.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TabStreaming.xaml.cs">
       <DependentUpon>TabStreaming.xaml</DependentUpon>
@@ -211,6 +218,10 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.ServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Social\MPExtended.Libraries.Social.csproj">
+      <Project>{504A098A-8141-418A-9FC5-C7870C68C716}</Project>
+      <Name>MPExtended.Libraries.Social</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>

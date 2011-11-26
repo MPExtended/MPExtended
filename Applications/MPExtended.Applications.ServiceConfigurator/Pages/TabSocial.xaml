@@ -1,0 +1,28 @@
+﻿<Page x:Class="MPExtended.Applications.ServiceConfigurator.Pages.TabSocial"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="560"
+	Title="TabSocial">
+
+    <Grid>
+        <TextBlock Height="75" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbExplanation" VerticalAlignment="Top" Width="536" TextWrapping="Wrap">
+            MPExtended supports synchronization of the movies and shows you watch in clients to Trakt and follw.it. You can configure your account for
+            these sites here.
+        </TextBlock>
+        <Label Content="Site:" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,59,0,0" Name="lblPort" VerticalAlignment="Top" Width="82" />
+        <RadioButton Content="None" Height="16" HorizontalAlignment="Left" Margin="100,64,0,0" Name="rbNone" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="none"/>
+        <RadioButton Content="Trakt" Height="16" HorizontalAlignment="Left" Margin="100,86,0,0" Name="rbTrakt" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="trakt" />
+        <RadioButton Content="Follw.it" Height="16" HorizontalAlignment="Left" Margin="100,108,0,0" Name="rbFollwit" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="follwit" />
+        
+        <Label Content="Username:" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,138,0,0" Name="label1" VerticalAlignment="Top" Width="82" />
+        <Label Content="Password:" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,172,0,0" Name="label2" VerticalAlignment="Top" Width="82" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="100,140,0,0" Name="txtUsername" VerticalAlignment="Top" Width="200" TextChanged="textChanged"/>
+        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="100,175,0,0" Name="txtPassword" VerticalAlignment="Top" Width="200" PasswordChanged="textChanged"/>
+        <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="100,209,0,0" Name="btnTest" VerticalAlignment="Top" Width="94" Click="btnTest_Click" />
+        <Button Content="Save" Height="23" HorizontalAlignment="Left" Margin="206,209,0,0" Name="btnSave" VerticalAlignment="Top" Width="94" IsEnabled="False" Click="btnSave_Click"/>
+        <Label Content="Credentials invalid!" Height="28" HorizontalAlignment="Left" Margin="100,238,0,0" Name="lblTestResult" VerticalAlignment="Top" FontWeight="Bold"  />
+    </Grid>
+</Page>

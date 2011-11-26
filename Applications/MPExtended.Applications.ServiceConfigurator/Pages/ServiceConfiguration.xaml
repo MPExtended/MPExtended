@@ -34,6 +34,8 @@
             </TabItem>
             <TabItem Header="Plugins" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
             </TabItem>
+            <TabItem Header="Social" Width="140" Name="tiSocial" Tag="Pages/TabSocial.xaml">
+            </TabItem>
             <TabItem Header="Authentication" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
             </TabItem>
             <TabItem Header="QR-Code" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
