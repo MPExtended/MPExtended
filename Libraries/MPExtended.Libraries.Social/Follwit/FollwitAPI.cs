@@ -60,6 +60,12 @@ namespace MPExtended.Libraries.Social.Follwit
             return JSONUtil.FromJSON<FollwitResponse>(json);
         }
 
+        public static FollwitResponse TestAccount(FollwitAccountTestData data)
+        {
+            string json = CallAPI(FollwitConfig.URL.TestAccount, JSONUtil.ToJSON(data));
+            return JSONUtil.FromJSON<FollwitResponse>(json);
+        }
+
         private static string MapToURL(FollwitWatchStatus status)
         {
             switch (status)

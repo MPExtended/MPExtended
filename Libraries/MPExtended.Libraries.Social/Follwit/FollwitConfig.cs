@@ -39,6 +39,7 @@ namespace MPExtended.Libraries.Social.Follwit
         {
             public const string WatchEpisode = @"http://follw.it/api/3/" + ApiKey + "/episode.{0}";
             public const string WatchMovie = @"http://follw.it/api/3/" + ApiKey + "/movie.{0}";
+            public const string TestAccount = @"http://follw.it/api/3/" + ApiKey + "/user.authenticate";
         }
     }
 }

@@ -87,5 +87,16 @@ namespace MPExtended.Services.StreamingService.Code
             Log.Debug("WSD: Canceled episode {0}", episode.Title);
             return true;
         }
+
+        // not needed as this class won't be called from the configurator
+        public bool TestCredentials(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string HashPassword(string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

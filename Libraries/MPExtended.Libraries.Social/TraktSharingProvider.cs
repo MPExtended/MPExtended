@@ -41,12 +41,22 @@ namespace MPExtended.Libraries.Social
             }
         }
 
-        private string GetPasswordHash()
+        public string HashPassword(string password)
         {
-            // TODO: save password encrypted instead of in plaintext
-            byte[] data = Encoding.ASCII.GetBytes(Configuration["password"]);
+            byte[] data = Encoding.ASCII.GetBytes(password);
             byte[] hash = SHA1Managed.Create().ComputeHash(data);
             return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+        }
+
+        public bool TestCredentials(string username, string password)
+        {
+            var data = new TraktAccountTestData()
+            {
+                UserName = username,
+                Password = HashPassword(password)
+            };
+            var resp = TraktAPI.TestAccount(data);
+            return resp.Status == "success";
         }
 
         public bool StartWatchingMovie(WebMovieDetailed movie)
@@ -77,7 +87,7 @@ namespace MPExtended.Libraries.Social
                 MediaCenterBuildDate = TraktConfig.MediaCenterDate,
                 MediaCenterVersion = TraktConfig.MediaCenterVersion,
                 PluginVersion = TraktConfig.PluginVersion,
-                Password = GetPasswordHash(),
+                Password = Configuration["passwordHash"],
                 UserName = Configuration["username"],
 
                 Duration = movie.Runtime.ToString(),
@@ -148,7 +158,7 @@ namespace MPExtended.Libraries.Social
                 MediaCenterBuildDate = TraktConfig.MediaCenterDate,
                 MediaCenterVersion = TraktConfig.MediaCenterVersion,
                 PluginVersion = TraktConfig.PluginVersion,
-                Password = GetPasswordHash(),
+                Password = Configuration["passwordHash"],
                 UserName = Configuration["username"],
 
                 Duration = show.Runtime.ToString(),

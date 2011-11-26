@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -43,6 +44,13 @@ namespace MPExtended.Libraries.Social.Trakt
             return JSONUtil.FromJSON<TraktResponse>(json);
         }
 
+        public static TraktResponse TestAccount(TraktAccountTestData data)
+        {
+            string url = TraktConfig.URL.TestAccount;
+            string json = CallAPI(url, JSONUtil.ToJSON(data));
+            return JSONUtil.FromJSON<TraktResponse>(json);
+        }
+
         private static string MapToURL(TraktWatchStatus status)
         {
             switch (status)
@@ -60,16 +68,25 @@ namespace MPExtended.Libraries.Social.Trakt
 
         private static string CallAPI(string address, string data)
         {
+            WebClient client = new WebClient();
             try
             {
                 ServicePointManager.Expect100Continue = false;
-                WebClient client = new WebClient();
                 client.Encoding = Encoding.UTF8;
                 client.Headers.Add("User-Agent", TraktConfig.UserAgent);
                 return client.UploadString(address, data);
             }
             catch (WebException e)
             {
+                // this might happen in the TestAccount method
+                if ((e.Response as HttpWebResponse).StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    using (var reader = new StreamReader(e.Response.GetResponseStream()))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+
                 Log.Warn("Failed to call Trakt API", e);
                 return String.Empty;
             }

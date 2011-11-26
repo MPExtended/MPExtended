@@ -78,6 +78,7 @@ namespace MPExtended.Libraries.Social.Trakt
         {
             public const string ScrobbleShow = @"http://api.trakt.tv/show/{0}/" + ApiKey;
             public const string ScrobbleMovie = @"http://api.trakt.tv/movie/{0}/" + ApiKey;
+            public const string TestAccount = @"http://api.trakt.tv/account/test/" + ApiKey;
         }
     }
 }

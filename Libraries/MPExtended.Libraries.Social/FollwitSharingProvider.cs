@@ -40,6 +40,22 @@ namespace MPExtended.Libraries.Social
             }
         }
 
+        public bool TestCredentials(string username, string password)
+        {
+            var data = new FollwitAccountTestData()
+            {
+                UserName = username,
+                Password = FollwitAPI.GeneratePasswordHash(password)
+            };
+            var resp = FollwitAPI.TestAccount(data);
+            return resp.Response == "success";
+        }
+
+        public string HashPassword(string password)
+        {
+            return FollwitAPI.GeneratePasswordHash(password);
+        }
+
         public bool StartWatchingMovie(WebMovieDetailed movie)
         {
             return CallFollwitMovie(movie, FollwitWatchStatus.Watching);
@@ -76,7 +92,7 @@ namespace MPExtended.Libraries.Social
                 var fm = new FollwitMovie()
                 {
                     Username = Configuration["username"],
-                    Password = FollwitAPI.GeneratePasswordHash(Configuration["password"]),
+                    Password = Configuration["passwordHash"],
                     IMDBId = movie.ExternalId.First(x => x.Site == "IMDB").Id
                 };
 
@@ -129,7 +145,7 @@ namespace MPExtended.Libraries.Social
                 var fm = new FollwitEpisode()
                 {
                     Username = Configuration["username"],
-                    Password = FollwitAPI.GeneratePasswordHash(Configuration["password"]),
+                    Password = Configuration["passwordHash"],
                     TVDBId = episode.ExternalId.First(x => x.Site == "TVDB").Id
                 };
 

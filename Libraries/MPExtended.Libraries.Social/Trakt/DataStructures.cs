@@ -6,11 +6,21 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Libraries.Social.Trakt
 {
-    public enum TraktWatchStatus
+    internal enum TraktWatchStatus
     {
         Watching,
         Scrobble,
         CancelWatching
+    }
+
+    [DataContract]
+    internal class TraktAccountTestData
+    {
+        [DataMember(Name = "username")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "password")]
+        public string Password { get; set; }
     }
 
     [DataContract]

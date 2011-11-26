@@ -14,6 +14,16 @@ namespace MPExtended.Libraries.Social.Follwit
     }
 
     [DataContract]
+    internal class FollwitAccountTestData
+    {
+        [DataMember(Name = "username")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "password")]
+        public string Password { get; set; }
+    }
+
+    [DataContract]
     internal class FollwitEpisode
     {
         [DataMember(Name = "username")]

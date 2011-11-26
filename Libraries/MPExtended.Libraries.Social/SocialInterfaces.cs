@@ -31,6 +31,9 @@ namespace MPExtended.Libraries.Social
         IMediaAccessService MediaService { get; set; }
         Dictionary<string, string> Configuration { get; set;  }
 
+        bool TestCredentials(string username, string password);
+        string HashPassword(string password);
+
         bool StartWatchingMovie(WebMovieDetailed movie);
         bool WatchingMovie(WebMovieDetailed movie, int progress);
         bool FinishMovie(WebMovieDetailed movie);
