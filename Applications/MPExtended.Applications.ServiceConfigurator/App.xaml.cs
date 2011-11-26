@@ -46,6 +46,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             // defaults
             StartupArguments.RunAsTrayApp = true;
+            StartupArguments.OpenOnStart = false;
 
             // parse command line arguments
             foreach (string arg in e.Args)
@@ -58,6 +59,10 @@ namespace MPExtended.Applications.ServiceConfigurator
                     case "/NoTray":
                     case "/OnlyConfigurator":
                         StartupArguments.RunAsTrayApp = false;
+                        StartupArguments.OpenOnStart = true;
+                        break;
+                    case "/Open":
+                        StartupArguments.OpenOnStart = true;
                         break;
                     default:
                         Log.Warn("Unknown command-line parameter {0}", arg);

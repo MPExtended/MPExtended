@@ -61,8 +61,7 @@
     </InstallExecuteSequence>
     
     <!-- Run configurator after installation -->
-    <Property Id="WixShellExecTarget" Value="[#ConfiguratorExecutable]" />
-    <CustomAction Id="LaunchConfigurator" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    <CustomAction Id="LaunchConfigurator" FileKey="ConfiguratorExecutable" ExeCommand="/Open" Impersonate="yes" Return="asyncNoWait" />
     
     <!-- Service -->
     <DirectoryRef Id="InstallDirectory">

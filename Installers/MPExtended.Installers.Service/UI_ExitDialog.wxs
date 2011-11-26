@@ -23,7 +23,7 @@
         <Control Id="Description" Type="Text" X="135" Y="70" Width="220" Height="40" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogDescription)" />
         <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogTitle)" />
         <Control Id="OptionalCheckBox" Type="CheckBox" X="135" Y="190" Width="220" Height="40" Hidden="yes" Property="WIXUI_EXITDIALOGOPTIONALCHECKBOX" CheckBoxValue="1" Text="!(loc.LaunchConfiguratorText)">
-          <Condition Action="show">NOT Installed</Condition>
+          <Condition Action="show"><![CDATA[NOT Installed AND (&Feature_Configurator=3)]]></Condition>
         </Control>
 
         <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="123" Height="234" TabSkip="no" Text="ExitDialogBitmap" />

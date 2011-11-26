@@ -78,7 +78,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                 ErrorHandling.ShowError(ex);
             }
 
-            if (StartupArguments.RunAsTrayApp)
+            if (StartupArguments.RunAsTrayApp && !StartupArguments.OpenOnStart)
                 Hide();
 
             HandleMpState(userSessionService.IsMediaPortalRunning().Status);

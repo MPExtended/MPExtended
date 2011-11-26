@@ -25,5 +25,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     internal static class StartupArguments
     {
         public static bool RunAsTrayApp { get; set; }
+        public static bool OpenOnStart { get; set; }
     }
 }
