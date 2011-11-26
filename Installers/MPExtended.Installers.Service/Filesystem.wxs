@@ -122,8 +122,9 @@
             <!-- WSS -->
             <Component Id="Component_WSS_Binaries" Guid="3a0d3e40-c061-40b7-bd78-195c35d702c8">
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.dll" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
+              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.dll" />
             </Component>
 
             <!-- WSS registry -->
