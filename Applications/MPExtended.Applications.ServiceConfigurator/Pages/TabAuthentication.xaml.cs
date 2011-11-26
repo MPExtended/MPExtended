@@ -36,24 +36,28 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         public TabAuthentication()
         {
             InitializeComponent();
-            foreach(User u in Configuration.Services.Users) 
+            foreach (User u in Configuration.Services.Users)
             {
                 users.Add(u);
             }
 
             lvUsers.DataContext = users;
+
+            cbEnable.IsChecked = Configuration.Services.AuthenticationEnabled;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             Configuration.Services.Users = users.ToList();
+            Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
             if (Configuration.Services.Save())
             {
-                MessageBox.Show("Updated users and passwords. Please restart the service for the changes to take effect.");
+                string message = "Updated users and passwords. Please restart the service for the changes to take affect.";
+                MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Save failed");
+                MessageBox.Show("Save failed", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -65,9 +69,25 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            users.Add(new User() { Username = txtUsername.Text, Password = txtPassword.Password });
+            User u = new User() { Username = txtUsername.Text };
+            u.SetPasswordFromPlaintext(txtPassword.Password);
+            users.Add(u);
             txtUsername.Text = "";
             txtPassword.Password = "";
+        }
+
+        private void txtUsername_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnAdd.IsEnabled = !users.Any(x => x.Username == txtUsername.Text);
+        }
+
+        private void cbEnable_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            bool enable = cbEnable.IsChecked.HasValue && cbEnable.IsChecked.Value;
+            btnAdd.IsEnabled = enable;
+            txtUsername.IsEnabled = enable;
+            txtPassword.IsEnabled = enable;
+            lvUsers.IsEnabled = enable;
         }
     }
 }

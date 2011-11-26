@@ -35,9 +35,9 @@ namespace MPExtended.Libraries.ServiceLib
             if (!Configuration.Services.AuthenticationEnabled)
                 return;
 
-            if(Configuration.Services.Users.Count(x => x.Username == userName && x.Password == password) == 0)
+            if(!Configuration.Services.Users.Any(x => x.Username == userName && x.ValidatePassword(password)))
             {
-                Log.Info("Request with invalid username {0} with password {1}", userName, password);
+                Log.Info("Access denied for request with username {0}", userName);
 
                 SecurityTokenException ex = new SecurityTokenException("Validation Failed!");
 
@@ -47,5 +47,6 @@ namespace MPExtended.Libraries.ServiceLib
                 throw ex;
             }
         }
+
     }
 }

@@ -8,22 +8,33 @@
 	Title="TabAuthentication">
 
     <Grid>
-        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,113,12,41" Name="lvUsers" VerticalAlignment="Stretch" ItemsSource="{Binding}">
+        <TextBlock Height="57" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbText" VerticalAlignment="Top" TextWrapping="Wrap" Width="536">
+            You can configure authentication for MPExtended here. It is recommended that you enable authentication and change the password (or delete) of the default account, admin. Never
+            make an installation accessible from the internet without using authentication and secure passwords. 
+        </TextBlock>
+
+        <CheckBox Content="Enable authentication (recommended!)" Height="16" HorizontalAlignment="Left" Margin="12,75,0,0" Name="cbEnable" VerticalAlignment="Top" Click="cbEnable_CheckedChanged" />
+
+        <Label Content="Username" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,111,0,0" Name="lblUsername" VerticalAlignment="Top" />
+        <Label Content="Password" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,140,0,0" Name="lblPassword" VerticalAlignment="Top" />
+
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="102,113,0,0" Name="txtUsername" VerticalAlignment="Top" ToolTip="Username" Width="190" TextChanged="txtUsername_TextChanged" />
+        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="102,142,0,0" Name="txtPassword" VerticalAlignment="Top" ToolTip="Password" Width="190" />
+
+        <Button Content="Save" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnSave" VerticalAlignment="Bottom" Width="171" Click="btnSave_Click"/>
+        <Button Content="Add account" Height="23" HorizontalAlignment="Right" Margin="0,141,108,0" Name="btnAdd" VerticalAlignment="Top" Width="141" Click="btnAdd_Click"/>
+
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,184,12,41" Name="lvUsers" VerticalAlignment="Stretch" ItemsSource="{Binding}">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Name="miDelete" Click="miDelete_Click" />
+                    <MenuItem Header="Delete account" Name="miDelete" Click="miDelete_Click" />
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" Width="200" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Password}" Header="Password" Width="200" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Save" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnSave" VerticalAlignment="Bottom" Width="171" Click="btnSave_Click"/>
-        <Button Content="Add" Height="23" HorizontalAlignment="Right" Margin="0,84,12,0" Name="btnAdd" VerticalAlignment="Top" Width="92" Click="btnAdd_Click"/>
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,84,0,0" Name="txtUsername" VerticalAlignment="Top" ToolTip="Username" Width="190" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="208,84,0,0" Name="txtPassword" VerticalAlignment="Top" ToolTip="Password" Width="190" />
     </Grid>
 </Page>

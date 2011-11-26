@@ -94,7 +94,7 @@ namespace MPExtended.Libraries.General
         public virtual void GetUsernameAndPassword(User user, out string username, out string password)
         {
             username = user.Username;
-            password = user.Password;
+            password = user.GetPassword();
         }
 
         private static bool CheckRegistryKey(RegistryKey reg, string key, string name)

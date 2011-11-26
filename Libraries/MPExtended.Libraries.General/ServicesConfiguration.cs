@@ -20,13 +20,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace MPExtended.Libraries.General
 {
     public class User
     {
+        private const string PASSWORD_KEY = "MPExtended Password Key"; // And here all our security goes out of the window: the key is on the internet.
+
         public string Username { get; set; }
-        public string Password { get; set; }
+        public string EncryptedPassword { get; set; }
+
+        public bool ValidatePassword(string password)
+        {
+            return GetPassword() == password;
+        }
+
+        public string GetPassword()
+        {
+            return Encryption.Decrypt(PASSWORD_KEY, EncryptedPassword);
+        }
+
+        public void SetPasswordFromPlaintext(string password)
+        {
+            EncryptedPassword = Encryption.Encrypt(PASSWORD_KEY, password);
+        }
     }
 
     public class NetworkImpersonationConfiguration
@@ -80,7 +98,7 @@ namespace MPExtended.Libraries.General
             Users = file.Element("users").Elements("user").Select(x => new User()
             {
                 Username = x.Element("username").Value,
-                Password = x.Element("password").Value
+                EncryptedPassword = x.Element("password").Value
             }).ToList();
         }
 
@@ -108,7 +126,7 @@ namespace MPExtended.Libraries.General
 
                 file.Element("users").Elements().Remove();
                 foreach(User u in Users) {
-                    var userElement = new XElement("user", new XElement("username", u.Username), new XElement("password", u.Password));
+                    var userElement = new XElement("user", new XElement("username", u.Username), new XElement("password", u.EncryptedPassword));
                     file.Element("users").Add(userElement);
                 }
 
