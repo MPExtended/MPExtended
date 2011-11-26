@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="697"
+      d:DesignHeight="450" d:DesignWidth="700"
 	Title="MediaAccessServer" xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages" Background="{x:Null}">
 
     <Grid Width="AUTO">
@@ -28,24 +28,24 @@
                 </Style>
             </TabControl.Resources>
 
-            <TabItem Header="General" Width="140" Name="tiGeneral" Tag="Pages/TabGeneral.xaml">
+            <TabItem Header="Project" Width="140" Name="tiGeneral" Tag="Pages/TabProject.xaml">
+            </TabItem>
+            <TabItem Header="Configuration" Width="140" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
+            </TabItem>
+            <TabItem Header="Plugins" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
             </TabItem>
             <TabItem Header="Authentication" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
             </TabItem>
-            <TabItem Header="QR Code" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
+            <TabItem Header="QR-Code" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
             </TabItem>
-            <TabItem Header="Plugin Config" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
+            <TabItem Header="Streaming" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
             </TabItem>
-            <TabItem Header="Troubleshooting" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
+            <TabItem Header="Logs" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
             </TabItem>
-            <TabItem Header="Streaming" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
+            <TabItem Header="Troubleshooting" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
             </TabItem>
-            <TabItem Header="Server Logs" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
-            </TabItem>
-            <TabItem Header="About" Name="tiAbout" Tag="Pages/TabAbout.xaml">
-            </TabItem>
-
         </TabControl>
+        
         <Image HorizontalAlignment="Left" Margin="0,0,0,22" Name="image1" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
         <Button Content="Start" Height="23" Name="btnStartStopService" Width="105" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,0,0,4" />
         <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="6,0,0,137" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="119" FontWeight="Bold" Foreground="#FF009600" />

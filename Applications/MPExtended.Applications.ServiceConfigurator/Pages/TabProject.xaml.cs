@@ -20,46 +20,57 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
     /// <summary>
-    /// Interaction logic for TabAbout.xaml
+    /// Interaction logic for TabProject.xaml
     /// </summary>
-    public partial class TabAbout : Page
+    public partial class TabProject : Page
     {
         private BackgroundWorker versionChecker;
 
-        public TabAbout()
+        public TabProject()
         {
             InitializeComponent();
+            lblVersion.Text = String.Format("{0} (checking for updates...)", VersionUtil.GetVersionName());
+
             versionChecker = new BackgroundWorker();
             versionChecker.DoWork += delegate(object s, DoWorkEventArgs args)
             {
-                string text = String.Format("You're currently using version {0}. ", VersionUtil.GetVersionName());
+                string text;
                 if (!UpdateChecker.IsWorking())
                 {
-                    text += "Failed to retrieve update information.";
+                    text = "failed to retrieve update information";
                 } 
                 else if (UpdateChecker.IsUpdateAvailable())
                 {
-                    text += String.Format("Update available: version {0}, released on {1:dd MMM yyyy}.",
+                    text = String.Format("update available: version {0}, released on {1:dd MMM yyyy}",
                         UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
                 }
                 else
                 {
-                    text += "No update available.";
+                    text = "no update available";
                 }
 
-                args.Result = text;
+                args.Result = String.Format("{0} ({1})", VersionUtil.GetVersionName(), text);
             };
             versionChecker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
             {
-                lblVersion.Content = args.Result as string;
+                lblVersion.Text = args.Result as string;
             };
-            versionChecker.RunWorkerAsync();
+            //versionChecker.RunWorkerAsync();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
+

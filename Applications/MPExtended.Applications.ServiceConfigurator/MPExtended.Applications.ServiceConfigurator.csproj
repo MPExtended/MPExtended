@@ -112,7 +112,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\TabAbout.xaml">
+    <Page Include="Pages\TabProject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,7 +124,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\TabGeneral.xaml">
+    <Page Include="Pages\TabConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,8 +152,8 @@
     <Compile Include="Pages\SectionPluginSettings.xaml.cs">
       <DependentUpon>SectionPluginSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\TabAbout.xaml.cs">
-      <DependentUpon>TabAbout.xaml</DependentUpon>
+    <Compile Include="Pages\TabProject.xaml.cs">
+      <DependentUpon>TabProject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TabAuthentication.xaml.cs">
       <DependentUpon>TabAuthentication.xaml</DependentUpon>
@@ -161,8 +161,8 @@
     <Compile Include="Pages\TabBarcode.xaml.cs">
       <DependentUpon>TabBarcode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\TabGeneral.xaml.cs">
-      <DependentUpon>TabGeneral.xaml</DependentUpon>
+    <Compile Include="Pages\TabConfiguration.xaml.cs">
+      <DependentUpon>TabConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TabPluginConfig.xaml.cs">
       <DependentUpon>TabPluginConfig.xaml</DependentUpon>

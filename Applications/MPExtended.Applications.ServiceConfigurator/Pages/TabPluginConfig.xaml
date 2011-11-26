@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="557"
+      d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabPluginConfig">
 
     <Grid>

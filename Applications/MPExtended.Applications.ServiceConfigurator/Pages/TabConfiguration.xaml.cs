@@ -26,11 +26,11 @@ using MPExtended.Libraries.General;
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
     /// <summary>
-    /// Interaction logic for TabGeneral.xaml
+    /// Interaction logic for TabConfiguration.xaml
     /// </summary>
-    public partial class TabGeneral : Page
+    public partial class TabConfiguration : Page
     {
-        public TabGeneral()
+        public TabConfiguration()
         {
             InitializeComponent();
 
