@@ -32,10 +32,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         protected IPluginData data;
         protected string[] Extensions { get; set; }
 
+        public bool Supported { get; set; }
+
         public PictureLibraryBase(IPluginData data)
         {
             this.data = data;
             Extensions = new string[] { ".jpg", ".png", ".bmp" };
+            Supported = true;
         }
 
         public virtual IEnumerable<WebPictureBasic> GetAllPicturesBasic()

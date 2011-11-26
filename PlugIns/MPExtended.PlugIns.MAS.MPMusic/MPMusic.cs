@@ -35,12 +35,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     public class MPMusic : Database, IMusicLibrary
     {
         private Dictionary<string, string> configuration;
+        public bool Supported { get; set; }
 
         [ImportingConstructor]
         public MPMusic(IPluginData data)
         {
             configuration = data.GetConfiguration("MP MyMusic");
             DatabasePath = configuration["database"];
+            Supported = File.Exists(DatabasePath);
         }
 
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()

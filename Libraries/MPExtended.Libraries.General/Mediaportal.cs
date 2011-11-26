@@ -97,8 +97,7 @@ namespace MPExtended.Libraries.General
 
         public static Dictionary<string, string> ReadSectionFromConfigFile(string sectionName)
         {
-            string path = Path.Combine(GetLocation(MediaportalDirectory.Config), "MediaPortal.xml");
-            XElement file = XElement.Load(path);
+            XElement file = XElement.Load(GetConfigFilePath());
 
             // find section
             var elements = file.Elements("section").Where(x => x.Attribute("name").Value == sectionName);
@@ -110,6 +109,11 @@ namespace MPExtended.Libraries.General
 
             // return list
             return elements.First().Elements("entry").ToDictionary(x => x.Attribute("name").Value, x => x.Value);
+        }
+
+        public static string GetConfigFilePath()
+        {
+            return Path.Combine(GetLocation(MediaportalDirectory.Config), "MediaPortal.xml");
         }
     }
 }

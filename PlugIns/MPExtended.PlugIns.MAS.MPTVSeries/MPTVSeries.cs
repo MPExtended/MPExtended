@@ -34,12 +34,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     public class MPTVSeries : Database, ITVShowLibrary
     {
         private Dictionary<string, string> configuration;
+        public bool Supported { get; set; }
 
         [ImportingConstructor]
         public MPTVSeries(IPluginData data)
         {
             this.configuration = data.GetConfiguration("MP-TVSeries");
             this.DatabasePath = configuration["database"];
+            Supported = File.Exists(DatabasePath);
         }
 
         public IEnumerable<WebTVShowBasic> GetAllTVShowsBasic()

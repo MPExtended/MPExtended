@@ -53,7 +53,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             get
             {
-                return items.Keys;
+                return items.Where(x => x.Value.Value.Supported).Select(x => x.Key).ToList();
             }
         }
 
@@ -61,7 +61,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             int key = passedId.HasValue ? passedId.Value : ProviderHandler.GetDefaultProvider(type);
 
-            if (!items.ContainsKey(key))
+            if (!items.ContainsKey(key) || !items[key].Value.Supported)
             {
                 Log.Error("Tried to get library for unknown id {0}", key);
                 return default(T);
@@ -70,19 +70,14 @@ namespace MPExtended.Services.MediaAccessService
             return items[key].Value;
         }
 
-        public Tuple<T, IDictionary<string, object>> GetValueAndMetadata(int key)
-        {
-            return new Tuple<T, IDictionary<string, object>>(GetValue(key), items[key].Metadata);
-        }
-
         public int Count()
         {
-            return items.Count;
+            return items.Count(x => x.Value.Value.Supported);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return items.Select(x => GetValue(x.Key)).GetEnumerator();
+            return items.Where(x => x.Value.Value.Supported).Select(x => GetValue(x.Key)).GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -93,7 +88,7 @@ namespace MPExtended.Services.MediaAccessService
         // more specific methods below
         public int GetKeyByName(string name)
         {
-            var list = items.Where(x => (string)x.Value.Metadata["Name"] == name);
+            var list = items.Where(x => x.Value.Value.Supported && (string)x.Value.Metadata["Name"] == name);
             if (list.Count() > 0)
             {
                 return list.First().Key;
@@ -104,22 +99,22 @@ namespace MPExtended.Services.MediaAccessService
 
         public List<WebBackendProvider> GetAllAsBackendProvider()
         {
-            List<WebBackendProvider> ret = new List<WebBackendProvider>();
-            foreach (int key in items.Keys)
-            {
-                ret.Add(new WebBackendProvider()
+            return items.Values
+                .Where(x => x.Value.Supported)
+                .Select(x => new WebBackendProvider()
                 {
-                    Name = (string)items[key].Metadata["Name"],
-                    Id = (int)items[key].Metadata["Id"],
-                    Version = VersionUtil.GetBuildVersion(items[key].Value.GetType().Assembly).ToString()
-                });
-            }
-            return ret;
+                    Name = (string)x.Metadata["Name"],
+                    Id = (int)x.Metadata["Id"],
+                    Version = VersionUtil.GetBuildVersion(x.Value.GetType().Assembly).ToString()
+                })
+                .ToList();
         }
 
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
-            return items.Keys.SelectMany(key => GetValue(key).Search(text).Finalize((int)items[key].Metadata["Id"], type));
+            return items
+                .Where(x => x.Value.Value.Supported)
+                .SelectMany(x => x.Value.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type));
         }
     }
 }

@@ -30,7 +30,6 @@ namespace MPExtended.Services.MediaAccessService
         List<WebBackendProvider> GetAllAsBackendProvider();
         int GetKeyByName(string name);
         T GetValue(int? passedId);
-        Tuple<T, IDictionary<string, object>> GetValueAndMetadata(int key);
         ICollection<int> Keys { get; }
         IEnumerable<WebSearchResult> SearchAll(string text);
         T this[int? key] { get; }

@@ -37,10 +37,13 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         // - it's less code for us
         // - we can more easily add new features (see for example the horrible TMDB implementation below)
 
+        public bool Supported { get; set; }
+
         [ImportingConstructor]
         public MPMovingPictures(IPluginData data)
         {
             DatabasePath = data.GetConfiguration("Moving Pictures")["database"];
+            Supported = File.Exists(DatabasePath);
         }
 
         [MergeListReader]

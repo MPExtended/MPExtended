@@ -44,6 +44,12 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         [ImportingConstructor]
         public MPPictureShares(IPluginData data) : base(data)
         {
+            if (!File.Exists(Mediaportal.GetConfigFilePath()))
+            {
+                Supported = false;
+                return;
+            }
+
             IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile("pictures");
 
             Extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
@@ -57,7 +63,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                     continue;
                 }
 
-                shares.Add(new Share() 
+                shares.Add(new Share()
                 {
                     Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
                     Path = Path.GetFullPath(list.Where(x => x.Key == "sharepath" + i).Select(x => x.Value).First()),
@@ -66,6 +72,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             shareCache = new Dictionary<string, Share>();
+            Supported = true;
         }
 
         public override IEnumerable<WebCategory> GetAllPictureCategories()

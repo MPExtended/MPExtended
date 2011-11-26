@@ -17,6 +17,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface ILibrary
     {
+        bool Supported { get; }
         WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);

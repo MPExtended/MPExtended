@@ -32,10 +32,13 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [ExportMetadata("Id", 7)]
     public class MPVideos : Database, IMovieLibrary
     {
+        public bool Supported { get; set; }
+
         [ImportingConstructor]
         public MPVideos(IPluginData data)
         {
             DatabasePath = data.GetConfiguration("MP MyVideo")["database"];
+            Supported = File.Exists(DatabasePath);
         }
 
         private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
