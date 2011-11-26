@@ -32,8 +32,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
     {
         private string root;
 
-        public bool Supported { get; set; }
-
         [ImportingConstructor]
         public FSPictures(IPluginData data) : base(data)
         {
