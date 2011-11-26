@@ -113,5 +113,10 @@ namespace MPExtended.Libraries.General
 
             return allServices.Where(x => x.IsInstalled && !disabled.Contains(x.Assembly)).ToList();
         }
+
+        public static bool IsServiceInstalled(MPExtendedService srv)
+        {
+            return GetInstalledServices().Any(x => x.ServiceName == srv);
+        }
     }
 }

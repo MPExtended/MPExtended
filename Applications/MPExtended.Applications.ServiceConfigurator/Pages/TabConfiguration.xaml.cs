@@ -76,11 +76,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
             {
-                MessageBox.Show("Credentials validated successfully", "MPExtended");
+                MessageBox.Show("Credentials validated successfully", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Failed to login using network credentials", "MPExtended");
+                MessageBox.Show("Failed to login using network credentials", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

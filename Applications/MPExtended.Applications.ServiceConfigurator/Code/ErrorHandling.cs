@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
-using System.Windows.Forms;
+using System.Windows;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -29,7 +29,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         public static void ShowError(Exception ex)
         {
             Log.Warn("Unexpected error happened", ex);
-            MessageBox.Show("An unexpected error occured. Please file a bugreport with the service's log files attached", ex.Message);
+            string message = String.Format("An unexpected error occured. Please file a bugreport with the service's log files attached.\n\n{0}", ex.Message);
+            MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

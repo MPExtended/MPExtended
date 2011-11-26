@@ -75,7 +75,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             catch (Exception ex)
             {
                 Log.Error("Failed to open configurator", ex);
-                MessageBox.Show(ex.ToString());
+                ErrorHandling.ShowError(ex);
             }
 
             if (StartupArguments.RunAsTrayApp)

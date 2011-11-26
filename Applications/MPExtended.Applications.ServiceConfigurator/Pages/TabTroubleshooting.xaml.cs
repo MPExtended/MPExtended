@@ -133,7 +133,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             if (dlg.ShowDialog() == true)
             {
                 LogExporter.Export(dlg.FileName);
-                MessageBox.Show(String.Format("Exported logs and configuration data to {0}", dlg.FileName), "Export", MessageBoxButton.OK);
+                MessageBox.Show(String.Format("Exported logs and configuration data to {0}", dlg.FileName), "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

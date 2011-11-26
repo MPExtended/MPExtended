@@ -22,6 +22,7 @@ using System.Security.Principal;
 using System.ServiceProcess;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
@@ -46,42 +47,28 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 mServiceController = new ServiceController("MPExtended Service");
+                HandleServiceState(mServiceController.Status);
             }
             catch (InvalidOperationException)
             {
-                MessageBox.Show("MPExtended service is not installed! Please install the latest version.");
-                return;
-            }
-
-            if (!isServiceAvailable(mServiceController))
-            {
                 mServiceController = null;
+                Log.Error("MPExtended Service not installed");
+                MessageBox.Show("MPExtended Service not installed. Please make sure your installation is correct.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             // initialize watcher
             InitBackgroundWorker();
-        }
 
-        // what are we trying to achieve with this? 
-        private bool isServiceAvailable(ServiceController _controller)
-        {
-            try
+            // hide tabs not applicable for current situation
+            if (!Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
             {
-                ServiceController[] controllers = ServiceController.GetServices();
-
-                foreach (ServiceController c in controllers)
-                {
-                    if (c.ServiceName.Equals(_controller.ServiceName))
-                    {
-                        return true;
-                    }
-                }
+                tiPlugin.Visibility = System.Windows.Visibility.Hidden;
+                tiSocial.Visibility = System.Windows.Visibility.Hidden;
             }
-            catch (Exception ex)
+            if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
             {
-                Log.Warn("Service unavailable: {0}", ex.ToString());
+                tiStreaming.Visibility = System.Windows.Visibility.Hidden;
             }
-            return false;
         }
 
         /// <summary>
@@ -100,6 +87,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        /// <summary>
+        /// Initialize the service watcher.
+        /// </summary>
         private void InitBackgroundWorker()
         {
             // Task to watch the windows service
@@ -154,21 +144,21 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 case ServiceControllerStatus.Stopped:
                     btnStartStopService.Content = "Start";
-                    lblServiceState.Content = "Service Stopped";
-                    lblServiceState.Foreground = System.Windows.Media.Brushes.Red;
+                    lblServiceState.Content = "Service stopped";
+                    lblServiceState.Foreground = Brushes.Red;
                     break;
                 case ServiceControllerStatus.Running:
                     btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service Started";
-                    lblServiceState.Foreground = System.Windows.Media.Brushes.Green;
+                    lblServiceState.Content = "Service started";
+                    lblServiceState.Foreground = Brushes.Green;
                     break;
                 case ServiceControllerStatus.StartPending:
                     btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service Starting";
-                    lblServiceState.Foreground = System.Windows.Media.Brushes.Teal;
+                    lblServiceState.Content = "Service starting";
+                    lblServiceState.Foreground = Brushes.Teal;
                     break;
                 default:
-                    lblServiceState.Foreground = System.Windows.Media.Brushes.Teal;
+                    lblServiceState.Foreground = Brushes.Teal;
                     lblServiceState.Content = "Service " + _status.ToString();
                     break;
             }
