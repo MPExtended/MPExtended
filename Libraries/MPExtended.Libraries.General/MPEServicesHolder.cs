@@ -23,14 +23,28 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Libraries.General
 {
-    internal class MPEServicesHolder
+    public class MPEServicesHolder
     {
+        private string MASUrl;
+        private string TASUrl;
+
         private IMediaAccessService MASConnection;
         private IWebStreamingService WSSForMAS;
         private IStreamingService StreamForMAS;
         private ITVAccessService TASConnection;
         private IWebStreamingService WSSForTAS;
         private IStreamingService StreamForTAS;
+
+        public MPEServicesHolder(string mas, string tas)
+        {
+            MASUrl = mas;
+            TASUrl = tas;
+        }
+
+        public MPEServicesHolder()
+            : this(Configuration.Services.MASConnection, Configuration.Services.TASConnection)
+        {
+        }
 
         ~MPEServicesHolder()
         {
@@ -48,7 +62,7 @@ namespace MPExtended.Libraries.General
             {
                 if (MASConnection == null || ((ICommunicationObject)MASConnection).State == CommunicationState.Faulted)
                 {
-                    MASConnection = CreateConnection<IMediaAccessService>(Configuration.Services.MASConnection, "MediaAccessService");
+                    MASConnection = CreateConnection<IMediaAccessService>(MASUrl, "MediaAccessService");
                 }
 
                 return MASConnection;
@@ -75,7 +89,7 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                Uri uri = new Uri(Configuration.Services.MASConnection);
+                Uri uri = new Uri(MASUrl);
                 return uri.IsLoopback;
             }
         }
@@ -86,7 +100,7 @@ namespace MPExtended.Libraries.General
             {
                 if (WSSForMAS == null || ((ICommunicationObject)WSSForMAS).State == CommunicationState.Faulted)
                 {
-                    WSSForMAS = CreateConnection<IWebStreamingService>(Configuration.Services.MASConnection, "StreamingService");
+                    WSSForMAS = CreateConnection<IWebStreamingService>(MASUrl, "StreamingService");
                 }
 
                 return WSSForMAS;
@@ -99,7 +113,7 @@ namespace MPExtended.Libraries.General
             {
                 if (StreamForMAS == null || ((ICommunicationObject)StreamForMAS).State == CommunicationState.Faulted)
                 {
-                    StreamForMAS = CreateConnection<IStreamingService>(Configuration.Services.MASConnection, "StreamingService");
+                    StreamForMAS = CreateConnection<IStreamingService>(MASUrl, "StreamingService");
                 }
 
                 return StreamForMAS;
@@ -126,7 +140,7 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                Uri uri = new Uri(Configuration.Services.MASConnection);
+                Uri uri = new Uri(MASUrl);
                 return uri.IsLoopback;
             }
         }
@@ -137,7 +151,7 @@ namespace MPExtended.Libraries.General
             {
                 if (TASConnection == null || ((ICommunicationObject)TASConnection).State == CommunicationState.Faulted)
                 {
-                    TASConnection = CreateConnection<ITVAccessService>(Configuration.Services.TASConnection, "TVAccessService");
+                    TASConnection = CreateConnection<ITVAccessService>(TASUrl, "TVAccessService");
                 }
 
                 return TASConnection;
@@ -163,7 +177,7 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                Uri uri = new Uri(Configuration.Services.TASConnection);
+                Uri uri = new Uri(TASUrl);
                 return uri.IsLoopback;
             }
         }
@@ -174,7 +188,7 @@ namespace MPExtended.Libraries.General
             {
                 if (WSSForTAS == null || ((ICommunicationObject)WSSForTAS).State == CommunicationState.Faulted)
                 {
-                    WSSForTAS = CreateConnection<IWebStreamingService>(Configuration.Services.TASConnection, "StreamingService");
+                    WSSForTAS = CreateConnection<IWebStreamingService>(TASUrl, "StreamingService");
                 }
 
                 return WSSForTAS;
@@ -187,7 +201,7 @@ namespace MPExtended.Libraries.General
             {
                 if (StreamForTAS == null || ((ICommunicationObject)StreamForTAS).State == CommunicationState.Faulted)
                 {
-                    StreamForTAS = CreateConnection<IStreamingService>(Configuration.Services.TASConnection, "StreamingService");
+                    StreamForTAS = CreateConnection<IStreamingService>(TASUrl, "StreamingService");
                 }
 
                 return StreamForTAS;
@@ -214,7 +228,7 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                Uri uri = new Uri(Configuration.Services.TASConnection);
+                Uri uri = new Uri(TASUrl);
                 return uri.IsLoopback;
             }
         }

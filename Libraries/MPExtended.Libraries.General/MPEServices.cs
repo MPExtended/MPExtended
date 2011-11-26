@@ -41,5 +41,10 @@ namespace MPExtended.Libraries.General
         public static IStreamingService TASStream { get { return holder.TASStream; } }
         public static bool HasTASStreamConnection { get { return holder.HasTASStreamConnection; } }
         public static bool IsTASStreamLocal { get { return holder.IsTASStreamLocal; } }
+
+        public static void SetConnectionUrls(string mas, string tas)
+        {
+            holder = new MPEServicesHolder(mas, tas);
+        }
     }
 }
