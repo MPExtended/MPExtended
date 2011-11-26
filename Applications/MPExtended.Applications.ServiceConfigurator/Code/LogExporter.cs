@@ -28,6 +28,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal class LogExporter
     {
+        private const string PasswordSubstitute = "Removed by ServiceConfigurator export";
+
         public static void Export(string savePath)
         {
             // create zipfile
@@ -41,17 +43,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                     File.OpenRead(file.FullName).CopyTo(logPart.GetStream());
                 }
 
-                // copy config files
-                foreach(string name in new string[] { "MediaAccess.xml", "Streaming.xml" }) {
-                    var configPart = zipFile.CreatePart(new Uri("/" + name, UriKind.Relative), "", CompressionOption.Maximum);
-                    File.OpenRead(Path.Combine(Installation.GetConfigurationDirectory(), name)).CopyTo(configPart.GetStream());
-                }
+                // copy MediaAccess.xml
+                var masPart = zipFile.CreatePart(new Uri("/MediaAccess.xml", UriKind.Relative), "", CompressionOption.Maximum);
+                File.OpenRead(Path.Combine(Installation.GetConfigurationDirectory(), "MediaAccess.xml")).CopyTo(masPart.GetStream());
 
-                // strip username & password from file
+                // strip watch sharing username and password from Streaming.xml
+                var streamingPart = zipFile.CreatePart(new Uri("/Streaming.xml", UriKind.Relative), "", CompressionOption.Maximum);
+                XElement streaming = XElement.Load(Path.Combine(Installation.GetConfigurationDirectory(), "Streaming.xml"));
+                streaming.Element("watchsharing").Element("passwordHash").Value = PasswordSubstitute;
+                streaming.Save(streamingPart.GetStream());
+
+                // strip username & passwords from Services.xml file
                 var servicePart = zipFile.CreatePart(new Uri("/Services.xml", UriKind.Relative), "", CompressionOption.Maximum);
                 XElement services = XElement.Load(Path.Combine(Installation.GetConfigurationDirectory(), "Services.xml"));
                 services.Element("users").Elements("user").Remove();
-                services.Element("users").Value = "Removed by ServiceConfigurator export";
+                services.Element("users").Value = PasswordSubstitute;
+                services.Element("networkImpersonation").Element("password").Value = PasswordSubstitute;
                 services.Save(servicePart.GetStream());
             }
         }
