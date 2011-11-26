@@ -39,7 +39,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public void BuildPipeline(StreamContext context, int position, EncoderUnit.LogStream log)
         {            
             // input
-            bool doInputReader = !context.Source.IsLocalFile;
+            bool doInputReader = context.Source.DoesNeedInputReader();
             if(doInputReader)
             {
                 context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);

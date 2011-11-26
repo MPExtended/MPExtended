@@ -34,6 +34,7 @@ namespace MPExtended.Libraries.General
         public string Domain { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public bool ReadInStreamingService { get; set; }
     }
 
     public class ServicesConfiguration
@@ -73,6 +74,7 @@ namespace MPExtended.Libraries.General
                 Domain = file.Element("networkImpersonation").Element("domain").Value,
                 Username = file.Element("networkImpersonation").Element("username").Value,
                 Password = file.Element("networkImpersonation").Element("password").Value,
+                ReadInStreamingService = file.Element("networkImpersonation").Element("readInStreamingService").Value == "true"
             };
 
             Users = file.Element("users").Elements("user").Select(x => new User()
@@ -102,6 +104,7 @@ namespace MPExtended.Libraries.General
                 file.Element("networkImpersonation").Element("domain").Value = NetworkImpersonation.Domain;
                 file.Element("networkImpersonation").Element("username").Value = NetworkImpersonation.Username;
                 file.Element("networkImpersonation").Element("password").Value = NetworkImpersonation.Password;
+                file.Element("networkImpersonation").Element("readInStreamingService").Value = NetworkImpersonation.ReadInStreamingService ? "true" : "false";
 
                 file.Element("users").Elements().Remove();
                 foreach(User u in Users) {

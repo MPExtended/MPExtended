@@ -531,7 +531,7 @@ namespace MPExtended.Services.TVAccessService
                         using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
                         {
                             var ret = new WebRecordingFileInfo(filename);
-                            ret.IsLocalFile = false;
+                            ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
                             ret.OnNetworkDrive = true;
                             return ret;
                         }
@@ -553,7 +553,7 @@ namespace MPExtended.Services.TVAccessService
                 WebRecordingFileInfo info = GetRecordingFileInfo(id);
 
                 // return it as a simple file
-                if (info.IsLocalFile)
+                if (info.IsLocalFile && File.Exists(info.Path))
                 {
                     return new FileStream(info.Path, FileMode.Open, FileAccess.Read);
                 }

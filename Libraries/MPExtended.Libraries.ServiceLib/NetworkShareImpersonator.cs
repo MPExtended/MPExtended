@@ -27,11 +27,11 @@ namespace MPExtended.Libraries.ServiceLib
     {
         private Impersonator impersonator;
 
-        public NetworkShareImpersonator()
+        public NetworkShareImpersonator(bool impersonate)
         {
             string username = Configuration.Services.NetworkImpersonation.Username;
             string password = Configuration.Services.NetworkImpersonation.Password;
-            if (!String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            if (impersonate && !String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 try
                 {
@@ -43,6 +43,11 @@ namespace MPExtended.Libraries.ServiceLib
                     impersonator = null;
                 }
             }
+        }
+
+        public NetworkShareImpersonator()
+            : this(true)
+        {
         }
 
         public void Dispose()

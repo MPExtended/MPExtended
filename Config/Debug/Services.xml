@@ -12,6 +12,7 @@
     <domain></domain>
     <username></username>
     <password></password>
+    <readInStreamingService>true</readInStreamingService>
   </networkImpersonation>
   
   <bonjour>

@@ -116,15 +116,18 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // execute it
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
-            info.FileName = Configuration.Streaming.FFMpegPath;
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            Process proc = new Process();
-            proc.StartInfo = info;
-            proc.Start();
-            proc.WaitForExit();
+            using (var impersonator = source.GetImpersonator())
+            {
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.Arguments = String.Format("-ss {0} -vframes 1 -i \"{1}\" {2} -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
+                info.FileName = Configuration.Streaming.FFMpegPath;
+                info.CreateNoWindow = true;
+                info.UseShellExecute = false;
+                Process proc = new Process();
+                proc.StartInfo = info;
+                proc.Start();
+                proc.WaitForExit();
+            }
 
             // log when failed
             if (!File.Exists(tempFile))
@@ -161,7 +164,12 @@ namespace MPExtended.Services.StreamingService.Code
             // check for existence on disk
             if (!File.Exists(cachedPath))
             {
-                Image orig = Image.FromStream(src.GetDataStream());
+                Image orig;
+                using (var impersonator = source.GetImpersonator())
+                {
+                    orig = Image.FromStream(src.GetDataStream());
+                }
+
                 if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
                 {
                     WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
@@ -250,10 +258,24 @@ namespace MPExtended.Services.StreamingService.Code
                 data = MPEServices.MAS.RetrieveFile(source.Provider, (WebMediaType)source.MediaType, (WebFileType)artworktype, source.Id, source.Offset);
                 return new ImageSource(data, info.Extension);
             }
-            else
+            else if (info.OnNetworkDrive)
+            {
+                using (var impersonator = new NetworkShareImpersonator())
+                {
+                    if (File.Exists(path))
+                    {
+                        data = File.OpenRead(path);
+                        return new ImageSource(data, info.Extension);
+                    }
+                }
+            }
+            
+            // fallback to a simple read only if file is accessible
+            if(File.Exists(path))
             {
                 return new ImageSource(path);
             }
+            return null;
         }
 
         private static Stream StreamImage(ImageSource src) 

@@ -683,7 +683,7 @@ namespace MPExtended.Services.MediaAccessService
                         using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
                         {
                             var ret = new WebFileInfo(path);
-                            ret.IsLocalFile = false;
+                            ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
                             ret.OnNetworkDrive = true;
                             return ret;
                         }
@@ -719,13 +719,13 @@ namespace MPExtended.Services.MediaAccessService
                 WebFileInfo info = GetFileInfo(provider, mediatype, filetype, id, offset);
 
                 // first try to read the file
-                if (info.IsLocalFile)
+                if (info.IsLocalFile && File.Exists(path))
                 {
                     return new FileStream(path, FileMode.Open, FileAccess.Read);
                 }
 
                 // maybe the plugin has some magic
-                if (info.Exists && !info.OnNetworkDrive)
+                if (!info.IsLocalFile && info.Exists && !info.OnNetworkDrive)
                 {
                     return GetLibrary(provider, mediatype).GetFile(path);
                 }

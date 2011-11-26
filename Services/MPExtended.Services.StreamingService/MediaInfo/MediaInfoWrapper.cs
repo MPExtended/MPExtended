@@ -56,7 +56,10 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             }
             else if (source.IsLocalFile)
             {
-                return GetMediaInfo(source.GetPath(), false);
+                using (var impersonator = source.GetImpersonator())
+                {
+                    return GetMediaInfo(source.GetPath(), false);
+                }
             }
             else
             {

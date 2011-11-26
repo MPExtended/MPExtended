@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Units;
@@ -147,6 +148,13 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 throw new FileNotFoundException();
             }
+            else if (IsLocalFile && FileInfo.OnNetworkDrive)
+            {
+                using (var impersonator = new NetworkShareImpersonator())
+                {
+                    return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                }
+            }
             else if (IsLocalFile)
             {
                 return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -165,6 +173,25 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
+        public NetworkShareImpersonator GetImpersonator()
+        {
+            // only do impersonation for files that are confirmed to be on a network drive and we can't access the normal way
+            bool doImpersonation = FileInfo.OnNetworkDrive && !File.Exists(FileInfo.Path);
+            return new NetworkShareImpersonator(doImpersonation);
+        }
+
+        public bool DoesNeedInputReader()
+        {
+            // non-local files and TV always need input readers
+            if (!IsLocalFile || MediaType == WebStreamMediaType.TV)
+            {
+                return true;
+            }
+
+            // the only case where we don't need an input reader is when we can access the file (which happens most of the time)
+            return !File.Exists(GetPath());
+        }
+
         public IProcessingUnit GetInputReaderUnit()
         {
             if (!Exists)
@@ -172,7 +199,12 @@ namespace MPExtended.Services.StreamingService.Code
                 throw new FileNotFoundException();
             }
 
-            if (IsLocalFile || MediaType == WebStreamMediaType.TV)
+            if (FileInfo.IsLocalFile && FileInfo.OnNetworkDrive)
+            {
+                return new ImpersonationInputUnit(GetPath());
+            }
+
+            if ((IsLocalFile && File.Exists(GetPath())) || MediaType == WebStreamMediaType.TV)
             {
                 return new InputUnit(GetPath());
             }
