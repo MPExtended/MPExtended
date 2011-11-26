@@ -41,7 +41,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             cbBonjourEnabled.IsChecked = Configuration.Services.BonjourEnabled;
             txtServiceName.Text = GetServiceName();
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
-            txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.Password;
+            txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -50,7 +50,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.BonjourName = txtServiceName.Text;
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
-            Configuration.Services.NetworkImpersonation.Password = txtNetworkPassword.Password;
+            Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
             Configuration.Services.Save();
         }
 

@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.ServiceLib
         public NetworkShareImpersonator(bool impersonate)
         {
             string username = Configuration.Services.NetworkImpersonation.Username;
-            string password = Configuration.Services.NetworkImpersonation.Password;
+            string password = Configuration.Services.NetworkImpersonation.GetPassword();
             if (impersonate && !String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 try

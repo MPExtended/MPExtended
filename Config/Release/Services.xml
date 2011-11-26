@@ -11,7 +11,7 @@
   <networkImpersonation>
     <domain></domain>
     <username></username>
-    <password></password>
+    <password></password><!-- This is encrypted, so set it only through the configurator -->
     <readInStreamingService>true</readInStreamingService>
   </networkImpersonation>
 

@@ -49,10 +49,22 @@ namespace MPExtended.Libraries.General
 
     public class NetworkImpersonationConfiguration
     {
+        private const string PASSWORD_KEY = "MPExtended Impersonation Password"; // And here all our security goes out of the window: the key is on the internet.
+
         public string Domain { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+        public string EncryptedPassword { get; set; }
         public bool ReadInStreamingService { get; set; }
+
+        public string GetPassword()
+        {
+            return EncryptedPassword == String.Empty ? String.Empty : Encryption.Decrypt(PASSWORD_KEY, EncryptedPassword);
+        }
+
+        public void SetPasswordFromPlaintext(string password)
+        {
+            EncryptedPassword = password == String.Empty ? String.Empty : Encryption.Encrypt(PASSWORD_KEY, password);
+        }
     }
 
     public class ServicesConfiguration
@@ -91,7 +103,7 @@ namespace MPExtended.Libraries.General
             {
                 Domain = file.Element("networkImpersonation").Element("domain").Value,
                 Username = file.Element("networkImpersonation").Element("username").Value,
-                Password = file.Element("networkImpersonation").Element("password").Value,
+                EncryptedPassword = file.Element("networkImpersonation").Element("password").Value,
                 ReadInStreamingService = file.Element("networkImpersonation").Element("readInStreamingService").Value == "true"
             };
 
@@ -121,7 +133,7 @@ namespace MPExtended.Libraries.General
 
                 file.Element("networkImpersonation").Element("domain").Value = NetworkImpersonation.Domain;
                 file.Element("networkImpersonation").Element("username").Value = NetworkImpersonation.Username;
-                file.Element("networkImpersonation").Element("password").Value = NetworkImpersonation.Password;
+                file.Element("networkImpersonation").Element("password").Value = NetworkImpersonation.EncryptedPassword;
                 file.Element("networkImpersonation").Element("readInStreamingService").Value = NetworkImpersonation.ReadInStreamingService ? "true" : "false";
 
                 file.Element("users").Elements().Remove();
