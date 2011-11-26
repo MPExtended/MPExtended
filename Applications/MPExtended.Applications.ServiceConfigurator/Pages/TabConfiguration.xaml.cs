@@ -21,7 +21,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using MPExtended.Libraries.General;
+using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -36,8 +38,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             // load config
             txtPort.Text = Configuration.Services.Port.ToString();
-            txtServiceName.Text = Configuration.Services.BonjourName.ToString();
             cbBonjourEnabled.IsChecked = Configuration.Services.BonjourEnabled;
+            txtServiceName.Text = GetServiceName();
+            txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
+            txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.Password;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -45,7 +49,44 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.Port = Int32.Parse(txtPort.Text);
             Configuration.Services.BonjourName = txtServiceName.Text;
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
+            Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
+            Configuration.Services.NetworkImpersonation.Password = txtNetworkPassword.Password;
             Configuration.Services.Save();
+        }
+
+        private string GetServiceName()
+        {
+            string value = Configuration.Services.BonjourName;
+            if (!String.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            try
+            {
+                return System.Environment.MachineName;
+            }
+            catch (Exception)
+            {
+                return "MPExtended Services";
+            }
+        }
+
+        private void btnTestCredentials_Click(object sender, RoutedEventArgs e)
+        {
+            if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
+            {
+                MessageBox.Show("Credentials validated successfully", "MPExtended");
+            }
+            else
+            {
+                MessageBox.Show("Failed to login using network credentials", "MPExtended");
+            }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            CommonEventHandlers.NavigateHyperlink(sender, e);
         }
     }
 }

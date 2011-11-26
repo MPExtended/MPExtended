@@ -7,12 +7,43 @@
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabGeneral">
 
-    <Grid>
-        <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="8,9,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="85,9,0,0" Name="txtPort" VerticalAlignment="Top" Width="83" Text="4322" IsReadOnly="False" IsEnabled="True" />
-        <Button Content="Save" Name="btnSave" MinWidth="80" Margin="8,46,0,0" MinHeight="23" Click="btnSave_Click" HorizontalAlignment="Left" Width="211" Height="23" VerticalAlignment="Top" />
-        <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="247,9,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="352,11,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="181" />
-        <CheckBox Content="Enable Autodetection via ZeroConf/Bonjour" Height="16" HorizontalAlignment="Left" Margin="249,50,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
+    <Grid>        
+        <GroupBox Header="Services" Height="109" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="256">
+            <Grid>
+                <TextBlock Height="37" Margin="6,6,6,0" Name="tbPort" Text="You can configure the port on which the services listen here." TextWrapping="Wrap" VerticalAlignment="Top" />
+                <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="6,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
+                <TextBox Height="23"  Margin="80,51,0,0" Name="txtPort" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Text="4322" IsReadOnly="False" IsEnabled="True" />
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="Autodetection" Height="237" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
+            <Grid>
+                <TextBlock TextWrapping="Wrap" Height="139" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="228">
+                    The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves.
+                    <LineBreak />
+                    This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed, else you can download it
+                    <Hyperlink NavigateUri="http://support.apple.com/kb/DL999" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>.
+                </TextBlock>
+
+                <CheckBox Content="Enable autodetection" Height="16" HorizontalAlignment="Left" Margin="10,155,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
+                <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="6,177,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" />
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="99,179,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="139" />
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="Network drives" Height="223" HorizontalAlignment="Left" Margin="12,127,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="256">
+            <Grid>
+                <TextBlock Height="99" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="232" TextWrapping="Wrap">
+                    If you have put your media files on a different system (such as a dedicated server or a NAS), MPExtended needs the credentials for this drive to access them. Usually this are the credentials of your Windows account.
+                </TextBlock>
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="118,111,0,0" Name="txtNetworkUser" VerticalAlignment="Top" Width="120" />
+                <PasswordBox Height="23" HorizontalAlignment="Left" Margin="118,140,0,0" Name="txtNetworkPassword" VerticalAlignment="Top" Width="120" />
+                <Label Content="Username" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,109,0,0" Name="label1" VerticalAlignment="Top" Width="78" />
+                <Label Content="Password" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,138,0,0" Name="label2" VerticalAlignment="Top" Width="78" />
+                <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="118,169,0,0" Name="btnTestCredentials" VerticalAlignment="Top" Width="120" Click="btnTestCredentials_Click" />
+            </Grid>
+        </GroupBox>
+
+        <Button Content="Save" Name="btnSave" MinWidth="80" Margin="0,0,12,12" MinHeight="23" Click="btnSave_Click" HorizontalAlignment="Right" Width="100" Height="23" VerticalAlignment="Bottom" />
     </Grid>
 </Page>

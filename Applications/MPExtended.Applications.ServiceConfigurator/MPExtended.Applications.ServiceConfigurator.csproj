@@ -90,6 +90,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\CommonEventHandlers.cs" />
+    <Compile Include="Code\CredentialTester.cs" />
     <Compile Include="Code\ErrorHandling.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\LogExporter.cs" />
