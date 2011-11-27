@@ -41,7 +41,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             this.data = data;
             this.configuration = data.GetConfiguration("MP Shares");
 
-            if (!File.Exists(Mediaportal.GetConfigFilePath()))
+            if (!Mediaportal.HasValidConfigFile())
             {
                 Supported = false;
                 return;

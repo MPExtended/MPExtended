@@ -111,7 +111,7 @@ namespace MPExtended.Libraries.General
             }
             catch (Exception ex)
             {
-                Log.Warn("Failed while loading MediaPortalDirs.xml", ex);
+                Log.Warn("Error while loading MediaPortalDirs.xml", ex);
                 return null;
             }
         }
@@ -155,6 +155,26 @@ namespace MPExtended.Libraries.General
             else
             {
                 return Path.Combine(location, "MediaPortal.xml");
+            }
+        }
+
+        public static bool HasValidConfigFile()
+        {
+            try
+            {
+                string path = GetConfigFilePath();
+                if(path == null)
+                {
+                    return false;
+                }
+
+                var xml = XElement.Load(path); // try to parse it
+                return true;
+            }
+            catch (Exception)
+            {
+                Log.Warn("No valid MediaPortal config file detected");
+                return false;
             }
         }
     }

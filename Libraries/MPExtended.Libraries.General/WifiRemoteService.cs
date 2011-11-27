@@ -40,8 +40,13 @@ namespace MPExtended.Libraries.General
             {
                 try
                 {
-                    var config = Mediaportal.ReadSectionFromConfigFile("plugins");
-                    return config.ContainsKey("WifiRemote") && config["WifiRemote"] == "yes";
+                    if (Mediaportal.HasValidConfigFile())
+                    {
+                        var config = Mediaportal.ReadSectionFromConfigFile("plugins");
+                        return config.ContainsKey("WifiRemote") && config["WifiRemote"] == "yes";
+                    }
+
+                    return false;
                 }
                 catch (Exception)
                 {

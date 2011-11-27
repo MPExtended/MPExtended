@@ -44,7 +44,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         [ImportingConstructor]
         public MPPictureShares(IPluginData data) : base(data)
         {
-            if (!File.Exists(Mediaportal.GetConfigFilePath()))
+            if (!Mediaportal.HasValidConfigFile())
             {
                 Supported = false;
                 return;
