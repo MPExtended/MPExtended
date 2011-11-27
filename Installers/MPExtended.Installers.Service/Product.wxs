@@ -40,12 +40,12 @@
     </Upgrade>
     
     <!-- The stupid icon -->
-    <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\producticon.ico" />
+    <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\MpExtl_Icon_256.ico" />
     <Property Id="ARPPRODUCTICON" Value="MPExtendedIcon" />
 
     <!-- Require .net 4 -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this isntaller again.">
+    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>
     
