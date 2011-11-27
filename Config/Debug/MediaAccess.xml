@@ -22,29 +22,25 @@
 
   <pluginConfiguration>
     <plugin name="MP-TVSeries">
-      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
-      <banner type="folder" displayname="Banner Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
-      <fanart type="folder" displayname="Fanart Folder">C:\ProgramData\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
-      <!-- This is just a demo -->
-      <showall type="boolean" displayname="Show all">false</showall>
-      <version type="number" displayname="Version (number)">12</version>
-      <description type="text" displayname="Description (text)">abcd</description>
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
+      <banner type="folder" displayname="Banner Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
+      <fanart type="folder" displayname="Fanart Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
     </plugin>
     <plugin name="MP MyVideo">
-      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
     <plugin name="Moving Pictures">
-      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
     </plugin>
     <plugin name="MP MyMusic">
-      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
       <cover type="folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
     </plugin>
     <plugin name="FS Pictures">
-      <root type="folder" displayname="Root Folder">\\10.1.1.49\fotos</root>
+      <root type="folder" displayname="Root Folder"></root>
     </plugin>
     <plugin name="MP MyVideo">
-      <database type="file" displayname="Database Location">C:\ProgramData\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
   </pluginConfiguration>
 </appconfig>
