@@ -21,7 +21,7 @@
     <!-- General stuff -->
     <ComponentGroup Id="Component_WebMP">
       <ComponentRef Id="Component_Hosting"/>
-      <ComponentRef Id="Component_Libraries"/>
+      <ComponentRef Id="Component_Binaries"/>
       <ComponentRef Id="Component_Config"/>
       <ComponentRef Id="Component_Logs"/>
       <ComponentRef Id="Component_Registry"/>

@@ -54,7 +54,6 @@
       <Component Id="Component_Hosting" Guid="72a08c6b-5611-4d41-ab8e-abb1a7315641">
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe" KeyPath="yes" Id="MainService"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe.config" />
-        <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
 
         <ServiceInstall
           Id="InstallService"
