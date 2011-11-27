@@ -137,6 +137,7 @@ namespace MPExtended.Libraries.General
                     {
                         transcoderConfig.Add(new XElement(item.Key, item.Value));
                     }
+                    node.Add(transcoderConfig);
 
                     file.Element("transcoders").Add(node);
                 }
