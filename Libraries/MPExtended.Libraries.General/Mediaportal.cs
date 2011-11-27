@@ -39,10 +39,22 @@ namespace MPExtended.Libraries.General
         {
             try
             {
-                string keyPath = Environment.Is64BitOperatingSystem ?
-                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal" :
-                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal";
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(keyPath);
+                // I can't make any sense of which one is used when, so just always try both keys.
+                string[] keys = new string[] {
+                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal",
+                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal"
+                };
+
+                RegistryKey key = null;
+                foreach (var keyPath in keys)
+                {
+                    key = Registry.LocalMachine.OpenSubKey(keyPath);
+                    if (key != null)
+                    {
+                        break;
+                    }
+                }
+
                 if (key == null)
                 {
                     Log.Warn("Could not find MediaPortal installation path key in registry, is MediaPortal installed?");
@@ -67,36 +79,50 @@ namespace MPExtended.Libraries.General
 
         public static string GetLocation(MediaportalDirectory type)
         {
-            // read from MediaPortalDirs.xml
-            string mpDirs = Path.Combine(GetClientInstallationDirectory(), "MediaPortalDirs.xml");
-            if (!File.Exists(mpDirs))
+            try
             {
-                Log.Warn("Could not find MediaPortalDirs.xml");
+                // read from MediaPortalDirs.xml
+                string clientInstallDir = GetClientInstallationDirectory();
+                string mpDirs = clientInstallDir == null ? null : Path.Combine(clientInstallDir, "MediaPortalDirs.xml");
+                if (mpDirs == null || !File.Exists(mpDirs))
+                {
+                    Log.Warn("Could not find MediaPortalDirs.xml");
+                    return null;
+                }
+
+                XElement file = XElement.Load(mpDirs);
+                var element = file.Elements("Dir").Where(x => x.Attribute("id").Value == type.ToString());
+                if (element.Count() == 0)
+                {
+                    Log.Warn("Could not find directory with id {0} in MediaPortalDirs.xml", type);
+                    return null;
+                }
+
+                // apply transformations
+                var path = element.First().Element("Path").Value;
+                path = path.Replace("%ProgramData%", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+                if (!Path.IsPathRooted(path))
+                {
+                    path = Path.Combine(GetClientInstallationDirectory(), path);
+                }
+
+                // and return it
+                return Path.GetFullPath(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed while loading MediaPortalDirs.xml", ex);
                 return null;
             }
-
-            XElement file = XElement.Load(mpDirs);
-            var element = file.Elements("Dir").Where(x => x.Attribute("id").Value == type.ToString());
-            if (element.Count() == 0)
-            {
-                Log.Warn("Could not find directory with id {0} in MediaPortalDirs.xml", type);
-                return null;
-            }
-
-            // apply transformations
-            var path = element.First().Element("Path").Value;
-            path = path.Replace("%ProgramData%", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-            if(!Path.IsPathRooted(path))
-            {
-                path = Path.Combine(GetClientInstallationDirectory(), path);
-            }
-
-            // and return it
-            return Path.GetFullPath(path);
         }
 
         public static Dictionary<string, string> ReadSectionFromConfigFile(string sectionName)
         {
+            if (!File.Exists(GetConfigFilePath()))
+            {
+                return new Dictionary<string, string>();
+            }
+
             XElement file = XElement.Load(GetConfigFilePath());
 
             // find section
@@ -113,7 +139,15 @@ namespace MPExtended.Libraries.General
 
         public static string GetConfigFilePath()
         {
-            return Path.Combine(GetLocation(MediaportalDirectory.Config), "MediaPortal.xml");
+            string location = GetLocation(MediaportalDirectory.Config);
+            if (location == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Path.Combine(location, "MediaPortal.xml");
+            }
         }
     }
 }
