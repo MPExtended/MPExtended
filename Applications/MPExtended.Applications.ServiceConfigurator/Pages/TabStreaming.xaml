@@ -9,8 +9,24 @@
       Initialized="Page_Initialized">
 
     <Grid>
-        <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="6,78,-6,214" Name="label1" />
-        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="0,102,6,6" Name="lvActiveStreams" VerticalAlignment="Stretch" Height="212">
+        <Label Content="Default language" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="lblDefaultLanguage" VerticalAlignment="Top" />
+        <TextBlock Height="43" HorizontalAlignment="Stretch" Margin="18,38,14,0" Name="tbDefaultLanguage" VerticalAlignment="Top" TextWrapping="Wrap" Grid.ColumnSpan="2">
+            Some clients don't support configuring the audio and subtitle language on a per-stream basis. You can configure the default audio and subtitle language for these clients here.
+        </TextBlock>
+        <Label Content="Default audio language:" Height="28" HorizontalAlignment="Left" Margin="12,78,0,0" Name="lblDefaultAudio" VerticalAlignment="Top" />
+        <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,80,12,0" Name="cbAudio" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
+        <Label Content="Default subtitle language:" Height="28" HorizontalAlignment="Left" Margin="12,112,0,0" Name="lblDefaultSubtitle" VerticalAlignment="Top" />
+        <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,114,12,0" Name="cbSubtitle" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
+        <Button Content="Save" Height="23" HorizontalAlignment="Right" Margin="0,145,12,0" Name="btnSave" VerticalAlignment="Top" Width="75" Click="btnSave_Click" />
+
+        <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="12,144,0,0" Name="lblStreamingProfiles" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label Content="To change the streaming profiles (for advanced users only), you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="12,173,0,0" Name="lblEditStreaming" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="18,199,0,0" Name="tbStreamingXml" VerticalAlignment="Top">
+            <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="not used" RequestNavigate="Hyperlink_RequestNavigate">Streaming.xml</Hyperlink>
+        </TextBlock>
+
+        <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="12,228,12,194" Name="label1" Grid.ColumnSpan="2" />
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="18,262,12,12" Name="lvActiveStreams" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Kick Session" Name="miKickUserSession" Click="miKickUserSession_Click" />
@@ -25,12 +41,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label9" VerticalAlignment="Top" FontWeight="Bold" />
-        <Label Content="To change the streaming profiles (advanced users only) you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="6,31,0,0" Name="label10" VerticalAlignment="Top" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="15,57,0,0" Name="textBlock1" VerticalAlignment="Top">
-            <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="C:\ProgramData\MPExtended\" RequestNavigate="Hyperlink_RequestNavigate">
-                <TextBlock Name="tbStreamingConfigLocation" Text="Streaming.xml" />
-            </Hyperlink>    
-        </TextBlock>
     </Grid>
 </Page>

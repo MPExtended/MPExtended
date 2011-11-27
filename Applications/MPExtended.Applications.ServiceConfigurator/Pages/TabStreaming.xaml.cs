@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -47,6 +49,38 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             mSessionWatcher.Tick += activeSessionWatcher_Tick;
 
             InitializeComponent();
+
+            // load language list
+            var languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
+                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
+                .OrderBy(x => x.TwoLetterISOLanguageName)
+                .ToDictionary(x => x.TwoLetterISOLanguageName, x => String.Format("{0} ({1})", x.TwoLetterISOLanguageName, x.DisplayName));
+
+            // set valid items
+            cbAudio.DataContext = new Dictionary<string, string>() { 
+                { "first", "First stream in file" } 
+            }.Concat(languages);
+
+            cbSubtitle.DataContext = new Dictionary<string, string>()
+            {
+                { "none", "Disable subtitles" },
+                { "first", "First stream in file" },
+                { "external", "Use external .srt file" }
+            }.Concat(languages);
+
+            // set default item
+            cbAudio.SelectedValue = Configuration.Streaming.DefaultAudioStream;
+            cbSubtitle.SelectedValue = Configuration.Streaming.DefaultSubtitleStream;
+        }
+
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
+            Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
+            Configuration.Streaming.Save();
+            MessageBox.Show("Saved default language selection!", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Page_Initialized(object sender, EventArgs e)
@@ -56,7 +90,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
+            Process.Start(new ProcessStartInfo(folder));
             e.Handled = true;
         }
 
