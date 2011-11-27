@@ -1,6 +1,6 @@
 ﻿namespace MPExtended.ServiceHosts.WebMediaPortal
 {
-    partial class Service1
+    partial class HostService
     {
         /// <summary> 
         /// Required designer variable.
