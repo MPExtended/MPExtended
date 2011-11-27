@@ -118,23 +118,31 @@ namespace MPExtended.Libraries.General
 
         public static Dictionary<string, string> ReadSectionFromConfigFile(string sectionName)
         {
-            if (!File.Exists(GetConfigFilePath()))
+            try
             {
+                if (!File.Exists(GetConfigFilePath()))
+                {
+                    return new Dictionary<string, string>();
+                }
+
+                XElement file = XElement.Load(GetConfigFilePath());
+
+                // find section
+                var elements = file.Elements("section").Where(x => x.Attribute("name").Value == sectionName);
+                if (elements.Count() == 0)
+                {
+                    Log.Debug("Requested MediaPortal config for non-available section {0}", sectionName);
+                    return new Dictionary<string, string>();
+                }
+
+                // return list
+                return elements.First().Elements("entry").ToDictionary(x => x.Attribute("name").Value, x => x.Value);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to read section {0} from MediaPortal.xml", sectionName), ex);
                 return new Dictionary<string, string>();
             }
-
-            XElement file = XElement.Load(GetConfigFilePath());
-
-            // find section
-            var elements = file.Elements("section").Where(x => x.Attribute("name").Value == sectionName);
-            if (elements.Count() == 0)
-            {
-                Log.Debug("Requested MediaPortal config for non-available section {0}", sectionName);
-                return new Dictionary<string, string>();
-            }
-
-            // return list
-            return elements.First().Elements("entry").ToDictionary(x => x.Attribute("name").Value, x => x.Value);
         }
 
         public static string GetConfigFilePath()

@@ -101,6 +101,7 @@ namespace MPExtended.Services.MediaAccessService
 #endif
 
                 CompositionContainer container = new CompositionContainer(catalog);
+                container.ComposeExportedValue(new PluginData());
                 container.ComposeParts(this);
                 return true;
             }
