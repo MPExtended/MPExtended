@@ -34,13 +34,17 @@ namespace MPExtended.Libraries.General
         WifiRemote
     }
 
+    public enum MPExtendedProduct
+    {
+        Service,
+        WebMediaPortal
+    }
+
     public static class Installation
     {
-        public static string GetRootDirectory()
-        {
-            // FIXME: It's not really a good idea that this function has a totally different function in Debug and
-            // Release builds. 
 #if DEBUG
+        public static string GetSourceRootDirectory()
+        {
             // It's a bit tricky to find the root source directory for Debug builds. The assembly might be in a different
             // directory then where it's source tree is (which happens with WebMP for example), so we can't use the Location
             // of the current executing assembly. The CodeBase points to it's original location on compilation, but this 
@@ -60,29 +64,39 @@ namespace MPExtended.Libraries.General
 
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
+        }
 #else
-            // By default we try to read it from the registry, where the install location is set during installation. If
-            // that fails, fall back to the parent directory of the currently executing assembly, which probably works good
-            // for 99% of the cases. 
+        public static string GetInstallDirectory(MPExtendedProduct product)
+        {
+            // If possible, try to read it from the registry, where the install location is set during installation. 
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
             if (key != null)
             {
-                object value = key.GetValue("InstallLocation");
+                object value = key.GetValue(String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product)));
                 if (value != null)
                 {
                     return value.ToString();
                 }
             }
 
-            DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-            return info.Parent.FullName;
-#endif
+            // Fallback to dynamic detection based upon the default install location of the services
+            switch(product)
+            {
+                case MPExtendedProduct.Service:
+                    return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                case MPExtendedProduct.WebMediaPortal:
+                    DirectoryInfo webmpinfo = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                    return webmpinfo.Parent.FullName;
+                default:
+                    throw new ArgumentException();
+            }
         }
+#endif
 
         public static string GetConfigurationDirectory()
         {
 #if DEBUG
-            return Path.Combine(GetRootDirectory(), "Config", "Debug");
+            return Path.Combine(GetSourceRootDirectory(), "Config", "Debug");
 #else
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
 #endif

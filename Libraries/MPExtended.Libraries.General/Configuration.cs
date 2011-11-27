@@ -66,13 +66,7 @@ namespace MPExtended.Libraries.General
 
         public static string GetPath(string filename)
         {
-            string basedir = "";
-#if DEBUG
-            basedir = Path.GetFullPath(Path.Combine(Installation.GetRootDirectory(), "Config", "Debug"));
-#else
-            basedir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
-#endif
-            return Path.Combine(basedir, filename);
+            return Path.Combine(Installation.GetConfigurationDirectory(), filename);
         }
     }
 }

@@ -64,13 +64,9 @@ namespace MPExtended.Libraries.General
             get
             {
 #if DEBUG
-                string bindir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                string solutionRoot = Path.GetFullPath(Path.Combine(bindir, "..", "..", "..", ".."));
-                string fullpath = Path.GetFullPath(Path.Combine(solutionRoot, "Services", Assembly, "bin", "Debug", Assembly + ".dll"));
-                return fullpath;
+                return Path.Combine(Installation.GetSourceRootDirectory(), "Services", Assembly, "bin", "Debug", Assembly + ".dll");
 #else
-                string ourDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                return Path.GetFullPath(Path.Combine(ourDirectory, Assembly + ".dll"));
+                return Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), Assembly + ".dll");
 #endif
             }
         }

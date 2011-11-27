@@ -33,7 +33,7 @@
             <!-- General registry (installation path) -->
             <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="InstallLocation" Value="[MPEXTENDEDDIRECTORY]" />
+                <RegistryValue Type="string" Name="ServiceInstallLocation" Value="[MPEXTENDEDDIRECTORY]Service" />
               </RegistryKey>
             </Component>
             
