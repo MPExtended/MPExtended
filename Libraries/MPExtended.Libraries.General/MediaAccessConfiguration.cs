@@ -81,13 +81,19 @@ namespace MPExtended.Libraries.General
 
                 foreach (XElement plugin in file.Element("pluginConfiguration").Elements("plugin"))
                 {
-                        PluginConfiguration[plugin.Attribute("name").Value] = plugin.Elements().Select(x => new PluginConfigItem()
-                            {
-                                DisplayName = x.Attribute("displayname").Value,
-                                Name = x.Name.LocalName,
-                                Type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true),
-                                Value = PerformFolderSubstitution(x.Value),
-                            }).ToList();
+                    PluginConfiguration[plugin.Attribute("name").Value] = new List<PluginConfigItem>();
+                    foreach(var x in plugin.Elements())
+                    {
+                        ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
+                        string value = type == ConfigType.File || type == ConfigType.Folder ? PerformFolderSubstitution(x.Value) : x.Value;
+                        PluginConfiguration[plugin.Attribute("name").Value].Add(new PluginConfigItem()
+                        {
+                            DisplayName = x.Attribute("displayname").Value,
+                            Name = x.Name.LocalName,
+                            Type = type,
+                            Value = value
+                        });
+                    }
                 }
             }
             catch (Exception ex)
