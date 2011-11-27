@@ -273,17 +273,18 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVShowBasic GetTVShowBasicById(int? provider, string id);
 
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVShowDetailed GetTVShowDetailedById(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVSeasonBasic> GetTVSeasonsBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVSeasonBasic> GetTVSeasonsBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.TVSeasonNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVSeasonDetailed> GetTVSeasonsDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVSeasonDetailed> GetTVSeasonsDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.TVSeasonNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -293,37 +294,38 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVSeasonDetailed GetTVSeasonDetailedById(int? provider, string id);
 
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int? provider, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+        IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

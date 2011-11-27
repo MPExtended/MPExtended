@@ -138,14 +138,24 @@ namespace MPExtended.Services.MediaAccessService
         // Allow easy sorting from MediaAccessService.cs
         public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput)
         {
+            return SortMediaItemList<T>(list, sortInput, orderInput, SortBy.Title, Interfaces.OrderBy.Asc);
+        }
+
+        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort)
+        {
+            return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, Interfaces.OrderBy.Asc);
+        }
+        
+        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort, OrderBy defaultOrder)
+        {
             // parse arguments
             if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
             {
                 Log.Warn("Invalid OrderBy value {0} given", orderInput);
                 throw new Exception("Invalid OrderBy value specified");
             }
-            SortBy sort = sortInput.HasValue ? sortInput.Value : SortBy.Title;
-            OrderBy order = orderInput.HasValue ? orderInput.Value : Interfaces.OrderBy.Asc;
+            SortBy sort = sortInput.HasValue ? sortInput.Value : defaultSort;
+            OrderBy order = orderInput.HasValue ? orderInput.Value : defaultOrder;
 
             // do the actual sorting
             try

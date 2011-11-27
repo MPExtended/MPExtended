@@ -53,8 +53,10 @@ namespace MPExtended.Services.TVAccessService
             switch (sortInput)
             {
                 case SortField.Name:
-                default:
                     return list.OrderBy(x => x.DisplayName, orderInput);
+                case SortField.User:
+                default:
+                    return list.OrderBy(x => x.SortOrder, orderInput);
             }
         }
 
@@ -74,13 +76,13 @@ namespace MPExtended.Services.TVAccessService
         {
             switch (sortInput)
             {
-                case SortField.Name:
-                default:
-                    return list.OrderBy(x => x.ProgramName, orderInput);
                 case SortField.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
                 case SortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
+                case SortField.Name:
+                default:
+                    return list.OrderBy(x => x.ProgramName, orderInput);
             }
         }
 
@@ -88,13 +90,13 @@ namespace MPExtended.Services.TVAccessService
         {
             switch (sortInput)
             {
-                case SortField.Name:
-                default:
-                    return list.OrderBy(x => x.Title, orderInput);
                 case SortField.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
                 case SortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
+                case SortField.Name:
+                default:
+                    return list.OrderBy(x => x.Title, orderInput);
             }
         }
     }

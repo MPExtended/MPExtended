@@ -201,13 +201,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebActor> GetAllMovieActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            sort = sort.HasValue ? sort.Value : SortBy.Name;
-            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
+            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).Finalize(provider, ProviderType.Movie);
         }
 
         public IList<WebActor> GetMovieActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return GetAllMovieActors(provider, sort, order).TakeRange(start, end).ToList();
+            return MovieLibraries[provider].GetAllMovies().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
         }
 
         public WebItemCount GetMovieActorCount(int? provider)
@@ -426,14 +425,14 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetTVShowBasic(id).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVSeasonBasic> GetTVSeasonsBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVSeasonBasic> GetTVSeasonsBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.TVSeasonNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllSeasonsBasic().Where(x => x.ShowId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllSeasonsBasic().Where(x => x.ShowId == id).SortMediaItemList(sort, order, SortBy.TVSeasonNumber).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVSeasonDetailed> GetTVSeasonsDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVSeasonDetailed> GetTVSeasonsDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.TVSeasonNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllSeasonsDetailed().Where(x => x.ShowId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllSeasonsDetailed().Where(x => x.ShowId == id).SortMediaItemList(sort, order, SortBy.TVSeasonNumber).Finalize(provider, ProviderType.TVShow);
         }
 
         public WebTVSeasonDetailed GetTVSeasonDetailedById(int? provider, string id)
@@ -446,44 +445,44 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetSeasonBasic(id).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicByRange(int? provider, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesBasic().SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShow(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShow(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.ShowId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).TakeRange(start, end - start).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForTVShowByRange(int? provider, string id, int start, int end, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order).TakeRange(start, end - start).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.ShowId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).TakeRange(start, end - start).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasicForSeason(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesBasic().Where(p => p.SeasonId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailedForSeason(int? provider, string id, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc)
         {
-            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllEpisodesDetailed().Where(p => p.SeasonId == id).SortMediaItemList(sort, order, SortBy.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
 
         public WebTVEpisodeBasic GetTVEpisodeBasicById(int? provider, string id)
@@ -523,13 +522,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebActor> GetAllTVShowActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            sort = sort.HasValue ? sort.Value : SortBy.Name;
-            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
+            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).Finalize(provider, ProviderType.TVShow);
         }
 
         public IList<WebActor> GetTVShowActorsByRange(int? provider, int start, int end, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
         {
-            return GetAllTVShowActors(provider, sort, order).TakeRange(start, end).ToList();
+            return TVShowLibraries[provider].GetAllTVShowsBasic().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
         }
 
         public WebItemCount GetTVShowActorCount(int? provider)
