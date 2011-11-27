@@ -29,20 +29,21 @@
                 <RegistryValue Type="string" Name="WebMediaPortalInstallLocation" Value="[MPEXTENDEDDIRECTORY]WebMediaPortal" />
               </RegistryKey>
             </Component>
-            
-            <Directory Id="BinDirectory" Name="bin">
-              <!-- Binaries for WebMP -->
-              <Component Id="Component_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.General.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.dll" />
-                <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
-              </Component>
+
+            <Directory Id="WwwDirectory" Name="www">
+              <Directory Id="BinDirectory" Name="bin">
+                <!-- Binaries for WebMP -->
+                <Component Id="Component_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.General.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
+                </Component>
+              </Directory>
             </Directory>
-            
           </Directory>
         </Directory>
       </Directory>
