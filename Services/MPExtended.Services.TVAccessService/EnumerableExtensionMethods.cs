@@ -48,7 +48,7 @@ namespace MPExtended.Services.TVAccessService
             return Enumerable.ThenBy(source, keySelector);
         }
 
-        public static IOrderedEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelBasic
+        public static IEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelBasic
         {
             switch (sortInput)
             {
@@ -56,11 +56,22 @@ namespace MPExtended.Services.TVAccessService
                     return list.OrderBy(x => x.DisplayName, orderInput);
                 case SortField.User:
                 default:
-                    return list.OrderBy(x => x.SortOrder, orderInput);
+                    // There are two ways to order channels in MediaPortal:
+                    // - The SortOrder property of a channel (SortOrder field in channel table)
+                    // - The order in which the channels are in a group (SortOrder field in GroupMap table). This isn't exposed as a property
+                    //   somehwere, we just get the items in this order from TvBusinessLayer and have to deal with it. 
+                    // While using the first makes more sense from a programmers POV, the user expects the second one, so let's use that
+                    // one here, which means that we don't sort. 
+
+                    if (orderInput.HasValue && orderInput.Value == SortOrder.Desc)
+                    {
+                        return list.Reverse();
+                    }
+                    return list;
             }
         }
 
-        public static IOrderedEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelGroup
+        public static IEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelGroup
         {
             switch (sortInput)
             {
@@ -72,7 +83,7 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public static IOrderedEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduleBasic
+        public static IEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduleBasic
         {
             switch (sortInput)
             {
@@ -86,7 +97,7 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public static IOrderedEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebRecordingBasic
+        public static IEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebRecordingBasic
         {
             switch (sortInput)
             {
