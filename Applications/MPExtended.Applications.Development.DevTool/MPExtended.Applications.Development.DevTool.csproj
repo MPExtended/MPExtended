@@ -5,22 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0B852F64-7C0E-4555-A20D-0F0ABF337255}</ProjectGuid>
+    <ProjectGuid>{1D0293A1-5E32-4FAC-8A12-F99579A75134}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Applications.Development.DocumentationGenerator</RootNamespace>
-    <AssemblyName>MPExtended.Applications.Development.DocumentationGenerator</AssemblyName>
+    <RootNamespace>MPExtended.Applications.Development.DevTool</RootNamespace>
+    <AssemblyName>MPExtended.Applications.Development.DevTool</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -54,13 +47,25 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="TASGenerator.cs" />
-    <Compile Include="DocGenItem.cs" />
-    <Compile Include="WSSGenerator.cs" />
-    <Compile Include="Generator.cs" />
-    <Compile Include="MASGenerator.cs" />
+    <Compile Include="DocGen\DocGenItem.cs" />
+    <Compile Include="DocGen\Generator.cs" />
+    <Compile Include="DocGen\MASGenerator.cs" />
+    <Compile Include="DocGen\DocDevTool.cs" />
+    <Compile Include="DocGen\TASGenerator.cs" />
+    <Compile Include="DocGen\WSSGenerator.cs" />
+    <Compile Include="IDevTool.cs" />
+    <Compile Include="InterfaceCheck.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
+      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
+      <Name>MPExtended.Libraries.General</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

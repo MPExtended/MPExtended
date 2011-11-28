@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace MPExtended.Applications.Development.DocGen
+namespace MPExtended.Applications.Development.DevTool.DocGen
 {
     internal class WSSGenerator : Generator
     {
