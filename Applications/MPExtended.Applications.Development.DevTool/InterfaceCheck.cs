@@ -36,27 +36,32 @@ namespace MPExtended.Applications.Development.DevTool
             string rootpath = Installation.GetSourceRootDirectory();
             CheckService(rootpath, "MPExtended.Services.MediaAccessService", "IMediaAccessService", "MediaAccessService");
             CheckService(rootpath, "MPExtended.Services.TVAccessService", "ITVAccessService", "TVAccessService");
-            CheckService(rootpath, "MPExtended.Services.StreamingService", "IStreamingService", "StreamingService");
+            CheckService(rootpath, "MPExtended.Services.StreamingService", new string[] { "IStreamingService", "IWebStreamingService" }, "StreamingService");
             CheckService(rootpath, "MPExtended.Services.UserSessionService", "IUserSessionService", "UserSessionService");
             OutputStream.WriteLine("Done");
         }
 
         private void CheckService(string rootpath, string service, string interfacename, string classname)
         {
+            CheckService(rootpath, service, new string[] { interfacename }, classname);
+        }
+
+        private void CheckService(string rootpath, string service, string[] interfacenames, string classname)
+        {
             string interfaceAssemblyName = service + ".Interfaces";
             Assembly iface = Assembly.LoadFrom(Path.Combine(rootpath, "Services", interfaceAssemblyName, "bin", "Debug", interfaceAssemblyName + ".dll"));
             Assembly impl = Assembly.LoadFrom(Path.Combine(rootpath, "Services", service, "bin", "Debug", service + ".dll"));
 
-            Type interfaceType = iface.GetType(interfaceAssemblyName + "." + interfacename);
+            Type[] interfaceTypes = interfacenames.Select(x => iface.GetType(interfaceAssemblyName + "." + x)).ToArray();
             Type implementationType = impl.GetType(service + "." + classname);
 
             MethodInfo[] implMethods = implementationType.GetMethods();
-            MethodInfo[] intfMethods = interfaceType.GetMethods();
+            MethodInfo[] intfMethods = interfaceTypes.SelectMany(x => x.GetMethods()).ToArray();
 
             foreach (MethodInfo currentMethod in implMethods)
             {
                 // skip standard methods
-                if (currentMethod.DeclaringType.Name != implementationType.Name)
+                if (currentMethod.DeclaringType.Name != implementationType.Name || currentMethod.Name == "Dispose")
                 {
                     continue;
                 }
