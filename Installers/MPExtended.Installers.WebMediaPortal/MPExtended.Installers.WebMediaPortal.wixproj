@@ -24,6 +24,7 @@
     <Compile Include="Features.wxs" />
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="UI_Control.wxs" />
     <Compile Include="WWW.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +46,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
@@ -53,6 +58,9 @@
       <HintPath>$(WixExtDir)\WixFirewallExtension.dll</HintPath>
       <Name>WixFirewallExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Texts.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

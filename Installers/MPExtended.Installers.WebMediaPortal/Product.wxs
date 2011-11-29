@@ -86,13 +86,12 @@
           Program="[#MainService]" />
       </Component>
     </DirectoryRef>
-    
-    <!-- User interface
+
+    <!-- User interfacer -->
+    <Property Id="WIXUI_INSTALLDIR" Value="MPEXTENDEDDIRECTORY" />
     <UIRef Id="GeneralUI"/>
     <UIRef Id="WixUI_Common" />
-    <UIRef Id="WixUI_ErrorProgressText" />
-    -->
-    
+
     <!-- Custom images -->
     <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />

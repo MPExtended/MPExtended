@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <!--
+  Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+  
+  MPExtended is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+  
+  MPExtended is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+  -->
+  
+  <!-- Remove all banner texts-->
+	<String Id="SetupTypeDlgTitle"></String>
+  <String Id="MaintenanceTypeDlgTitle"></String>
+  <String Id="MaintenanceTypeDlgDescription"></String>
+  <String Id="InstallDirDlgTitle"></String>
+  <String Id="InstallDirDlgDescription"></String>
+  <String Id="VerifyReadyDlgInstallTitle"></String>
+  <String Id="VerifyReadyDlgChangeTitle"></String>
+  <String Id="VerifyReadyDlgRemoveTitle"></String>
+  <String Id="VerifyReadyDlgRepairTitle"></String>
+  <String Id="VerifyReadyDlgUpdateTitle"></String>
+  <String Id="ProgressDlgTitleInstalling"></String>
+  <String Id="ProgressDlgTitleChanging"></String>
+  <String Id="ProgressDlgTitleRepairing"></String>
+  <String Id="ProgressDlgTitleRemoving"></String>
+  <String Id="ProgressDlgTitleUpdating"></String>
+</WixLocalization>
