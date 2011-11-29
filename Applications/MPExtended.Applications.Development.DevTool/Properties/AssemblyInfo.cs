@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MPExtended.Applications.Development.DocGen")]
+[assembly: AssemblyTitle("MPExtended.Applications.Development.DevTool")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended.Applications.Development.DocGen")]
+[assembly: AssemblyProduct("MPExtended Development Tool")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3d11e363-3600-407c-bb59-18d044618fd9")]
+[assembly: Guid("a8d47dca-c91f-4d8d-a3f8-af9b129679c3")]

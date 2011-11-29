@@ -21,42 +21,54 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using MPExtended.Libraries.General;
 
-namespace MPExtended.Applications.Development.CheckServiceInterfaces
+namespace MPExtended.Applications.Development.DevTool
 {
-    class Program
+    internal class InterfaceCheck : IDevTool
     {
-        static void Main(string[] args)
+        public TextWriter OutputStream { get; set; }
+        public TextReader InputStream { get; set; }
+        public string Name { get { return "InterfaceCheck"; } }
+
+        public void Run()
         {
-            string rootpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "..", "..");
+            string rootpath = Installation.GetSourceRootDirectory();
             CheckService(rootpath, "MPExtended.Services.MediaAccessService", "IMediaAccessService", "MediaAccessService");
-            Console.WriteLine("Done");
-            Console.ReadKey();
+            CheckService(rootpath, "MPExtended.Services.TVAccessService", "ITVAccessService", "TVAccessService");
+            CheckService(rootpath, "MPExtended.Services.StreamingService", new string[] { "IStreamingService", "IWebStreamingService" }, "StreamingService");
+            CheckService(rootpath, "MPExtended.Services.UserSessionService", "IUserSessionService", "UserSessionService");
+            OutputStream.WriteLine("Done");
         }
 
-        private static void CheckService(string rootpath, string service, string interfacename, string classname)
+        private void CheckService(string rootpath, string service, string interfacename, string classname)
+        {
+            CheckService(rootpath, service, new string[] { interfacename }, classname);
+        }
+
+        private void CheckService(string rootpath, string service, string[] interfacenames, string classname)
         {
             string interfaceAssemblyName = service + ".Interfaces";
             Assembly iface = Assembly.LoadFrom(Path.Combine(rootpath, "Services", interfaceAssemblyName, "bin", "Debug", interfaceAssemblyName + ".dll"));
             Assembly impl = Assembly.LoadFrom(Path.Combine(rootpath, "Services", service, "bin", "Debug", service + ".dll"));
 
-            Type interfaceType = iface.GetType(interfaceAssemblyName + "." + interfacename);
+            Type[] interfaceTypes = interfacenames.Select(x => iface.GetType(interfaceAssemblyName + "." + x)).ToArray();
             Type implementationType = impl.GetType(service + "." + classname);
 
             MethodInfo[] implMethods = implementationType.GetMethods();
-            MethodInfo[] intfMethods = interfaceType.GetMethods();
+            MethodInfo[] intfMethods = interfaceTypes.SelectMany(x => x.GetMethods()).ToArray();
 
             foreach (MethodInfo currentMethod in implMethods)
             {
                 // skip standard methods
-                if (currentMethod.DeclaringType.Name != implementationType.Name)
+                if (currentMethod.DeclaringType.Name != implementationType.Name || currentMethod.Name == "Dispose")
                 {
                     continue;
                 }
 
                 if (intfMethods.Where(x => x.Name == currentMethod.Name).Count() == 0)
                 {
-                    Console.WriteLine("{0} Unknown method {1} in implementation!", service, currentMethod.Name);
+                    OutputStream.WriteLine("{0}: Unknown method {1} in implementation!", service, currentMethod.Name);
                     continue;
                 }
 
@@ -66,7 +78,7 @@ namespace MPExtended.Applications.Development.CheckServiceInterfaces
 
                 if (intfParameters.Length != implParameters.Length)
                 {
-                    Console.WriteLine("{0}: Method {1} exists in implementation with different signature then in interface", service, currentMethod.Name);
+                    OutputStream.WriteLine("{0}: Method {1} exists in implementation with different signature then in interface", service, currentMethod.Name);
                     continue;
                 }
 
@@ -74,7 +86,7 @@ namespace MPExtended.Applications.Development.CheckServiceInterfaces
                 {
                     if (intfParameters[i].Name != implParameters[i].Name)
                     {
-                        Console.WriteLine("{0}({1}): Parameter {2} has different names ({3} vs {4})", service, currentMethod.Name, i, intfParameters[i].Name, implParameters[i].Name);
+                        OutputStream.WriteLine("{0}({1}): Parameter {2} has different names ({3} vs {4})", service, currentMethod.Name, i, intfParameters[i].Name, implParameters[i].Name);
                     }
                 }
             }

@@ -21,13 +21,15 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using MPExtended.Libraries.General;
 
-namespace MPExtended.Applications.Development.DocGen
+namespace MPExtended.Applications.Development.DevTool.DocGen
 {
     internal abstract class Generator
     {
         public Assembly Assembly { get; set; }
         public TextWriter Output { get; set; }
+        public TextWriter UserStream { get; set; }
         protected Type JsonAPI { get; set; }
         protected Type StreamAPI { get; set; }
         protected IEnumerable<Type> Enums { get; set; }
@@ -59,11 +61,14 @@ namespace MPExtended.Applications.Development.DocGen
         public void Generate()
         {
             // header
-            string date = DateTime.Now.ToString("dd MMM yyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
-            Output.WriteLine("<p>This page contains the API documentation for this MPExtended service, as automatically generated on {0}. " +
-                "Please do not edit, as these probably will be overwritten.</p>", date);
+            Output.WriteLine(
+                "<p>This page contains the API documentation for this MPExtended service, as automatically generated on {0} for version {1} (build {2}). " +
+                "Please do not edit, as your changes will be overwritten.</p>",
+                DateTime.Now.ToString("dd MMM yyy HH:mm", System.Globalization.CultureInfo.InvariantCulture),
+                VersionUtil.GetVersion(JsonAPI.Assembly),
+                VersionUtil.GetBuildVersion(JsonAPI.Assembly));
 
-            Console.WriteLine("Generating documentation for assembly {0}", Assembly.GetName().Name);
+            UserStream.WriteLine("Generating documentation for assembly {0}", Assembly.GetName().Name);
             CustomGenerate();
 
             // get all items 
@@ -97,7 +102,7 @@ namespace MPExtended.Applications.Development.DocGen
             int lastOrder = -1;
 
             // navigation
-            Console.WriteLine("=> Generating documentation header");
+            UserStream.WriteLine("=> Generating documentation header");
             Output.WriteLine("<h3>Navigation</h3>");
             foreach (var item in itemstogen)
             {
@@ -129,7 +134,7 @@ namespace MPExtended.Applications.Development.DocGen
                     GenerateEnumDocumentation(item.Reflected as Type);
                 }
             }
-            Console.WriteLine("=> Done");
+            UserStream.WriteLine("=> Done");
 
             Output.Flush();
             Output.Close();
@@ -138,7 +143,7 @@ namespace MPExtended.Applications.Development.DocGen
         protected void GenerateMethodDocumentation(MethodInfo method, string urlprefix)
         {
             // general method
-            Console.WriteLine("=> Generating documentation for method {0}", method.Name);
+            UserStream.WriteLine("=> Generating documentation for method {0}", method.Name);
             Output.WriteLine(String.Format("<h4 name=\"{0}\">{0}</h4><dl>", method.Name));
             Output.WriteLine(String.Format("<dt>URL</dt><dd>{0}/{1}</dd>", urlprefix, method.Name));
 
@@ -199,7 +204,7 @@ namespace MPExtended.Applications.Development.DocGen
 
         protected void GenerateReturnDocumentation(MethodInfo method, Type type)
         {
-            Console.WriteLine("==> Generating documentation for type {0}", type.Name);
+            UserStream.WriteLine("==> Generating documentation for type {0}", type.Name);
             Output.WriteLine("<ul>");
             foreach (var property in type.GetProperties())
             {
@@ -221,7 +226,7 @@ namespace MPExtended.Applications.Development.DocGen
 
         protected void GenerateEnumDocumentation(Type type)
         {
-            Console.WriteLine("=> Generating documentation for type {0}", type.Name);
+            UserStream.WriteLine("=> Generating documentation for type {0}", type.Name);
             Output.WriteLine("<h4 name=\"{0}\">{0} (enumeration)</h4>", type.Name);
             Output.WriteLine("<dl><dt>Values</dt><dd><ul>");
             foreach (var val in type.GetEnumValues())
