@@ -104,7 +104,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             string sql = "SELECT strGenre FROM genre";
             return new LazyQuery<WebGenre>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("strGenre", "Name", DataReaders.ReadString)
+                new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString)
             });
         }
 
