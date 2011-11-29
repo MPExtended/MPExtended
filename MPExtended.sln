@@ -131,7 +131,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Installers.Custo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Social", "Libraries\MPExtended.Libraries.Social\MPExtended.Libraries.Social.csproj", "{504A098A-8141-418A-9FC5-C7870C68C716}"
 EndProject
-
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.DevTool", "Applications\MPExtended.Applications.Development.DevTool\MPExtended.Applications.Development.DevTool.csproj", "{1D0293A1-5E32-4FAC-8A12-F99579A75134}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.WebMediaPortal", "Installers\MPExtended.Installers.WebMediaPortal\MPExtended.Installers.WebMediaPortal.wixproj", "{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}"
@@ -345,7 +344,6 @@ Global
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|x86.Build.0 = Debug|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Any CPU.ActiveCfg = Release|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.ActiveCfg = Release|x86
 		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.Build.0 = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Debug|Any CPU.ActiveCfg = Debug|x86
@@ -355,7 +353,6 @@ Global
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Debug|x86.Build.0 = Debug|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|Any CPU.ActiveCfg = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|Mixed Platforms.Build.0 = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|x86.ActiveCfg = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Release|x86.Build.0 = Release|x86
 		{26B34D42-CA8B-44BF-A282-E516E2C22588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -434,7 +431,6 @@ Global
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Debug|x86.Build.0 = Debug|x86
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Release|Any CPU.ActiveCfg = Release|x86
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Release|Mixed Platforms.Build.0 = Release|x86
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Release|x86.ActiveCfg = Release|x86
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F}.Release|x86.Build.0 = Release|x86
 		{1CEFD1EA-2EFF-4B98-8022-C59003E4234A}.Debug|Any CPU.ActiveCfg = Debug|x86
@@ -457,7 +453,6 @@ Global
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Release|x86.ActiveCfg = Release|Any CPU
-
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -465,12 +460,10 @@ Global
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|x86.Build.0 = Debug|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|Any CPU.ActiveCfg = Release|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|Mixed Platforms.Build.0 = Release|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|x86.ActiveCfg = Release|x86
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|x86.Build.0 = Release|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|x86.ActiveCfg = Debug|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|x86.Build.0 = Debug|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Release|Any CPU.ActiveCfg = Release|x86

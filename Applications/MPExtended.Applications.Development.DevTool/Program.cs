@@ -27,6 +27,11 @@ namespace MPExtended.Applications.Development.DevTool
     {
         static void Main(string[] args)
         {
+#if !DEBUG
+            Console.WriteLine("DevTool isn't supported in Release mode.");
+            Console.ReadKey();
+            Environment.Exit(1);
+#endif
             var tools = new IDevTool[] {
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),

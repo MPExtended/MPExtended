@@ -33,7 +33,7 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
 
         public void Run()
         {
-            string rootpath = Installation.GetSourceRootDirectory();
+            string rootpath = Util.GetSourceRootDirectory();
             OutputStream.Write("Enter output directory: ");
             string outputDir = InputStream.ReadLine().Trim();
 
