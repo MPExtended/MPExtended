@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <!--
+    Copyright (c) 2011 MPExtended Developers, http://mpextended.github.com/
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+  -->
+  <Product
+    Id="af91671d-17bc-4269-a797-26444ed73ed9"
+    UpgradeCode="1911d293-8311-457a-bd09-296fec9bc368"
+    Name="MPExtended WebMediaPortal"
+    Language="1033"
+    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
+    Manufacturer="MPExtended">
+    <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
+
+    <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
+    <Property Id="MSIFASTINSTALL" Value="3" />
+    
+    <!-- Project general -->
+    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
+
+    <!-- Disallow downgrades and support upgrades -->
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+    <Upgrade Id="1911d293-8311-457a-bd09-296fec9bc368">
+      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.General.dll)" />
+    </Upgrade>
+    
+    <!-- The icon -->
+    <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\MpExtl_Icon_256.ico" />
+    <Property Id="ARPPRODUCTICON" Value="MPExtendedIcon" />
+
+    <!-- Require .NET 4 -->
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+    
+    <!-- Service -->
+    <DirectoryRef Id="InstallDirectory">
+      <Component Id="Component_Hosting" Guid="72a08c6b-5611-4d41-ab8e-abb1a7315641">
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe" KeyPath="yes" Id="MainService"/>
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe.config" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.General.dll" Id="Hosting_MPExtended.Libraries.General.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.dll" Id="Hosting_NLog.dll"/>
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.config" Id="Hosting_NLog.config"/>
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\IISExpressTemplate.config" />
+
+        <ServiceInstall
+          Id="InstallService"
+          Type="ownProcess"
+          Vital="yes"
+          Name="MPExtended WebMediaPortal"
+          DisplayName="MPExtended WebMediaPortal"
+          Description="Webinterface for MediaPortal"
+          Start="auto"
+          ErrorControl="ignore"
+          Interactive="no"
+          Account="LocalSystem" />
+        <ServiceControl
+          Id="StartService"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Name="MPExtended WebMediaPortal"
+          Wait="yes" />
+        <fire:FirewallException
+          IgnoreFailure="yes"
+          Id="FirewallException"
+          Name="MPExtended WebMediaPortal"
+          Scope="localSubnet"
+          Protocol="tcp"
+          Program="[#MainService]" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- User interfacer -->
+    <Property Id="WIXUI_INSTALLDIR" Value="MPEXTENDEDDIRECTORY" />
+    <UIRef Id="GeneralUI"/>
+    <UIRef Id="WixUI_Common" />
+
+    <!-- Custom images -->
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />
+    <Binary Id="ExitDialogBitmap" SourceFile="$(var.SolutionDir)\Libraries\Installer\exitdialog.bmp" />
+
+    <FeatureRef Id="Feature_WebMP" />
+  </Product>
+</Wix>

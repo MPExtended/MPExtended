@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <!--
+    Copyright (c) 2011 MPExtended Developers, http://mpextended.github.com/
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+  -->
+  
+  <!-- Remove all banner texts-->
+	<String Id="SetupTypeDlgTitle"></String>
+  <String Id="MaintenanceTypeDlgTitle"></String>
+  <String Id="MaintenanceTypeDlgDescription"></String>
+  <String Id="InstallDirDlgTitle"></String>
+  <String Id="InstallDirDlgDescription"></String>
+  <String Id="VerifyReadyDlgInstallTitle"></String>
+  <String Id="VerifyReadyDlgChangeTitle"></String>
+  <String Id="VerifyReadyDlgRemoveTitle"></String>
+  <String Id="VerifyReadyDlgRepairTitle"></String>
+  <String Id="VerifyReadyDlgUpdateTitle"></String>
+  <String Id="ProgressDlgTitleInstalling"></String>
+  <String Id="ProgressDlgTitleChanging"></String>
+  <String Id="ProgressDlgTitleRepairing"></String>
+  <String Id="ProgressDlgTitleRemoving"></String>
+  <String Id="ProgressDlgTitleUpdating"></String>
+</WixLocalization>
