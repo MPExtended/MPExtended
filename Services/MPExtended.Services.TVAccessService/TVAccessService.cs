@@ -509,9 +509,9 @@ namespace MPExtended.Services.TVAccessService
             return Recording.ListAll().TakeRange(start, end).Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).ToList();
         }
 
-        public WebRecordingBasic GetRecordingById(int recordingId)
+        public WebRecordingBasic GetRecordingById(int id)
         {
-            return Recording.Retrieve(recordingId).ToWebRecording();
+            return Recording.Retrieve(id).ToWebRecording();
         }
 
         public WebRecordingFileInfo GetRecordingFileInfo(int id)
