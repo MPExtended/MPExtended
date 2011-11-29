@@ -294,6 +294,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebTVSeasonDetailed GetTVSeasonDetailedById(int? provider, string id);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebTVEpisodeBasic> GetAllTVEpisodesBasic(int? provider, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebTVEpisodeDetailed> GetAllTVEpisodesDetailed(int? provider, SortBy? sort = SortBy.TVEpisodeNumber, OrderBy? order = OrderBy.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -48,7 +48,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface ITVEpisodeNumberSortable
     {
         int EpisodeNumber { get; set; }
-        string SeasonId { get; set; }
+        int SeasonNumber { get; set; }
     }
 
     public interface ITVSeasonNumberSortable

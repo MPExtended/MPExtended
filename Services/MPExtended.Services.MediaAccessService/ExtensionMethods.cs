@@ -188,7 +188,7 @@ namespace MPExtended.Services.MediaAccessService
 
                     // tv
                     case SortBy.TVEpisodeNumber:
-                        return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonId, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
+                        return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonNumber, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
                     case SortBy.TVSeasonNumber:
                         return list.OrderBy(x => ((ITVSeasonNumberSortable)x).SeasonNumber, order);
                     case SortBy.TVDateAired:
