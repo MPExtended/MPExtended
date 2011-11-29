@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Xml.Linq;
 using MPExtended.Libraries.General;
@@ -88,8 +89,10 @@ namespace MPExtended.Applications.Development.DevTool
 
                 foreach (var file in files)
                 {
+                    string id = Regex.Replace(path + "_" + file, "[^a-zA-Z0-9_]+", "_", RegexOptions.Compiled);
                     filesComponent.Add(new XElement(ns + "File",
-                        new XAttribute("Source", @"$(var.SolutionDir)\" + path + @"\" + file)
+                        new XAttribute("Source", @"$(var.SolutionDir)\" + path + @"\" + file),
+                        new XAttribute("Id", "FileGen_" + (id.Length > 60 ? id.Substring(id.Length - 60) : id))
                     ));
                 }
 
