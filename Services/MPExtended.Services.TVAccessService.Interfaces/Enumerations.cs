@@ -22,6 +22,40 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     }
 
     [DataContract]
+    public enum WebScheduleType
+    {
+        [EnumMember]
+        Once = 0,
+        [EnumMember]
+        Daily = 1,
+        [EnumMember]
+        Weekly = 2,
+        [EnumMember]
+        EveryTimeOnThisChannel = 3,
+        [EnumMember]
+        EveryTimeOnEveryChannel = 4,
+        [EnumMember]
+        Weekends = 5,
+        [EnumMember]
+        WorkingDays = 6,
+        [EnumMember]
+        WeeklyEveryTimeOnThisChannel = 7
+    }
+
+    [DataContract]
+    public enum WebScheduleKeepMethod
+    {
+        [EnumMember]
+        UntilSpaceNeeded = 0,
+        [EnumMember]
+        UntilWatched = 1,
+        [EnumMember]
+        TillDate = 2,
+        [EnumMember]
+        Always = 3
+    }
+
+    [DataContract]
     public enum SortOrder
     {
         [EnumMember]

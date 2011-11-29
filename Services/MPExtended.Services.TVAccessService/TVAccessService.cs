@@ -167,14 +167,14 @@ namespace MPExtended.Services.TVAccessService
             AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
         }
 
-        public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType)
+        public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType)
         {
             AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
         }
 
-        public void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
+        public void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
         {
-            Log.Debug("Adding schedulw on channel {0} for {1}, {2}-{3}, type {4}", channelId, title, startTime, endTime, scheduleType);
+            Log.Debug("Adding schedule on channel {0} for {1}, {2} till {3}, type {4}", channelId, title, startTime, endTime, scheduleType);
             ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
             Schedule schedule = _tvBusiness.AddSchedule(channelId, title, startTime, endTime, (int)scheduleRecType);
 

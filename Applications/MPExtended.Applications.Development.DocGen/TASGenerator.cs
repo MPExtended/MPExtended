@@ -30,13 +30,17 @@ namespace MPExtended.Applications.Development.DocGen
             this.Assembly = assembly;
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.ITVAccessService");
             this.Enums = new List<Type>() {
-                //this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.WebChannelState.States")
+                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.ChannelState"),
+                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.WebScheduleType"),
+                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.WebScheduleKeepMethod"),
+                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.SortField"),
+                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.SortOrder"),
             };
         }
 
         protected override int GenerateSortOrder(string methodName)
         {
-            if (methodName.Contains("GetChannelState")) return 2;
+            if (methodName.Contains("ChannelState")) return 2;
             if (methodName.Contains("Switch")) return 5;
             if (methodName.Contains("Radio")) return 4;
             if (methodName.Contains("GetChannel")) return 3;

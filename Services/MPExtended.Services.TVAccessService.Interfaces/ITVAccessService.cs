@@ -53,11 +53,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType);
+        void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, int scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority);
+        void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

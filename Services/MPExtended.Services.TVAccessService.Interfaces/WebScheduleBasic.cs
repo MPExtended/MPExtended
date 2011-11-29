@@ -18,7 +18,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
         public DateTime KeepDate { get; set; }
-        public int KeepMethod { get; set; }
+        public WebScheduleKeepMethod KeepMethod { get; set; }
         public int MaxAirings { get; set; }
         public int PostRecordInterval { get; set; }
         public int PreRecordInterval { get; set; }
@@ -27,7 +27,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int Quality { get; set; }
         public int QualityType { get; set; }
         public int RecommendedCard { get; set; }
-        public int ScheduleType { get; set; }
+        public WebScheduleType ScheduleType { get; set; }
         public bool Series { get; set; }
         public DateTime StartTime { get; set; }
     }

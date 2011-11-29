@@ -434,7 +434,7 @@ namespace MPExtended.Services.TVAccessService
                 IsChanged = sch.IsChanged,
                 IsManual = sch.IsManual,
                 KeepDate = sch.KeepDate != DateTime.MinValue ? sch.KeepDate : new DateTime(2000, 1, 1),
-                KeepMethod = sch.KeepMethod,
+                KeepMethod = (WebScheduleKeepMethod)sch.KeepMethod,
                 MaxAirings = sch.MaxAirings,
                 PostRecordInterval = sch.PostRecordInterval,
                 PreRecordInterval = sch.PreRecordInterval,
@@ -443,7 +443,7 @@ namespace MPExtended.Services.TVAccessService
                 Quality = sch.Quality,
                 QualityType = (int)sch.QualityType,
                 RecommendedCard = sch.RecommendedCard,
-                ScheduleType = sch.ScheduleType,
+                ScheduleType = (WebScheduleType)sch.ScheduleType,
                 Series = sch.Series,
                 StartTime = sch.StartTime != DateTime.MinValue ? sch.StartTime : new DateTime(2000, 1, 1)
             };
