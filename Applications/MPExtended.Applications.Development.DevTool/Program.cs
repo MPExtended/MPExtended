@@ -30,6 +30,7 @@ namespace MPExtended.Applications.Development.DevTool
             var tools = new IDevTool[] {
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),
+                new WixFSGenerator()
             };
 
             string line = "help";
