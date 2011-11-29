@@ -24,6 +24,7 @@
     <Compile Include="Features.wxs" />
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="WWW.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Applications\MPExtended.Applications.WebMediaPortal\MPExtended.Applications.WebMediaPortal.csproj">
