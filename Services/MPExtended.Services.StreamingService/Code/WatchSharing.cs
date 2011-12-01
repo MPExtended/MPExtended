@@ -221,6 +221,12 @@ namespace MPExtended.Services.StreamingService.Code
 
         public void SetClientPlayerPosition(MediaSource source, int playerPosition)
         {
+            // ignore when not needed
+            if (!enabled || (source.MediaType != WebStreamMediaType.Movie && source.MediaType != WebStreamMediaType.TVEpisode))
+            {
+                return;
+            }
+
             string identifier = GetIdentifierFromMediaSource(source);
             lock (streams[identifier])
             {
