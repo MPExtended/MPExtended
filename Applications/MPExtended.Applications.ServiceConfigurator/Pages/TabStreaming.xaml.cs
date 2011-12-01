@@ -44,11 +44,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         public TabStreaming()
         {
+            // session watcher (started in Page_Initialized, which is called via InitializeComponent)
             mSessionWatcher = new DispatcherTimer();
             mSessionWatcher.Interval = TimeSpan.FromSeconds(2);
             mSessionWatcher.Tick += activeSessionWatcher_Tick;
 
             InitializeComponent();
+
+            // actually show the list
+            lvActiveStreams.ItemsSource = mStreamingSessions;
 
             // load language list
             var languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
