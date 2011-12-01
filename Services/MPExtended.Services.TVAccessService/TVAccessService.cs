@@ -111,7 +111,7 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region TV Server
-        public bool TestConnectionToTVService()
+        public WebResult TestConnectionToTVService()
         {
             return RemoteControl.IsConnected;
         }
@@ -152,48 +152,58 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetSetting(tagName, "").Value;
         }
 
-        public void WriteSettingToDatabase(string tagName, string value)
+        public WebResult WriteSettingToDatabase(string tagName, string value)
         {
             Setting setting = _tvBusiness.GetSetting(tagName, "");
             setting.Value = value;
             setting.Persist();
+            return true;
         }
         #endregion
 
         #region Schedules
-        public void StartRecordingManual(string userName, int channelId, string title)
+        public WebResult StartRecordingManual(string userName, int channelId, string title)
         {
             Log.Debug("Start recording manual on channel " + channelId + ", userName: " + userName);
-            AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
+            return AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
         }
 
-        public void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType)
+        public WebResult AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType)
         {
-            AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
+            return AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
         }
 
-        public void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
+        public WebResult AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
         {
-            Log.Debug("Adding schedule on channel {0} for {1}, {2} till {3}, type {4}", channelId, title, startTime, endTime, scheduleType);
-            ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
-            Schedule schedule = _tvBusiness.AddSchedule(channelId, title, startTime, endTime, (int)scheduleRecType);
-
-            schedule.ScheduleType = (int)scheduleRecType;
-            schedule.PreRecordInterval = preRecordInterval >= 0 ? preRecordInterval : Int32.Parse(_tvBusiness.GetSetting("preRecordInterval", "5").Value);
-            schedule.PostRecordInterval = postRecordInterval >= 0 ? postRecordInterval : Int32.Parse(_tvBusiness.GetSetting("postRecordInterval", "5").Value);
-
-            if (!String.IsNullOrEmpty(directory))
+            try
             {
-                schedule.Directory = directory;
-            }
+                Log.Debug("Adding schedule on channel {0} for {1}, {2} till {3}, type {4}", channelId, title, startTime, endTime, scheduleType);
+                ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
+                Schedule schedule = _tvBusiness.AddSchedule(channelId, title, startTime, endTime, (int)scheduleRecType);
 
-            if (priority >= 0)
+                schedule.ScheduleType = (int)scheduleRecType;
+                schedule.PreRecordInterval = preRecordInterval >= 0 ? preRecordInterval : Int32.Parse(_tvBusiness.GetSetting("preRecordInterval", "5").Value);
+                schedule.PostRecordInterval = postRecordInterval >= 0 ? postRecordInterval : Int32.Parse(_tvBusiness.GetSetting("postRecordInterval", "5").Value);
+
+                if (!String.IsNullOrEmpty(directory))
+                {
+                    schedule.Directory = directory;
+                }
+
+                if (priority >= 0)
+                {
+                    schedule.Priority = priority;
+                }
+
+                schedule.Persist();
+                _tvControl.OnNewSchedule();
+                return true;
+            }
+            catch (Exception ex)
             {
-                schedule.Priority = priority;
+                Log.Warn("Failed to add schedule", ex);
+                return false;
             }
-
-            schedule.Persist();
-            _tvControl.OnNewSchedule();
         }
 
         public WebCount GetScheduleCount()
@@ -216,49 +226,68 @@ namespace MPExtended.Services.TVAccessService
             return Schedule.Retrieve(scheduleId).ToWebSchedule();
         }
 
-        public void CancelSchedule(int programId)
+        public WebResult CancelSchedule(int programId)
         {
-            Program p = Program.Retrieve(programId);
-
-            foreach (Schedule schedule in Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)))
+            try
             {
-                switch (schedule.ScheduleType)
+                var program = Program.Retrieve(programId);
+                foreach (Schedule schedule in Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(program, true)))
                 {
-                    case (int)ScheduleRecordingType.Once:
-                        schedule.Delete();
-                        _tvControl.OnNewSchedule();
-                        break;
-                    default:
-                        CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, schedule.StartTime);
-                        canceledSchedule.Persist();
-                        _tvControl.OnNewSchedule();
-                        break;
+                    switch (schedule.ScheduleType)
+                    {
+                        case (int)ScheduleRecordingType.Once:
+                            schedule.Delete();
+                            _tvControl.OnNewSchedule();
+                            break;
+                        default:
+                            CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, schedule.StartTime);
+                            canceledSchedule.Persist();
+                            _tvControl.OnNewSchedule();
+                            break;
+                    }
                 }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to cancel schedule for programId {0}", programId), ex);
+                return false;
             }
         }
 
-        public void DeleteSchedule(int scheduleId)
+        public WebResult DeleteSchedule(int scheduleId)
         {
-            Schedule schedule = Schedule.Retrieve(scheduleId);
-
-            // first cancel all of the episodes of this program for this schedule
-            foreach (Program program in Program.ListAll().Where(program => program.Title == schedule.ProgramName))
+            // TODO: the workflow in this method doesn't make any sense at all
+            try
             {
-                if (schedule.IsRecordingProgram(program, true))
+                Schedule schedule = Schedule.Retrieve(scheduleId);
+
+                // first cancel all of the episodes of this program for this schedule
+                foreach (Program program in Program.ListAll().Where(program => program.Title == schedule.ProgramName))
                 {
-                    CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, program.IdChannel, program.StartTime);
-                    canceledSchedule.Persist();
-                    _tvControl.OnNewSchedule();
+                    if (schedule.IsRecordingProgram(program, true))
+                    {
+                        CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, program.IdChannel, program.StartTime);
+                        canceledSchedule.Persist();
+                        _tvControl.OnNewSchedule();
+                    }
                 }
-            }
 
-            // now remove existing CanceledSchedule for this schedule
-            foreach (CanceledSchedule canceled in CanceledSchedule.ListAll().Where(canceled => canceled.IdSchedule == schedule.IdSchedule))
-            {
-                canceled.Remove();
+                // now remove existing CanceledSchedule for this schedule
+                foreach (CanceledSchedule canceled in CanceledSchedule.ListAll().Where(canceled => canceled.IdSchedule == schedule.IdSchedule))
+                {
+                    canceled.Remove();
+                }
+                schedule.Remove();
+                _tvControl.OnNewSchedule();
+                return true;
             }
-            schedule.Remove();
-            _tvControl.OnNewSchedule();
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to delete schedule {0}", scheduleId), ex);
+                return false;
+            }
         }
         #endregion
 
@@ -319,7 +348,7 @@ namespace MPExtended.Services.TVAccessService
             }
 
             return webChannelStates;
-        
+
             /* This is the old implementation which doesn't work due to a NullReferenceException in TvService
             Dictionary<int, ChannelState> channelStates = _tvControl.GetAllChannelStatesForGroup(groupId, GetUserByUserName(userName, true));
             Dictionary<int, WebChannelState> webChannelStates = new Dictionary<int, WebChannelState>();
@@ -468,7 +497,7 @@ namespace MPExtended.Services.TVAccessService
             return tvCard;
         }
 
-        public void SendHeartbeat(string userName)
+        public WebResult SendHeartbeat(string userName)
         {
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
@@ -478,9 +507,10 @@ namespace MPExtended.Services.TVAccessService
             }
 
             _tvControl.HeartBeat(currentUser);
+            return true;
         }
 
-        public bool CancelCurrentTimeShifting(string userName)
+        public WebResult CancelCurrentTimeShifting(string userName)
         {
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
@@ -648,7 +678,7 @@ namespace MPExtended.Services.TVAccessService
             return Program.Retrieve(programId).ToWebProgramDetailed();
         }
 
-        public bool GetProgramIsScheduledOnChannel(int channelId, int programId)
+        public WebResult GetProgramIsScheduledOnChannel(int channelId, int programId)
         {
             Program program = Program.Retrieve(programId);
             Channel channel = Channel.Retrieve(channelId);
@@ -656,7 +686,7 @@ namespace MPExtended.Services.TVAccessService
             return channel.ReferringSchedule().Any(schedule => schedule.IsRecordingProgram(program, false));
         }
 
-        public bool GetProgramIsScheduled(int programId)
+        public WebResult GetProgramIsScheduled(int programId)
         {
             Program p = Program.Retrieve(programId);
             return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0;
