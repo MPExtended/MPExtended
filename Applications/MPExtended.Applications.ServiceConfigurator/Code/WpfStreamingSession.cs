@@ -53,13 +53,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 NotifyPropertyChanged("File");
             }
 
-            String progress = newSession.TranscodingInfo != null ? (newSession.TranscodingInfo.TranscodingPosition / 1000).ToString() : "";
-            if (this.Progress == null || !this.Progress.Equals(progress))
+            if (newSession.PlayerPosition > 0)
             {
-                this.Progress = progress;
-                NotifyPropertyChanged("Progress");
+                TimeSpan span = TimeSpan.FromMilliseconds(newSession.PlayerPosition);
+                span = span.Subtract(TimeSpan.FromMilliseconds(span.Milliseconds)); // don't show the damn milliseconds
+                String progress = span.ToString("g");
+                if (this.Progress == null || !this.Progress.Equals(progress))
+                {
+                    this.Progress = progress;
+                    NotifyPropertyChanged("Progress");
+                }
             }
-
         }
 
         public String Identifier { get; set; }
