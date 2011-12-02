@@ -7,16 +7,33 @@ namespace MPExtended.Services.StreamingService.Interfaces
 {
     public class WebTranscodingInfo
     {
+        /// <summary>
+        /// The amount of video that has already been transcoded (0 is the start of playback position).
+        /// </summary>
+        public int TranscodedTime { get; set; }
+
+        /// <summary>
+        /// The number of frames already transcoded.
+        /// </summary>
+        public int TranscodedFrames { get; set; }
+
+        /// <summary>
+        /// The position in the file at which the transcoder currently is (0 is the start of the file).
+        /// </summary>
+        public int TranscodingPosition { get; set; }
+
+        /// <summary>
+        /// The framerate at which the transcoder is currently transcoding in frames per second. Doesn't have to be the framerate of the output stream.
+        /// </summary>
+        public int TranscodingFPS { get; set; } 
+
+        /// <summary>
+        /// The current bitrate of the output stream in kbit/s.
+        /// </summary>
+        public int OutputBitrate { get; set; }
+
         // whether or not getting the transcoding info is supported
         public bool Supported { get; set; }
-        // current bitrate in kbit/s
-        public decimal CurrentBitrate { get; set; }
-        // current time in milliseconds for the transcoding
-        public int CurrentTime { get; set; }
-        // number of frames that get encoded per second
-        public int EncodingFPS { get; set; }
-        // number of encoded frames
-        public int EncodedFrames { get; set; }
         // is the transcoding finished?
         public bool Finished { get; set; }
         // did the transcoding fail?

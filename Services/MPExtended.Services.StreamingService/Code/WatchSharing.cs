@@ -344,7 +344,7 @@ namespace MPExtended.Services.StreamingService.Code
                 int transcodedValue = 0;
                 if (streams[id].TranscodingInfo != null && streams[id].TranscodingInfo.Value != null)
                 {
-                    transcodedValue = streams[id].TranscodingInfo.Value.CurrentTime;
+                    transcodedValue = streams[id].TranscodingInfo.Value.TranscodingPosition;
                 }
                 else
                 {

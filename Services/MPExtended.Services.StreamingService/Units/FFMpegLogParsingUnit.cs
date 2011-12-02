@@ -35,10 +35,12 @@ namespace MPExtended.Services.StreamingService.Units
         public bool LogProgress { get; set; }
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
+        private int startPosition; // in milliseconds
 
-        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save) 
+        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, int startPosition) 
         {
             data = save;
+            this.startPosition = startPosition;
         }
 
         public bool Setup() 
@@ -48,7 +50,7 @@ namespace MPExtended.Services.StreamingService.Units
             data.Value.Failed = false;
             processThread = ThreadManager.Start("FFMpegLogParsing", delegate()
             {
-                ParseOutputStream(InputStream, data, LogMessages, LogProgress);
+                ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
             });
             return true;
         }
@@ -64,11 +66,10 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, bool logMessages, bool logProgress)
+        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, int startPosition, bool logMessages, bool logProgress)
         {
             StreamReader reader = new StreamReader(outputStream);
 
-            bool aborted = false;
             string line;
             while ((line = reader.ReadLine()) != null)
             {
@@ -86,11 +87,11 @@ namespace MPExtended.Services.StreamingService.Units
                             canBeErrorLine = false;
                             lock (saveData)
                             {
-                                saveData.Value.CurrentBitrate = Decimal.Parse(match.Groups[7].Value, System.Globalization.CultureInfo.InvariantCulture);
-                                saveData.Value.CurrentTime = (Int32.Parse(match.Groups[4].Value) * 3600 + Int32.Parse(match.Groups[5].Value) * 60 + Int32.Parse(match.Groups[6].Value)) * 1000;
-                                saveData.Value.EncodedFrames = Int32.Parse(match.Groups[1].Value);
-                                saveData.Value.EncodingFPS = Int32.Parse(match.Groups[2].Value);
-                                // saveData.Value.EncodedKb = Int32.Parse(match.Groups[3].Value);
+                                saveData.Value.TranscodedTime = (Int32.Parse(match.Groups[4].Value) * 3600 + Int32.Parse(match.Groups[5].Value) * 60 + Int32.Parse(match.Groups[6].Value)) * 1000;
+                                saveData.Value.TranscodedFrames = Int32.Parse(match.Groups[1].Value);
+                                saveData.Value.TranscodingPosition = startPosition + saveData.Value.TranscodedTime;
+                                saveData.Value.TranscodingFPS = Int32.Parse(match.Groups[2].Value);
+                                saveData.Value.OutputBitrate = (int)Math.Round(Decimal.Parse(match.Groups[7].Value, System.Globalization.CultureInfo.InvariantCulture));
                             }
 
                             if (!logProgress) // we don't log output
@@ -113,7 +114,7 @@ namespace MPExtended.Services.StreamingService.Units
                 }
                 catch (ThreadAbortException)
                 {
-                    aborted = true;
+                    saveData.Value.Failed = true;
                     break;
                 }
                 catch (Exception e)
@@ -122,7 +123,6 @@ namespace MPExtended.Services.StreamingService.Units
                 }
             }
 
-            saveData.Value.Failed = aborted;
             saveData.Value.Finished = true;
             reader.Close();
             return;

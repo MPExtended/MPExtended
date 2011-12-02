@@ -53,7 +53,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 NotifyPropertyChanged("File");
             }
 
-            String progress = newSession.TranscodingInfo != null ? newSession.TranscodingInfo.CurrentTime.ToString() : "";
+            String progress = newSession.TranscodingInfo != null ? (newSession.TranscodingInfo.TranscodingPosition / 1000).ToString() : "";
             if (this.Progress == null || !this.Progress.Equals(progress))
             {
                 this.Progress = progress;
