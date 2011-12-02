@@ -36,7 +36,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void BuildPipeline(StreamContext context, int position)
+        public void BuildPipeline(StreamContext context)
         {
             // add input
             bool doInputReader = context.Source.DoesNeedInputReader();
@@ -59,7 +59,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
-                    position != 0 ? "-ss " + position : "",
+                    context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
                     context.OutputSize, context.OutputSize.Width, context.OutputSize.Height,
                     mappings, context.Profile.CodecParameters["codecParameters"]
                 );
@@ -68,7 +68,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
-                    position != 0 ? "-ss " + position : "",
+                    context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
                     mappings, context.Profile.CodecParameters["codecParameters"]
                 );
             }
@@ -85,7 +85,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // setup output parsing
             var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
-            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo);
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, context.StartPosition);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
             context.Pipeline.AddLogUnit(logunit, 6);

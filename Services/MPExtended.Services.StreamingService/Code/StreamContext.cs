@@ -26,6 +26,9 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class StreamContext
     {
+        // time in milliseconds for which a client player sync position is valid
+        private const int CLIENT_SYNC_VALID_DURATION = 120000;
+
         public MediaSource Source { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
         public bool IsTv { get; set; }
@@ -33,11 +36,31 @@ namespace MPExtended.Services.StreamingService.Code
         public Resolution OutputSize { get; set; }
         public TranscoderProfile Profile { get; set; }
 
+        public int StartPosition { get; set; }
+        public int SyncedPlayerPosition { get; set; }
+        public DateTime LastPlayerPositionSync { get; set; }
+
         public Pipeline Pipeline { get; set; }
 
         public WebTranscodingInfo TranscodingInfo { get; set; }
 
         public int? AudioTrackId { get; set; }
         public int? SubtitleTrackId { get; set; }
+
+        /// <summary>
+        /// Get the approximate player position of the client. This value comes from the client, transcoder and clock.
+        /// </summary>
+        /// <returns>Client player position in milliseconds</returns>
+        public int GetPlayerPosition()
+        {
+            if (LastPlayerPositionSync > DateTime.Now.Subtract(TimeSpan.FromMilliseconds(CLIENT_SYNC_VALID_DURATION)))
+            {
+                return SyncedPlayerPosition + (int)(DateTime.Now - LastPlayerPositionSync).TotalMilliseconds;
+            }
+            else
+            {
+                return TranscodingInfo.TranscodingPosition;
+            }
+        }
     }
 }

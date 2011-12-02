@@ -26,18 +26,18 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class TranscodingInfoCalculator
     {
-        private const int FPS_SAMPLING_RATE = 5; // in seconds
+        private const int FPS_SAMPLING_RATE = 5000;
 
-        public int SamplingRate { get; set; } // in milliseconds
+        public int SamplingRate { get; set; } // milliseconds between samples
         public int FPS { get; set; }
-        public int StartPosition { get; set; } // in milliseconds
+        public int StartPosition { get; set; }
 
-        private int milliseconds;
-        private int counter;
-        private int lastCountMilliseconds;
+        private int transcodingPositionInFile;
+        private int fpsCalculatorCounter;
+        private int lastCountPosition;
         private int calculatedFPS;
 
-        private long durationMilliseconds;
+        private long duration;
         private bool loggedUnknownDuration = false;
         private bool hasValidData = false;
 
@@ -50,22 +50,22 @@ namespace MPExtended.Services.StreamingService.Code
             this.SamplingRate = samplingRate;
         }
 
-        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long durationMilliseconds)
+        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long duration)
             : this(startPosition, fps, samplingRate)
         {
-            this.durationMilliseconds = durationMilliseconds;
+            this.duration = duration;
         }
 
-        /// <param name="newTime">New time there's transcoded to in milliseconds</param>
+        /// <param name="newTime">New time till where is transcoded in milliseconds</param>
         public void NewTime(int newTime)
         {
-            int fpsCount = FPS_SAMPLING_RATE * 1000 / SamplingRate;
+            int fpsCount = FPS_SAMPLING_RATE / SamplingRate;
 
-            milliseconds = newTime;
-            if (counter++ % fpsCount == 0)
+            transcodingPositionInFile = newTime;
+            if (fpsCalculatorCounter++ % fpsCount == 0)
             {
-                calculatedFPS = ((newTime - lastCountMilliseconds) / (1000 / FPS)) / FPS_SAMPLING_RATE;
-                lastCountMilliseconds = newTime;
+                calculatedFPS = ((newTime - lastCountPosition) / (1000 / FPS)) / (FPS_SAMPLING_RATE / 1000);
+                lastCountPosition = newTime;
             }
 
             hasValidData = true;
@@ -73,7 +73,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public void NewPercentage(double percentage)
         {
-            if (this.durationMilliseconds == 0)
+            if (this.duration == 0)
             {
                 if (!loggedUnknownDuration)
                 {
@@ -83,7 +83,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return;
             }
 
-            NewTime((int)Math.Round(percentage * this.durationMilliseconds));
+            NewTime((int)Math.Round(percentage * this.duration));
         }
 
         public void SetStats(Reference<WebTranscodingInfo> output)
@@ -91,9 +91,10 @@ namespace MPExtended.Services.StreamingService.Code
             lock (output.Value)
             {
                 output.Value.Supported = hasValidData;
-                output.Value.EncodingFPS = calculatedFPS;
-                output.Value.EncodedFrames = (milliseconds - StartPosition) / (1000 / FPS);
-                output.Value.CurrentTime = milliseconds;
+                output.Value.TranscodedTime = (transcodingPositionInFile - StartPosition);
+                output.Value.TranscodedFrames = (transcodingPositionInFile - StartPosition) / (1000 / FPS);
+                output.Value.TranscodingPosition = transcodingPositionInFile;
+                output.Value.TranscodingFPS = calculatedFPS;
             }
         }
     }

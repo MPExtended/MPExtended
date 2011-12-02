@@ -50,10 +50,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?parameters=&action=playlist&identifier=" + Identifier;
         }
 
-        public void BuildPipeline(StreamContext context, int position)
+        public void BuildPipeline(StreamContext context)
         {
             this.context = context;
-            obj.BuildPipeline(context, position);
+            obj.BuildPipeline(context);
 
             segmenterUnit = new HTTPLiveStreamingUnit(Identifier);
             segmenterUnit.DebugOutput = false; // change for debugging

@@ -31,7 +31,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override void BuildPipeline(StreamContext context, int position)
+        public override void BuildPipeline(StreamContext context)
         {
             SetupAssemblyLoader();
 
@@ -43,18 +43,18 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(context, position);
+            VLCParameters vlcparam = GenerateVLCParameters(context);
             int duration = (int)Math.Round((decimal)context.MediaInfo.Duration / 1000);
 
             // add the unit
             VLCManagedEncoder unit;
             if (doInputReader)
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, context, VLCManagedEncoder.InputMethod.NamedPipe);
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, context, VLCManagedEncoder.InputMethod.NamedPipe);
             }
             else
             {
-                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, position, context, VLCManagedEncoder.InputMethod.File, context.Source.GetPath());
+                unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, context, VLCManagedEncoder.InputMethod.File, context.Source.GetPath());
             }
             context.Pipeline.AddDataUnit(unit, 5);
         }

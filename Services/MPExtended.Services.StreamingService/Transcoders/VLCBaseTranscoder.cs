@@ -43,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        protected VLCParameters GenerateVLCParameters(StreamContext context, int position)
+        protected VLCParameters GenerateVLCParameters(StreamContext context)
         {
             List<string> arguments = context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList();
 
@@ -65,12 +65,12 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // position
-            if (position > 0)
+            if (context.StartPosition > 0)
             {
-                // FIXME: temporary allow disabling it as it breaks some profiles
+                // disabling this is probably a bit idea as some things (watch sharing, transcoding info) fail then, which results in faulty clients.
                 if (!context.Profile.CodecParameters.ContainsKey("disableSeeking") || context.Profile.CodecParameters["disableSeeking"] == "no")
                 {
-                    arguments.Add("--start-time=" + position);
+                    arguments.Add("--start-time=" + (context.StartPosition / 1000));
                 }
             }
 
@@ -119,6 +119,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
             };
         }
 
-        public abstract void BuildPipeline(StreamContext context, int position);
+        public abstract void BuildPipeline(StreamContext context);
     }
 }

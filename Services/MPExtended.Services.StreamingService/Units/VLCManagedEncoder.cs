@@ -47,7 +47,6 @@ namespace MPExtended.Services.StreamingService.Units
 
         private string sout;
         private string[] arguments;
-        private int startPos; // in seconds
         private StreamContext context;
         private InputMethod inputMethod;
         private string inputPath = null;
@@ -56,17 +55,16 @@ namespace MPExtended.Services.StreamingService.Units
 
         private NamedPipe transcoderInputStream;
 
-        public VLCManagedEncoder(string sout, string[] arguments, int startPos, StreamContext context, InputMethod inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, StreamContext context, InputMethod inputMethod)
         {
             this.sout = sout;
             this.arguments = arguments;
             this.inputMethod = inputMethod;
-            this.startPos = startPos;
             this.context = context;
         }
 
-        public VLCManagedEncoder(string sout, string[] arguments, int startPos, StreamContext context, InputMethod inputMethod, string input)
-            : this(sout, arguments, startPos, context, inputMethod)
+        public VLCManagedEncoder(string sout, string[] arguments, StreamContext context, InputMethod inputMethod, string input)
+            : this(sout, arguments, context, inputMethod)
         {
             this.inputPath = input;
         }
@@ -129,7 +127,7 @@ namespace MPExtended.Services.StreamingService.Units
             // TODO: wait for state machine
 
             // setup data thread
-            infoReader = ThreadManager.Start("VLCInfoThread", InfoThread, startPos);
+            infoReader = ThreadManager.Start("VLCInfoThread", InfoThread, context.StartPosition);
             return true;
         }
 
@@ -161,12 +159,12 @@ namespace MPExtended.Services.StreamingService.Units
             if (context.MediaInfo.Duration > 0)
             {
                 Log.Trace("VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
-                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
+                calculator = new TranscodingInfoCalculator((int)passedPosition, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
             }
             else
             {
                 Log.Trace("VLCManagedInfo: duration unknown");
-                calculator = new TranscodingInfoCalculator((int)passedPosition * 1000, 25, POLL_DATA_TIME);
+                calculator = new TranscodingInfoCalculator((int)passedPosition, 25, POLL_DATA_TIME);
             }
 
             while (true)

@@ -40,8 +40,8 @@ namespace MPExtended.Services.StreamingService.Units
         public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, int position) 
         {
             data = save;
-            this.position = position;
             this.info = info;
+            this.position = position;
         }
 
         public bool Setup() 
@@ -50,7 +50,7 @@ namespace MPExtended.Services.StreamingService.Units
             vlcIsStarted = false;
             processThread = ThreadManager.Start("VLCLogParsing", delegate()
             {
-                ParseOutputStream(InputStream, data, false, this.position);
+                ParseOutputStream(InputStream, data, position, false);
             });
             return true;
         }
@@ -68,10 +68,10 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, bool logProgress, int position)
+        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, int startPosition, bool logProgress)
         {
             StreamReader reader = new StreamReader(stdoutStream);
-            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position * 1000, 25, 500, info.Duration); //VLCWrapper prints twice a second
+            TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position, 25, 500, info.Duration); //VLCWrapper prints twice a second
 
             bool aborted = false;
             string line;
