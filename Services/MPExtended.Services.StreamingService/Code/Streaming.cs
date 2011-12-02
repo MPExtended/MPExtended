@@ -32,9 +32,9 @@ namespace MPExtended.Services.StreamingService.Code
     internal class Streaming : IDisposable
     {
 #if DEBUG
-        private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // in milliseconds, use shorter time for debugging
+        private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // use shorter time for debugging
 #else
-        private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // in milliseconds, 2 minutes seams reasonable
+        private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // 2 minutes seams reasonable for production
 #endif
         public const int STREAM_NONE = -2;
         public const int STREAM_DEFAULT = -1;
@@ -86,13 +86,13 @@ namespace MPExtended.Services.StreamingService.Code
                     lock (Streams)
                     {
                         var toDelete = Streams
-                            .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.MillisecondsSinceLastRead > ALLOW_STREAM_IDLE_TIME)
+                            .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > ALLOW_STREAM_IDLE_TIME)
                             .Select(x => x.Value.Identifier)
                             .ToList();
 
                         foreach (string key in toDelete)
                         {
-                            Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.MillisecondsSinceLastRead);
+                            Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.TimeSinceLastRead);
                             KillStream(key);
                         }
                     }

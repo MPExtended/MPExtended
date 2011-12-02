@@ -35,7 +35,7 @@ namespace MPExtended.Services.StreamingService.Units
         public bool LogProgress { get; set; }
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
-        private int startPosition; // in milliseconds
+        private int startPosition;
 
         public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, int startPosition) 
         {

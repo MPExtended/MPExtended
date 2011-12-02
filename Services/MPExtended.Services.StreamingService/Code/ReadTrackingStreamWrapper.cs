@@ -37,7 +37,7 @@ namespace MPExtended.Services.StreamingService.Code
             readTimer.Start();
         }
 
-        public long MillisecondsSinceLastRead
+        public long TimeSinceLastRead
         {
             get { return readTimer.ElapsedMilliseconds; }
         }

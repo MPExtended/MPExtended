@@ -26,18 +26,18 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class TranscodingInfoCalculator
     {
-        private const int FPS_SAMPLING_RATE = 5000; // in milliseconds
+        private const int FPS_SAMPLING_RATE = 5000;
 
-        public int SamplingRate { get; set; } // in milliseconds
+        public int SamplingRate { get; set; } // milliseconds between samples
         public int FPS { get; set; }
-        public int StartPosition { get; set; } // in milliseconds
+        public int StartPosition { get; set; }
 
         private int transcodingPositionInFile;
         private int fpsCalculatorCounter;
         private int lastCountPosition;
         private int calculatedFPS;
 
-        private long duration; // in milliseconds
+        private long duration;
         private bool loggedUnknownDuration = false;
         private bool hasValidData = false;
 
@@ -50,10 +50,10 @@ namespace MPExtended.Services.StreamingService.Code
             this.SamplingRate = samplingRate;
         }
 
-        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long durationMilliseconds)
+        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long duration)
             : this(startPosition, fps, samplingRate)
         {
-            this.duration = durationMilliseconds;
+            this.duration = duration;
         }
 
         /// <param name="newTime">New time till where is transcoded in milliseconds</param>
