@@ -73,8 +73,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Genera
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.ServiceConfigurator", "Applications\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj", "{EDD71CEF-C318-4229-9427-DD822C6EDEB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.Performance", "Applications\MPExtended.Applications.Development.Performance\MPExtended.Applications.Development.Performance.csproj", "{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.StreamingService", "Applications\MPExtended.Applications.Development.StreamingService\MPExtended.Applications.Development.StreamingService.csproj", "{1E43D575-56AE-4F75-8FA0-D0EDC8501933}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserSessionService", "UserSessionService", "{91B3A941-4E1F-4F9A-8005-1BA11303E829}"
@@ -337,15 +335,6 @@ Global
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1}.Release|Mixed Platforms.Build.0 = Release|x86
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1}.Release|x86.ActiveCfg = Release|x86
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1}.Release|x86.Build.0 = Release|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|x86.ActiveCfg = Debug|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Debug|x86.Build.0 = Debug|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Any CPU.ActiveCfg = Release|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.ActiveCfg = Release|x86
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF}.Release|x86.Build.0 = Release|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -507,7 +496,6 @@ Global
 		{93F758FE-66B6-4C5D-B15D-7B31BC4964A8} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{EDD71CEF-C318-4229-9427-DD822C6EDEB1} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
 		{CA3022CA-1E84-485C-8AB3-1116407E32CA} = {4EBDE946-34F6-494D-9AD7-21BDB64CBC48}
-		{ABA99ADC-5086-4320-95B8-1ACDBF55C8BF} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
