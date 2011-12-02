@@ -151,12 +151,13 @@ namespace MPExtended.Services.StreamingService.Code
 
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
+                    stream.Context.StartPosition = position;
                     stream.Context.Profile = profile;
                     stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
-                    sharing.StartStream(stream.Context, infoRef, position);
+                    sharing.StartStream(stream.Context, infoRef);
                 
                     // get transcoder
                     stream.Transcoder = profile.GetTranscoder();
@@ -205,7 +206,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // build the pipeline
                     stream.Context.Pipeline = new Pipeline();
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.BuildPipeline(stream.Context, position);
+                    stream.Transcoder.BuildPipeline(stream.Context, position / 1000);
 
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();
@@ -289,16 +290,22 @@ namespace MPExtended.Services.StreamingService.Code
                 SourceType = s.Context.Source.MediaType,
                 SourceId = s.Context.Source.Id,
                 Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
-                TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
                 StartTime = s.StartTime,
-                DisplayName = s.Context.Source.GetDisplayName()
+                DisplayName = s.Context.Source.GetDisplayName(),
+
+                StartPosition = s.Context.StartPosition,
+                PlayerPosition = s.Context.GetPlayerPosition(),
+                TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
             }).ToList();
         }
 
         public void SetPlayerPosition(string identifier, int playerPosition)
         {
-            if(Streams.ContainsKey(identifier) && Streams[identifier] != null)
-                sharing.SetClientPlayerPosition(Streams[identifier].Context.Source, playerPosition);
+            if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
+            {
+                Streams[identifier].Context.SyncedPlayerPosition = playerPosition;
+                Streams[identifier].Context.LastPlayerPositionSync = DateTime.Now;
+            }
         }
 
         public WebTranscodingInfo GetEncodingInfo(string identifier) 

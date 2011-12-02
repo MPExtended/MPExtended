@@ -106,7 +106,7 @@ namespace MPExtended.Services.StreamingService
         {
             if (playerPosition.HasValue)
             {
-                _stream.SetPlayerPosition(identifier, playerPosition.Value);
+                _stream.SetPlayerPosition(identifier, playerPosition.Value * 1000);
             }
             return _stream.GetEncodingInfo(identifier);
         }
@@ -146,7 +146,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition);
+            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000);
         }
 
         public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
@@ -154,7 +154,7 @@ namespace MPExtended.Services.StreamingService
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition, audioId, subtitleId);
+            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
         }
 
         public bool FinishStream(string identifier)
