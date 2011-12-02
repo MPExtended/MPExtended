@@ -42,33 +42,61 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult NewMovies()
         {
-            var tmp = MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort: SortBy.DateAdded, order: OrderBy.Desc);
-            return PartialView(tmp);
+            try
+            {
+                var tmp = MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, 3, sort: SortBy.DateAdded, order: OrderBy.Desc);
+                return PartialView(tmp);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public ActionResult NewEpisodes()
         {
-            var tmp = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
-            var list = tmp.Select(x => new EpisodeModel
+            try
             {
-                Episode = x,
-                Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),
-                Show = MPEServices.MAS.GetTVShowDetailedById(x.PID, x.ShowId)
-            });
+                var tmp = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
+                var list = tmp.Select(x => new EpisodeModel
+                {
+                    Episode = x,
+                    Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),
+                    Show = MPEServices.MAS.GetTVShowDetailedById(x.PID, x.ShowId)
+                });
 
-            return PartialView(list);
+                return PartialView(list);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public ActionResult NewRecordings()
         {
-            var tmp = MPEServices.TAS.GetRecordingsByRange(0, 4, SortField.StartTime, SortOrder.Desc);
-            return PartialView(tmp);
+            try
+            {
+                var tmp = MPEServices.TAS.GetRecordingsByRange(0, 4, SortField.StartTime, SortOrder.Desc);
+                return PartialView(tmp);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public ActionResult CurrentSchedules()
         {
-            var tmp = MPEServices.TAS.GetSchedules();
-            return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
+            try
+            {
+                var tmp = MPEServices.TAS.GetSchedules();
+                return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
