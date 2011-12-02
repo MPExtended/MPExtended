@@ -19,7 +19,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region TV Server
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool TestConnectionToTVService();
+        WebResult TestConnectionToTVService();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -43,21 +43,21 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void WriteSettingToDatabase(string tagName, string value);
+        WebResult WriteSettingToDatabase(string tagName, string value);
         #endregion
 
         #region Schedules
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void StartRecordingManual(string userName, int channelId, string title);
+        WebResult StartRecordingManual(string userName, int channelId, string title);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType);
+        WebResult AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority);
+        WebResult AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -77,11 +77,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void CancelSchedule(int programId);
+        WebResult CancelSchedule(int programId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void DeleteSchedule(int scheduleId);
+        WebResult DeleteSchedule(int scheduleId);
         #endregion
 
         #region Recordings
@@ -226,11 +226,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void SendHeartbeat(string userName);
+        WebResult SendHeartbeat(string userName);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool CancelCurrentTimeShifting(string userName);
+        WebResult CancelCurrentTimeShifting(string userName);
         #endregion
 
         #region EPG
@@ -290,11 +290,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool GetProgramIsScheduledOnChannel(int channelId, int programId);
+        WebResult GetProgramIsScheduledOnChannel(int channelId, int programId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool GetProgramIsScheduled(int programId);
+        WebResult GetProgramIsScheduled(int programId);
         #endregion
     }
 }
