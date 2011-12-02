@@ -206,7 +206,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // build the pipeline
                     stream.Context.Pipeline = new Pipeline();
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.BuildPipeline(stream.Context, position / 1000);
+                    stream.Transcoder.BuildPipeline(stream.Context);
 
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();

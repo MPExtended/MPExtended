@@ -38,7 +38,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void BuildPipeline(StreamContext context, int position)
+        public void BuildPipeline(StreamContext context)
         {
             // we ignore our arguments :)
             context.TranscodingInfo.Supported = false;

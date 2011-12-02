@@ -30,13 +30,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override void BuildPipeline(StreamContext context, int position)
+        public override void BuildPipeline(StreamContext context)
         {
             // VLC doesn't support output parsing, but subclasses do
-            BuildPipeline(context, position, EncoderUnit.LogStream.None);
+            BuildPipeline(context, EncoderUnit.LogStream.None);
         }
 
-        public void BuildPipeline(StreamContext context, int position, EncoderUnit.LogStream log)
+        public void BuildPipeline(StreamContext context, EncoderUnit.LogStream log)
         {            
             // input
             bool doInputReader = context.Source.DoesNeedInputReader();
@@ -46,7 +46,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(context, position);
+            VLCParameters vlcparam = GenerateVLCParameters(context);
 
             // prepare vlc arguments
             string path = @"\#OUT#";
