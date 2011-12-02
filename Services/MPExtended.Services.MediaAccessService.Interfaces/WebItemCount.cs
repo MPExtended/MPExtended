@@ -20,7 +20,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         public override bool Equals(object obj)
         {
-            return obj as WebItemCount != null && (obj as WebItemCount).Count == this.Count;
+            WebItemCount c = obj is int ? new WebItemCount((int)obj) : obj as WebItemCount;
+            return (object)c != null && this.Count == c.Count;
         }
 
         public override int GetHashCode()
@@ -30,12 +31,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         public static bool operator ==(WebItemCount a, WebItemCount b)
         {
-            return a.Count == b.Count;
+            return Object.ReferenceEquals(a, b) || (((object)a) != null && ((object)b) != null && a.Count == b.Count);
         }
 
         public static bool operator !=(WebItemCount a, WebItemCount b)
         {
-            return a.Count != b.Count;
+            return !(a == b);
         }
 
         public static implicit operator int(WebItemCount count)
