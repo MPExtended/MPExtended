@@ -81,7 +81,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             if (StartupArguments.RunAsTrayApp && !StartupArguments.OpenOnStart)
                 Hide();
 
-            HandleMpState(userSessionService.IsMediaPortalRunning().Status);
+            HandleMpState(userSessionService.IsMediaPortalRunning().Result);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -117,7 +117,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void MenuStartCloseMp_Click(object sender, RoutedEventArgs e)
         {
-            bool isMpRunning = UserServices.USS.IsMediaPortalRunning().Status;
+            bool isMpRunning = UserServices.USS.IsMediaPortalRunning().Result;
             if (!isMpRunning)
             {
                 userSessionService.StartMediaPortal();
@@ -144,7 +144,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            HandleMpState(userSessionService.IsMediaPortalRunning().Status);
+            HandleMpState(userSessionService.IsMediaPortalRunning().Result);
         }
 
         private void MenuOpenConfigurator_Click(object sender, RoutedEventArgs e)

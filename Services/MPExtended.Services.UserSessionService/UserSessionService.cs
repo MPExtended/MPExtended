@@ -89,7 +89,7 @@ namespace MPExtended.Services.UserSessionService
                 return new WebResult(false);
             }
 
-            while (!IsMediaPortalRunning().Status)
+            while (!IsMediaPortalRunning().Result)
             {
                 System.Threading.Thread.Sleep(500);
             }
