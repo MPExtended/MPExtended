@@ -100,7 +100,7 @@ namespace MPExtended.Applications.Development.USSTest
                 try
                 {
                     WebResult res = service.IsMediaPortalRunning();
-                    if (res.Status)
+                    if (res.Result)
                     {
                         MessageBox.Show("MediaPortal is running");
                     }
