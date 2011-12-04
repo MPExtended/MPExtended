@@ -255,7 +255,8 @@ namespace MPExtended.Services.StreamingService.Code
 
         public string GetUniqueIdentifier()
         {
-            return String.Format("{0}-{1}-{2}", MediaType, Provider, Id);
+            string ident = String.Format("{0}-{1}-{2}", MediaType, Provider, Id);
+            return String.Concat(ident.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
         }
 
         public string GetDebugName()
