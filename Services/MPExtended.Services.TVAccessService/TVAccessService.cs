@@ -213,12 +213,12 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebScheduleBasic> GetSchedules(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
         {
-            return Schedule.ListAll().Select(sch => sch.ToWebSchedule()).SortScheduleList(sort, order).ToList();
+            return Schedule.ListAll().Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).ToList();
         }
 
         public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
         {
-            return Schedule.ListAll().TakeRange(start, end).Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).ToList();
+            return Schedule.ListAll().Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).TakeRange(start, end).ToList();
         }
 
         public WebScheduleBasic GetScheduleById(int scheduleId)
@@ -305,7 +305,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelGroup> GetGroupsByRange(int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).TakeRange(start, end).SortGroupList(sort, order).ToList();
+            return ChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).SortGroupList(sort, order).TakeRange(start, end).ToList();
         }
 
         public WebChannelGroup GetGroupById(int groupId)
@@ -325,7 +325,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelDetailed> GetChannelsDetailed(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -335,7 +335,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelDetailed> GetChannelsDetailedByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName)
@@ -379,7 +379,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelGroup> GetRadioGroupsByRange(int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).TakeRange(start, end).SortGroupList(sort, order).ToList();
+            return RadioChannelGroup.ListAll().Select(chg => chg.ToWebChannelGroup()).SortGroupList(sort, order).TakeRange(start, end).ToList();
         }
 
         public WebChannelGroup GetRadioGroupById(int groupId)
@@ -399,7 +399,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -409,7 +409,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
-            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).TakeRange(start, end).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName)
@@ -536,7 +536,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
         {
-            return Recording.ListAll().TakeRange(start, end).Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).ToList();
+            return Recording.ListAll().Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).TakeRange(start, end).ToList();
         }
 
         public WebRecordingBasic GetRecordingById(int id)
@@ -644,7 +644,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).TakeRange(start, end).Select(p => p.ToWebProgramDetailed()).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).TakeRange(start, end).ToList();
         }
 
         public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm)
@@ -654,7 +654,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebProgramBasic> SearchProgramsBasicByRange(string searchTerm, int start, int end)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).TakeRange(start, end).Select(p => p.ToWebProgramBasic()).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramBasic()).TakeRange(start, end).ToList();
         }
 
 
