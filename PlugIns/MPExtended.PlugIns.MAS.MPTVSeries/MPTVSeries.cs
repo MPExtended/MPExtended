@@ -194,11 +194,12 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
             // and load seasons
             string sql = 
-                    "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, STRFTIME('%Y', e.FirstAired) AS year, " +
+                    "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, STRFTIME('%Y', MIN(e.FirstAired)) AS year, " +
                         "s.BannerFileNames " +
                     "FROM season s " +
-                    "INNER JOIN online_episodes e ON e.EpisodeIndex = 1 AND e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
+                    "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
                     "WHERE %where " +
+                    "GROUP BY s.ID, s.SeriesID, s.SeasonIndex " + 
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
