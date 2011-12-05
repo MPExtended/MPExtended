@@ -177,7 +177,8 @@ namespace MPExtended.Services.StreamingService.Code
         {
             // only do impersonation for files that are confirmed to be on a network drive and we can't access the normal way. TV files
             // are excluded as they are supposed to be local.
-            bool doImpersonation = MediaType != WebStreamMediaType.TV && FileInfo.OnNetworkDrive && !File.Exists(FileInfo.Path);
+            bool impersonationEnabled = Configuration.Services.NetworkImpersonation.IsEnabled();
+            bool doImpersonation = impersonationEnabled && MediaType != WebStreamMediaType.TV && FileInfo.OnNetworkDrive && !File.Exists(FileInfo.Path);
             return new NetworkShareImpersonator(doImpersonation);
         }
 

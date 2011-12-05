@@ -65,6 +65,11 @@ namespace MPExtended.Libraries.General
         {
             EncryptedPassword = password == String.Empty ? String.Empty : Encryption.Encrypt(PASSWORD_KEY, password);
         }
+
+        public bool IsEnabled()
+        {
+            return !String.IsNullOrEmpty(Username) && !String.IsNullOrEmpty(GetPassword());
+        }
     }
 
     public class ServicesConfiguration
