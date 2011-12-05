@@ -4,7 +4,6 @@
     ViewBag.Title = "Live TV";
     var CurrentProgram = "No Title";
 }
-@{Html.RenderAction("Menu", "Television");}
 
 <div>
     You are watching: <strong>@{if(Model.CurrentProgram != null){ @Model.CurrentProgram.Title}

@@ -36,12 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Television/
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult Menu()
-        {
-            return PartialView();
+            return TVGuide();
         }
 
         public ActionResult TVGuide()
