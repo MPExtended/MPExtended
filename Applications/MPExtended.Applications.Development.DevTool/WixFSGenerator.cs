@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using MPExtended.Libraries.General;
 
@@ -44,7 +45,7 @@ namespace MPExtended.Applications.Development.DevTool
             string inputDir = InputStream.ReadLine();
             OutputStream.Write("Enter output file: ");
             string outputFile = InputStream.ReadLine();
-            OutputStream.Write("Enter suffix of the directory and component: ");
+            OutputStream.Write("Enter prefix of the directory and component: ");
             string name = InputStream.ReadLine();
 
             // setup XML file
@@ -82,9 +83,15 @@ namespace MPExtended.Applications.Development.DevTool
                 .Where(x => !forbiddenExtensions.Contains(Path.GetExtension(x)) && !forbiddenFiles.Contains(x));
             if (files.Count() > 0)
             {
+                // create stable GUIDs
+                MD5 provider = MD5.Create();
+                byte[] bytes = provider.ComputeHash(Encoding.UTF8.GetBytes("MPExtended_Hash_Guid_" + baseComponent));
+                int byteIndex = BitConverter.IsLittleEndian ? 7 : 1;
+                bytes[byteIndex] = (byte)(0x40 | (0x0F & bytes[byteIndex])); // pretend this are random GUIDs
+
                 XElement filesComponent = new XElement(ns + "Component",
                     new XAttribute("Id", baseComponent),
-                    new XAttribute("Guid", Guid.NewGuid().ToString("D"))
+                    new XAttribute("Guid", new Guid(bytes).ToString("D"))
                 );
 
                 foreach (var file in files)
