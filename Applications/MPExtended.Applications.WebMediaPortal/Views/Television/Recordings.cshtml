@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
-
 @{
     ViewBag.Title = "Recordings";
 }
+
 <style type="text/css">
     .recordingList
     {
@@ -23,7 +23,7 @@
 <ul class="recordingList">
     @foreach (var recording in Model)
     {
-        <li>@Html.ActionLink(recording.Title, "WatchRecording", new { recording = recording.Id })</li>
+        <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "WatchRecording", new { recording = recording.Id })</li>
     }
 </ul>
 

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebScheduleBasic>
+﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel>
 @{
     ViewBag.Title = "CurrentSchedules";
 }
 
 @{
-    if (@Model != null && @Model.Count(p => p.ProgramName != "") > 0)
+    if (@Model != null && @Model.Count(p => p.Title != "") > 0)
     {
     <h2>
         Current Schedules</h2>
@@ -12,7 +12,7 @@
         <ul>
             @foreach (var schedule in Model)
             {
-                <li><a href="@Url.Action("ScheduleDetails", "Television", new { scheduleId = @schedule.IdChannel })"> @schedule.ProgramName - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</a></li>       
+                <li>@schedule.Title - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</li>       
             }
         </ul>
     </div>

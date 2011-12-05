@@ -1,24 +1,22 @@
-﻿@model MPExtended.Services.TVAccessService.Interfaces.WebProgramBasic
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ProgramDetailsViewModel
 @{
     ViewBag.Title = "ProgramDetails";
 }
-<h2>@Model.Title</h2>
-<div class="TVProgramDescription">
-    @Model.Description
-</div>
-@{if (@Model.IsScheduled)
-  {
 
-    <div class="TVProgramSchedule">
-        <a href="@Url.Action("DeleteSchedule", "Television", new { programId = @Model.Id })">
-        Cancel</a>
-    </div>
-  }
-  else
-  {
-   <div class="TVProgramSchedule">
-        <a   href="@Url.Action("AddSchedule", "Television", new { programId = @Model.Id })">
-        Schedule</a>
-    </div>
-  }
-}
+<h2>@Model.Title</h2>
+<p>
+    <strong>@Model.StartTime</strong> till <strong>@Model.EndTime</strong> on channel <strong>@Model.ChannelName</strong><br />
+    @{if (@Model.IsScheduled)
+      {
+          @Html.ActionLink("Cancel schedule", "DeleteSchedule", new { programId = @Model.Id })
+      }
+      else
+      {
+          @Html.ActionLink("Schedule", "AddSchedule", new { programId = @Model.Id })
+      }
+    }
+</p>
+<p>
+    @Model.Description
+</p>
+

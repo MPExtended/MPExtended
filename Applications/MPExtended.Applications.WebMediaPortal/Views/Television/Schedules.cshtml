@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel>
+@{
+    ViewBag.Title = "Schedules";
+}
+
+<h2>Schedules</h2>
+
+<table>
+    <tr>
+        <th>Program</th>
+        <th>Repetition</th>
+        <th>Start time</th>
+        <th>End time</th>
+        <th></th>
+    </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(x => item.Title)</td>
+            <td>@Html.DisplayFor(x => item.Type)</td>
+            <td>@Html.DisplayFor(x => item.StartTime)</td>
+            <td>@Html.DisplayFor(x => item.EndTime)</td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteScheduleById", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>

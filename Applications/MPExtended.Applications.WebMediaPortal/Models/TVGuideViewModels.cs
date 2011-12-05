@@ -98,4 +98,28 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             return string.Format(invariantCulture, "{0:0.00}%", programDuration / guideDuration * 100);
         }
     }
+
+    public class ProgramDetailsViewModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public bool IsScheduled { get; set; }
+        public string ChannelName { get; set; }
+
+        public ProgramDetailsViewModel(WebProgramBasic program)
+        {
+            Id = program.Id;
+            Title = program.Title;
+            Description = program.Description;
+            StartTime = program.StartTime;
+            EndTime = program.EndTime;
+            IsScheduled = program.IsScheduled;
+
+            var channel = MPEServices.TAS.GetChannelBasicById(program.IdChannel);
+            ChannelName = channel.DisplayName;
+        }
+    }
 }

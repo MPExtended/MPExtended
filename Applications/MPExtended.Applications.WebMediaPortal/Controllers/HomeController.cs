@@ -90,7 +90,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var schedules = MPEServices.TAS.GetSchedules().Where(x => x.StartTime.Date == DateTime.Now.Date).ToList();
+                var schedules = MPEServices.TAS.GetSchedules()
+                    .Where(x => x.StartTime.Date == DateTime.Now.Date)
+                    .Select(x => new ScheduleViewModel(x))
+                    .ToList();
                 return PartialView(schedules);
             }
             catch (Exception)
