@@ -32,36 +32,45 @@ namespace MPExtended.Services.StreamingService.Code
     internal class MediaSource
     {
         public WebStreamMediaType MediaType { get; set; }
+        public WebArtworkType FileType { get; set; }
         public string Id { get; set; } // path to tsbuffer for TV
         public int? Provider { get; set; } // for MAS
         public int Offset { get; set; }
 
         private WebFileInfo fileInfoCache;
-        private WebFileInfo FileInfo
+
+        public WebFileInfo FileInfo
         {
             get
             {
                 if (fileInfoCache == null && MediaType == WebStreamMediaType.Recording)
                 {
-                    WebRecordingFileInfo info = MPEServices.TAS.GetRecordingFileInfo(Int32.Parse(Id));
-                    return new WebFileInfo()
+                    if (FileType == WebArtworkType.Content)
                     {
-                        Exists = info.Exists,
-                        Extension = info.Extension,
-                        IsLocalFile = info.IsLocalFile,
-                        IsReadOnly = info.IsReadOnly,
-                        LastAccessTime = info.LastAccessTime,
-                        LastModifiedTime = info.LastModifiedTime,
-                        Name = info.Name,
-                        OnNetworkDrive = info.OnNetworkDrive,
-                        Path = info.Path,
-                        PID = -1,
-                        Size = info.Size
-                    };
+                        WebRecordingFileInfo info = MPEServices.TAS.GetRecordingFileInfo(Int32.Parse(Id));
+                        fileInfoCache = new WebFileInfo()
+                        {
+                            Exists = info.Exists,
+                            Extension = info.Extension,
+                            IsLocalFile = info.IsLocalFile,
+                            IsReadOnly = info.IsReadOnly,
+                            LastAccessTime = info.LastAccessTime,
+                            LastModifiedTime = info.LastModifiedTime,
+                            Name = info.Name,
+                            OnNetworkDrive = info.OnNetworkDrive,
+                            Path = info.Path,
+                            PID = -1,
+                            Size = info.Size
+                        };
+                    }
+                    else
+                    {
+
+                    }
                 } 
                 else if(fileInfoCache == null)
                 {
-                    fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                    fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, (WebMediaType)MediaType, (WebFileType)FileType, Id, Offset);
                 }
 
                 return fileInfoCache;
@@ -106,8 +115,9 @@ namespace MPExtended.Services.StreamingService.Code
         {
             this.MediaType = (WebStreamMediaType)type;
             this.Id = id;
-            this.Offset = 0;
             this.Provider = provider;
+            this.Offset = 0;
+            this.FileType = WebArtworkType.Content;
         }
 
         public MediaSource(WebMediaType type, int? provider, string id, int offset)
@@ -128,6 +138,12 @@ namespace MPExtended.Services.StreamingService.Code
             : this(type, provider, id)
         {
             this.Offset = offset;
+        }
+
+        public MediaSource(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType filetype, int offset)
+            : this(mediatype, provider, id, offset)
+        {
+            this.FileType = filetype;
         }
 
         public string GetPath()
@@ -169,7 +185,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else
             {
-                return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, WebFileType.Content, Id, Offset);
+                return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, (WebFileType)FileType, Id, Offset);
             }
         }
 
@@ -256,13 +272,13 @@ namespace MPExtended.Services.StreamingService.Code
 
         public string GetUniqueIdentifier()
         {
-            string ident = String.Format("{0}-{1}-{2}", MediaType, Provider, Id);
+            string ident = String.Format("{0}-{1}-{2}-{3}-{4}", MediaType, Provider, Id, FileType, Offset);
             return String.Concat(ident.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
         }
 
         public string GetDebugName()
         {
-            return String.Format("mediatype={0} provider={1} id={2} offset={3}", MediaType, Provider, Id, Offset);
+            return String.Format("mediatype={0} provider={1} id={2} filetype={3} offset={4}", MediaType, Provider, Id, FileType, Offset);
         }
 
         public override string ToString()

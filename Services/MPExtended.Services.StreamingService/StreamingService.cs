@@ -224,12 +224,12 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
         { 
-             return Images.GetImage(new MediaSource(mediatype, provider, id, offset), artworktype);
+             return Images.GetImage(new MediaSource(mediatype, provider, id, artworktype, offset));
         }
 
         public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
         {
-            return Images.GetResizedImage(new MediaSource(mediatype, provider, id, offset), artworktype, maxWidth, maxHeight);
+            return Images.GetResizedImage(new MediaSource(mediatype, provider, id, artworktype, offset), maxWidth, maxHeight);
         }
         #endregion
     }

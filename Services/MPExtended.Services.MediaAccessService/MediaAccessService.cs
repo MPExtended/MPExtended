@@ -675,10 +675,11 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebFileInfo GetFileInfo(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
-            string path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
-
+            string path = "";
             try
             {
+                path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
+
                 try
                 {
                     // first try it the usual way
@@ -701,11 +702,11 @@ namespace MPExtended.Services.MediaAccessService
             }
             catch (FileNotFoundException)
             {
-                Log.Info("Failed to load fileinfo for non-existing file mediatype={0}, filetype={1}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path);
+                Log.Info("Failed to load fileinfo for non-existing file mediatype={0}, filetype={1}, provider={5}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path, provider);
             }
             catch (Exception ex)
             {
-                Log.Info(String.Format("Failed to load fileinfo for mediatype={0}, filetype={1}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path), ex);
+                Log.Info(String.Format("Failed to load fileinfo for mediatype={0}, filetype={1}, provider={5}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path, provider), ex);
             }
 
             return new WebFileInfo()
