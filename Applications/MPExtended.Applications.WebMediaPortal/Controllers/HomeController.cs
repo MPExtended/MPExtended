@@ -63,7 +63,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     Episode = x,
                     Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),
                     Show = MPEServices.MAS.GetTVShowDetailedById(x.PID, x.ShowId)
-                });
+                }).ToList();
 
                 return PartialView(list);
             }
@@ -90,8 +90,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var tmp = MPEServices.TAS.GetSchedules();
-                return PartialView(tmp.Where(p => p.StartTime.Day == DateTime.Now.Day));
+                var schedules = MPEServices.TAS.GetSchedules().Where(x => x.StartTime.Date == DateTime.Now.Date).ToList();
+                return PartialView(schedules);
             }
             catch (Exception)
             {
