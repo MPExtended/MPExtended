@@ -21,8 +21,10 @@ using System.Linq;
 using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.General;
+using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
@@ -44,12 +46,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult TVGuide()
         {
-            var channelList = MPEServices.TAS.GetChannelsBasic(1);
-            if (channelList != null)
-            {
-                return View(channelList);
-            }
-            return null;
+            var lastHour = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0, DateTimeKind.Local);
+            var endOfGuide = lastHour.AddHours(4);
+
+            var model = new TVGuideViewModel(MPEServices.TAS.GetGroupById(1), lastHour, endOfGuide);
+            return View(model);
         }
 
         public ActionResult WatchLiveTV(int channelId)
@@ -76,17 +77,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return View(recordings);
             }
             return null;
-        }
-
-        public ActionResult ProgramData(int channelId)
-        {
-            DateTime startTime = DateTime.Now;
-            DateTime endTime = DateTime.Now.AddHours(4);
-
-            var programsList = from p in MPEServices.TAS.GetProgramsDetailedForChannel(channelId, startTime, endTime)
-                               select new Models.SingleTVProgramModel(p, startTime, endTime);
-
-            return PartialView(programsList);
         }
 
         public ActionResult ProgramDetails(int programId)
@@ -128,6 +118,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return View(schedule);
             }
             return null;
+        }
+
+        public ActionResult ChannelLogo(int channelId)
+        {
+            var logo = MPEServices.TASStream.GetArtwork(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0);
+            return File(logo, "image/png");
         }
     }
 }

@@ -1,281 +1,62 @@
-﻿/* TV GUIDE STYLES */
-.div
+﻿#TVGuide .headerrow 
 {
-    display: block;
-    
-    }
-.TVGuideRow
-{
-	height: 50px;
-	overflow: hidden;
-	
-	width: 100%;
+    padding: 2px 5px;
+    height: 25px;
 }
 
-.TVGuideStandardSpacing
+#TVGuide .headerspacer
 {
-	height: 5px;
+    width: 230px;    
+    float: left;
 }
 
-.TVGuideProgramsPanel
+#TVGuide .headertime
 {
-	height: 100%;
-	margin-left: 150px; /* keep in sync with TVGuideCellChannel.width and TVGuideTimeSelectionPanel.margin-left and TVGuideHoursSeperatorPanel.margin-left */
+    border-left: 1px solid #8A8575;
+    padding-left: 5px;
+    height: 100%;
 }
 
-.TVGuideCellChannel
+#TVGuide .channelrow
 {
-	background-image: url(Images/TVGuide/ChannelNameBG.png);
-	float: left;
-	height: 100%;
-	width: 150px; /* keep in sync with TVGuideProgramsPanel.margin-left and TVGuideTimeSelectionPanel.margin-left and TVGuideHoursSeperatorPanel.margin-left */
+    overflow: hidden;
+    clear: both;
+    padding: 2px 5px;
+    height: 50px;
+    margin-bottom: 4px;
+    border: 1px solid #8A8575;
 }
 
-.TVGuideCellChannelImageWithChannelText
+#TVGuide .channelname
 {
-	overflow: hidden;
-	height: 32px;
-	width: 130px;
-	margin: 0 auto;
-	margin-left: 10px;
-	display: block;
-	border: 0;
+    height: 35px; /* 50px height of .channelrow minus padding-top */
+    width: 175px;
+    float: left;
+    padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
+    background-size: 50px 50px;
+    background-position: left center;
+    background-repeat: no-repeat;
 }
 
-.TVGuideCellChannelImageWithoutChannelText
+#TVGuide .programs 
 {
-	overflow: hidden;
-	height: 40px;
-	width: 130px;
-	margin: 0 auto;
-	margin-top: 5px;
-	display: block;
-	border: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
-.TVGuideCellChannelText
+#TVGuide .programcontainer
 {
-	overflow: hidden;
-	width: 100%;
-	float: left;
-	text-decoration: none;
-	color: #22231E;
-	text-align: center;
-	margin-top: 15px;
-	cursor: pointer;
+    float: left;
+    height: 100%;
 }
 
-.TVGuideCellChannelText:hover
+#TVGuide .program 
 {
-	color: #D3EF36;
+    height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
+    margin: 2px 5px 2px 0px;
+    padding: 2px;
+    background-color: #DFE7F5;
+    border: 1px solid #DFE7F5;
+    border-radius: 2px;
+    color: #8A8575;
 }
-
-.TVGuideCellProgram
-{
-	float: left;
-	height: 100%;
-	background-image: url(Images/TVGuide/Program.png);
-	background-repeat: repeat-x;
-}
-
-.TVGuideCellProgramOnAir
-{
-	float: left;
-	height: 100%;
-	background-image: url(Images/TVGuide/ProgramOnAir.png);
-	background-repeat: repeat-x;
-}
-
-.TVGuideCellProgramOnScheduled
-{
-	float: left;
-	height: 100%;
-	background-image: url(Images/TVGuide/ProgramOnScheduled.png);
-	background-repeat:repeat-x;
-}
-
-.TVGuideCellProgramNoEPG
-{
-	float: left;
-	height: 100%;
-	background-color: #D3D3D3;
-}
-
-.TVGuideCellProgramLeftSeperator
-{
-	width: 3px; /* keep in sync with TVGuideCellProgramText.margin-left */
-	height: 100%;
-	float: left;
-	background: White url(Images/TVGuide/ProgramLeftSeperator.png) no-repeat right;
-}
-
-.TVGuideCellProgramRightSeperator
-{
-	width: 3px; /* keep in sync with TVGuideCellProgramText.margin-right */
-	height: 100%;
-	float: right;
-	background: White url(Images/TVGuide/ProgramRightSeperator.png) no-repeat left;
-}
-
-.TVGuideCellProgramText
-{
-	overflow: hidden;
-	height: 100%;
-	width: 100%;
-	float: left;
-	text-decoration: none;
-	color: Black;
-	margin-left: -3px; /* keep in sync with TVGuideCellProgramLeftSeperator.width */
-	margin-right: -3px; /* keep in sync with TVGuideCellProgramRightSeperator.width */
-}
-
-.TVGuideCellProgramTextNoEPG
-{
-	overflow: hidden;
-	height: 100%;
-	width: 100%;
-	float: left;
-	text-decoration: none;
-	color: #B0B0B0;
-}
-
-.TVGuideProgramPaging
-{
-	float: right;
-	margin-right: 10px;
-}
-
-.TVGuideTimeNavigationPanel
-{
-	height: 25px;
-}
-
-.TVGuideRefreshLinkPanel
-{
-	float: left;
-	vertical-align: middle;
-}
-
-.TVGuideTimeSelectionPanel
-{
-	margin-left: 150px;
-	margin-right: 10px;
-}
-
-.TVGuideNavTimeLeft
-{
-	float: left;
-	width: 30px;
-}
-
-.TVGuideNavTimeRight
-{
-	float: right;
-	width: 30px;
-}
-
-.TVGuideHoursSeperatorPanel
-{
-	margin-left: 150px; /* keep in sync with TVGuideProgramsPanel.margin-left */
-}
-
-.TVGuideHoursSeperatorSpacing
-{
-	float: left;
-}
-
-.TVGuideHoursSeperatorHour
-{
-	float: left;
-	overflow: hidden;
-	height: 22px;
-}
-
-.TVGuideDate
-{
-}
-
-.TVGuideSingleChannelProgramText
-{
-	overflow: hidden;
-	height: 100%;
-	float: left;
-	text-decoration: none;
-	color: Black;
-}
-
-.TVGuideSingleChannelGuidePanel
-{
-	width: 50%;
-	float: left;
-}
-
-.TVGuideSingleChannelInfoPanel
-{
-	width: 50%;
-	float: right;
-}
-
-.TVGuideProgramInfoTooltip
-{
-	display: none;
-	background: transparent url(Images/TVGuide/ProgramShortInfoBackground.png) no-repeat;
-	font-size: 12px;
-	height: 250px;
-	width: 450px;
-	padding: 25px;
-	color: #fff;
-}
-
-.TVGuideProgramInfoTooltipContentWrap
-{
-	position: relative;
-	top: 30px;
-	height: 170px;
-	width: 400px;
-	overflow: auto;
-}
-
-.TVGuideProgramInfoDialog
-{
-	display: none;
-	z-index: 9999;
-	background-color: White;
-	width: 675px;
-	height: 500px;
-	border: 1px solid #666;
-	box-shadow: 0 0 90px 5px #000;
-	-moz-box-shadow: 0 0 90px 5px #000;
-	-webkit-box-shadow: 0 0 90px #000;
-	padding: 20px;
-}
-
-.TVGuideProgramInfoDialog a.close
-{
-	background-image: url(Images/TVGuide/ProgramInfoDialogClose.png);
-	z-index: 10000;
-	position: absolute;
-	right: -15px;
-	top: -15px;
-	cursor: pointer;
-	height: 35px;
-	width: 35px;
-}
-
-.TVGuideProgramInfoDialogContentWrap
-{
-	height: 100%;
-}
-
-.TVGuideProgramInfoDialogiFrameFixMask
-{
-	background-image: url(Images/Blank.gif);
-	position: absolute;
-	z-index: 2;
-	left: 0pt;
-	top: 0pt;
-	right: 0pt;
-	bottom: 0pt;
-	display: none;
-}
-/* <-> */

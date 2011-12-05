@@ -97,8 +97,8 @@
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\SettingsViewModel.cs" />
-    <Compile Include="Models\SingleTVProgramModel.cs" />
     <Compile Include="Models\StreamModels.cs" />
+    <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,9 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Television\TVGuide.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Television\ProgramData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashPlayer.cshtml" />
