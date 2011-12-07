@@ -28,30 +28,56 @@ namespace MPExtended.Services.UserSessionService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class UserSessionProxyService : IUserSessionService
     {
-        private IUserSessionService proxy;
-
-        public UserSessionProxyService()
+        private IUserSessionService proxyChannel;
+        private IUserSessionService Proxy
         {
-            NetTcpBinding binding = new NetTcpBinding()
+            get
             {
-                MaxReceivedMessageSize = 100000000,
-                ReceiveTimeout = new TimeSpan(0, 0, 5),
-                SendTimeout = new TimeSpan(0, 0, 5),
-            };
-            binding.ReliableSession.Enabled = true;
-            binding.ReliableSession.Ordered = true;
+                bool recreateChannel = false;
+                if (proxyChannel == null)
+                {
+                    recreateChannel = true;
+                } 
+                else if(((ICommunicationObject)proxyChannel).State == CommunicationState.Faulted)
+                {
+                    try
+                    {
+                        ((ICommunicationObject)proxyChannel).Close(TimeSpan.FromMilliseconds(500));
+                    }
+                    catch (Exception)
+                    {
+                        // oops. 
+                    }
 
-            proxy = ChannelFactory<IUserSessionService>.CreateChannel(
-                binding,
-                new EndpointAddress("net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation")
-            );
+                    recreateChannel = true;
+                }
+
+                if (recreateChannel)
+                {
+                    NetTcpBinding binding = new NetTcpBinding()
+                    {
+                        MaxReceivedMessageSize = 100000000,
+                        ReceiveTimeout = new TimeSpan(0, 0, 10),
+                        SendTimeout = new TimeSpan(0, 0, 10),
+                    };
+                    binding.ReliableSession.Enabled = true;
+                    binding.ReliableSession.Ordered = true;
+
+                    proxyChannel = ChannelFactory<IUserSessionService>.CreateChannel(
+                        binding,
+                        new EndpointAddress("net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation")
+                    );
+                }
+
+                return proxyChannel;
+            }
         }
 
         public WebResult TestConnection()
         {
             try
             {
-                return proxy.TestConnection();
+                return Proxy.TestConnection();
             }
             catch (Exception)
             {
@@ -63,27 +89,27 @@ namespace MPExtended.Services.UserSessionService
 
         public WebResult IsMediaPortalRunning()
         {
-            return proxy.IsMediaPortalRunning();
+            return Proxy.IsMediaPortalRunning();
         }
 
         public WebResult StartMediaPortal()
         {
-            return proxy.StartMediaPortal();
+            return Proxy.StartMediaPortal();
         }
 
         public WebResult StartMediaPortalBlocking()
         {
-            return proxy.StartMediaPortalBlocking();
+            return Proxy.StartMediaPortalBlocking();
         }
 
         public WebResult SetPowerMode(WebPowerMode powerMode)
         {
-            return proxy.SetPowerMode(powerMode);
+            return Proxy.SetPowerMode(powerMode);
         }
 
         public WebResult CloseMediaPortal()
         {
-            return proxy.CloseMediaPortal();
+            return Proxy.CloseMediaPortal();
         }
     }
 }
