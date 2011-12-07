@@ -202,7 +202,7 @@ namespace MPExtended.Services.StreamingService.Code
                 int idChannel = source.MediaType == WebStreamMediaType.TV ? 
                     Int32.Parse(source.Id) : 
                     MPEServices.TAS.GetRecordingById(Int32.Parse(source.Id)).IdChannel;
-                string channelName = MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName;
+                string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');
 
                 // find directory
                 string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
@@ -214,10 +214,10 @@ namespace MPExtended.Services.StreamingService.Code
 
                 // find image
                 DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
-                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelName.ToLowerInvariant());
+                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelFileName.ToLowerInvariant());
                 if(matched.Count() == 0)
                 {
-                    Log.Debug("Did not find tv logo for channel {0}", channelName);
+                    Log.Debug("Did not find tv logo {0}", channelFileName);
                     return null;
                 }
 
