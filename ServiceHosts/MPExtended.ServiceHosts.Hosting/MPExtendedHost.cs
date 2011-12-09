@@ -49,7 +49,10 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 Log.Debug("Opening MPExtended ServiceHost...");
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
-                zeroconf.PublishServices(Installation.GetInstalledServices());
+                ThreadManager.Start("Zeroconf", delegate()
+                {
+                    zeroconf.PublishServices(Installation.GetInstalledServices());
+                });
                 Log.Debug("Opened MPExtended ServiceHost");
                 return true;
             }
