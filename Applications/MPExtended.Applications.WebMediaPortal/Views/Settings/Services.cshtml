@@ -1,0 +1,33 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ServiceSettingsViewModel
+@{
+    ViewBag.Title = "Service settings";
+}
+<h2>Service settings</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.MASUrl)
+            </td>
+            <td>
+                @Html.EditorFor(x => x.MASUrl)
+                @Html.ValidationMessageFor(x => x.MASUrl)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.TASUrl)
+            </td>
+            <td>
+                @Html.EditorFor(x => x.TASUrl)
+                @Html.ValidationMessageFor(x => x.TASUrl)
+            </td>
+        </tr>
+    </table>
+    <br />
+    <input type="submit" value="Save" />
+    </div>
+}

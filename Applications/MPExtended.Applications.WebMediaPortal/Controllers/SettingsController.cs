@@ -32,18 +32,36 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Settings/
         public ActionResult Index()
         {
-            return View(new SettingsViewModel());
+            return View(new SettingsViewModel(Settings.ActiveSettings));
         }
 
-        public ActionResult Update(string SelectedMediaProfile, string SelectedTVProfile, string SelectedGroup)
+        [HttpPost]
+        public ActionResult Index(SettingsViewModel model)
         {
-            SettingModel settings = new SettingModel();
-            settings.DefaultGroup = Int32.Parse(SelectedGroup);
-            settings.DefaultMediaProfile = SelectedMediaProfile;
-            settings.DefaultTVProfile = SelectedTVProfile;
+            if (!ModelState.IsValid)
+            {
+                return View(new SettingsViewModel(Settings.ActiveSettings));
+            }
 
-            Settings.GlobalSettings = settings;
+            Settings.ActiveSettings = model.ToSettingModel(Settings.ActiveSettings);
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Services()
+        {
+            return View(new ServiceSettingsViewModel(Settings.ActiveSettings));
+        }
+
+        [HttpPost]
+        public ActionResult Services(ServiceSettingsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(new ServiceSettingsViewModel(Settings.ActiveSettings));
+            }
+
+            Settings.ActiveSettings = model.ToSettingModel(Settings.ActiveSettings);
+            return RedirectToAction("Services");
         }
     }
 }

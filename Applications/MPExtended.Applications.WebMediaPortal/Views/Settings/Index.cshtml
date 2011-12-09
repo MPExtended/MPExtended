@@ -3,35 +3,68 @@
     ViewBag.Title = "Settings";
 }
 <h2>Settings</h2>
-@using (Html.BeginForm("Update", "Settings"))
+@Html.ActionLink("Configure service URLs", "Services")
+<br /><br />
+
+@using (Html.BeginForm())
 {
     <div>
     <table>
         <tr>
             <td>
-                Default group
+                @Html.LabelFor(x => x.SelectedGroup)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedGroup, new SelectList(Model.Groups, "Value", "Text"), @Model.Settings.DefaultGroup)
+                @Html.DropDownListFor(x => x.SelectedGroup, new SelectList(Model.Groups, "Value", "Text"))
                 @Html.ValidationMessageFor(x => x.SelectedGroup)
             </td>
         </tr>
         <tr>
             <td>
-                Default media transcoding profile
+                @Html.LabelFor(x => x.SelectedMediaProfile)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"), @Model.Settings.DefaultMediaProfile)
+                @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"))
                 @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
             </td>
         </tr>
         <tr>
             <td>
-                Default TV transcoding profile
+                @Html.LabelFor(x => x.SelectedTVProfile)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedTVProfile, new SelectList(Model.TVProfiles, "Value", "Text"), @Model.Settings.DefaultTVProfile)
+                @Html.DropDownListFor(x => x.SelectedTVProfile, new SelectList(Model.TVProfiles, "Value", "Text"))
                 @Html.ValidationMessageFor(x => x.SelectedTVProfile)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.TVShowProvider)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.TVShowProvider, Model.TVShowDatabases)
+                @Html.ValidationMessageFor(x => x.TVShowProvider)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.MovieProvider)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.MovieProvider, Model.MovieDatabases)
+                @Html.ValidationMessageFor(x => x.MovieProvider)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.MusicProvider)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.MusicProvider, Model.MusicDatabases)
+                @Html.ValidationMessageFor(x => x.MusicProvider)
             </td>
         </tr>
     </table>
