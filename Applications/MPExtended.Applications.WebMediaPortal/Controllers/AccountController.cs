@@ -22,11 +22,12 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
