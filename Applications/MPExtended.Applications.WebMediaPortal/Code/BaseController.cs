@@ -26,6 +26,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public class BaseController : Controller
     {
+        private static bool establishedMasConnection;
+        private static bool establishedTasConnection;
+
         protected override void OnException(ExceptionContext filterContext)
         {
             if (filterContext.ExceptionHandled || filterContext.IsChildAction)
@@ -49,8 +52,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.LayoutHasMAS = MPEServices.HasMASConnection;
-            ViewBag.LayoutHasTAS = MPEServices.HasTASConnection;
+            establishedMasConnection = establishedMasConnection ? true : MPEServices.HasMASConnection;
+            establishedTasConnection = establishedTasConnection ? true : MPEServices.HasTASConnection;
+            ViewBag.LayoutHasMAS = establishedMasConnection;
+            ViewBag.LayoutHasTAS = establishedTasConnection;
         }
     }
 }
