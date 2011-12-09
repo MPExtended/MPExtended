@@ -1,4 +1,4 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.StreamModel
+﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
 <script type="text/javascript">
     function getVlcPlayer(vlc_id) {
         if (document.all) vlc_id += '_ie';
@@ -36,12 +36,12 @@
 <input type="button" value="stop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
 <input type="button" value="switch fullscreen" onclick="goFullscreen();" />
 <input type="button" value="enable deinterlacing" onclick="enableDeinterlace('linear');" /> 
-<hr style="border: solid 1px black" />
+<br />
 
-<object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Width" height="@Model.Height" events="True">
+<object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Size.Width" height="@Model.Size.Height" events="True">
    <param name="ShowDisplay" value="false" ></param>
    <param name="AutoLoop" value="no"></param>
    <param name="AutoPlay" value="no"></param>
-   <embed id="vlcplayer" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" autoplay="no" loop="no" width="@Model.Width" height="@Model.Height">
+   <embed id="vlcplayer" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" autoplay="no" loop="no" width="@Model.Size.Width" height="@Model.Size.Height">
    </embed>
 </object>

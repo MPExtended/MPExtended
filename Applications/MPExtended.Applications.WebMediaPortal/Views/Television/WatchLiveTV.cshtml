@@ -4,15 +4,17 @@
     var CurrentProgram = "No Title";
 }
 
-<div>
-    You are watching: <strong>@{if(Model.CurrentProgram != null){ @Model.CurrentProgram.Title}
-                                else {@CurrentProgram}}</strong> on <strong>@Model.DisplayName</strong>
-</div>
+<h2>Live TV</h2>
+You are watching: <strong>@{if(Model.CurrentProgram != null){ @Model.CurrentProgram.Title}
+                            else {@CurrentProgram}}</strong> on <strong>@Model.DisplayName</strong>
+<br />
+<br />
 
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
       type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TV,
       itemId = @Model.Id
-  });}
+  });
+}
 </div>

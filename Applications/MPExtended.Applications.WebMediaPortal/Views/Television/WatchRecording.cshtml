@@ -3,9 +3,10 @@
     ViewBag.Title = "Recording";
 }
 
-<div>
-    You are watching: <strong>@Model.Title</strong>
-</div>
+<h2>Recording</h2>
+You are watching: <strong>@Model.Title</strong>
+<br />
+<br />
 
 <div>
 @{Html.RenderAction("Player", "Stream", new

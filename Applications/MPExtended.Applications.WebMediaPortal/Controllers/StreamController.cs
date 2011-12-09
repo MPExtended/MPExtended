@@ -138,28 +138,34 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Player
-        public ActionResult Player(WebStreamMediaType type, string itemId, bool showVideo = true)
+        public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
-            // TODO: insert proper support for VLC player
-            // TODO: insert proper support for selecting the transcoder profile
-
-            // get the profile
-            string target = showVideo ? "pc-flash-video" : "pc-flash-audio";
-            string preferredProfile = showVideo ? "Flash LQ" : "Flash Audio";
-            string transcoderName = Request.Params["player"] != null ? Request.Params["player"] : preferredProfile;
-            WebTranscoderProfile profile = GetStreamControl(type).GetTranscoderProfileByName(transcoderName);
-            if (profile == null || profile.Target != target) {
-                List<WebTranscoderProfile> profiles = GetStreamControl(type).GetTranscoderProfilesForTarget(target);
-                if(profiles.Count == 0)
-                    throw new ArgumentException("Profile does not exists");
-                profile = profiles.First();
+            // get transcoding profile
+            IWebStreamingService streamControl = GetStreamControl(type);
+            WebTranscoderProfile profile = null;
+            if (Request.QueryString["transcoder"] != null)
+                profile = GetStreamControl(type).GetTranscoderProfileByName(Request.QueryString["transcoder"]);
+            if (Request.Form["transcoder"] != null)
+                profile = GetStreamControl(type).GetTranscoderProfileByName(Request.Form["transcoder"]);
+            if (profile == null)
+            {
+                string defaultName = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? 
+                    Settings.ActiveSettings.DefaultTVProfile : Settings.ActiveSettings.DefaultMediaProfile;
+                profile = GetStreamControl(type).GetTranscoderProfileByName(defaultName);
             }
-            VideoPlayer player = VideoPlayer.Flash;
+
+            // get all transcoder profiles
+            var profiles = GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-flash-video" : "pc-flash-audio")
+                .Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-vlc-video" : "pc-vlc-audio"))
+                .Select(x => x.Name);
+
+            // get view properties
+            VideoPlayer player = profile.Target == "pc-vlc-video" || profile.Target == "pc-vlc-audio" ? VideoPlayer.VLC : VideoPlayer.Flash;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
 
             // player size
             WebResolution playerSize;
-            if (!showVideo)
+            if (!video)
             {
                 playerSize = new WebResolution() { Width = 300, Height = 120 };
             } 
@@ -171,11 +177,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
-            parameters["transcoder"] = transcoderName;
+            parameters["transcoder"] = profile.Name;
 
             // generate view
-            return PartialView(viewName, new StreamModel
+            return PartialView(new PlayerViewModel
             {
+                Transcoders = profiles,
+                Transcoder = profile.Name,
+                Player = player,
+                PlayerViewName = viewName,
                 URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters),
                 Size = playerSize
             });

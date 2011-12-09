@@ -1,0 +1,11 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.DropDownList("transcoder", Model.TranscoderSelectList)
+    <input type="submit" value="Change player" />
+}
+
+<br />
+<br />
+@Html.Partial(Model.PlayerViewName)

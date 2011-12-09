@@ -18,16 +18,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Mvc;
 using System.Xml;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public class StreamModel
+    public class PlayerViewModel
     {
+        public IEnumerable<string> Transcoders { get; set; }
+        public string Transcoder { get; set; }
+        public VideoPlayer Player { get; set; }
+        public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
         public string URL { get; set; }
+
+        public IEnumerable<SelectListItem> TranscoderSelectList
+        {
+            get
+            {
+                return Transcoders.Select(tc => new SelectListItem()
+                    {
+                        Text = tc,
+                        Value = tc,
+                        Selected = tc == Transcoder
+                    });
+            }
+        }
     }
 
     public enum VideoPlayer

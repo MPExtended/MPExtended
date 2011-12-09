@@ -1,9 +1,12 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.EpisodeModel
 @{
-    ViewBag.Title = "Play";
+    ViewBag.Title = "Watch Episode";
 }
+
 <h2>Play</h2>
 You are watching <strong>@Model.Show.Title - Season @Model.Season.SeasonNumber Episode @Model.Episode.EpisodeNumber - @Model.Episode.Title</strong>
+<br /><br />
+
 @{Html.RenderAction("Player", "Stream", new
   {
       type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TVEpisode,

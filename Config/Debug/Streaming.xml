@@ -80,6 +80,39 @@
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
+      <name>VLC Flash Test</name>
+      <description>VLC test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>pc-flash-video</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>1280</maxOutputWidth>
+      <maxOutputHeight>720</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>yes</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tvOptions>--sout-mux-caching=10000</tvOptions>
+        <encoder>vcodec=h264,vb=512,aenc=ffmpeg,acodec=mp4a,ab=128,audio-sync,channels=2,venc=x264{profile=baseline}</encoder>
+        <muxer>:standard{access=file,mux=flv1,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>Direct</name>
+      <description>VLC test profile</description>
+      <bandwidth>1024</bandwidth>
+      <target>pc-vlc-video</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.Direct" />
+    </transcoder>
+    <transcoder>
       <name>Flash LQ</name>
       <description>Profile for LQ streaming in WebMediaPortal</description>
       <bandwidth>3800</bandwidth>
