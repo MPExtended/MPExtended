@@ -46,5 +46,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             };
             filterContext.ExceptionHandled = true;
         }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            ViewBag.LayoutHasMAS = MPEServices.HasMASConnection;
+            ViewBag.LayoutHasTAS = MPEServices.HasTASConnection;
+        }
     }
 }
