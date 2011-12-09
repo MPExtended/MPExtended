@@ -3,41 +3,55 @@
     ViewBag.Title = "TV Guide";
 }
 
-<h2>
-    @Model.GroupName
-</h2>
-<div id="TVGuide">
-    <div class="headerrow">
-        <div class="headerspacer">&nbsp;</div>
-        <div class="programs">
-            @{  for(int i = 0; i < 8; i++)
-                {
-                    <div class="programcontainer" style="width: 12.5%;">
-                        <div class="headertime">@Model.GuideStart.AddMinutes(i * 30).ToString("HH:mm")</div>
-                    </div>        
-                }   
-            }
-        </div>
-    </div>
+@using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
+{
+    @Html.DropDownList("group", Model.Groups)
+    <button name="time" value="@Model.GuideStart.ToString("s")">Update</button>
 
-    @{  foreach (var channel in @Model.Channels)
-       {
-            <div class="channelrow">
-                <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id }));">
-                    @Html.ActionLink(channel.DisplayName, "WatchLiveTV", new { channelId = channel.Id })
-                </div>
-                <div class="programs">
-                    @{  foreach (var program in channel.Programs)
-                        {
-                            <div class="programcontainer" style="width: @program.GetPercentageWidth();">
-                                <div class="program">
-                                    @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
+    <br />
+    <br />
+
+    <div id="TVGuide">
+        <div class="headerrow">
+            <div class="headerspacer">
+                <button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier">Earlier</button>
             </div>
+            <div class="programs">
+                @{  foreach (var marker in Model.TimeMarkers)
+                    {
+                        <div class="programcontainer" style="width: 12.5%;">
+                            <div class="headertime">
+                                @marker.Format
+                                @if (marker.Last)
+                                {
+                                    <button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later">Later</button>
+                                }
+                            </div>
+                        </div>        
+                    }   
+                }
+            </div>
+        </div>
+
+        @{  foreach (var channel in @Model.Channels)
+            {
+                <div class="channelrow">
+                    <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id }));">
+                        @Html.ActionLink(channel.DisplayName, "WatchLiveTV", new { channelId = channel.Id })
+                    </div>
+                    <div class="programs">
+                        @{  foreach (var program in channel.Programs)
+                            {
+                                <div class="programcontainer" style="width: @program.GetPercentageWidth();">
+                                    <div class="program">
+                                        @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
         }
-    }
-</div>
+    </div>
+}

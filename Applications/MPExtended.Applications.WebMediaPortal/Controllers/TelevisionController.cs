@@ -39,12 +39,21 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return TVGuide();
         }
 
-        public ActionResult TVGuide()
+        public ActionResult TVGuide(int? group = null, string time = null)
         {
-            var lastHour = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0, DateTimeKind.Local);
+            DateTime startTime;
+            if (time == null || !DateTime.TryParse(time, out startTime))
+            {
+                startTime = DateTime.Now;
+            }
+
+            var lastHour = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, 0, 0, DateTimeKind.Local);
             var endOfGuide = lastHour.AddHours(4);
 
-            var model = new TVGuideViewModel(MPEServices.TAS.GetGroupById(1), lastHour, endOfGuide);
+            var groups = MPEServices.TAS.GetGroups();
+            var activeGroup = MPEServices.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup);
+
+            var model = new TVGuideViewModel(groups, activeGroup, lastHour, endOfGuide);
             return View(model);
         }
 

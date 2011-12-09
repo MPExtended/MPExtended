@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using MPExtended.Libraries.General;
 using MPExtended.Services.TVAccessService.Interfaces;
 
@@ -26,6 +27,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class TVGuideViewModel
     {
+        public struct TimeMarker
+        {
+            public DateTime Time { get; set; }
+            public string Format { get; set; }
+            public bool Last { get; set; }
+        }
+
+        private IEnumerable<WebChannelGroup> groups;
+
         public DateTime GuideStart { get; private set; }
         public DateTime GuideEnd { get; private set; }
 
@@ -33,8 +43,48 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string GroupName { get; private set; }
         public IEnumerable<TVGuideChannelViewModel> Channels { get; private set; }
 
-        public TVGuideViewModel(WebChannelGroup channelGroup, DateTime guideStart, DateTime guideEnd)
+        public DateTime EarlierGuideStart { get { return GuideStart.Subtract(GuideEnd - GuideStart); } }
+        public DateTime LaterGuideStart { get { return GuideEnd; } }
+
+        public IEnumerable<SelectListItem> Groups
         {
+            get
+            {
+                return groups.Select(x => new SelectListItem() { 
+                    Text = x.GroupName, 
+                    Value = x.Id.ToString(),
+                    Selected = x.Id == GroupId
+                });
+            }
+        }
+
+        public IEnumerable<TimeMarker> TimeMarkers
+        {
+            get
+            {
+                for(int i = 0; i < 8; i++)
+                {
+                    TimeMarker tm = new TimeMarker();
+                    tm.Time = GuideStart.AddMinutes(i * 30);
+                    tm.Last = i == 7;
+                    if (tm.Time.Date == DateTime.Now.Date)
+                    {
+                        tm.Format = tm.Time.ToShortTimeString();
+                    }
+                    else 
+                    {
+                        tm.Format = tm.Time.ToShortDateString() + " " + tm.Time.ToShortTimeString();
+                    }
+
+                    yield return tm;
+                }
+            }
+        }
+
+        public TVGuideViewModel(IEnumerable<WebChannelGroup> groups, WebChannelGroup channelGroup, DateTime guideStart, DateTime guideEnd)
+        {
+            this.groups = groups;
+
             GuideStart = guideStart;
             GuideEnd = guideEnd;
 
