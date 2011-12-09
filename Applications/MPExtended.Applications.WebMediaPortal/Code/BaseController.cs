@@ -39,6 +39,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             // log the error
             Log.Warn("Error during controller body", filterContext.Exception);
 
+            // set viewbag properties
+            SetViewBagProperties();
+
+            // return exception page
             filterContext.Result = new ViewResult
             {
                 ViewName = "~/Views/Shared/Error.cshtml",
@@ -47,10 +51,17 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     Model = filterContext.Exception
                 },
             };
+            (filterContext.Result as ViewResult).ViewBag.LayoutHasMAS = ViewBag.LayoutHasMAS;
+            (filterContext.Result as ViewResult).ViewBag.LayoutHasTAS = ViewBag.LayoutHasTAS;
             filterContext.ExceptionHandled = true;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            SetViewBagProperties();
+        }
+
+        private void SetViewBagProperties()
         {
             establishedMasConnection = establishedMasConnection ? true : MPEServices.HasMASConnection;
             establishedTasConnection = establishedTasConnection ? true : MPEServices.HasTASConnection;
