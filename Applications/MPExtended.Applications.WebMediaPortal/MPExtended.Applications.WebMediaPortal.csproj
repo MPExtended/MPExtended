@@ -80,6 +80,7 @@
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\Validators.cs" />
     <Compile Include="Code\XMLMembershipProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieLibraryController.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\ScheduleViewModels.cs" />
     <Compile Include="Models\SettingsModel.cs" />
-    <Compile Include="Models\SettingsViewModel.cs" />
+    <Compile Include="Models\SettingsViewModels.cs" />
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -261,6 +262,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Settings\Services.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">

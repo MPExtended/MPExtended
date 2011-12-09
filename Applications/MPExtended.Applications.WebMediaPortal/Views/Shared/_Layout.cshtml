@@ -16,12 +16,20 @@
         <div class="navigation">
             <ul id="navlist">
                 <li class="first"><a href="/" id="current">Home</a></li>
-                <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li>
-                <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li>
-                <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li>
-                <li>@Html.ActionLink("TV Guide", "TVGuide", "Television")</li>
-                <li>@Html.ActionLink("Recordings", "Recordings", "Television")</li>
-                <li>@Html.ActionLink("Schedules", "Schedules", "Television")</li>
+                @if (ViewBag.LayoutHasMAS)
+                {
+                    <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li>
+                    <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li>
+                    <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li>
+                }
+                
+                @if (ViewBag.LayoutHasTAS)
+                {
+                    <li>@Html.ActionLink("TV Guide", "TVGuide", "Television")</li>
+                    <li>@Html.ActionLink("Recordings", "Recordings", "Television")</li>
+                    <li>@Html.ActionLink("Schedules", "Schedules", "Television")</li>
+                }
+                
                 <li>@Html.ActionLink("Settings", "Index", "Settings") </li>
             </ul>
         </div>

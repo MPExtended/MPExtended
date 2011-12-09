@@ -16,7 +16,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -244,7 +247,7 @@ namespace MPExtended.Libraries.General
                 return default(T);
             }
 
-            if (addr.IsLoopback)
+            if (addr.IsLoopback && addr.Port == 4322)
             {
                 return ChannelFactory<T>.CreateChannel(
                     new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },

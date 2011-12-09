@@ -41,19 +41,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
         }
 
-        public static SettingModel GlobalSettings
-        {
-            get
-            {
-                return LoadSettings();
-            }
-
-            set
-            {
-                SaveSettings(value);
-            }
-        }
-
         public static SettingModel LoadSettings()
         {
             SettingModel loadedObj = null;

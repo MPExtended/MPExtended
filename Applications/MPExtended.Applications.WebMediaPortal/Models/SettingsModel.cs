@@ -34,5 +34,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int? MusicProvider { get; set; }
         public int? PicturesProvider { get; set; }
         public int? FileSystemProvider { get; set; }
+
+        public string MASUrl { get; set; }
+        public string TASUrl { get; set; }
     }
 }
