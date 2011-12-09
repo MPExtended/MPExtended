@@ -134,12 +134,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult WatchRecording(int recordingId)
-        {
-            var rec = MPEServices.TAS.GetRecordingById(recordingId);
-            return View(rec);
-        }
-
         public ActionResult Recordings()
         {
             var recordings = MPEServices.TAS.GetRecordings();
@@ -148,6 +142,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return View(recordings);
             }
             return null;
+        }
+
+        public ActionResult Recording(int id)
+        {
+            var rec = MPEServices.TAS.GetRecordingById(id);
+            return View(rec);
+        }
+
+        public ActionResult WatchRecording(int id)
+        {
+            var rec = MPEServices.TAS.GetRecordingById(id);
+            return View(rec);
         }
     }
 }

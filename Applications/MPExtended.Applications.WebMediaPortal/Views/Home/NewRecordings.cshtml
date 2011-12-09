@@ -12,7 +12,7 @@
         <ul>
             @foreach (var recording in Model)
             {
-                <li>@recording.Title</li>       
+                <li>@Html.ActionLink(recording.Title, "Recording", "Television", new { id = recording.Id }, new { })</li>
             }
         </ul>
     </div>
