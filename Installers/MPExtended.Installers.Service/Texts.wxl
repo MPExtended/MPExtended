@@ -35,42 +35,42 @@
   <String Id="ProgressDlgTitleUpdating"></String>
   
   <!-- Texts for setup dialog-->
-  <String Id="SetupTypeTitle">Select which type of MPExtended installation you want.</String>
+  <String Id="SetupTypeTitle">Please choose which type of MPExtended setup you want.</String>
   <String Id="SetupTypeClient">Client</String>
-  <String Id="SetupTypeClientTooltip">Install client services</String>
-  <String Id="SetupTypeClientDescription">Install the services for MediaPortal and its plugins. Select if you've installed only MediaPortal on this computer.</String>
+  <String Id="SetupTypeClientTooltip">Install only the client services</String>
+  <String Id="SetupTypeClientDescription">Install the services for MediaPortal and its plugins. Choose this if you've only installed MediaPortal on this computer, or if you don't use MediaPortal to watch TV.</String>
   <String Id="SetupTypeServer">Server</String>
-  <String Id="SetupTypeServerTooltip">Install server services</String>
-  <String Id="SetupTypeServerDescription">Install the services for the MediaPortal TV Server. Select if you've installed the MediaPortal TV Server but not MediaPortal on this computer.</String>
+  <String Id="SetupTypeServerTooltip">Install only the server services</String>
+  <String Id="SetupTypeServerDescription">Install the services for the MediaPortal TV Server. Choose this if you've only installed the MediaPortal TV Server on this computer.</String>
   <String Id="SetupTypeSingleseat">Singleseat</String>
-  <String Id="SetupTypeSingleseatTooltip">Install singleseat services</String>
-  <String Id="SetupTypeSingleseatDescription">Install the services for MediaPortal, its plugins and the MediaPortal TV Server. Select if you've installed MediaPortal and the TV Server on this computer.</String>
+  <String Id="SetupTypeSingleseatTooltip">Install the client and server services</String>
+  <String Id="SetupTypeSingleseatDescription">Install the services for MediaPortal, its plugins and the MediaPortal TV Server. Choose this if you've installed MediaPortal and the TV Server on this computer or if you are unsure.</String>
   <String Id="SetupTypeCustom">Custom</String>
   <String Id="SetupTypeCustomTooltip">Customize your installation</String>
   <String Id="SetupTypeCustomDescription">Select the components to install by hand. Only for advanced users.</String>
   
   <!-- Custom feature selection dialog -->
   <String Id="FeatureClient">Client service</String>
-  <String Id="FeatureClientDescription">Provides the MediaAccessService to access the databases of MediaPortal and its plugins.</String>
+  <String Id="FeatureClientDescription">Install the MediaAccessService which provides access to the databases of MediaPortal and its plugins.</String>
   <String Id="FeatureWifiRemote">WifiRemote</String>
   <String Id="FeatureWifiRemoteDescription">Install the WifiRemote plugin for MediaPortal.</String>
   <String Id="FeatureServer">Server service</String>
-  <String Id="FeatureServerDescription">Provides the access to the MediaPortal TV Server.</String>
+  <String Id="FeatureServerDescription">Install the TVAccessService which provides access to the MediaPortal TV Server.</String>
   <String Id="FeatureStreaming">Streaming service</String>
-  <String Id="FeatureStreamingDescription">Stream and your (optionally transcoded) media files to clients. Also provides access to artwork and images.</String>
+  <String Id="FeatureStreamingDescription">Stream your (optionally transcoded) media files to clients. Also provides access to artwork.</String>
   <String Id="FeatureConfigurator">Configuration interface</String>
   <String Id="FeatureConfiguratorDescription">Graphical interface to the configuration of MPExtended. Also offers support to remotely start/stop MediaPortal.</String>
   
   <!-- Configurator shortcuts dialog -->
-  <String Id="ConfiguratorMainText">You can select the install options for the configuration program. Note that the configuration program is also used to start MediaPortal from (mobile) clients, so you may want to have it running always.</String>
+  <String Id="ConfiguratorMainText">You can select installation options for the tray application here. This application is used to start MediaPortal from (mobile) clients, so let it start automatically for the best user experience. It also features the configuration interface for MPExtended.</String>
   <String Id="ConfiguratorStartMenu">Create shortcut in start menu.</String>
   <String Id="ConfiguratorDesktop">Create shortcut on desktop.</String>
-  <String Id="ConfiguratorAutostart">Automatically start on boot.</String>
+  <String Id="ConfiguratorAutostart">Automatically start on Windows startup.</String>
   <String Id="ConfiguratorShortcutName">MPExtended Configuration</String>
   <String Id="ConfiguratorShortcutDescription">MPExtended configuration program</String>
   <String Id="ConfiguratorAutorunName">MPExtended Configurator</String>
   <String Id="ConfiguratorAutorunDescription">MPExtended</String>
   
   <!-- Finish dialog -->
-  <String Id="LaunchConfiguratorText">Launch configurator</String>
+  <String Id="LaunchConfiguratorText">Start tray application</String>
 </WixLocalization>

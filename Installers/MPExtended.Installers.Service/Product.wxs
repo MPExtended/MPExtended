@@ -109,6 +109,7 @@
     <!-- Configurator program -->
     <Property Id="INSTALLCONFIGURATORSTARTMENU">1</Property>
     <Property Id="INSTALLCONFIGURATORAUTOSTART">1</Property>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX">1</Property>
     
     <!-- Custom images -->
     <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
