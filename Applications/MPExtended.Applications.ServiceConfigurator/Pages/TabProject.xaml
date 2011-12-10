@@ -35,7 +35,12 @@
             <LineBreak />
             
             Version:<LineBreak />
-            &#160;&#160;&#160;<Run Name="lblVersion">x.x.x (checking for updates...) [THIS IS UPDATED FROM CODE]</Run><LineBreak />
+            &#160;&#160;&#160;
+                <TextBlock Name="tbVersion">
+                    <Run Name="lblVersion">0.4.0</Run>
+                    (<Hyperlink Name="hbUpdates" RequestNavigate="hbUpdates_RequestNavigate" NavigateUri="">check for updates</Hyperlink>)
+                </TextBlock>
+            <LineBreak />
         </TextBlock>
     </Grid>
 </Page>
