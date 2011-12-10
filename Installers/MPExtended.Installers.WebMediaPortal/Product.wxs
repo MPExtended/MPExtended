@@ -40,8 +40,17 @@
 
     <!-- Require .NET 4 -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this installer again.">
+    <Condition Message="MPExtended WebMediaPortal requires Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+    
+    <!-- Require IIS Express -->
+    <Property Id="IISEXPRESSINSTALLED">
+      <RegistrySearch Id="IISExpressInstalledSearch" Type="raw" Win64="no"
+                      Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{22025051-1991-48EB-8BE8-7A3329DAE7ED}" Name="InstallDate" />
+    </Property>
+    <Condition Message="The installer has detected that the prerequisite IIS Express is not installed. Please install IIS Express and run the installer again.">
+      <![CDATA[Installed OR IISEXPRESSINSTALLED]]>
     </Condition>
     
     <!-- Service -->

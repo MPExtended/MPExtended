@@ -40,7 +40,7 @@
 
     <!-- Require .net 4 -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
-    <Condition Message="MPExtended services require Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and then run this installer again.">
+    <Condition Message="MPExtended services requires Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>
     
