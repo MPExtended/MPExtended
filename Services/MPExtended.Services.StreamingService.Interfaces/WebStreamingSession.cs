@@ -12,6 +12,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public WebStreamMediaType SourceType { get; set; }
         public string SourceId { get; set; }
         public string ClientDescription { get; set; }
+        public string ClientIPAddress { get; set; }
         public DateTime StartTime { get; set; }
         public string DisplayName { get; set; }
 
@@ -19,10 +20,12 @@ namespace MPExtended.Services.StreamingService.Interfaces
         /// The place where the user started the playback. 
         /// </summary>
         public int StartPosition { get; set; }
+
         /// <summary>
         /// The current place of the player.
         /// </summary>
         public int PlayerPosition { get; set; }
+
         public WebTranscodingInfo TranscodingInfo { get; set; }
     }
 }

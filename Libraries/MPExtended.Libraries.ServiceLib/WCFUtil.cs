@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.ServiceModel.Channels;
 using System.Net;
 
 namespace MPExtended.Libraries.ServiceLib
@@ -56,6 +58,13 @@ namespace MPExtended.Libraries.ServiceLib
             {
                 // probably a net.pipe binding, just ignore it
             }
+        }
+
+        public static string GetClientIPAddress()
+        {
+            MessageProperties properties = OperationContext.Current.IncomingMessageProperties;
+            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+            return endpoint.Address;
         }
     }
 }

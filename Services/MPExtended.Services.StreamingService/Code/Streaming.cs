@@ -46,7 +46,8 @@ namespace MPExtended.Services.StreamingService.Code
         {
             public string Identifier { get; set; }
             public string ClientDescription { get; set; }
-            public DateTime StartTime { get; set; } // date the stream started, for cleanup
+            public string ClientIP { get; set; }
+            public DateTime StartTime { get; set; } // date the stream was initialized (no use)
 
             public ITranscoder Transcoder { get; set; }
             public ReadTrackingStreamWrapper OutputStream { get; set; }
@@ -115,6 +116,7 @@ namespace MPExtended.Services.StreamingService.Code
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
+            stream.ClientIP = WCFUtil.GetClientIPAddress();
             stream.StartTime = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
@@ -286,6 +288,7 @@ namespace MPExtended.Services.StreamingService.Code
             return Streams.Select(s => s.Value).Select(s => new WebStreamingSession()
             {
                 ClientDescription = s.ClientDescription,
+                ClientIPAddress = s.ClientIP,
                 Identifier = s.Identifier,
                 SourceType = s.Context.Source.MediaType,
                 SourceId = s.Context.Source.Id,

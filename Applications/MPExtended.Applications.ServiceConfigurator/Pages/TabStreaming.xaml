@@ -35,9 +35,10 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientIP}" Header="IP Address" Width="100"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="File" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="Progress" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="Progress"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="File"/>
                 </GridView>
             </ListView.View>
         </ListView>

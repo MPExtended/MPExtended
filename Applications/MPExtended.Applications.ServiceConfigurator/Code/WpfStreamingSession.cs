@@ -39,6 +39,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             mStreamingSession = newSession;
             this.Identifier = newSession.Identifier;
             this.ClientDescription = newSession.ClientDescription;
+            this.ClientIP = newSession.ClientIPAddress;
 
             if (this.Profile == null || !this.Profile.Equals(newSession.Profile))
             {
@@ -68,6 +69,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
         public String Identifier { get; set; }
         public String ClientDescription { get; set; }
+        public String ClientIP { get; set; }
         public String Profile { get; set; }
         public String File { get; set; }
         public String Progress { get; set; }
