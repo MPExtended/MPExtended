@@ -33,36 +33,89 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
-    internal class ImageSource
+    internal class ImageMediaSource : MediaSource
     {
-        public Stream Data { get; set; }
-        public string Path { get; set; }
-        public string Extension { get; set; }
+        private string path = null;
 
-        public ImageSource(string path) 
+        public string Extension
         {
-            this.Path = path;
-            this.Extension = System.IO.Path.GetExtension(path);
-        }
-
-        public ImageSource(Stream data)
-        {
-            this.Data = data;
-        }
-
-        public ImageSource(Stream data, string extension) : this(data)
-        {
-            this.Extension = extension;
-        }
-
-        public Stream GetDataStream()
-        {
-            if (Data == null)
+            get
             {
-                return File.OpenRead(Path);
+                return IsCustomized() ? Path.GetExtension(GetPath()) : GetFileInfo().Extension;
+            }
+        }
+
+        public override bool Exists
+        {
+            get
+            {
+                return IsCustomized() ? File.Exists(GetPath()) : base.Exists;
+            }
+        }
+
+        public override bool SupportsDirectAccess
+        {
+            get
+            {
+                return IsCustomized() ? true : base.SupportsDirectAccess;
+            }
+        }
+
+        public ImageMediaSource(string path)
+            : base(WebMediaType.File, null, "")
+        {
+            this.path = path;
+        }
+
+        public ImageMediaSource(WebStreamMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
+            : base (type, provider, id, filetype, offset)
+        {
+        }
+
+        protected override bool CheckArguments(WebStreamMediaType mediatype, WebArtworkType filetype)
+        {
+            if ((mediatype == WebStreamMediaType.TV || mediatype == WebStreamMediaType.Recording) && filetype == WebArtworkType.Logo)
+                return true;
+            return base.CheckArguments(mediatype, filetype);
+        }
+
+        protected bool IsCustomized()
+        {
+            return path != null || ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo);
+        }
+
+        public override WebFileInfo GetFileInfo()
+        {
+            if ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo)
+            {
+                // get display name
+                int idChannel = MediaType == WebStreamMediaType.TV ?
+                    Int32.Parse(Id) :
+                    MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
+                string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');
+
+                // find directory
+                string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
+                if (!Directory.Exists(tvLogoDir))
+                {
+                    Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
+                    return new WebFileInfo() { Exists = false };
+                }
+
+                // find image
+                DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
+                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelFileName.ToLowerInvariant());
+                if (matched.Count() == 0)
+                {
+                    Log.Debug("Did not find tv logo {0}", channelFileName);
+                    return new WebFileInfo() { Exists = false };
+                }
+
+                // great, return it
+                return new WebFileInfo(matched.First().FullName);
             }
 
-            return Data;
+            return path != null ? new WebFileInfo(path) : base.GetFileInfo();
         }
     }
 
@@ -72,14 +125,14 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (!source.Exists)
             {
-                Log.Warn("ExtractImage: Source {0} (resolved {1}) doesn't exists", source.GetDebugName(), source.GetPath());
+                Log.Warn("ExtractImage: Source {0} (resolved to path {1}) doesn't exists", source.GetDebugName(), source.GetPath());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                 return Stream.Null;
             }
 
-            if (!source.IsLocalFile)
+            if (!source.SupportsDirectAccess)
             {
-                Log.Warn("ExtractImage: Source type={0} id={1} is not supported yet", source.MediaType, source.Id);
+                Log.Warn("ExtractImage: Extracting images from remote sources isn't supported yet", source.MediaType, source.Id);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotImplemented);
                 return Stream.Null;
             }
@@ -112,7 +165,7 @@ namespace MPExtended.Services.StreamingService.Code
             // maybe it exists in cache, return that then
             if (File.Exists(tempFile))
             {
-                return StreamImage(new ImageSource(tempFile));
+                return StreamImage(new ImageMediaSource(tempFile));
             }
 
             // execute it
@@ -137,15 +190,15 @@ namespace MPExtended.Services.StreamingService.Code
                 return Stream.Null;
             }
 
-            return StreamImage(new ImageSource(tempFile));
+            return StreamImage(new ImageMediaSource(tempFile));
         }
 
-        public static Stream GetResizedImage(MediaSource source, int maxWidth, int maxHeight)
+        public static Stream GetResizedImage(ImageMediaSource src, int maxWidth, int maxHeight)
         {
             // load file
-            ImageSource src = ConvertToImageSource(source);
-            if (src == null)
+            if (!src.Exists)
             {
+                Log.Info("Requested resized image for non-existing source {0}", src.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                 return Stream.Null;
             }
@@ -154,15 +207,15 @@ namespace MPExtended.Services.StreamingService.Code
             string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
             if (!Directory.Exists(tmpDir))
                 Directory.CreateDirectory(tmpDir);
-            string cachedPath = Path.Combine(tmpDir, String.Format("rs_{0}_{1}_{2}.jpg", source.GetUniqueIdentifier(), maxWidth, maxHeight));
+            string cachedPath = Path.Combine(tmpDir, String.Format("rs_{0}_{1}_{2}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight));
 
             // check for existence on disk
             if (!File.Exists(cachedPath))
             {
                 Image orig;
-                using (var impersonator = source.GetImpersonator())
+                using (var impersonator = src.GetImpersonator())
                 {
-                    orig = Image.FromStream(src.GetDataStream());
+                    orig = Image.FromStream(src.Retrieve());
                 }
 
                 if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
@@ -172,73 +225,23 @@ namespace MPExtended.Services.StreamingService.Code
                 }
             }
 
-            return StreamImage(new ImageSource(cachedPath));
+            return StreamImage(new ImageMediaSource(cachedPath));
         }
 
-        public static Stream GetImage(MediaSource msource)
+        public static Stream GetImage(ImageMediaSource source)
         {
-            ImageSource source = ConvertToImageSource(msource);
-            if (source == null)
+            return StreamImage(source);
+        }
+
+        private static Stream StreamImage(ImageMediaSource src) 
+        {
+            if (!src.Exists)
             {
+                Log.Info("Tried to stream image from non-existing source {0}", src.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                 return Stream.Null;
             }
 
-            return StreamImage(source);
-        }
-
-        private static ImageSource ConvertToImageSource(MediaSource source)
-        {
-            // handle tv and recordings specially
-            if (source.MediaType == WebStreamMediaType.TV || source.MediaType == WebStreamMediaType.Recording)
-            {
-                if (source.FileType != WebArtworkType.Logo)
-                {
-                    Log.Info("Requested invalid artwork mediatype={0} artworktype={1}", source.MediaType, source.FileType);
-                    return null;
-                }
-
-                // get display name
-                int idChannel = source.MediaType == WebStreamMediaType.TV ? 
-                    Int32.Parse(source.Id) : 
-                    MPEServices.TAS.GetRecordingById(Int32.Parse(source.Id)).IdChannel;
-                string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');
-
-                // find directory
-                string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
-                if (!Directory.Exists(tvLogoDir))
-                {
-                    Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
-                    return null;
-                }
-
-                // find image
-                DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
-                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelFileName.ToLowerInvariant());
-                if(matched.Count() == 0)
-                {
-                    Log.Debug("Did not find tv logo {0}", channelFileName);
-                    return null;
-                }
-
-                // great, return it
-                return new ImageSource(matched.First().FullName);
-            }
-
-            // handle all 'standard' media cases
-            if (!source.Exists)
-            {
-                Log.Info("Requested unavailable artwork (file not found) {0}", source.GetDebugName());
-                return null;
-            }
-            else 
-            {
-                return new ImageSource(source.Retrieve(), source.FileInfo.Extension);
-            }
-        }
-
-        private static Stream StreamImage(ImageSource src) 
-        {
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
                 { ".jpeg", "image/jpeg" },
                 { ".jpg", "image/jpeg" },
@@ -249,7 +252,7 @@ namespace MPExtended.Services.StreamingService.Code
             string mime = commonMimeTypes.ContainsKey(src.Extension) ? commonMimeTypes[src.Extension] : "application/octet-stream";
             WebOperationContext.Current.OutgoingResponse.ContentType = mime;
 
-            return src.GetDataStream();
+            return src.Retrieve();
         }
 
         private static bool ResizeImage(Image origImage, string newFile, int maxWidth, int maxHeight)

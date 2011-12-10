@@ -36,7 +36,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             SetupAssemblyLoader();
 
             // input
-            bool doInputReader = !context.Source.IsLocalFile;
+            bool doInputReader = context.Source.NeedsInputReaderUnit;
             if (doInputReader)
             {
                 context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);

@@ -113,6 +113,12 @@ namespace MPExtended.Services.StreamingService.Code
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source)
         {
+            if (!source.Exists)
+            {
+                Log.Warn("Tried to start stream for non-existing file {0}", source.GetDebugName());
+                return false;
+            }
+
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
@@ -296,7 +302,7 @@ namespace MPExtended.Services.StreamingService.Code
                     SourceId = s.Context.Source.Id,
                     Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
                     StartTime = s.StartTime,
-                    DisplayName = s.Context.Source.GetDisplayName(),
+                    DisplayName = s.Context.Source.GetMediaDisplayName(),
 
                     StartPosition = s.Context.StartPosition,
                     PlayerPosition = s.Context.GetPlayerPosition(),

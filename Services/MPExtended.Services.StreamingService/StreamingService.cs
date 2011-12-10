@@ -182,15 +182,19 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
+            MediaSource source = new MediaSource(type, provider, itemId);
             try
             {
-                MediaSource source = new MediaSource(type, provider, itemId);
+                if (!source.Exists)
+                {
+                    throw new FileNotFoundException();
+                }
                 return source.Retrieve();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                Log.Info("GetMediaItem() called for unknown mediaitem type={0}, provider={1}, itemId={2}", type, provider, itemId);
+                Log.Info(String.Format("GetMediaItem() failed for {0}", source.GetDebugName()), ex);
                 return Stream.Null;
             }
         }
@@ -214,22 +218,22 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetImage(WebStreamMediaType type, int? provider, string id)
         {
-            return Images.GetImage(new MediaSource(type, provider, id));
+            return Images.GetImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0));
         }
 
         public Stream GetImageResized(WebStreamMediaType type, int? provider, string id, int maxWidth, int maxHeight)
         {
-             return Images.GetResizedImage(new MediaSource(type, provider, id), maxWidth, maxHeight);
+            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0), maxWidth, maxHeight);
         }
 
         public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
-        { 
-             return Images.GetImage(new MediaSource(mediatype, provider, id, artworktype, offset));
+        {
+            return Images.GetImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset));
         }
 
         public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
         {
-            return Images.GetResizedImage(new MediaSource(mediatype, provider, id, artworktype, offset), maxWidth, maxHeight);
+            return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), maxWidth, maxHeight);
         }
         #endregion
     }

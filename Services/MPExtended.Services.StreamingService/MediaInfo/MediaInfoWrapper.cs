@@ -54,7 +54,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             {
                 throw new FileNotFoundException();
             }
-            else if (source.IsLocalFile)
+            else if (source.SupportsDirectAccess)
             {
                 using (var impersonator = source.GetImpersonator())
                 {
