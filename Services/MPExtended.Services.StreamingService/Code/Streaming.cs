@@ -285,21 +285,24 @@ namespace MPExtended.Services.StreamingService.Code
 
         public List<WebStreamingSession> GetStreamingSessions()
         {
-            return Streams.Select(s => s.Value).Select(s => new WebStreamingSession()
+            lock (Streams)
             {
-                ClientDescription = s.ClientDescription,
-                ClientIPAddress = s.ClientIP,
-                Identifier = s.Identifier,
-                SourceType = s.Context.Source.MediaType,
-                SourceId = s.Context.Source.Id,
-                Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
-                StartTime = s.StartTime,
-                DisplayName = s.Context.Source.GetDisplayName(),
+                return Streams.Select(s => s.Value).Select(s => new WebStreamingSession()
+                {
+                    ClientDescription = s.ClientDescription,
+                    ClientIPAddress = s.ClientIP,
+                    Identifier = s.Identifier,
+                    SourceType = s.Context.Source.MediaType,
+                    SourceId = s.Context.Source.Id,
+                    Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
+                    StartTime = s.StartTime,
+                    DisplayName = s.Context.Source.GetDisplayName(),
 
-                StartPosition = s.Context.StartPosition,
-                PlayerPosition = s.Context.GetPlayerPosition(),
-                TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
-            }).ToList();
+                    StartPosition = s.Context.StartPosition,
+                    PlayerPosition = s.Context.GetPlayerPosition(),
+                    TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
+                }).ToList();
+            }
         }
 
         public void SetPlayerPosition(string identifier, int playerPosition)
