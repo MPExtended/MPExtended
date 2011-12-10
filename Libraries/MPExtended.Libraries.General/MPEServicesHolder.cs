@@ -44,8 +44,29 @@ namespace MPExtended.Libraries.General
             TASUrl = tas;
         }
 
+        public MPEServicesHolder(bool useLocalhostByDefault)
+        {
+            try
+            {
+                MASUrl = Configuration.Services.MASConnection;
+                TASUrl = Configuration.Services.TASConnection;
+            }
+            catch (Exception)
+            {
+                if (useLocalhostByDefault)
+                {
+                    MASUrl = "auto://127.0.0.1:4322";
+                    TASUrl = "auto://127.0.0.1:4322";
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
         public MPEServicesHolder()
-            : this(Configuration.Services.MASConnection, Configuration.Services.TASConnection)
+            : this(false)
         {
         }
 

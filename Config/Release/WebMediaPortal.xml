@@ -8,4 +8,6 @@
   <MusicProvider xsi:nil="true" />
   <PicturesProvider xsi:nil="true" />
   <FileSystemProvider xsi:nil="true" />
+  <MASUrl>auto://127.0.0.1:4322</MASUrl>
+  <TASUrl>auto://127.0.0.1:4322</TASUrl>
 </SettingModel>

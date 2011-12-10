@@ -47,17 +47,15 @@ namespace MPExtended.Applications.WebMediaPortal.Code
  
             try
             {
+                // load from file using XmlSerializer
                 XmlSerializer SerializerObj = new XmlSerializer(typeof(SettingModel));
-
-                // Create a new file stream for reading the XML file
                 FileStream ReadFileStream = new FileStream(Configuration.GetPath("WebMediaPortal.xml"), FileMode.Open, FileAccess.Read, FileShare.Read);
-
-                // Load the object saved above by using the Deserialize function
                 loadedObj = (SettingModel)SerializerObj.Deserialize(ReadFileStream);
 
-                // Cleanup
+                // cleanup
                 ReadFileStream.Close();
                 ReadFileStream.Dispose();
+                return loadedObj;
              
             }
             catch (Exception ex)
@@ -65,15 +63,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 Log.Debug("Exception in LoadSettings", ex);
             }
 
-            if (loadedObj == null)
-            {
-                // default values
-                loadedObj = new SettingModel();
-                loadedObj.DefaultGroup = 1;
-                loadedObj.DefaultMediaProfile = "Flash HQ";
-                loadedObj.DefaultTVProfile = "Flash HQ";
-            }
-
+            // set some default values
+            loadedObj.MASUrl = "auto://127.0.0.1:4322";
+            loadedObj.TASUrl = "auto://127.0.0.1:4322";
             return loadedObj;
         }
 

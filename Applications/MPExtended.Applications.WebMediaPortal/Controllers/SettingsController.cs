@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Libraries.General;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
@@ -61,6 +62,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             Settings.ActiveSettings = model.ToSettingModel(Settings.ActiveSettings);
+            MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             return RedirectToAction("Services");
         }
     }

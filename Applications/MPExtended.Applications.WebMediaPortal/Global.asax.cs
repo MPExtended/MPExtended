@@ -21,6 +21,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal
 {
@@ -52,6 +54,9 @@ namespace MPExtended.Applications.WebMediaPortal
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            // set connection settings
+            MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
         }
     }
 }

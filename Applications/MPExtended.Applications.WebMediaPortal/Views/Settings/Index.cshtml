@@ -10,6 +10,8 @@
 {
     <div>
     <table>
+        @{  if(Model.ShowTASConfiguration)
+            {
         <tr>
             <td>
                 @Html.LabelFor(x => x.SelectedGroup)
@@ -21,15 +23,6 @@
         </tr>
         <tr>
             <td>
-                @Html.LabelFor(x => x.SelectedMediaProfile)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"))
-                @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
-            </td>
-        </tr>
-        <tr>
-            <td>
                 @Html.LabelFor(x => x.SelectedTVProfile)
             </td>
             <td>
@@ -37,36 +30,51 @@
                 @Html.ValidationMessageFor(x => x.SelectedTVProfile)
             </td>
         </tr>
-        <tr>
-            <td colspan="2">&nbsp;</td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(x => x.TVShowProvider)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.TVShowProvider, Model.TVShowDatabases)
-                @Html.ValidationMessageFor(x => x.TVShowProvider)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(x => x.MovieProvider)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.MovieProvider, Model.MovieDatabases)
-                @Html.ValidationMessageFor(x => x.MovieProvider)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(x => x.MusicProvider)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.MusicProvider, Model.MusicDatabases)
-                @Html.ValidationMessageFor(x => x.MusicProvider)
-            </td>
-        </tr>
+            }
+        }
+        @{  if (Model.ShowMASConfiguration)
+            {
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.SelectedMediaProfile)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"))
+                    @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.TVShowProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.TVShowProvider, Model.TVShowDatabases)
+                    @Html.ValidationMessageFor(x => x.TVShowProvider)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.MovieProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.MovieProvider, Model.MovieDatabases)
+                    @Html.ValidationMessageFor(x => x.MovieProvider)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.MusicProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.MusicProvider, Model.MusicDatabases)
+                    @Html.ValidationMessageFor(x => x.MusicProvider)
+                </td>
+            </tr>
+            }
+        }
     </table>
     <br />
     <input type="submit" value="Save" />

@@ -25,7 +25,7 @@ namespace MPExtended.Libraries.General
 {
     public static class MPEServices
     {
-        private static MPEServicesHolder holder = new MPEServicesHolder();
+        private static MPEServicesHolder holder = new MPEServicesHolder(true);
 
         public static IMediaAccessService MAS { get { return holder.MAS; } }
         public static bool HasMASConnection { get { return holder.HasMASConnection; } }

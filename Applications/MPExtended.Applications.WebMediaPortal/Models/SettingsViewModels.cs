@@ -99,6 +99,22 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public bool ShowMASConfiguration
+        {
+            get
+            {
+                return MPEServices.HasMASConnection;
+            }
+        }
+
+        public bool ShowTASConfiguration
+        {
+            get
+            {
+                return MPEServices.HasTASConnection;
+            }
+        }
+
         [DisplayName("Default TV group")]
         [Required(ErrorMessage = "Please select a group")]
         public int SelectedGroup { get; set; }
@@ -133,10 +149,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             SelectedMediaProfile = model.DefaultMediaProfile;
             SelectedTVProfile = model.DefaultTVProfile;
 
-            var serviceDesc = MPEServices.MAS.GetServiceDescription();
-            MovieProvider = GetCurrentProvider(model.MovieProvider, serviceDesc.DefaultMovieLibrary);
-            MusicProvider = GetCurrentProvider(model.MusicProvider, serviceDesc.DefaultMusicLibrary);
-            TVShowProvider = GetCurrentProvider(model.TVShowProvider, serviceDesc.DefaultTvShowLibrary);
+            if (ShowMASConfiguration)
+            {
+                var serviceDesc = MPEServices.MAS.GetServiceDescription();
+                MovieProvider = GetCurrentProvider(model.MovieProvider, serviceDesc.DefaultMovieLibrary);
+                MusicProvider = GetCurrentProvider(model.MusicProvider, serviceDesc.DefaultMusicLibrary);
+                TVShowProvider = GetCurrentProvider(model.TVShowProvider, serviceDesc.DefaultTvShowLibrary);
+            }
         }
 
         public SettingModel ToSettingModel(SettingModel changeModel)
