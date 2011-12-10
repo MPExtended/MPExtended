@@ -94,28 +94,39 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void SetTestLinks(string _address, int _port)
         {
-            var services = Installation.GetInstalledServices().Select(x => x.ServiceName);
             string baseAdress = "http://{0}:{1}/MPExtended/{2}/json/{3}";
 
-            if(services.Contains(MPExtendedService.MediaAccessService))
+            if (Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
             {
                 string mediaAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "MediaAccessService", "GetServiceDescription");
-                hlTestLinkMediaAccessGeneral.NavigateUri = new Uri(mediaAccessServiceDescriptionUrl);
-                tbTestLinkMediaAccessGeneral.Text = mediaAccessServiceDescriptionUrl;
+                hlTestLinkMediaAccess.NavigateUri = new Uri(mediaAccessServiceDescriptionUrl);
+                tbTestLinkMediaAccess.Text = mediaAccessServiceDescriptionUrl;
+            }
+            else
+            {
+                gridLinks.RowDefinitions[0].MaxHeight = 0;
             }
 
-            if(services.Contains(MPExtendedService.TVAccessService))
+            if (Installation.IsServiceInstalled(MPExtendedService.TVAccessService))
             {
                 string tvAccessServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "TVAccessService", "GetServiceDescription");
-                hlTestLinkTvAccessGeneral.NavigateUri = new Uri(tvAccessServiceDescriptionUrl);
-                tbTestLinkTvAccessGeneral.Text = tvAccessServiceDescriptionUrl;
+                hlTestLinkTvAccess.NavigateUri = new Uri(tvAccessServiceDescriptionUrl);
+                tbTestLinkTvAccess.Text = tvAccessServiceDescriptionUrl;
+            }
+            else
+            {
+                gridLinks.RowDefinitions[1].MaxHeight = 0;
             }
 
-            if(services.Contains(MPExtendedService.StreamingService))
+            if (Installation.IsServiceInstalled(MPExtendedService.StreamingService))
             {
                 string streamingServiceDescriptionUrl = String.Format(baseAdress, _address, _port, "StreamingService", "GetServiceDescription");
-                hlTestLinkStreamingGeneral.NavigateUri = new Uri(streamingServiceDescriptionUrl);
-                tbTestLinkStreamingGeneral.Text = streamingServiceDescriptionUrl;
+                hlTestLinkStreaming.NavigateUri = new Uri(streamingServiceDescriptionUrl);
+                tbTestLinkStreaming.Text = streamingServiceDescriptionUrl;
+            }
+            else
+            {
+                gridLinks.RowDefinitions[2].MaxHeight = 0;
             }
         }
 

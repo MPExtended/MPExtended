@@ -12,16 +12,40 @@
         <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
         <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
         <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
-        <Label Content="MediaAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,160,0,0" Name="label8" VerticalAlignment="Top" />
-        <TextBlock Height="23" Margin="168,165,6,0" VerticalAlignment="Top">
-                        <Hyperlink  Name="hlTestLinkMediaAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate">
-                            <TextBlock Name="tbTestLinkMediaAccessGeneral" Text="ServiceDescription.xml" />
-                        </Hyperlink>    
-                    </TextBlock>
-        <Label Content="Streaming General:" Height="28" HorizontalAlignment="Left" Margin="15,189,0,0" Name="label11" VerticalAlignment="Top" />
-        <TextBlock Height="23" Margin="168,194,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkStreamingGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkStreamingGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
-        <Label Content="TvAccess General:" Height="28" HorizontalAlignment="Left" Margin="15,218,0,0" Name="label12" VerticalAlignment="Top" />
-        <TextBlock Height="23" Margin="168,223,6,0" VerticalAlignment="Top"><Hyperlink Name="hlTestLinkTvAccessGeneral" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Name="tbTestLinkTvAccessGeneral" Text="ServiceDescription.xml" /></Hyperlink></TextBlock>
+        
+        <Grid Name="gridLinks" Margin="6,160,15,40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="29" />
+                <RowDefinition Height="29" />
+                <RowDefinition Height="29" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Media:" />
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+                <Hyperlink  Name="hlTestLinkMediaAccess" RequestNavigate="Hyperlink_RequestNavigate">
+                    <TextBlock Name="tbTestLinkMediaAccess" Text="ServiceDescription.xml" />
+                </Hyperlink>    
+            </TextBlock>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="TV Server:" />
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                <Hyperlink Name="hlTestLinkTvAccess" RequestNavigate="Hyperlink_RequestNavigate">
+                    <TextBlock Name="tbTestLinkTvAccess" Text="ServiceDescription.xml" />
+                </Hyperlink>
+            </TextBlock>
+            
+            <Label Grid.Row="2" Grid.Column="0" Content="Streaming:" />
+            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+                <Hyperlink Name="hlTestLinkStreaming" RequestNavigate="Hyperlink_RequestNavigate">
+                    <TextBlock Name="tbTestLinkStreaming" Text="ServiceDescription.xml" />
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+
         <Button Content="Export logs and configuration" Height="23" HorizontalAlignment="Left" Margin="15,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
     </Grid>
 </Page>

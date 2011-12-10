@@ -68,6 +68,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
             {
                 tcMainTabs.Items.Remove(tiStreaming);
+                tcMainTabs.Items.Remove(tiSocial);
             }
         }
 
