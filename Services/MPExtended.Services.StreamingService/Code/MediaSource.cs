@@ -65,7 +65,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
                     else
                     {
-
+                        throw new Exception(String.Format("Invalid combination of mediatype recording and filetype {0}", FileType));
                     }
                 } 
                 else if(fileInfoCache == null)
@@ -217,12 +217,10 @@ namespace MPExtended.Services.StreamingService.Code
                 throw new FileNotFoundException();
             }
 
-            if (FileInfo.IsLocalFile && FileInfo.OnNetworkDrive)
+            if (MediaType != WebStreamMediaType.TV && (FileInfo.IsLocalFile && FileInfo.OnNetworkDrive))
             {
                 return new ImpersonationInputUnit(GetPath());
-            }
-
-            if ((IsLocalFile && File.Exists(GetPath())) || MediaType == WebStreamMediaType.TV)
+            } else if (MediaType == WebStreamMediaType.TV || (IsLocalFile && File.Exists(GetPath())))
             {
                 return new InputUnit(GetPath());
             }
