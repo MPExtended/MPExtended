@@ -81,6 +81,14 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         public static WebMediaInfo GetMediaInfo(string source, bool ignoreCache)
         {
+            lock (Cache)
+            {
+                return DoLoadMediaInfo(source, ignoreCache);
+            }
+        }
+
+        private static WebMediaInfo DoLoadMediaInfo(string source, bool ignoreCache)
+        {
             try
             {
                 if (source == null || !File.Exists(source))
