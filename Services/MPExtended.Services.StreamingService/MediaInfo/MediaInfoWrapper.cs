@@ -106,6 +106,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 info.Option("ParseSpeed", "0.3");
                 info.Open(source);
                 WebMediaInfo retinfo = new WebMediaInfo();
+                retinfo.Container = info.Get(StreamKind.General, 0, "Format");
 
                 // video
                 retinfo.VideoStreams = new List<WebVideoStream>();
