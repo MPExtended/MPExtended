@@ -57,5 +57,61 @@
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
+
+    <!-- Direct streaming for WebMediaPortal -->
+    <transcoder>
+      <name>Direct</name>
+      <description>VLC test profile</description>
+      <bandwidth>10000</bandwidth>
+      <target>pc-vlc-video</target>
+      <transport>http</transport>
+      <mime>video/x-unknown</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>1024</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.Direct" />
+    </transcoder>
+    
+    <!-- Flash streaming for WebMediaPortal -->
+    <transcoder>
+      <name>Flash HQ</name>
+      <description>Flash HQ</description>
+      <bandwidth>3000</bandwidth>
+      <target>pc-flash-video</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>1280</maxOutputWidth>
+      <maxOutputHeight>720</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <encoder>vcodec=h264,vb=3500,venc=x264{profile=baseline},acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>Flash LQ</name>
+      <description>Flash LQ</description>
+      <bandwidth>1000</bandwidth>
+      <target>pc-flash-video</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>854</maxOutputWidth>
+      <maxOutputHeight>450</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
   </transcoders>
 </appconfig>
