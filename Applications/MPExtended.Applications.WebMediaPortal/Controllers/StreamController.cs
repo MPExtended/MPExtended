@@ -29,16 +29,8 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [Authorize]
     public class StreamController : BaseController
     {
-        //
-        // GET: /Stream/
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         //
         // Streaming
         private int? GetProvider(WebStreamMediaType type)
@@ -83,30 +75,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            // TODO: this should be done better
-            byte[] buffer = new byte[65536];
-            int read;
-            Stream inputStream = WebRequest.Create(url).GetResponse().GetResponseStream();
-
-            // set headers and disable buffer
-            HttpContext.Response.Buffer = false;
-            HttpContext.Response.BufferOutput = false;
-            HttpContext.Response.ContentType = GetStreamControl(type).GetTranscoderProfileByName(transcoder).MIME;
-            HttpContext.Response.StatusCode = 200;
-
-            // stream to output
-            while (HttpContext.Response.IsClientConnected && (read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                HttpContext.Response.OutputStream.Write(buffer, 0, read);
-                HttpContext.Response.OutputStream.Flush();
-            }
-
-            if (!GetStreamControl(type).FinishStream(identifier))
-            {
-                Log.Error("Streaming: FinishStream failed");
-            }
-
-            return new EmptyResult();
+            // redirect user to stream (WSS has automatic stream killing now)
+            return Redirect(url);
         }
 
         //
@@ -138,6 +108,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Player
+        [Authorize]
         public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
             // get transcoding profile
