@@ -28,9 +28,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal class Direct : ITranscoder
     {
-        public TranscoderProfile Profile { get; set; }
-        public MediaSource Source { get; set; }
-        public WebMediaInfo MediaInfo { get; set; }
         public string Identifier { get; set; }
 
         public string GetStreamURL()
@@ -42,7 +39,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         {
             // we ignore our arguments :)
             context.TranscodingInfo.Supported = false;
-            context.Pipeline.AddDataUnit(Source.GetInputReaderUnit(), 1);
+            context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
             return;
         }
     }
