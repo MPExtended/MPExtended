@@ -23,6 +23,8 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
 using System.Net;
+using MPExtended.Libraries.General;
+using System.Net.Sockets;
 
 namespace MPExtended.Libraries.ServiceLib
 {
@@ -41,11 +43,21 @@ namespace MPExtended.Libraries.ServiceLib
             }
             catch (InvalidOperationException)
             {
-                // probably a net.pipe binding
+                // probably a net.pipe binding, ignore that
+            }
+
+            // then try current IP address
+            int port = Configuration.Services.Port;
+            Func<IPAddress, bool> checkAddressValid = 
+                x => x.AddressFamily == AddressFamily.InterNetwork || (Configuration.Services.EnableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6);
+            var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+            if (addresses.Any(checkAddressValid))
+            {
+                return String.Format("http://{0}:{1}/MPExtended/", addresses.First(checkAddressValid).ToString(), port);
             }
 
             // last resort: localhost
-            return "http://localhost:4322/MPExtended/";
+            return String.Format("http://localhost:{0}/MPExtended/", port);
         }
 
         public static void SetResponseCode(HttpStatusCode code)
@@ -63,8 +75,15 @@ namespace MPExtended.Libraries.ServiceLib
         public static string GetClientIPAddress()
         {
             MessageProperties properties = OperationContext.Current.IncomingMessageProperties;
-            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            return endpoint.Address;
+            if (properties.ContainsKey(RemoteEndpointMessageProperty.Name))
+            {
+                RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+                return endpoint.Address;
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 }
