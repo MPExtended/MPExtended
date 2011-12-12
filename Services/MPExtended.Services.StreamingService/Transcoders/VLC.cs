@@ -47,11 +47,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // get parameters
             VLCParameters vlcparam = GenerateVLCParameters(context);
-
-            // prepare vlc arguments
             string path = @"\#OUT#";
             string sout = vlcparam.Sout.Replace("#OUT#", path);
-            string arguments = GenerateArguments(vlcparam.Input, sout, String.Join(" ", vlcparam.Arguments));
+
+            // generate vlc argument string
+            var quotedArgList = vlcparam.Arguments.Select(x => x.Replace("\"", "\\\""));
+            string vlcArguments = "\"" + String.Join("\" \"", quotedArgList) + "\"";
+            string arguments = GenerateArguments(vlcparam.Input, sout, vlcArguments);
 
             // add the unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
