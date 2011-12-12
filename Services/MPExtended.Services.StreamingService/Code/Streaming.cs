@@ -348,7 +348,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
             }
 
-            return Resolution.Calculate(aspect, new Resolution(profile.MaxOutputWidth, profile.MaxOutputHeight), 2);
+            return Resolution.Calculate(aspect, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)

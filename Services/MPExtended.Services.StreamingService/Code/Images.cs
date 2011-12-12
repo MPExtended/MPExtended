@@ -139,12 +139,12 @@ namespace MPExtended.Services.StreamingService.Code
 
             // calculate size
             string ffmpegResize = "";
-            if (maxWidth != null && maxHeight != null)
+            if (maxWidth != null || maxHeight != null)
             {
                 try
                 {
                     decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
-                    ffmpegResize = "-s " + Resolution.Calculate(resolution, new Resolution(maxWidth.Value, maxHeight.Value)).ToString();
+                    ffmpegResize = "-s " + Resolution.Calculate(resolution, maxWidth, maxHeight).ToString();
                 }
                 catch (Exception ex)
                 {
@@ -169,9 +169,9 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // execute it
+            ProcessStartInfo info = new ProcessStartInfo();
             using (var impersonator = source.GetImpersonator())
             {
-                ProcessStartInfo info = new ProcessStartInfo();
                 info.Arguments = String.Format("-ss {0} -i \"{1}\" {2} -vframes 1 -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
                 info.FileName = Configuration.Streaming.FFMpegPath;
                 info.CreateNoWindow = true;
@@ -185,7 +185,7 @@ namespace MPExtended.Services.StreamingService.Code
             // log when failed
             if (!File.Exists(tempFile))
             {
-                Log.Warn("Failed to extract image to temporary file {0}", tempFile);
+                Log.Warn("Failed to extract image to temporary file {0} with command {1}", tempFile, info.Arguments);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
@@ -193,7 +193,7 @@ namespace MPExtended.Services.StreamingService.Code
             return StreamImage(new ImageMediaSource(tempFile));
         }
 
-        public static Stream GetResizedImage(ImageMediaSource src, int maxWidth, int maxHeight)
+        public static Stream GetResizedImage(ImageMediaSource src, int? maxWidth, int? maxHeight)
         {
             // load file
             if (!src.Exists)
@@ -255,34 +255,18 @@ namespace MPExtended.Services.StreamingService.Code
             return src.Retrieve();
         }
 
-        private static bool ResizeImage(Image origImage, string newFile, int maxWidth, int maxHeight)
+        private static bool ResizeImage(Image origImage, string newFile, int? maxWidth, int? maxHeight)
         {
             try
             {
-                int sourceWidth = origImage.Width;
-                int sourceHeight = origImage.Height;
+                Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
 
-                float nPercent = 0;
-                float nPercentW = 0;
-                float nPercentH = 0;
-
-                nPercentW = ((float)maxWidth / (float)sourceWidth);
-                nPercentH = ((float)maxHeight / (float)sourceHeight);
-
-                if (nPercentH < nPercentW)
-                    nPercent = nPercentH;
-                else
-                    nPercent = nPercentW;
-
-                int destWidth = (int)(sourceWidth * nPercent);
-                int destHeight = (int)(sourceHeight * nPercent);
-
-                Bitmap newImage = new Bitmap(destWidth, destHeight);
+                Bitmap newImage = new Bitmap(newSize.Width, newSize.Height);
 
                 Graphics g = Graphics.FromImage((Image)newImage);
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                g.DrawImage(origImage, 0, 0, destWidth, destHeight);
+                g.DrawImage(origImage, 0, 0, newSize.Width, newSize.Height);
                 g.Dispose();
 
                 // Save resized picture
