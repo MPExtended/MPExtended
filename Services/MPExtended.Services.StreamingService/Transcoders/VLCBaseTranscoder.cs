@@ -59,9 +59,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // add tv options if specified
-            if (context.IsTv && context.Profile.CodecParameters.ContainsKey("tvOptions") && context.Profile.CodecParameters["tvOptions"].Length > 0)
+            if ( (context.IsTv || context.MediaInfo.Container == "MPEG-TS") &&
+                  context.Profile.CodecParameters.ContainsKey("tsOptions") && context.Profile.CodecParameters["tsOptions"].Length > 0)
             {
-                arguments.AddRange(context.Profile.CodecParameters["tvOptions"].Split(' ').Where(x => x.Length > 0));
+                arguments.AddRange(context.Profile.CodecParameters["tsOptions"].Split(' ').Where(x => x.Length > 0));
             }
 
             // position
