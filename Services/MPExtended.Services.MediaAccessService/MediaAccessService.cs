@@ -700,6 +700,10 @@ namespace MPExtended.Services.MediaAccessService
                     }
                 }
             }
+            catch (ArgumentOutOfRangeException)
+            {
+                Log.Info("Cannot resolve mediatype={0}, filetype={1}, provider={2}, id={3}, offset={4}", mediatype, filetype, provider, id, offset);
+            }
             catch (FileNotFoundException)
             {
                 Log.Info("Failed to load fileinfo for non-existing file mediatype={0}, filetype={1}, provider={5}, id={2}, offset={3} (resulting in path={4})", mediatype, filetype, id, offset, path, provider);
