@@ -64,7 +64,7 @@
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="5">WixUI_InstallMode = "Repair" OR WixUI_InstallMode = "Remove"</Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="3">WixUI_InstallMode = "Update"</Publish>
       
-      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="LaunchConfigurator" Order="1"><![CDATA[WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed]]></Publish>
+      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="LaunchConfigurator" Order="1"><![CDATA[WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed AND &Feature_Configurator=3]]></Publish>
       <Publish Dialog="CustomExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="2">1</Publish>
     </UI>
 	</Fragment>
