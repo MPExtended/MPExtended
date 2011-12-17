@@ -15,7 +15,7 @@
         </div>
         <div class="navigation">
             <ul id="navlist">
-                <li class="first"><a href="/" id="current">Home</a></li>
+                <li class="first">@Html.ActionLink("Home", "Index", "Home")</li>
                 @if (ViewBag.LayoutHasMAS)
                 {
                     <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li>
