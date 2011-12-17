@@ -43,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static SettingModel LoadSettings()
         {
-            SettingModel loadedObj = null;
+            SettingModel loadedObj = new SettingModel();
  
             try
             {
@@ -56,7 +56,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 ReadFileStream.Close();
                 ReadFileStream.Dispose();
                 return loadedObj;
-             
             }
             catch (Exception ex)
             {
