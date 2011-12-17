@@ -25,6 +25,7 @@ using System.Xml.Linq;
 using ZeroconfService;
 using System.Net.NetworkInformation;
 using MPExtended.Libraries.General;
+using System.Security.Cryptography;
 
 namespace MPExtended.ServiceHosts.Hosting
 {
@@ -45,9 +46,27 @@ namespace MPExtended.ServiceHosts.Hosting
             serviceName = GetServiceName();
             foreach (Service srv in services)
             {
-                // also publish some additional data
+                // We also send a list of usernames and password hashes, so that clients can detect if they match across MPExtended
+                // installations.
+                // Note: this is specifically introduced for aMPdroid. It will probably be changed to something more advanced in the
+                // next release where we don't keep backwards-compatibility for this part. Please do not depend on the presence of
+                // this property.
+                HashAlgorithm hashAlg = MD5.Create();
+                Dictionary<string, string> sendUsers = new Dictionary<string,string>();
+                foreach(var user in Configuration.Services.Users)
+                {
+                    byte[] hash = hashAlg.ComputeHash(Encoding.UTF8.GetBytes(user.EncryptedPassword));
+                    for (int i = 1; i < 1000; i++)
+                    {
+                        hash = hashAlg.ComputeHash(hash);
+                    }
+                    sendUsers.Add(user.Username, Convert.ToBase64String(hash, 0, 12));
+                }
+
+                // also publish IP address and username list
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = GetHardwareAddresses();
+                additionalData["users"] = String.Join(";", sendUsers.Select(x => x.Key + ":" + x.Value));
 
                 NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, srv.Port);
                 net.AllowMultithreadedCallbacks = true;
