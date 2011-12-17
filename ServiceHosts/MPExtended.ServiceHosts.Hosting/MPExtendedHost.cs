@@ -47,7 +47,7 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             try
             {
-                Log.Debug("Opening MPExtended ServiceHost...");
+                Log.Debug("Opening MPExtended ServiceHost version {0} (build {1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion());
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
                 ThreadManager.Start("Zeroconf", delegate()
                 {
