@@ -67,7 +67,6 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 Type rettype;
                 IsListType(method.ReturnType, out rettype);
                 var items = rettype.GetInterfaces().Where(x => x.Name.EndsWith("Sortable")).Select(x => x.Name.Substring(1, x.Name.Length - 9)).ToList();
-                if (items.Contains("Category")) items[items.IndexOf("Category")] = "UserDefinedCategories";
 
                 Type sby = Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.SortBy");
                 var valid = sby.GetEnumValues().Cast<int>().Select(x => new { Value = x, Name = sby.GetEnumName(x) }).Where(x => items.Contains(x.Name));

@@ -143,6 +143,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             WebPictureDetailed pic = new WebPictureDetailed();
             pic.Id = PathToId(path);
             pic.Path.Add(path);
+            pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image data
             BitmapSource img = BitmapFrame.Create(new Uri(path));
@@ -176,6 +177,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             WebPictureBasic pic = new WebPictureBasic();
             pic.Id = PathToId(path);
             pic.Path.Add(path);
+            pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image metadata
             BitmapSource img = BitmapFrame.Create(new Uri(path));
@@ -191,6 +193,17 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             return pic;
+        }
+
+        private WebCategory GetCategoryFromPath(string path)
+        {
+            string dir = Path.GetDirectoryName(path);
+
+            return new WebCategory()
+            {
+                Title = Path.GetFileName(dir),
+                Id = PathToId(dir)
+            };
         }
 
         public abstract IEnumerable<WebCategory> GetAllPictureCategories();

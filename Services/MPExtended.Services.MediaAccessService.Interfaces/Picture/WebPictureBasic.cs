@@ -5,15 +5,15 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-    public class WebPictureBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IPictureDateTakenSortable
+    public class WebPictureBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
     {
         public WebPictureBasic()
         {
             DateTaken = new DateTime(1970, 1, 1);
-            Path = new List<string>();
+            Categories = new List<WebCategory>();
         }
 
-        public string CategoryId { get; set; }
+        public IList<WebCategory> Categories { get; set; }
         public string Title { get; set; }
         public DateTime DateTaken { get; set; }
 

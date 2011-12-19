@@ -5,12 +5,11 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
 {
-    public class WebTVShowBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, ICategorySortable, IRatingSortable, IArtwork, IActors
+    public class WebTVShowBasic : WebObject, ITitleSortable, IDateAddedSortable, IYearSortable, IGenreSortable, IRatingSortable, IArtwork, IActors
     {
         public WebTVShowBasic()
         {
             DateAdded = new DateTime(1970, 1, 1);
-            UserDefinedCategories = new List<string>();
             Genres = new List<string>();
             Artwork = new List<WebArtwork>();
             ExternalId = new List<WebExternalId>();
@@ -20,7 +19,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public string Id { get; set; }
         public bool IsProtected { get; set; }
         public DateTime DateAdded { get; set; }
-        public IList<string> UserDefinedCategories { get; set; }
         public IList<string> Genres { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
         public IList<WebActor> Actors { get; set; }

@@ -81,6 +81,16 @@ namespace MPExtended.Services.MediaAccessService
                 }).ToList();
             }
 
+            if (item is ICategorySortable)
+            {
+                (item as ICategorySortable).Categories = (item as ICategorySortable).Categories.Select(x => new WebCategory()
+                {
+                    Id = x.Id,
+                    PID = item.PID,
+                    Title = x.Title
+                }).ToList();
+            }
+
             return item;
         }
 

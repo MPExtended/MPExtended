@@ -157,8 +157,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 .Select(x => new WebMusicArtistBasic()
                 {
                     Id = x,
-                    Title = x,
-                    UserDefinedCategories = new List<string>()
+                    Title = x
                 }).ToList();
         }
 

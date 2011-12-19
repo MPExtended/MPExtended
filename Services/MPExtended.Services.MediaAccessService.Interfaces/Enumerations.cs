@@ -73,7 +73,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Rating = 4,
         [EnumMember]
-        UserDefinedCategories = 5,
+        Categories = 5,
         [EnumMember]
         MusicTrackNumber = 6,
         [EnumMember]

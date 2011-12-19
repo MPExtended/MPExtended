@@ -32,7 +32,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface ICategorySortable
     {
-        IList<string> UserDefinedCategories { get; set; }
+        IList<WebCategory> Categories { get; set; }
     }
 
     public interface IMusicTrackNumberSortable 

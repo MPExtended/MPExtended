@@ -51,14 +51,6 @@ namespace MPExtended.Services.MediaAccessService
             return list;
         }
 
-        public static IEnumerable<T> FilterCategory<T>(this IEnumerable<T> list, string category) where T : ICategorySortable
-        {
-            if (category != null)
-                return Where(list, x => ((ICategorySortable)x).UserDefinedCategories.Contains(category));
-
-            return list;
-        }
-
         public static IEnumerable<T> FilterActor<T>(this IEnumerable<T> list, string actor) where T : IActors
         {
             if (actor != null)
@@ -67,14 +59,9 @@ namespace MPExtended.Services.MediaAccessService
             return list;
         }
 
-        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string category) where T : IGenreSortable, ICategorySortable
+        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string actor) where T : IGenreSortable, IActors
         {
-            return FilterCategory(FilterGenre(list, genre), category);
-        }
-
-        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string category, string actor) where T : IGenreSortable, ICategorySortable, IActors
-        {
-            return FilterCategory(FilterGenre(FilterActor(list, actor), genre), category);
+            return FilterGenre(FilterActor(list, actor), genre);
         }
 
         // Take advantage of lazy queries
@@ -173,8 +160,8 @@ namespace MPExtended.Services.MediaAccessService
                         return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
                     case SortBy.Rating:
                         return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
-                    case SortBy.UserDefinedCategories:
-                        return list.OrderBy(x => ((ICategorySortable)x).UserDefinedCategories.First(), order);
+                    case SortBy.Categories:
+                        return list.OrderBy(x => ((ICategorySortable)x).Categories.First().Title, order);
                     case SortBy.Type:
                         return list.OrderBy(x => ((ITypeSortable)x).Type, order);
                     case SortBy.Name:
