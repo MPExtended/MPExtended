@@ -101,16 +101,20 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language, m.imdb_id, s.identifier AS tmdb_id " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, m.imdb_id, s.identifier " +
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
                          "LEFT JOIN " +
-                                "(SELECT smi.movie, smi.identifier " +
-                                "FROM source_movie_info smi " +
-                                "LEFT JOIN source_info si ON smi.source = si.id " + 
-                                "WHERE si.providertype LIKE 'MediaPortal.Plugins.MovingPictures.DataProviders.TheMovieDbProvider, MovingPictures, %' " + 
-                                "GROUP BY smi.movie, smi.identifier) AS s " +
+                                "(SELECT smi.identifier AS identifier, smi.movie AS movie " +
+                                " FROM " +
+                                    "(SELECT smi.movie AS movie, MAX(smi.id) AS id " +
+                                    " FROM source_movie_info smi " +
+                                    " LEFT JOIN source_info si ON smi.source = si.id " + 
+                                    " WHERE si.providertype LIKE 'MediaPortal.Plugins.MovingPictures.DataProviders.TheMovieDbProvider, MovingPictures, %' " + 
+                                    " GROUP BY smi.movie) AS sid " +
+                                " LEFT JOIN source_movie_info smi ON sid.id = smi.id " +
+                                ") s " +
                             "ON s.movie = m.id AND s.identifier != '' " +
                          "WHERE %where " + 
                          "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year, " +
