@@ -45,7 +45,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         protected VLCParameters GenerateVLCParameters(StreamContext context)
         {
-            List<string> arguments = context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList();
+            List<string> arguments = context.Profile.CodecParameters.ContainsKey("options") ?
+                context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList() :
+                new List<string>();
 
             // input
             string inURL = "";

@@ -24,6 +24,36 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
+    public class StreamTarget
+    {
+        public VideoPlayer Player { get; set; }
+        public bool HasVideo { get; set; }
+        public string Name { get; set; }
+
+        public StreamTarget(VideoPlayer player, bool video, string name)
+        {
+            this.Player = player;
+            this.HasVideo = video;
+            this.Name = name;
+        }
+
+        public static List<StreamTarget> GetAudioTargets()
+        {
+            return new List<StreamTarget>() {
+                new StreamTarget(VideoPlayer.VLC, false, "pc-vlc-audio"),
+                new StreamTarget(VideoPlayer.Flash, false, "pc-flash-audio")
+            };
+        }
+
+        public static List<StreamTarget> GetVideoTargets()
+        {
+            return new List<StreamTarget>() {
+                new StreamTarget(VideoPlayer.VLC, true, "pc-vlc-video"),
+                new StreamTarget(VideoPlayer.Flash, true, "pc-flash-video")
+            };
+        }
+    }
+
     public class PlayerViewModel
     {
         public IEnumerable<string> Transcoders { get; set; }

@@ -113,5 +113,21 @@
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
+    <transcoder>
+      <name>Flash Audio</name>
+      <description>Flash Audio</description>
+      <bandwidth>256</bandwidth>
+      <target>pc-flash-audio</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>false</videoStream>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=none,acodec=mp4a,ab=256,channels=2,samplerate=48000</encoder>
+        <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
   </transcoders>
 </appconfig>

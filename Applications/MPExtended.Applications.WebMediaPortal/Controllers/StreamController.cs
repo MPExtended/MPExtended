@@ -120,25 +120,39 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 profile = GetStreamControl(type).GetTranscoderProfileByName(Request.Form["transcoder"]);
             if (profile == null)
             {
-                string defaultName = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? 
-                    Settings.ActiveSettings.DefaultTVProfile : Settings.ActiveSettings.DefaultMediaProfile;
+                string defaultName = "";
+                if(type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording) 
+                {
+                    defaultName = Settings.ActiveSettings.DefaultTVProfile;
+                } 
+                else if(video)
+                {
+                    defaultName = Settings.ActiveSettings.DefaultMediaProfile;
+                }
+                else 
+                {
+                    defaultName = Settings.ActiveSettings.DefaultAudioProfile;
+                }
                 profile = GetStreamControl(type).GetTranscoderProfileByName(defaultName);
             }
 
             // get all transcoder profiles
-            var profiles = GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-flash-video" : "pc-flash-audio")
-                .Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-vlc-video" : "pc-vlc-audio"))
-                .Select(x => x.Name);
+            List<StreamTarget> targets = video ? StreamTarget.GetVideoTargets() : StreamTarget.GetAudioTargets();
+            List<string> profiles = new List<string>();
+            foreach (StreamTarget target in targets)
+            {
+                profiles = profiles.Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).ToList();
+            }
 
             // get view properties
-            VideoPlayer player = profile.Target == "pc-vlc-video" || profile.Target == "pc-vlc-audio" ? VideoPlayer.VLC : VideoPlayer.Flash;
+            VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
 
             // player size
             WebResolution playerSize;
             if (!video)
             {
-                playerSize = new WebResolution() { Width = 300, Height = 120 };
+                playerSize = new WebResolution() { Width = 300, Height = 150 };
             } 
             else
             {
