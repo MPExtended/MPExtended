@@ -23,12 +23,22 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        string ReadSettingFromDatabase(string tagName);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebResult WriteSettingToDatabase(string tagName, string value);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null);
+        #endregion
 
+        #region Cards
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCard> GetCards();
@@ -44,14 +54,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebRtspClient> GetStreamingClients();
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string ReadSettingFromDatabase(string tagName);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult WriteSettingToDatabase(string tagName, string value);
         #endregion
 
         #region Schedules

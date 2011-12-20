@@ -116,6 +116,19 @@ namespace MPExtended.Services.TVAccessService
             return RemoteControl.IsConnected;
         }
 
+        public string ReadSettingFromDatabase(string tagName)
+        {
+            return _tvBusiness.GetSetting(tagName, "").Value;
+        }
+
+        public WebResult WriteSettingToDatabase(string tagName, string value)
+        {
+            Setting setting = _tvBusiness.GetSetting(tagName, "");
+            setting.Value = value;
+            setting.Persist();
+            return true;
+        }
+
         public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
             text = text.ToLower();
@@ -168,7 +181,9 @@ namespace MPExtended.Services.TVAccessService
         {
             return Search(text, type).TakeRange(start, end).ToList();
         }
+        #endregion
 
+        #region Cards
         public IList<WebCard> GetCards()
         {
             return Card.ListAll().Select(c => c.ToWebCard()).ToList();
@@ -198,19 +213,6 @@ namespace MPExtended.Services.TVAccessService
         public IList<WebRtspClient> GetStreamingClients()
         {
             return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
-        }
-
-        public string ReadSettingFromDatabase(string tagName)
-        {
-            return _tvBusiness.GetSetting(tagName, "").Value;
-        }
-
-        public WebResult WriteSettingToDatabase(string tagName, string value)
-        {
-            Setting setting = _tvBusiness.GetSetting(tagName, "");
-            setting.Value = value;
-            setting.Persist();
-            return true;
         }
         #endregion
 
