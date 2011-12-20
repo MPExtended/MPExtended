@@ -16,7 +16,13 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [EnumMember]
         Schedule = 2,
         [EnumMember]
-        Recording = 3
+        Recording = 3,
+        [EnumMember]
+        TVGroup = 4,
+        [EnumMember]
+        RadioGroup = 5,
+        [EnumMember]
+        Program = 6
     }
 
     public class WebTVSearchResult

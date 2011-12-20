@@ -141,11 +141,37 @@ namespace MPExtended.Services.TVAccessService
                     .Select(channel => new WebTVSearchResult()
                     {
                         Id = channel.IdChannel.ToString(),
-                        Score = (int)Math.Round((decimal)text.Length / channel.DisplayName.Length * 100),
+                        Score = 50 + (int)Math.Round((decimal)text.Length / channel.DisplayName.Length * 50),
                         Title = channel.DisplayName,
                         Type = channel.IsTv ? WebTVSearchResultType.TVChannel : WebTVSearchResultType.RadioChannel
                     })
                     .Where(r => type == null || r.Type == type));
+            }
+
+            if (type == null || type == WebTVSearchResultType.TVGroup)
+            {
+                result = result.Concat(ChannelGroup.ListAll()
+                    .Where(group => group.GroupName.Contains(text, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(group => new WebTVSearchResult()
+                    {
+                        Id = group.IdGroup.ToString(),
+                        Score = 50 + (int)Math.Round((decimal)text.Length / group.GroupName.Length * 50),
+                        Title = group.GroupName,
+                        Type = WebTVSearchResultType.TVGroup
+                    }));
+            }
+
+            if (type == null || type == WebTVSearchResultType.RadioGroup)
+            {
+                result = result.Concat(RadioChannelGroup.ListAll()
+                    .Where(group => group.GroupName.Contains(text, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(group => new WebTVSearchResult()
+                    {
+                        Id = group.IdGroup.ToString(),
+                        Score = 50 + (int)Math.Round((decimal)text.Length / group.GroupName.Length * 50),
+                        Title = group.GroupName,
+                        Type = WebTVSearchResultType.RadioGroup
+                    }));
             }
 
             if (type == null || type == WebTVSearchResultType.Recording)
@@ -155,7 +181,7 @@ namespace MPExtended.Services.TVAccessService
                     .Select(rec => new WebTVSearchResult()
                     {
                         Id = rec.IdRecording.ToString(),
-                        Score = (int)Math.Round((decimal)text.Length / rec.Title.Length * 100),
+                        Score = 50 + (int)Math.Round((decimal)text.Length / rec.Title.Length * 50),
                         Title = rec.Title,
                         Type = WebTVSearchResultType.Recording
                     }));
@@ -168,9 +194,21 @@ namespace MPExtended.Services.TVAccessService
                     .Select(schedule => new WebTVSearchResult()
                     {
                         Id = schedule.IdSchedule.ToString(),
-                        Score = (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 100),
+                        Score = 50 + (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 50),
                         Title = schedule.ProgramName,
                         Type = WebTVSearchResultType.Schedule
+                    }));
+            }
+
+            if (type == null || type == WebTVSearchResultType.Program)
+            {
+                result = result.Concat(_tvBusiness.SearchPrograms(text)
+                    .Select(program => new WebTVSearchResult()
+                    {
+                        Id = program.IdProgram.ToString(),
+                        Score = (int)Math.Round((decimal)text.Length / program.Title.Length * 50),
+                        Title = program.Title,
+                        Type = WebTVSearchResultType.Program
                     }));
             }
 
