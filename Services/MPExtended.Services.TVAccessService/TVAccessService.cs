@@ -116,6 +116,59 @@ namespace MPExtended.Services.TVAccessService
             return RemoteControl.IsConnected;
         }
 
+        public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
+        {
+            text = text.ToLower();
+            IEnumerable<WebTVSearchResult> result = new List<WebTVSearchResult>();
+
+            if (type == null || type == WebTVSearchResultType.TVChannel || type == WebTVSearchResultType.RadioChannel)
+            {
+                result = result.Concat(Channel.ListAll()
+                    .Where(channel => channel.DisplayName.Contains(text, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(channel => new WebTVSearchResult()
+                    {
+                        Id = channel.IdChannel.ToString(),
+                        Score = (int)Math.Round((decimal)text.Length / channel.DisplayName.Length * 100),
+                        Title = channel.DisplayName,
+                        Type = channel.IsTv ? WebTVSearchResultType.TVChannel : WebTVSearchResultType.RadioChannel
+                    })
+                    .Where(r => type == null || r.Type == type));
+            }
+
+            if (type == null || type == WebTVSearchResultType.Recording)
+            {
+                result = result.Concat(Recording.ListAll()
+                    .Where(rec => rec.Title.Contains(text, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(rec => new WebTVSearchResult()
+                    {
+                        Id = rec.IdRecording.ToString(),
+                        Score = (int)Math.Round((decimal)text.Length / rec.Title.Length * 100),
+                        Title = rec.Title,
+                        Type = WebTVSearchResultType.Recording
+                    }));
+            }
+
+            if (type == null || type == WebTVSearchResultType.Schedule)
+            {
+                result = result.Concat(Schedule.ListAll()
+                    .Where(schedule => schedule.ProgramName.Contains(text, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(schedule => new WebTVSearchResult()
+                    {
+                        Id = schedule.IdSchedule.ToString(),
+                        Score = (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 100),
+                        Title = schedule.ProgramName,
+                        Type = WebTVSearchResultType.Schedule
+                    }));
+            }
+
+            return result.OrderByDescending(x => x.Score).ToList();
+        }
+
+        public IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null)
+        {
+            return Search(text, type).TakeRange(start, end).ToList();
+        }
+
         public IList<WebCard> GetCards()
         {
             return Card.ListAll().Select(c => c.ToWebCard()).ToList();

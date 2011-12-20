@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="EnumerableExtensionMethods.cs" />
     <Compile Include="ConvertExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GentleProviders.cs" />
     <Compile Include="TVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
