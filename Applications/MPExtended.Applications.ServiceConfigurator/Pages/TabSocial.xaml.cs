@@ -154,7 +154,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Streaming.WatchSharing["passwordHash"] = GetImplementation().HashPassword(txtPassword.Password);
             Configuration.Streaming.WatchSharing["type"] = activeProvider;
             Configuration.Streaming.Save();
-            lblTestResult.Content = "Saved successfully";
+            lblTestResult.Content = "Saved successfully, restart the service for the changes to take affect.";
         }
     }
 }

@@ -52,6 +52,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
             Configuration.Services.Save();
+
+            MessageBox.Show("Configuration updated. Please restart the service for the changes to take effect.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private string GetServiceName()
