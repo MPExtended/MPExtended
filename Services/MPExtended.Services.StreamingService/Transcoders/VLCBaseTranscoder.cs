@@ -51,7 +51,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // input
             string inURL = "";
-            if (context.Pipeline.GetDataUnit(1) != null && context.Pipeline.GetDataUnit(1) is InputUnit)
+            if (context.Source.NeedsInputReaderUnit)
             {
                 inURL = "stream://#IN#";
             }
