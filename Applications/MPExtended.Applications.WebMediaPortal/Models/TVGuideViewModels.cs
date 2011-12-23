@@ -135,7 +135,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             this.guideEnd = guideEnd;
         }
 
-        public string GetPercentageWidth()
+        public double GetPercentageWidth()
         {
             // get duration of program
             DateTime calcStartTime = StartTime < guideStart ? guideStart : StartTime;
@@ -143,9 +143,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             double programDuration = (calcEndTime - calcStartTime).TotalMinutes;
             double guideDuration = (guideEnd - guideStart).TotalMinutes;
 
-            // calculate percentage
+            // return percentage (scale value a tiny bit down because rounding could result in a total of 100.01%, which doesn't display properly)
+            return programDuration / guideDuration * 99.9;
+        }
+
+        public string GetCssPercentageWidth()
+        {
+            // convert to string
             var invariantCulture = System.Globalization.CultureInfo.InvariantCulture;
-            return string.Format(invariantCulture, "{0:0.00}%", programDuration / guideDuration * 100);
+            return string.Format(invariantCulture, "{0:0.00}%", GetPercentageWidth());
         }
     }
 

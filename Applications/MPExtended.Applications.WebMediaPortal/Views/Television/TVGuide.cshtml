@@ -42,10 +42,14 @@
                     <div class="programs">
                         @{  foreach (var program in channel.Programs)
                             {
-                                <div class="programcontainer" style="width: @program.GetPercentageWidth();">
-                                    <div class="program">
-                                        @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
-                                    </div>
+                                <div class="programcontainer" style="width: @program.GetCssPercentageWidth();">
+                                @{  if(program.GetPercentageWidth() > 1)
+                                    {
+                                        <div class="program">
+                                            @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
+                                        </div>
+                                    }
+                                }
                                 </div>
                             }
                         }
