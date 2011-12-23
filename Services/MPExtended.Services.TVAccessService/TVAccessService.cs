@@ -157,7 +157,7 @@ namespace MPExtended.Services.TVAccessService
                         Id = group.IdGroup.ToString(),
                         Score = 50 + (int)Math.Round((decimal)text.Length / group.GroupName.Length * 50),
                         Title = group.GroupName,
-                        Type = WebTVSearchResultType.TVGroup
+                        Type = WebTVSearchResultType.TVGroup,
                     }));
             }
 
@@ -183,7 +183,10 @@ namespace MPExtended.Services.TVAccessService
                         Id = rec.IdRecording.ToString(),
                         Score = 50 + (int)Math.Round((decimal)text.Length / rec.Title.Length * 50),
                         Title = rec.Title,
-                        Type = WebTVSearchResultType.Recording
+                        Type = WebTVSearchResultType.Recording,
+                        StartTime = rec.StartTime,
+                        EndTime = rec.EndTime,
+                        ChannelName = Channel.Retrieve(rec.IdChannel).DisplayName
                     }));
             }
 
@@ -208,7 +211,10 @@ namespace MPExtended.Services.TVAccessService
                         Id = program.IdProgram.ToString(),
                         Score = (int)Math.Round((decimal)text.Length / program.Title.Length * 50),
                         Title = program.Title,
-                        Type = WebTVSearchResultType.Program
+                        Type = WebTVSearchResultType.Program,
+                        StartTime = program.StartTime,
+                        EndTime = program.EndTime,
+                        ChannelName = Channel.Retrieve(program.IdChannel).DisplayName
                     }));
             }
 
