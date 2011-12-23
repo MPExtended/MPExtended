@@ -57,6 +57,27 @@
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
+    
+    <!-- A test -->
+    <transcoder>
+      <name>Android VLC RTSP</name>
+      <description>Android VLC RTSP profile</description>
+      <bandwidth>700</bandwidth>
+      <target>android</target>
+      <transport>rtsp</transport>
+      <mime>application/x-rtsp</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>800</maxOutputWidth>
+      <maxOutputHeight>600</maxOutputHeight>
+      
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
+        <muxer>:rtp{sdp=#ADDRESS#}</muxer>
+        <options>--no-sout-rtp-sap --no-sout-standard-sap --sout-keep --ttl 1</options>
+      </transcoderConfiguration>
+    </transcoder>
 
     <!-- Direct streaming for WebMediaPortal -->
     <transcoder>

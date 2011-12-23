@@ -19,20 +19,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using MPExtended.Libraries.ServiceLib;
+using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    class VLCWrapperRTSP : VLCWrapper
+    internal class VLCWrapperRTSP : VLCWrapper
     {
+        private string address;
+
         public VLCWrapperRTSP()
         {
             readOutputStream = false;
+            int nr = new Random().Next(10000, 99999);
+            address = "rtsp://{0}:5544/" + nr + ".sdp";
+        }
+
+        protected override Tuple<string, string> GetEncoderMuxerParameters(StreamContext context)
+        {
+            return new Tuple<string, string>(
+                context.Profile.CodecParameters["encoder"],
+                context.Profile.CodecParameters["muxer"].Replace("#ADDRESS#", String.Format(address, ""))
+            );
         }
 
         public override string GetStreamURL()
         {
-            // TODO
-            return "rtsp://localhost:5544/";
+            // wait a few seconds till stream is ready
+            Thread.Sleep(2500);
+
+            return String.Format(address, WCFUtil.GetCurrentHostname());
         }
     }
 }

@@ -18,13 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.ServiceModel.Channels;
 using System.Net;
-using MPExtended.Libraries.General;
 using System.Net.Sockets;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
+using System.Text;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Libraries.ServiceLib
 {
@@ -58,6 +58,12 @@ namespace MPExtended.Libraries.ServiceLib
 
             // last resort: localhost
             return String.Format("http://localhost:{0}/MPExtended/", port);
+        }
+
+        public static string GetCurrentHostname()
+        {
+            Uri root = new Uri(GetCurrentRoot());
+            return root.Host;
         }
 
         public static void SetResponseCode(HttpStatusCode code)

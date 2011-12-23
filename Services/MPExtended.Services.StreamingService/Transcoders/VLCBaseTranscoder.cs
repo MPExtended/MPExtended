@@ -45,9 +45,20 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         protected VLCParameters GenerateVLCParameters(StreamContext context)
         {
-            List<string> arguments = context.Profile.CodecParameters.ContainsKey("options") ?
-                context.Profile.CodecParameters["options"].Split(' ').Where(x => x.Length > 0).ToList() :
-                new List<string>();
+            var encmuxparam = GetEncoderMuxerParameters(context);
+            return GenerateVLCParameters(
+                context,
+                context.Profile.CodecParameters.ContainsKey("options") ? context.Profile.CodecParameters["options"] : "",
+                context.Profile.CodecParameters.ContainsKey("tsOptions") ? context.Profile.CodecParameters["tsOptions"] : "",
+                context.Profile.CodecParameters.ContainsKey("disableSeeking") && context.Profile.CodecParameters["disableSeeking"] == "yes",
+                encmuxparam.Item1,
+                encmuxparam.Item2
+            );
+        }
+
+        protected VLCParameters GenerateVLCParameters(StreamContext context, string options, string tsOptions, bool disableSeeking, string encoderOptions, string muxerOptions)
+        {
+            List<string> arguments = options.Split(' ').Where(x => x.Length > 0).ToList();
 
             // input
             string inURL = "";
@@ -61,20 +72,15 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // add tv options if specified
-            if ( (context.IsTv || context.MediaInfo.Container == "MPEG-TS") &&
-                  context.Profile.CodecParameters.ContainsKey("tsOptions") && context.Profile.CodecParameters["tsOptions"].Length > 0)
+            if ((context.IsTv || context.MediaInfo.Container == "MPEG-TS") && tsOptions.Length > 0)
             {
-                arguments.AddRange(context.Profile.CodecParameters["tsOptions"].Split(' ').Where(x => x.Length > 0));
+                arguments.AddRange(tsOptions.Split(' ').Where(x => x.Length > 0));
             }
 
-            // position
-            if (context.StartPosition > 0)
+            // position (disabling this is probably a bad idea as some things (watch sharing, transcoding info) fail then, which results in faulty clients.)
+            if (context.StartPosition > 0 && !disableSeeking)
             {
-                // disabling this is probably a bit idea as some things (watch sharing, transcoding info) fail then, which results in faulty clients.
-                if (!context.Profile.CodecParameters.ContainsKey("disableSeeking") || context.Profile.CodecParameters["disableSeeking"] == "no")
-                {
-                    arguments.Add("--start-time=" + (context.StartPosition / 1000));
-                }
+                arguments.Add("--start-time=" + (context.StartPosition / 1000));
             }
 
             // audio track 
@@ -108,10 +114,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // create parameters
-            string sout =
-                "#transcode{" + context.Profile.CodecParameters["encoder"] + 
+            string sout = "#transcode{" + encoderOptions + 
                 ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height + "," + subtitleTranscoder + "}" +
-                context.Profile.CodecParameters["muxer"];
+                muxerOptions;
 
             // return
             return new VLCParameters()
@@ -120,6 +125,14 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 Arguments = arguments.ToArray(),
                 Input = inURL
             };
+        }
+
+        protected virtual Tuple<string, string> GetEncoderMuxerParameters(StreamContext context)
+        {
+            return new Tuple<string, string>(
+                context.Profile.CodecParameters["encoder"],
+                context.Profile.CodecParameters["muxer"]
+            );
         }
 
         public abstract void BuildPipeline(StreamContext context);
