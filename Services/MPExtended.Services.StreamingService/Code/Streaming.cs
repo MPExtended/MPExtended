@@ -219,7 +219,12 @@ namespace MPExtended.Services.StreamingService.Code
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();
                     stream.Context.Pipeline.Start();
-                    Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(Streams[identifier].Context.Pipeline.GetFinalStream());
+
+                    Stream finalStream = Streams[identifier].Context.Pipeline.GetFinalStream();
+                    if (finalStream != null)
+                    {
+                        Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(finalStream);
+                    }
 
                     Log.Info("Started stream with identifier " + identifier);
                     return stream.Transcoder.GetStreamURL();
