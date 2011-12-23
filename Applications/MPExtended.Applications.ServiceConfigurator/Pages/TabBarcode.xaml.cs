@@ -90,7 +90,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 ServerDescription desc = new ServerDescription();
                 desc.HardwareAddresses = String.Join(";", GetHardwareAddresses());
                 desc.Addresses = String.Join(";", GetIPAddresses());
-                desc.Hostname = GetServiceName();
+                desc.Name = GetServiceName();
                 desc.QRVersion = 1;
 
                 desc.Services = new List<ServiceDescription>();
