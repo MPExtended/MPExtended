@@ -40,9 +40,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         [DataMember]
         public int QRVersion { get; set; }
         [DataMember]
-        public List<String> Addresses { get; set; }
+        public string Addresses { get; set; }
         [DataMember]
-        public List<String> MACAddresses { get; set; }
+        public string HardwareAddresses { get; set; }
         [DataMember]
         public string Hostname { get; set; }
         [DataMember]

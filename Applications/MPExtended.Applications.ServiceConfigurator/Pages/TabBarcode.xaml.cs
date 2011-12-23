@@ -88,8 +88,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 ServerDescription desc = new ServerDescription();
-                desc.MACAddresses = GetHardwareAddresses();
-                desc.Addresses = GetIPAddresses();
+                desc.HardwareAddresses = String.Join(";", GetHardwareAddresses());
+                desc.Addresses = String.Join(";", GetIPAddresses());
                 desc.Hostname = GetServiceName();
                 desc.QRVersion = 1;
 
