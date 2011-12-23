@@ -235,6 +235,36 @@ namespace MPExtended.Services.StreamingService
         {
             return _stream.CustomTranscoderData(identifier, action, parameters);
         }
+
+        public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition)
+        {
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            {
+                Log.Warn("Host {0} isn't authorized to call DoStream", WCFUtil.GetClientIPAddress());
+                return Stream.Null;
+            }
+
+            // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
+            string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
+            Log.Debug("DoStream: using identifier {0}", identifier);
+
+            if (!InitStream(type, provider, itemId, clientDescription, identifier))
+            {
+                Log.Info("DoStream: InitStream() failed");
+                FinishStream(identifier);
+                return Stream.Null;
+            }
+
+            if (StartStream(identifier, profileName, startPosition).Length == 0)
+            {
+                Log.Info("DoStream: StartStream failed");
+                FinishStream(identifier);
+                return Stream.Null;
+            }
+
+            Log.Trace("DoStream: succeeded, returning stream");
+            return RetrieveStream(identifier);
+        }
         #endregion
 
         #region Images
