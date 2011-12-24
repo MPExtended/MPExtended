@@ -15,11 +15,15 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    public static class ExtensionMethods
+    internal static class ExtensionMethods
     {
         public static XmlNode GetFirstNode(this XmlNodeList list, string nodeName)
         {

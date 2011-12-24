@@ -29,7 +29,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     /// <summary>
     /// Helper class for QR Barcodes
     /// </summary>
-    public class QRCodeGenerator
+    internal class QRCodeGenerator
     {
         /// <summary>
         /// Encodes the given message String as QR Barcode and returns the bitmap

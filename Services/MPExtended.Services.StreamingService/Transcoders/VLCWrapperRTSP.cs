@@ -22,7 +22,7 @@ using System.Text;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    class VLCWrapperRTSP : VLCWrapper
+    internal class VLCWrapperRTSP : VLCWrapper
     {
         public VLCWrapperRTSP()
         {

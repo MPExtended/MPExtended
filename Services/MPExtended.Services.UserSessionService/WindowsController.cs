@@ -31,7 +31,7 @@ namespace MPExtended.Services.UserSessionService
   /// <summary>
   /// Specifies the type of restart options that an application can use.
   /// </summary>
-  public enum RestartOptions
+  internal enum RestartOptions
   {
     /// <summary>
     /// Shuts down all processes running in the security context of the process that called the ExitWindowsEx function. Then it logs the user off.
@@ -113,7 +113,7 @@ namespace MPExtended.Services.UserSessionService
   /// <summary>
   /// Implements methods to exit Windows.
   /// </summary>
-  public class WindowsController
+  internal class WindowsController
   {
     public delegate void AfterExitWindowsHandler(RestartOptions how, bool force, bool result);
 
@@ -406,7 +406,7 @@ namespace MPExtended.Services.UserSessionService
   /// <summary>
   /// The exception that is thrown when an error occures when requesting a specific privilege.
   /// </summary>
-  public class PrivilegeException : Exception
+  internal class PrivilegeException : Exception
   {
     /// <summary>
     /// Initializes a new instance of the PrivilegeException class.

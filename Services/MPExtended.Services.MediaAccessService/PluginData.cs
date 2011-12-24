@@ -28,7 +28,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 namespace MPExtended.Services.MediaAccessService
 {
     [Export(typeof(IPluginData))]
-    public class PluginData : IPluginData
+    internal class PluginData : IPluginData
     {
         public Dictionary<string, string> GetConfiguration(string pluginname)
         {

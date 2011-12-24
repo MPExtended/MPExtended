@@ -23,7 +23,7 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    public class ServiceDescription
+    internal class ServiceDescription
     {
         [DataMember]
         public string Name { get; set; }
@@ -35,7 +35,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         public string Password { get; set; }
     }
 
-    public class ServerDescription
+    internal class ServerDescription
     {
         [DataMember]
         public int QRVersion { get; set; }

@@ -28,7 +28,7 @@ using TvLibrary.Streaming;
 
 namespace MPExtended.Services.TVAccessService
 {
-    public static class WebCardExtensionMethods
+    internal static class WebCardExtensionMethods
     {
         public static WebCard ToWebCard(this Card card)
         {
@@ -70,7 +70,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebVirtualCardExtensionMethods
+    internal static class WebVirtualCardExtensionMethods
     {
         public static WebVirtualCard ToWebVirtualCard(this VirtualCard card)
         {
@@ -119,7 +119,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebUserExtensionMethods
+    internal static class WebUserExtensionMethods
     {
         public static WebUser ToWebUser(this IUser user)
         {
@@ -142,7 +142,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebChannelExtensionMethods
+    internal static class WebChannelExtensionMethods
     {
         public static WebChannelDetailed ToWebChannelDetailed(this Channel ch)
         {
@@ -260,7 +260,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebChannelGroupExtensionMethods
+    internal static class WebChannelGroupExtensionMethods
     {
         public static WebChannelGroup ToWebChannelGroup(this ChannelGroup group)
         {
@@ -317,7 +317,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebProgramExtensionMethods
+    internal static class WebProgramExtensionMethods
     {
         public static WebProgramDetailed ToWebProgramDetailed(this Program p)
         {
@@ -390,7 +390,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebRtspClientExtensionMethods
+    internal static class WebRtspClientExtensionMethods
     {
         public static WebRtspClient ToWebRtspClient(this RtspClient rtsp)
         {
@@ -411,7 +411,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebScheduleExtensionMethods
+    internal static class WebScheduleExtensionMethods
     {
         public static WebScheduleBasic ToWebSchedule(this Schedule sch)
         {
@@ -458,7 +458,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebRecordingExtensionMethods
+    internal static class WebRecordingExtensionMethods
     {
         public static WebRecordingBasic ToWebRecording(this Recording rec)
         {
@@ -505,7 +505,7 @@ namespace MPExtended.Services.TVAccessService
         }
     }
 
-    public static class WebChannelStateExtensionMethods
+    internal static class WebChannelStateExtensionMethods
     {
         public static WebChannelState ToWebChannelState(this TvControl.ChannelState state, int channelId)
         {

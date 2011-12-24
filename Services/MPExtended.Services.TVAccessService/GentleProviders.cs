@@ -28,7 +28,7 @@ namespace MPExtended.Services.TVAccessService
     /// <summary>
     /// This is required for VS to pick up the reference to Gentle. Ignore it.
     /// </summary>
-    class GentleProviders
+    internal class GentleProviders
     {
         private GentleProviders()
         {

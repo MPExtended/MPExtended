@@ -24,7 +24,7 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    public static class Validators
+    internal static class Validators
     {
         public static ValidationResult ValidateTASUrl(object data)
         {

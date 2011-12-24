@@ -30,9 +30,8 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    public static class ExtensionMethods
+    internal static class ExtensionMethods
     {
-
         public static Bitmap ToWinFormsBitmap(this BitmapSource bitmapsource)
         {
             using (MemoryStream stream = new MemoryStream())

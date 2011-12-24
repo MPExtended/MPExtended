@@ -27,7 +27,7 @@ using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    abstract class VLCBaseTranscoder : ITranscoder
+    internal abstract class VLCBaseTranscoder : ITranscoder
     {
         public string Identifier { get; set; }
 

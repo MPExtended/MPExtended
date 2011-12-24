@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace MPExtended.Applications.UacServiceHandler
 {
-    static class Program
+    public static class Program
     {
         static String SERVICE_NAME = "MPExtended Service";
 
@@ -100,7 +100,6 @@ namespace MPExtended.Applications.UacServiceHandler
                 }
             }
         }
-
 
         private static void RestartService(ServiceController sc, int timeoutMilliseconds)
         {

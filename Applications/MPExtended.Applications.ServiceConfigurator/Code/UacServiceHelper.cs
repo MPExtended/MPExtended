@@ -25,7 +25,7 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    public class UacServiceHelper
+    internal class UacServiceHelper
     {
         public static bool StartService()
         {

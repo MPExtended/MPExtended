@@ -25,7 +25,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
-    public class WpfStreamingSession : INotifyPropertyChanged
+    internal class WpfStreamingSession : INotifyPropertyChanged
     {
         private WebStreamingSession mStreamingSession;
 

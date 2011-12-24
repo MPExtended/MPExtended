@@ -37,7 +37,7 @@ namespace MPExtended.Services.MediaAccessService
     // sorting.
 
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public sealed class MediaAccessService : ProviderHandler, IMediaAccessService
+    public class MediaAccessService : ProviderHandler, IMediaAccessService
     {
         #region General
         private const int MOVIE_API = 3;
