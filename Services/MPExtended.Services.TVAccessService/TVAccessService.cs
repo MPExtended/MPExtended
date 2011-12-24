@@ -209,7 +209,7 @@ namespace MPExtended.Services.TVAccessService
                     .Select(program => new WebTVSearchResult()
                     {
                         Id = program.IdProgram.ToString(),
-                        Score = (int)Math.Round((decimal)text.Length / program.Title.Length * 50),
+                        Score = (int)Math.Round(((decimal)text.Length / program.Title.Length * 50) - Math.Abs((decimal)(program.StartTime - DateTime.Now).TotalDays)),
                         Title = program.Title,
                         Type = WebTVSearchResultType.Program,
                         StartTime = program.StartTime,
