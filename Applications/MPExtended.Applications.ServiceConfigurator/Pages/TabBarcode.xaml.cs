@@ -77,6 +77,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             if (diag.ShowDialog() == true)
             {
                 ((BitmapSource)imgQRCode.Source).ToWinFormsBitmap().Save(diag.FileName);
+                MessageBox.Show(String.Format("Saved QR-code to {0}", diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
