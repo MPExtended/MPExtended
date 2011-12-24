@@ -37,6 +37,14 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
                 </Component>
+                
+                <!-- Libraries for WebMP -->
+                <Component Id="Component_WWW_Libraries" Guid="75ab3f9d-d58f-40be-8b72-9e659222077b">
+                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.dll" />
+                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.ApplicationServices.dll" />
+                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.Helpers.dll" />
+                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.Mvc.dll" />
+                </Component>
               </Directory>
             </Directory>
           </Directory>
