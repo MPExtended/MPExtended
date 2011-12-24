@@ -22,13 +22,14 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
-using MPExtended.Libraries.General; 
+using MPExtended.Libraries.General;
+using MPExtended.ServiceHosts.WebMediaPortal.Properties;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {
     internal static class HostConfiguration
     {
-        public static int Port { get { return 8080; } }
+        public static int Port { get { return Settings.Default.Port; } }
 
         public static string[] HostAddresses
         {
