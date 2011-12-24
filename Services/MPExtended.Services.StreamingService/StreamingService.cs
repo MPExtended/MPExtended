@@ -40,7 +40,7 @@ namespace MPExtended.Services.StreamingService
 
         public StreamingService()
         {
-            _stream = new Streaming();
+            _stream = new Streaming(this);
         }
 
         public void Dispose()

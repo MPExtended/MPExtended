@@ -40,6 +40,7 @@ namespace MPExtended.Services.StreamingService.Code
         public const int STREAM_DEFAULT = -1;
 
         private WatchSharing sharing;
+        private StreamingService service;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
 
         private class ActiveStream
@@ -55,9 +56,10 @@ namespace MPExtended.Services.StreamingService.Code
             public StreamContext Context { get; set; }
         }
 
-        public Streaming()
+        public Streaming(StreamingService serviceInstance)
         {
             sharing = new WatchSharing();
+            service = serviceInstance;
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
         }
 
@@ -94,7 +96,7 @@ namespace MPExtended.Services.StreamingService.Code
                         foreach (string key in toDelete)
                         {
                             Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.TimeSinceLastRead);
-                            KillStream(key);
+                            service.FinishStream(key);
                         }
                     }
 
