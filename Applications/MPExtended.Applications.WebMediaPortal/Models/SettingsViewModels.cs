@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Libraries.General;
 using MPExtended.Applications.WebMediaPortal.Code;
 
@@ -29,20 +30,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class SettingsViewModel
     {
-        private List<SelectListItem> _mediaProfiles = new List<SelectListItem>();
-        private List<SelectListItem> _tvProfiles = new List<SelectListItem>();
-        private List<SelectListItem> _groups = new List<SelectListItem>();
-
         public List<SelectListItem> MediaProfiles
         {
             get
             {
-                foreach (var profile in MPEServices.MASStreamControl.GetTranscoderProfiles())
-                {
-                    _mediaProfiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
-                }
+                return GetProfiles(MPEServices.MASStreamControl, "pc-vlc-video", "pc-flash-video");
+            }
+        }
 
-                return _mediaProfiles;
+        public List<SelectListItem> AudioProfiles
+        {
+            get
+            {
+                return GetProfiles(MPEServices.MASStreamControl, "pc-vlc-audio", "pc-flash-audio");
             }
         }
 
@@ -50,12 +50,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var profile in MPEServices.TASStreamControl.GetTranscoderProfiles())
-                {
-                    _tvProfiles.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
-                }
-
-                return _tvProfiles;
+                return GetProfiles(MPEServices.TASStreamControl, "pc-vlc-video", "pc-flash-video");
             }
         }
 
@@ -63,12 +58,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                foreach (var group in MPEServices.TAS.GetGroups())
-                {
-                    _groups.Add(new SelectListItem() { Text = group.GroupName, Value = group.Id.ToString() });
-                }
-
-                return _groups;
+                return MPEServices.TAS.GetGroups()
+                    .Select(x => new SelectListItem() { Text = x.GroupName, Value = x.Id.ToString() })
+                    .ToList();
             }
         }
 
@@ -123,6 +115,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [Required(ErrorMessage = "Please select a media profile")]
         public string SelectedMediaProfile { get; set; }
 
+        [DisplayName("Default music streaming profile")]
+        [Required(ErrorMessage = "Please select a music profile")]
+        public string SelectedAudioProfile { get; set; }
+
         [DisplayName("Default TV streaming profile")]
         [Required(ErrorMessage = "Please select a tv profile")]
         public string SelectedTVProfile { get; set; }
@@ -147,6 +143,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             SelectedGroup = model.DefaultGroup;
             SelectedMediaProfile = model.DefaultMediaProfile;
+            SelectedAudioProfile = model.DefaultAudioProfile;
             SelectedTVProfile = model.DefaultTVProfile;
 
             if (ShowMASConfiguration)
@@ -162,11 +159,25 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             changeModel.DefaultGroup = SelectedGroup;
             changeModel.DefaultMediaProfile = SelectedMediaProfile;
+            changeModel.DefaultAudioProfile = SelectedAudioProfile;
             changeModel.DefaultTVProfile = SelectedTVProfile;
             changeModel.TVShowProvider = TVShowProvider;
             changeModel.MusicProvider = MusicProvider;
             changeModel.MovieProvider = MovieProvider;
             return changeModel;
+        }
+
+        private List<SelectListItem> GetProfiles(IWebStreamingService service, params string[] targets)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (string target in targets)
+            {
+                foreach(var profile in service.GetTranscoderProfilesForTarget(target))
+                {
+                    items.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
+                }
+            }
+            return items;
         }
 
         private int GetCurrentProvider(int? setting, int defaultValue)

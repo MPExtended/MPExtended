@@ -3,7 +3,7 @@ Streaming\ffmpeg.exe:
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://ffmpeg.org/, http://git.videolan.org/ffmpeg.git and http://ffmpeg.zeranoe.com/builds/source/ffmpeg/
 - Compiled for Windows by Kyle Schwarz, http://ffmpeg.zeranoe.com/
-- Revision 6e19cfb083eda83aaf4b49ae765ab2b3e578d32d, static 32-bit build
+- Revision 61b1d85c1f1074d9ce56bb482de99d0f03c7a161, static 32-bit build
 
 Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net

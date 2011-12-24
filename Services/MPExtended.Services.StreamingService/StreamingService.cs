@@ -40,7 +40,7 @@ namespace MPExtended.Services.StreamingService
 
         public StreamingService()
         {
-            _stream = new Streaming();
+            _stream = new Streaming(this);
         }
 
         public void Dispose()
@@ -208,12 +208,14 @@ namespace MPExtended.Services.StreamingService
         #region Images
         public Stream ExtractImage(WebStreamMediaType type, int? provider, string itemId, int position)
         {
-             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
+            return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
         }
 
         public Stream ExtractImageResized(WebStreamMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
         {
-             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, maxWidth, maxHeight);
+            int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
+            int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
+            return Images.ExtractImage(new MediaSource(type, provider, itemId), position, calcMaxWidth, calcMaxHeight);
         }
 
         public Stream GetImage(WebStreamMediaType type, int? provider, string id)
@@ -223,7 +225,9 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetImageResized(WebStreamMediaType type, int? provider, string id, int maxWidth, int maxHeight)
         {
-            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0), maxWidth, maxHeight);
+            int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
+            int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
+            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0), calcMaxWidth, calcMaxHeight);
         }
 
         public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
@@ -233,7 +237,9 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
         {
-            return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), maxWidth, maxHeight);
+            int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
+            int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
+            return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), calcMaxWidth, calcMaxHeight);
         }
         #endregion
     }

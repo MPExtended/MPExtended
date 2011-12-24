@@ -44,6 +44,15 @@
                 </td>
             </tr>
             <tr>
+                <td>
+                    @Html.LabelFor(x => x.SelectedAudioProfile)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.SelectedAudioProfile, new SelectList(Model.AudioProfiles, "Value", "Text"))
+                    @Html.ValidationMessageFor(x => x.SelectedAudioProfile)
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>

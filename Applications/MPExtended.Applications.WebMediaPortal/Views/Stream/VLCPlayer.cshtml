@@ -1,5 +1,22 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
+<input type="button" value="play" onclick="getVlcPlayer('vlcplayer').playlist.play();" /> 
+<input type="button" value="pause" onclick="getVlcPlayer('vlcplayer').playlist.togglePause();" />
+<input type="button" value="stop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
+<input type="button" value="switch fullscreen" onclick="goFullscreen();" />
+<input type="button" value="enable deinterlacing" onclick="enableDeinterlace('linear');" /> 
+<br />
+
+<object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Size.Width" height="@Model.Size.Height" events="True">
+   <param name="ShowDisplay" value="false" ></param>
+   <param name="AutoLoop" value="no"></param>
+   <param name="AutoPlay" value="no"></param>
+   <embed id="vlcplayer" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" autoplay="no" loop="no" width="@Model.Size.Width" height="@Model.Size.Height">
+   </embed>
+</object>
+
 <script type="text/javascript">
+    var shownFullscreenMessage = false;
+
     function getVlcPlayer(vlc_id) {
         if (document.all) vlc_id += '_ie';
         return document.getElementById(vlc_id);
@@ -23,25 +40,12 @@
     function goFullscreen() {
         // yes, version checking is bad but otherwise we end up with loads of bug reports
         var version = getVlcPlayer('vlcplayer').versionInfo();
-        if (version.substr(0, 4) == '1.1.') {
-            alert("Fullscreen does not work with your VLC version. Downgrade to VLC 1.0.x if you want fullscreen; but then you loose deinterlace support.");
-        } else {
-            getVlcPlayer('vlcplayer').video.fullscreen = true;
-        }
+        if (version.substr(0, 4) == '1.1.' && !shownFullscreenMessage) {
+            alert("Fullscreen might not work with your VLC version. Downgrade to VLC 1.0.x if you want fullscreen; but then you loose deinterlace support.");
+            shownFullscreenMessage = true;
+        } 
+        getVlcPlayer('vlcplayer').video.fullscreen = true;
     }
+
+    init();
 </script>
-
-<input type="button" value="play" onclick="getVlcPlayer('vlcplayer').playlist.play();" /> 
-<input type="button" value="pause" onclick="getVlcPlayer('vlcplayer').playlist.togglePause();" />
-<input type="button" value="stop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
-<input type="button" value="switch fullscreen" onclick="goFullscreen();" />
-<input type="button" value="enable deinterlacing" onclick="enableDeinterlace('linear');" /> 
-<br />
-
-<object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Size.Width" height="@Model.Size.Height" events="True">
-   <param name="ShowDisplay" value="false" ></param>
-   <param name="AutoLoop" value="no"></param>
-   <param name="AutoPlay" value="no"></param>
-   <embed id="vlcplayer" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" version="VideoLAN.VLCPlugin.2" autoplay="no" loop="no" width="@Model.Size.Width" height="@Model.Size.Height">
-   </embed>
-</object>

@@ -81,6 +81,14 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         public static WebMediaInfo GetMediaInfo(string source, bool ignoreCache)
         {
+            lock (Cache)
+            {
+                return DoLoadMediaInfo(source, ignoreCache);
+            }
+        }
+
+        private static WebMediaInfo DoLoadMediaInfo(string source, bool ignoreCache)
+        {
             try
             {
                 if (source == null || !File.Exists(source))
@@ -106,6 +114,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 info.Option("ParseSpeed", "0.3");
                 info.Open(source);
                 WebMediaInfo retinfo = new WebMediaInfo();
+                retinfo.Container = info.Get(StreamKind.General, 0, "Format");
 
                 // video
                 retinfo.VideoStreams = new List<WebVideoStream>();

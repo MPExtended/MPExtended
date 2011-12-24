@@ -49,8 +49,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             string mappings = "";
             if (context.AudioTrackId != null)
             {
-                // do audio stream index + 1 because the video stream always has index = 1
-                mappings = String.Format("-map 0:0 -map 0:{0}", context.MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index + 1);
+                mappings = String.Format("-map v:0 -map a:{0}", context.MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index);
             }
 
             // calculate full argument string

@@ -21,7 +21,8 @@ using System.Linq;
 using System.Text;
 using MPExtended.Services.StreamingService.Interfaces;
 
-namespace MPExtended.Services.StreamingService.Code {
+namespace MPExtended.Services.StreamingService.Code
+{
     internal class Resolution : WebResolution
     {
         public Resolution(int width, int height)
@@ -30,40 +31,76 @@ namespace MPExtended.Services.StreamingService.Code {
             Height = height;
         }
 
-        public Resolution CalculateResize(Resolution maxOutputSize, int framesizeMultipleOff = 1) 
-        {
-            return CalculateResize(Width / Height, maxOutputSize, framesizeMultipleOff);
-        }
-
-        public Resolution CalculateResize(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) 
-        {
-            // get the aspect ratio for the height / width calculation, defaulting to 16:9
-            decimal displayAspect = destinationAspectRatio == 0 ? 16 / 9 : destinationAspectRatio;
-
-            // calculate new width
-            int width = maxOutput.Width;
-            int height = (int)(width * (1 / displayAspect));
-            if (height > maxOutput.Height) {
-                height = maxOutput.Height;
-                width = (int)(height * displayAspect);
-            }
-
-            // round
-            int newWidth = ((int)Math.Round(width * 1.0 / framesizeMultipleOff)) * framesizeMultipleOff;
-            int newHeight = ((int)Math.Round(height * 1.0 / framesizeMultipleOff)) * framesizeMultipleOff;
-
-            return new Resolution(newWidth, newHeight);
-        }
-
-        public override string ToString() 
+        public override string ToString()
         {
             return Width.ToString() + "x" + Height.ToString();
         }
 
-        public static Resolution Calculate(decimal destinationAspectRatio, Resolution maxOutput, int framesizeMultipleOff = 1) 
+        public Resolution CalculateResize(Resolution maxOutputSize)
         {
-            Resolution res = new Resolution(0, 0);
-            return res.CalculateResize(destinationAspectRatio, maxOutput, framesizeMultipleOff);
+            return Calculate(Width, Height, maxOutputSize.Width, maxOutputSize.Height, 1);
+        }
+
+        public Resolution CalculateResize(Resolution maxOutputSize, int framesizeMultipleOff)
+        {
+            return Calculate(Width, Height, maxOutputSize.Width, maxOutputSize.Height, framesizeMultipleOff);
+        }
+
+        public static Resolution Calculate(decimal destinationAspectRatio, Resolution maxOutput)
+        {
+            return Calculate(destinationAspectRatio, maxOutput.Width, maxOutput.Height);
+        }
+
+        public static Resolution Calculate(decimal destinationAspectRatio, int? maxWidth, int? maxHeight)
+        {
+            return Calculate(destinationAspectRatio, maxWidth, maxHeight, 1);
+        }
+
+        public static Resolution Calculate(int sourceWidth, int sourceHeight, int? maxWidth, int? maxHeight, int framesizeMultipleOff)
+        {
+            Resolution res = Calculate((decimal)sourceWidth / (decimal)sourceHeight, maxWidth, maxHeight, framesizeMultipleOff);
+            if (res.Width == 0 && res.Height == 0)
+            {
+                return new Resolution(sourceWidth, sourceHeight);
+            }
+            return res;
+        }
+
+        public static Resolution Calculate(decimal destinationAspectRatio, int? maxWidth, int? maxHeight, int framesizeMultipleOff)
+        {
+            // get the aspect ratio for the height / width calculation, defaulting to 16:9
+            decimal displayAspect = destinationAspectRatio == 0 ? 16 / 9 : destinationAspectRatio;
+
+            // skip no resize situation
+            if (maxWidth == null && maxHeight == null)
+            {
+                return new Resolution(0, 0);
+            }
+
+            // default to max size
+            int width = maxWidth.HasValue ? maxWidth.Value : 0;
+            int height = maxHeight.HasValue ? maxHeight.Value : 0;
+
+            // correct aspect ratio if needed
+            if (maxWidth == null)
+            {
+                width = (int)(height * displayAspect);
+            }
+            else
+            {
+                height = (int)(width * (1 / displayAspect));
+                if (maxHeight != null && height > maxHeight)
+                {
+                    height = maxHeight.Value;
+                    width = (int)(height * displayAspect);
+                }
+            }
+
+            // round on frame multiple
+            int newWidth = ((int)Math.Round(width * 1.0 / framesizeMultipleOff)) * framesizeMultipleOff;
+            int newHeight = ((int)Math.Round(height * 1.0 / framesizeMultipleOff)) * framesizeMultipleOff;
+
+            return new Resolution(newWidth, newHeight);
         }
     }
 }

@@ -29,16 +29,8 @@ using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [Authorize]
     public class StreamController : BaseController
     {
-        //
-        // GET: /Stream/
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         //
         // Streaming
         private int? GetProvider(WebStreamMediaType type)
@@ -83,30 +75,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            // TODO: this should be done better
-            byte[] buffer = new byte[65536];
-            int read;
-            Stream inputStream = WebRequest.Create(url).GetResponse().GetResponseStream();
-
-            // set headers and disable buffer
-            HttpContext.Response.Buffer = false;
-            HttpContext.Response.BufferOutput = false;
-            HttpContext.Response.ContentType = GetStreamControl(type).GetTranscoderProfileByName(transcoder).MIME;
-            HttpContext.Response.StatusCode = 200;
-
-            // stream to output
-            while (HttpContext.Response.IsClientConnected && (read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                HttpContext.Response.OutputStream.Write(buffer, 0, read);
-                HttpContext.Response.OutputStream.Flush();
-            }
-
-            if (!GetStreamControl(type).FinishStream(identifier))
-            {
-                Log.Error("Streaming: FinishStream failed");
-            }
-
-            return new EmptyResult();
+            // redirect user to stream (WSS has automatic stream killing now)
+            return Redirect(url);
         }
 
         //
@@ -138,6 +108,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Player
+        [Authorize]
         public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
             // get transcoding profile
@@ -149,25 +120,39 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 profile = GetStreamControl(type).GetTranscoderProfileByName(Request.Form["transcoder"]);
             if (profile == null)
             {
-                string defaultName = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? 
-                    Settings.ActiveSettings.DefaultTVProfile : Settings.ActiveSettings.DefaultMediaProfile;
+                string defaultName = "";
+                if(type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording) 
+                {
+                    defaultName = Settings.ActiveSettings.DefaultTVProfile;
+                } 
+                else if(video)
+                {
+                    defaultName = Settings.ActiveSettings.DefaultMediaProfile;
+                }
+                else 
+                {
+                    defaultName = Settings.ActiveSettings.DefaultAudioProfile;
+                }
                 profile = GetStreamControl(type).GetTranscoderProfileByName(defaultName);
             }
 
             // get all transcoder profiles
-            var profiles = GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-flash-video" : "pc-flash-audio")
-                .Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(video ? "pc-vlc-video" : "pc-vlc-audio"))
-                .Select(x => x.Name);
+            List<StreamTarget> targets = video ? StreamTarget.GetVideoTargets() : StreamTarget.GetAudioTargets();
+            List<string> profiles = new List<string>();
+            foreach (StreamTarget target in targets)
+            {
+                profiles = profiles.Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).ToList();
+            }
 
             // get view properties
-            VideoPlayer player = profile.Target == "pc-vlc-video" || profile.Target == "pc-vlc-audio" ? VideoPlayer.VLC : VideoPlayer.Flash;
+            VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
 
             // player size
             WebResolution playerSize;
             if (!video)
             {
-                playerSize = new WebResolution() { Width = 300, Height = 120 };
+                playerSize = new WebResolution() { Width = 300, Height = 150 };
             } 
             else
             {

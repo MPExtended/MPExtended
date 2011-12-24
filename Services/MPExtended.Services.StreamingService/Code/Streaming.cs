@@ -40,6 +40,7 @@ namespace MPExtended.Services.StreamingService.Code
         public const int STREAM_DEFAULT = -1;
 
         private WatchSharing sharing;
+        private StreamingService service;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
 
         private class ActiveStream
@@ -55,9 +56,10 @@ namespace MPExtended.Services.StreamingService.Code
             public StreamContext Context { get; set; }
         }
 
-        public Streaming()
+        public Streaming(StreamingService serviceInstance)
         {
             sharing = new WatchSharing();
+            service = serviceInstance;
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
         }
 
@@ -94,7 +96,7 @@ namespace MPExtended.Services.StreamingService.Code
                         foreach (string key in toDelete)
                         {
                             Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.TimeSinceLastRead);
-                            KillStream(key);
+                            service.FinishStream(key);
                         }
                     }
 
@@ -219,7 +221,12 @@ namespace MPExtended.Services.StreamingService.Code
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();
                     stream.Context.Pipeline.Start();
-                    Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(Streams[identifier].Context.Pipeline.GetFinalStream());
+
+                    Stream finalStream = Streams[identifier].Context.Pipeline.GetFinalStream();
+                    if (finalStream != null)
+                    {
+                        Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(finalStream);
+                    }
 
                     Log.Info("Started stream with identifier " + identifier);
                     return stream.Transcoder.GetStreamURL();
@@ -348,7 +355,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
             }
 
-            return Resolution.Calculate(aspect, new Resolution(profile.MaxOutputWidth, profile.MaxOutputHeight), 2);
+            return Resolution.Calculate(aspect, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)
