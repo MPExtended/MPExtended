@@ -70,6 +70,9 @@
             <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalUsers.xml">
               <Permission User="Everyone" GenericAll="yes" Write="yes" />
             </File>
+            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalHosting.xml">
+              <Permission User="Everyone" GenericAll="yes" Write="yes" />
+            </File>
           </Component>
 
           <Directory Id="LogDirectory" Name="Logs">

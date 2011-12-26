@@ -39,7 +39,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
 
             try
             {
-                // generate config file
+                // generate IIS Express config file
                 var generator = new IISConfigGenerator();
 #if DEBUG
                 generator.PhysicalSitePath = Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal");

@@ -22,19 +22,28 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
+using System.Xml.Linq;
 using MPExtended.Libraries.General;
-using MPExtended.ServiceHosts.WebMediaPortal.Properties;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {
     internal static class HostConfiguration
     {
-        public static int Port { get { return Settings.Default.Port; } }
+        public static int Port
+        {
+            get
+            {
+                XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
+                return Int32.Parse(configFile.Element("port").Value);
+            }
+        }
 
         public static string[] HostAddresses
         {
             get
             {
+                XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
+
                 // If you didn't get it, I like LINQ
                 return NetworkInterface.GetAllNetworkInterfaces()
                     .Select(x => x.GetIPProperties())
@@ -55,6 +64,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                         }
                     })
                     .Concat(new string[] { "localhost" })
+                    .Concat(configFile.Element("baseAddresses").Elements("add").Select(x => x.Value))
                     .Distinct()
                     .ToArray();
             }
