@@ -45,8 +45,11 @@ namespace MPExtended.Services.StreamingService
 
         public void Dispose()
         {
-            _stream.Dispose();
-            _stream = null;
+            if (_stream != null)
+            {
+                _stream.Dispose();
+                _stream = null;
+            }
         }
 
         public WebStreamServiceDescription GetServiceDescription()
