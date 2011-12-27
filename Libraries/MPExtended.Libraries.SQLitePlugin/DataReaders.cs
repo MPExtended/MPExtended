@@ -172,6 +172,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             return txt.Split(separator).Select(y => y.Trim()).Where(y => y.Length > 0).Distinct().ToList();
         }
 
+        [AllowSQLCompare('|')]
         public static object ReadPipeList(SQLiteDataReader reader, int idx)
         {
             return ReadList(reader, idx, '|');

@@ -24,93 +24,18 @@ using System.Text;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
-//using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        // Take a range from the list for returning
+        // Take a range from the list
         public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
         {
             int count = end - start + 1;
-
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).GetRange(start, count);
-            if (source is List<T>)
-                return ((List<T>)source).GetRange(start, Math.Min(count, source.Count() - start));
             return source.Skip(start).Take(count);
         }
 
-        // Some special filter methods
-        public static IEnumerable<T> FilterGenre<T>(this IEnumerable<T> list, string genre) where T : IGenreSortable
-        {
-            if (genre != null)
-                return Where(list, x => ((IGenreSortable)x).Genres.Contains(genre));
-
-            return list;
-        }
-
-        public static IEnumerable<T> FilterActor<T>(this IEnumerable<T> list, string actor) where T : IActors
-        {
-            if (actor != null)
-                return Where(list, x => ((IActors)x).Actors.Contains(new WebActor() { Name = actor }));
-
-            return list;
-        }
-
-        public static IEnumerable<T> CommonFilter<T>(this IEnumerable<T> list, string genre, string actor) where T : IGenreSortable, IActors
-        {
-            return FilterGenre(FilterActor(list, actor), genre);
-        }
-
-        // Take advantage of lazy queries
-        public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Expression<Func<T, bool>> predicate)
-        {
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).Where(predicate);
-            return Enumerable.Where(source, predicate.Compile());
-        }
-
-        public static int Count<T>(this IEnumerable<T> source)
-        {
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).Count();
-            return Enumerable.Count(source);
-        }
-
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
-        {
-            if (source is ILazyQuery<TSource>)
-            {
-                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
-                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                    return lazy.OrderBy(keySelector);
-                return lazy.OrderByDescending(keySelector);
-            }
-
-            var comp = keySelector.Compile();
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                return Enumerable.OrderBy(source, comp);
-            return Enumerable.OrderByDescending(source, comp);
-        }
-
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
-        {
-            if (source is ILazyQuery<TSource>)
-            {
-                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
-                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                    return lazy.ThenBy(keySelector);
-                return lazy.ThenByDescending(keySelector);
-            }
-
-            var comp = keySelector.Compile();
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                return Enumerable.ThenBy(source, comp);
-            return Enumerable.ThenByDescending(source, comp);
-        }
-    
         // Finalize it
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
@@ -121,19 +46,77 @@ namespace MPExtended.Services.MediaAccessService
         {
             return Finalization.ForList(list, providerId, mediatype);
         }
+    }
+
+    internal static class IQueryableExtensionMethods
+    {
+        // Take a range from the list
+        public static IQueryable<T> TakeRange<T>(this IQueryable<T> source, int start, int end)
+        {
+            int count = end - start + 1;
+            return source.Skip(start).Take(count);
+        }
+
+        // Some special filter methods
+        public static IQueryable<T> FilterGenre<T>(this IQueryable<T> list, string genre) where T : IGenreSortable
+        {
+            if (genre != null)
+                return list.Where(x => ((IGenreSortable)x).Genres.Contains(genre));
+
+            return list;
+        }
+
+        public static IQueryable<T> FilterActor<T>(this IQueryable<T> list, string actor) where T : IActors
+        {
+            if (actor != null)
+                return list.Where(x => ((IActors)x).Actors.Contains(new WebActor() { Name = actor }));
+
+            return list;
+        }
+
+        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor) where T : IGenreSortable, IActors
+        {
+            return FilterGenre(FilterActor(list, actor), genre);
+        }
+
+        // Easy aliases for ordering and sorting
+        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        {
+            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+                return Queryable.OrderBy(source, keySelector);
+            return Queryable.OrderByDescending(source, keySelector);
+        }
+
+        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        {
+            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+                return Queryable.ThenBy(source, keySelector);
+            return Queryable.ThenByDescending(source, keySelector);
+        }
+    
+        // Finalize it
+        public static List<T> Finalize<T>(this IQueryable<T> list, int? providerId, ProviderType type) where T : WebObject
+        {
+            return Finalization.ForList(list, providerId, type);
+        }
+
+        public static List<T> Finalize<T>(this IQueryable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
+        {
+            return Finalization.ForList(list, providerId, mediatype);
+        }
 
         // Allow easy sorting from MediaAccessService.cs
-        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput)
         {
             return SortMediaItemList<T>(list, sortInput, orderInput, SortBy.Title, Interfaces.OrderBy.Asc);
         }
 
-        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort)
         {
             return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, Interfaces.OrderBy.Asc);
         }
-        
-        public static IOrderedEnumerable<T> SortMediaItemList<T>(this IEnumerable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort, OrderBy defaultOrder)
+
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort, OrderBy defaultOrder)
         {
             // parse arguments
             if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
@@ -198,14 +181,14 @@ namespace MPExtended.Services.MediaAccessService
         }
     }
 
-    internal static class IOrderedEnumerableExtensionMethods
+    internal static class IOrderedQueryableExtensionMethods
     {
-        public static List<T> Finalize<T>(this IOrderedEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
+        public static List<T> Finalize<T>(this IOrderedQueryable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
             return Finalization.ForList(list, providerId, type);
         }
 
-        public static List<T> Finalize<T>(this IOrderedEnumerable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
+        public static List<T> Finalize<T>(this IOrderedQueryable<T> list, int? providerId, WebMediaType mediatype) where T : WebObject
         {
             return Finalization.ForList(list, providerId, mediatype);
         }

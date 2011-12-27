@@ -25,8 +25,19 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
-    public class LazyQuery<T> : ILazyQuery<T>, IEnumerable<T> where T : new()
+    public class LazyQuery<T> : IOrderedQueryable<T> where T : class, new()
     {
+        public Expression Expression { get; private set; }
+        public IQueryProvider Provider { get; private set; }
+
+        public Type ElementType
+        {
+            get
+            {
+                return typeof(T);
+            }
+        }
+
         private Database db;
         private string inputQuery;
         private SQLiteParameter[] parameters;
@@ -36,7 +47,8 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqltext, descending
         private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
-        private Tuple<int, int> range = null;
+        private int? skip = null;
+        private int? take = null;
 
         private List<T> result = null;
 
@@ -48,6 +60,8 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.parameters = new SQLiteParameter[] { };
             this.factory = ObjectFactory<T>.FromCreate(createmethod);
             this.finalize = finalize;
+            Expression = Expression.Constant(this);
+            Provider = new LazyQueryProvider<T>(this);
         }
 
         public LazyQuery(Database db, string sql, SQLiteParameter[] parameters, IEnumerable<SQLFieldMapping> mapping, Delegates<T>.CreateMethod createmethod)
@@ -90,14 +104,6 @@ namespace MPExtended.Libraries.SQLitePlugin
             return ExecuteQuery().GetEnumerator();
         }
 
-        public IOrderedEnumerable<T> CreateOrderedEnumerable<TKey>(Func<T, TKey> keySelector, IComparer<TKey> comparer, bool descending)
-        {
-            // TODO: this one really needs improvement to do subsequent ordering instead
-            if (descending)
-                return ExecuteQuery().OrderByDescending(keySelector, comparer);
-            return ExecuteQuery().OrderBy(keySelector, comparer);
-        }
-
         private Tuple<string, SQLiteParameter[]> PrepareQuery()
         {
             string sql = this.inputQuery;
@@ -106,13 +112,13 @@ namespace MPExtended.Libraries.SQLitePlugin
             if (!sql.Contains("%order"))
                 sql = sql + " %order"; // at the end works in 99,9% of the cases. just add it yourself for the other 0,1% (mainly UNION)
 
-            // prepare order
-            string orderSql = "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2));
-            if (range != null)
-            {
-                orderSql += " LIMIT " + range.Item1 + ", " + range.Item2;
-            }
-            sql = sql.Replace("%order", orderItems.Count == 0 ? String.Empty : orderSql);
+            // prepare order and limit
+            string orderSql = "";
+            if (orderItems.Count > 0)
+                orderSql += "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2)) + " ";
+            if (skip != null || take != null)
+                orderSql += "LIMIT " + (skip == null ? 0 : skip.Value) + (take == null ? "" : ", " + take.Value);
+            sql = sql.Replace("%order", orderSql);
 
             // prepare where
             SQLiteParameter[] realParams = whereItems.Select((x, index) => new SQLiteParameter("@lazyQuery" + index, x.Item2)).Union(parameters).ToArray();
@@ -122,7 +128,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             return new Tuple<string, SQLiteParameter[]>(sql, realParams);
         }
 
-        private List<T> ExecuteQuery()
+        internal List<T> ExecuteQuery()
         {
             // don't execute queries twice
             if (result != null)
@@ -138,7 +144,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 while (query.Reader.Read())
                 {
                     T obj = factory.CreateObject(query.Reader);
-                    if(finalize != null) 
+                    if (finalize != null)
                     {
                         obj = finalize(obj);
                     }
@@ -149,7 +155,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             return result;
         }
 
-        private IEnumerable<T> SmartWhere(Expression<Func<T, bool>> predicate)
+        private IQueryable<T> SmartWhere(Expression<Func<T, bool>> predicate)
         {
             // make sure query is valid and not yet executed
             if (!this.inputQuery.Contains("%where"))
@@ -162,10 +168,27 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return null;
             if (!predicate.Parameters[0].Type.IsAssignableFrom(typeof(T)))
                 return null;
-
-            // parse the body
-            if (predicate.NodeType != ExpressionType.Lambda || !(predicate.Body is BinaryExpression))
+            if (predicate.NodeType != ExpressionType.Lambda)
                 return null;
+
+            // dispatch based on type
+            if (predicate.Body is MethodCallExpression)
+            {
+                return SmartWhereMethodCall(predicate);
+            }
+            else if (predicate.Body is BinaryExpression)
+            {
+                return SmartWhereBinaryExpression(predicate);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private IQueryable<T> SmartWhereBinaryExpression(Expression<Func<T, bool>> predicate)
+        {
+            // parse the body
             BinaryExpression ex = (BinaryExpression)predicate.Body;
             if (ex.NodeType != ExpressionType.Equal)
                 return null;
@@ -201,11 +224,43 @@ namespace MPExtended.Libraries.SQLitePlugin
             return this;
         }
 
-        public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
+        private IQueryable<T> SmartWhereMethodCall(Expression<Func<T, bool>> predicate)
+        {
+            MethodCallExpression mce = predicate.Body as MethodCallExpression;
+
+            // verify some preconditions
+            if (mce.Method.Name != "Contains")
+                return null;
+            if (mce.Arguments.Count != 1 || mce.Arguments[0].NodeType != ExpressionType.MemberAccess)
+                return null;
+            if (mce.Object.NodeType != ExpressionType.MemberAccess)
+                return null;
+
+            // get value
+            object value = Expression.Lambda(mce.Arguments[0]).Compile().DynamicInvoke();
+            if(!(value is Int32) && !(value is String))
+                return null;
+
+            // check mapping
+            string field = (mce.Object as MemberExpression).Member.Name;
+            var mappingList = mapping.Where(x => x.PropertyName == field);
+            if (mappingList.Count() == 0)
+                return null;
+            SQLFieldMapping thisMapping = mappingList.First();
+            if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute)))
+                return null;
+
+            // build SQL
+            AllowSQLCompareAttribute attr = (AllowSQLCompareAttribute)Attribute.GetCustomAttribute(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute));
+            whereItems.Add(new Tuple<string, object>(attr.GetSQLCondition(thisMapping), value));
+            return this;
+        }
+
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             try
             {
-                IEnumerable<T> smart = SmartWhere(predicate);
+                IQueryable<T> smart = SmartWhere(predicate);
                 if (smart != null)
                     return smart;
             }
@@ -215,11 +270,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
 
             // if we can't do it in SQL just execute the code
-            Func<T, bool> comp = predicate.Compile();
-            return ExecuteQuery().Where(comp);
+            return ExecuteQuery().AsQueryable().Where(predicate);
         }
 
-        private IOrderedEnumerable<T> SmartAddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
+        private IOrderedQueryable<T> SmartAddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
         {
             // don't execute query twice
             if (result != null)
@@ -234,7 +288,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             // parse the body
             if (!(keySelector.Body is MemberExpression))
                 return null;
-            
+
             // we expect a parameter or a cast to an interface here
             MemberExpression ex = (MemberExpression)keySelector.Body;
             if (ex.Expression.NodeType != ExpressionType.Convert && ex.Expression.NodeType != ExpressionType.Parameter)
@@ -257,12 +311,12 @@ namespace MPExtended.Libraries.SQLitePlugin
             return this;
         }
 
-        private IOrderedEnumerable<T> AddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
+        private IOrderedQueryable<T> AddOrder<TKey>(bool desc, Expression<Func<T, TKey>> keySelector)
         {
             // first try to do it in SQL
             try
             {
-                IOrderedEnumerable<T> smart = SmartAddOrder(desc, keySelector);
+                IOrderedQueryable<T> smart = SmartAddOrder(desc, keySelector);
                 if (smart != null)
                     return smart;
             }
@@ -272,47 +326,80 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
 
             // if we can't do it in SQL just execute the code
-            Func<T, TKey> comp = keySelector.Compile();
             if (!desc)
             {
-                return ExecuteQuery().OrderBy(comp);
+                return ExecuteQuery().AsQueryable().OrderBy(keySelector);
             }
             else
             {
-                return ExecuteQuery().OrderByDescending(comp);
+                return ExecuteQuery().AsQueryable().OrderByDescending(keySelector);
             }
         }
 
-        public IOrderedEnumerable<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector)
+        public IOrderedQueryable<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector)
         {
             return AddOrder(false, keySelector);
         }
 
-        public IOrderedEnumerable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
+        public IOrderedQueryable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
         {
             return AddOrder(true, keySelector);
         }
 
-        public IOrderedEnumerable<T> ThenBy<TKey>(Expression<Func<T, TKey>> keySelector)
+        public IOrderedQueryable<T> ThenBy<TKey>(Expression<Func<T, TKey>> keySelector)
         {
             return AddOrder(false, keySelector);
         }
 
-        public IOrderedEnumerable<T> ThenByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
+        public IOrderedQueryable<T> ThenByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
         {
             return AddOrder(true, keySelector);
         }
 
-        public IEnumerable<T> GetRange(int index, int count)
+        public IQueryable<T> GetRange(int index, int count)
         {
+            // we can't do two limit operations
+            if (skip != null || take != null)
+            {
+                ExecuteQuery();
+            }
+
             // don't execute query twice
             if (result != null)
             {
-                return result.GetRange(index, count);
+                return result.GetRange(index, count).AsQueryable();
             }
 
-            range = new Tuple<int, int>(index, count);
+            // set limit options and continue
+            skip = index;
+            take = count;
             return this;
+        }
+
+        public IQueryable<T> Skip(int count)
+        {
+            if (skip != null)
+            {
+                return ExecuteQuery().Skip(count).AsQueryable();
+            }
+            else
+            {
+                skip = count;
+                return this;
+            }
+        }
+
+        public IQueryable<T> Take(int count)
+        {
+            if (take != null)
+            {
+                return ExecuteQuery().Take(count).AsQueryable();
+            }
+            else
+            {
+                take = count;
+                return this;
+            }
         }
 
         public int Count()
@@ -323,6 +410,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return result.Count;
             }
 
+            // execute the query
             Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
             string sql = "SELECT COUNT(*) AS count FROM (" + prepared.Item1 + ") tbl";
             using (Query query = new Query(db.DatabasePath, sql, prepared.Item2))
