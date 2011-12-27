@@ -112,6 +112,7 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.xml" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\NLog.config" Name="MPExtended.Applications.ServiceConfigurator.exe.nlog" />
             </Component>
 
             <!-- WSS -->
