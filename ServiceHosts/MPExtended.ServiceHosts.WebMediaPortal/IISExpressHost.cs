@@ -81,13 +81,17 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 {
                     using (StreamReader reader = (StreamReader)param)
                     {
-                        using (StreamWriter writer = new StreamWriter(logPath, true, Encoding.UTF8, 16 * 1024))
+                        Stream file = File.Open(logPath, FileMode.Append, FileAccess.Write, FileShare.Read);
+                        using (StreamWriter writer = new StreamWriter(file, Encoding.UTF8, 16 * 1024))
                         {
                             writer.WriteLine("<process started at {0:yyyy-MM-dd HH:mm:ss} with arguments {1}>", DateTime.Now, arguments);
                             string line;
+                            long i = 0;
                             while ((line = reader.ReadLine()) != null)
                             {
                                 writer.WriteLine("[{0:yyyy-MM-dd HH:mm:ss}] {1}", DateTime.Now, line);
+                                if (i++ % 10 == 0)
+                                    writer.Flush();
                             }
                             writer.WriteLine("<process exited at {0:yyyy-MM-dd HH:mm:ss}>", DateTime.Now);
                         }

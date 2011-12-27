@@ -40,7 +40,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 foreach (FileInfo file in logDir.GetFiles("*.log"))
                 {
                     var logPart = zipFile.CreatePart(new Uri("/" + file.Name, UriKind.Relative), "", CompressionOption.Maximum);
-                    File.OpenRead(file.FullName).CopyTo(logPart.GetStream());
+                    File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(logPart.GetStream());
                 }
 
                 // copy MediaAccess.xml

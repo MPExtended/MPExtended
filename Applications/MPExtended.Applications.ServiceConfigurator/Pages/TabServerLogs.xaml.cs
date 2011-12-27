@@ -46,8 +46,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             mLogUpdater.Interval = TimeSpan.FromSeconds(2);
             mLogUpdater.Tick += logUpdater_Tick;
 
-            string logRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
-            foreach (string file in Directory.GetFiles(logRoot))
+            foreach (string file in Directory.GetFiles(Installation.GetLogDirectory()))
             {
                 cbLogFiles.Items.Add(Path.GetFileName(file));
             }
@@ -71,13 +70,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             if (mSelectedLog != null)
             {
                 lvLogViewer.Items.Clear();
-                string fullpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs", mSelectedLog);
+                string fullpath = Path.Combine(Installation.GetLogDirectory(), mSelectedLog);
 
                 if (File.Exists(fullpath))
                 {
                     try
                     {
-                        StreamReader re = File.OpenText(fullpath);
+                        FileStream file = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        StreamReader re = new StreamReader(file, Encoding.UTF8);
                         string input = null;
                         while ((input = re.ReadLine()) != null)
                         {
