@@ -25,7 +25,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
-    public class LazyQuery<T> : ILazyQuery<T>, IEnumerable<T> where T : new()
+    public class LazyQuery<T> : IOrderedEnumerable<T>, IEnumerable<T> where T : new()
     {
         private Database db;
         private string inputQuery;

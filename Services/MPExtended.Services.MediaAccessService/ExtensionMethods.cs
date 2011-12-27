@@ -35,8 +35,6 @@ namespace MPExtended.Services.MediaAccessService
         {
             int count = end - start + 1;
 
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).GetRange(start, count);
             if (source is List<T>)
                 return ((List<T>)source).GetRange(start, Math.Min(count, source.Count() - start));
             return source.Skip(start).Take(count);
@@ -67,28 +65,16 @@ namespace MPExtended.Services.MediaAccessService
         // Take advantage of lazy queries
         public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Expression<Func<T, bool>> predicate)
         {
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).Where(predicate);
             return Enumerable.Where(source, predicate.Compile());
         }
 
         public static int Count<T>(this IEnumerable<T> source)
         {
-            if (source is ILazyQuery<T>)
-                return ((ILazyQuery<T>)source).Count();
             return Enumerable.Count(source);
         }
 
         public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
         {
-            if (source is ILazyQuery<TSource>)
-            {
-                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
-                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                    return lazy.OrderBy(keySelector);
-                return lazy.OrderByDescending(keySelector);
-            }
-
             var comp = keySelector.Compile();
             if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
                 return Enumerable.OrderBy(source, comp);
@@ -97,14 +83,6 @@ namespace MPExtended.Services.MediaAccessService
 
         public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
         {
-            if (source is ILazyQuery<TSource>)
-            {
-                ILazyQuery<TSource> lazy = (ILazyQuery<TSource>)source;
-                if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
-                    return lazy.ThenBy(keySelector);
-                return lazy.ThenByDescending(keySelector);
-            }
-
             var comp = keySelector.Compile();
             if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
                 return Enumerable.ThenBy(source, comp);
