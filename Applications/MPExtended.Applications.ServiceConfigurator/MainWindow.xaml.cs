@@ -117,16 +117,23 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void MenuStartCloseMp_Click(object sender, RoutedEventArgs e)
         {
-            bool isMpRunning = UserServices.USS.IsMediaPortalRunning().Result;
-            if (!isMpRunning)
+            try
             {
-                userSessionService.StartMediaPortal();
-                HandleMpState(true);
+                bool isMpRunning = userSessionService.IsMediaPortalRunning().Result;
+                if (!isMpRunning)
+                {
+                    userSessionService.StartMediaPortal();
+                    HandleMpState(true);
+                }
+                else
+                {
+                    userSessionService.CloseMediaPortal();
+                    HandleMpState(false);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                userSessionService.CloseMediaPortal();
-                HandleMpState(false);
+                Log.Warn("Exception while trying to start/stop MediaPortal", ex);
             }
         }
 
