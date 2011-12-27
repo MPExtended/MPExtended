@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Win32;
@@ -40,11 +41,34 @@ namespace MPExtended.Libraries.General
         WebMediaPortal
     }
 
+    public enum FileLayoutType
+    {
+        Source,
+        Installed
+    }
+
     public static class Installation
     {
-#if DEBUG
+        public static FileLayoutType GetFileLayoutType()
+        {
+            string binDir = AppDomain.CurrentDomain.BaseDirectory;
+            if (Path.GetDirectoryName(binDir) == "Debug" || Path.GetDirectoryName(binDir) == "Release")
+            {
+                return FileLayoutType.Source;
+            }
+            else
+            {
+                return FileLayoutType.Installed;
+            }
+        }
+
         public static string GetSourceRootDirectory()
         {
+            if (GetFileLayoutType() != FileLayoutType.Source)
+            {
+                throw new InvalidOperationException("Source root directory not available for release installations");
+            }
+
             // It's a bit tricky to find the root source directory for Debug builds. The assembly might be in a different
             // directory then where it's source tree is (which happens with WebMP for example), so we can't use the Location
             // of the current executing assembly. The CodeBase points to it's original location on compilation, but this 
@@ -65,9 +89,14 @@ namespace MPExtended.Libraries.General
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
         }
-#else
+
         public static string GetInstallDirectory(MPExtendedProduct product)
         {
+            if (GetFileLayoutType() != FileLayoutType.Installed)
+            {
+                throw new InvalidOperationException("Install directory not available for source installations");
+            }
+
             // If possible, try to read it from the registry, where the install location is set during installation. 
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
             if (key != null)
@@ -91,15 +120,17 @@ namespace MPExtended.Libraries.General
                     throw new ArgumentException();
             }
         }
-#endif
 
         public static string GetConfigurationDirectory()
         {
-#if DEBUG
-            return Path.Combine(GetSourceRootDirectory(), "Config", "Debug");
-#else
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
-#endif
+            if (GetFileLayoutType() == FileLayoutType.Source)
+            {
+                return Path.Combine(GetSourceRootDirectory(), "Config", "Debug");
+            }
+            else
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
+            }
         }
 
         public static string GetLogDirectory()
