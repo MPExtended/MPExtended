@@ -23,7 +23,7 @@
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
     <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
-    <Property Id="MSIFASTINSTALL" Value="3" />
+    <!-- <Property Id="MSIFASTINSTALL" Value="3" /> -->
     
     <!-- Project general -->
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
