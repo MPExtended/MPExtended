@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.Development.DevTool
 {
@@ -27,11 +28,12 @@ namespace MPExtended.Applications.Development.DevTool
     {
         static void Main(string[] args)
         {
-#if !DEBUG
-            Console.WriteLine("DevTool isn't supported in Release mode.");
-            Console.ReadKey();
-            Environment.Exit(1);
-#endif
+            if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+            {
+                Console.WriteLine("DevTool only works from a source tree");
+                Environment.Exit(1);
+            }
+
             var tools = new IDevTool[] {
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),

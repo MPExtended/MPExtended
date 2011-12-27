@@ -86,18 +86,21 @@ namespace MPExtended.Services.MediaAccessService
             {
                 AggregateCatalog catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-#if DEBUG
-                string pluginRoot = Path.Combine(Installation.GetSourceRootDirectory(), "PlugIns");
-                foreach (string pdir in Directory.GetDirectories(pluginRoot))
+                if (Installation.GetFileLayoutType() == FileLayoutType.Source)
                 {
-                    string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-                    if (Directory.Exists(dir))
-                        catalog.Catalogs.Add(new DirectoryCatalog(dir));
+                    string pluginRoot = Path.Combine(Installation.GetSourceRootDirectory(), "PlugIns");
+                    foreach (string pdir in Directory.GetDirectories(pluginRoot))
+                    {
+                        string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
+                        if (Directory.Exists(dir))
+                            catalog.Catalogs.Add(new DirectoryCatalog(dir));
+                    }
                 }
-#else
-                string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Extensions"));
-                catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
-#endif
+                else
+                {
+                    string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Extensions"));
+                    catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
+                }
 
                 CompositionContainer container = new CompositionContainer(catalog);
                 container.ComposeExportedValue(new PluginData());

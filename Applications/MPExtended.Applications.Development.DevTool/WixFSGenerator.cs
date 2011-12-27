@@ -41,7 +41,7 @@ namespace MPExtended.Applications.Development.DevTool
         public void Run()
         {
             // get meta info
-            OutputStream.Write("Enter directory to include: " + Util.GetSourceRootDirectory() + @"\");
+            OutputStream.Write("Enter directory to include: " + Installation.GetSourceRootDirectory() + @"\");
             string inputDir = InputStream.ReadLine();
             OutputStream.Write("Enter output file: ");
             string outputFile = InputStream.ReadLine();
@@ -77,7 +77,7 @@ namespace MPExtended.Applications.Development.DevTool
         private bool AddDirectory(string path, string baseComponent, string basePrefix, XNamespace ns, XElement dirNode, XElement componentGroup)
         {
             bool didAdd = false;
-            string fullPath = Path.Combine(Util.GetSourceRootDirectory(), path);
+            string fullPath = Path.Combine(Installation.GetSourceRootDirectory(), path);
             var files = Directory.GetFiles(fullPath)
                 .Select(x => Path.GetFileName(x))
                 .Where(x => !forbiddenExtensions.Contains(Path.GetExtension(x)) && !forbiddenFiles.Contains(x));
