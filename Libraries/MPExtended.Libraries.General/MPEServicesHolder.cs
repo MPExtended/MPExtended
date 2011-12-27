@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -28,6 +29,8 @@ namespace MPExtended.Libraries.General
 {
     public class MPEServicesHolder
     {
+        private const int MAX_ITEMS_IN_OBJECT_GRAPH = Int32.MaxValue;
+
         private string MASUrl;
         private string TASUrl;
 
@@ -268,20 +271,31 @@ namespace MPExtended.Libraries.General
                 return default(T);
             }
 
+            // create channel factory
+            ChannelFactory<T> factory = null;
             if (addr.IsLoopback && addr.Port == 4322)
             {
-                return ChannelFactory<T>.CreateChannel(
+                factory = new ChannelFactory<T>(
                     new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },
                     new EndpointAddress(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", service))
                 );
             }
             else
             {
-                return ChannelFactory<T>.CreateChannel(
+                factory = new ChannelFactory<T>(
                     new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
                     new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", addr.Host, addr.Port, service))
                 );
             }
+
+            // set MaxItemsInObjectGraph parameter for all operations
+            foreach(OperationDescription operation in factory.Endpoint.Contract.Operations)
+            {
+                operation.Behaviors.Find<DataContractSerializerOperationBehavior>().MaxItemsInObjectGraph = MAX_ITEMS_IN_OBJECT_GRAPH;
+            }
+
+            // return
+            return factory.CreateChannel();
         }
 
         private void CloseConnection(ICommunicationObject channel)
