@@ -29,6 +29,7 @@
         <li>@Model.Title</li>
         <li>@Model.Year</li>
         <li>@String.Join(", ", Model.Genres)</li>
+        <li>Rating: @Model.Rating.ToString("##.0")</li>
         <li>@Html.ActionLink("Play", "Play", new { movie = @Model.Id })</li>
     </ul>
 </div>
