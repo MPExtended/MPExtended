@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,8 +86,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 ServerDescription desc = new ServerDescription();
-                desc.HardwareAddresses = String.Join(";", GetHardwareAddresses());
-                desc.Addresses = String.Join(";", GetIPAddresses());
+                desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
+                desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
                 desc.Name = GetServiceName();
                 desc.QRVersion = 1;
 
@@ -121,19 +118,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 Log.Error("Error generating barcode", ex);
             }
-        }
-
-        private static List<string> GetIPAddresses()
-        {
-            var addr = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            return addr.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Select(x => x.ToString()).ToList();
-        }
-
-        private static List<string> GetHardwareAddresses()
-        {
-            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-            var available = nics.Where(x => x.OperationalStatus == OperationalStatus.Up);
-            return available.Select(x => x.GetPhysicalAddress().ToString()).Where(x => !String.IsNullOrEmpty(x) && x.Length == 12).ToList();
         }
 
         /// <summary>

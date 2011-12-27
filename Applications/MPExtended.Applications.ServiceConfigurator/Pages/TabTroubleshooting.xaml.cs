@@ -19,8 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,18 +32,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabTroubleshooting : Page
     {
-        private class MyNetworkAddress
-        {
-            public NetworkInterface Interface { get; set; }
-            public IPAddressInformation Address { get; set; }
-
-            public override string ToString()
-            {
-                return Address.Address + " (" + Interface.Name + ")";
-            }
-        }
-
-        private Dictionary<string, MyNetworkAddress> networkAddresses;
+        private Dictionary<string, string> networkAddresses;
 
         public TabTroubleshooting()
         {
@@ -55,40 +42,24 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void SetNetworkInterfaces()
         {
-            networkAddresses = new Dictionary<string,MyNetworkAddress>();
-            foreach (NetworkInterface n in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                Log.Debug("Available Network Interface: {0}", n.Name);
-                IPInterfaceProperties properties = n.GetIPProperties();
-
-                foreach (IPAddressInformation unicast in properties.UnicastAddresses)
-                {
-                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork ||
-                        (unicast.Address.AddressFamily == AddressFamily.InterNetworkV6 && Configuration.Services.EnableIPv6))
-                    {
-                        Log.Debug("\tAvailable UniCast: {0}", unicast.Address);
-                        MyNetworkAddress addr = new MyNetworkAddress() { Interface = n, Address = unicast };
-                        networkAddresses.Add(addr.ToString(), addr);
-                    }
-                }
-            }
-
+            networkAddresses = NetworkInformation.GetNetworkInterfaces()
+                .ToDictionary(x => x.Value, x => x.Value + " (" + x.Key + ")");
             cbNetworkInterfaces.DataContext = networkAddresses;
-            cbNetworkInterfaces.DisplayMemberPath = "Key";
-            cbNetworkInterfaces.SelectedValuePath = "Value";
+            cbNetworkInterfaces.SelectedValuePath = "Key";
+            cbNetworkInterfaces.DisplayMemberPath = "Value";
 
-            if(networkAddresses.Count > 0)
+            if (networkAddresses.Count > 0)
             {
-                cbNetworkInterfaces.SelectedValue = networkAddresses.First().Value;
+                cbNetworkInterfaces.SelectedValue = networkAddresses.First().Key;
             }
         }
 
         private void cbNetworkInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MyNetworkAddress addr = (MyNetworkAddress)cbNetworkInterfaces.SelectedValue;
-            if (addr != null)
+            string val = (string)cbNetworkInterfaces.SelectedValue;
+            if (val != null)
             {
-                SetTestLinks(addr.Address.Address.ToString(), Configuration.Services.Port);
+                SetTestLinks(val, Configuration.Services.Port);
             }
         }
 

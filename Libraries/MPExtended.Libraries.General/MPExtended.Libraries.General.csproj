@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Encryption.cs" />
+    <Compile Include="NetworkInformation.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="MPEServicesHolder.cs" />
     <Compile Include="Installation.cs" />

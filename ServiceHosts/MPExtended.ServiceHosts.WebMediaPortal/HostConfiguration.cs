@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net;
-using System.Net.Sockets;
-using System.Net.NetworkInformation;
 using System.Xml.Linq;
 using MPExtended.Libraries.General;
 
@@ -45,12 +42,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
 
                 // If you didn't get it, I like LINQ
-                return NetworkInterface.GetAllNetworkInterfaces()
-                    .Select(x => x.GetIPProperties())
-                    .SelectMany(x => x.UnicastAddresses)
-                    .Select(x => x.Address)
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork ||
-                        (x.AddressFamily == AddressFamily.InterNetworkV6 && false)) // can't rely on Configuration.Services here due to sometimes uninstalled services
+                return NetworkInformation.GetIPAddresses(false)
                     .SelectMany(x =>
                     {
                         try

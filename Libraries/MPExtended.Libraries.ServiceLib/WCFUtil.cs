@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
@@ -48,12 +47,9 @@ namespace MPExtended.Libraries.ServiceLib
 
             // then try current IP address
             int port = Configuration.Services.Port;
-            Func<IPAddress, bool> checkAddressValid = 
-                x => x.AddressFamily == AddressFamily.InterNetwork || (Configuration.Services.EnableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6);
-            var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            if (addresses.Any(checkAddressValid))
+            if (NetworkInformation.GetIPAddresses().Any())
             {
-                return String.Format("http://{0}:{1}/MPExtended/", addresses.First(checkAddressValid).ToString(), port);
+                return String.Format("http://{0}:{1}/MPExtended/", NetworkInformation.GetIPAddresses().First(), port);
             }
 
             // last resort: localhost

@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using ZeroconfService;
-using System.Net.NetworkInformation;
 using MPExtended.Libraries.General;
 using System.Security.Cryptography;
 
@@ -65,7 +64,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
                 // also publish IP address and username list
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
-                additionalData["hwAddr"] = GetHardwareAddresses();
+                additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["users"] = String.Join(";", sendUsers.Select(x => x.Key + ":" + x.Value));
 
                 NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, srv.Port);
@@ -108,26 +107,6 @@ namespace MPExtended.ServiceHosts.Hosting
             catch (Exception)
             {
                 return "MPExtended Services";
-            }
-        }
-
-        private string GetHardwareAddresses()
-        {
-            try
-            {
-                var addresses =
-                    NetworkInterface.GetAllNetworkInterfaces()
-                        .Where(x => x.OperationalStatus == OperationalStatus.Up)
-                        .Where(x => x.GetPhysicalAddress() != null)
-                        .Select(x => x.GetPhysicalAddress().ToString())
-                        .Where(x => x.Length == 12);
-
-                return String.Join(";", addresses);
-            }
-            catch (Exception e)
-            {
-                Log.Warn("Could not get hardware address", e);
-                return "";
             }
         }
 

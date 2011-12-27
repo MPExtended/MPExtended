@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net.NetworkInformation;
+using System.Net;
+using System.Net.Sockets;
 using MPExtended.Libraries.General;
 
 namespace MPExtended.ServiceHosts.Hosting
@@ -37,7 +38,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
             // HTTP binding: pick the first non-local address to make sure there is also an valid IP in the SOAP messages.
             // We're restricted to just one IP by the WCF hosting, can't do anything about that. Shipping IIS is a bit too much. 
-            IEnumerable<string> nonLocalAddresses = GetIpAddresses().Where(x => x != "127.0.0.1" && x != "localhost");
+            IEnumerable<string> nonLocalAddresses = NetworkInformation.GetIPAddresses().Where(x => x != "127.0.0.1" && x != "localhost");
             string addr;
             if (nonLocalAddresses.Count() > 0)
             {
@@ -53,24 +54,6 @@ namespace MPExtended.ServiceHosts.Hosting
             ret.Add(new Uri(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", serviceName)));
 
             return ret.ToArray();
-        }
-
-        private static string[] GetIpAddresses()
-        {
-            var addresses = 
-                NetworkInterface.GetAllNetworkInterfaces()
-                    .Where(x => x.OperationalStatus == OperationalStatus.Up)
-                    .Select(x => x.GetIPProperties())
-                    .Select(x => x.UnicastAddresses)
-                    .SelectMany(x => x);
-
-            bool enableIPv6 = Configuration.Services.EnableIPv6;
-            if (!enableIPv6)
-            {
-                addresses = addresses.Where(x => x.Address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetworkV6);
-            }
-
-            return addresses.Select(x => x.Address.ToString()).ToArray();
         }
     }
 }
