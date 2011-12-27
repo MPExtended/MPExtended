@@ -99,7 +99,8 @@ namespace MPExtended.Libraries.SQLitePlugin
         public TResult Execute<TResult>(Expression expression)
         {
             // The compiler keeps whining about wanting a where TResult : class, new(), but that constraint is actually there because of the T
-            // constraint and the fact that TResult is always equal to T (but the compiler doesn't get that).
+            // constraint and the fact that TResult is most times equal to T in the cases we cast it (but the compiler doesn't get that). Therefore
+            // use dynamic typing here. 
 
             // try to do it in LazyQuery, if possible
             MethodCallExpression mce = expression as MethodCallExpression;
@@ -108,11 +109,11 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return (TResult)smartRes;
 
             // if not possible just execute the damn method
-            dynamic res = mce.Method.Invoke(null, GetArgumentsFromExpression(mce));
+            object res = mce.Method.Invoke(null, GetArgumentsFromExpression(mce));
             return (TResult)res;
         }
 
-        public T ExecuteQuerySmart(MethodCallExpression mce)
+        public dynamic ExecuteQuerySmart(MethodCallExpression mce)
         {
             if (mce.Method.Name == "First" && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
             {
@@ -128,7 +129,12 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return Query.GetRange(0, 1).ToList().First();
             }
 
-            return default(T);
+            if (mce.Method.Name == "Count" && mce.Arguments.Count == 1)
+            {
+                return Query.Count();
+            }
+
+            return null;
         }
 
         private object[] GetArgumentsFromExpression(MethodCallExpression mce)
