@@ -47,7 +47,8 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private List<Tuple<string, string, bool>> orderItems = new List<Tuple<string, string, bool>>(); // fieldname, sqltext, descending
         private List<Tuple<string, object>> whereItems = new List<Tuple<string, object>>(); // sqltext (with %prepared), value
-        private Tuple<int, int> range = null;
+        private int? skip = null;
+        private int? take = null;
 
         private List<T> result = null;
 
@@ -115,8 +116,8 @@ namespace MPExtended.Libraries.SQLitePlugin
             string orderSql = "";
             if (orderItems.Count > 0)
                 orderSql += "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2)) + " ";
-            if (range != null)
-                orderSql += "LIMIT " + range.Item1 + ", " + range.Item2 + " ";
+            if(skip != null || take != null)
+                orderSql += "LIMIT " + (skip == null ? 0 : skip.Value) + (take == null ? "" : ", " + take.Value);
             sql = sql.Replace("%order", orderSql);
 
             // prepare where
@@ -306,10 +307,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             return AddOrder(true, keySelector);
         }
 
-        public IEnumerable<T> GetRange(int index, int count)
+        public IQueryable<T> GetRange(int index, int count)
         {
             // we can't do two limit operations
-            if (range != null)
+            if (skip != null || take != null)
             {
                 ExecuteQuery();
             }
@@ -317,11 +318,39 @@ namespace MPExtended.Libraries.SQLitePlugin
             // don't execute query twice
             if (result != null)
             {
-                return result.GetRange(index, count);
+                return result.GetRange(index, count).AsQueryable();
             }
 
-            range = new Tuple<int, int>(index, count);
+            // set limit options and continue
+            skip = index;
+            take = count;
             return this;
+        }
+
+        public IQueryable<T> Skip(int count)
+        {
+            if (skip != null)
+            {
+                return ExecuteQuery().Skip(count).AsQueryable();
+            }
+            else
+            {
+                skip = count;
+                return this;
+            }
+        }
+
+        public IQueryable<T> Take(int count)
+        {
+            if (take != null)
+            {
+                return ExecuteQuery().Take(count).AsQueryable();
+            }
+            else
+            {
+                take = count;
+                return this;
+            }
         }
 
         public int Count()
@@ -332,6 +361,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return result.Count;
             }
 
+            // execute the query
             Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
             string sql = "SELECT COUNT(*) AS count FROM (" + prepared.Item1 + ") tbl";
             using (Query query = new Query(db.DatabasePath, sql, prepared.Item2))

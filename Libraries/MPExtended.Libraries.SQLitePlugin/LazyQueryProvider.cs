@@ -52,7 +52,8 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         private IQueryable<T> CreateQuerySmart(MethodCallExpression mce)
         {
-            if (mce.Method.Name == "Where" && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
+            string method = mce.Method.Name;
+            if (method == "Where" && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
             {
                 var expr = (mce.Arguments[1] as UnaryExpression).Operand as Expression<Func<T, bool>>;
                 if (expr != null)
@@ -61,20 +62,29 @@ namespace MPExtended.Libraries.SQLitePlugin
                 }
             }
 
-            if ((mce.Method.Name.StartsWith("OrderBy") || mce.Method.Name.StartsWith("ThenBy")) && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
+            if ((method.StartsWith("OrderBy") || method.StartsWith("ThenBy")) && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
             {
                 var expr = (mce.Arguments[1] as UnaryExpression).Operand;
-                var method = Query.GetType().GetMethod(mce.Method.Name);
+                var methodInstance = Query.GetType().GetMethod(mce.Method.Name);
                 if (expr == null || method == null || !(expr is LambdaExpression))
                 {
                     return null;
                 }
 
                 Type genericType = (expr as LambdaExpression).ReturnType;
-                var res = method.MakeGenericMethod(genericType).Invoke(Query, new object[] { expr }) as IQueryable<T>;
+                var res = methodInstance.MakeGenericMethod(genericType).Invoke(Query, new object[] { expr }) as IQueryable<T>;
                 if (res != null)
                 {
                     return res;
+                }
+            }
+
+            if ((method == "Skip" || method == "Take") && mce.Arguments.Count == 2 && mce.Arguments[1] is ConstantExpression)
+            {
+                var expr = (mce.Arguments[1] as ConstantExpression).Value;
+                if (expr is int)
+                {
+                    return method == "Skip" ? Query.Skip((int)expr) : Query.Take((int)expr);
                 }
             }
 
