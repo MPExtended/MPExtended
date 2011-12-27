@@ -48,7 +48,7 @@ namespace MPExtended.Libraries.ServiceLib
 
             // then try current IP address
             int port = Configuration.Services.Port;
-            Func<IPAddress, bool> checkAddressValid = 
+            Func<IPAddress, bool> checkAddressValid =
                 x => x.AddressFamily == AddressFamily.InterNetwork || (Configuration.Services.EnableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6);
             var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
             if (addresses.Any(checkAddressValid))
@@ -71,6 +71,18 @@ namespace MPExtended.Libraries.ServiceLib
             try
             {
                 WebOperationContext.Current.OutgoingResponse.StatusCode = code;
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
+
+        public static void AddHeader(string header, string value)
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
             }
             catch (InvalidOperationException)
             {

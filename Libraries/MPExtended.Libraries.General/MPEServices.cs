@@ -34,6 +34,8 @@ namespace MPExtended.Libraries.General
         public static IStreamingService MASStream { get { return holder.MASStream; } }
         public static bool HasMASStreamConnection { get { return holder.HasMASStreamConnection; } }
         public static bool IsMASStreamLocal { get { return holder.IsMASStreamLocal; } }
+        public static string HttpMASStreamRoot { get { return holder.HttpMASStreamRoot; } }
+
         public static ITVAccessService TAS { get { return holder.TAS; } }
         public static bool HasTASConnection { get { return holder.HasTASConnection; } }
         public static bool IsTASLocal { get { return holder.IsTASLocal; } }
@@ -41,6 +43,7 @@ namespace MPExtended.Libraries.General
         public static IStreamingService TASStream { get { return holder.TASStream; } }
         public static bool HasTASStreamConnection { get { return holder.HasTASStreamConnection; } }
         public static bool IsTASStreamLocal { get { return holder.IsTASStreamLocal; } }
+        public static string HttpTASStreamRoot { get { return holder.HttpTASStreamRoot; } }
 
         public static void SetConnectionUrls(string mas, string tas)
         {

@@ -30,7 +30,8 @@
         <li>@Model.Year</li>
         <li>@String.Join(", ", Model.Genres)</li>
         <li>Rating: @Model.Rating.ToString("##.0")</li>
-        <li>@Html.ActionLink("Play", "Play", new { movie = @Model.Id })</li>
+        <li>@Html.ActionLink("Download", "Movie", "Stream", new { item = @Model.Id, transcoder = "download" }, new { })</li>
+        <li>@Html.ActionLink("Play", "Play", new { movie = Model.Id })</li>
     </ul>
 </div>
 <div class="subcolumn">
