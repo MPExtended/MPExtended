@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
@@ -66,11 +67,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             {
                 if (args.Name.StartsWith("MPExtended.Libraries.VLCManaged"))
                 {
-#if DEBUG
-                    string directory = System.IO.Path.Combine(Installation.GetSourceRootDirectory(), "Libraries", "Streaming", "vlc-1.1.11");
-#else
-                    string directory = System.IO.Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Streaming", "vlc-1.1.11");
-#endif
+                    string directory = Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                        Path.Combine(Installation.GetSourceRootDirectory(), "Libraries", "Streaming", "vlc-1.1.11") :
+                        Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Streaming", "vlc-1.1.11");
 
                     string asmPath = System.IO.Path.Combine(directory, "MPExtended.Libraries.VLCManaged.dll");
                     return System.Reflection.Assembly.LoadFrom(asmPath);

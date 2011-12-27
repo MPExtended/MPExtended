@@ -43,11 +43,8 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-#if DEBUG
-                return true;
-#else
-                return CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", ServiceName.ToString() + "Installed");
-#endif
+                return Installation.GetFileLayoutType() == FileLayoutType.Source ||
+                    CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", ServiceName.ToString() + "Installed");
             }
         }
 
@@ -63,11 +60,9 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-#if DEBUG
-                return Path.Combine(Installation.GetSourceRootDirectory(), "Services", Assembly, "bin", "Debug", Assembly + ".dll");
-#else
-                return Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), Assembly + ".dll");
-#endif
+                return Installation.GetFileLayoutType() == FileLayoutType.Source ? 
+                    Path.Combine(Installation.GetSourceRootDirectory(), "Services", Assembly, "bin", "Debug", Assembly + ".dll") :
+                    Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), Assembly + ".dll");
             }
         }
 

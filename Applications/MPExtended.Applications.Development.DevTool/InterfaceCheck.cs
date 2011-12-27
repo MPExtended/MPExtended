@@ -33,7 +33,7 @@ namespace MPExtended.Applications.Development.DevTool
 
         public void Run()
         {
-            string rootpath = Util.GetSourceRootDirectory();
+            string rootpath = Installation.GetSourceRootDirectory();
             CheckService(rootpath, "MPExtended.Services.MediaAccessService", "IMediaAccessService", "MediaAccessService");
             CheckService(rootpath, "MPExtended.Services.TVAccessService", "ITVAccessService", "TVAccessService");
             CheckService(rootpath, "MPExtended.Services.StreamingService", new string[] { "IStreamingService", "IWebStreamingService" }, "StreamingService");

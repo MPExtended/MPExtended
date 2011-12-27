@@ -48,12 +48,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
-#if DEBUG
-                info.FileName = Path.Combine(Installation.GetSourceRootDirectory(), 
-                    "Applications", "MPExtended.Applications.UacServiceHandler", "bin", "Debug", "MPExtended.Applications.UacServiceHandler.exe");
-#else
-                info.FileName = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Applications.UacServiceHandler.exe");
-#endif
+
+                if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+                {
+                    info.FileName = Path.Combine(Installation.GetSourceRootDirectory(),
+                        "Applications", "MPExtended.Applications.UacServiceHandler", "bin", "Debug", "MPExtended.Applications.UacServiceHandler.exe");
+                }
+                else
+                {
+
+                    info.FileName = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Applications.UacServiceHandler.exe");
+                }
+
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
                 info.Arguments = _parameters;

@@ -41,11 +41,11 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
             {
                 // generate config file
                 var generator = new IISConfigGenerator();
-#if DEBUG
-                generator.PhysicalSitePath = Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal");
-#else
-                generator.PhysicalSitePath = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
-#endif
+                
+                generator.PhysicalSitePath = Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                    Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
+                    Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
+
                 generator.HostAddresses = HostConfiguration.HostAddresses;
                 generator.Port = HostConfiguration.Port;
                 generator.TemplatePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "IISExpressTemplate.config");
