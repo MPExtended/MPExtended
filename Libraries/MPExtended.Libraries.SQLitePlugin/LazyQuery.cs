@@ -116,7 +116,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             string orderSql = "";
             if (orderItems.Count > 0)
                 orderSql += "ORDER BY " + String.Join(", ", orderItems.Select(x => x.Item2)) + " ";
-            if(skip != null || take != null)
+            if (skip != null || take != null)
                 orderSql += "LIMIT " + (skip == null ? 0 : skip.Value) + (take == null ? "" : ", " + take.Value);
             sql = sql.Replace("%order", orderSql);
 
@@ -144,7 +144,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 while (query.Reader.Read())
                 {
                     T obj = factory.CreateObject(query.Reader);
-                    if(finalize != null) 
+                    if (finalize != null)
                     {
                         obj = finalize(obj);
                     }
@@ -168,10 +168,27 @@ namespace MPExtended.Libraries.SQLitePlugin
                 return null;
             if (!predicate.Parameters[0].Type.IsAssignableFrom(typeof(T)))
                 return null;
-
-            // parse the body
-            if (predicate.NodeType != ExpressionType.Lambda || !(predicate.Body is BinaryExpression))
+            if (predicate.NodeType != ExpressionType.Lambda)
                 return null;
+
+            // dispatch based on type
+            if (predicate.Body is MethodCallExpression)
+            {
+                return SmartWhereMethodCall(predicate);
+            }
+            else if (predicate.Body is BinaryExpression)
+            {
+                return SmartWhereBinaryExpression(predicate);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private IQueryable<T> SmartWhereBinaryExpression(Expression<Func<T, bool>> predicate)
+        {
+            // parse the body
             BinaryExpression ex = (BinaryExpression)predicate.Body;
             if (ex.NodeType != ExpressionType.Equal)
                 return null;
@@ -203,6 +220,38 @@ namespace MPExtended.Libraries.SQLitePlugin
             AllowSQLCompareAttribute attr = (AllowSQLCompareAttribute)Attribute.GetCustomAttribute(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute));
 
             // create smart where
+            whereItems.Add(new Tuple<string, object>(attr.GetSQLCondition(thisMapping), value));
+            return this;
+        }
+
+        private IQueryable<T> SmartWhereMethodCall(Expression<Func<T, bool>> predicate)
+        {
+            MethodCallExpression mce = predicate.Body as MethodCallExpression;
+
+            // verify some preconditions
+            if (mce.Method.Name != "Contains")
+                return null;
+            if (mce.Arguments.Count != 1 || mce.Arguments[0].NodeType != ExpressionType.MemberAccess)
+                return null;
+            if (mce.Object.NodeType != ExpressionType.MemberAccess)
+                return null;
+
+            // get value
+            object value = Expression.Lambda(mce.Arguments[0]).Compile().DynamicInvoke();
+            if(!(value is Int32) && !(value is String))
+                return null;
+
+            // check mapping
+            string field = (mce.Object as MemberExpression).Member.Name;
+            var mappingList = mapping.Where(x => x.PropertyName == field);
+            if (mappingList.Count() == 0)
+                return null;
+            SQLFieldMapping thisMapping = mappingList.First();
+            if (!Attribute.IsDefined(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute)))
+                return null;
+
+            // build SQL
+            AllowSQLCompareAttribute attr = (AllowSQLCompareAttribute)Attribute.GetCustomAttribute(thisMapping.Reader.Method, typeof(AllowSQLCompareAttribute));
             whereItems.Add(new Tuple<string, object>(attr.GetSQLCondition(thisMapping), value));
             return this;
         }
@@ -239,7 +288,7 @@ namespace MPExtended.Libraries.SQLitePlugin
             // parse the body
             if (!(keySelector.Body is MemberExpression))
                 return null;
-            
+
             // we expect a parameter or a cast to an interface here
             MemberExpression ex = (MemberExpression)keySelector.Body;
             if (ex.Expression.NodeType != ExpressionType.Convert && ex.Expression.NodeType != ExpressionType.Parameter)

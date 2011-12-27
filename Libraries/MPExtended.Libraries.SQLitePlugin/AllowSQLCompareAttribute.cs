@@ -32,6 +32,11 @@ namespace MPExtended.Libraries.SQLitePlugin
             this.SQLText = "%fullsqlname = %prepared";
         }
 
+        public AllowSQLCompareAttribute(char separator)
+        {
+            this.SQLText = String.Format("(%fullsqlname LIKE '%{0}' || %prepared || '{0}%' OR %fullsqlname LIKE '%{0} ' || %prepared || ' {0}%')", separator);
+        }
+
         public AllowSQLCompareAttribute(string SQL)
         {
             this.SQLText = SQL;
