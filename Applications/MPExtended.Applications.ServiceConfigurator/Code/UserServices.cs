@@ -33,24 +33,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             get
             {
-                if (ussConnection == null)
-                {
-                    NetTcpBinding binding = new NetTcpBinding()
-                    {
-                        MaxReceivedMessageSize = 100000000,
-                        ReceiveTimeout = new TimeSpan(0, 0, 5),
-                        SendTimeout = new TimeSpan(0, 0, 5),
-                    };
-                    binding.ReliableSession.Enabled = true;
-                    binding.ReliableSession.Ordered = true;
-
-                    ussConnection = ChannelFactory<IUserSessionService>.CreateChannel(
-                        binding,
-                        new EndpointAddress("net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation")
-                    );
-                }
-
-                return ussConnection;
+                return CreateChannel<IUserSessionService>(ref ussConnection, "net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation");
             }
         }
 
@@ -58,25 +41,47 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             get
             {
-                if (privateConnection == null)
-                {
-                    NetTcpBinding binding = new NetTcpBinding()
-                    {
-                        MaxReceivedMessageSize = 100000000,
-                        ReceiveTimeout = new TimeSpan(0, 0, 5),
-                        SendTimeout = new TimeSpan(0, 0, 5),
-                    };
-                    binding.ReliableSession.Enabled = true;
-                    binding.ReliableSession.Ordered = true;
-
-                    privateConnection = ChannelFactory<IPrivateUserSessionService>.CreateChannel(
-                        binding,
-                        new EndpointAddress("net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate")
-                    );
-                }
-
-                return privateConnection;
+                return CreateChannel<IPrivateUserSessionService>(ref privateConnection, "net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate");
             }
+        }
+
+        private static T CreateChannel<T>(ref T original, string address)
+        {
+            // if channel is working, just return it
+            if (original != null && ((ICommunicationObject)original).State != CommunicationState.Faulted)
+            {
+                return original;
+            }
+
+            // try to close a faulted channel
+            if(original != null)
+            {
+                try
+                {
+                    ((ICommunicationObject)original).Close(TimeSpan.FromMilliseconds(500));
+                }
+                catch (Exception)
+                {
+                    // oops.
+                }
+            }
+
+            // recreate channel
+            NetTcpBinding binding = new NetTcpBinding()
+            {
+                MaxReceivedMessageSize = 100000000,
+                ReceiveTimeout = new TimeSpan(0, 0, 5),
+                SendTimeout = new TimeSpan(0, 0, 5),
+            };
+            binding.ReliableSession.Enabled = true;
+            binding.ReliableSession.Ordered = true;
+
+            original = ChannelFactory<T>.CreateChannel(
+                binding,
+                new EndpointAddress(address)
+            );
+
+            return original;
         }
     }
 }
