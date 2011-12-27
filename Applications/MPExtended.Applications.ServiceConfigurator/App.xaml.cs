@@ -19,11 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Threading;
-using MPExtended.Libraries.General;
+using System.Windows;
 using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {
@@ -69,6 +70,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                         break;
                 }
             }
+
+#if !DEBUG
+            // change to installation directory
+            Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
+#endif
 
             // set startup form
             this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);

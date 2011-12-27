@@ -17,9 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
 using System.Windows;
 using MPExtended.Libraries.General;
 
@@ -47,7 +48,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
-                info.FileName = "MPExtended.Applications.UacServiceHandler.exe";
+#if DEBUG
+                info.FileName = Path.Combine(Installation.GetSourceRootDirectory(), 
+                    "Applications", "MPExtended.Applications.UacServiceHandler", "bin", "Debug", "MPExtended.Applications.UacServiceHandler.exe");
+#else
+                info.FileName = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Applications.UacServiceHandler.exe");
+#endif
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
                 info.Arguments = _parameters;

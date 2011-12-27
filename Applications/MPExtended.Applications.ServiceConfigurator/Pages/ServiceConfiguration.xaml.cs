@@ -169,6 +169,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (!IsAdmin())
             {
+                Log.Debug("StartStopService: no admin rights, use UacServiceHandler");
                 switch (mServiceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:
@@ -181,6 +182,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
             else
             {
+                Log.Debug("StartStopService: has admin rights, start/stop ourselves");
                 switch (mServiceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:
