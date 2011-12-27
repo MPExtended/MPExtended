@@ -52,7 +52,8 @@ namespace MPExtended.Libraries.General
         public static FileLayoutType GetFileLayoutType()
         {
             string binDir = AppDomain.CurrentDomain.BaseDirectory;
-            if (Path.GetDirectoryName(binDir) == "Debug" || Path.GetDirectoryName(binDir) == "Release")
+            string dirName = Path.GetFileName(Path.GetDirectoryName(binDir));
+            if (dirName == "Debug" || dirName == "Release")
             {
                 return FileLayoutType.Source;
             }
