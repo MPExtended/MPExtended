@@ -113,8 +113,9 @@ namespace MPExtended.Services.MediaAccessService
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
             return items
-                .Where(x => x.Value.Value.Supported)
-                .SelectMany(x => x.Value.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type));
+                .ToDictionary(x => x.Key, x => x.Value.Value)
+                .Where(x => x.Value.Supported)
+                .SelectMany(x => x.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type));
         }
     }
 }
