@@ -18,8 +18,8 @@
         <tr>
             <td>@Html.DisplayFor(x => item.Title)</td>
             <td>@Html.DisplayFor(x => item.Type)</td>
-            <td>@Html.DisplayFor(x => item.StartTime)</td>
-            <td>@Html.DisplayFor(x => item.EndTime)</td>
+            <td>@Html.DisplayFor(x => item.StartTimeFormatted)</td>
+            <td>@Html.DisplayFor(x => item.EndTimeFormatted)</td>
             <td>
                 @Html.ActionLink("Delete", "DeleteScheduleById", new { id = item.Id })
             </td>
