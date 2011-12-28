@@ -57,9 +57,13 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 return SyncedPlayerPosition + (int)(DateTime.Now - LastPlayerPositionSync).TotalMilliseconds;
             }
-            else
+            else if (TranscodingInfo != null)
             {
                 return TranscodingInfo.TranscodingPosition;
+            }
+            else
+            {
+                return 0;
             }
         }
     }
