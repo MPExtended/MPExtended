@@ -90,15 +90,38 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var schedules = MPEServices.TAS.GetSchedules()
-                    .Where(x => x.StartTime.Date == DateTime.Now.Date)
-                    .Select(x => new ScheduleViewModel(x))
-                    .ToList();
-                return PartialView(schedules);
+                var list = 
+                    from x in MPEServices.TAS.GetSchedules()
+                    where CheckScheduleIsOnDate(x, DateTime.Now)
+                    select new ScheduleViewModel(x);
+                return PartialView(list);
             }
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        private bool CheckScheduleIsOnDate(WebScheduleBasic schedule, DateTime date)
+        {
+            switch (schedule.ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                    return true;
+                case WebScheduleType.Weekends:
+                    return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+                case WebScheduleType.WorkingDays:
+                    return date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
+                case WebScheduleType.Weekly:
+                    return schedule.StartTime.DayOfWeek == date.DayOfWeek;
+                case WebScheduleType.Once:
+                // I'm not really sure about these three below, but it seems to work
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                    return schedule.StartTime.Date == date.Date;
+                default:
+                    return false;
             }
         }
     }
