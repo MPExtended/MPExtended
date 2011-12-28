@@ -53,7 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyLoader.cs" />
     <Compile Include="BaseAddresses.cs" />
     <Compile Include="MPExtendedHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
