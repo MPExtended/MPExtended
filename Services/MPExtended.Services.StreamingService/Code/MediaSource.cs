@@ -235,7 +235,12 @@ namespace MPExtended.Services.StreamingService.Code
                     case WebStreamMediaType.Recording:
                         return MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).Title;
                     case WebStreamMediaType.TV:
-                        return MPEServices.TAS.GetChannelBasicById(Int32.Parse(Id)).DisplayName;
+                        int channelId;
+                        if (!Int32.TryParse(Id, out channelId))
+                        {
+                            channelId = MPEServices.TAS.GetActiveCards().First(x => x.TimeShiftFileName == Id).IdChannel;
+                        }
+                        return MPEServices.TAS.GetChannelBasicById(channelId).DisplayName;
                     case WebStreamMediaType.TVEpisode:
                         var ep = MPEServices.MAS.GetTVEpisodeBasicById(Provider, Id);
                         var season = MPEServices.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);
