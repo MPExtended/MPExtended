@@ -63,7 +63,6 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="Code\ContentTypeUtil.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaSource.cs" />

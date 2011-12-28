@@ -37,42 +37,13 @@ namespace MPExtended.Libraries.General
     {
         public static string GetClientInstallationDirectory()
         {
-            try
+            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
+            if (res != null)
             {
-                // I can't make any sense of which one is used when, so just always try both keys.
-                string[] keys = new string[] {
-                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal",
-                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal"
-                };
-
-                RegistryKey key = null;
-                foreach (var keyPath in keys)
-                {
-                    key = Registry.LocalMachine.OpenSubKey(keyPath);
-                    if (key != null)
-                    {
-                        break;
-                    }
-                }
-
-                if (key == null)
-                {
-                    Log.Info("Could not find MediaPortal installation path key in registry, is MediaPortal installed?");
-                    return null;
-                }
-
-                object value = key.GetValue("InstallPath", null);
-                if (value == null)
-                {
-                    Log.Warn("Could not find InstallPath property, is MediaPortal corrupt?");
-                    return null;
-                }
-
-                return value.ToString();
+                return res.ToString();
             }
-            catch (Exception ex)
+            else
             {
-                Log.Error("Exception in Mediaportal.GetClientInstallationDirectory()", ex);
                 return null;
             }
         }

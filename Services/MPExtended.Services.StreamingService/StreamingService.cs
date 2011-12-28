@@ -195,10 +195,11 @@ namespace MPExtended.Services.StreamingService
                 
                 WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
 
-                string mime = ContentTypeUtil.GetContentTypeFromExtension(Path.GetExtension(source.GetFileInfo().Name));
+                // there has to be a better way to do this
+                object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
                 if (mime != null)
                 {
-                    WCFUtil.AddHeader("Content-Type", mime);
+                    WCFUtil.AddHeader("Content-Type", mime.ToString());
                 }
 
                 return source.Retrieve();

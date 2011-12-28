@@ -51,6 +51,11 @@ namespace MPExtended.Libraries.General
             return value;
         }
 
+        public static object ReadKey(RegistryHive hive, string subkey, string name)
+        {
+            return ReadKey(hive, RegistryView.Default, subkey, name);
+        }
+
         public static object ReadKeyAllViews(RegistryHive hive, string subkey, string name)
         {
             object value = ReadKey(hive, RegistryView.Registry64, subkey, name);

@@ -99,14 +99,11 @@ namespace MPExtended.Libraries.General
             }
 
             // If possible, try to read it from the registry, where the install location is set during installation. 
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
-            if (key != null)
+            string keyName = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
+            object value = RegistryReader.ReadKey(RegistryHive.LocalMachine, @"Software\MPExtended", keyName);
+            if (value != null)
             {
-                object value = key.GetValue(String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product)));
-                if (value != null)
-                {
-                    return value.ToString();
-                }
+                return value.ToString();
             }
 
             // Fallback to dynamic detection based upon the default install location of the services

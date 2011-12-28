@@ -44,7 +44,7 @@ namespace MPExtended.Libraries.General
             get
             {
                 return Installation.GetFileLayoutType() == FileLayoutType.Source ||
-                    CheckRegistryKey(Registry.LocalMachine, @"Software\MPExtended", ServiceName.ToString() + "Installed");
+                    RegistryReader.ReadKey(RegistryHive.LocalMachine, @"Software\MPExtended", ServiceName.ToString() + "Installed") != null;
             }
         }
 
@@ -86,23 +86,6 @@ namespace MPExtended.Libraries.General
         {
             username = user.Username;
             password = user.GetPassword();
-        }
-
-        private static bool CheckRegistryKey(RegistryKey reg, string key, string name)
-        {
-            RegistryKey regkey = reg.OpenSubKey(key);
-            if (regkey == null)
-            {
-                return false;
-            }
-
-            object value = regkey.GetValue(name);
-            if (value == null)
-            {
-                return false;
-            }
-
-            return value.ToString() == "true";
         }
     }
 }
