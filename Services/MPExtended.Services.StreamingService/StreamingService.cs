@@ -192,6 +192,15 @@ namespace MPExtended.Services.StreamingService
                 {
                     throw new FileNotFoundException();
                 }
+                
+                WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
+
+                string mime = ContentTypeUtil.GetContentTypeFromExtension(Path.GetExtension(source.GetFileInfo().Name));
+                if (mime != null)
+                {
+                    WCFUtil.AddHeader("Content-Type", mime);
+                }
+
                 return source.Retrieve();
             }
             catch (Exception ex)

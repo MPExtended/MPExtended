@@ -23,6 +23,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Microsoft.Win32;
 using MPExtended.Libraries.General;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
@@ -59,8 +60,26 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     Log.Debug("- Listening on {0}:{1}", addr, generator.Port);
                 }
 
+                // lookup IIS Express location
+                string iisExpress = null;
+                object iisExpressLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\IISExpress\7.5", "InstallPath");
+                string iisExpressDefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "IIS Express", "iisexpress.exe");
+                if (iisExpressLocation != null && File.Exists(Path.Combine(iisExpressLocation.ToString(), "iisexpress.exe")))
+                {
+                    iisExpress = Path.Combine(iisExpressLocation.ToString(), "iisexpress.exe");
+                    Log.Debug("Using IIS Express installed at {0}", iisExpress);
+                }
+                else if (File.Exists(iisExpressDefault))
+                {
+                    Log.Debug("Using IIS Express at default location {0}", iisExpressDefault);
+                } 
+                else
+                {
+                    Log.Fatal("IIS Express not found");
+                    return;
+                }
+
                 // start IIS Express
-                string iisExpress = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "IIS Express", "iisexpress.exe");
                 string arguments = String.Format("/systray:0 /config:{0} /site:WebMediaPortal", tempConfigFile);
                 string logPath = Path.Combine(Installation.GetLogDirectory(), String.Format("WebMediaPortalIIS-{0:yyyy_MM_dd}.log", DateTime.Now));
 

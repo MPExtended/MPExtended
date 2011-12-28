@@ -172,6 +172,15 @@ namespace MPExtended.Libraries.General
             }
         }
 
+        public string HttpMASStreamRoot
+        {
+            get
+            {
+                Uri uri = new Uri(MASUrl);
+                return String.Format("http://{0}:{1}/MPExtended/StreamingService/stream/", uri.Host, uri.Port);
+            }
+        }
+
         public ITVAccessService TAS
         {
             get
@@ -257,6 +266,15 @@ namespace MPExtended.Libraries.General
             {
                 Uri uri = new Uri(TASUrl);
                 return uri.IsLoopback;
+            }
+        }
+
+        public string HttpTASStreamRoot
+        {
+            get
+            {
+                Uri uri = new Uri(TASUrl);
+                return String.Format("http://{0}:{1}/MPExtended/StreamingService/stream/", uri.Host, uri.Port);
             }
         }
 

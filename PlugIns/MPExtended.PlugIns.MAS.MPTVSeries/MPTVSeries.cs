@@ -286,7 +286,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 };
             }, param);
 
-            string episodeSql = "SELECT CompositeID, EpisodeName FROM online_episodes WHERE EpisodeName LIKE @search";
+            string episodeSql = "SELECT EpisodeID, EpisodeName FROM online_episodes WHERE EpisodeName LIKE @search";
             IEnumerable<WebSearchResult> episodes = ReadList<WebSearchResult>(episodeSql, delegate(SQLiteDataReader reader)
             {
                 string title = reader.ReadString(1);

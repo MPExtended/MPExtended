@@ -45,7 +45,8 @@
 
         <li>Aired @Model.FirstAired.ToShortDateString()</li>
         @if(ViewBag.ShowPlay) {
-            <li>@Html.ActionLink("Play", "Play", new { episode = @Model.Id })</li>
+            <li>@Html.ActionLink("Download", "TVEpisode", "Stream", new { item = @Model.Id, transcoder = "download" }, new { })</li>
+            <li>@Html.ActionLink("Play", "Play", new { episode = Model.Id })</li>
         }
     </ul>
 </div>

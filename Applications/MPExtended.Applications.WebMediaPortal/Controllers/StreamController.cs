@@ -16,10 +16,12 @@
 #endregion
 
 using System;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
@@ -61,6 +63,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
         {
+            // Let's hope and pray no one creates a transcoder profile named download
+            if (transcoder == "download")
+            {
+                var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
+                queryString["type"] = ((int)type).ToString();
+                queryString["itemId"] = itemId;
+                string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
+                string getMediaItemUrl = rootUrl + "GetMediaItem?" + queryString.ToString();
+                return Redirect(getMediaItemUrl);
+            }
+
+
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier))
             {

@@ -74,6 +74,18 @@ namespace MPExtended.Libraries.ServiceLib
             }
         }
 
+        public static void AddHeader(string header, string value)
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
+
         public static string GetClientIPAddress()
         {
             MessageProperties properties = OperationContext.Current.IncomingMessageProperties;

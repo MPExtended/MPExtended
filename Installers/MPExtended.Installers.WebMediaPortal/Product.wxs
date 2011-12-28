@@ -47,9 +47,9 @@
     <!-- Require IIS Express -->
     <Property Id="IISEXPRESSINSTALLED">
       <RegistrySearch Id="IISExpressInstalledSearch" Type="raw" Win64="no"
-                      Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{22025051-1991-48EB-8BE8-7A3329DAE7ED}" Name="InstallDate" />
+                      Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\7.5" Name="InstallPath" />
     </Property>
-    <Condition Message="The installer has detected that the prerequisite IIS Express is not installed. Please install IIS Express and run the installer again.">
+    <Condition Message="The installer has detected that the prerequisite IIS Express 7.5 is not installed. Please install IIS Express 7.5 and run the installer again.">
       <![CDATA[Installed OR IISEXPRESSINSTALLED]]>
     </Condition>
     
