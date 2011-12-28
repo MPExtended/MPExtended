@@ -47,15 +47,13 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
                     Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
 
-                generator.HostAddresses = HostConfiguration.HostAddresses;
-                generator.Port = HostConfiguration.Port;
                 generator.TemplatePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "IISExpressTemplate.config");
                 tempConfigFile = Path.GetTempFileName();
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}", tempConfigFile);
 
                 // log configuration
-                foreach (var addr in generator.HostAddresses)
+                foreach (var addr in generator.GetHostAddresses())
                 {
                     Log.Debug("- Listening on {0}:{1}", addr, generator.Port);
                 }
