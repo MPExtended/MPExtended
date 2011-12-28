@@ -20,20 +20,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Services.MetaService;
 
 namespace MPExtended.ServiceHosts.Hosting
 {
     public class MPExtendedHost
     {
         private WCFHost wcf;
-        private Zeroconf zeroconf;
+        private IServicePublisher publisher;
         private List<Type> serviceTypes;
 
         public MPExtendedHost()
         {
             System.Threading.Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
-            zeroconf = new Zeroconf();
+            publisher = new ServicePublisher();
         }
 
         public MPExtendedHost(List<Type> types)
@@ -65,17 +66,7 @@ namespace MPExtended.ServiceHosts.Hosting
 
                 // perform the actual start
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
-                ThreadManager.Start("Zeroconf", delegate()
-                {
-                    try
-                    {
-                        zeroconf.PublishServices(Installation.GetInstalledServices());
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error("Zeroconf publish failed", ex);
-                    }
-                });
+                publisher.PublishAsync();
                 Log.Debug("Opened MPExtended ServiceHost");
                 return true;
             }
