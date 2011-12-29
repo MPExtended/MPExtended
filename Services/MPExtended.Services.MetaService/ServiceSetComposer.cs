@@ -77,8 +77,9 @@ namespace MPExtended.Services.MetaService
 
         protected IEnumerable<WebServiceSet> ComposeAll()
         {
-            string tveAddress = hinter.GetConfiguredTVServerAddress();
             List<WebServiceSet> sets = new List<WebServiceSet>();
+            string tveAddress = hinter.GetConfiguredTVServerAddress();
+            IMetaService tveMeta = tveAddress != null ? ServiceClientFactory.Create(tveAddress) : null;
 
             // Start with the most simple case: full singleseat
             if (HasActiveMAS && HasActiveTAS && HasActiveWSS && HasActiveUI)
@@ -93,10 +94,13 @@ namespace MPExtended.Services.MetaService
             }
 
             // Multiseat installation with UI + MAS + WSS on client and TAS + WSS on server (and we're the client)
-            if (HasActiveMAS && HasActiveWSS && HasActiveUI && !HasActiveTAS && tveAddress != null)
+            if (HasActiveMAS && HasActiveWSS && HasActiveUI && !HasActiveTAS && tveMeta != null)
             {
-                // TODO: check tveAddress and validate it doesn't have MAS and UI
-                sets.Add(CreateServiceSet(OurAddress, tveAddress, OurAddress));
+                if (!tveMeta.GetActiveServices().Contains(WebService.MediaAccessService) &&
+                    !tveMeta.HasUI())
+                {
+                    sets.Add(CreateServiceSet(OurAddress, tveAddress, OurAddress));
+                }
             }
 
             // Same as previous, but now we're the server
@@ -106,10 +110,12 @@ namespace MPExtended.Services.MetaService
             }
 
             // Multiseat installation with MAS + TAS + WSS on server and only UI on the client (we're the client)
-            if (HasActiveUI && !HasActiveMAS && !HasActiveTAS && !HasActiveWSS)
+            if (HasActiveUI && !HasActiveMAS && !HasActiveTAS && !HasActiveWSS && tveMeta != null)
             {
-                // TODO: check tveAddress and validate it has MAS
-                sets.Add(CreateServiceSet(tveAddress, tveAddress, OurAddress));
+                if (tveMeta.GetActiveServices().Contains(WebService.MediaAccessService))
+                {
+                    sets.Add(CreateServiceSet(tveAddress, tveAddress, OurAddress));
+                }
             }
 
             // Idem, but now we're the server

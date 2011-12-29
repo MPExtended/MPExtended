@@ -24,37 +24,29 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class MetaService : IMetaService
+    internal static class ServiceClientFactory
     {
-        public WebBool TestConnection()
+        public static IMetaService Create(string url)
         {
-            return true;
-        }
+            try
+            {
+                ChannelFactory<IMetaService> factory = new ChannelFactory<IMetaService>(
+                    new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
+                    new EndpointAddress(String.Format("http://{0}:4322/MPExtended/MetaService", url))
+                );
 
-        public IList<WebService> GetInstalledServices()
-        {
-            throw new NotImplementedException();
-        }
+                IMetaService channel = factory.CreateChannel();
+                if (!channel.TestConnection())
+                {
+                    return null;
+                }
 
-        public IList<WebService> GetActiveServices()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<WebServiceSet> GetActiveServiceSets()
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebServiceVersion GetVersion()
-        {
-            throw new NotImplementedException();
-        }
-
-        public WebBool HasUI()
-        {
-            throw new NotImplementedException();
+                return channel;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

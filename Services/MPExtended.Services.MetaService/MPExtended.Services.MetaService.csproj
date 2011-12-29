@@ -52,6 +52,7 @@
     <Compile Include="IServicePublisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MetaService.cs" />
+    <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServicePublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />
   </ItemGroup>

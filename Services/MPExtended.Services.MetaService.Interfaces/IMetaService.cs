@@ -12,7 +12,15 @@ namespace MPExtended.Services.MetaService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBool TestConnection();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebService> GetInstalledServices();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebService> GetActiveServices();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
