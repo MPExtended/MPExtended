@@ -121,6 +121,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
 
+        public bool IsCurrent
+        {
+            get
+            {
+                return DateTime.Now >= StartTime && DateTime.Now <= EndTime;
+            }
+        }
+
         private DateTime guideStart;
         private DateTime guideEnd;
 
