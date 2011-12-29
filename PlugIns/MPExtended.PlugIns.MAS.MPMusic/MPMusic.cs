@@ -119,18 +119,26 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 if(album.Artists.Count() > 0) 
                 {
-                    string path = GetLargeAlbumCover(album.Artists.Distinct().First(), album.Title);
-                    if (File.Exists(path))
+                    int i = 0;
+                    string[] filenames = new string[] {
+                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg"),
+                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + ".jpg")
+                    };
+                    foreach (string file in filenames)
                     {
-                        album.Artwork.Add(new WebArtworkDetailed()
+                        string path = Path.Combine(configuration["cover"], "Albums", file);
+                        if (File.Exists(path))
                         {
-                            Type = WebFileType.Cover,
-                            Offset = 0,
-                            Path = path,
-                            Rating = 1,
-                            Id = path.GetHashCode().ToString(),
-                            Filetype = Path.GetExtension(path).Substring(1)
-                        });
+                            album.Artwork.Add(new WebArtworkDetailed()
+                            {
+                                Type = WebFileType.Cover,
+                                Offset = i++,
+                                Path = path,
+                                Rating = 1,
+                                Id = path.GetHashCode().ToString(),
+                                Filetype = Path.GetExtension(path).Substring(1)
+                            });
+                        }
                     }
                 }
                 return album;
@@ -154,11 +162,31 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 .SelectMany(x => x)
                 .Distinct()
                 .OrderBy(x => x)
-                .Select(x => new WebMusicArtistBasic()
+                .Select(x =>
                 {
-                    Id = x,
-                    Title = x
-                }).ToList();
+                    var artist = new WebMusicArtistBasic();
+                    artist.Id = x;
+                    artist.Title = x;
+
+                    //if (artist.Id == "Talking Heads") System.Diagnostics.Debugger.Break();
+
+                    string path = Path.Combine(configuration["cover"], "Artists", MakeFileName(x) + ".jpg");
+                    if (File.Exists(path))
+                    {
+                        artist.Artwork.Add(new WebArtworkDetailed()
+                        {
+                            Type = WebFileType.Cover,
+                            Offset = 0,
+                            Path = path,
+                            Rating = 1,
+                            Id = path.GetHashCode().ToString(),
+                            Filetype = Path.GetExtension(path).Substring(1)
+                        });
+                    }
+
+                    return artist;
+                })
+                .ToList();
         }
 
         public WebMusicArtistBasic GetArtistBasicById(string artistId)
@@ -293,6 +321,17 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             string thumbDir = configuration["cover"];
             return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
+        }
+
+        private string MakeFileName(string text)
+        {
+            // This method should be compatible with Util.MakeFileName, in mediaportal/Core/Util/Util.cs:1840
+            text = text.Replace(':', '_');
+            foreach (char ch in Path.GetInvalidFileNameChars())
+            {
+                text = text.Replace(ch, '_');
+            }
+            return text;
         }
 
         private string EncodeTo64(string toEncode)
