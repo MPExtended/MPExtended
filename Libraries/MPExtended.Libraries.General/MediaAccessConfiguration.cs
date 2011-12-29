@@ -85,7 +85,7 @@ namespace MPExtended.Libraries.General
                     foreach(var x in plugin.Elements())
                     {
                         ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
-                        string value = type == ConfigType.File || type == ConfigType.Folder ? PerformFolderSubstitution(x.Value) : x.Value;
+                        string value = type == ConfigType.File || type == ConfigType.Folder ? Configuration.PerformFolderSubstitution(x.Value) : x.Value;
                         PluginConfiguration[plugin.Attribute("name").Value].Add(new PluginConfigItem()
                         {
                             DisplayName = x.Attribute("displayname").Value,
@@ -137,13 +137,6 @@ namespace MPExtended.Libraries.General
                 Log.Error("Failed to write MediaAccess.xml", ex);
                 return false;
             }
-        }
-
-        private static string PerformFolderSubstitution(string input)
-        {
-            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            input = input.Replace("%ProgramData%", cappdata);
-            return input;
         }
     }
 }

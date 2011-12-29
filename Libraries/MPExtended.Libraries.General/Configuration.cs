@@ -68,5 +68,12 @@ namespace MPExtended.Libraries.General
         {
             return Path.Combine(Installation.GetConfigurationDirectory(), filename);
         }
+
+        internal static string PerformFolderSubstitution(string input)
+        {
+            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            input = input.Replace("%ProgramData%", cappdata);
+            return input;
+        }
     }
 }
