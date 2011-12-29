@@ -79,7 +79,7 @@ namespace MPExtended.Services.MetaService
         {
             List<WebServiceSet> sets = new List<WebServiceSet>();
             string tveAddress = hinter.GetConfiguredTVServerAddress();
-            IMetaService tveMeta = tveAddress != null ? ServiceClientFactory.Create(tveAddress) : null;
+            IMetaService tveMeta = tveAddress != null ? ServiceClientFactory.CreateMeta(tveAddress) : null;
 
             // Start with the most simple case: full singleseat
             if (HasActiveMAS && HasActiveTAS && HasActiveWSS && HasActiveUI)

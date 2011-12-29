@@ -20,22 +20,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
+using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
     internal static class ServiceClientFactory
     {
-        public static IMetaService Create(string url)
+        public static IMetaService CreateMeta(string ip)
         {
             try
             {
-                ChannelFactory<IMetaService> factory = new ChannelFactory<IMetaService>(
-                    new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
-                    new EndpointAddress(String.Format("http://{0}:4322/MPExtended/MetaService", url))
-                );
-
-                IMetaService channel = factory.CreateChannel();
+                IMetaService channel = CreateConnection<IMetaService>(String.Format("http://{0}:4322/MPExtended/MetaService", ip));
                 if (!channel.TestConnection())
                 {
                     return null;
@@ -47,6 +45,32 @@ namespace MPExtended.Services.MetaService
             {
                 return null;
             }
+        }
+
+        public static IMediaAccessService CreateLocalMAS()
+        {
+            return CreateConnection<IMediaAccessService>(String.Format("http://127.0.0.1:4322/MPExtended/MediaAccessService"));
+        }
+
+        public static ITVAccessService CreateLocalTAS()
+        {
+            return CreateConnection<ITVAccessService>(String.Format("http://127.0.0.1:4322/MPExtended/TVAccessService"));
+        }
+
+        public static IWebStreamingService CreateLocalWSS()
+        {
+            return CreateConnection<IWebStreamingService>(String.Format("http://127.0.0.1:4322/MPExtended/StreamingService"));
+        }
+
+        private static T CreateConnection<T>(string url)
+        {
+            ChannelFactory<T> factory = new ChannelFactory<T>(
+                new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
+                new EndpointAddress(url)
+            );
+
+            T channel = factory.CreateChannel();
+            return channel;
         }
     }
 }

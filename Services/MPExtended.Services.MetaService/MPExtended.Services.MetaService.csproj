@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MetaService.cs" />
     <Compile Include="ServiceClientFactory.cs" />
+    <Compile Include="ServiceDetector.cs" />
     <Compile Include="ServicePublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />
   </ItemGroup>
@@ -61,9 +62,25 @@
       <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
       <Name>MPExtended.Libraries.General</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
+      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
+      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
       <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
       <Name>MPExtended.Services.MetaService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
+      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
+      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
+      <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
+      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

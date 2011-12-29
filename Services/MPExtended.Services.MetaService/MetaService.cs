@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -27,34 +28,44 @@ namespace MPExtended.Services.MetaService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class MetaService : IMetaService
     {
+        private const int API_VERSION = 4;
+
         public WebBool TestConnection()
         {
             return true;
         }
 
+        public WebServiceVersion GetVersion()
+        {
+            return new WebServiceVersion()
+            {
+                Version = VersionUtil.GetVersionName(),
+                Build = VersionUtil.GetBuildVersion().ToString(),
+                ApiVersion = API_VERSION,
+            };
+        }
+
         public IList<WebService> GetInstalledServices()
         {
-            throw new NotImplementedException();
+            return Installation.GetInstalledServices()
+                .Where(x => x.ServiceName != MPExtendedService.WifiRemote)
+                .Select(x => x.ToWebService())
+                .ToList();
         }
 
         public IList<WebService> GetActiveServices()
         {
-            throw new NotImplementedException();
+            return GetInstalledServices();
         }
 
         public IList<WebServiceSet> GetActiveServiceSets()
         {
-            throw new NotImplementedException();
-        }
-
-        public WebServiceVersion GetVersion()
-        {
-            throw new NotImplementedException();
+            return ServiceDetector.GetSetComposer().ComposeUnique().ToList();
         }
 
         public WebBool HasUI()
         {
-            throw new NotImplementedException();
+            return Installation.IsServiceInstalled(MPExtendedService.UserSessionService);
         }
     }
 }

@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -44,6 +45,27 @@ namespace MPExtended.Services.MetaService
                 we.TAS == compare.TAS &&
                 we.TASStream == compare.TASStream &&
                 we.UI == compare.UI;
+        }
+    }
+
+    internal static class ServiceExtensionMethods
+    {
+        public static WebService ToWebService(this Service service)
+        {
+            switch(service.ServiceName)
+            {
+                case MPExtendedService.MediaAccessService:
+                    return WebService.MediaAccessService;
+                case MPExtendedService.StreamingService:
+                    return WebService.StreamingService;
+                case MPExtendedService.TVAccessService:
+                    return WebService.TVAccessService;
+                case MPExtendedService.UserSessionService:
+                    return WebService.UserSessionService;
+                case MPExtendedService.WifiRemote:
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }
