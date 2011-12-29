@@ -52,6 +52,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             var groups = MPEServices.TAS.GetGroups();
             var activeGroup = MPEServices.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup);
+            if (activeGroup == null)
+            {
+                activeGroup = MPEServices.TAS.GetGroupById(groups.First().Id);
+            }
 
             var model = new TVGuideViewModel(groups, activeGroup, lastHour, endOfGuide);
             return View(model);
