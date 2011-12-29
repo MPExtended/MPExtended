@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeroconfService;
 
 namespace MPExtended.Services.MetaService
 {
@@ -26,17 +27,20 @@ namespace MPExtended.Services.MetaService
     {
         public bool Publish()
         {
-            throw new NotImplementedException();
+            return false;
+            //throw new NotImplementedException();
         }
 
         public void PublishAsync()
         {
-            throw new NotImplementedException();
+            return;
+            //throw new NotImplementedException();
         }
 
         public void Unpublish()
         {
-            throw new NotImplementedException();
+            return;
+            //throw new NotImplementedException();
         }
     }
 }

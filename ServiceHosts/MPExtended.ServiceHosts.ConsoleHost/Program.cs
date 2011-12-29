@@ -34,7 +34,8 @@ namespace MPExtended.ServiceHosts.ConsoleHost
                 typeof(MPExtended.Services.MediaAccessService.MediaAccessService),
                 typeof(MPExtended.Services.TVAccessService.TVAccessService),
                 typeof(MPExtended.Services.StreamingService.StreamingService),
-                typeof(MPExtended.Services.UserSessionService.UserSessionProxyService)
+                typeof(MPExtended.Services.UserSessionService.UserSessionProxyService),
+                typeof(MPExtended.Services.MetaService.MetaService)
             });
 #else
             var host = new MPExtendedHost();

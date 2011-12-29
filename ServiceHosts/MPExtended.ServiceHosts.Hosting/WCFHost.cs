@@ -79,7 +79,7 @@ namespace MPExtended.ServiceHosts.Hosting
                         foreach (var endpoint in host.Description.Endpoints)
                         {
                             // do not enable auth for stream endpoint
-                            if (endpoint.Name == "StreamEndpoint")
+                            if (endpoint.Name == "StreamEndpoint" || endpoint.Name.StartsWith("Unauthorized"))
                             {
                                 continue;
                             }
