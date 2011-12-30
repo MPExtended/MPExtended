@@ -51,16 +51,20 @@ namespace MPExtended.Libraries.General
     {
         public static FileLayoutType GetFileLayoutType()
         {
+            // Source distribution: search for a parent directory with the GlobalVersion.cs file
             string binDir = AppDomain.CurrentDomain.BaseDirectory;
-            string dirName = Path.GetFileName(Path.GetDirectoryName(binDir));
-            if (dirName == "Debug" || dirName == "Release")
+            DirectoryInfo info = new DirectoryInfo(binDir);
+            do
             {
-                return FileLayoutType.Source;
-            }
-            else
-            {
-                return FileLayoutType.Installed;
-            }
+                if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
+                {
+                    return FileLayoutType.Source;
+                }
+                info = info.Parent;
+            } while (info != null);
+
+            // No source, so it's binary
+            return FileLayoutType.Installed;
         }
 
         public static string GetSourceRootDirectory()
@@ -80,7 +84,7 @@ namespace MPExtended.Libraries.General
             DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(originalPath.LocalPath));
             do
             {
-                if (Directory.Exists(Path.Combine(info.FullName, "Config")) && Directory.Exists(Path.Combine(info.FullName, "Config", "Debug")))
+                if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
                 {
                     return info.FullName;
                 }
