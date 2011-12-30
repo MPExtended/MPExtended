@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <!--
+    Copyright (c) 2011 MPExtended Developers, http://mpextended.github.com/
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+  -->
+  <Product
+    Id="d1cfc4f7-b586-4ede-aa4c-81444d19a33c"
+    UpgradeCode="cdd8eb72-c655-4cd0-8d2b-1b8137876415"
+    Name="MPExtended WebMediaPortal (IIS version)"
+    Language="1033"
+    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
+    Manufacturer="MPExtended">
+    <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
+
+    <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
+    <!-- <Property Id="MSIFASTINSTALL" Value="3" /> -->
+
+    <!-- Project general -->
+    <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
+
+    <!-- Disallow downgrades and support upgrades -->
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+    <Upgrade Id="cdd8eb72-c655-4cd0-8d2b-1b8137876415">
+      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.General.dll)" />
+    </Upgrade>
+
+    <!-- The icon -->
+    <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\MpExtl_Icon_256.ico" />
+    <Property Id="ARPPRODUCTICON" Value="MPExtendedIcon" />
+
+    <!-- Require .NET 4 -->
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="MPExtended WebMediaPortal requires Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <!-- User interface -->
+    <Property Id="WIXUI_INSTALLDIR" Value="MPEXTENDEDDIRECTORY" />
+    <UIRef Id="GeneralUI"/>
+    <UIRef Id="WixUI_Common" />
+
+    <!-- Custom images -->
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />
+    <Binary Id="ExitDialogBitmap" SourceFile="$(var.SolutionDir)\Libraries\Installer\exitdialog.bmp" />
+
+    <!-- Main feature -->
+    <FeatureRef Id="Feature_WebMP" />
+  </Product>
+</Wix>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <!--
+    Copyright (c) 2011 MPExtended Developers, http://mpextended.github.com/
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+  -->
+  <Fragment>
+    <!-- Directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Program files -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
+          <Directory Id="InstallDirectory" Name="WebMediaPortal">
+            <!-- General registry (installation path) -->
+            <Component Id="Component_Registry" Guid="76089ff3-ddd3-4370-b2b8-d57de76b238e">
+              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                <RegistryValue Type="string" Name="WebMediaPortalInstallLocation" Value="[MPEXTENDEDDIRECTORY]WebMediaPortal" />
+              </RegistryKey>
+            </Component>
+
+            <Directory Id="Dir_WWW" Name="www">
+              <Directory Id="BinDirectory" Name="bin">
+                <!-- Binaries for WebMP -->
+                <Component Id="Component_WWW_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.General.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <!-- ProgramData -->
+      <Directory Id="CommonAppDataFolder">
+        <Directory Id="ConfigDirectory" Name="MPExtended">
+          <!-- Config -->
+          <Component Id="Component_Config" Guid="f28c66d5-93ec-49bb-8114-b2545970991b">
+            <CreateFolder Directory="ConfigDirectory">
+              <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
+            </CreateFolder>
+            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortal.xml">
+              <Permission User="Everyone" GenericAll="yes" Write="yes" />
+            </File>
+            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalUsers.xml">
+              <Permission User="Everyone" GenericAll="yes" Write="yes" />
+            </File>
+            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalHosting.xml">
+              <Permission User="Everyone" GenericAll="yes" Write="yes" />
+            </File>
+          </Component>
+
+          <Directory Id="LogDirectory" Name="Logs">
+            <!-- set directory permissions-->
+            <Component Id="Component_Logs" Guid="04ae34a1-f0c6-41b0-baa7-6161b48464c2">
+              <CreateFolder Directory="LogDirectory">
+                <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
+              </CreateFolder>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>

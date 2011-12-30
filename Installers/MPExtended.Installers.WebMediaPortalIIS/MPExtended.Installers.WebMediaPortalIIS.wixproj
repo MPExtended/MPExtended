@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.5</ProductVersion>
-    <ProjectGuid>{731c1b33-d8aa-450a-a02d-2b8d7f9d3aee}</ProjectGuid>
+    <ProjectGuid>{03bbeb5c-398f-4120-87f0-6ed698c63402}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>MPExtended.Installers.WebMediaPortal</OutputName>
     <OutputType>Package</OutputType>
@@ -21,11 +21,15 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\MPExtended.Installers.WebMediaPortal\UI_Control.wxs">
+      <Link>UI_Control.wxs</Link>
+    </Compile>
+    <Compile Include="..\MPExtended.Installers.WebMediaPortal\WWW.wxs">
+      <Link>WWW.wxs</Link>
+    </Compile>
     <Compile Include="Features.wxs" />
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
-    <Compile Include="UI_Control.wxs" />
-    <Compile Include="WWW.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Applications\MPExtended.Applications.WebMediaPortal\MPExtended.Applications.WebMediaPortal.csproj">
@@ -46,10 +50,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixFirewallExtension">
-      <HintPath>$(WixExtDir)\WixFirewallExtension.dll</HintPath>
-      <Name>WixFirewallExtension</Name>
-    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
@@ -60,7 +60,9 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Texts.wxl" />
+    <EmbeddedResource Include="..\MPExtended.Installers.WebMediaPortal\Texts.wxl">
+      <Link>Texts.wxl</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

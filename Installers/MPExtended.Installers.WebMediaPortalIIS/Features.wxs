@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <!--
+    Copyright (c) 2011 MPExtended Developers, http://mpextended.github.com/
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+  -->
+  <Fragment>
+    <!-- General stuff -->
+    <ComponentGroup Id="Component_WebMP">
+      <ComponentRef Id="Component_Config"/>
+      <ComponentRef Id="Component_Logs"/>
+      <ComponentRef Id="Component_Registry"/>
+      <ComponentRef Id="Component_WWW_Binaries"/>
+      <ComponentGroupRef Id="Component_WWW"/>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <!-- Reference components -->
+    <Feature Id="Feature_WebMP" Level="1" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
+             Title="MPExtended WebMediaPortal (IIS version)"
+             Description="Webinterface for MediaPortal">
+      <ComponentGroupRef Id="Component_WebMP" />
+    </Feature>
+  </Fragment>
+</Wix>
