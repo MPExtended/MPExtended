@@ -6,7 +6,7 @@
     <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{03bbeb5c-398f-4120-87f0-6ed698c63402}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>MPExtended.Installers.WebMediaPortal</OutputName>
+    <OutputName>MPExtended.Installers.WebMediaPortalIIS</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
