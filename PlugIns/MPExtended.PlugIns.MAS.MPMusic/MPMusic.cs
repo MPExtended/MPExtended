@@ -169,20 +169,26 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     artist.Id = x;
                     artist.Title = x;
 
-                    //if (artist.Id == "Talking Heads") System.Diagnostics.Debugger.Break();
-
-                    string path = Path.Combine(configuration["cover"], "Artists", MakeFileName(x) + ".jpg");
-                    if (File.Exists(path))
+                    int i = 0;
+                    string[] filenames = new string[] {
+                        MakeFileName(x + "L.jpg"),
+                        MakeFileName(x + ".jpg")
+                    };
+                    foreach (string file in filenames)
                     {
-                        artist.Artwork.Add(new WebArtworkDetailed()
+                        string path = Path.Combine(configuration["cover"], "Artists", file);
+                        if (File.Exists(path))
                         {
-                            Type = WebFileType.Cover,
-                            Offset = 0,
-                            Path = path,
-                            Rating = 1,
-                            Id = path.GetHashCode().ToString(),
-                            Filetype = Path.GetExtension(path).Substring(1)
-                        });
+                            artist.Artwork.Add(new WebArtworkDetailed()
+                            {
+                                Type = WebFileType.Cover,
+                                Offset = i++,
+                                Path = path,
+                                Rating = 1,
+                                Id = path.GetHashCode().ToString(),
+                                Filetype = Path.GetExtension(path).Substring(1)
+                            });
+                        }
                     }
 
                     return artist;
