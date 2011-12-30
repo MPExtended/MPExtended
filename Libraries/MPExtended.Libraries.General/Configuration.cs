@@ -17,9 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -66,7 +68,30 @@ namespace MPExtended.Libraries.General
 
         public static string GetPath(string filename)
         {
-            return Path.Combine(Installation.GetConfigurationDirectory(), filename);
+            string path = Path.Combine(Installation.GetConfigurationDirectory(), filename);
+            if (!File.Exists(path))
+            {
+                // copy from default location
+                MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
+                string defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
+                File.Copy(defaultPath, path);
+
+                // allow everyone to write to the config
+                var acl = File.GetAccessControl(path);
+                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
+                acl.AddAccessRule(rule);
+                File.SetAccessControl(path, acl);
+            }
+
+            return path;
+        }
+
+        internal static string PerformFolderSubstitution(string input)
+        {
+            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            input = input.Replace("%ProgramData%", cappdata);
+            return input;
         }
     }
 }

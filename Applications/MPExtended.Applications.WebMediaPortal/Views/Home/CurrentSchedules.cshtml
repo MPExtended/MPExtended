@@ -6,15 +6,14 @@
 @{
     if (@Model != null && @Model.Count(p => p.Title != "") > 0)
     {
-    <h2>
-        Current Schedules</h2>
-    <div>
-        <ul>
-            @foreach (var schedule in Model)
-            {
-                <li>@schedule.Title - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</li>       
-            }
-        </ul>
-    </div>
+        <h2>Today's schedules</h2>
+        <div>
+            <ul>
+                @foreach (var schedule in Model)
+                {
+                    <li>@schedule.Title - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</li>       
+                }
+            </ul>
+        </div>
     }   
 }

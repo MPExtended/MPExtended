@@ -69,12 +69,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
                 queryString["type"] = ((int)type).ToString();
                 queryString["itemId"] = itemId;
+
+                // Be a bit smart in setting the host header
                 string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
-                string getMediaItemUrl = rootUrl + "GetMediaItem?" + queryString.ToString();
-                return Redirect(getMediaItemUrl);
+                Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
+                UriBuilder builder = new UriBuilder(fullUri);
+                Uri hostUri = new Uri("http://" + HttpContext.Request.ServerVariables["HTTP_HOST"]); // .Url.Host always equals to localhost for some reason
+                builder.Host = hostUri.Host;
+                return Redirect(builder.Uri.ToString());
             }
 
-
+            // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier))
             {

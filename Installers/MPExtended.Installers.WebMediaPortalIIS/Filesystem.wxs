@@ -24,7 +24,7 @@
                 <RegistryValue Type="string" Name="WebMediaPortalInstallLocation" Value="[MPEXTENDEDDIRECTORY]WebMediaPortal" />
               </RegistryKey>
             </Component>
-            
+
             <!-- Default config -->
             <Directory Id="Dir_Config" Name="DefaultConfig">
               <Component Id="Component_Config" Guid="e9ff6a7f-c9a1-4ea9-87b7-62cb70ce3cc0">
@@ -37,7 +37,7 @@
             <!-- Web root -->
             <Directory Id="Dir_WWW" Name="www">
               <!-- This directory is filled by WWW.wxs -->
-              
+
               <Directory Id="BinDirectory" Name="bin">
                 <!-- Binaries for WebMP -->
                 <Component Id="Component_WWW_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
@@ -48,19 +48,6 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\NLog.config" />
-                </Component>
-                
-                <!-- Libraries for WebMP -->
-                <Component Id="Component_WWW_Libraries" Guid="75ab3f9d-d58f-40be-8b72-9e659222077b">
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\Microsoft.Web.Infrastructure.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.ApplicationServices.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.Helpers.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.Mvc.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.Razor.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.WebPages.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.WebPages.Deployment.dll" />
-                  <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.WebPages.Razor.dll" />
                 </Component>
               </Directory>
             </Directory>

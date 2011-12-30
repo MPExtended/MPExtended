@@ -659,6 +659,8 @@ namespace MPExtended.Services.MediaAccessService
                 return TVShowLibraries[provider].GetEpisodeDetailed(id).Artwork.Where(x => x.Type == WebFileType.Banner).Select(x => ((WebArtworkDetailed)x).Path).ToList();
             else if (mediatype == WebMediaType.Picture && filetype == WebFileType.Content)
                 return PictureLibraries[provider].GetPictureDetailed(id).Path;
+            else if (mediatype == WebMediaType.MusicArtist && filetype == WebFileType.Cover)
+                return MusicLibraries[provider].GetArtistBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
             else if (mediatype == WebMediaType.MusicAlbum && filetype == WebFileType.Cover)
                 return MusicLibraries[provider].GetAlbumBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
             else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Content)

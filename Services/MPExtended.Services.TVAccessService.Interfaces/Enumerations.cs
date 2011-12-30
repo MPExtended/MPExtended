@@ -24,20 +24,35 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     [DataContract]
     public enum WebScheduleType
     {
+        // UI: Once
         [EnumMember]
         Once = 0,
+
+        // UI: Every day at this time
         [EnumMember]
         Daily = 1,
+
+        // UI: Every week at this time
         [EnumMember]
         Weekly = 2,
+
+        // UI: Every time on this channel (starttime ignored)
         [EnumMember]
         EveryTimeOnThisChannel = 3,
+
+        // UI: Every time on every channel (starttime ignored)
         [EnumMember]
         EveryTimeOnEveryChannel = 4,
+
+        // UI: Weekends
         [EnumMember]
         Weekends = 5,
+
+        // UI: Weekdays 
         [EnumMember]
         WorkingDays = 6,
+
+        // UI: Weekly on this channel (starttime ignored)
         [EnumMember]
         WeeklyEveryTimeOnThisChannel = 7
     }

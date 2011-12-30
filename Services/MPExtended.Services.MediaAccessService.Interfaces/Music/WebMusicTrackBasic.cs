@@ -20,6 +20,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public string Title { get; set; }
         public int TrackNumber { get; set; }
         public int Year { get; set; }
+        public int Duration { get; set; }
         public IList<string> Genres { get; set; }
 
         public override WebMediaType Type

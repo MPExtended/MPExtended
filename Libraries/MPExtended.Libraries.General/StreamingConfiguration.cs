@@ -63,7 +63,7 @@ namespace MPExtended.Libraries.General
             DefaultAudioStream = file.Element("defaultStreams").Element("audio").Value;
             DefaultSubtitleStream = file.Element("defaultStreams").Element("subtitle").Value;
 
-            TVLogoDirectory = file.Element("tvLogoDirectory").Value;
+            TVLogoDirectory = Configuration.PerformFolderSubstitution(file.Element("tvLogoDirectory").Value);
 
             FFMpegPath = file.Element("ffmpeg").Element("path").Value;
             FFMpegAPI = file.Element("ffmpeg").Element("api").Value;

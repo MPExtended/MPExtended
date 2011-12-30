@@ -72,3 +72,8 @@
     color: #8A8575;
     overflow: hidden;
 }
+
+#TVGuide .program.current
+{
+    background-color: #AFCAFA;
+}
