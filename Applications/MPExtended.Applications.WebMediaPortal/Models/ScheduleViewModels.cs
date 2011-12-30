@@ -36,15 +36,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 { WebScheduleType.EveryTimeOnEveryChannel, "Every time on every channel" },
                 { WebScheduleType.Weekends, "Weekends" },
                 { WebScheduleType.WorkingDays, "Working days" },
-                { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Every week on this time on this channel" }
+                { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Weekly on this channel" }
             };
 
         public int Id { get; set; }
         public string Title { get; set; }
-        [DataType(DataType.Time)]
+
         public DateTime StartTime { get; set; }
-        [DataType(DataType.Time)]
         public DateTime EndTime { get; set; }
+
+        public string StartTimeFormatted { get; set; }
+        public string EndTimeFormatted { get; set; }
+
         public string Type { get; set; }
 
         public ScheduleViewModel(WebScheduleBasic schedule)
@@ -53,6 +56,31 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Title = schedule.ProgramName;
             StartTime = schedule.StartTime;
             EndTime = schedule.EndTime;
+
+            switch (schedule.ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                case WebScheduleType.Weekends:
+                case WebScheduleType.WorkingDays:
+                    StartTimeFormatted = schedule.StartTime.ToString("t");
+                    EndTimeFormatted = schedule.EndTime.ToString("t");
+                    break;
+                case WebScheduleType.Weekly:
+                    StartTimeFormatted = schedule.StartTime.ToString("dddd") + " " + schedule.StartTime.ToString("t");
+                    EndTimeFormatted = schedule.EndTime.ToString("dddd") + " " + schedule.EndTime.ToString("t");
+                    break;
+                case WebScheduleType.Once:
+                default:
+                    StartTimeFormatted = schedule.StartTime.ToString("g");
+                    EndTimeFormatted = schedule.EndTime.ToString("g");
+                    break;
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                    // they don't have a time associated with them
+                    break;
+            }
+
             Type = ScheduleTypeNames[schedule.ScheduleType];
         }
     }

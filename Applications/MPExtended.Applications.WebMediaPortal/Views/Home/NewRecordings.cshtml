@@ -6,15 +6,12 @@
 @{
     if (@Model != null && @Model.Count(p => p.Title != "") > 0)
     {
-    <h2>
-        Latest Recordings</h2>
-    <div class="column">
+        <h2>Latest Recordings</h2>
         <ul>
             @foreach (var recording in Model)
             {
-                <li>@Html.ActionLink(recording.Title, "Recording", "Television", new { id = recording.Id }, new { })</li>
+                <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })</li>
             }
         </ul>
-    </div>
     }
 }
