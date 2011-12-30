@@ -37,7 +37,7 @@ namespace MPExtended.Libraries.General
     {
         public static string GetClientInstallationDirectory()
         {
-            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
+            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
             if (res != null)
             {
                 return res.ToString();
