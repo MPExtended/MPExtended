@@ -63,6 +63,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "strPath", "Path", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("t", "strGenre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "iYear", "Year", DataReaders.ReadInt32),
+                new SQLFieldMapping("t", "iDuration", "Duration", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
             }, delegate(T item)
             {
