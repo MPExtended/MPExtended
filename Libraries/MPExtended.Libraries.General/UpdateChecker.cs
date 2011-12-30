@@ -43,7 +43,7 @@ namespace MPExtended.Libraries.General
                 return null;
             }
 
-            releases.Sort((x, y) => x.Version.CompareTo(y.Version));
+            releases.Sort((x, y) => y.BuildNumber.CompareTo(x.BuildNumber));
             return releases.First();
         }
 
