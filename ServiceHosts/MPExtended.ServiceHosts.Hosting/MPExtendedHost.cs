@@ -51,7 +51,14 @@ namespace MPExtended.ServiceHosts.Hosting
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
                 ThreadManager.Start("Zeroconf", delegate()
                 {
-                    zeroconf.PublishServices(Installation.GetInstalledServices());
+                    try
+                    {
+                        zeroconf.PublishServices(Installation.GetInstalledServices());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Zeroconf publish failed", ex);
+                    }
                 });
                 Log.Debug("Opened MPExtended ServiceHost");
                 return true;
