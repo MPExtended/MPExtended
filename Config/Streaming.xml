@@ -251,5 +251,27 @@
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
+
+    <!-- Pseudostreaming test -->
+    <transcoder>
+      <name>Flash pseudostreaming test</name>
+      <description>Flash pseudostreaming</description>
+      <bandwidth>3000</bandwidth>
+      <target>pc-flash-video</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>854</maxOutputWidth>
+      <maxOutputHeight>450</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperPseudoStreaming">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
   </transcoders>
 </appconfig>
