@@ -57,7 +57,7 @@ namespace MPExtended.Libraries.General
 
                 if (key == null)
                 {
-                    Log.Info("Could not find MediaPortal installation path key in registry, is MediaPortal installed?");
+                    Log.Info("Could not find MediaPortal client installation path key in registry, is MediaPortal client installed?");
                     return null;
                 }
 
