@@ -24,8 +24,20 @@
                 <RegistryValue Type="string" Name="WebMediaPortalInstallLocation" Value="[MPEXTENDEDDIRECTORY]WebMediaPortal" />
               </RegistryKey>
             </Component>
+            
+            <!-- Default config -->
+            <Directory Id="Dir_Config" Name="DefaultConfig">
+              <Component Id="Component_Config" Guid="e9ff6a7f-c9a1-4ea9-87b7-62cb70ce3cc0">
+                <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortal.xml" />
+                <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalUsers.xml" />
+                <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalHosting.xml" />
+              </Component>
+            </Directory>
 
+            <!-- Web root -->
             <Directory Id="Dir_WWW" Name="www">
+              <!-- This directory is filled by WWW.wxs -->
+              
               <Directory Id="BinDirectory" Name="bin">
                 <!-- Binaries for WebMP -->
                 <Component Id="Component_WWW_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
@@ -59,22 +71,6 @@
       <!-- ProgramData -->
       <Directory Id="CommonAppDataFolder">
         <Directory Id="ConfigDirectory" Name="MPExtended">
-          <!-- Config -->
-          <Component Id="Component_Config" Guid="f28c66d5-93ec-49bb-8114-b2545970991b">
-            <CreateFolder Directory="ConfigDirectory">
-              <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
-            </CreateFolder>
-            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortal.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalUsers.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-            <File Source="$(var.SolutionDir)\Config\Release\WebMediaPortalHosting.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-          </Component>
-
           <Directory Id="LogDirectory" Name="Logs">
             <!-- set directory permissions-->
             <Component Id="Component_Logs" Guid="04ae34a1-f0c6-41b0-baa7-6161b48464c2">

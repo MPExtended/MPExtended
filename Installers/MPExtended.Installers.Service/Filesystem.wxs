@@ -130,6 +130,24 @@
               </RegistryKey>
             </Component>
 
+            <!-- Configuration -->
+            <Directory Id="ConfigDefaultDirectory" Name="DefaultConfig">
+              <!-- General config -->
+              <Component Id="Component_General_Config" Guid="10b3c51a-e27c-436a-986d-8222ae9a8fed">
+                <File Source="$(var.SolutionDir)\Config\Release\Services.xml" />
+              </Component>
+
+              <!-- MAS config -->
+              <Component Id="Component_MAS_Config" Guid="97c257cf-8806-4d20-b674-790be70e7976">
+                <File Source="$(var.SolutionDir)\Config\Release\MediaAccess.xml" />
+              </Component>
+
+              <!-- Stream config -->
+              <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
+                <File Source="$(var.SolutionDir)\Config\Release\Streaming.xml" />
+              </Component>
+            </Directory>
+
             <Directory Id="StreamingDirectory" Name="Streaming">
               <!-- Filled from StreamBinaries.wxs -->
             </Directory>
@@ -140,30 +158,6 @@
       <!-- ProgramData -->
       <Directory Id="CommonAppDataFolder">
         <Directory Id="ConfigDirectory" Name="MPExtended">
-          <!-- General config -->
-          <Component Id="Component_General_Config" Guid="afe538ed-9cbb-4829-a341-886eb14b395f">
-            <CreateFolder Directory="ConfigDirectory">
-              <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
-            </CreateFolder>
-            <File Source="$(var.SolutionDir)\Config\Release\Services.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-          </Component>
-
-          <!-- MAS config -->
-          <Component Id="Component_MAS_Config" Guid="80b842fd-72b9-4a70-a3de-f307edcacb33">
-            <File Source="$(var.SolutionDir)\Config\Release\MediaAccess.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-          </Component>
-
-          <!-- Stream config -->
-          <Component Id="Component_WSS_Config" Guid="c1b6913e-a23b-4353-bb64-96bdb712ad19">
-            <File Source="$(var.SolutionDir)\Config\Release\Streaming.xml">
-              <Permission User="Everyone" GenericAll="yes" Write="yes" />
-            </File>
-          </Component>
-
           <Directory Id="LogDirectory" Name="Logs">
             <!-- set directory permissions-->
             <Component Id="Component_General_Logs" Guid="04ae34a1-f0c6-41b0-baa7-6161b48464c2">
