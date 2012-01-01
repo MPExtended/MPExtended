@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011 MPExtended, 2005-2011 Team MediaPortal
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2012 MPExtended, 2005-2011 Team MediaPortal
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // Copyright (C) 2005-2011 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
