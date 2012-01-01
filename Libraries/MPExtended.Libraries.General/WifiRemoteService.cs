@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2012 MPExtended
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -59,8 +59,15 @@ namespace MPExtended.Libraries.General
         {
             get
             {
-                string port = Mediaportal.ReadSectionFromConfigFile("WifiRemote")["port"];
-                return Int32.Parse(port);
+                try
+                {
+                    string port = Mediaportal.ReadSectionFromConfigFile("WifiRemote")["port"];
+                    return Int32.Parse(port);
+                }
+                catch (Exception)
+                {
+                    return 8017;
+                }
             }
         }
 
@@ -79,8 +86,16 @@ namespace MPExtended.Libraries.General
 
         public override void GetUsernameAndPassword(User user, out string username, out string password)
         {
-            username = DecryptConfig(Mediaportal.ReadSectionFromConfigFile("WifiRemote")["username"]);
-            password = DecryptConfig(Mediaportal.ReadSectionFromConfigFile("WifiRemote")["password"]);
+            try
+            {
+                username = DecryptConfig(Mediaportal.ReadSectionFromConfigFile("WifiRemote")["username"]);
+                password = DecryptConfig(Mediaportal.ReadSectionFromConfigFile("WifiRemote")["password"]);
+            }
+            catch (Exception)
+            {
+                username = "";
+                password = "";
+            }
         }
 
         private static string DecryptConfig(string data)

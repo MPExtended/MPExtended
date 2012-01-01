@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2012 MPExtended
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ namespace MPExtended.Libraries.General
             }
             else
             {
+				Log.Info("Could not find MediaPortal client installation path key in registry, is MediaPortal client installed?");
                 return null;
             }
         }

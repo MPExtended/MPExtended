@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2012 MPExtended
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -69,8 +69,13 @@ namespace MPExtended.Libraries.General
         public static string GetPath(string filename)
         {
             string path = Path.Combine(Installation.GetConfigurationDirectory(), filename);
+
             if (!File.Exists(path))
             {
+#if DEBUG
+                // In debug mode files always exists as they're read from the source tree
+                throw new FileNotFoundException("Couldn't find config - what did you do?!?!");
+#else
                 // copy from default location
                 MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
                 string defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
@@ -82,6 +87,7 @@ namespace MPExtended.Libraries.General
                 FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
                 acl.AddAccessRule(rule);
                 File.SetAccessControl(path, acl);
+#endif
             }
 
             return path;

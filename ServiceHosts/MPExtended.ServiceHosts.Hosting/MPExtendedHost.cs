@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011 MPExtended
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2012 MPExtended
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -51,7 +51,14 @@ namespace MPExtended.ServiceHosts.Hosting
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
                 ThreadManager.Start("Zeroconf", delegate()
                 {
-                    zeroconf.PublishServices(Installation.GetInstalledServices());
+                    try
+                    {
+                        zeroconf.PublishServices(Installation.GetInstalledServices());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Zeroconf publish failed", ex);
+                    }
                 });
                 Log.Debug("Opened MPExtended ServiceHost");
                 return true;
