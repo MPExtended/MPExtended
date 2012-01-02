@@ -63,9 +63,26 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 DataOutputStream = pipeClient;
 
-                // Do the actual metadata injection here:
-                // - you can read the VLC output from InputStream
-                // - write your output to pipeServer
+                byte[] bytes = new byte[1000];
+                int result = InputStream.Read(bytes, 0, 1000);
+                string bytesToFile = ByteArrayToString(bytes);
+                string onMetaData = bytesToFile.Substring(27, 10);
+                // if "onMetaData" exists then proceed to read the attributes
+                if (onMetaData == "onMetaData")
+                {
+                    int indexDuration = bytesToFile.IndexOf("duration");
+                    double durationOld = GetNextDouble(bytes, indexDuration + 9, 8);
+                    double durationNew = ((double)this.context.MediaInfo.Duration) / 1000;
+                    byte[] newDur = DoubleToByteArray(durationNew, true);
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        bytes[indexDuration + 9 + i] = newDur[i];
+                    }
+                }
+                String bytesToFileNew = ByteArrayToString(bytes);
+                pipeServer.Write(bytes, 0, result);
+
                 MPExtended.Services.StreamingService.Code.StreamCopy.AsyncStreamCopy(InputStream, pipeServer);
             });
             return true;
@@ -75,6 +92,48 @@ namespace MPExtended.Services.StreamingService.Units
         {
             ThreadManager.Abort(doInjectionThread);
             return true;
+        }
+
+        private Double GetNextDouble(Byte[] b, int offset, int length)
+        {
+            MemoryStream ms = new MemoryStream(b);
+            // move the desired number of places in the array
+            ms.Seek(offset, SeekOrigin.Current);
+            // create byte array
+            byte[] bytes = new byte[length];
+            // read bytes
+            int result = ms.Read(bytes, 0, length);
+            // convert to double (all flass values are written in reverse order)
+            return ByteArrayToDouble(bytes, true);
+        }
+
+        private string ByteArrayToString(byte[] bytes)
+        {
+            string byteString = string.Empty;
+            foreach (byte b in bytes)
+            {
+                byteString += Convert.ToChar(b).ToString();
+            }
+            return byteString;
+        }
+
+        private Double ByteArrayToDouble(byte[] bytes, bool readInReverse)
+        {
+            if (bytes.Length != 8)
+                throw new Exception("bytes must be exactly 8 in Length");
+            if (readInReverse)
+                Array.Reverse(bytes);
+            return BitConverter.ToDouble(bytes, 0);
+        }
+
+        private byte[] DoubleToByteArray(Double _value, bool writeInReverse)
+        {
+            byte[] bytes = BitConverter.GetBytes(_value);
+
+            if (writeInReverse)
+                Array.Reverse(bytes);
+
+            return bytes;
         }
     }
 }
