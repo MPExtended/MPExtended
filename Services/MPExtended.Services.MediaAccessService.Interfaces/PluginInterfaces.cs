@@ -27,13 +27,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface IMusicLibrary : ILibrary
     {
         IEnumerable<WebMusicTrackBasic> GetAllTracks();
+        IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed();
         IEnumerable<WebMusicAlbumBasic> GetAllAlbums();
         IEnumerable<WebMusicArtistBasic> GetAllArtists();
-        IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed();
+        IEnumerable<WebMusicArtistDetailed> GetAllArtistsDetailed();
         WebMusicTrackBasic GetTrackBasicById(string trackId);
+        WebMusicTrackDetailed GetTrackDetailedById(string trackId);
         WebMusicAlbumBasic GetAlbumBasicById(string albumId);
         WebMusicArtistBasic GetArtistBasicById(string artistId);
-        WebMusicTrackDetailed GetTrackDetailedById(string trackId);
+        WebMusicArtistDetailed GetArtistDetailedById(string artistId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
     }
