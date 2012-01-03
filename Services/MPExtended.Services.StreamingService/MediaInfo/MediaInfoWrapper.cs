@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using MPExtended.Libraries.General;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -170,7 +171,11 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     });
                 }
 
-                // only support usual naming convention for external files for now
+                // get max subtitle id
+                var list = retinfo.SubtitleStreams.Select(x => x.ID);
+                int lastId = list.Count() == 0 ? 0 : list.Max();
+
+                // standard name of external subtitle files
                 string subfile = Path.Combine(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".srt");
                 if (File.Exists(subfile))
                 {
@@ -178,12 +183,29 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     {
                         Language = "ext",
                         LanguageFull = "External subtitle file",
-                        ID = 500, // a file with so many streams seems quite unlikely to me
+                        ID = ++lastId, // a file with so many streams seems quite unlikely to me
                         Index = ++scodecnr,
                         Filename = subfile
                     });
                 }
 
+                // language in subtitle filename
+                var files = Directory.GetFiles(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".*.srt");
+                foreach (var file in files)
+                {
+                    string basename = Path.GetFileName(file).Substring(Path.GetFileNameWithoutExtension(source).Length);
+                    string tag = basename.Substring(1, basename.Length - 5);
+                    retinfo.SubtitleStreams.Add(new WebSubtitleStream()
+                    {
+                        Language = LookupCountryCode(tag),
+                        LanguageFull = tag,
+                        ID = ++lastId,
+                        Index = ++scodecnr,
+                        Filename = file
+                    });
+                }
+
+                
                 // return
                 info.Close();
 
@@ -227,6 +249,15 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 return 0;
 
             return result;
+        }
+
+        private static string LookupCountryCode(string languageName)
+        {
+            var language = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
+                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
+                .FirstOrDefault(x => x.DisplayName == languageName || x.EnglishName == languageName || x.NativeName == languageName || x.Name == languageName);
+            return language != null ? language.TwoLetterISOLanguageName : "ext";
         }
     }
 }
