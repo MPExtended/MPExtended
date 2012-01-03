@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IMusicTrackNumberSortable
+    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, IMusicTrackNumberSortable
     {
         public WebMusicTrackBasic()
         {
@@ -21,6 +21,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public int TrackNumber { get; set; }
         public int Year { get; set; }
         public int Duration { get; set; }
+        public float Rating { get; set; }
         public IList<string> Genres { get; set; }
 
         public override WebMediaType Type
