@@ -2,6 +2,13 @@
 <h2>
     Sorry, an error occurred while processing your request.
 </h2>
+
+<ul>
+<li>WebMediaPortal version @ViewBag.Version (build @ViewBag.BuildVersion).</li>
+<li>Request: @ViewBag.Request</li>
+</ul>
+<br />
+
 @{var exception = Model;}
 @while (exception != null)
 {

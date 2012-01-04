@@ -57,6 +57,8 @@ namespace MPExtended.Applications.WebMediaPortal
 
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
+            Log.Info("WebMediaPortal version {0} (build {1}) starting with MAS {2} and TAS {3}",
+                VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
         }
     }
 }
