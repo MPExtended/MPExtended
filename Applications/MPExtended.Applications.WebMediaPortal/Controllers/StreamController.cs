@@ -33,6 +33,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : BaseController
     {
+        private static List<Tuple<WebStreamMediaType, string>> RequestedStreams = new List<Tuple<WebStreamMediaType, string>>();
+
         //
         // Streaming
         private int? GetProvider(WebStreamMediaType type)
@@ -77,6 +79,22 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Uri hostUri = new Uri("http://" + HttpContext.Request.ServerVariables["HTTP_HOST"]); // .Url.Host always equals to localhost for some reason
                 builder.Host = hostUri.Host;
                 return Redirect(builder.Uri.ToString());
+            }
+
+            // Check if there is actually a player requested for this stream
+            bool found = false;
+            foreach (var item in RequestedStreams)
+            {
+                if (item.Item1 == type && item.Item2 == itemId)
+                {
+                    RequestedStreams.Remove(item);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                return new HttpUnauthorizedResult();
             }
 
             // Do a standard stream
@@ -130,6 +148,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         [Authorize]
         public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
+            // save stream request
+            RequestedStreams.Add(new Tuple<WebStreamMediaType, string>(type, itemId));
+
             // get transcoding profile
             IWebStreamingService streamControl = GetStreamControl(type);
             WebTranscoderProfile profile = null;
