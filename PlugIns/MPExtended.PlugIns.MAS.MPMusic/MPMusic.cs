@@ -49,7 +49,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
-            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre " +
+            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
                          "FROM tracks t " + 
                          "WHERE %where";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -64,6 +64,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "strGenre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "iYear", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "iDuration", "Duration", DataReaders.ReadInt32),
+                new SQLFieldMapping("t", "iRating", "Rating", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
             }, delegate(T item)
             {
@@ -100,10 +101,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             string sql = "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
                             "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
-                            "MIN(dateAdded) AS date, MIN(iYear) AS year " +
+                            "MIN(t.dateAdded) AS date, " +
+                            "CASE WHEN i.iYear ISNULL THEN MIN(t.iYear) ELSE i.iYear END AS year, " +
+                            "MAX(i.iRating) AS rating " + 
                          "FROM tracks t " +
+                         "LEFT JOIN albuminfo i ON t.strAlbum = i.strAlbum AND t.strArtist LIKE '%' || i.strArtist || '%' " +
                          "WHERE %where " + 
-                         "GROUP BY strAlbum, strAlbumArtist ";
+                         "GROUP BY t.strAlbum, t.strAlbumArtist ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("t", "strAlbum", "Id", AlbumIdReader),
@@ -115,7 +119,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "composer", "Composer", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "date", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("t", "year", "Year", DataReaders.ReadInt32)
+                new SQLFieldMapping("", "year", "Year", DataReaders.ReadInt32),
+                new SQLFieldMapping("", "rating", "Rating", DataReaders.ReadInt32),
             }, delegate(WebMusicAlbumBasic album)
             {
                 if(album.Artists.Count() > 0) 

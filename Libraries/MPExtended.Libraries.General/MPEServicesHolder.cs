@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -30,6 +31,8 @@ namespace MPExtended.Libraries.General
     public class MPEServicesHolder
     {
         private const int MAX_ITEMS_IN_OBJECT_GRAPH = Int32.MaxValue;
+        private const int MAX_STRING_CONTENT_LENGTH = Int32.MaxValue;
+        private const int MAX_ARRAY_LENGTH = Int32.MaxValue;
 
         private string MASUrl;
         private string TASUrl;
@@ -293,15 +296,29 @@ namespace MPExtended.Libraries.General
             ChannelFactory<T> factory = null;
             if (addr.IsLoopback && addr.Port == 4322)
             {
+                NetNamedPipeBinding binding = new NetNamedPipeBinding()
+                {
+                    MaxReceivedMessageSize = 100000000
+                };
+                binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
+                binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
+
                 factory = new ChannelFactory<T>(
-                    new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },
+                    binding,
                     new EndpointAddress(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", service))
                 );
             }
             else
             {
+                BasicHttpBinding binding = new BasicHttpBinding()
+                {
+                    MaxReceivedMessageSize = 100000000
+                };
+                binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
+                binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
+
                 factory = new ChannelFactory<T>(
-                    new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
+                    binding,
                     new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", addr.Host, addr.Port, service))
                 );
             }

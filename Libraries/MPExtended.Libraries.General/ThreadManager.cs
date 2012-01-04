@@ -25,6 +25,17 @@ namespace MPExtended.Libraries.General
 {
     public static class ThreadManager
     {
+        private class ThreadStartArguments
+        {
+            public string Name { get; set; }
+            public string StackTrace { get; set; }
+
+            public bool HasParameter { get; set; }
+            public object Parameter { get; set; }
+            public ThreadStart StartMethod { get; set; }
+            public ParameterizedThreadStart ParameterStartMethod { get; set; }
+        }
+
         private static List<Thread> threads = new List<Thread>();
 
         public static void Add(Thread t)
@@ -39,20 +50,58 @@ namespace MPExtended.Libraries.General
 
         public static Thread Start(string name, ThreadStart method) 
         {
-            Thread t = new Thread(method);
-            t.Name = name;
-            t.Start();
-            threads.Add(t);
-            return t;
+            return Start(new ThreadStartArguments()
+            {
+                Name = name,
+                StackTrace = Environment.StackTrace,
+                HasParameter = false,
+                StartMethod = method
+            });
         }
 
         public static Thread Start(string name, ParameterizedThreadStart method, object parameter)
         {
-            Thread t = new Thread(method);
-            t.Name = name;
-            t.Start(parameter);
-            threads.Add(t);
-            return t;
+            return Start(new ThreadStartArguments()
+            {
+                Name = name,
+                StackTrace = Environment.StackTrace,
+                HasParameter = true,
+                Parameter = parameter,
+                ParameterStartMethod = method
+            });
+        }
+
+        private static Thread Start(ThreadStartArguments arguments)
+        {
+            Thread thread = new Thread(new ParameterizedThreadStart(delegate(object threadArguments) {
+                ThreadStartArguments tsa = threadArguments as ThreadStartArguments;
+                try
+                {
+                    if (tsa.HasParameter)
+                    {
+                        tsa.ParameterStartMethod.Invoke(tsa.Parameter);
+                    }
+                    else
+                    {
+                        tsa.StartMethod.Invoke();
+                    }
+                }
+                catch (ThreadAbortException)
+                {
+                    // we don't care about these
+                }
+                catch (Exception ex)
+                {
+                    string message = String.Format("Thread {0} aborting due to uncaught exception", tsa.Name);
+                    Log.Error(message, ex);
+                    Log.Info("Thread was started at:\r\n{0}", tsa.StackTrace);
+                }
+            }));
+
+            thread.Name = arguments.Name;
+            thread.Start(arguments);
+            threads.Add(thread);
+            return thread;
         }
 
         public static void Abort(string name)

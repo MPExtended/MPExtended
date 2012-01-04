@@ -49,6 +49,7 @@ namespace MPExtended.Applications.ServiceConfigurator
         public MainWindow()
         {
             InitializeComponent();
+            userSessionService = new UserSessionService();
 
             try
             {
@@ -61,7 +62,10 @@ namespace MPExtended.Applications.ServiceConfigurator
                 privateHost.Open();
 
                 Log.Info("UserSessionService started...");
-                userSessionService = new UserSessionService();
+            }
+            catch (AddressAlreadyInUseException)
+            {
+                Log.Info("Address for UserSessionService is already in use");
             }
             catch (Exception ex)
             {

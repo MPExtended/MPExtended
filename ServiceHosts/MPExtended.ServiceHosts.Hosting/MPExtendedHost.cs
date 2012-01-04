@@ -48,6 +48,18 @@ namespace MPExtended.ServiceHosts.Hosting
             try
             {
                 Log.Debug("Opening MPExtended ServiceHost version {0} (build {1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion());
+
+                // always log uncaught exceptions
+                AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e)
+                {
+                    Log.Error("Unhandled exception", (Exception)e.ExceptionObject);
+                    if (e.IsTerminating)
+                    {
+                        Log.Fatal("Terminating because of previous exception");
+                    }
+                };
+
+                // perform the actual start
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
                 ThreadManager.Start("Zeroconf", delegate()
                 {
