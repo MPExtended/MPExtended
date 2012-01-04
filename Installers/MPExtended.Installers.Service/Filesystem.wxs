@@ -21,7 +21,9 @@
             <!-- General -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
               <File Source="$(var.MPExtended.Libraries.ServiceLib.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
+              <File Source="$(var.MPExtended.Libraries.ServiceLib.TargetDir)\MPExtended.Libraries.ServiceLib.pdb" />
               <File Source="$(var.MPExtended.Libraries.General.TargetDir)\MPExtended.Libraries.General.dll" />
+              <File Source="$(var.MPExtended.Libraries.General.TargetDir)\MPExtended.Libraries.General.pdb" />
               <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
             </Component>
             
@@ -43,6 +45,7 @@
             <!-- MAS -->
             <Component Id="Component_MAS_Binaries" Guid="61a8f10a-2010-46d2-be8e-1e84fb959b89">
               <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
+              <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.pdb" />
             </Component>
 
             <!-- MAS registry -->
@@ -59,13 +62,19 @@
                 <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.dll" />
                 <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
 
-                <!-- all plugins for release -->
+                <!-- all plugins that we release -->
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.pdb" />
               </Component>
             </Directory>
 
@@ -82,6 +91,7 @@
               <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TVDatabase.dll" />
               <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvLibrary.Interfaces.dll" />
               <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.dll" />
+              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.pdb" />
             </Component>
 
             <!-- TAS registry -->
@@ -95,6 +105,7 @@
             <Component Id="Component_USS_Binaries" Guid="fe44be32-fa7d-4439-a16a-ddbab9e592b4">
               <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.Interfaces.dll" />
               <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.dll" />
+              <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.pdb" />
             </Component>
 
             <!-- USS registry -->
@@ -108,6 +119,7 @@
             <Component Id="Component_Configurator_Binaries" Guid="b35532af-5cc4-41a7-9bce-03175b3d8f92">
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" Id="ConfiguratorExecutable" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe.config" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.pdb" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.xml" />
@@ -118,9 +130,11 @@
             <!-- WSS -->
             <Component Id="Component_WSS_Binaries" Guid="3a0d3e40-c061-40b7-bd78-195c35d702c8">
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.dll" />
+              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.pdb" />
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
               <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.dll" />
+              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.pdb" />
             </Component>
 
             <!-- WSS registry -->

@@ -62,15 +62,18 @@
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_Service" Guid="bec0610f-43c4-4a1d-840b-6beeb1259a62">
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe" KeyPath="yes" Id="MainService"/>
+        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.pdb" />
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe.config" />
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\NLog.config" />
 
         <!-- hosting -->
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.Hosting.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.Hosting.pdb" />
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\ZeroconfService.dll" />
         
         <!-- let's just install the consolehost too, for debugging -->
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe" />
+        <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.pdb" />
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe.config" />
 
         <ServiceInstall
