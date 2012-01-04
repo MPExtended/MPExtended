@@ -69,17 +69,30 @@ namespace MPExtended.Libraries.General
         public static string GetInstallDirectory(MPExtendedProduct product)
         {
             // If possible, try to read it from the registry, where the install location is set during installation. 
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\MPExtended");
-            if (key != null)
+            string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
+            object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
+            if (regLocation != null)
             {
-                object value = key.GetValue(String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product)));
-                if (value != null)
-                {
-                    return value.ToString();
-                }
+                return regLocation.ToString();
             }
 
-            // Fallback to dynamic detection based upon the default install location of the services
+            // try default installation location
+            string location = null;
+            switch (product)
+            {
+                case MPExtendedProduct.Service:
+                    location = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "MPExtended", "Service");
+                    break;
+                case MPExtendedProduct.WebMediaPortal:
+                    location = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "MPExtended", "WebMediaPortal");
+                    break;
+            }
+            if (Directory.Exists(location))
+            {
+                return location;
+            }
+
+            // Fallback to dynamic detection based upon the current execution location
             switch(product)
             {
                 case MPExtendedProduct.Service:
