@@ -135,7 +135,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public TVGuideProgramViewModel(WebProgramBasic program, DateTime guideStart, DateTime guideEnd)
         {
             Id = program.Id;
-            Title = program.Title;
+            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
             StartTime = program.StartTime;
             EndTime = program.EndTime;
 
@@ -176,7 +176,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public ProgramDetailsViewModel(WebProgramBasic program)
         {
             Id = program.Id;
-            Title = program.Title;
+            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
             Description = program.Description;
             StartTime = program.StartTime;
             EndTime = program.EndTime;
