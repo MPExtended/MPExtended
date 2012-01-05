@@ -77,9 +77,20 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     return;
                 }
 
+                // rotate IIS Express logfile if it's too big
+                string logPath = Path.Combine(Installation.GetLogDirectory(), String.Format("WebMediaPortalIIS.log", DateTime.Now));
+                if (File.Exists(logPath) && new FileInfo(logPath).Length > 1024 * 1024)
+                {
+                    string backup = Path.ChangeExtension(logPath, ".bak");
+                    if (File.Exists(backup))
+                    {
+                        File.Delete(backup);
+                    }
+                    File.Move(logPath, backup);
+                }
+
                 // start IIS Express
                 string arguments = String.Format("/systray:0 /config:{0} /site:WebMediaPortal", tempConfigFile);
-                string logPath = Path.Combine(Installation.GetLogDirectory(), String.Format("WebMediaPortalIIS-{0:yyyy_MM_dd}.log", DateTime.Now));
 
                 hostProcess = new Process();
                 hostProcess.StartInfo = new ProcessStartInfo()
