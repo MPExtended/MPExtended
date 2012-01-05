@@ -35,6 +35,11 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
         {
             try
             {
+                // parse config
+                XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
+                int port = Int32.Parse(configFile.Element("port").Value);
+
+                // create config
                 XElement file = XElement.Load(TemplatePath);
                 XElement site = file.Element("system.applicationHost").Element("sites").Elements("site").First(x => x.Attribute("name").Value == "WebMediaPortal");
 
@@ -45,15 +50,12 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     )
                 );
 
-                foreach (string addr in HostAddresses)
-                {
-                    site.Element("bindings").Add(
-                        new XElement("binding",
-                            new XAttribute("protocol", "http"),
-                            new XAttribute("bindingInformation", String.Format(":{0}:{1}", Port, addr))
-                        )
-                    );
-                }
+                site.Element("bindings").Add(
+                    new XElement("binding",
+                        new XAttribute("protocol", "http"),
+                        new XAttribute("bindingInformation", String.Format(":{0}:", Port))
+                    )
+                );
 
                 file.Save(outputFile);
                 return true;

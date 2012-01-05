@@ -53,12 +53,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 tempConfigFile = Path.GetTempFileName();
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}", tempConfigFile);
-
-                // log configuration
-                foreach (var addr in generator.HostAddresses)
-                {
-                    Log.Debug("- Listening on {0}:{1}", addr, generator.Port);
-                }
+                Log.Debug("Listening on port {0}", generator.Port);
 
                 // lookup IIS Express location
                 string iisExpress = null;
