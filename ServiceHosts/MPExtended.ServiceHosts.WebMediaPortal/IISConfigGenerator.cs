@@ -46,7 +46,6 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 // parse config
                 XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
                 int port = Int32.Parse(configFile.Element("port").Value);
-                string[] hostAddresses = GetHostAddresses();
 
                 // create config
                 XElement file = XElement.Load(TemplatePath);
@@ -59,15 +58,12 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     )
                 );
 
-                foreach (string addr in hostAddresses)
-                {
-                    site.Element("bindings").Add(
-                        new XElement("binding",
-                            new XAttribute("protocol", "http"),
-                            new XAttribute("bindingInformation", String.Format(":{0}:{1}", Port, addr))
-                        )
-                    );
-                }
+                site.Element("bindings").Add(
+                    new XElement("binding",
+                        new XAttribute("protocol", "http"),
+                        new XAttribute("bindingInformation", String.Format(":{0}:", Port))
+                    )
+                );
 
                 file.Save(outputFile);
                 return true;
@@ -77,30 +73,6 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 Log.Warn("Failed to generate IIS config file", ex);
                 return false;
             }
-        }
-
-        public string[] GetHostAddresses()
-        {
-            XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
-
-            // If you didn't get it, I like LINQ
-            return NetworkInformation.GetIPAddresses(false)
-                .SelectMany(x =>
-                {
-                    try
-                    {
-                        var entry = Dns.GetHostEntry(x);
-                        return entry.Aliases.Concat(new string[] { entry.HostName, x.ToString() });
-                    }
-                    catch (Exception)
-                    {
-                        return new string[] { x.ToString() };
-                    }
-                })
-                .Concat(new string[] { "localhost" })
-                .Concat(configFile.Element("baseAddresses").Elements("add").Select(x => x.Value))
-                .Distinct()
-                .ToArray();
         }
     }
 }

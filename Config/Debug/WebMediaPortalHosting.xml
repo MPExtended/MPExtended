@@ -1,13 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <hosting>
   <port>8080</port>
-  <baseAddresses>
-    <!--
-
-       You can add additional URLs here:
-
-          <add>webmp.my-domain.com</add>
-
-    -->
-  </baseAddresses>
 </hosting>
