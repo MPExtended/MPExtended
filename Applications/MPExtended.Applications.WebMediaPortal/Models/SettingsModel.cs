@@ -38,5 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public string MASUrl { get; set; }
         public string TASUrl { get; set; }
+
+        public string Skin { get; set; }
     }
 }

@@ -19,12 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Libraries.General;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.General;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -91,6 +92,22 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public IEnumerable<SelectListItem> Skins
+        {
+            get
+            {
+                string path = HttpContext.Current.Server.MapPath("~/Skins");
+                var items = Directory.GetDirectories(path).Select(x => new SelectListItem() { 
+                    Text = Path.GetFileName(x),
+                    Value = Path.GetFileName(x)
+                });
+                return new List<SelectListItem>()
+                {
+                    new SelectListItem() { Text = "default", Value = "default" }
+                }.Union(items);
+            }
+        }
+
         public bool ShowMASConfiguration
         {
             get
@@ -135,6 +152,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [Required(ErrorMessage = "Please specify a valid music database")]
         public int MusicProvider { get; set; }
 
+        [DisplayName("Skin")]
+        [Required(ErrorMessage = "Please select a valid skin")]
+        public string Skin { get; set; }
+
         public SettingsViewModel()
         {
         }
@@ -145,6 +166,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             SelectedMediaProfile = model.DefaultMediaProfile;
             SelectedAudioProfile = model.DefaultAudioProfile;
             SelectedTVProfile = model.DefaultTVProfile;
+
+            Skin = model.Skin;
 
             if (ShowMASConfiguration)
             {
@@ -164,6 +187,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             changeModel.TVShowProvider = TVShowProvider;
             changeModel.MusicProvider = MusicProvider;
             changeModel.MovieProvider = MovieProvider;
+            changeModel.Skin = Skin;
             return changeModel;
         }
 

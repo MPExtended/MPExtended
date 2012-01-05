@@ -10,6 +10,17 @@
 {
     <div>
     <table>
+         <tr>
+            <td>
+                @Html.LabelFor(x => x.Skin)
+            </td>
+            <td>
+            
+                @Html.DropDownListFor(x => x.Skin, new SelectList(Model.Skins, "Value", "Text"))
+                @Html.ValidationMessageFor(x => x.Skin)
+            </td>
+        </tr>
+
         @{  if(Model.ShowTASConfiguration)
             {
         <tr>

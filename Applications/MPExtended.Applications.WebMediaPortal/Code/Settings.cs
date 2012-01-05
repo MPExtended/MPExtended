@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using System.Xml.Serialization;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.General;
@@ -38,6 +39,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             set
             {
                 SaveSettings(value);
+
+                ViewEngines.Engines.Clear();
+                ViewEngines.Engines.Add(new SkinnableViewEngine(value.Skin));
+                ViewEngines.Engines.Add(new RazorViewEngine());
             }
         }
 
