@@ -96,6 +96,7 @@
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\SkinnableViewEngine.cs" />
     <Compile Include="Code\Validators.cs" />
     <Compile Include="Code\XMLMembershipProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -311,6 +312,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\Player.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Skins\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
