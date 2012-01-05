@@ -47,6 +47,10 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             try
             {
+                // rotate log files if possible
+                LogRotation rotation = new LogRotation();
+                rotation.Rotate();
+
                 Log.Debug("Opening MPExtended ServiceHost version {0} (build {1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion());
 
                 // always log uncaught exceptions
