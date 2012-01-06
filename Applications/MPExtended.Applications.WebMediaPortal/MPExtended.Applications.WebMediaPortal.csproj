@@ -94,9 +94,11 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Mvc\DropdownExtensions.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
-    <Compile Include="Code\Validators.cs" />
+    <Compile Include="Mvc\ListChoiceAttribute.cs" />
+    <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\XMLMembershipProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieLibraryController.cs" />

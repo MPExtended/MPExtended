@@ -22,7 +22,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using MPExtended.Libraries.General;
 
-namespace MPExtended.Applications.WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class Validators
     {
