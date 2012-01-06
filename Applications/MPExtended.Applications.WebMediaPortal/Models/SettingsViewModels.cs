@@ -22,9 +22,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.General;
-using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -54,7 +54,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public List<SelectListItem> Groups
+        public List<SelectListItem> TVGroups
         {
             get
             {
@@ -108,32 +108,35 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
 
         [DisplayName("Default TV group")]
-        [Required(ErrorMessage = "Please select a group")]
+        [ListChoice("TVGroups", AllowNull = true, ErrorMessage="Please select a valid TV group")]
         public int SelectedGroup { get; set; }
 
         [DisplayName("Default media streaming profile")]
-        [Required(ErrorMessage = "Please select a media profile")]
+        [ListChoice("MediaProfiles", AllowNull = true, ErrorMessage="Please select a valid media streaming profile")]
         public string SelectedMediaProfile { get; set; }
 
         [DisplayName("Default music streaming profile")]
-        [Required(ErrorMessage = "Please select a music profile")]
+        [ListChoice("AudioProfiles", AllowNull = true, ErrorMessage = "Please select a valid audio streaming profile")]
         public string SelectedAudioProfile { get; set; }
 
         [DisplayName("Default TV streaming profile")]
-        [Required(ErrorMessage = "Please select a tv profile")]
+        [ListChoice("TVProfiles", AllowNull = true, ErrorMessage = "Please select a valid TV streaming profile")]
         public string SelectedTVProfile { get; set; }
 
         [DisplayName("TV Show database")]
-        [Required(ErrorMessage = "Please specify a valid TV show database")]
+        [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessage = "Please select a valid TV show database")]
         public int TVShowProvider { get; set; }
 
         [DisplayName("Movie database")]
-        [Required(ErrorMessage = "Please specify a valid movie database")]
+        [ListChoice("MovieDatabases", AllowNull = true, ErrorMessage = "Please select a valid movie database")]
         public int MovieProvider { get; set; }
 
         [DisplayName("Music database")]
-        [Required(ErrorMessage = "Please specify a valid music database")]
+        [ListChoice("MusicDatabases", AllowNull = true, ErrorMessage = "Please select a valid music database")]
         public int MusicProvider { get; set; }
+
+        [DisplayName("Stream type")]
+        public StreamType StreamType { get; set; }
 
         public SettingsViewModel()
         {
@@ -141,6 +144,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public SettingsViewModel(SettingModel model)
         {
+            StreamType = model.StreamType;
             SelectedGroup = model.DefaultGroup;
             SelectedMediaProfile = model.DefaultMediaProfile;
             SelectedAudioProfile = model.DefaultAudioProfile;
@@ -157,10 +161,12 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public SettingModel ToSettingModel(SettingModel changeModel)
         {
+            changeModel.StreamType = StreamType;
             changeModel.DefaultGroup = SelectedGroup;
             changeModel.DefaultMediaProfile = SelectedMediaProfile;
             changeModel.DefaultAudioProfile = SelectedAudioProfile;
             changeModel.DefaultTVProfile = SelectedTVProfile;
+
             changeModel.TVShowProvider = TVShowProvider;
             changeModel.MusicProvider = MusicProvider;
             changeModel.MovieProvider = MovieProvider;

@@ -10,6 +10,16 @@
 {
     <div>
     <table>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.StreamType)
+            </td>
+            <td>
+                @Html.EnumDropDownListFor(x => x.StreamType)
+                @Html.ValidationMessageFor(x => x.StreamType)
+            </td>
+        </tr>
+
         @{  if(Model.ShowTASConfiguration)
             {
         <tr>
@@ -17,7 +27,7 @@
                 @Html.LabelFor(x => x.SelectedGroup)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedGroup, new SelectList(Model.Groups, "Value", "Text"))
+                @Html.DropDownListFor(x => x.SelectedGroup)
                 @Html.ValidationMessageFor(x => x.SelectedGroup)
             </td>
         </tr>
@@ -26,7 +36,7 @@
                 @Html.LabelFor(x => x.SelectedTVProfile)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedTVProfile, new SelectList(Model.TVProfiles, "Value", "Text"))
+                @Html.DropDownListFor(x => x.SelectedTVProfile)
                 @Html.ValidationMessageFor(x => x.SelectedTVProfile)
             </td>
         </tr>
@@ -39,7 +49,7 @@
                     @Html.LabelFor(x => x.SelectedMediaProfile)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.SelectedMediaProfile, new SelectList(Model.MediaProfiles, "Value", "Text"))
+                    @Html.DropDownListFor(x => x.SelectedMediaProfile)
                     @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
                 </td>
             </tr>
@@ -48,7 +58,7 @@
                     @Html.LabelFor(x => x.SelectedAudioProfile)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.SelectedAudioProfile, new SelectList(Model.AudioProfiles, "Value", "Text"))
+                    @Html.DropDownListFor(x => x.SelectedAudioProfile)
                     @Html.ValidationMessageFor(x => x.SelectedAudioProfile)
                 </td>
             </tr>
@@ -60,7 +70,7 @@
                     @Html.LabelFor(x => x.TVShowProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.TVShowProvider, Model.TVShowDatabases)
+                    @Html.DropDownListFor(x => x.TVShowProvider)
                     @Html.ValidationMessageFor(x => x.TVShowProvider)
                 </td>
             </tr>
@@ -69,7 +79,7 @@
                     @Html.LabelFor(x => x.MovieProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.MovieProvider, Model.MovieDatabases)
+                    @Html.DropDownListFor(x => x.MovieProvider)
                     @Html.ValidationMessageFor(x => x.MovieProvider)
                 </td>
             </tr>
@@ -78,7 +88,7 @@
                     @Html.LabelFor(x => x.MusicProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.MusicProvider, Model.MusicDatabases)
+                    @Html.DropDownListFor(x => x.MusicProvider)
                     @Html.ValidationMessageFor(x => x.MusicProvider)
                 </td>
             </tr>

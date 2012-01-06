@@ -17,13 +17,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
+    public enum StreamType
+    {
+        [Description("Direct: best performance, works only on local network")]
+        Direct,
+
+        [Description("Direct when possible, proxied otherwise")]
+        DirectWhenPossible,
+
+        [Description("Proxied: instantly stops timeshiftings, works over the internet")]
+        Proxied,
+    }
+
     public class SettingModel
     {
+        public StreamType StreamType { get; set; }
+
         public int DefaultGroup { get; set; }
 
         public string DefaultMediaProfile { get; set; }
