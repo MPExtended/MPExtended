@@ -11,6 +11,15 @@
     <div>
     <table>
         <tr>
+           <td>
+                @Html.LabelFor(x => x.StreamType)
+           </td>
+           <td>
+                @Html.DropDownListFor(x => x.StreamType, Model.StreamTypes)
+                @Html.ValidationMessageFor(x => x.StreamType)
+           </td>
+        </tr>
+        <tr>
             <td>
                 @Html.LabelFor(x => x.EnableDeinterlace)
             </td>

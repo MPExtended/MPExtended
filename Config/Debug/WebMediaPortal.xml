@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SettingModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StreamType>DirectWhenPossible</StreamType>
   <DefaultGroup>1</DefaultGroup>
   <DefaultMediaProfile>Flash LQ</DefaultMediaProfile>
   <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
   <DefaultTVProfile>Flash LQ</DefaultTVProfile>
-  <TVShowProvider xsi:nil="true" />
-  <MovieProvider xsi:nil="true" />
-  <MusicProvider xsi:nil="true" />
+  <EnableDeinterlace>false</EnableDeinterlace>
+  <TVShowProvider>6</TVShowProvider>
+  <MovieProvider>3</MovieProvider>
+  <MusicProvider>4</MusicProvider>
   <PicturesProvider xsi:nil="true" />
   <FileSystemProvider xsi:nil="true" />
   <MASUrl>auto://127.0.0.1:4322</MASUrl>

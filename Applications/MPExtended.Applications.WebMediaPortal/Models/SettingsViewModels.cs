@@ -107,6 +107,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public IEnumerable<SelectListItem> StreamTypes
+        {
+            get
+            {
+                return new List<SelectListItem>()
+                {
+                    new SelectListItem() { Value = "Direct", Text = "Direct: best performance, works only on local network" },
+                    new SelectListItem() { Value = "DirectWhenPossible", Text = "Direct when possible, proxied otherwise" },
+                    new SelectListItem() { Value = "Proxied", Text = "Proxied: instantly stops timeshiftings, works over the internet" },
+                };
+            }
+        }
+
         [DisplayName("Default TV group")]
         [Required(ErrorMessage = "Please select a group")]
         public int SelectedGroup { get; set; }
@@ -138,12 +151,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [DisplayName("VLC player: enable deinterlacing by default?")]
         public bool EnableDeinterlace { get; set; }
 
+        [DisplayName("Stream type")]
+        public StreamType StreamType { get; set; }
+
         public SettingsViewModel()
         {
         }
 
         public SettingsViewModel(SettingModel model)
         {
+            StreamType = model.StreamType;
             EnableDeinterlace = model.EnableDeinterlace;
             SelectedGroup = model.DefaultGroup;
             SelectedMediaProfile = model.DefaultMediaProfile;
@@ -161,6 +178,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public SettingModel ToSettingModel(SettingModel changeModel)
         {
+            changeModel.StreamType = StreamType;
             changeModel.EnableDeinterlace = EnableDeinterlace;
             changeModel.DefaultGroup = SelectedGroup;
             changeModel.DefaultMediaProfile = SelectedMediaProfile;

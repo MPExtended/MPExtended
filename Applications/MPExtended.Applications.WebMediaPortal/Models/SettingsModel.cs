@@ -22,8 +22,17 @@ using System.Web;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
+    public enum StreamType
+    {
+        Direct,
+        DirectWhenPossible,
+        Proxied,
+    }
+
     public class SettingModel
     {
+        public StreamType StreamType { get; set; }
+
         public int DefaultGroup { get; set; }
 
         public string DefaultMediaProfile { get; set; }
