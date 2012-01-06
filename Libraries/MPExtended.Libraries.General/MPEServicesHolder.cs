@@ -321,6 +321,12 @@ namespace MPExtended.Libraries.General
                     binding,
                     new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", addr.Host, addr.Port, service))
                 );
+
+                if (addr.UserInfo != null && addr.UserInfo.Length > 0 && addr.UserInfo.Contains('@'))
+                {
+                    factory.Credentials.UserName.UserName = addr.UserInfo.Substring(0, addr.UserInfo.IndexOf('@'));
+                    factory.Credentials.UserName.Password = addr.UserInfo.Substring(addr.UserInfo.IndexOf('@') + 1);
+                }
             }
 
             // set MaxItemsInObjectGraph parameter for all operations
