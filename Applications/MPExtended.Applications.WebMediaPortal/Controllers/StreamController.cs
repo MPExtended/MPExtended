@@ -63,24 +63,36 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
+        private ActionResult Download(WebStreamMediaType type, string itemId, string transcoder)
         {
-            // Let's hope and pray no one creates a transcoder profile named download
-            if (transcoder == "download")
-            {
-                var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
-                queryString["type"] = ((int)type).ToString();
-                queryString["itemId"] = itemId;
+            // Create URL to GetMediaItem
+            var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
+            queryString["type"] = ((int)type).ToString();
+            queryString["itemId"] = itemId;
+            string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
+            Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
 
-                // Be a bit smart in setting the host header
-                string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
-                Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
-                UriBuilder builder = new UriBuilder(fullUri);
-                Uri hostUri = new Uri("http://" + HttpContext.Request.ServerVariables["HTTP_HOST"]); // .Url.Host always equals to localhost for some reason
-                builder.Host = hostUri.Host;
-                return Redirect(builder.Uri.ToString());
+            // Check stream type
+            StreamType streamMode = Settings.ActiveSettings.StreamType;
+            if (streamMode == StreamType.DirectWhenPossible)
+            {
+                streamMode = NetworkInformation.IsOnLAN(NetworkInformation.NormalizeAddress(HttpContext.Request.UserHostAddress)) ? StreamType.Direct : StreamType.Proxied;
             }
 
+            // Do the actual streaming
+            if (streamMode == StreamType.Proxied)
+            {
+                ProxyStream(fullUri.ToString());
+            }
+            else if (streamMode == StreamType.Direct)
+            {
+                return Redirect(fullUri.ToString());
+            }
+            return new EmptyResult();
+        }
+
+        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
+        {
             // Check if there is actually a player requested for this stream
             bool found = false;
             foreach (var item in RequestedStreams)
@@ -112,8 +124,52 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            // redirect user to stream (WSS has automatic stream killing now)
-            return Redirect(url);
+            // Check stream type
+            StreamType streamMode = Settings.ActiveSettings.StreamType;
+            if (streamMode == StreamType.DirectWhenPossible)
+            {
+                streamMode = NetworkInformation.IsOnLAN(NetworkInformation.NormalizeAddress(HttpContext.Request.UserHostAddress)) ? StreamType.Direct : StreamType.Proxied;
+            }
+
+            // Do the actual streaming
+            if (streamMode == StreamType.Proxied)
+            {
+                ProxyStream(url);
+            }
+            else if (streamMode == StreamType.Direct)
+            {
+                return Redirect(url);
+            }
+
+            // kill stream (doesn't matter much if this doesn't happen, WSS kills streams automatically nowadays)
+            if (!GetStreamControl(type).FinishStream(identifier))
+            {
+                Log.Error("Streaming: FinishStream failed");
+            }
+            return new EmptyResult();
+        }
+
+        protected void ProxyStream(string sourceUrl)
+        {
+            byte[] buffer = new byte[65536]; // we don't actually read the full buffer each time, so a big size is ok
+            int read;
+
+            // do request
+            WebResponse response = WebRequest.Create(sourceUrl).GetResponse();
+            Stream sourceStream = response.GetResponseStream();
+
+            // set headers and disable buffer
+            HttpContext.Response.Buffer = false;
+            HttpContext.Response.BufferOutput = false;
+            HttpContext.Response.ContentType = response.Headers["Content-Type"] == null ? "video/MP2T" : response.Headers["Content-Type"];
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+
+            // stream to output
+            while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                HttpContext.Response.OutputStream.Write(buffer, 0, read);
+                HttpContext.Response.OutputStream.Flush(); // TODO: is this needed?
+            }
         }
 
         //

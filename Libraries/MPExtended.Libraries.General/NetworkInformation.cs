@@ -27,14 +27,23 @@ namespace MPExtended.Libraries.General
 {
     public static class NetworkInformation
     {
-        public static string[] GetIPAddresses(bool enableIPv6)
+        public static IEnumerable<IPAddress> GetIPAddressList(bool enableIPv6)
         {
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
                 .Where(x => enableIPv6 || x.AddressFamily != AddressFamily.InterNetworkV6)
-                .Select(x => x.ToString())
                 .Distinct()
                 .ToArray();
+        }
+
+        public static IEnumerable<IPAddress> GetIPAddressList()
+        {
+            return GetIPAddressList(Configuration.Services.EnableIPv6);
+        }
+
+        public static string[] GetIPAddresses(bool enableIPv6)
+        {
+            return GetIPAddressList(enableIPv6).Select(x => x.ToString()).ToArray();
         }
 
         public static string[] GetIPAddresses()
@@ -53,10 +62,51 @@ namespace MPExtended.Libraries.General
                 .ToArray();
         }
 
+        public static bool IsOnLAN(IPAddress address)
+        {
+            if (address.IsLocal())
+            {
+                return true;
+            }
+
+            var info = NetworkInterface.GetAllNetworkInterfaces()
+                .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                .SelectMany(x => x.GetIPProperties().UnicastAddresses)
+                .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                .Where(x => x.IPv4Mask != null)
+                .First();
+
+            return address.IsInSameSubnet(info.Address, info.IPv4Mask);
+        }
+
+        public static IPAddress NormalizeAddress(string address)
+        {
+            if (address == "localhost")
+            {
+                address = "127.0.0.1";
+            }
+            IPAddress addr = IPAddress.Parse(address);
+
+            // let's try if we can lookup the ipv4 address
+            if (addr.AddressFamily == AddressFamily.InterNetworkV6)
+            {
+                var list = NetworkInterface.GetAllNetworkInterfaces()
+                    .Where(x => x.OperationalStatus == OperationalStatus.Up)
+                    .Select(x => x.GetIPProperties().UnicastAddresses)
+                    .Where(x => x.Any(y => y.Address.IsEqual(addr)) && x.Any(y => y.Address.AddressFamily == AddressFamily.InterNetwork));
+                if (list.Any())
+                {
+                    addr = list.First().First(x => x.Address.AddressFamily == AddressFamily.InterNetwork).Address;
+                }
+            }
+
+            return addr;
+        }
+
         public static Dictionary<string, string> GetNetworkInterfaces(bool enableIPv6)
         {
             Dictionary<string, string> ifaces = new Dictionary<string, string>();
-            foreach (var iface in NetworkInterface.GetAllNetworkInterfaces())
+            foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
             {
                 foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
                 {
