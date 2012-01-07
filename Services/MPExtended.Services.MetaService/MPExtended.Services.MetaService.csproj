@@ -54,7 +54,7 @@
     <Compile Include="MetaService.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServiceDetector.cs" />
-    <Compile Include="ServicePublisher.cs" />
+    <Compile Include="ZeroconfPublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />
   </ItemGroup>
   <ItemGroup>

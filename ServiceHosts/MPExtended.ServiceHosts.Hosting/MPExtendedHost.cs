@@ -34,7 +34,7 @@ namespace MPExtended.ServiceHosts.Hosting
         {
             System.Threading.Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
-            publisher = new ServicePublisher();
+            publisher = new ZeroconfPublisher();
         }
 
         public MPExtendedHost(List<Type> types)
@@ -83,6 +83,7 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 Log.Debug("Closing MPExtended ServiceHost...");
                 wcf.Stop();
+                publisher.Unpublish();
                 ThreadManager.AbortAll();
                 Log.Flush();
                 return true;
