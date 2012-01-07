@@ -51,9 +51,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
             catch (InvalidOperationException)
             {
-                mServiceController = null;
-                Log.Error("MPExtended Service not installed");
-                MessageBox.Show("MPExtended Service not installed. Please make sure your installation is correct.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (Installation.GetFileLayoutType() != FileLayoutType.Source)
+                {
+                    mServiceController = null;
+                    Log.Error("MPExtended Service not installed");
+                    MessageBox.Show("MPExtended Service not installed. Please make sure your installation is correct.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
 
             // initialize watcher
