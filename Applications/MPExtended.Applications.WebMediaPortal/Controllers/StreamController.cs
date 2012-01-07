@@ -61,12 +61,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        private ActionResult Download(WebStreamMediaType type, string itemId, string transcoder)
+        public ActionResult Download(WebStreamMediaType type, string item)
         {
             // Create URL to GetMediaItem
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
             queryString["type"] = ((int)type).ToString();
-            queryString["itemId"] = itemId;
+            queryString["itemId"] = item;
             string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
             Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
 
@@ -143,8 +143,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // set headers and disable buffer
             HttpContext.Response.Buffer = false;
             HttpContext.Response.BufferOutput = false;
-            HttpContext.Response.ContentType = response.Headers["Content-Type"] == null ? "video/MP2T" : response.Headers["Content-Type"];
             HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+            HttpContext.Response.ContentType = response.Headers["Content-Type"] == null ? "video/MP2T" : response.Headers["Content-Type"];
+            foreach (string header in response.Headers.Keys)
+            {
+                if (header.StartsWith("Content-"))
+                {
+                    HttpContext.Response.AddHeader(header, response.Headers[header]);
+                }
+            }
 
             // stream to output
             while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
