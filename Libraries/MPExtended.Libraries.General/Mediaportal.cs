@@ -35,6 +35,8 @@ namespace MPExtended.Libraries.General
 
     public static class Mediaportal
     {
+        private static bool? hasValidConfig = null;
+
         public static string GetClientInstallationDirectory()
         {
             object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
@@ -117,7 +119,7 @@ namespace MPExtended.Libraries.General
             }
         }
 
-        public static string GetConfigFilePath()
+        private static string GetConfigFilePath()
         {
             string location = GetLocation(MediaportalDirectory.Config);
             if (location == null)
@@ -132,15 +134,23 @@ namespace MPExtended.Libraries.General
 
         public static bool HasValidConfigFile()
         {
+            if (hasValidConfig.HasValue)
+            {
+                return hasValidConfig.Value;
+            }
+
+            hasValidConfig = false;
             try
             {
                 string path = GetConfigFilePath();
-                if(path == null)
+                if(path == null || !File.Exists(path))
                 {
+                    Log.Info("MediaPortal configuration file does not exists");
                     return false;
                 }
 
                 var xml = XElement.Load(path); // try to parse it
+                hasValidConfig = true;
                 return true;
             }
             catch (Exception)
