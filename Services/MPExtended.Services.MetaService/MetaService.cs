@@ -47,15 +47,12 @@ namespace MPExtended.Services.MetaService
 
         public IList<WebService> GetInstalledServices()
         {
-            return Installation.GetInstalledServices()
-                .Where(x => x.ServiceName != MPExtendedService.WifiRemote)
-                .Select(x => x.ToWebService())
-                .ToList();
+            return ServiceDetector.GetInstalledServices();
         }
 
         public IList<WebService> GetActiveServices()
         {
-            return GetInstalledServices();
+            return ServiceDetector.GetActiveServices();
         }
 
         public IList<WebServiceSet> GetActiveServiceSets()
@@ -65,7 +62,7 @@ namespace MPExtended.Services.MetaService
 
         public WebBool HasUI()
         {
-            return Installation.IsServiceInstalled(MPExtendedService.UserSessionService);
+            return ServiceDetector.HasUI;
         }
     }
 }

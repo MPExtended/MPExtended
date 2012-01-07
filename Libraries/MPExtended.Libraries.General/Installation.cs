@@ -32,7 +32,6 @@ namespace MPExtended.Libraries.General
         TVAccessService,
         StreamingService,
         UserSessionService,
-        WifiRemote,
         MetaService
     }
 
@@ -179,8 +178,7 @@ namespace MPExtended.Libraries.General
                 new Service(MPExtendedService.TVAccessService, "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp"),
                 new Service(MPExtendedService.StreamingService, "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp"),
                 new Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp"),
-                new Service(MPExtendedService.MetaService, "MPExtended.Services.MetaService", "MetaService", "<not used>"),
-                new WifiRemoteService()
+                new Service(MPExtendedService.MetaService, "MPExtended.Services.MetaService", "MetaService", "<not used>")
             };
 
             string[] disabled =

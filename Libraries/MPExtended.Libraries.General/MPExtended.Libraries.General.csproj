@@ -76,7 +76,6 @@
     <Compile Include="ConfigurationContracts\Streaming.cs" />
     <Compile Include="UpdateChecker.cs" />
     <Compile Include="VersionUtil.cs" />
-    <Compile Include="WifiRemoteService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">

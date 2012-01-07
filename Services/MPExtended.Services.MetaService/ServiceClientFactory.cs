@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using MPExtended.Libraries.General;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -49,25 +50,42 @@ namespace MPExtended.Services.MetaService
 
         public static IMediaAccessService CreateLocalMAS()
         {
-            return CreateConnection<IMediaAccessService>(String.Format("http://127.0.0.1:4322/MPExtended/MediaAccessService"));
+            return CreateConnection<IMediaAccessService>(String.Format("net.pipe://127.0.0.1/MPExtended/MediaAccessService"));
         }
 
         public static ITVAccessService CreateLocalTAS()
         {
-            return CreateConnection<ITVAccessService>(String.Format("http://127.0.0.1:4322/MPExtended/TVAccessService"));
+            return CreateConnection<ITVAccessService>(String.Format("net.pipe://127.0.0.1/MPExtended/TVAccessService"));
         }
 
         public static IWebStreamingService CreateLocalWSS()
         {
-            return CreateConnection<IWebStreamingService>(String.Format("http://127.0.0.1:4322/MPExtended/StreamingService"));
+            return CreateConnection<IWebStreamingService>(String.Format("net.pipe://127.0.0.1/MPExtended/StreamingService"));
         }
 
         private static T CreateConnection<T>(string url)
         {
-            ChannelFactory<T> factory = new ChannelFactory<T>(
-                new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
-                new EndpointAddress(url)
-            );
+            Uri uri = new Uri(url);
+            ChannelFactory<T> factory;
+            if (uri.Scheme == "net.pipe")
+            {
+                factory = new ChannelFactory<T>(
+                    new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },
+                    new EndpointAddress(url)
+                );
+            }
+            else if (uri.Scheme == "http")
+            {
+                factory = new ChannelFactory<T>(
+                    new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
+                    new EndpointAddress(url)
+                );
+            }
+            else
+            {
+                Log.Warn("Tried to create connection to unsupported scheme {0}", url);
+                return default(T);
+            }
 
             T channel = factory.CreateChannel();
             return channel;

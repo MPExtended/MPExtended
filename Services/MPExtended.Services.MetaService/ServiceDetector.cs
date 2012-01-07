@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
@@ -31,6 +32,8 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
+                    if (!Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
+                        return false;
                     var msd = ServiceClientFactory.CreateLocalMAS().GetServiceDescription();
                     return msd.AvailableMovieLibraries.Count > 0;
                 }
@@ -47,6 +50,8 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
+                    if (!Installation.IsServiceInstalled(MPExtendedService.TVAccessService))
+                        return false;
                     var tsd = ServiceClientFactory.CreateLocalTAS().GetServiceDescription();
                     return tsd.HasConnectionToTVServer;
                 }
@@ -63,6 +68,8 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
+                    if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
+                        return false;
                     var wsd = ServiceClientFactory.CreateLocalWSS().GetServiceDescription();
                     return wsd.SupportsMedia || wsd.SupportsRecordings || wsd.SupportsTV;
                 }
@@ -77,7 +84,7 @@ namespace MPExtended.Services.MetaService
         {
             get
             {
-                return true;
+                return Installation.IsServiceInstalled(MPExtendedService.UserSessionService);
             }
         }
 
@@ -92,6 +99,25 @@ namespace MPExtended.Services.MetaService
             composer.HasActiveUI = HasUI;
 
             return composer;
+        }
+
+        public static List<WebService> GetInstalledServices()
+        {
+            return Installation.GetInstalledServices().Select(x => x.ToWebService()).ToList();
+        }
+
+        public static List<WebService> GetActiveServices()
+        {
+            List<WebService> list = new List<WebService>()
+            {
+                WebService.MediaAccessService
+            };
+
+            if (HasActiveMAS) list.Add(WebService.MediaAccessService);
+            if (HasActiveTAS) list.Add(WebService.TVAccessService);
+            if (HasActiveWSS) list.Add(WebService.StreamingService);
+            if (HasUI) list.Add(WebService.UserSessionService);
+            return list;
         }
     }
 }
