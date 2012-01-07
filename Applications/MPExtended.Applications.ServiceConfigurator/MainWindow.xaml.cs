@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -29,6 +30,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using MPExtended.Libraries.General;
 using MPExtended.Services.UserSessionService;
 using MPExtended.Services.UserSessionService.Interfaces;
@@ -86,6 +88,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                 Hide();
 
             HandleMpState(userSessionService.IsMediaPortalRunning().Result);
+
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
+            {
+                taskbarItemContextMenu.Items.Remove(MenuOpenWebMP);
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -206,6 +213,13 @@ namespace MPExtended.Applications.ServiceConfigurator
         private void MenuPowermodeScreensaverOn_Click(object sender, RoutedEventArgs e)
         {
             userSessionService.SetPowerMode(WebPowerMode.Screensaver);
+        }
+
+        private void MenuOpenWebMP_Click(object sender, RoutedEventArgs e)
+        {
+            XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
+            int port = Int32.Parse(configFile.Element("port").Value);
+            Process.Start(new ProcessStartInfo("http://localhost:" + port));
         }
     }
 }

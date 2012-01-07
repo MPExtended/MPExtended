@@ -63,6 +63,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public WebResolution Size { get; set; }
         public string URL { get; set; }
 
+        public SettingModel Settings
+        {
+            get
+            {
+                return Code.Settings.ActiveSettings;
+            }
+        }
+
         public IEnumerable<SelectListItem> TranscoderSelectList
         {
             get

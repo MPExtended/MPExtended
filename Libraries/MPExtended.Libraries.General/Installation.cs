@@ -139,6 +139,20 @@ namespace MPExtended.Libraries.General
             }
         }
 
+        public static bool IsProductInstalled(MPExtendedProduct product)
+        {
+            if (GetFileLayoutType() == FileLayoutType.Source)
+            {
+                return true;
+            }
+            else
+            {
+                string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
+                object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
+                return regLocation != null;
+            }
+        }
+
         public static string GetConfigurationDirectory()
         {
             if (GetFileLayoutType() == FileLayoutType.Source)

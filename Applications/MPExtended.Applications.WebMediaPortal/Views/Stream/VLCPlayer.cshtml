@@ -26,6 +26,11 @@
         var vlc = getVlcPlayer('vlcplayer');
         vlc.playlist.add("@Html.Raw(@Model.URL)");
         vlc.playlist.play();
+
+        @if(Model.Settings.EnableDeinterlace)
+        {
+            @Html.Raw("enableDeinterlace('linear');")
+        }
     }
 
     function enableDeinterlace(type) {

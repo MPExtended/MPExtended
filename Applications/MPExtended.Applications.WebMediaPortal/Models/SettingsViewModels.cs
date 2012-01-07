@@ -135,8 +135,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("MusicDatabases", AllowNull = true, ErrorMessage = "Please select a valid music database")]
         public int MusicProvider { get; set; }
 
+
         [DisplayName("Stream type")]
         public StreamType StreamType { get; set; }
+
+        [DisplayName("VLC player: enable deinterlacing by default?")]
+        public bool EnableDeinterlace { get; set; }
+
 
         public SettingsViewModel()
         {
@@ -145,6 +150,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public SettingsViewModel(SettingModel model)
         {
             StreamType = model.StreamType;
+            EnableDeinterlace = model.EnableDeinterlace;
             SelectedGroup = model.DefaultGroup;
             SelectedMediaProfile = model.DefaultMediaProfile;
             SelectedAudioProfile = model.DefaultAudioProfile;
@@ -162,6 +168,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public SettingModel ToSettingModel(SettingModel changeModel)
         {
             changeModel.StreamType = StreamType;
+            changeModel.EnableDeinterlace = EnableDeinterlace;
             changeModel.DefaultGroup = SelectedGroup;
             changeModel.DefaultMediaProfile = SelectedMediaProfile;
             changeModel.DefaultAudioProfile = SelectedAudioProfile;
