@@ -70,6 +70,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);
             }
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
+            {
+                tcMainTabs.Items.Remove(tiWebMediaPortal);
+            }
         }
 
         /// <summary>

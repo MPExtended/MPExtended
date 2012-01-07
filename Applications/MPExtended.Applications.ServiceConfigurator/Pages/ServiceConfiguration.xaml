@@ -46,6 +46,8 @@
             </TabItem>
             <TabItem Header="Troubleshooting" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
             </TabItem>
+            <TabItem Header="WebMediaPortal" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
+            </TabItem>
         </TabControl>
 
         <Image HorizontalAlignment="Left" Margin="6,0,11,11" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />

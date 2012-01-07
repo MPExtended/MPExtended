@@ -150,6 +150,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\TabWebMediaPortal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pages\ServiceConfiguration.xaml.cs">
@@ -184,6 +188,9 @@
     </Compile>
     <Compile Include="Pages\TabTroubleshooting.xaml.cs">
       <DependentUpon>TabTroubleshooting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TabWebMediaPortal.xaml.cs">
+      <DependentUpon>TabWebMediaPortal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
