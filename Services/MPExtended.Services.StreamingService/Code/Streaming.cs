@@ -22,6 +22,7 @@ using System.Linq;
 using System.ServiceModel.Web;
 using System.Threading;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.General.ConfigurationContracts;
 using MPExtended.Libraries.ServiceLib;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;

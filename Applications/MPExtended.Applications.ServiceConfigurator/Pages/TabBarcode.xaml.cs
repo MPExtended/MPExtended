@@ -26,6 +26,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.General.ConfigurationContracts;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

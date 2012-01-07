@@ -34,8 +34,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
         {
             get
             {
-                XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
-                return Int32.Parse(configFile.Element("port").Value);
+                return Configuration.WebMediaPortalHosting.Port;
             }
         }
 

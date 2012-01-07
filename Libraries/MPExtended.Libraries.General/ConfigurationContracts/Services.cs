@@ -20,9 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using System.Security.Cryptography;
 
-namespace MPExtended.Libraries.General
+namespace MPExtended.Libraries.General.ConfigurationContracts
 {
     public class User
     {
@@ -47,7 +46,7 @@ namespace MPExtended.Libraries.General
         }
     }
 
-    public class NetworkImpersonationConfiguration
+    public class NetworkImpersonation
     {
         private const string PASSWORD_KEY = "MPExtended Impersonation Password"; // And here all our security goes out of the window: the key is on the internet.
 
@@ -72,7 +71,7 @@ namespace MPExtended.Libraries.General
         }
     }
 
-    public class ServicesConfiguration
+    public class Services
     {
         public bool AuthenticationEnabled { get; set; }
 
@@ -87,9 +86,9 @@ namespace MPExtended.Libraries.General
 
         public List<User> Users { get; set; }
 
-        public NetworkImpersonationConfiguration NetworkImpersonation { get; set; }
+        public NetworkImpersonation NetworkImpersonation { get; set; }
 
-        public ServicesConfiguration()
+        public Services()
         {
             XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
 
@@ -104,7 +103,7 @@ namespace MPExtended.Libraries.General
             MASConnection = file.Element("connections").Element("mas").Value;
             TASConnection = file.Element("connections").Element("tas").Value;
 
-            NetworkImpersonation = new NetworkImpersonationConfiguration()
+            NetworkImpersonation = new NetworkImpersonation()
             {
                 Domain = file.Element("networkImpersonation").Element("domain").Value,
                 Username = file.Element("networkImpersonation").Element("username").Value,

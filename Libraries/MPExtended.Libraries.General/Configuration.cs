@@ -22,47 +22,58 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
+using MPExtended.Libraries.General.ConfigurationContracts;
 
 namespace MPExtended.Libraries.General
 {
     public class Configuration
     {
-        private static ServicesConfiguration serviceConfig = null;
-        private static MediaAccessConfiguration mediaConfig = null;
-        private static StreamingConfiguration streamConfig = null;
+        private static ConfigurationContracts.Services serviceConfig = null;
+        private static MediaAccess mediaConfig = null;
+        private static Streaming streamConfig = null;
+        private static WebMediaPortalHosting webmpHostingConfig = null;
 
-        public static ServicesConfiguration Services 
+        public static ConfigurationContracts.Services Services 
         {
             get 
             {
                 if (serviceConfig == null)
-                    serviceConfig = new ServicesConfiguration();
+                    serviceConfig = new ConfigurationContracts.Services();
 
                 return serviceConfig;
             }
         }
 
-        public static MediaAccessConfiguration Media
+        public static MediaAccess Media
         {
             get
             {
                 if (mediaConfig == null)
-                    mediaConfig = new MediaAccessConfiguration();
+                    mediaConfig = new MediaAccess();
 
                 return mediaConfig;
             }
         }
 
-        public static StreamingConfiguration Streaming
+        public static Streaming Streaming
         {
             get
             {
                 if (streamConfig == null)
-                    streamConfig = new StreamingConfiguration();
+                    streamConfig = new Streaming();
 
                 return streamConfig;
+            }
+        }
+
+        public static WebMediaPortalHosting WebMediaPortalHosting
+        {
+            get
+            {
+                if (webmpHostingConfig == null)
+                    webmpHostingConfig = new WebMediaPortalHosting();
+
+                return webmpHostingConfig;
             }
         }
 

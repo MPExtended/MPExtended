@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace MPExtended.Libraries.General
+namespace MPExtended.Libraries.General.ConfigurationContracts
 {
     public class TranscoderProfile
     {
@@ -38,7 +38,7 @@ namespace MPExtended.Libraries.General
         public IDictionary<string, string> CodecParameters { get; set; }
     }
 
-    public class StreamingConfiguration
+    public class Streaming
     {
         public const string STREAM_NONE = "none";
         public const string STREAM_DEFAULT = "default";
@@ -56,7 +56,7 @@ namespace MPExtended.Libraries.General
 
         public List<TranscoderProfile> Transcoders { get; set; }
 
-        public StreamingConfiguration()
+        public Streaming()
         {
             XElement file = XElement.Load(Configuration.GetPath("Streaming.xml"));
 

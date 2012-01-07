@@ -18,9 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
-using System.Security.Cryptography;
+using MPExtended.Libraries.General.ConfigurationContracts;
 
 namespace MPExtended.Libraries.General
 {

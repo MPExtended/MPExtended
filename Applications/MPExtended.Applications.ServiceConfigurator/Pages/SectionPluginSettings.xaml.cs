@@ -23,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.General.ConfigurationContracts;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages

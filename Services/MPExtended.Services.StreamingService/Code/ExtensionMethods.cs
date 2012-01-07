@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.General;
+using MPExtended.Libraries.General.ConfigurationContracts;
 using MPExtended.Services.StreamingService.Transcoders;
 using MPExtended.Services.StreamingService.Interfaces;
 

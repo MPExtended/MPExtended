@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace MPExtended.Libraries.General
+namespace MPExtended.Libraries.General.ConfigurationContracts
 {
     public enum ConfigType { File, Folder, Text, Number, Boolean }
 
@@ -45,7 +45,7 @@ namespace MPExtended.Libraries.General
         }
     }
 
-    public class DefaultPluginConfiguration
+    public class DefaultPlugins
     {
         public string TVShow { get; set; }
         public string Movie { get; set; }
@@ -54,19 +54,19 @@ namespace MPExtended.Libraries.General
         public string Filesystem { get; set; }
     }
 
-    public class MediaAccessConfiguration
+    public class MediaAccess
     {
-        public DefaultPluginConfiguration DefaultPlugins { get; set; }
+        public DefaultPlugins DefaultPlugins { get; set; }
         public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
         public List<string> DisabledPlugins { get; set; }
 
-        public MediaAccessConfiguration()
+        public MediaAccess()
         {
             try
             {
                 XElement file = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
 
-                DefaultPlugins = new DefaultPluginConfiguration()
+                DefaultPlugins = new DefaultPlugins()
                 {
                     Filesystem = file.Element("defaultPlugins").Element("filesystem").Value,
                     Movie = file.Element("defaultPlugins").Element("movie").Value,

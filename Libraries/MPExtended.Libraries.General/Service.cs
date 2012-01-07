@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Win32;
+using MPExtended.Libraries.General.ConfigurationContracts;
 
 namespace MPExtended.Libraries.General
 {
