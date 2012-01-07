@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -91,6 +92,30 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public IEnumerable<SelectListItem> Skins
+        {
+            get
+            {
+                IEnumerable<SelectListItem> items = new List<SelectListItem>()
+                {
+                    new SelectListItem() { Text = "default", Value = "default" }
+                };
+
+                string path = HttpContext.Current.Server.MapPath("~/Skins");
+                if (Directory.Exists(path))
+                {
+                    items = items.Union(Directory.GetDirectories(path).Select(x => new SelectListItem()
+                    {
+                        Text = Path.GetFileName(x),
+                        Value = Path.GetFileName(x)
+                    }));
+
+                }
+
+                return items;
+            }
+        }
+
         public bool ShowMASConfiguration
         {
             get
@@ -135,13 +160,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("MusicDatabases", AllowNull = true, ErrorMessage = "Please select a valid music database")]
         public int MusicProvider { get; set; }
 
-
         [DisplayName("Stream type")]
         public StreamType StreamType { get; set; }
 
         [DisplayName("VLC player: enable deinterlacing by default?")]
         public bool EnableDeinterlace { get; set; }
 
+        [DisplayName("Skin")]
+        [Required(ErrorMessage = "Please select a valid skin")]
+		[ListChoice("Skins", AllowNull = false, ErrorMessage = "Please select a valid skin")]
+        public string Skin { get; set; }
 
         public SettingsViewModel()
         {
@@ -149,6 +177,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public SettingsViewModel(SettingModel model)
         {
+		    Skin = model.Skin;
             StreamType = model.StreamType;
             EnableDeinterlace = model.EnableDeinterlace;
             SelectedGroup = model.DefaultGroup;
@@ -177,6 +206,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             changeModel.TVShowProvider = TVShowProvider;
             changeModel.MusicProvider = MusicProvider;
             changeModel.MovieProvider = MovieProvider;
+            changeModel.Skin = Skin;
             return changeModel;
         }
 

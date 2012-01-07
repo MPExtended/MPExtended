@@ -10,6 +10,16 @@
 {
     <div>
     <table>
+         <tr>
+            <td>
+                @Html.LabelFor(x => x.Skin)
+            </td>
+            <td>
+            
+                @Html.DropDownListFor(x => x.Skin)
+                @Html.ValidationMessageFor(x => x.Skin)
+            </td>
+        </tr>
         <tr>
             <td>
                 @Html.LabelFor(x => x.StreamType)

@@ -10,6 +10,7 @@
   <MovieProvider i:nil="true" />
   <MusicProvider i:nil="true" />
   <PicturesProvider i:nil="true" />
+  <Skin>default</Skin>
   <StreamType>DirectWhenPossible</StreamType>
   <TASUrl>auto://127.0.0.1:4322</TASUrl>
   <TVShowProvider i:nil="true" />
