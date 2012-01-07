@@ -134,7 +134,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         [DisplayName("Default TV group")]
         [ListChoice("TVGroups", AllowNull = true, ErrorMessage="Please select a valid TV group")]
-        public int SelectedGroup { get; set; }
+        public int? SelectedGroup { get; set; }
 
         [DisplayName("Default media streaming profile")]
         [ListChoice("MediaProfiles", AllowNull = true, ErrorMessage="Please select a valid media streaming profile")]
@@ -150,15 +150,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         [DisplayName("TV Show database")]
         [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessage = "Please select a valid TV show database")]
-        public int TVShowProvider { get; set; }
+        public int? TVShowProvider { get; set; }
 
         [DisplayName("Movie database")]
         [ListChoice("MovieDatabases", AllowNull = true, ErrorMessage = "Please select a valid movie database")]
-        public int MovieProvider { get; set; }
+        public int? MovieProvider { get; set; }
 
         [DisplayName("Music database")]
         [ListChoice("MusicDatabases", AllowNull = true, ErrorMessage = "Please select a valid music database")]
-        public int MusicProvider { get; set; }
+        public int? MusicProvider { get; set; }
 
         [DisplayName("Stream type")]
         public StreamType StreamType { get; set; }

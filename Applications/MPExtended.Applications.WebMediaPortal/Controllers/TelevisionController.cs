@@ -51,7 +51,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var endOfGuide = lastHour.AddHours(4);
 
             var groups = MPEServices.TAS.GetGroups();
-            var activeGroup = MPEServices.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup);
+            var activeGroup = MPEServices.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup.GetValueOrDefault(groups.First().Id));
             if (activeGroup == null)
             {
                 activeGroup = MPEServices.TAS.GetGroupById(groups.First().Id);

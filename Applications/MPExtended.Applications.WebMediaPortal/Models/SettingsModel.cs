@@ -44,7 +44,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public StreamType StreamType { get; set; }
 
-        public int DefaultGroup { get; set; }
+        public int? DefaultGroup { get; set; }
 
         public string DefaultMediaProfile { get; set; }
         public string DefaultAudioProfile { get; set; }

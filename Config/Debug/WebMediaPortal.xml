@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SettingModel xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/MPExtended.Applications.WebMediaPortal.Models">
   <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
-  <DefaultGroup>1</DefaultGroup>
+  <DefaultGroup i:nil="true" />
   <DefaultMediaProfile>Flash LQ</DefaultMediaProfile>
   <DefaultTVProfile>Flash LQ</DefaultTVProfile>
   <EnableDeinterlace>false</EnableDeinterlace>
