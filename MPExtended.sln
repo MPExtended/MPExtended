@@ -112,7 +112,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debug", "Debug", "{9258DFD4
 		Config\Debug\Streaming.xml = Config\Debug\Streaming.xml
 		Config\Debug\WebMediaPortal.xml = Config\Debug\WebMediaPortal.xml
 		Config\Debug\WebMediaPortalHosting.xml = Config\Debug\WebMediaPortalHosting.xml
-		Config\Debug\WebMediaPortalUsers.xml = Config\Debug\WebMediaPortalUsers.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{D16BD20A-94B3-4E8C-A8E9-8F7BBF6F161C}"
@@ -122,7 +121,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{D16B
 		Config\Release\Streaming.xml = Config\Release\Streaming.xml
 		Config\Release\WebMediaPortal.xml = Config\Release\WebMediaPortal.xml
 		Config\Release\WebMediaPortalHosting.xml = Config\Release\WebMediaPortalHosting.xml
-		Config\Release\WebMediaPortalUsers.xml = Config\Release\WebMediaPortalUsers.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.USSTest", "Applications\MPExtended.Applications.Development.USSTest\MPExtended.Applications.Development.USSTest.csproj", "{B4064E77-5558-4932-BBD2-88B02E8F1F6F}"

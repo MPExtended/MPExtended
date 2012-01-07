@@ -95,13 +95,13 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Code\ServiceMembershipProvider.cs" />
     <Compile Include="Mvc\DropdownExtensions.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
-    <Compile Include="Code\XMLMembershipProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieLibraryController.cs" />
     <Compile Include="Controllers\MusicLibraryController.cs" />
@@ -219,16 +219,7 @@
     <Content Include="Views\Shared\_LogOnPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\ChangePassword.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Account\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Picture\Index.cshtml" />

@@ -78,87 +78,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         // URL: /Account/LogOff
         // **************************************
-
         public ActionResult LogOff()
         {
             FormsService.SignOut();
 
             return RedirectToAction("Index", "Home");
-        }
-
-        // **************************************
-        // URL: /Account/Register
-        // **************************************
-        [Authorize]
-        public ActionResult Register()
-        {
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize]
-        public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View(model);
-        }
-
-        // **************************************
-        // URL: /Account/ChangePassword
-        // **************************************
-        [Authorize]
-        public ActionResult ChangePassword()
-        {
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View();
-        }
-
-        [Authorize]
-        [HttpPost]
-        public ActionResult ChangePassword(ChangePasswordModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
-                {
-                    return RedirectToAction("ChangePasswordSuccess");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View(model);
-        }
-
-        // **************************************
-        // URL: /Account/ChangePasswordSuccess
-        // **************************************
-        [Authorize]
-        public ActionResult ChangePasswordSuccess()
-        {
-            return View();
         }
     }
 }
