@@ -175,7 +175,7 @@ namespace MPExtended.Services.StreamingService.Units
                     float position = transcoder.GetPosition();
                     Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
                     calculator.NewPercentage(position);
-                    calculator.SetStats(einfo);
+                    calculator.SaveStats(einfo);
                 }
                 catch (ThreadAbortException)
                 {

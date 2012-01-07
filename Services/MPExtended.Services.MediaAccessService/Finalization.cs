@@ -93,10 +93,5 @@ namespace MPExtended.Services.MediaAccessService
 
             return item;
         }
-
-        public static T ForItem<T>(T item, int? provider, WebMediaType providerType) where T : WebObject
-        {
-            return ForItem(item, provider, providerType.ToProviderType());
-        }
     }
 }

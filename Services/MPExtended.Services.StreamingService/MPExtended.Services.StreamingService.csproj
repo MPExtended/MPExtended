@@ -99,8 +99,6 @@
     <Compile Include="Units\ILogProcessingUnit.cs" />
     <Compile Include="Units\InputUnit.cs" />
     <Compile Include="Units\IProcessingUnit.cs" />
-    <Compile Include="Units\PassthroughUnit.cs" />
-    <Compile Include="Units\StreamCopyUnit.cs" />
     <Compile Include="Units\VLCManagedEncoder.cs" />
     <Compile Include="Units\VLCWrapperParsingUnit.cs" />
     <Compile Include="Code\NamedPipe.cs" />

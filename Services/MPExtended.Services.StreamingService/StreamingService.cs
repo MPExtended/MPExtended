@@ -68,7 +68,7 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Configuration.Streaming.Transcoders.Select(x => x.CopyToWebTranscoderProfile()).ToList();
+            return Configuration.Streaming.Transcoders.Select(x => x.ToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)

@@ -116,7 +116,7 @@ namespace MPExtended.Services.StreamingService.Units
                         // returning libvlc_time_t or a int64_t. And since it's in microseconds it gets big very fast, so it's absolutely useless.
                         double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
                         calculator.NewPercentage(percentage);
-                        calculator.SetStats(data);
+                        calculator.SaveStats(data);
                         continue;
                     }
 

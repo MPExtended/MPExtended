@@ -86,7 +86,7 @@ namespace MPExtended.Services.StreamingService.Code
             NewTime((int)Math.Round(percentage * this.duration));
         }
 
-        public void SetStats(Reference<WebTranscodingInfo> output)
+        public void SaveStats(Reference<WebTranscodingInfo> output)
         {
             lock (output.Value)
             {

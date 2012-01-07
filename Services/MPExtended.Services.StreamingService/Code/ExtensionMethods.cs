@@ -40,14 +40,7 @@ namespace MPExtended.Services.StreamingService.Code
 
     internal static class TranscoderProfileExtensionMethods
     {
-        public static ITranscoder GetTranscoder(this TranscoderProfile profile)
-        {
-            // For now only support files in current assembly
-            ITranscoder inst = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.TranscoderImplementationClass));
-            return inst;
-        }
-
-        public static WebTranscoderProfile CopyToWebTranscoderProfile(this TranscoderProfile profile)
+        public static WebTranscoderProfile ToWebTranscoderProfile(this TranscoderProfile profile)
         {
             // WCF sucks a bit with returning child classes
             return new WebTranscoderProfile()

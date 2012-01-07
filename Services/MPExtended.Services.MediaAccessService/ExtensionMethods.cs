@@ -203,7 +203,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public static T Finalize<T>(this T item, int? provider, WebMediaType mediatype) where T : WebObject
         {
-            return Finalization.ForItem(item, provider, mediatype);
+            return Finalization.ForItem(item, provider, mediatype.ToProviderType());
         }
     }
 

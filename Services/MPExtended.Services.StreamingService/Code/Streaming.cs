@@ -171,7 +171,7 @@ namespace MPExtended.Services.StreamingService.Code
                     sharing.StartStream(stream.Context, infoRef);
                 
                     // get transcoder
-                    stream.Transcoder = profile.GetTranscoder();
+                    stream.Transcoder = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.TranscoderImplementationClass));
                     stream.Transcoder.Identifier = identifier;
 
                     // get audio and subtitle id
