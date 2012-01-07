@@ -25,8 +25,9 @@
 
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu Opened="ContextMenu_Opened">
+                <ContextMenu Opened="ContextMenu_Opened" Name="taskbarItemContextMenu">
                     <MenuItem Name="MenuOpenConfigurator" Header="Open MPExtended Configurator" Click="MenuOpenConfigurator_Click" />
+                    <MenuItem Name="MenuOpenWebMP" Header="Open WebMediaPortal" Click="MenuOpenWebMP_Click" />
                     <MenuItem Name="MenuStartCloseMp" Header="Start MediaPortal" Click="MenuStartCloseMp_Click"/>
                     <MenuItem Name="MenuPowermodes" Header="Powermodes">
                         <MenuItem Name="MenuPowermodeScreensaverOn" Header="Screensaver" Click="MenuPowermodeScreensaverOn_Click"/>

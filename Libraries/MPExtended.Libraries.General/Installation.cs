@@ -106,6 +106,17 @@ namespace MPExtended.Libraries.General
         }
 #endif
 
+        public static bool IsProductInstalled(MPExtendedProduct product)
+        {
+#if DEBUG
+            return true;
+#else
+            string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
+            object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
+            return regLocation != null;
+#endif
+        }
+
         public static string GetConfigurationDirectory()
         {
 #if DEBUG
