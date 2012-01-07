@@ -49,11 +49,5 @@ namespace MPExtended.Libraries.General
             return address.AddressFamily == check.AddressFamily &&
                 address.GetAddressBytes().SequenceEqual(check.GetAddressBytes());
         }
-
-        public static bool IsLocal(this IPAddress address)
-        {
-            // TODO: there isn't a better implementation of this?
-            return new Uri("http://" + address.ToString()).IsLoopback;
-        }
     }
 }

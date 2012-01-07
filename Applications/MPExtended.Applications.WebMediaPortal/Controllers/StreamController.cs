@@ -76,7 +76,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             StreamType streamMode = Settings.ActiveSettings.StreamType;
             if (streamMode == StreamType.DirectWhenPossible)
             {
-                streamMode = NetworkInformation.IsOnLAN(NetworkInformation.NormalizeAddress(HttpContext.Request.UserHostAddress)) ? StreamType.Direct : StreamType.Proxied;
+                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
             }
 
             // Do the actual streaming
@@ -128,7 +128,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             StreamType streamMode = Settings.ActiveSettings.StreamType;
             if (streamMode == StreamType.DirectWhenPossible)
             {
-                streamMode = NetworkInformation.IsOnLAN(NetworkInformation.NormalizeAddress(HttpContext.Request.UserHostAddress)) ? StreamType.Direct : StreamType.Proxied;
+                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
             }
 
             // Do the actual streaming
