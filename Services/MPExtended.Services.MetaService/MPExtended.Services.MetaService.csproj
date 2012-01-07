@@ -55,6 +55,7 @@
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServiceDetector.cs" />
     <Compile Include="WCFMetaService.cs" />
+    <Compile Include="Zeroconf.cs" />
     <Compile Include="ZeroconfPublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />
   </ItemGroup>

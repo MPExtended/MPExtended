@@ -27,14 +27,11 @@ namespace MPExtended.Services.MetaService
 {
     internal class ZeroconfPublisher : IServicePublisher
     {
-        private const string DOMAIN = ""; // whole network
-        private const string SET_SERVICE_TYPE = "_mpextended-set._tcp"; 
-
         private List<NetService> publishedServices = new List<NetService>();
 
         public bool Publish(ServiceDetector detector)
         {
-            if (!Configuration.Services.BonjourEnabled || !CheckBonjourInstallation())
+            if (!Zeroconf.IsEnabled)
             {
                 return false;
             }
@@ -48,7 +45,7 @@ namespace MPExtended.Services.MetaService
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
 
-                NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, GetComputerName(), srv.Port);
+                NetService net = new NetService(Zeroconf.DOMAIN, srv.ZeroconfServiceType, GetComputerName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -68,7 +65,7 @@ namespace MPExtended.Services.MetaService
                 additionalData["tasstream"] = set.TASStream != null ? set.TASStream : String.Empty;
                 additionalData["ui"] = set.UI != null ? set.UI : String.Empty;
 
-                NetService net = new NetService(DOMAIN, SET_SERVICE_TYPE, GetComputerName(), Configuration.Services.Port);
+                NetService net = new NetService(Zeroconf.DOMAIN, Zeroconf.SET_SERVICE_TYPE, GetComputerName(), Configuration.Services.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -92,21 +89,6 @@ namespace MPExtended.Services.MetaService
         public void Unpublish()
         {
             // bonjour cleans up automatically
-        }
-
-        protected bool CheckBonjourInstallation()
-        {
-            try
-            {
-                Version ver = NetService.DaemonVersion;
-                Log.Debug("Bonjour version {0} installed", ver.ToString());
-                return true;
-            }
-            catch (Exception)
-            {
-                Log.Trace("Bonjour not installed");
-                return false;
-            }
         }
 
         private string GetComputerName()
