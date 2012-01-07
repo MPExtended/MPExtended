@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web;
+using System.Runtime.Serialization;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -37,6 +38,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class SettingModel
     {
+        public SettingModel()
+        {
+        }
+
         public StreamType StreamType { get; set; }
 
         public int DefaultGroup { get; set; }

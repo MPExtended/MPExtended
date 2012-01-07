@@ -20,7 +20,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Xml.Serialization;
+using System.Xml;
+using System.Text;
+using System.Runtime.Serialization;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.General;
 
@@ -43,43 +45,38 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static SettingModel LoadSettings()
         {
-            SettingModel loadedObj = new SettingModel();
+            // default values
+            SettingModel settings = new SettingModel();
+            settings.MASUrl = "auto://127.0.0.1:4322";
+            settings.TASUrl = "auto://127.0.0.1:4322";
  
             try
             {
-                // load from file using XmlSerializer
-                XmlSerializer SerializerObj = new XmlSerializer(typeof(SettingModel));
-                FileStream ReadFileStream = new FileStream(Configuration.GetPath("WebMediaPortal.xml"), FileMode.Open, FileAccess.Read, FileShare.Read);
-                loadedObj = (SettingModel)SerializerObj.Deserialize(ReadFileStream);
-
-                // cleanup
-                ReadFileStream.Close();
-                ReadFileStream.Dispose();
-                return loadedObj;
+                using(XmlReader reader = XmlReader.Create(Configuration.GetPath("WebMediaPortal.xml")))
+                {
+                    DataContractSerializer serializer = new DataContractSerializer(typeof(SettingModel));
+                    settings = (SettingModel)serializer.ReadObject(reader);
+                }
             }
             catch (Exception ex)
             {
                 Log.Debug("Exception in LoadSettings", ex);
             }
 
-            // set some default values
-            loadedObj.MASUrl = "auto://127.0.0.1:4322";
-            loadedObj.TASUrl = "auto://127.0.0.1:4322";
-            return loadedObj;
+            return settings;
         }
 
         private static void SaveSettings(SettingModel settings)
         {
-            // Create a new XmlSerializer instance with the type of the test class
-            XmlSerializer SerializerObj = new XmlSerializer(typeof(SettingModel));
-
-            // Create a new file stream to write the serialized object to a file
-            TextWriter WriteFileStream = new StreamWriter(Configuration.GetPath("WebMediaPortal.xml"));
-            SerializerObj.Serialize(WriteFileStream, settings);
-
-            // Cleanup
-            WriteFileStream.Close();
-            WriteFileStream.Dispose();
+            XmlWriterSettings writerSettings = new XmlWriterSettings();
+            writerSettings.CloseOutput = true;
+            writerSettings.Indent = true;
+            writerSettings.OmitXmlDeclaration = false;
+            using (XmlWriter writer = XmlWriter.Create(Configuration.GetPath("WebMediaPortal.xml"), writerSettings))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(SettingModel));
+                serializer.WriteObject(writer, settings);
+            }
         }
     }
 }

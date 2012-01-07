@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<SettingModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingModel xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/MPExtended.Applications.WebMediaPortal.Models">
+  <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
   <DefaultGroup>1</DefaultGroup>
   <DefaultMediaProfile>Flash LQ</DefaultMediaProfile>
-  <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
   <DefaultTVProfile>Flash LQ</DefaultTVProfile>
-  <TVShowProvider xsi:nil="true" />
-  <MovieProvider xsi:nil="true" />
-  <MusicProvider xsi:nil="true" />
-  <PicturesProvider xsi:nil="true" />
-  <FileSystemProvider xsi:nil="true" />
+  <EnableDeinterlace>false</EnableDeinterlace>
+  <FileSystemProvider i:nil="true" />
   <MASUrl>auto://127.0.0.1:4322</MASUrl>
+  <MovieProvider i:nil="true" />
+  <MusicProvider i:nil="true" />
+  <PicturesProvider i:nil="true" />
+  <StreamType>DirectWhenPossible</StreamType>
   <TASUrl>auto://127.0.0.1:4322</TASUrl>
+  <TVShowProvider i:nil="true" />
 </SettingModel>

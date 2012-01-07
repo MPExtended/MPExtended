@@ -54,6 +54,7 @@
       <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.ApplicationServices">
       <Private>True</Private>
