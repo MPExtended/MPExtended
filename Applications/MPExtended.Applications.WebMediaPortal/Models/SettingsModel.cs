@@ -30,6 +30,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string DefaultAudioProfile { get; set; }
         public string DefaultTVProfile { get; set; }
 
+        public bool EnableDeinterlace { get; set; }
+
         public int? TVShowProvider { get; set; }
         public int? MovieProvider { get; set; }
         public int? MusicProvider { get; set; }

@@ -10,6 +10,17 @@
 {
     <div>
     <table>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.EnableDeinterlace)
+            </td>
+            <td>
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "true") Yes
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "false") No
+                @Html.ValidationMessageFor(x => x.EnableDeinterlace)
+            </td>
+        </tr>
         @{  if(Model.ShowTASConfiguration)
             {
         <tr>
