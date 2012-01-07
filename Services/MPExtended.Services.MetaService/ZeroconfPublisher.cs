@@ -25,20 +25,19 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    public class ZeroconfPublisher : IServicePublisher
+    internal class ZeroconfPublisher : IServicePublisher
     {
         private const string DOMAIN = ""; // whole network
         private const string SET_SERVICE_TYPE = "_mpextended-set._tcp"; 
 
         private List<NetService> publishedServices = new List<NetService>();
 
-        public bool Publish()
+        public bool Publish(ServiceDetector detector)
         {
             if (!Configuration.Services.BonjourEnabled || !CheckBonjourInstallation())
             {
                 return false;
             }
-            MetaService meta = new MetaService();
 
             // old style services
             foreach (Service srv in Installation.GetInstalledServices())
@@ -59,7 +58,7 @@ namespace MPExtended.Services.MetaService
             }
     
             // new style service sets
-            foreach (WebServiceSet set in meta.GetActiveServiceSets())
+            foreach (WebServiceSet set in detector.CreateSetComposer().ComposeUnique())
             {
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["mac"] = String.Join(";", NetworkInformation.GetMACAddresses());
@@ -81,11 +80,11 @@ namespace MPExtended.Services.MetaService
             return true;
         }
 
-        public void PublishAsync()
+        public void PublishAsync(ServiceDetector detector)
         {
             ThreadManager.Start("ZeroconfPublish", delegate()
             {
-                Publish();
+                Publish(detector);
             });
             return;
         }

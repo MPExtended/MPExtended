@@ -19,15 +19,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ServiceModel;
+using System.Threading;
 using MPExtended.Libraries.General;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class MetaService : IMetaService
     {
+        #region Initialization
+        public static MetaService Instance { get; private set; }
+
+        public static void Setup()
+        {
+            if (Instance == null)
+            {
+                Instance = new MetaService();
+            }
+        }
+
+        private IServicePublisher[] publishers;
+        private ServiceDetector detector;
+
+        public MetaService()
+        {
+            detector = new ServiceDetector();
+            publishers = new IServicePublisher[] { new ZeroconfPublisher() };
+
+            ThreadManager.Start("ServicePublishing", delegate()
+            {
+                // give it some time to publish
+                Thread.Sleep(5000);
+                foreach (var publisher in publishers)
+                {
+                    publisher.PublishAsync(detector);
+                }
+            });
+        }
+
+        ~MetaService()
+        {
+            foreach (var publisher in publishers)
+            {
+                publisher.Unpublish();
+            }
+        }
+        #endregion
+
+        #region IMetaService implementation
         private const int API_VERSION = 4;
 
         public WebBool TestConnection()
@@ -47,22 +86,23 @@ namespace MPExtended.Services.MetaService
 
         public IList<WebService> GetInstalledServices()
         {
-            return ServiceDetector.GetInstalledServices();
+            return detector.GetInstalledServices();
         }
 
         public IList<WebService> GetActiveServices()
         {
-            return ServiceDetector.GetActiveServices();
+            return detector.GetActiveServices();
         }
 
         public IList<WebServiceSet> GetActiveServiceSets()
         {
-            return ServiceDetector.GetSetComposer().ComposeUnique().ToList();
+            return detector.CreateSetComposer().ComposeUnique().ToList();
         }
 
         public WebBool HasUI()
         {
-            return ServiceDetector.HasUI;
+            return detector.HasUI;
         }
+        #endregion
     }
 }

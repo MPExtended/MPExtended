@@ -26,7 +26,19 @@ namespace MPExtended.Services.MetaService
 {
     internal class CompositionHinter
     {
+        private string tveAddress;
+
+        public void StartDiscovery()
+        {
+            tveAddress = ReadConfiguredTVServerAddress();
+        }
+
         public string GetConfiguredTVServerAddress()
+        {
+            return tveAddress;
+        }
+
+        protected string ReadConfiguredTVServerAddress()
         {
             // Try to read the TV server IP address from MediaPortal's configuration
             if (!Mediaportal.HasValidConfigFile())

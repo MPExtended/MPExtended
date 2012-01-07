@@ -27,14 +27,12 @@ namespace MPExtended.ServiceHosts.Hosting
     public class MPExtendedHost
     {
         private WCFHost wcf;
-        private IServicePublisher publisher;
         private List<Type> serviceTypes;
 
         public MPExtendedHost()
         {
             System.Threading.Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
-            publisher = new ZeroconfPublisher();
         }
 
         public MPExtendedHost(List<Type> types)
@@ -64,9 +62,12 @@ namespace MPExtended.ServiceHosts.Hosting
                     }
                 };
 
-                // perform the actual start
+                // start all WCF services
                 wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
-                publisher.PublishAsync();
+
+                // setup MetaService
+                MetaService.Setup();
+
                 Log.Debug("Opened MPExtended ServiceHost");
                 return true;
             }
@@ -83,7 +84,6 @@ namespace MPExtended.ServiceHosts.Hosting
             {
                 Log.Debug("Closing MPExtended ServiceHost...");
                 wcf.Stop();
-                publisher.Unpublish();
                 ThreadManager.AbortAll();
                 Log.Flush();
                 return true;

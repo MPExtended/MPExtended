@@ -61,6 +61,10 @@
       <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
       <Name>MPExtended.Libraries.General</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService\MPExtended.Services.MetaService.csproj">
       <Project>{11B46BC9-331A-45CC-9F1D-2EC580197B36}</Project>
       <Name>MPExtended.Services.MetaService</Name>

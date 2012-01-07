@@ -22,10 +22,10 @@ using System.Text;
 
 namespace MPExtended.Services.MetaService
 {
-    public interface IServicePublisher
+    internal interface IServicePublisher
     {
-        bool Publish();
-        void PublishAsync();
+        bool Publish(ServiceDetector detector);
+        void PublishAsync(ServiceDetector detector);
         void Unpublish();
     }
 }

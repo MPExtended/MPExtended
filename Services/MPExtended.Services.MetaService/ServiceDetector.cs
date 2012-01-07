@@ -26,7 +26,7 @@ namespace MPExtended.Services.MetaService
 {
     internal class ServiceDetector
     {
-        public static bool HasActiveMAS
+        public bool HasActiveMAS
         {
             get
             {
@@ -44,7 +44,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public static bool HasActiveTAS
+        public bool HasActiveTAS
         {
             get
             {
@@ -62,7 +62,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public static bool HasActiveWSS
+        public bool HasActiveWSS
         {
             get
             {
@@ -80,7 +80,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public static bool HasUI
+        public bool HasUI
         {
             get
             {
@@ -88,9 +88,17 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public static ServiceSetComposer GetSetComposer()
+        private CompositionHinter hinter;
+
+        public ServiceDetector()
         {
-            ServiceSetComposer composer = new ServiceSetComposer();
+            hinter = new CompositionHinter();
+            hinter.StartDiscovery();
+        }
+
+        public ServiceSetComposer CreateSetComposer()
+        {
+            ServiceSetComposer composer = new ServiceSetComposer(hinter);
             composer.OurAddress = NetworkInformation.GetIPAddresses().First();
 
             composer.HasActiveMAS = HasActiveMAS;
@@ -101,12 +109,12 @@ namespace MPExtended.Services.MetaService
             return composer;
         }
 
-        public static List<WebService> GetInstalledServices()
+        public List<WebService> GetInstalledServices()
         {
             return Installation.GetInstalledServices().Select(x => x.ToWebService()).ToList();
         }
 
-        public static List<WebService> GetActiveServices()
+        public List<WebService> GetActiveServices()
         {
             List<WebService> list = new List<WebService>()
             {

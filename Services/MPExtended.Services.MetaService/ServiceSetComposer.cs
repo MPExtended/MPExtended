@@ -34,9 +34,9 @@ namespace MPExtended.Services.MetaService
 
         private CompositionHinter hinter;
 
-        public ServiceSetComposer()
+        public ServiceSetComposer(CompositionHinter hinter)
         {
-            hinter = new CompositionHinter();
+            this.hinter = hinter;
         }
 
         public IEnumerable<WebServiceSet> ComposeUnique()
