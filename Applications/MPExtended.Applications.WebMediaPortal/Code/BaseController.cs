@@ -21,13 +21,23 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.General;
+using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public class BaseController : Controller
     {
-        private static bool establishedMasConnection;
-        private static bool establishedTasConnection;
+        protected AvailabilityModel ServiceAvailability
+        {
+            get
+            {
+                if (Session["availabilityModel"] == null)
+                {
+                    Session["availabilityModel"] = new AvailabilityModel();
+                }
+                return Session["availabilityModel"] as AvailabilityModel;
+            }
+        }
 
         protected override void OnException(ExceptionContext filterContext)
         {
@@ -39,9 +49,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             // log the error
             Log.Warn("Error during controller body", filterContext.Exception);
 
-            // set viewbag properties
-            SetViewBagProperties();
-
             // return exception page
             filterContext.Result = new ViewResult
             {
@@ -51,8 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     Model = filterContext.Exception
                 },
             };
-            (filterContext.Result as ViewResult).ViewBag.LayoutHasMAS = ViewBag.LayoutHasMAS;
-            (filterContext.Result as ViewResult).ViewBag.LayoutHasTAS = ViewBag.LayoutHasTAS;
+            (filterContext.Result as ViewResult).ViewBag.Availability = ServiceAvailability;
             (filterContext.Result as ViewResult).ViewBag.Version = VersionUtil.GetVersionName();
             (filterContext.Result as ViewResult).ViewBag.BuildVersion = VersionUtil.GetBuildVersion().ToString();
             (filterContext.Result as ViewResult).ViewBag.Request = filterContext.HttpContext.Request.Url;
@@ -61,15 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            SetViewBagProperties();
-        }
-
-        private void SetViewBagProperties()
-        {
-            establishedMasConnection = establishedMasConnection ? true : MPEServices.HasMASConnection;
-            establishedTasConnection = establishedTasConnection ? true : MPEServices.HasTASConnection;
-            ViewBag.LayoutHasMAS = establishedMasConnection;
-            ViewBag.LayoutHasTAS = establishedTasConnection;
+            ViewBag.Availability = ServiceAvailability;
         }
     }
 }
