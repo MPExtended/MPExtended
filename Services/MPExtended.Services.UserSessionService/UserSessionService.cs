@@ -50,6 +50,9 @@ namespace MPExtended.Services.UserSessionService
         [DllImport("user32.dll")]
         private static extern int SendMessage(int hWnd, int hMsg, int wParam, int lParam);
 
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private const int WM_SYSCOMMAND = 0x0112;
         private const int SC_MONITORPOWER = 0xF170;
         private const int HWND_BROADCAST = 0xFFFF;
@@ -111,6 +114,7 @@ namespace MPExtended.Services.UserSessionService
                 Process proc = new Process();
                 proc.StartInfo = info;
                 proc.Start();
+                SetForegroundWindow(proc.MainWindowHandle);
 
                 return true;
             }
