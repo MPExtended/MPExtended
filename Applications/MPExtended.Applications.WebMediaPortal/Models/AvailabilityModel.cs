@@ -28,10 +28,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public bool TAS { get; set; }
         public bool MAS { get; set; }
 
+        public bool Movies { get; set; }
+        public bool TVShows { get; set; }
+        public bool Music { get; set; }
+
         public AvailabilityModel()
         {
             TAS = MPEServices.HasTASConnection;
             MAS = MPEServices.HasMASConnection;
+
+            var msd = MPEServices.HasMASConnection ? MPEServices.MAS.GetServiceDescription() : null;
+            Movies = MAS && msd.DefaultMovieLibrary != 0;
+            TVShows = MAS && msd.DefaultTvShowLibrary != 0;
+            Music = MAS && msd.DefaultMusicLibrary != 0;
         }
     }
 }
