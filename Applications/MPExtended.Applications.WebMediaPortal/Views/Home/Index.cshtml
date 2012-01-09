@@ -30,18 +30,18 @@
     Welcome</h3>
 <div>
     <div class="item">
-        @{Html.RenderAction("NewMovies", "Home");}
+        @{if(ViewBag.Availability.Movies) { Html.RenderAction("NewMovies", "Home"); }}
     </div>
     <br class="noFloat" />
     <div class="item">
-        @{Html.RenderAction("NewEpisodes", "Home");}
+        @{if(ViewBag.Availability.TVShows) { Html.RenderAction("NewEpisodes", "Home"); }}
     </div>
     <br class="noFloat" />
     <div class="item">
-        @{Html.RenderAction("NewRecordings", "Home");}
+        @{if(ViewBag.Availability.TAS) { Html.RenderAction("NewRecordings", "Home"); }}
     </div>
     <br class="noFloat" />
     <div class="item">
-        @{Html.RenderAction("CurrentSchedules", "Home");}
+        @{if(ViewBag.Availability.TAS) { Html.RenderAction("CurrentSchedules", "Home"); }}
     </div>
 </div>
