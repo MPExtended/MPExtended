@@ -95,7 +95,7 @@
           IgnoreFailure="yes"
           Id="FirewallException"
           Name="MPExtended Service"
-          Scope="localSubnet"
+          Scope="any"
           Protocol="tcp"
           Program="[#MainService]" />
       </Component>

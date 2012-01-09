@@ -85,7 +85,7 @@
           IgnoreFailure="yes"
           Id="FirewallException"
           Name="MPExtended WebMediaPortal"
-          Scope="localSubnet"
+          Scope="any"
           Protocol="tcp"
           Program="[#MainService]" />
       </Component>
