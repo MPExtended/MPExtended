@@ -338,24 +338,28 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
-            if (!profile.HasVideoStream)
-                return new Resolution(0, 0);
-
-            decimal aspect = (decimal)16 / 9; // the default aspect ratio
-            if (source.MediaType != WebStreamMediaType.TV && profile != null)
+            try
             {
+                if (!profile.HasVideoStream)
+                    return new Resolution(0, 0);
+
                 if (info == null)
                 {
-                    info = MediaInfoWrapper.GetMediaInfo(source);
+                    info = MediaInfoHelper.LoadMediaInfoOrSurrogate(source);
                 }
 
                 if (info.VideoStreams.Count > 0)
                 {
-                    aspect = info.VideoStreams.First().DisplayAspectRatio;
+                    return Resolution.Calculate(info.VideoStreams.First().DisplayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
                 }
             }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to calculate size of output stream", ex);
+            }
 
-            return Resolution.Calculate(aspect, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+            // default
+            return Resolution.Calculate(16 / 9, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)
