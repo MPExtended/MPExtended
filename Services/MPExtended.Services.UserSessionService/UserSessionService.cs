@@ -129,7 +129,7 @@ namespace MPExtended.Services.UserSessionService
         {
             try
             {
-                Log.Info("Starting MediaPortal");
+                Log.Info("Bringing MediaPortal to the front");
                 Process[] processes = Process.GetProcessesByName("MediaPortal");
 
                 if (processes.Length == 1)
@@ -140,7 +140,7 @@ namespace MPExtended.Services.UserSessionService
             }
             catch (Exception ex)
             {
-                Log.Warn("Failed to launch mediaportal", ex);
+                Log.Warn("Failed to bring MediaPortal to the front", ex);
             }
             return false;
         }
