@@ -125,6 +125,26 @@ namespace MPExtended.Services.UserSessionService
             }
         }
 
+        public WebResult SetMediaPortalForeground()
+        {
+            try
+            {
+                Log.Info("Starting MediaPortal");
+                Process[] processes = Process.GetProcessesByName("MediaPortal");
+
+                if (processes.Length == 1)
+                {
+                    SetForegroundWindow(processes[0].MainWindowHandle);
+                    return true;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to launch mediaportal", ex);
+            }
+            return false;
+        }
+
         public WebResult SetPowerMode(WebPowerMode powerMode)
         {
             try

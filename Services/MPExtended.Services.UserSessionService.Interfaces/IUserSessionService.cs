@@ -28,6 +28,10 @@ namespace MPExtended.Services.UserSessionService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebResult SetMediaPortalForeground();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResult SetPowerMode(WebPowerMode powerMode);
 
         [OperationContract]
