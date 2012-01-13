@@ -114,6 +114,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AvailabilityModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\ScheduleViewModels.cs" />
     <Compile Include="Models\SettingsModel.cs" />

@@ -50,6 +50,9 @@ namespace MPExtended.Services.UserSessionService
         [DllImport("user32.dll")]
         private static extern int SendMessage(int hWnd, int hMsg, int wParam, int lParam);
 
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private const int WM_SYSCOMMAND = 0x0112;
         private const int SC_MONITORPOWER = 0xF170;
         private const int HWND_BROADCAST = 0xFFFF;
@@ -111,6 +114,7 @@ namespace MPExtended.Services.UserSessionService
                 Process proc = new Process();
                 proc.StartInfo = info;
                 proc.Start();
+                SetForegroundWindow(proc.MainWindowHandle);
 
                 return true;
             }
@@ -119,6 +123,26 @@ namespace MPExtended.Services.UserSessionService
                 Log.Warn("Failed to launch mediaportal", ex);
                 return false;
             }
+        }
+
+        public WebResult SetMediaPortalForeground()
+        {
+            try
+            {
+                Log.Info("Bringing MediaPortal to the front");
+                Process[] processes = Process.GetProcessesByName("MediaPortal");
+
+                if (processes.Length == 1)
+                {
+                    SetForegroundWindow(processes[0].MainWindowHandle);
+                    return true;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to bring MediaPortal to the front", ex);
+            }
+            return false;
         }
 
         public WebResult SetPowerMode(WebPowerMode powerMode)

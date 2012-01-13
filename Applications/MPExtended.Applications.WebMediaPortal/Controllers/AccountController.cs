@@ -81,6 +81,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult LogOff()
         {
             FormsService.SignOut();
+            Session.Abandon();
 
             return RedirectToAction("Index", "Home");
         }

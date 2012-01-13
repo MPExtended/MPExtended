@@ -102,6 +102,11 @@ namespace MPExtended.Services.UserSessionService
             return Proxy.StartMediaPortalBlocking();
         }
 
+        public WebResult SetMediaPortalForeground()
+        {
+            return Proxy.SetMediaPortalForeground();
+        }
+
         public WebResult SetPowerMode(WebPowerMode powerMode)
         {
             return Proxy.SetPowerMode(powerMode);

@@ -119,12 +119,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             };
 
             string sql = 
-                    "SELECT DISTINCT s.ID, l.Parsed_Name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
+                    "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
                         "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
                         "s.IMDB_ID, s.added " +
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
+                    "GROUP BY s.ID, s.Pretty_Name, s.Genre, s.BannerFileNames, s.FirstAired, " +
+                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
+                        "s.IMDB_ID, s.added " +
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),

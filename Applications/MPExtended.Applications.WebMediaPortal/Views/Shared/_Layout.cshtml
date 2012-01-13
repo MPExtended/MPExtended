@@ -16,14 +16,11 @@
         <div class="navigation">
             <ul id="navlist">
                 <li class="first">@Html.ActionLink("Home", "Index", "Home")</li>
-                @if (ViewBag.LayoutHasMAS)
-                {
-                    <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li>
-                    <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li>
-                    <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li>
-                }
+                @if (ViewBag.Availability.Music) { <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li> }
+                @if (ViewBag.Availability.Movies) { <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li> }
+                @if (ViewBag.Availability.TVShows) { <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li> }
                 
-                @if (ViewBag.LayoutHasTAS)
+                @if (ViewBag.Availability.TAS)
                 {
                     <li>@Html.ActionLink("TV Guide", "TVGuide", "Television")</li>
                     <li>@Html.ActionLink("Recordings", "Recordings", "Television")</li>
