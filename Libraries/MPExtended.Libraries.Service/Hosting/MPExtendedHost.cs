@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -26,20 +27,12 @@ namespace MPExtended.Libraries.Service.Hosting
     {
         private WCFHost wcf;
         private Zeroconf zeroconf;
-        private List<Type> serviceTypes;
 
         public MPExtendedHost()
         {
-            System.Threading.Thread.CurrentThread.Name = "HostThread";
+            Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
             zeroconf = new Zeroconf();
-        }
-
-        public MPExtendedHost(List<Type> types)
-            : this()
-        {
-            serviceTypes = types;
-            wcf.SetTypes(types);
         }
 
         public bool Open()
@@ -62,8 +55,21 @@ namespace MPExtended.Libraries.Service.Hosting
                     }
                 };
 
-                // perform the actual start
-                wcf.Start(Installation.GetInstalledServices().Where(x => x.HostAsWCF).ToList());
+                // start the WCF services
+                wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
+
+                // start the background threads
+                var services = Installation.GetAvailableServices().Where(x => x.BackgroundThread != null);
+                foreach (var service in services)
+                {
+                    string name = service.Service.ToString() + "Background";
+                    ThreadManager.Start(name, delegate()
+                    {
+                        service.BackgroundThread.Invoke();
+                    });
+                }
+
+                // do the zeroconf publish
                 ThreadManager.Start("Zeroconf", delegate()
                 {
                     try
@@ -75,7 +81,6 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Error("Zeroconf publish failed", ex);
                     }
                 });
-                Log.Debug("Opened MPExtended ServiceHost");
                 return true;
             }
             catch (Exception ex)

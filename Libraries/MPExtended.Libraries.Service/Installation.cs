@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service
@@ -48,8 +49,17 @@ namespace MPExtended.Libraries.Service
         Installed
     }
 
+    public class ServiceConfiguration
+    {
+        public MPExtendedService Service { get; set; }
+        public string ZeroconfType { get; set; }
+        public int Port { get; set; }
+    }
+
     public static class Installation
     {
+        private static List<ServiceAssemblyAttribute> installedServices;
+
         public static FileLayoutType GetFileLayoutType()
         {
             // Source distribution: search for a parent directory with the GlobalVersion.cs file
@@ -171,30 +181,38 @@ namespace MPExtended.Libraries.Service
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
         }
 
-        public static List<Hosting.Service> GetInstalledServices()
+        internal static List<ServiceAssemblyAttribute> GetAvailableServices()
         {
-            var allServices = new List<Hosting.Service>()
+            if (installedServices == null)
             {
-                new Hosting.Service(MPExtendedService.MediaAccessService, "MPExtended.Services.MediaAccessService", "MediaAccessService", "_mpextended-mas._tcp"),
-                new Hosting.Service(MPExtendedService.TVAccessService, "MPExtended.Services.TVAccessService", "TVAccessService", "_mpextended-tas._tcp"),
-                new Hosting.Service(MPExtendedService.StreamingService, "MPExtended.Services.StreamingService", "StreamingService", "_mpextended-wss._tcp"),
-                new Hosting.Service(MPExtendedService.UserSessionService, "MPExtended.Services.UserSessionService", "UserSessionProxyService", "_mpextended-uss._tcp"),
-                new Hosting.WifiRemoteService()
-            };
+                string directory = Installation.GetFileLayoutType() == FileLayoutType.Installed ?
+                    Installation.GetInstallDirectory(MPExtendedProduct.Service) :
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-            string[] disabled =
-                XElement.Load(Configuration.GetPath("Services.xml"))
-                .Element("disabledServices")
-                .Elements("service")
-                .Select(x => x.Value)
-                .ToArray();
+                var files = Directory.GetFiles(directory, "MPExtended.Services.*.dll");
 
-            return allServices.Where(x => x.IsInstalled && !disabled.Contains(x.Assembly)).ToList();
+                installedServices = files
+                    .Select(path => Assembly.LoadFrom(path))
+                    .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
+                    .ToList();
+            }
+
+            return installedServices;
+        }
+
+        public static List<ServiceConfiguration> GetInstalledServices()
+        {
+            return GetAvailableServices().Select(x => new ServiceConfiguration()
+            {
+                Port = Configuration.Services.Port,
+                Service = x.Service,
+                ZeroconfType = x.ZeroconfType
+            }).ToList();
         }
 
         public static bool IsServiceInstalled(MPExtendedService srv)
         {
-            return GetInstalledServices().Any(x => x.ServiceName == srv);
+            return GetInstalledServices().Any(x => x.Service == srv);
         }
     }
 }

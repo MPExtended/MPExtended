@@ -35,7 +35,7 @@ namespace MPExtended.Libraries.Service.Hosting
         private List<NetService> publishServices = new List<NetService>();
         private string serviceName = "";
 
-        public void PublishServices(List<Service> services)
+        public void PublishServices(IEnumerable<ServiceConfiguration> services)
         {
             if (!Configuration.Services.BonjourEnabled || !CheckBonjourInstallation())
             {
@@ -43,7 +43,7 @@ namespace MPExtended.Libraries.Service.Hosting
             }
 
             serviceName = GetServiceName();
-            foreach (Service srv in services)
+            foreach (ServiceConfiguration srv in services)
             {
                 // We also send a list of usernames and password hashes, so that clients can detect if they match across MPExtended
                 // installations.
@@ -67,7 +67,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["users"] = String.Join(";", sendUsers.Select(x => x.Key + ":" + x.Value));
 
-                NetService net = new NetService(DOMAIN, srv.ZeroconfServiceType, serviceName, srv.Port);
+                NetService net = new NetService(DOMAIN, srv.ZeroconfType, serviceName, srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidNotPublishService += new NetService.ServiceNotPublished(FailedToPublishService);

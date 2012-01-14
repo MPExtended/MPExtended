@@ -31,36 +31,14 @@ namespace MPExtended.Libraries.Service.Hosting
         private List<ServiceHost> hosts = new List<ServiceHost>();
         private Dictionary<string, Type> types = new Dictionary<string, Type>();
 
-        public void SetTypes(List<Type> passedList) 
+        public void Start(IEnumerable<ServiceAssemblyAttribute> availableServices)
         {
-            foreach (Type t in passedList)
-            {
-                types[t.Name] = t;
-            }
-        }
-
-        public void Start(List<Service> availableServices)
-        {
-            foreach (Service srv in availableServices)
+            foreach (ServiceAssemblyAttribute srv in availableServices)
             {
                 try
                 {
-                    Log.Debug("Loading service {0}", srv.ImplementationName);
-                    if (types.ContainsKey(srv.ImplementationName))
-                    {
-                        hosts.Add(new ServiceHost(types[srv.ImplementationName], BaseAddresses.GetForService(srv.ServiceName)));
-                    }
-                    else if (File.Exists(srv.AssemblyPath))
-                    {
-                        Log.Trace("Assembly path: {0}", srv.AssemblyPath);
-                        Assembly asm = Assembly.LoadFrom(srv.AssemblyPath);
-                        Type t = asm.GetType(srv.FullTypeName);
-                        hosts.Add(new ServiceHost(t, BaseAddresses.GetForService(srv.ServiceName)));
-                    }
-                    else
-                    {
-                        Log.Debug("Service not installed");
-                    }
+                    Log.Debug("Loading service {0}", srv.WCFType.Name);
+                    hosts.Add(new ServiceHost(srv.WCFType, BaseAddresses.GetForService(srv.Service)));
                 }
                 catch (Exception ex)
                 {

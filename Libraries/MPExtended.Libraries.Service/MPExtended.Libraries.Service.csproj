@@ -74,13 +74,12 @@
     <Compile Include="ConfigurationContracts\Services.cs" />
     <Compile Include="ConfigurationContracts\Streaming.cs" />
     <Compile Include="ConfigurationContracts\WebMediaPortalHosting.cs" />
+    <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
     <Compile Include="Hosting\BaseAddresses.cs" />
     <Compile Include="Hosting\LogRotation.cs" />
     <Compile Include="Hosting\MPExtendedHost.cs" />
-    <Compile Include="Hosting\Service.cs" />
     <Compile Include="Hosting\WCFHost.cs" />
-    <Compile Include="Hosting\WifiRemoteService.cs" />
     <Compile Include="Hosting\Zeroconf.cs" />
     <Compile Include="Util\Impersonator.cs" />
     <Compile Include="Installation.cs" />

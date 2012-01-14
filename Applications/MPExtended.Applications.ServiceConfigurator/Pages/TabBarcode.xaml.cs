@@ -98,16 +98,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     var srvdesc = new ServiceDescription()
                     {
-                        Name = srv.ServiceName.ToString(),
+                        Name = srv.Service.ToString(),
                         Port = srv.Port
                     };
 
                     if (auth != null)
                     {
-                        string usernameOut, passwordOut;
-                        srv.GetUsernameAndPassword(auth, out usernameOut, out passwordOut);
-                        srvdesc.User = usernameOut;
-                        srvdesc.Password = passwordOut;
+                        srvdesc.User = auth.Username;
+                        srvdesc.Password = auth.GetPassword();
                     }
 
                     desc.Services.Add(srvdesc);
