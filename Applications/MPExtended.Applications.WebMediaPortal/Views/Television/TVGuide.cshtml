@@ -56,7 +56,8 @@
                                 <div class="programcontainer" style="width: @program.GetCssPercentageWidth();">
                                 @{  if (program.GetPercentageWidth() > 1)
                                     {
-                                        <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")">
+                                        <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")"
+                                            onclick="location.href='@Url.Action("ProgramDetails", new { programId = program.Id })';">
                                             @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
                                         </div>
                                     }
