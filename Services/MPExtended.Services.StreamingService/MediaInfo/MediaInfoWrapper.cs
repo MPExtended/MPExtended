@@ -52,6 +52,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             }
             else if (!source.Exists)
             {
+                Log.Warn("Trying to load fileinfo from file {0}, which doesn't seem to exist", source.GetPath());
                 throw new FileNotFoundException();
             }
             else if (source.SupportsDirectAccess)
@@ -93,7 +94,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             {
                 if (source == null || !File.Exists(source))
                 {
-                    Log.Warn("GetMediaInfo: File " + source + " doesn't exist or is not accessible");
+                    Log.Warn("GetMediaInfo: File {0} doesn't exist or is not accessible", source);
                     return null;
                 }
 
