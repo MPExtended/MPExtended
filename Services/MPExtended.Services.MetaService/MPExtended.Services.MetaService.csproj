@@ -47,6 +47,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="BackgroundThread.cs" />
     <Compile Include="CompositionHinter.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="IServicePublisher.cs" />
@@ -60,9 +61,9 @@
     <Compile Include="ServiceSetComposer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
-      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
-      <Name>MPExtended.Libraries.General</Name>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>

@@ -24,7 +24,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
-using MPExtended.ServiceHosts.Hosting;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.ServiceHosts.CoreService
 {

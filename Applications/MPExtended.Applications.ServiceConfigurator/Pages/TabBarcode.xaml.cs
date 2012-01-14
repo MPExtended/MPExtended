@@ -25,8 +25,9 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Libraries.General;
-using MPExtended.Libraries.General.ConfigurationContracts;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.ConfigurationContracts;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -97,16 +98,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     var srvdesc = new ServiceDescription()
                     {
-                        Name = srv.ServiceName.ToString(),
+                        Name = srv.Service.ToString(),
                         Port = srv.Port
                     };
 
                     if (auth != null)
                     {
-                        string usernameOut, passwordOut;
-                        srv.GetUsernameAndPassword(auth, out usernameOut, out passwordOut);
-                        srvdesc.User = usernameOut;
-                        srvdesc.Password = passwordOut;
+                        srvdesc.User = auth.Username;
+                        srvdesc.Password = auth.GetPassword();
                     }
 
                     desc.Services.Add(srvdesc);

@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService

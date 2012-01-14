@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -48,11 +48,11 @@ namespace MPExtended.Services.MetaService
         }
     }
 
-    internal static class ServiceExtensionMethods
+    internal static class ServiceConfigurationExtensionMethods
     {
-        public static WebService ToWebService(this Service service)
+        public static WebService ToWebService(this ServiceConfiguration service)
         {
-            switch(service.ServiceName)
+            switch(service.Service)
             {
                 case MPExtendedService.MediaAccessService:
                     return WebService.MediaAccessService;

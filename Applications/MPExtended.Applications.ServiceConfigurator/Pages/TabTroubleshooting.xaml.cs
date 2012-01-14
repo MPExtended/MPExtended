@@ -23,7 +23,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

@@ -21,7 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {

@@ -23,17 +23,6 @@
   <port>4322</port>
   <enableIPv6>false</enableIPv6>
 
-  <disabledServices>
-    <!--
-      You can disable individual services (for debugging) here. Enter the assembly name in a <service> tag:
-      
-        <service>MPExtended.Services.MediaAccessService</service>
-        <service>MPExtended.Services.TVAccessService</service>
-        <service>MPExtended.Services.StreamingService</service>
-        <service>MPExtended.Services.UserSessionService</service>
-    -->
-  </disabledServices>
-
   <!-- If you've have multiseat setup you can specify different hosts for the other host here. This is picked up by WSS (but it doesn't work) and by WebMP. -->
   <connections>
     <mas>auto://127.0.0.1:4322</mas>

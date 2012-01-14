@@ -60,13 +60,9 @@
     <Compile Include="WindowsController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.General\MPExtended.Libraries.General.csproj">
-      <Project>{98732EF2-81BD-4194-B718-DB356B03306F}</Project>
-      <Name>MPExtended.Libraries.General</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.ServiceLib</Name>
+      <Name>MPExtended.Libraries.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
       <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>

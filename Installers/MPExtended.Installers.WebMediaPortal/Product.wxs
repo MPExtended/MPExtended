@@ -18,7 +18,7 @@
     UpgradeCode="1911d293-8311-457a-bd09-296fec9bc368"
     Name="MPExtended WebMediaPortal"
     Language="1033"
-    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
+    Version="!(bind.FileVersion.MPExtended.Libraries.Service.dll)"
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 
@@ -58,7 +58,7 @@
       <Component Id="Component_Hosting" Guid="72a08c6b-5611-4d41-ab8e-abb1a7315641">
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe" KeyPath="yes" Id="MainService"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe.config" />
-        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.General.dll" Id="Hosting_MPExtended.Libraries.General.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.dll" Id="Hosting_MPExtended.Libraries.Service.dll" />
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.dll" Id="Hosting_NLog.dll"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.config" Id="Hosting_NLog.config"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\IISExpressTemplate.config" />

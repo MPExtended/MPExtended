@@ -24,7 +24,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Mvc;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models

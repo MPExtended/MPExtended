@@ -29,7 +29,8 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages

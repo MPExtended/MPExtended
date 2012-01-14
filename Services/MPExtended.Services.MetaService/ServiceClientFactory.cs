@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;

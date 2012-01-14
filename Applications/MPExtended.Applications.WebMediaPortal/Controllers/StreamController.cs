@@ -16,8 +16,8 @@
 #endregion
 
 using System;
-using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -26,8 +26,10 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Libraries.General;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {

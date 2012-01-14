@@ -24,7 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

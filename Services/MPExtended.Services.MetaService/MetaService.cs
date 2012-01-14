@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService

@@ -21,7 +21,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using ZeroconfService;
 
 namespace MPExtended.Services.MetaService

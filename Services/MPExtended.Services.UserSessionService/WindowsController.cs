@@ -24,7 +24,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Threading;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.UserSessionService
 {

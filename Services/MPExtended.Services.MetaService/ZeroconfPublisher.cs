@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeroconfService;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -37,15 +38,15 @@ namespace MPExtended.Services.MetaService
             }
 
             // old style services
-            foreach (Service srv in Installation.GetInstalledServices())
+            foreach (var srv in Installation.GetInstalledServices())
             {
-                if (srv.ZeroconfServiceType == null)
+                if (srv.ZeroconfType == null)
                     continue;
 
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
 
-                NetService net = new NetService(Zeroconf.DOMAIN, srv.ZeroconfServiceType, GetComputerName(), srv.Port);
+                NetService net = new NetService(Zeroconf.DOMAIN, srv.ZeroconfType, GetComputerName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
