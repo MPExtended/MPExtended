@@ -28,7 +28,7 @@ namespace MPExtended.Applications.Development.DevTool
     {
         static void Main(string[] args)
         {
-            if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+            if (Installation.GetFileLayoutType() != FileLayoutType.Source)
             {
                 Console.WriteLine("DevTool only works from a source tree");
                 Environment.Exit(1);
