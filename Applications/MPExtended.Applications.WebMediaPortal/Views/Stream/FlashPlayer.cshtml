@@ -1,14 +1,24 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
 <script src="@Url.Content("~/Content/jwplayer/jwplayer.js")" type="text/javascript"></script>
-<div id="videoplayer">
-    Install <a href="http://www.adobe.com/products/flashplayer/">Adobe Flash Player</a> to use this player.
+ 
+<div id="mediaspace">
+   Install <a href="http://www.adobe.com/products/flashplayer/">Adobe Flash Player</a> to use this player.
 </div>
-<script type="text/javascript">
-    jwplayer("videoplayer").setup({
-        flashplayer: "@Url.Content("~/Content/jwplayer/player.swf")",
-        file: "@Html.Raw(@Model.URL)",
-        type: "video",
-        width: @Model.Size.Width,
-        height: @Model.Size.Height
+ 
+<script type='text/javascript'>
+    jwplayer('mediaspace').setup({
+        'flashplayer': '@Url.Content("~/Content/jwplayer/player.swf")',
+        'file': '@Html.Raw(@Model.URL)',
+        'provider': 'http',
+        'http.startparam': 'starttime',
+        'controlbar': 'bottom',
+        'width': '@Model.Size.Width',
+        'height': '@Model.Size.Height',
+        'skin': '@Url.Content("~/Content/jwplayer/newtubedark.zip")',
+        'plugins': { 'metaviewer-1': {
+                'position': 'left',
+                'size': '200'
+            }
+        }
     });
 </script>
