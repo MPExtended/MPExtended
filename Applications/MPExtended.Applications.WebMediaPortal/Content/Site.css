@@ -20,6 +20,8 @@ body
 	margin-right: auto;
 	padding: 15px;
 	margin-bottom: 15px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 #white_shadow
@@ -45,6 +47,8 @@ body
 	box-shadow: 0 1px 20px rgba(0,0,0, .4);
 	position: relative;
 	top: 0px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 #container 
@@ -169,7 +173,7 @@ ul#navlist li
 
 ul#navlist li a
 {
-	padding: 6px 10px 7px;
+	padding: 6px 15px 7px;
 	margin: 10px 5px;
 	text-shadow: #01425e 0 1px 0;
 	font-weight: bold;
@@ -264,14 +268,14 @@ h3
 
 a:link, a:visited
 {
-	color: #009;
+	color: #0872a0;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 a:hover
 {
-	color: #fff;
+	color: #68ab36;
 	text-decoration: none;
 	font-weight: bold;
 }
