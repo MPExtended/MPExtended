@@ -56,6 +56,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);
+                    ServiceAvailability.Reload();
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -81,7 +82,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult LogOff()
         {
             FormsService.SignOut();
-            Session.Abandon();
+            ServiceAvailability.Reload();
 
             return RedirectToAction("Index", "Home");
         }
