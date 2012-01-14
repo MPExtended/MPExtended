@@ -30,8 +30,38 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public struct TimeMarker
         {
             public DateTime Time { get; set; }
-            public string Format { get; set; }
             public bool Last { get; set; }
+
+            public string Format
+            {
+                get
+                {
+                    if (Time.Date == DateTime.Now.Date)
+                    {
+                        return Time.ToShortTimeString();
+                    }
+                    else
+                    {
+                        return Time.ToShortDateString() + " " + Time.ToShortTimeString();
+                    }
+                }
+            }
+
+            public string TimeFormat
+            {
+                get
+                {
+                    return Time.ToShortTimeString();
+                }
+            }
+
+            public string FullFormat
+            {
+                get
+                {
+                    return Time.ToShortDateString() + " " + Time.ToShortTimeString();
+                }
+            }
         }
 
         private IEnumerable<WebChannelGroup> groups;
@@ -67,17 +97,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     TimeMarker tm = new TimeMarker();
                     tm.Time = GuideStart.AddMinutes(i * 30);
                     tm.Last = i == 7;
-                    if (tm.Time.Date == DateTime.Now.Date)
-                    {
-                        tm.Format = tm.Time.ToShortTimeString();
-                    }
-                    else 
-                    {
-                        tm.Format = tm.Time.ToShortDateString() + " " + tm.Time.ToShortTimeString();
-                    }
 
                     yield return tm;
                 }
+            }
+        }
+
+        public string DateFormat
+        {
+            get
+            {
+                return GuideStart.ToShortDateString();
             }
         }
 
@@ -91,7 +121,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             GroupId = channelGroup.Id;
             GroupName = channelGroup.GroupName;
 
-            DateTime loadGuideEnd =guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
+            DateTime loadGuideEnd = guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
             Channels = MPEServices.TAS.GetChannelsBasic(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
         }
     }
