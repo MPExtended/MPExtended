@@ -63,18 +63,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MPExtended.ServiceHosts.Hosting\MPExtended.ServiceHosts.Hosting.csproj">
-      <Project>{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}</Project>
-      <Name>MPExtended.ServiceHosts.Hosting</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\MPExtended.ServiceHosts.Hosting\App.config">
+    <None Include="..\..\Libraries\MPExtended.Libraries.Service\Hosting\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

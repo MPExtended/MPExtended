@@ -23,7 +23,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Libraries.Social.Follwit;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Social
 {

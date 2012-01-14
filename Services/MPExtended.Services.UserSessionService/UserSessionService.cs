@@ -25,8 +25,8 @@ using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using MPExtended.Libraries.General;
-using MPExtended.Libraries.ServiceLib;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService

@@ -25,8 +25,8 @@ using System.Web;
 using System.Web.Security;
 using System.Xml;
 using System.Xml.Linq;
-using MPExtended.Libraries.General;
-using MPExtended.Libraries.General.ConfigurationContracts;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.ConfigurationContracts;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {

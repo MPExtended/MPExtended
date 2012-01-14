@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MPExtended.Libraries.Service</RootNamespace>
+    <AssemblyName>MPExtended.Libraries.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\Logging\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZeroconfService">
+      <HintPath>..\Misc\ZeroconfService.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationContracts\MediaAccess.cs" />
+    <Compile Include="ConfigurationContracts\Services.cs" />
+    <Compile Include="ConfigurationContracts\Streaming.cs" />
+    <Compile Include="ConfigurationContracts\WebMediaPortalHosting.cs" />
+    <Compile Include="WCF\CustomQueryStringConverter.cs" />
+    <Compile Include="Hosting\BaseAddresses.cs" />
+    <Compile Include="Hosting\LogRotation.cs" />
+    <Compile Include="Hosting\MPExtendedHost.cs" />
+    <Compile Include="Hosting\Service.cs" />
+    <Compile Include="Hosting\WCFHost.cs" />
+    <Compile Include="Hosting\WifiRemoteService.cs" />
+    <Compile Include="Hosting\Zeroconf.cs" />
+    <Compile Include="Util\Impersonator.cs" />
+    <Compile Include="Installation.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Util\NetworkShareImpersonator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WCF\SoapBehavior.cs" />
+    <Compile Include="ThreadManager.cs" />
+    <Compile Include="Util\Encryption.cs" />
+    <Compile Include="Util\IPAddressExtensions.cs" />
+    <Compile Include="Util\Mediaportal.cs" />
+    <Compile Include="Util\NetworkInformation.cs" />
+    <Compile Include="Util\PathUtil.cs" />
+    <Compile Include="Util\RegistryReader.cs" />
+    <Compile Include="Util\UpdateChecker.cs" />
+    <Compile Include="VersionUtil.cs" />
+    <Compile Include="WCF\WcfUsernameValidator.cs" />
+    <Compile Include="WCFUtil.cs" />
+    <Compile Include="WCF\WebBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Hosting\App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

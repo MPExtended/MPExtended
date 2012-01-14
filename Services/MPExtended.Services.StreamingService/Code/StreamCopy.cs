@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.StreamingService.Code {
     internal class StreamCopy {

@@ -24,7 +24,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {

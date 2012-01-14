@@ -64,9 +64,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.ServiceLib\MPExtended.Libraries.ServiceLib.csproj">
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.ServiceLib</Name>
+      <Name>MPExtended.Libraries.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
@@ -100,13 +100,9 @@
       <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
       <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.ServiceHosts.Hosting\MPExtended.ServiceHosts.Hosting.csproj">
-      <Project>{13254AC1-D087-47AB-8FBB-C0D4FEDEDF1A}</Project>
-      <Name>MPExtended.ServiceHosts.Hosting</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\MPExtended.ServiceHosts.Hosting\App.config">
+    <None Include="..\..\Libraries\MPExtended.Libraries.Service\Hosting\App.config">
       <Link>App.config</Link>
     </None>
     <None Include="app.manifest">

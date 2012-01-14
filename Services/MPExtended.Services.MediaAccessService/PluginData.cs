@@ -22,7 +22,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
@@ -32,9 +32,9 @@ namespace MPExtended.Services.MediaAccessService
     {
         public Dictionary<string, string> GetConfiguration(string pluginname)
         {
-            if (MPExtended.Libraries.General.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
+            if (MPExtended.Libraries.Service.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
             {
-                return MPExtended.Libraries.General.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
+                return MPExtended.Libraries.Service.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
             }
 
             return new Dictionary<string, string>();

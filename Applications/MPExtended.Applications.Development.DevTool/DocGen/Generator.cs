@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.IO;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.Development.DevTool.DocGen
 {

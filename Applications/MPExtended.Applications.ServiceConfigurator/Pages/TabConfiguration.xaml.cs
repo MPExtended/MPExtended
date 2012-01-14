@@ -22,7 +22,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages

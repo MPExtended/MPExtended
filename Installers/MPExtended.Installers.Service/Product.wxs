@@ -18,7 +18,7 @@
     UpgradeCode="21ae5680-f56d-4bb6-8835-87b5081b156d"
     Name="MPExtended Service"
     Language="1033"
-    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
+    Version="!(bind.FileVersion.MPExtended.Libraries.Service.dll)"
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 

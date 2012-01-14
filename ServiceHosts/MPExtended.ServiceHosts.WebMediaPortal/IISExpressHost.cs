@@ -24,7 +24,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {
