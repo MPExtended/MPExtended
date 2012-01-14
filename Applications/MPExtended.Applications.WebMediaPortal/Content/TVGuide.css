@@ -1,92 +1,116 @@
-﻿#TVGuide .headerrow 
-{
-    padding: 2px 5px;
-    height: 25px;
+﻿#TVGuide .headerrow {
+	padding: 2px 5px;
+	height: 25px;
+	margin: 0px -15px;
+	position: relative;
 }
 
-#TVGuide .headerspacer
-{
-    width: 230px;    
-    float: left;
-    text-align: right;
+#TVGuide .headerspacer {
+	width: 201px;
+	float: left;
+	text-align: right;
 }
 
-#TVGuide .headertime
-{
-    border-left: 1px solid #8A8575;
-    padding-left: 5px;
-    height: 100%;
+#TVGuide .headertime {
+	font-family: Arial, Helvetica, sans-serif;
+	border-left: 1px solid #E8E8E8;
+	padding-left: 5px;
+	font-size: 12px;
+	width: 87px;
+	height: 100%;
 }
 
-#TVGuide .headerrow button.earlier
-{
-    margin-right: 10px;
+button.earlier {
+	margin-right: 10px;
+	height: 21px;
+	width: 21px;
+	border: none;
+	background: top left no-repeat url('Images/left.gif');
 }
 
-#TVGuide .headerrow button.later
-{
-    float: right;
+button.later {
+	margin-right: 10px;
+	height: 21px;
+	width: 22px;
+	border: none;
+	background: top left no-repeat url('Images/right.gif');
+	position: absolute;
+	right: 0px;
 }
 
-#TVGuide .channelrow
-{
-    overflow: hidden;
-    clear: both;
-    padding: 2px 5px;
-    height: 50px;
-    margin-bottom: 4px;
-    border: 1px solid #8A8575;
+#TVGuide .channelrow {
+	overflow: hidden;
+	clear: both;
+	padding: 2px 5px;
+	height: 50px;
+	margin: 0px -15px;
+	border-top: thin solid #E8E8E8;
 }
 
-#TVGuide .channelname
-{
-    height: 35px; /* 50px height of .channelrow minus padding-top */
-    width: 175px;
-    float: left;
-    padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
-    background-size: 50px 50px;
-    background-position: left center;
-    background-repeat: no-repeat;
+#TVGuide .channelname {
+	height: 35px; /* 50px height of .channelrow minus padding-top */
+	width: 145px;
+	float: left;
+	padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
+	background-size: 50px 50px;
+	background-position: left center;
+	background-repeat: no-repeat;
 }
 
-#TVGuide .programs 
-{
-    height: 100%;
-    overflow: hidden;
+#TVGuide .channelname a {
+	color: #043A62;
 }
 
-#TVGuide .programcontainer
-{
-    float: left;
-    height: 100%;
+#TVGuide .programs {
+	height: 100%;
+	overflow: hidden;
 }
 
-#TVGuide .program 
-{
-    height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
-    margin: 2px 5px 2px 0px;
-    padding: 2px;
-    background-color: #DFE7F5;
-    border: 1px solid #DFE7F5;
-    border-radius: 2px;
-    color: #8A8575;
-    overflow: hidden;
+#TVGuide .programcontainer {
+	float: left;
+	height: 100%;
 }
 
-#TVGuide .program.current
-{
-    background-color: #AFCAFA;
+#TVGuide .program {
+	height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
+	margin: 2px 3px 2px 3px;
+	padding: 5px 5px 2px 5px;
+	background: #198cbe;
+	background: -moz-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #198cbe), color-stop(100%, #0872a0));
+	background: -webkit-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -o-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -ms-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: linear-gradient(top, #198cbe 0%, #0872a0 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#198cbe', endColorstr='#0872a0', GradientType=0 );
+	border: none;
+	border-radius: 4px;
+	color: #cee8f4;
+	overflow: hidden;
 }
 
-#TVGuide .program.scheduled
-{
-    background-color: #FA8787;
-    border: 1px solid #E3E3E3;
+#TVGuide .program a {
+	font-size: 12px;
+	color: #cee8f4;
+	text-shadow: #01425e 0 1px 0;
+	font-weight: bold;
 }
 
-#TVGuide .program.scheduled a 
-{
-    color: white;
+#TVGuide .program.current {
+	background: #d1ee7a;
+	background: -moz-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d1ee7a), color-stop(100%, #b1dd2c));
+	background: -webkit-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -o-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -ms-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1ee7a', endColorstr='#b1dd2c', GradientType=0 );
+}
+
+#TVGuide .program.current a {
+	color: #4b6400;
+	text-shadow: #f0f9d3 0 1px 0;
+	font-weight: bold;
 }
 
 #TVGuideNavigation select 

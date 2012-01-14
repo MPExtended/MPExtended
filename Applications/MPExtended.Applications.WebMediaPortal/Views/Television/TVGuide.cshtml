@@ -12,7 +12,7 @@
     @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
     {
         @Html.DropDownList("group", Model.Groups)
-        @Html.TextBox("date", Model.GuideStart.ToShortDateString())
+        @* @Html.TextBox("date", Model.GuideStart.ToShortDateString()) *@
         @Html.Hidden("time", Model.GuideStart.ToString("s"))
     }
 </div>
@@ -20,27 +20,26 @@
 @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
 {
     @Html.Hidden("group", Model.GroupId)
+	<br />
+	<button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier"></button>
+	<button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later"></button>
     <br />
     <br />
 
     <div id="TVGuide">
         <div class="headerrow">
             <div class="headerspacer">
-                <button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier">@UIStrings.Earlier</button>
+                &nbsp;
             </div>
             <div class="programs">
                 @{  foreach (var marker in Model.TimeMarkers)
                     {
-                        <div class="programcontainer" style="width: 12.5%;">
+                        <div class="programcontainer">
                             <div class="headertime">
-                                @marker.Format
-                                @if (marker.Last)
-                                {
-                                    <button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later">@UIStrings.Later</button>
-                                }
+                                @marker.TimeFormat
                             </div>
-                        </div>
-                    }
+                        </div>        
+                    }   
                 }
             </div>
         </div>

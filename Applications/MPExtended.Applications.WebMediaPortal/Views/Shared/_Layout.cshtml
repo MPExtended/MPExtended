@@ -15,43 +15,49 @@
     }
 </head>
 <body>
-    <div id="header">
-        <div id='logo'></div>
-        <h1>WebMediaPortal</h1>
-
-        <div id="logindisplay">
-        @if (ViewBag.Availability.Authentication)
-        {
-            @Html.Partial("_LogOnPartial")
-        }
-        </div>
-
-        <div id="search">
-            @using (Html.BeginForm("Results", "Search", FormMethod.Get))
-            {
-                <input type="text" name="text" placeholder="@UIStrings.SearchFieldPlaceholder" onblur="this.form.submit();" />
-            }
-        </div>
-
-        <div class="navigation">
-            <ul id="navlist">
-                <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
-                @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
-                @if (ViewBag.Availability.Movies) { <li>@Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") </li> }
-                @if (ViewBag.Availability.TVShows) { <li>@Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") </li> }
-                
-                @if (ViewBag.Availability.TAS)
+    <div id="white_shadow"></div>
+    <div id="center">
+        <div id="header_wrap">
+            <div id="header">
+		        <div id='logo'></div>
+		        <div id="logindisplay">
+                @if (ViewBag.Availability.Authentication)
                 {
-                    <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
-                    <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
-                    <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
-                    <li>@Html.ActionLink(UIStrings.Status, "Index", "TVServer")</li>
+                    @Html.Partial("_LogOnPartial")
                 }
+	  	        </div>
+
+                <!--       
+                <div id="search">
+                    @using (Html.BeginForm("Results", "Search", FormMethod.Get))
+                    {
+                        <input type="text" name="text" placeholder="@UIStrings.SearchFieldPlaceholder" onblur="this.form.submit();" />
+                    }
+                </div>
+                -->
+	        </div>
+		    <div class="navigation">
+			    <ul id="navlist">
+                    <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
+                    @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
+                    @if (ViewBag.Availability.Movies) { <li>@Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") </li> }
+                    @if (ViewBag.Availability.TVShows) { <li>@Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") </li> }
                 
-                <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
-            </ul>
-        </div>
+                    @if (ViewBag.Availability.TAS)
+                    {
+                        <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
+                        <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
+                        <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
+                        <li>@Html.ActionLink(UIStrings.Status, "Index", "TVServer")</li>
+                    }
+                
+                    <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
+                </ul>
+            </div>
+	    </div>
+	    <div id="content">
+	        @RenderBody()
+	    </div>
     </div>
-    @RenderBody()
 </body>
 </html>
