@@ -22,7 +22,7 @@ using System.IO;
 using System.Text;
 using System.Net;
 using System.Data.SQLite;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 

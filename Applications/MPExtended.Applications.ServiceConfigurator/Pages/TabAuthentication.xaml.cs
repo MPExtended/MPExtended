@@ -22,8 +22,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using MPExtended.Libraries.General;
-using MPExtended.Libraries.General.ConfigurationContracts;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.ConfigurationContracts;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

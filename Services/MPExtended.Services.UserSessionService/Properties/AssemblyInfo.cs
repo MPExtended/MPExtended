@@ -17,3 +17,9 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("9b7805f6-464e-423d-ac19-98a6db9fac75")]
+
+// The hosting information
+[assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
+    Service = MPExtended.Libraries.Service.MPExtendedService.UserSessionService,
+    WCFType = typeof(MPExtended.Services.UserSessionService.UserSessionProxyService),
+    ZeroconfType = "_mpextended-uss._tcp.")]

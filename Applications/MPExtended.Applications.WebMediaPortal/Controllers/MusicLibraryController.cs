@@ -23,7 +23,7 @@ using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Client;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 

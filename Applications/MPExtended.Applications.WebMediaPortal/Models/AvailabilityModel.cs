@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Client;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {

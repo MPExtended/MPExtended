@@ -23,7 +23,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml.Linq;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.Development.DevTool
 {

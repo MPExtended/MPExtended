@@ -22,7 +22,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal
 {

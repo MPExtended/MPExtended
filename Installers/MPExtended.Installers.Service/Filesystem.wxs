@@ -20,10 +20,10 @@
           <Directory Id="InstallDirectory" Name="Service">
             <!-- General -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
-              <File Source="$(var.MPExtended.Libraries.ServiceLib.TargetDir)\MPExtended.Libraries.ServiceLib.dll" />
-              <File Source="$(var.MPExtended.Libraries.ServiceLib.TargetDir)\MPExtended.Libraries.ServiceLib.pdb" />
-              <File Source="$(var.MPExtended.Libraries.General.TargetDir)\MPExtended.Libraries.General.dll" />
-              <File Source="$(var.MPExtended.Libraries.General.TargetDir)\MPExtended.Libraries.General.pdb" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
+              <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
+              <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
               <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
             </Component>
             

@@ -31,7 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.UserSessionService;
 using MPExtended.Services.UserSessionService.Interfaces;
 using MPExtended.Applications.ServiceConfigurator.Code;

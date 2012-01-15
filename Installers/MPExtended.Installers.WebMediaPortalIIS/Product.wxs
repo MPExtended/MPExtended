@@ -17,7 +17,7 @@
     UpgradeCode="cdd8eb72-c655-4cd0-8d2b-1b8137876415"
     Name="MPExtended WebMediaPortal (IIS version)"
     Language="1033"
-    Version="!(bind.FileVersion.MPExtended.Libraries.General.dll)"
+    Version="!(bind.FileVersion.MPExtended.Libraries.Service.dll)"
     Manufacturer="MPExtended">
     <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
 

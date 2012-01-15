@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Client;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 

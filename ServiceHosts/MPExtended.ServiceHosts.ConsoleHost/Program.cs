@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.ServiceHosts.Hosting;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.ServiceHosts.ConsoleHost
 {
@@ -27,18 +27,7 @@ namespace MPExtended.ServiceHosts.ConsoleHost
     {
         static void Main(string[] args)
         {
-#if DEBUG
-            // optimize for speed in debug builds
-            var host = new MPExtendedHost(new List<Type>
-            {
-                typeof(MPExtended.Services.MediaAccessService.MediaAccessService),
-                typeof(MPExtended.Services.TVAccessService.TVAccessService),
-                typeof(MPExtended.Services.StreamingService.StreamingService),
-                typeof(MPExtended.Services.UserSessionService.UserSessionProxyService)
-            });
-#else
             var host = new MPExtendedHost();
-#endif
             host.Open();
 
             ExitDetector.Install(delegate()

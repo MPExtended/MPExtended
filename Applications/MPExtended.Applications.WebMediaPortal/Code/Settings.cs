@@ -23,7 +23,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {

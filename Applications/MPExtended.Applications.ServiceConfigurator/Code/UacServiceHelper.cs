@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {

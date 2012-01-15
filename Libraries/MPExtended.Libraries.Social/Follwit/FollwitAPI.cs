@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Security.Cryptography;
-using MPExtended.Libraries.General;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Social.Follwit
 {
