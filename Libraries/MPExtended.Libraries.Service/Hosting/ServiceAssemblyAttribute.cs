@@ -27,7 +27,9 @@ namespace MPExtended.Libraries.Service.Hosting
     {
         public MPExtendedService Service { get; set; }
         public Type WCFType { get; set; }
-        public Action BackgroundThread { get; set; }
         public string ZeroconfType { get; set; }
+
+        public Type InitClass { get; set; }
+        public string InitMethod { get; set; }
     }
 }

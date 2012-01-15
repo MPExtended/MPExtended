@@ -18,13 +18,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
     public class MPExtendedHost
     {
+        private const string STARTUP_CONDITION = "MPExtendedHost";
+
         private WCFHost wcf;
         private Zeroconf zeroconf;
 
@@ -39,6 +43,8 @@ namespace MPExtended.Libraries.Service.Hosting
         {
             try
             {
+                ServiceStartup.RegisterStartupCondition(STARTUP_CONDITION);
+
                 // rotate log files if possible
                 LogRotation rotation = new LogRotation();
                 rotation.Rotate();
@@ -59,14 +65,12 @@ namespace MPExtended.Libraries.Service.Hosting
                 wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
 
                 // start the background threads
-                var services = Installation.GetAvailableServices().Where(x => x.BackgroundThread != null);
+                var services = Installation.GetAvailableServices().Where(x => x.InitClass != null && x.InitMethod != null);
                 foreach (var service in services)
                 {
                     string name = service.Service.ToString() + "Background";
-                    ThreadManager.Start(name, delegate()
-                    {
-                        service.BackgroundThread.Invoke();
-                    });
+                    BindingFlags flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod;
+                    service.InitClass.InvokeMember(service.InitMethod, flags, null, null, null);
                 }
 
                 // do the zeroconf publish
@@ -81,6 +85,8 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Error("Zeroconf publish failed", ex);
                     }
                 });
+
+                ServiceStartup.StartupConditionCompleted(STARTUP_CONDITION);
                 return true;
             }
             catch (Exception ex)

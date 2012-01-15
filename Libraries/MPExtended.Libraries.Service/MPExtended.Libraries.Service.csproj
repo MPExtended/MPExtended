@@ -75,6 +75,7 @@
     <Compile Include="ConfigurationContracts\Streaming.cs" />
     <Compile Include="ConfigurationContracts\WebMediaPortalHosting.cs" />
     <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
+    <Compile Include="Hosting\ServiceStartup.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
     <Compile Include="Hosting\BaseAddresses.cs" />
     <Compile Include="Hosting\LogRotation.cs" />
