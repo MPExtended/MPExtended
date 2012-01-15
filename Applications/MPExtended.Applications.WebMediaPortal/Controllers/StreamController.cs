@@ -93,7 +93,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
+        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime)
         {
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -109,7 +109,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            string url = GetStreamControl(type).StartStream(identifier, transcoder, 0);
+            string url = GetStreamControl(type).StartStream(identifier, transcoder, starttime);
             if (String.IsNullOrEmpty(url))
             {
                 Log.Error("Streaming: StartStream failed");
@@ -173,29 +173,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(int item, string transcoder)
+        public ActionResult TV(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult Movie(int item, string transcoder)
+        public ActionResult Movie(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult TVEpisode(int item, string transcoder)
+        public ActionResult TVEpisode(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult Recording(int item, string transcoder)
+        public ActionResult Recording(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult MusicTrack(int item, string transcoder)
+        public ActionResult MusicTrack(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder, starttime);
         }
 
         //
