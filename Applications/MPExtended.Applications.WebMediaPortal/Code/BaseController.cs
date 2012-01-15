@@ -59,8 +59,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 },
             };
             (filterContext.Result as ViewResult).ViewBag.Availability = ServiceAvailability;
-            (filterContext.Result as ViewResult).ViewBag.Version = VersionUtil.GetVersionName();
-            (filterContext.Result as ViewResult).ViewBag.BuildVersion = VersionUtil.GetBuildVersion().ToString();
+            (filterContext.Result as ViewResult).ViewBag.FullVersion = VersionUtil.GetFullVersionString();
             (filterContext.Result as ViewResult).ViewBag.Request = filterContext.HttpContext.Request.Url;
             filterContext.ExceptionHandled = true;
         }

@@ -49,7 +49,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 LogRotation rotation = new LogRotation();
                 rotation.Rotate();
 
-                Log.Debug("Opening MPExtended ServiceHost version {0} (build {1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion());
+                Log.Debug("Opening MPExtended ServiceHost version {0}", VersionUtil.GetFullVersionString());
 
                 // always log uncaught exceptions
                 AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e)
