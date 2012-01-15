@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -28,6 +29,8 @@ namespace MPExtended.Services.MetaService
     public class MetaService : IMetaService
     {
         #region Initialization
+        private const string STARTUP_CONDITION = "MetaService";
+
         public static MetaService Instance { get; private set; }
 
         public static void Setup()
@@ -40,11 +43,18 @@ namespace MPExtended.Services.MetaService
 
         private IServicePublisher[] publishers;
         private ServiceDetector detector;
+        private bool initialized;
 
         public MetaService()
         {
+            ServiceStartup.RegisterStartupCondition(STARTUP_CONDITION);
             detector = new ServiceDetector();
             publishers = new IServicePublisher[] { new ZeroconfPublisher() };
+            initialized = false;
+            ServiceStartup.Started += delegate()
+            {
+                initialized = true;
+            };
 
             ThreadManager.Start("ServicePublishing", delegate()
             {
@@ -54,6 +64,7 @@ namespace MPExtended.Services.MetaService
                 {
                     publisher.PublishAsync(detector);
                 }
+                ServiceStartup.StartupConditionCompleted(STARTUP_CONDITION);
             });
         }
 
@@ -71,7 +82,7 @@ namespace MPExtended.Services.MetaService
 
         public WebBool TestConnection()
         {
-            return true;
+            return initialized;
         }
 
         public WebServiceVersion GetVersion()
