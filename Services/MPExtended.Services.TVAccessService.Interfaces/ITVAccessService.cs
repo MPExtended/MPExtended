@@ -54,6 +54,14 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebRtspClient> GetStreamingClients();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebDiskSpaceInformation GetRecordingDiskInformationForCard(int id);
         #endregion
 
         #region Schedules

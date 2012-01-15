@@ -258,6 +258,19 @@ namespace MPExtended.Services.TVAccessService
         {
             return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
         }
+
+        public IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation()
+        {
+            return GetCards().Select(x => x.RecordingFolder).Distinct()
+                .Select(x => DiskSpaceInformation.GetSpaceInformation(x))
+                .ToList();
+        }
+
+        public WebDiskSpaceInformation GetRecordingDiskInformationForCard(int id)
+        {
+            string folder = Card.Retrieve(id).ToWebCard().RecordingFolder;
+            return DiskSpaceInformation.GetSpaceInformation(folder);
+        }
         #endregion
 
         #region Schedules
