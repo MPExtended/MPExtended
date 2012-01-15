@@ -69,11 +69,13 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationContracts\MediaAccess.cs" />
     <Compile Include="ConfigurationContracts\Services.cs" />
     <Compile Include="ConfigurationContracts\Streaming.cs" />
     <Compile Include="ConfigurationContracts\WebMediaPortalHosting.cs" />
+    <Compile Include="Properties\GitVersion.cs" />
     <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
     <Compile Include="Hosting\ServiceStartup.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
@@ -106,6 +108,9 @@
     <None Include="Hosting\App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)Libraries\misc\write-git-version.bat $(ProjectDir) $(ProjectDir)Properties\GitVersion.cs</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
