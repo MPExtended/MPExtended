@@ -34,8 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Settings/
         public ActionResult Index()
         {
-            ViewBag.Version = VersionUtil.GetVersionName();
-            ViewBag.BuildVersion = VersionUtil.GetBuildVersion().ToString();
+            ViewBag.Version = VersionUtil.GetFullVersionString();
 
             return View(new SettingsViewModel(Settings.ActiveSettings));
         }
@@ -43,8 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         [HttpPost]
         public ActionResult Index(SettingsViewModel model)
         {
-            ViewBag.Version = VersionUtil.GetVersionName();
-            ViewBag.BuildVersion = VersionUtil.GetBuildVersion().ToString();
+            ViewBag.Version = VersionUtil.GetFullVersionString();
 
             if (!ModelState.IsValid)
             {
