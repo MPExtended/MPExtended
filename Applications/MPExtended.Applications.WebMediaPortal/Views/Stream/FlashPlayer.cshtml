@@ -5,7 +5,7 @@
     .dragdealer
     {
         position: relative;
-        height: 20px;
+        height: 15px;
         width: 570px;
         background: #EEE;
     }
@@ -16,11 +16,11 @@
     }
     .dragdealer .red-bar
     {
-        width: 15px;
-        height: 20px;
+        width: 10px;
+        height: 15px;
         background: #CC0000;
         color: #FFF;
-        line-height: 20px;
+        line-height: 15px;
         text-align: center;
     }
     .dragdealer .disabled
@@ -59,17 +59,17 @@
         loose: true,
         speed: 100,
         disabled: true,
-        callback: function(x, y) {
+        callback: function (x, y) {
             startPos = Math.round(videoLength * x);
             play(startPos, true)
-	    }
+        }
     });
 
     jwplayer('mediaspace').setup({
         'flashplayer': '@Url.Content("~/Content/jwplayer/player.swf")',
         'controlbar': 'bottom',
-        'width': '@Model.Size.Width',
-        'height': '@Model.Size.Height',
+        'width': '570',
+        'height': '320',
         'skin': '@Url.Content("~/Content/jwplayer/slim.zip")'
     }).onTime(function (callback) {
         var pos = parseFloat(startPos) + callback.position;
@@ -77,7 +77,7 @@
         percentage = pos / callback.duration;
         slider.setValue(percentage);
         setText("percentageText", percentage.toString());
-    }).onPlay(function(){
+    }).onPlay(function () {
         videoLength = jwplayer().getDuration();
         setText("durationText", videoLength.toString());
         slider.enable();
@@ -85,10 +85,10 @@
         play(0, false);
     });
 
-    function play(startPos, autoStart){
+    function play(startPos, autoStart) {
         jwplayer().stop();
-        jwplayer().load({ provider: 'http', file: '@Html.Raw(@Model.URL)' + '&starttime=' + startPos.toString()});
-        if(autoStart == true){
+        jwplayer().load({ provider: 'http', file: '@Html.Raw(@Model.URL)' + '&starttime=' + startPos.toString() });
+        if (autoStart == true) {
             jwplayer().play();
         }
     }
