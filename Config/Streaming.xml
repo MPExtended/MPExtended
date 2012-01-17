@@ -251,6 +251,38 @@
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
+    <transcoder>
+      <name>MP3</name>
+      <description>MP3</description>
+      <bandwidth>256</bandwidth>
+      <target>pc-flash-audio</target>
+      <transport>http</transport>
+      <mime>audio/mpeg</mime>
+      <videoStream>false</videoStream>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=none,acodec=mp3,ab=256,channels=2,samplerate=48000</encoder>
+        <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>AAC</name>
+      <description>AAC</description>
+      <bandwidth>256</bandwidth>
+      <target>pc-flash-audio</target>
+      <transport>http</transport>
+      <mime>audio/aac</mime>
+      <videoStream>false</videoStream>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <encoder>vcodec=none,acodec=mp4a,ab=256,channels=2,samplerate=48000</encoder>
+        <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
 
     <!-- Pseudostreaming test -->
     <transcoder>

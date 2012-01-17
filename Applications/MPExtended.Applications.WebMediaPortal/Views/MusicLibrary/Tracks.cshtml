@@ -28,5 +28,7 @@
     }
     </ul>
 </div>
+<br style="clear: both;" />
+<br />
 
-
+@{Html.RenderAction("MusicPlayer", "Stream", new { albumId = @Model.ElementAt(0).AlbumId }); }
