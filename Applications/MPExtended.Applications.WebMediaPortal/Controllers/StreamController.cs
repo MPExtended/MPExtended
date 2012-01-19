@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : BaseController
     {
-        private static List<Tuple<WebStreamMediaType, string>> RequestedStreams = new List<Tuple<WebStreamMediaType, string>>();
+        private static List<string> PlayerOpenedBy = new List<string>();
 
         //
         // Streaming
@@ -96,17 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
         {
             // Check if there is actually a player requested for this stream
-            bool found = false;
-            foreach (var item in RequestedStreams)
-            {
-                if (item.Item1 == type && item.Item2 == itemId)
-                {
-                    RequestedStreams.Remove(item);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
+            if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
                 return new HttpUnauthorizedResult();
             }
@@ -214,7 +204,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
             // save stream request
-            RequestedStreams.Add(new Tuple<WebStreamMediaType, string>(type, itemId));
+            if(!PlayerOpenedBy.Contains(Request.UserHostAddress))
+            {
+                PlayerOpenedBy.Add(Request.UserHostAddress);
+            }
 
             // get transcoding profile
             IWebStreamingService streamControl = GetStreamControl(type);
