@@ -149,17 +149,17 @@
             <Directory Id="ConfigDefaultDirectory" Name="DefaultConfig">
               <!-- General config -->
               <Component Id="Component_General_Config" Guid="10b3c51a-e27c-436a-986d-8222ae9a8fed">
-                <File Source="$(var.SolutionDir)\Config\Release\Services.xml" />
+                <File Source="$(var.SolutionDir)\Config\Services.xml" />
               </Component>
 
               <!-- MAS config -->
               <Component Id="Component_MAS_Config" Guid="97c257cf-8806-4d20-b674-790be70e7976">
-                <File Source="$(var.SolutionDir)\Config\Release\MediaAccess.xml" />
+                <File Source="$(var.SolutionDir)\Config\MediaAccess.xml" />
               </Component>
 
               <!-- Stream config -->
               <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
-                <File Source="$(var.SolutionDir)\Config\Release\Streaming.xml" />
+                <File Source="$(var.SolutionDir)\Config\Streaming.xml" />
               </Component>
             </Directory>
 

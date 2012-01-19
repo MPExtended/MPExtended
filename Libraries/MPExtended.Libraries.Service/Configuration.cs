@@ -33,9 +33,9 @@ namespace MPExtended.Libraries.Service
         private static Streaming streamConfig = null;
         private static WebMediaPortalHosting webmpHostingConfig = null;
 
-        public static ConfigurationContracts.Services Services 
+        public static ConfigurationContracts.Services Services
         {
-            get 
+            get
             {
                 if (serviceConfig == null)
                     serviceConfig = new ConfigurationContracts.Services();
@@ -83,22 +83,25 @@ namespace MPExtended.Libraries.Service
 
             if (!File.Exists(path))
             {
-#if DEBUG
-                // In debug mode files always exists as they're read from the source tree
-                throw new FileNotFoundException("Couldn't find config - what did you do?!?!");
-#else
-                // copy from default location
-                MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
-                string defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
-                File.Copy(defaultPath, path);
+                if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+                {
+                    // When running from source they should exists
+                    throw new FileNotFoundException("Couldn't find config - what did you do?!?!");
+                }
+                else
+                {
+                    // copy from default location
+                    MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
+                    string defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
+                    File.Copy(defaultPath, path);
 
-                // allow everyone to write to the config
-                var acl = File.GetAccessControl(path);
-                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
-                acl.AddAccessRule(rule);
-                File.SetAccessControl(path, acl);
-#endif
+                    // allow everyone to write to the config
+                    var acl = File.GetAccessControl(path);
+                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                    FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
+                    acl.AddAccessRule(rule);
+                    File.SetAccessControl(path, acl);
+                }
             }
 
             return path;

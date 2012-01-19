@@ -168,7 +168,7 @@ namespace MPExtended.Libraries.Service
         {
             if (GetFileLayoutType() == FileLayoutType.Source)
             {
-                return Path.Combine(GetSourceRootDirectory(), "Config", "Debug");
+                return Path.Combine(GetSourceRootDirectory(), "Config");
             }
             else
             {
