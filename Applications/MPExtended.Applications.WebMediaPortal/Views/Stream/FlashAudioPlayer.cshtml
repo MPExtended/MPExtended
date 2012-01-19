@@ -23,7 +23,7 @@
                     <text>
                     { 'title': '@track.Title',
                       'image': '@Url.Action("AlbumImage", new { album = Model.Tracks.ElementAt(0).AlbumId })',
-                      'file': '@Html.Raw(Url.Action("MusicTrack", "Stream", new { item = track.Id, transcoder = Model.Transcoder }))', 
+                      'file': '@Html.Raw(Url.Action("MusicTrack", "Stream", new { item = track.Id, transcoder = Model.GetTranscoderForTrack(track) }))', 
                       'provider': 'sound'
                     },
                     </text>

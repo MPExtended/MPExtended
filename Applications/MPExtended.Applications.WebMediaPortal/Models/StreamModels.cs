@@ -59,6 +59,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public IEnumerable<string> Transcoders { get; set; }
         public string Transcoder { get; set; }
+        public WebTranscoderProfile TranscoderProfile { get; set; }
         public VideoPlayer Player { get; set; }
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
@@ -89,6 +90,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public class AlbumPlayerViewModel : PlayerViewModel
     {
         public IEnumerable<WebMusicTrackBasic> Tracks { get; set; }
+
+        public string GetTranscoderForTrack(WebMusicTrackBasic track)
+        {
+            if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg")
+            {
+                return "Direct";
+            }
+            else
+            {
+                return Transcoder;
+            }
+        }
     }
 
     public enum VideoPlayer

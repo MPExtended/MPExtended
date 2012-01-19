@@ -235,6 +235,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // generate view
             model.Transcoders = profiles;
             model.Transcoder = profile.Name;
+            model.TranscoderProfile = profile;
             model.Player = player;
             model.PlayerViewName = viewName;
             return PartialView("Player", model);
