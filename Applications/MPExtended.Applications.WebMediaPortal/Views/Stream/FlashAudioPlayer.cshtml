@@ -16,7 +16,9 @@
         'playlist.size': '320',
         'autostart': 'false',
         'skin': '@Url.Content("~/Content/jwplayer/whotube.zip")',
-        'plugins': 'revolt-1',
+        'plugins': '',
+		'stretching': 'uniform',
+		'repeat': 'list',
         'playlist': [
                 @foreach (var track in Model.Tracks)
                 {
@@ -24,7 +26,9 @@
                     { 'title': '@track.Title',
                       'image': '@Url.Action("AlbumImage", "MusicLibrary", new { album = Model.Tracks.ElementAt(0).AlbumId })',
                       'file': '@Html.Raw(Url.Action("MusicTrack", "Stream", new { item = track.Id, transcoder = Model.GetTranscoderForTrack(track) }))', 
-                      'provider': 'sound'
+                      'provider': 'sound',
+                      'duration': '@track.Duration',
+					  'description': '@track.Album',
                     },
                     </text>
                 }

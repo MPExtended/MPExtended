@@ -30,6 +30,7 @@ using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -84,7 +85,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
-                ProxyStream(fullUri.ToString());
+                ProxyStream(fullUri.ToString(), null);
             }
             else if (streamMode == StreamType.Direct)
             {
@@ -101,6 +102,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+       
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier))
@@ -126,7 +128,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
-                ProxyStream(url);
+                WebFileInfo info = null;
+                if (true)
+                {
+                    //TODO: determine when to use fileinfo to set content length based on transcoder profile
+                    info = MPEServices.MAS.GetFileInfo(GetProvider(type), (WebMediaType)type, Services.MediaAccessService.Interfaces.WebFileType.Content, itemId, 0);
+                }
+                ProxyStream(url, info);
             }
             else if (streamMode == StreamType.Direct)
             {
@@ -141,7 +149,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        protected void ProxyStream(string sourceUrl)
+        protected void ProxyStream(string sourceUrl, WebFileInfo info)
         {
             byte[] buffer = new byte[65536]; // we don't actually read the full buffer each time, so a big size is ok
             int read;
@@ -163,6 +171,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
             }
 
+            if (info != null)
+            {
+                HttpContext.Response.AddHeader("Content-Length", info.Size.ToString());
+            }
             // stream to output
             while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
             {
