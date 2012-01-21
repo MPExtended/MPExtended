@@ -59,9 +59,18 @@ namespace MPExtended.Libraries.Service
     public static class Installation
     {
         private static List<ServiceAssemblyAttribute> installedServices;
+        private static FileLayoutType? fileLayoutType;
 
         public static FileLayoutType GetFileLayoutType()
         {
+            if(fileLayoutType.HasValue)
+            {
+                return fileLayoutType.Value;
+            }
+
+            // Default to binary installation as we don't have to recognize that
+            fileLayoutType = FileLayoutType.Installed;
+
             // Source distribution: search for a parent directory with the GlobalVersion.cs file
             string binDir = AppDomain.CurrentDomain.BaseDirectory;
             DirectoryInfo info = new DirectoryInfo(binDir);
@@ -69,13 +78,14 @@ namespace MPExtended.Libraries.Service
             {
                 if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
                 {
-                    return FileLayoutType.Source;
+                    fileLayoutType = FileLayoutType.Source;
+                    break;
                 }
                 info = info.Parent;
             } while (info != null);
 
-            // No source, so it's binary
-            return FileLayoutType.Installed;
+            // Return
+            return fileLayoutType.Value;
         }
 
         public static string GetSourceRootDirectory()
@@ -181,20 +191,37 @@ namespace MPExtended.Libraries.Service
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
         }
 
+        internal static bool IsDebugBuild()
+        {
+            var attrs = (AssemblyConfigurationAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
+            if (attrs.Length > 0)
+            {
+                return attrs.First().Configuration == "Debug";
+            }
+            return false;
+        }
+
         internal static List<ServiceAssemblyAttribute> GetAvailableServices()
         {
             if (installedServices == null)
             {
-                string directory = Installation.GetFileLayoutType() == FileLayoutType.Installed ?
-                    Installation.GetInstallDirectory(MPExtendedProduct.Service) :
-                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-                var files = Directory.GetFiles(directory, "MPExtended.Services.*.dll");
-
-                installedServices = files
-                    .Select(path => Assembly.LoadFrom(path))
-                    .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
-                    .ToList();
+                if (GetFileLayoutType() == FileLayoutType.Installed)
+                {
+                    installedServices = Directory.GetFiles(GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Services.*.dll")
+                        .Select(path => Assembly.LoadFrom(path))
+                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
+                        .ToList();
+                }
+                else
+                {
+                    installedServices = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
+                        .Select(x => Path.Combine(x, "bin", IsDebugBuild() ? "Debug" : "Release"))
+                        .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
+                        .Distinct()
+                        .Select(path => Assembly.LoadFrom(path))
+                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
+                        .ToList();
+                }
             }
 
             return installedServices;
