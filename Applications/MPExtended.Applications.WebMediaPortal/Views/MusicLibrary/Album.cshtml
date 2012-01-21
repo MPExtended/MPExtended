@@ -1,0 +1,7 @@
+﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Music.WebMusicTrackBasic>
+
+@{
+    ViewBag.Title = "Album";
+}
+
+@{Html.RenderAction("MusicPlayer", "Stream", new { albumId = @Model.ElementAt(0).AlbumId }); }

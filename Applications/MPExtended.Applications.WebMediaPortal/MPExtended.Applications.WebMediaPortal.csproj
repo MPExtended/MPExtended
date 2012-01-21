@@ -187,9 +187,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MusicLibrary\Play.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -199,7 +196,7 @@
     <Content Include="Views\MusicLibrary\Albums.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MusicLibrary\Tracks.cshtml" />
+    <Content Include="Views\MusicLibrary\Album.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\MovieLibrary\Index.cshtml" />
