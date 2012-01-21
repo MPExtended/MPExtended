@@ -6,9 +6,9 @@
   <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
   <DefaultTVProfile>Flash LQ</DefaultTVProfile>
   <EnableDeinterlace>false</EnableDeinterlace>
-  <TVShowProvider>6</TVShowProvider>
-  <MovieProvider>3</MovieProvider>
-  <MusicProvider>4</MusicProvider>
+  <TVShowProvider xsi:nil="true" />
+  <MovieProvider xsi:nil="true" />
+  <MusicProvider xsi:nil="true" />
   <PicturesProvider xsi:nil="true" />
   <FileSystemProvider xsi:nil="true" />
   <MASUrl>auto://127.0.0.1:4322</MASUrl>

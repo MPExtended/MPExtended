@@ -5,6 +5,7 @@
   <DefaultMediaProfile>Flash HQ</DefaultMediaProfile>
   <DefaultAudioProfile>Flash Audio</DefaultAudioProfile>
   <DefaultTVProfile>Flash HQ</DefaultTVProfile>
+  <EnableDeinterlace>false</EnableDeinterlace>
   <TVShowProvider xsi:nil="true" />
   <MovieProvider xsi:nil="true" />
   <MusicProvider xsi:nil="true" />
