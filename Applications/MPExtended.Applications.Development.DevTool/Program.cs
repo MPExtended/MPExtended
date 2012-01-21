@@ -28,19 +28,29 @@ namespace MPExtended.Applications.Development.DevTool
     {
         static void Main(string[] args)
         {
+            // init
             if (Installation.GetFileLayoutType() != FileLayoutType.Source)
             {
                 Console.WriteLine("DevTool only works from a source tree");
                 Environment.Exit(1);
             }
 
+            // command line operating modes
+            if (args.Length == 3 && args[0] == "/WebMPInstallerRebuild")
+            {
+                var gen = new WixFSGenerator();
+                gen.OutputStream = (TextWriter)Console.Out;
+                gen.RunFromInput(args[1], args[2], "WWW");
+                Environment.Exit(0);
+            }
+
+            // CLI
+            string line = "help";
             var tools = new IDevTool[] {
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),
                 new WixFSGenerator()
             };
-
-            string line = "help";
             do
             {
                 switch (line)

@@ -63,6 +63,9 @@
     <EmbeddedResource Include="Texts.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)Libraries\Tools\DevTool.exe" /WebMPInstallerRebuild "Applications\MPExtended.Applications.WebMediaPortal" "$(ProjectDir)WWW.wxs"</PreBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.
