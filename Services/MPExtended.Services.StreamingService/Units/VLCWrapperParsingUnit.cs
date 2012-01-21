@@ -82,7 +82,7 @@ namespace MPExtended.Services.StreamingService.Units
                     Log.Trace("VLCWrapperParsing: read line {0}", line);
 
                     // just for debugging of the wrapper tool
-                    if(line.StartsWith("A") || line == "S started" || line == "S null")
+                    if(line.StartsWith("A") || line.StartsWith("I") || line == "S started" || line == "S null")
                         continue;
 
                     // propagate start event to Start() method
