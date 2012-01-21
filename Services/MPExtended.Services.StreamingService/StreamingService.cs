@@ -35,6 +35,7 @@ namespace MPExtended.Services.StreamingService
     public class StreamingService : IWebStreamingService, IStreamingService, IDisposable
     {
         private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
+        private static List<string> _authorizedHosts = new List<string>();
         private const int API_VERSION = 2;
 
         private Streaming _stream;
@@ -55,6 +56,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebStreamServiceDescription GetServiceDescription()
         {
+            AuthorizeStreaming();
             bool hasTv = MPEServices.HasTASConnection; // takes a while so don't execute it twice
             return new WebStreamServiceDescription()
             {
@@ -124,11 +126,21 @@ namespace MPExtended.Services.StreamingService
         {
             return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
+
+        public bool AuthorizeStreaming()
+        {
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            {
+                _authorizedHosts.Add(WCFUtil.GetClientIPAddress());
+            }
+            return true;
+        }
         #endregion
 
         #region Streaming
         public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier)
         {
+            AuthorizeStreaming();
             if (type == WebStreamMediaType.TV)
             {
                 int channelId = Int32.Parse(itemId);
@@ -186,6 +198,12 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
+            if(!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            {
+                Log.Warn("Host {0} isn't authorized to call GetMediaItem", WCFUtil.GetClientIPAddress());
+                return Stream.Null;
+            }
+
             MediaSource source = new MediaSource(type, provider, itemId);
             try
             {

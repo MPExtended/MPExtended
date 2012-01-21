@@ -60,5 +60,9 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        bool AuthorizeStreaming();
     }
 }
