@@ -67,7 +67,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             string text = fullpath.Substring(rootInfo.Length + 1);
-            byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(text);
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(text);
             return Convert.ToBase64String(toEncodeAsBytes);
         }
 
@@ -79,7 +79,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             byte[] encodedDataAsBytes = Convert.FromBase64String(id);
-            string path = ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            string path = Encoding.UTF8.GetString(encodedDataAsBytes);
             return Path.Combine(root, path);
         }
     }

@@ -95,7 +95,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             string dircomponent = Path.GetFullPath(fullpath).Substring(share.Path.Length + 1);
-            byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(dircomponent);
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(dircomponent);
             string base64dir = Convert.ToBase64String(toEncodeAsBytes);
             return String.Format("{0}|{1}", share.Index, base64dir);
         }
@@ -111,7 +111,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             int shareIndex = Int32.Parse(id.Substring(0, id.IndexOf("|")));
             string path64 = id.Substring(id.IndexOf("|") + 1);
             byte[] encodedDataAsBytes = Convert.FromBase64String(path64);
-            string path = ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            string path = Encoding.UTF8.GetString(encodedDataAsBytes);
 
             return Path.GetFullPath(Path.Combine(shares.Where(x => x.Index == shareIndex).First().Path, path));
         }

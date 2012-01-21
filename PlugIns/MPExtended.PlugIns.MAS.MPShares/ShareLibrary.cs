@@ -292,18 +292,16 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         private string EncodeTo64(string toEncode)
         {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(toEncode);
+            return Convert.ToBase64String(toEncodeAsBytes);
         }
 
         private string DecodeFrom64(string encodedData)
         {
             try
             {
-                byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-                string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-                return returnValue;
+                byte[] encodedDataAsBytes = Convert.FromBase64String(encodedData);
+                return Encoding.UTF8.GetString(encodedDataAsBytes);
             }
             catch (FormatException)
             {
