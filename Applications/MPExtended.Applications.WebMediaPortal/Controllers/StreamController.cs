@@ -86,7 +86,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (streamMode == StreamType.Proxied)
             {
                 GetStreamControl(type).AuthorizeStreaming();
-                ProxyStream(fullUri.ToString(), null);
+                ProxyStream(fullUri.ToString());
             }
             else if (streamMode == StreamType.Direct)
             {
@@ -103,7 +103,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-
        
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
@@ -130,14 +129,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
-                GetStreamControl(type).AuthorizeStreaming();
-                WebFileInfo info = null;
-                if (true)
-                {
-                    //TODO: determine when to use fileinfo to set content length based on transcoder profile
-                    info = MPEServices.MAS.GetFileInfo(GetProvider(type), (WebMediaType)type, Services.MediaAccessService.Interfaces.WebFileType.Content, itemId, 0);
-                }
-                ProxyStream(url, info);
+				GetStreamControl(type).AuthorizeStreaming();
+                ProxyStream(url);
             }
             else if (streamMode == StreamType.Direct)
             {
@@ -153,7 +146,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        protected void ProxyStream(string sourceUrl, WebFileInfo info)
+        protected void ProxyStream(string sourceUrl)
         {
             byte[] buffer = new byte[65536]; // we don't actually read the full buffer each time, so a big size is ok
             int read;
@@ -173,12 +166,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 {
                     HttpContext.Response.AddHeader(header, response.Headers[header]);
                 }
+                else if (header.StartsWith("X-Content-")) // We set the Content-Length header with the X- prefix because WCF removes the normal header
+                {
+                    HttpContext.Response.AddHeader(header.Substring(2), response.Headers[header]);
+                }
             }
 
-            if (info != null)
-            {
-                HttpContext.Response.AddHeader("Content-Length", info.Size.ToString());
-            }
             // stream to output
             while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
             {
