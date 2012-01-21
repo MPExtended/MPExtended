@@ -47,7 +47,11 @@ namespace MPExtended.Applications.Development.DevTool
             string outputFile = InputStream.ReadLine();
             OutputStream.Write("Enter prefix of the directory and component: ");
             string name = InputStream.ReadLine();
+            RunFromInput(inputDir, outputFile, name);
+        }
 
+        public void RunFromInput(string inputDir, string outputFile, string name)
+        {
             // setup XML file
             XNamespace ns = "http://schemas.microsoft.com/wix/2006/wi";
             XElement componentGroup = new XElement(ns + "ComponentGroup", new XAttribute("Id", "Component_" + name));
