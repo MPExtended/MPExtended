@@ -74,6 +74,7 @@
     <Compile Include="Code\WatchSharing.cs" />
     <Compile Include="Code\WatchSharingDebug.cs" />
     <Compile Include="Code\MediaInfoHelper.cs" />
+    <Compile Include="Transcoders\IRetrieveHookTranscoder.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
     <Compile Include="StreamingService.cs" />

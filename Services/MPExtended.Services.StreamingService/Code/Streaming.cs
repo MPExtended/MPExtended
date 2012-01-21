@@ -250,6 +250,14 @@ namespace MPExtended.Services.StreamingService.Code
                     WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                     return Stream.Null;
                 }
+
+                WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
+
+                if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)
+                {
+                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled(Streams[identifier].Context);
+                }
+
                 return Streams[identifier].OutputStream;
             }
         }

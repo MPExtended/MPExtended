@@ -17,15 +17,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class Direct : ITranscoder
+    internal class Direct : ITranscoder, IRetrieveHookTranscoder
     {
         public string Identifier { get; set; }
 
@@ -40,6 +42,20 @@ namespace MPExtended.Services.StreamingService.Transcoders
             context.TranscodingInfo.Supported = false;
             context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
             return;
+        }
+
+        public void RetrieveStreamCalled(StreamContext context)
+        {
+            // Also set X- variant because WCF removes normal header, see #96
+            WCFUtil.SetContentLength(context.Source.GetFileInfo().Size);
+            WCFUtil.AddHeader("X-Content-Length", context.Source.GetFileInfo().Size.ToString());
+
+            // there has to be a better way to do this
+            object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(context.Source.GetFileInfo().Name), "Content Type");
+            if (mime != null)
+            {
+                WCFUtil.SetContentType(mime.ToString());
+            }
         }
     }
 }

@@ -225,11 +225,15 @@ namespace MPExtended.Services.StreamingService
                 
                 WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
 
+                // WCF removes the Content-Length header for some reason, so set it also as X-Content-Length (#96)  
+                WCFUtil.SetContentLength(source.GetFileInfo().Size);
+                WCFUtil.AddHeader("X-Content-Length", source.GetFileInfo().Size.ToString());
+
                 // there has to be a better way to do this
                 object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
                 if (mime != null)
                 {
-                    WCFUtil.AddHeader("Content-Type", mime.ToString());
+                    WCFUtil.SetContentType(mime.ToString());
                 }
 
                 return source.Retrieve();

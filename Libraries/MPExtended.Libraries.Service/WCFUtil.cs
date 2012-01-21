@@ -74,7 +74,47 @@ namespace MPExtended.Libraries.Service
             }
         }
 
+        public static void SetContentLength(long length)
+        {
+            try
+            {
+                // This doesn't work yet (#96)
+                WebOperationContext.Current.OutgoingResponse.ContentLength = length;
+                AddHeader(HttpResponseHeader.ContentLength, length.ToString());
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
+
+
+        public static void SetContentType(string type)
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = type;
+                //AddHeader(HttpResponseHeader.ContentType, type);
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
+
         public static void AddHeader(string header, string value)
+        {
+            try
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
+            }
+            catch (InvalidOperationException)
+            {
+                // probably a net.pipe binding, just ignore it
+            }
+        }
+
+        public static void AddHeader(HttpResponseHeader header, string value)
         {
             try
             {
