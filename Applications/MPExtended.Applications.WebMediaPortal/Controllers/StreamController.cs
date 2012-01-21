@@ -84,10 +84,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
+                GetStreamControl(type).AuthorizeStreaming();
                 ProxyStream(fullUri.ToString());
             }
             else if (streamMode == StreamType.Direct)
             {
+                GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
                 return Redirect(fullUri.ToString());
             }
             return new EmptyResult();
@@ -126,10 +128,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
+                GetStreamControl(type).AuthorizeStreaming();
                 ProxyStream(url);
             }
             else if (streamMode == StreamType.Direct)
             {
+                GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
                 return Redirect(url);
             }
 

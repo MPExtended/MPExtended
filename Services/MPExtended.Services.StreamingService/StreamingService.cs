@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.ServiceModel;
 using MPExtended.Libraries.Client;
@@ -135,6 +136,15 @@ namespace MPExtended.Services.StreamingService
             }
             return true;
         }
+
+        public bool AuthorizeRemoteHostForStreaming(string host)
+        {
+            if (!_authorizedHosts.Contains(host))
+            {
+                _authorizedHosts.Add(host);
+            }
+            return true;
+        }
         #endregion
 
         #region Streaming
@@ -198,9 +208,10 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
-            if(!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
                 Log.Warn("Host {0} isn't authorized to call GetMediaItem", WCFUtil.GetClientIPAddress());
+                WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);
                 return Stream.Null;
             }
 
@@ -238,9 +249,10 @@ namespace MPExtended.Services.StreamingService
 
         public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition)
         {
-            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
                 Log.Warn("Host {0} isn't authorized to call DoStream", WCFUtil.GetClientIPAddress());
+                WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);
                 return Stream.Null;
             }
 
