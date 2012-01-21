@@ -64,5 +64,9 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         bool AuthorizeStreaming();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        bool AuthorizeRemoteHostForStreaming(string host);
     }
 }
