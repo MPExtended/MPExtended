@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -253,10 +254,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         private static string LookupCountryCode(string languageName)
         {
-            var language = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
-                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
-                .FirstOrDefault(x => x.DisplayName == languageName || x.EnglishName == languageName || x.NativeName == languageName || x.Name == languageName);
+            var language = CultureDatabase.GetLanguage(languageName);
             return language != null ? language.TwoLetterISOLanguageName : "ext";
         }
     }

@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -31,6 +30,7 @@ using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -56,9 +56,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             lvActiveStreams.ItemsSource = mStreamingSessions;
 
             // load language list
-            var languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
-                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
+            var languages = CultureDatabase.GetLanguages()
                 .OrderBy(x => x.TwoLetterISOLanguageName)
                 .ToDictionary(x => x.TwoLetterISOLanguageName, x => String.Format("{0} ({1})", x.TwoLetterISOLanguageName, x.DisplayName));
 
