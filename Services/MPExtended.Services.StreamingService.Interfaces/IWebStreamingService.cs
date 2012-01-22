@@ -37,7 +37,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier);
+        bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout);
 
         // startPosition is in seconds
         [OperationContract]

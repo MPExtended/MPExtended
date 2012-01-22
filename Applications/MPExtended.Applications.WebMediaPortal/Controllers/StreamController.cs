@@ -33,6 +33,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : BaseController
     {
+        // This is the timeout after which streams are automatically killed
+        private const int STREAM_TIMEOUT = 5;
+
         //
         // Streaming
         private int? GetProvider(WebStreamMediaType type)
@@ -93,7 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier))
+            if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
