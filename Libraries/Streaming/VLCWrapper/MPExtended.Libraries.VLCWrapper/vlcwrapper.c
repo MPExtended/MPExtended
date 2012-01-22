@@ -1,4 +1,4 @@
-// Copyright (C) 2011 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,8 +55,9 @@
 
 #define ENDLN(x) (x "\n")
 
+#define VERSION "0.1.1"
 #define USER_AGENT "VLC Wrapper for MPExtended"
-#define HTTP_USER_AGENT "VLCWrapper/0.1 MPExtended/0.3.9"
+#define HTTP_USER_AGENT "VLCWrapper/"VERSION
 
 #define MEDIA_NAME "Stream"
 
@@ -78,6 +79,25 @@ const char *state_name[] = {
 
 // maybe this var should be locked when writing it
 int global_state = STATE_NULL;
+
+// this is copied from src/text/unicode.c in the vlc source
+char* FromLocale(const char *string) {
+	char *out;
+
+	int len = 1 + MultiByteToWideChar (CP_ACP, 0, string, -1, NULL, 0);
+	wchar_t *wide = malloc (len * sizeof (wchar_t));
+	if (wide == NULL)
+		return NULL;
+
+	MultiByteToWideChar (CP_ACP, 0, string, -1, wide, len);
+	len = 1 + WideCharToMultiByte (CP_UTF8, 0, wide, -1, NULL, 0, NULL, NULL);
+	out = malloc (len);
+	if (out != NULL)
+		WideCharToMultiByte (CP_UTF8, 0, wide, -1, out, len, NULL, NULL);
+
+	free (wide);
+	return out;
+}
 
 void event_callback(const libvlc_event_t *event_data, void *data_void) {
    int data = *(int*)data_void;
@@ -126,6 +146,11 @@ int main(int argc, char **argv) {
       printf(ENDLN("Usage: vlcwrapper <input> <soutstring> [optional vlc arguments]"));
       return 1;
    }
+
+	// print some information
+	fprintf(stdout, ENDLN("I VLCWrapper version %s"), VERSION);
+	fprintf(stdout, ENDLN("A path %s"), FromLocale(argv[1]));
+	fprintf(stdout, ENDLN("A config %s"), argv[2]);
    
    // init state machine
    global_state = STATE_NULL;
@@ -138,7 +163,7 @@ int main(int argc, char **argv) {
       strcpy(vlc_argv[i-3], argv[i]);
    }
    for(i = 0; i < nr; i++)
-      fprintf(stdout, ENDLN("A %d %s"), i, vlc_argv[i]);
+      fprintf(stdout, ENDLN("A cmd %d %s"), i, vlc_argv[i]);
 
    // init vlc
    vlc = libvlc_new(nr, vlc_argv);
@@ -156,7 +181,7 @@ int main(int argc, char **argv) {
    register_event(eventManager, libvlc_VlmMediaInstanceStatusEnd, STATE_FINISHED);
 
    // start broadcast    
-   libvlc_vlm_add_broadcast(vlc, MEDIA_NAME, argv[1], argv[2], 0, NULL, true, false);
+   libvlc_vlm_add_broadcast(vlc, MEDIA_NAME, FromLocale(argv[1]), argv[2], 0, NULL, true, false);
    libvlc_vlm_play_media(vlc, MEDIA_NAME);
    
    // wait till it's started or errored

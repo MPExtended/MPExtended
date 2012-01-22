@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -28,10 +29,18 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public static WebMediaInfo LoadMediaInfoOrSurrogate(MediaSource source)
         {
-            WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(source);
-            if (info != null)
+            WebMediaInfo info;
+            try
             {
-                return info;
+                info = MediaInfoWrapper.GetMediaInfo(source);
+                if (info != null)
+                {
+                    return info;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Info(String.Format("Failed to load MediaInfo for {0}", source.GetDebugName()), ex);
             }
 
             WebMediaInfo surr = new WebMediaInfo();

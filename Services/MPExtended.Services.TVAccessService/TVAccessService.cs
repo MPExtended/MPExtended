@@ -199,7 +199,8 @@ namespace MPExtended.Services.TVAccessService
                         Id = schedule.IdSchedule.ToString(),
                         Score = 50 + (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 50),
                         Title = schedule.ProgramName,
-                        Type = WebTVSearchResultType.Schedule
+                        Type = WebTVSearchResultType.Schedule,
+                        ChannelName = Channel.Retrieve(schedule.IdChannel).DisplayName
                     }));
             }
 

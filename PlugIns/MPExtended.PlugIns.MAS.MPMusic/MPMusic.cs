@@ -348,7 +348,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         private string EncodeTo64(string toEncode)
         {
-            byte[] toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(toEncode);
             return Convert.ToBase64String(toEncodeAsBytes);
         }
 
@@ -357,7 +357,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             try
             {
                 byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-                return Encoding.ASCII.GetString(encodedDataAsBytes);
+                return Encoding.UTF8.GetString(encodedDataAsBytes);
             }
             catch (FormatException)
             {

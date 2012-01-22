@@ -34,7 +34,7 @@ namespace MPExtended.Services.StreamingService.Code
 #if DEBUG
         private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // use shorter time for debugging
 #else
-        private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // 2 minutes seams reasonable for production
+        private const int ALLOW_STREAM_IDLE_TIME = 5 * 1000; // two minutes was doomed to long by a lot of people for WebMP, so let's try 5 seconds
 #endif
         public const int STREAM_NONE = -2;
         public const int STREAM_DEFAULT = -1;

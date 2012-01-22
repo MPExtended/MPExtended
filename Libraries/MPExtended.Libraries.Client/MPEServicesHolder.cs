@@ -318,15 +318,21 @@ namespace MPExtended.Libraries.Client
                 binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
                 binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
 
+                if (addr.UserInfo != null && addr.UserInfo.Length > 0 && addr.UserInfo.Contains(':'))
+                {
+                    binding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
+                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
+                }
+
                 factory = new ChannelFactory<T>(
                     binding,
                     new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", addr.Host, addr.Port, service))
                 );
 
-                if (addr.UserInfo != null && addr.UserInfo.Length > 0 && addr.UserInfo.Contains('@'))
+                if (addr.UserInfo != null && addr.UserInfo.Length > 0 && addr.UserInfo.Contains(':'))
                 {
-                    factory.Credentials.UserName.UserName = addr.UserInfo.Substring(0, addr.UserInfo.IndexOf('@'));
-                    factory.Credentials.UserName.Password = addr.UserInfo.Substring(addr.UserInfo.IndexOf('@') + 1);
+                    factory.Credentials.UserName.UserName = addr.UserInfo.Substring(0, addr.UserInfo.IndexOf(':'));
+                    factory.Credentials.UserName.Password = addr.UserInfo.Substring(addr.UserInfo.IndexOf(':') + 1);
                 }
             }
 
