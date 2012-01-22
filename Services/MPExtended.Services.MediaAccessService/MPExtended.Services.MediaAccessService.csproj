@@ -81,10 +81,6 @@
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
-      <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
-      <Name>MPExtended.Services.UserSessionService</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

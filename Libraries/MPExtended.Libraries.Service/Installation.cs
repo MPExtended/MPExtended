@@ -217,6 +217,7 @@ namespace MPExtended.Libraries.Service
                     installedServices = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
                         .Select(x => Path.Combine(x, "bin", IsDebugBuild() ? "Debug" : "Release"))
                         .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
+                        .GroupBy(x => Path.GetFileName(x), (x, y) => y.First())
                         .Distinct()
                         .Select(path => Assembly.LoadFrom(path))
                         .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
