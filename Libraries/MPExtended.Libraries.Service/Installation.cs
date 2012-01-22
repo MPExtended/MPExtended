@@ -214,11 +214,25 @@ namespace MPExtended.Libraries.Service
                 }
                 else
                 {
-                    installedServices = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
+                    // Loading the assemblies in a mix-and-match style from different directories doesn't work and gives all kind of 
+                    // weird errors, such as MethodMissingException in some classes from an assembly. So we now prefer to load all assemblies
+                    // from the directory where the current assembly runs, and fallback to the Services directory only if some services aren't
+                    // available in our own directory. This makes those services unstable, but that should only happen in non-hosting processes
+                    // such as the configurator. The configurator does load USS from it's own directory (it has a reference) so the only things
+                    // that don't work are MAS, TAS and WSS but those aren't used there anyway. However, it does need to know whether they are
+                    // available because it configures the display of tabs based upon the installed services. This isn't relevant for installed
+                    // services, because everything is loaded from the same directory there anyway. 
+
+                    var myDir = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "MPExtended.Services.*.dll")
+                        .Where(x => !x.Contains(".Interfaces.dll"));
+                    var myFileNames = myDir.Select(x => Path.GetFileName(x));
+                    var serviceFiles = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
                         .Select(x => Path.Combine(x, "bin", IsDebugBuild() ? "Debug" : "Release"))
                         .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
-                        .GroupBy(x => Path.GetFileName(x), (x, y) => y.First())
-                        .Distinct()
+                        .Where(x => !x.Contains(".Interfaces.dll") && !myFileNames.Contains(Path.GetFileName(x)))
+                        .GroupBy(x => Path.GetFileName(x), (x, y) => y.First());
+
+                    installedServices = myDir.Concat(serviceFiles)
                         .Select(path => Assembly.LoadFrom(path))
                         .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
                         .ToList();
