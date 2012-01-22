@@ -37,37 +37,5 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 return Int32.Parse(configFile.Element("port").Value);
             }
         }
-
-        public static string[] HostAddresses
-        {
-            get
-            {
-                XElement configFile = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
-
-                // If you didn't get it, I like LINQ
-                return NetworkInterface.GetAllNetworkInterfaces()
-                    .Select(x => x.GetIPProperties())
-                    .SelectMany(x => x.UnicastAddresses)
-                    .Select(x => x.Address)
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork ||
-                        (x.AddressFamily == AddressFamily.InterNetworkV6 && false)) // can't rely on Configuration.Services here due to sometimes uninstalled services
-                    .SelectMany(x =>
-                    {
-                        try
-                        {
-                            var entry = Dns.GetHostEntry(x);
-                            return entry.Aliases.Concat(new string[] { entry.HostName, x.ToString() });
-                        }
-                        catch (Exception)
-                        {
-                            return new string[] { x.ToString() };
-                        }
-                    })
-                    .Concat(new string[] { "localhost" })
-                    .Concat(configFile.Element("baseAddresses").Elements("add").Select(x => x.Value))
-                    .Distinct()
-                    .ToArray();
-            }
-        }
     }
 }

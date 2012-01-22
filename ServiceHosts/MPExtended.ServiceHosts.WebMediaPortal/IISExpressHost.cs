@@ -47,7 +47,6 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
 #else
                 generator.PhysicalSitePath = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
 #endif
-                generator.HostAddresses = HostConfiguration.HostAddresses;
                 generator.Port = HostConfiguration.Port;
                 generator.TemplatePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "IISExpressTemplate.config");
                 tempConfigFile = Path.GetTempFileName();
