@@ -45,6 +45,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             Supported = File.Exists(DatabasePath);
         }
 
+        #region Tracks
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
         {
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
@@ -96,7 +97,9 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             return LoadAllTracks<WebMusicTrackDetailed>().Where(x => x.Id == trackId).First();
         }
+        #endregion
 
+        #region Albums
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
             string sql = "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
@@ -155,9 +158,33 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             return (GetAllAlbums() as LazyQuery<WebMusicAlbumBasic>).Where(x => x.Id == albumId).First();
         }
+        #endregion
 
-        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        #region Artists
+        private class DetailedArtistInfo
         {
+            public string Name { get; set; }
+            public string Styles { get; set; }
+            public string Tones { get; set; }
+            public string Biography { get; set; }
+        }
+
+        public IEnumerable<WebMusicArtistDetailed> GetAllArtistsDetailed()
+        {
+            // pre-load advanced info
+            string infoSql = "SELECT strArtist, strStyles, strTones, strAMGBio FROM artistinfo";
+            var detInfo = ReadList<DetailedArtistInfo>(infoSql, delegate(SQLiteDataReader reader)
+            {
+                return new DetailedArtistInfo()
+                {
+                    Name = reader.ReadString(0),
+                    Styles = reader.ReadString(1),
+                    Tones = reader.ReadString(2),
+                    Biography = reader.ReadString(3),
+                };
+            }).ToDictionary(x => x.Name, x => x);
+
+            // then load all artists
             string sql = "SELECT DISTINCT strArtist FROM tracks " +
                          "UNION " +
                          "SELECT DISTINCT stralbumArtist FROM tracks ";
@@ -170,9 +197,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 .OrderBy(x => x)
                 .Select(x =>
                 {
-                    var artist = new WebMusicArtistBasic();
+                    var artist = new WebMusicArtistDetailed();
                     artist.Id = x;
                     artist.Title = x;
+
+                    if (detInfo.ContainsKey(x))
+                    {
+                        artist.Styles = detInfo[x].Styles;
+                        artist.Tones = detInfo[x].Tones;
+                        artist.Biography = detInfo[x].Biography;
+                    }
 
                     int i = 0;
                     string[] filenames = new string[] {
@@ -197,14 +231,35 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     }
 
                     return artist;
-                })
-                .ToList();
+                });
+        }
+
+        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        {
+            return GetAllArtistsDetailed().Select(x => ArtistDetailedToArtistBasic(x));
+        }
+
+        public WebMusicArtistDetailed GetArtistDetailedById(string artistId)
+        {
+            return GetAllArtistsDetailed().Where(x => x.Id == artistId).First();
         }
 
         public WebMusicArtistBasic GetArtistBasicById(string artistId)
         {
-            return GetAllArtists().Where(x => x.Id == artistId).First();
+            return ArtistDetailedToArtistBasic(GetAllArtistsDetailed().Where(x => x.Id == artistId).First());
         }
+
+        private WebMusicArtistBasic ArtistDetailedToArtistBasic(WebMusicArtistDetailed det)
+        {
+            return new WebMusicArtistBasic()
+            {
+                Artwork = det.Artwork,
+                Id = det.Id,
+                PID = det.PID,
+                Title = det.Title
+            };
+        }
+        #endregion
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
