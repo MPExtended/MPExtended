@@ -31,11 +31,6 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Streaming : IDisposable
     {
-#if DEBUG
-        private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // use shorter time for debugging
-#else
-        private const int ALLOW_STREAM_IDLE_TIME = 5 * 1000; // two minutes was doomed to long by a lot of people for WebMP, so let's try 5 seconds
-#endif
         public const int STREAM_NONE = -2;
         public const int STREAM_DEFAULT = -1;
 
@@ -49,6 +44,9 @@ namespace MPExtended.Services.StreamingService.Code
             public string ClientDescription { get; set; }
             public string ClientIP { get; set; }
             public DateTime StartTime { get; set; } // date the stream was initialized (no use)
+
+            public int Timeout { get; set; } // in seconds!
+            public DateTime LastActivity { get; set; }
 
             public ITranscoder Transcoder { get; set; }
             public ReadTrackingStreamWrapper OutputStream { get; set; }
@@ -86,21 +84,26 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 try
                 {
-                    lock (Streams)
-                    {
-                        var toDelete = Streams
-                            .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > ALLOW_STREAM_IDLE_TIME)
-                            .Select(x => x.Value.Identifier)
-                            .ToList();
+                    var toDelete = Streams
+                        .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))
+                        .Where(x => x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
+                        .Select(x => x.Value.Identifier)
+                        .ToList();
 
-                        foreach (string key in toDelete)
+                    if (toDelete.Count > 0)
+                    {
+                        lock (Streams)
                         {
-                            Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.TimeSinceLastRead);
-                            service.FinishStream(key);
+                            foreach (string key in toDelete)
+                            {
+                                Log.Info("Stream {0} has been idle for {1} milliseconds with last activity at {2}, so cancel it", 
+                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                                service.FinishStream(key);
+                            }
                         }
                     }
 
-                    Thread.Sleep(ALLOW_STREAM_IDLE_TIME);
+                    Thread.Sleep(1000);
                 }
                 catch (ThreadAbortException)
                 {
@@ -115,6 +118,11 @@ namespace MPExtended.Services.StreamingService.Code
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source)
         {
+            return InitStream(identifier, clientDescription, source, 5 * 60);
+        }
+
+        public bool InitStream(string identifier, string clientDescription, MediaSource source, int timeout)
+        {
             if (!source.Exists)
             {
                 Log.Warn("Tried to start stream for non-existing file {0}", source.GetDebugName());
@@ -126,6 +134,8 @@ namespace MPExtended.Services.StreamingService.Code
             stream.ClientDescription = clientDescription;
             stream.ClientIP = WCFUtil.GetClientIPAddress();
             stream.StartTime = DateTime.Now;
+            stream.Timeout = timeout;
+            stream.LastActivity = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
@@ -337,6 +347,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public WebTranscodingInfo GetEncodingInfo(string identifier) 
         {
+            Streams[identifier].LastActivity = DateTime.Now;
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
                 return Streams[identifier].Context.TranscodingInfo;
 

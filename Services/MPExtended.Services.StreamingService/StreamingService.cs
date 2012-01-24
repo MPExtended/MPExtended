@@ -148,7 +148,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Streaming
-        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier)
+        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
         {
             AuthorizeStreaming();
             if (type == WebStreamMediaType.TV)
@@ -164,8 +164,9 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}", type, provider, itemId, clientDescription, identifier);
-            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId));
+            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}; idleTimeout={5}", 
+                type, provider, itemId, clientDescription, identifier, idleTimeout);
+            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
         public string StartStream(string identifier, string profileName, int startPosition)
