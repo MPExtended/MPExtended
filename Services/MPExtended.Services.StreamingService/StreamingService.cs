@@ -265,7 +265,7 @@ namespace MPExtended.Services.StreamingService
             string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
             Log.Debug("DoStream: using identifier {0}", identifier);
 
-            if (!InitStream(type, provider, itemId, clientDescription, identifier))
+            if (!InitStream(type, provider, itemId, clientDescription, identifier, 2))
             {
                 Log.Info("DoStream: InitStream() failed");
                 FinishStream(identifier);
