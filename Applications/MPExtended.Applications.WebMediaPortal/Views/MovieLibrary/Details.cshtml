@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
-@model MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieDetailed
+﻿@model MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieDetailed
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Details";
 }
+
 <style type="text/css">
     .column
     {
@@ -19,11 +19,13 @@
         margin-right: 20px;
     }
 </style>
-<h2>
-    Details</h2>
+
+<h2>Details</h2>
+
 <div class="column">
     <img class="img" src="@Url.Action("Image", new { movie = @Model.Id })" alt="" />
 </div>
+
 <div class="column">
     <ul>
         <li>@Model.Title</li>
@@ -34,6 +36,7 @@
         <li>@Html.ActionLink("Play", "Play", new { movie = Model.Id })</li>
     </ul>
 </div>
+
 <div class="subcolumn">
     @Model.Summary
 </div>

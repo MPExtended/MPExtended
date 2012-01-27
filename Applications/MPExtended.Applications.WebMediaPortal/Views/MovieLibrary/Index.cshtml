@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
 @{
-    ViewBag.Title = "Movies";
+	ViewBag.Title = "Movies";
 }
+
 <style type="text/css">
     .movieList
     {
@@ -17,8 +18,9 @@
         
     }
 </style>
-<h2>
-    Your movies</h2>
+
+<h2>Your movies</h2>
+
 <ul class="movieList">
     @foreach (var movie in Model)
     {

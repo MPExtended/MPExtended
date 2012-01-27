@@ -1,17 +1,12 @@
 ﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
-@{
-    ViewBag.Title = "NewRecordings";
-}
 
-@{
-    if (@Model != null && @Model.Count(p => p.Title != "") > 0)
-    {
-        <h2>Latest Recordings</h2>
-        <ul>
-            @foreach (var recording in Model)
-            {
-                <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })</li>
-            }
-        </ul>
-    }
+@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+{
+    <h2>Latest Recordings</h2>
+    <ul>
+        @foreach (var recording in Model)
+        {
+            <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })</li>
+        }
+    </ul>
 }

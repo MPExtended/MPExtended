@@ -1,13 +1,8 @@
 ﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
-@{
-    ViewBag.Title = "NewMovies";
-}
 
-@{
-    if (@Model != null && @Model.Count(p => p.Title != "") > 0)
-    {
-    <h2>
-        Latest Movies</h2>
+@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+{
+    <h2>Latest Movies</h2>
     <div>
         @foreach (var movie in Model)
         {
@@ -21,5 +16,4 @@
             </div>
         }
     </div>
-    }
 }

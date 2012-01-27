@@ -1,13 +1,8 @@
 ﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.EpisodeModel>
-@{
-    ViewBag.Title = "NewEpisodes";
-}
 
-@{
-    if (@Model != null && @Model.Count() > 0)
-    {
-    <h2>
-        Latest Episodes</h2>
+@if (@Model != null && @Model.Count() > 0)
+{
+    <h2>Latest Episodes</h2>
     <div>
         @foreach (var episode in Model)
         {
@@ -22,5 +17,4 @@
             </div>
         }
     </div>
-    }
 }

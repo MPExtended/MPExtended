@@ -1,10 +1,19 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - WebMediaPortal</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/TVGuide.css")" rel="stylesheet" type="text/css" />
+    @foreach (string style in ViewBag.Styles)
+    {
+        <link href="@Url.Content(style)" rel="Stylesheet" type="text/css" />
+    }
+
     <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    @foreach (string script in ViewBag.Scripts)
+    {
+        <script src="@Url.Content(script)" type="text/javascript"></script>
+    }
 </head>
 <body>
     <div id="header">

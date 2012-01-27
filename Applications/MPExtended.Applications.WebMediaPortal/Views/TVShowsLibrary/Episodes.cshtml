@@ -13,11 +13,12 @@
         max-width: 300px;
     }
 </style>
-<h2>
-    Episodes</h2>
+<h2>Episodes</h2>
+
 <div class="column">
     <img class="img" src="@Url.Action("Image", new { season = @Model.ElementAt(0).SeasonId })" alt="" />
 </div>
+
 <div class="column">
     <ul>
         @foreach (var episode in Model)

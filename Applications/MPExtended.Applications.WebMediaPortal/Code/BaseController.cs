@@ -58,15 +58,22 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     Model = filterContext.Exception
                 },
             };
-            (filterContext.Result as ViewResult).ViewBag.Availability = ServiceAvailability;
-            (filterContext.Result as ViewResult).ViewBag.FullVersion = VersionUtil.GetFullVersionString();
             (filterContext.Result as ViewResult).ViewBag.Request = filterContext.HttpContext.Request.Url;
+            SetViewBagProperties((filterContext.Result as ViewResult).ViewBag);
             filterContext.ExceptionHandled = true;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.Availability = ServiceAvailability;
+            SetViewBagProperties(ViewBag);
+        }
+
+        private void SetViewBagProperties(dynamic bag)
+        {
+            bag.Availability = ServiceAvailability;
+            bag.FullVersion = VersionUtil.GetFullVersionString();
+            bag.Styles = new List<string>();
+            bag.Scripts = new List<string>();
         }
     }
 }
