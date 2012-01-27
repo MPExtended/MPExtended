@@ -46,13 +46,15 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
                 // get media info and save it to the cache
                 TsBuffer buf = new TsBuffer(source.Id);
+                string path = buf.GetCurrentFilePath();
+                Log.Debug("Using path {0} from TS buffer {1} as source for {2}", path, source.Id, source.GetDebugName());
                 WebMediaInfo info = GetMediaInfo(buf.GetCurrentFilePath(), true);
                 TvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
                 return info;
             }
             else if (!source.Exists)
             {
-                Log.Warn("Trying to load fileinfo from file {0}, which doesn't seem to exist", source.GetPath());
+                Log.Warn("Trying to load mediainfo for {0}, which doesn't seem to exist", source.GetDebugName());
                 throw new FileNotFoundException();
             }
             else if (source.SupportsDirectAccess)
@@ -65,6 +67,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             else
             {
                 // not (yet?) supported
+                Log.Warn("Loading mediainfo for {0} isn't supported yet", source.GetDebugName());
                 throw new NotSupportedException();
             }
         }

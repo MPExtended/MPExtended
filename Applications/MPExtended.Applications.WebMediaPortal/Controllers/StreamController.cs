@@ -67,6 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Download(WebStreamMediaType type, string item)
         {
             // Create URL to GetMediaItem
+            Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
@@ -83,10 +84,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
+                Log.Debug("Proxying download at {0}", fullUri.ToString());
                 ProxyStream(fullUri.ToString());
             }
             else if (streamMode == StreamType.Direct)
             {
+                Log.Debug("Redirecting user to download at {0}", fullUri.ToString()); 
                 return Redirect(fullUri.ToString());
             }
             return new EmptyResult();
@@ -96,6 +99,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}", identifier, type, itemId, transcoder);
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
             {
                 Log.Error("Streaming: InitStream failed");
@@ -115,6 +119,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 streamMode = NetworkInformation.IsOnLAN(NetworkInformation.NormalizeAddress(HttpContext.Request.UserHostAddress)) ? StreamType.Direct : StreamType.Proxied;
             }
+            Log.Debug("Stream started successfully, is at {0} with stream mode {1}", url, streamMode);
 
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
@@ -127,6 +132,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // kill stream (doesn't matter much if this doesn't happen, WSS kills streams automatically nowadays)
+            Log.Debug("Finished streami {0}", identifier);
             if (!GetStreamControl(type).FinishStream(identifier))
             {
                 Log.Error("Streaming: FinishStream failed");
@@ -140,6 +146,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             int read;
 
             // do request
+            Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
             WebResponse response = WebRequest.Create(sourceUrl).GetResponse();
             Stream sourceStream = response.GetResponseStream();
 
@@ -197,6 +204,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
         {
             // get transcoding profile
+            Log.Debug("Client {0} requesting player for type={1}, itemId={2}, video={3}", Request.UserHostAddress, type, itemId, video);
             IWebStreamingService streamControl = GetStreamControl(type);
             WebTranscoderProfile profile = null;
             if (Request.QueryString["transcoder"] != null)
@@ -248,15 +256,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
+            string playUrl = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters);
 
             // generate view
+            Log.Debug("Created player with size={0} view={1} transcoder={2} url={3}", playerSize, viewName, profile.Name, playUrl);
             return PartialView(new PlayerViewModel
             {
                 Transcoders = profiles,
                 Transcoder = profile.Name,
                 Player = player,
                 PlayerViewName = viewName,
-                URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters),
+                URL = playUrl,
                 Size = playerSize
             });
         }
