@@ -246,7 +246,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (!video)
             {
                 playerSize = new WebResolution() { Width = 300, Height = 150 };
-            } 
+            }
+            else if (type == WebStreamMediaType.TV)
+            {
+                // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
+                // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
+                // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
+                playerSize = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
+            }
             else
             {
                 playerSize = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);

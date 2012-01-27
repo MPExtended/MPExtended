@@ -347,6 +347,11 @@ namespace MPExtended.Services.StreamingService.Code
             return null;
         }
 
+        public Resolution CalculateSize(TranscoderProfile profile, decimal displayAspectRatio)
+        {
+            return Resolution.Calculate(displayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+        }
+
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
             try
@@ -370,7 +375,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // default
-            return Resolution.Calculate(16 / 9, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+            return Resolution.Calculate(MediaInfoHelper.DEFAULT_ASPECT_RATIO, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)

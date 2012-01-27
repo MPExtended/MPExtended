@@ -121,6 +121,19 @@ namespace MPExtended.Services.StreamingService
 
         public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
         {
+            if (type == WebStreamMediaType.TV)
+            {
+                try
+                {
+                    itemId = _timeshiftings[itemId].TimeShiftFileName;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Log.Error("Client tried to get stream size for non-existing timeshifting {0}, using default aspectratio", itemId);
+                    return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), MediaInfoHelper.DEFAULT_ASPECT_RATIO).ToWebResolution();
+                }
+            }
+
             return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
         #endregion
