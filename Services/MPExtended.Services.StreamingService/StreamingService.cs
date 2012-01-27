@@ -145,6 +145,28 @@ namespace MPExtended.Services.StreamingService
             }
             return true;
         }
+
+        public WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId)
+        {
+            MediaSource source = new MediaSource(type, provider, itemId);
+            string path = source.GetPath();
+            if (path == null || path.Length == 0)
+            {
+                return new WebItemSupportStatus(false, "Cannot resolve item to a path");
+            }
+
+            if (!source.Exists)
+            {
+                return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
+            }
+
+            if (path.EndsWith(".IFO"))
+            {
+                return new WebItemSupportStatus(false, "Streaming DVD files is not supported");
+            }
+
+            return new WebItemSupportStatus() { Supported = true };
+        }
         #endregion
 
         #region Streaming
