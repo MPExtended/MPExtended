@@ -68,6 +68,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult Download(WebStreamMediaType type, string item)
         {
             // Create URL to GetMediaItem
