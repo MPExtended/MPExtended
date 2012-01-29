@@ -45,6 +45,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int Id { get; set; }
         public string Title { get; set; }
 
+        public int ChannelId { get; set; }
+        public string ChannelName { get; set; }
+
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
@@ -59,6 +62,23 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Title = schedule.ProgramName;
             StartTime = schedule.StartTime;
             EndTime = schedule.EndTime;
+            ChannelId = schedule.IdChannel;
+
+            switch(schedule.ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.Once:
+                case WebScheduleType.Weekends:
+                case WebScheduleType.Weekly:
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                case WebScheduleType.WorkingDays:
+                    ChannelName = MPEServices.TAS.GetChannelBasicById(ChannelId).DisplayName;
+                    break;
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                    ChannelName = "";
+                    break;
+            }
 
             switch (schedule.ScheduleType)
             {
