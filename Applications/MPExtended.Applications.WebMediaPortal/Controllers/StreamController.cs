@@ -17,10 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -29,8 +29,8 @@ using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
-using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -226,6 +226,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return streamControl.GetTranscoderProfileByName(profileName);
         }
 
+        private IWebStreamingService GetStreamControl(WebStreamMediaType type)
+        {
+            if (type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording)
+            {
+                return MPEServices.TASStreamControl;
+            }
+            else
+            {
+                return MPEServices.MASStreamControl;
+            }
+        }
+
         internal ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile)
         {
             // save stream request
@@ -258,6 +270,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Player(WebStreamMediaType type, string itemId)
         {
             PlayerViewModel model = new PlayerViewModel();
+            model.MediaType = type;
+            model.MediaId = itemId;
 
             // get profile
             var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
@@ -278,27 +292,46 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
         }
 
-        //
-        // Player
         [Authorize]
         public ActionResult MusicPlayer(string albumId)
         {
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
+            model.MediaId = albumId;
             WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
             model.Tracks = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 
-        private IWebStreamingService GetStreamControl(WebStreamMediaType type)
+        [Authorize]
+        public ActionResult Playlist(WebStreamMediaType type, string itemId)
         {
-            if (type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording)
+            // save stream request
+            if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
-                return MPEServices.TASStreamControl;
+                PlayerOpenedBy.Add(Request.UserHostAddress);
             }
-            else
-            {
-                return MPEServices.MASStreamControl;
-            }
+
+            // get profile
+            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+                Settings.ActiveSettings.DefaultTVProfile :
+                Settings.ActiveSettings.DefaultMediaProfile;
+            var profile = GetProfile(GetStreamControl(type), defaultProfile);
+
+            // generate url
+            RouteValueDictionary parameters = new RouteValueDictionary();
+            parameters["item"] = itemId;
+            parameters["transcoder"] = profile.Name;
+            string url = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+
+            // create playlist
+            StringBuilder m3u = new StringBuilder();
+            m3u.AppendLine("#EXTM3U");
+            m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
+            m3u.AppendLine(url);
+
+            // return it
+            byte[] data = Encoding.UTF8.GetBytes(m3u.ToString());
+            return File(data, "audio/x-mpegurl", "stream.m3u");
         }
     }
 }

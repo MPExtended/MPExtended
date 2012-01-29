@@ -64,6 +64,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
         public string URL { get; set; }
+        public WebStreamMediaType MediaType { get; set; }
+        public string MediaId { get; set; }
 
         public SettingModel Settings
         {
@@ -90,6 +92,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public class AlbumPlayerViewModel : PlayerViewModel
     {
         public IEnumerable<WebMusicTrackBasic> Tracks { get; set; }
+
+        public AlbumPlayerViewModel()
+        {
+            MediaType = WebStreamMediaType.MusicAlbum;
+        }
 
         public string GetTranscoderForTrack(WebMusicTrackBasic track)
         {
