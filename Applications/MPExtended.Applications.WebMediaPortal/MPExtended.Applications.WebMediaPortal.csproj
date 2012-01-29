@@ -300,7 +300,7 @@
     <Content Include="Views\Home\NewEpisodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\AddSchedule.cshtml" />
+    <Content Include="Views\Television\AddScheduleForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Television\Schedules.cshtml" />
@@ -316,6 +316,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Television\AddScheduleByProgram.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

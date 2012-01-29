@@ -17,10 +17,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Mvc;
+using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
@@ -88,16 +91,66 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public class AddScheduleViewModel
     {
         public int ProgramId { get; set; }
-        public string ProgramTitle { get; set; }
-        public IEnumerable<SelectListItem> Types { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        public string Title { get; set; }
+
+        [DisplayName("Start time")]
+        [Required]
+        public DateTime? StartTime { get; set; }
+
+        [DisplayName("End time")]
+        [Required]
+        public DateTime? EndTime { get; set; }
+
+        [DisplayName("Schedule type")]
+        [ListChoice("ScheduleTypeList", AllowNull = false, ErrorMessage = "Select a valid schedule type")]
+        public WebScheduleType ScheduleType { get; set; }
+
+        [DisplayName("Channel")]
+        [ListChoice("ChannelList", AllowNull = false, ErrorMessage = "Select a valid channel")]
+        public int Channel { get; set; }
+
+        public IEnumerable<SelectListItem> ChannelList
+        {
+            get
+            {
+                return MPEServices.TAS.GetAllChannelsBasic(SortField.Name)
+                        .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
+            }
+        }
+
+        public IEnumerable<SelectListItem> ScheduleTypeList
+        {
+            get
+            {
+                return ScheduleViewModel.ScheduleTypeNames
+                   .Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Value });
+            }
+        }
+
+        public bool IsFromProgram
+        {
+            get
+            {
+                return ProgramId != 0;
+            }
+        }
+
+        public AddScheduleViewModel()
+        {
+            StartTime = null;
+            EndTime = null;
+        }
 
         public AddScheduleViewModel(WebProgramBasic program)
         {
+            StartTime = program.StartTime;
+            EndTime = program.EndTime;
+            Title = program.Title;
+            Channel = program.IdChannel;
             ProgramId = program.Id;
-            ProgramTitle = program.Title;
-            Types = ScheduleViewModel.ScheduleTypeNames
-                .Select(x => new SelectListItem() { Value = ((int)x.Key).ToString(), Text = x.Value })
-                .ToList();
         }
     }
 }

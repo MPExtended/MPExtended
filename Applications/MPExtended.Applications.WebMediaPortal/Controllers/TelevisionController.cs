@@ -85,35 +85,43 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
-        public ActionResult AddSchedule(int programId)
+        public ActionResult AddSchedule(int? programId = null)
         {
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            if (program == null)
+            if (programId != null && programId != 0)
             {
-                return HttpNotFound();
+                var program = MPEServices.TAS.GetProgramDetailedById(programId.Value);
+                if (program == null)
+                {
+                    return HttpNotFound();
+                }
+                return View("AddScheduleByProgram", new AddScheduleViewModel(program));
+            } 
+            else
+            {
+                return View("AddScheduleForm", new AddScheduleViewModel());
             }
-
-            return View(new AddScheduleViewModel(program));
         }
 
         [HttpPost]
-        public ActionResult AddSchedule(FormCollection fc, int programId)
+        public ActionResult AddSchedule(AddScheduleViewModel model)
         {
-            WebScheduleType type;
-            if (!Enum.TryParse<WebScheduleType>(fc["type"], out type))
+            // show view again if user failed to fill in correctly
+            if (!ModelState.IsValid)
             {
-                // TODO: error message
-                type = WebScheduleType.Once;
+                return AddSchedule(model.ProgramId);
             }
 
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            if (program == null)
-            {
-                return HttpNotFound();
-            }
+            // add schedule and redirect
+            MPEServices.TAS.AddSchedule(model.Channel, model.Title, model.StartTime.Value, model.EndTime.Value, model.ScheduleType);
 
-            MPEServices.TAS.AddSchedule(program.IdChannel, program.Title, program.StartTime, program.EndTime, type);
-            return RedirectToAction("ProgramDetails", new { programId = programId });
+            if (model.ProgramId != 0)
+            {
+                return RedirectToAction("ProgramDetails", new { programId = model.ProgramId });
+            }
+            else
+            {
+                return RedirectToAction("Schedules");
+            }
         }
 
         public ActionResult Schedules()
