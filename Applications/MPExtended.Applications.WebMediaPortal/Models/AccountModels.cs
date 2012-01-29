@@ -24,22 +24,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using MPExtended.Applications.WebMediaPortal.Strings;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
     #region Models
     public class LogOnModel
     {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
+        [LocalizedDisplayName(ResourceType = typeof(FormStrings), ResourceName = "LogOnUsername")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [LocalizedDisplayName(ResourceType = typeof(FormStrings), ResourceName = "LogOnPassword")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [LocalizedDisplayName(ResourceType = typeof(FormStrings), ResourceName = "LogOnRememberMe")]
         public bool RememberMe { get; set; }
     }
     #endregion

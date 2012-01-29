@@ -25,6 +25,7 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -32,14 +33,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public static Dictionary<WebScheduleType, string> ScheduleTypeNames = new Dictionary<WebScheduleType, string>()
             {
-                { WebScheduleType.Once, "Once" },
-                { WebScheduleType.Daily, "Daily" },
-                { WebScheduleType.Weekly, "Weekly" },
-                { WebScheduleType.EveryTimeOnThisChannel, "Every time on this channel" },
-                { WebScheduleType.EveryTimeOnEveryChannel, "Every time on every channel" },
-                { WebScheduleType.Weekends, "Weekends" },
-                { WebScheduleType.WorkingDays, "Working days" },
-                { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Weekly on this channel" }
+                { WebScheduleType.Once, FormStrings.ScheduleTypeOnce },
+                { WebScheduleType.Daily, FormStrings.ScheduleTypeDaily },
+                { WebScheduleType.Weekly, FormStrings.ScheduleTypeWeekly },
+                { WebScheduleType.EveryTimeOnThisChannel, FormStrings.ScheduleTypeEveryTimeOnThisChannel },
+                { WebScheduleType.EveryTimeOnEveryChannel, FormStrings.ScheduleTypeEveryTimeOnEveryChannel },
+                { WebScheduleType.Weekends, FormStrings.ScheduleTypeWeekends },
+                { WebScheduleType.WorkingDays, FormStrings.ScheduleTypeWorkingDays },
+                { WebScheduleType.WeeklyEveryTimeOnThisChannel, FormStrings.ScheduleTypeWeeklyOnThisChannel }
             };
 
         public int ProgramId { get; set; }

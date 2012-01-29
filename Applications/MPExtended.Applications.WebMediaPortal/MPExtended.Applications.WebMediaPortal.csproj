@@ -104,6 +104,7 @@
     <Compile Include="Mvc\DropdownExtensions.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
+    <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
     <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -126,6 +127,11 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strings\FormStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Strings\UIStrings.Designer.cs">
       <DependentUpon>UIStrings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -334,6 +340,10 @@
     <Content Include="Views\Schedule\_Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Strings\FormStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Strings\UIStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIStrings.Designer.cs</LastGenOutput>
