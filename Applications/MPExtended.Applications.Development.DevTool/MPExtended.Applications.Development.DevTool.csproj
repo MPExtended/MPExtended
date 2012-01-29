@@ -55,6 +55,7 @@
     <Compile Include="DocGen\WSSGenerator.cs" />
     <Compile Include="IDevTool.cs" />
     <Compile Include="InterfaceCheck.cs" />
+    <Compile Include="MyGengoImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WixFSGenerator.cs" />

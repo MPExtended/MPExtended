@@ -49,7 +49,8 @@ namespace MPExtended.Applications.Development.DevTool
             var tools = new IDevTool[] {
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),
-                new WixFSGenerator()
+                new WixFSGenerator(),
+                new MyGengoImporter()
             };
             do
             {
