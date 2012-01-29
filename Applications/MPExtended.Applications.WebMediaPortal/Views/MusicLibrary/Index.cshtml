@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Music.WebMusicArtistBasic>
 @{
-    ViewBag.Title = "Music Library";
+	ViewBag.Title = UIStrings.Music;
 }
 
 <style type="text/css">
@@ -18,11 +18,11 @@
     }
 </style>
 
-<h2>Artists</h2>
+<h2>@UIStrings.YourArtists</h2>
 <ul class="artistList">
-    @if (@Model != null)
+    @if (Model != null)
     {
-        @foreach (var artist in Model)
+        foreach (var artist in Model)
         {
             <li>@Html.ActionLink(artist.Title, "Albums", new { artist = artist.Id })</li>
         }

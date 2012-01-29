@@ -58,7 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             try
             {
                 var tmp = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
-                var list = tmp.Select(x => new EpisodeModel
+                var list = tmp.Select(x => new TVEpisodeViewModel
                 {
                     Episode = x,
                     Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),

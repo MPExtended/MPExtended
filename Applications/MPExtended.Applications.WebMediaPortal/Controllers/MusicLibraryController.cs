@@ -23,6 +23,7 @@ using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -44,22 +45,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Albums(string artist)
         {
+            var artistObj = MPEServices.MAS.GetMusicArtistBasicById(Settings.ActiveSettings.MusicProvider, artist);
             var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
-            if (albumList != null)
+            return View(new ArtistViewModel()
             {
-                return View(albumList);
-            }
-            return null;
+                Artist = artistObj,
+                Albums = albumList
+            });
         }
 
         public ActionResult Album(string album)
         {
+            var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
             var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
-            if (trackList != null)
+
+            return View(new AlbumViewModel()
             {
-                return View(trackList);
-            }
-            return null;
+                Album = albumObj,
+                Tracks = trackList
+            });
         }
 
         public ActionResult AlbumImage(string album)

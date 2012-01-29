@@ -23,7 +23,20 @@ using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public class EpisodeModel
+    public class TVShowViewModel
+    {
+        public WebTVShowBasic Show { get; set; }
+        public IEnumerable<WebTVSeasonBasic> Seasons { get; set; }
+    }
+
+    public class TVSeasonViewModel
+    {
+        public WebTVShowBasic Show { get; set; }
+        public WebTVSeasonBasic Season { get; set; }
+        public IEnumerable<WebTVEpisodeBasic> Episodes { get; set; }
+    }
+
+    public class TVEpisodeViewModel
     {
         public WebTVEpisodeDetailed Episode { get; set; }
         public WebTVSeasonDetailed Season { get; set; }

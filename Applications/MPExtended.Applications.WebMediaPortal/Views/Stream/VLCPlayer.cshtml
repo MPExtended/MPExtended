@@ -1,9 +1,9 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
-<input type="button" value="play" onclick="getVlcPlayer('vlcplayer').playlist.play();" /> 
-<input type="button" value="pause" onclick="getVlcPlayer('vlcplayer').playlist.togglePause();" />
-<input type="button" value="stop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
-<input type="button" value="switch fullscreen" onclick="goFullscreen();" />
-<input type="button" value="enable deinterlacing" onclick="enableDeinterlace('linear');" /> 
+<input type="button" value="@UIStrings.VLCPlay" onclick="getVlcPlayer('vlcplayer').playlist.play();" /> 
+<input type="button" value="@UIStrings.VLCPause" onclick="getVlcPlayer('vlcplayer').playlist.togglePause();" />
+<input type="button" value="@UIStrings.VLCStop" onclick="getVlcPlayer('vlcplayer').playlist.stop();" />
+<input type="button" value="@UIStrings.VLCSwitchFullscreen" onclick="goFullscreen();" />
+<input type="button" value="@UIStrings.VLCEnableDeinterlacing" onclick="enableDeinterlace('linear');" /> 
 <br />
 
 <object id="vlcplayer_ie" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" width="@Model.Size.Width" height="@Model.Size.Height" events="True">
@@ -38,7 +38,7 @@
         if (typeof (vlc.video.deinterlace) !== "undefined") {
             vlc.video.deinterlace.enable(type);
         } else {
-            alert("Your VLC version is too old to support deinterlacing in the browser. Update to version 1.1.0 or higher; but then you loose fullscreen support.");
+            alert("@Html.Raw(UIStrings.VLCTooOldToSupportDeinterlacing)");
         }
     }
 
@@ -46,7 +46,7 @@
         // yes, version checking is bad but otherwise we end up with loads of bug reports
         var version = getVlcPlayer('vlcplayer').versionInfo();
         if (version.substr(0, 4) == '1.1.' && !shownFullscreenMessage) {
-            alert("Fullscreen might not work with your VLC version. Downgrade to VLC 1.0.x if you want fullscreen; but then you loose deinterlace support.");
+            alert("@Html.Raw(UIStrings.VLCFullscreenNotSupported)");
             shownFullscreenMessage = true;
         } 
         getVlcPlayer('vlcplayer').video.fullscreen = true;
