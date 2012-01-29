@@ -30,6 +30,7 @@ using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -99,14 +100,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder)
+        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime)
         {
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
                 return new HttpUnauthorizedResult();
             }
-
+       
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
@@ -115,7 +116,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            string url = GetStreamControl(type).StartStream(identifier, transcoder, 0);
+            string url = GetStreamControl(type).StartStream(identifier, transcoder, starttime);
             if (String.IsNullOrEmpty(url))
             {
                 Log.Error("Streaming: StartStream failed");
@@ -132,7 +133,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
-                GetStreamControl(type).AuthorizeStreaming();
+				GetStreamControl(type).AuthorizeStreaming();
                 ProxyStream(url);
             }
             else if (streamMode == StreamType.Direct)
@@ -169,6 +170,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 {
                     HttpContext.Response.AddHeader(header, response.Headers[header]);
                 }
+                else if (header.StartsWith("X-Content-")) // We set the Content-Length header with the X- prefix because WCF removes the normal header
+                {
+                    HttpContext.Response.AddHeader(header.Substring(2), response.Headers[header]);
+                }
             }
 
             // stream to output
@@ -181,105 +186,107 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(int item, string transcoder)
+        public ActionResult TV(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult Movie(int item, string transcoder)
+        public ActionResult Movie(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult TVEpisode(int item, string transcoder)
+        public ActionResult TVEpisode(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult Recording(int item, string transcoder)
+        public ActionResult Recording(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder, starttime);
         }
 
-        public ActionResult MusicTrack(int item, string transcoder)
+        public ActionResult MusicTrack(int item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder);
+            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder, starttime);
         }
 
         //
         // Player
-        [Authorize]
-        public ActionResult Player(WebStreamMediaType type, string itemId, bool video = true)
+        private WebTranscoderProfile GetProfile(IWebStreamingService streamControl, string defaultProfile)
+        {
+            // get transcoding profile
+            string profileName = null;
+            if (Request.QueryString["transcoder"] != null)
+                profileName = Request.QueryString["transcoder"];
+            if (Request.Form["transcoder"] != null)
+                profileName = Request.Form["transcoder"];
+            if (profileName == null)
+                profileName = defaultProfile;
+            return streamControl.GetTranscoderProfileByName(profileName);
+        }
+
+        internal ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile)
         {
             // save stream request
-            if(!PlayerOpenedBy.Contains(Request.UserHostAddress))
+            if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
                 PlayerOpenedBy.Add(Request.UserHostAddress);
             }
 
-            // get transcoding profile
-            IWebStreamingService streamControl = GetStreamControl(type);
-            WebTranscoderProfile profile = null;
-            if (Request.QueryString["transcoder"] != null)
-                profile = GetStreamControl(type).GetTranscoderProfileByName(Request.QueryString["transcoder"]);
-            if (Request.Form["transcoder"] != null)
-                profile = GetStreamControl(type).GetTranscoderProfileByName(Request.Form["transcoder"]);
-            if (profile == null)
-            {
-                string defaultName = "";
-                if(type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording) 
-                {
-                    defaultName = Settings.ActiveSettings.DefaultTVProfile;
-                } 
-                else if(video)
-                {
-                    defaultName = Settings.ActiveSettings.DefaultMediaProfile;
-                }
-                else 
-                {
-                    defaultName = Settings.ActiveSettings.DefaultAudioProfile;
-                }
-                profile = GetStreamControl(type).GetTranscoderProfileByName(defaultName);
-            }
-
             // get all transcoder profiles
-            List<StreamTarget> targets = video ? StreamTarget.GetVideoTargets() : StreamTarget.GetAudioTargets();
             List<string> profiles = new List<string>();
             foreach (StreamTarget target in targets)
             {
-                profiles = profiles.Concat(GetStreamControl(type).GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).ToList();
+                profiles = profiles.Concat(streamControl.GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).ToList();
             }
 
             // get view properties
             VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
 
-            // player size
-            WebResolution playerSize;
-            if (!video)
-            {
-                playerSize = new WebResolution() { Width = 300, Height = 150 };
-            } 
-            else
-            {
-                playerSize = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
-            }
+            // generate view
+            model.Transcoders = profiles;
+            model.Transcoder = profile.Name;
+            model.TranscoderProfile = profile;
+            model.Player = player;
+            model.PlayerViewName = viewName;
+            return PartialView("Player", model);
+        }
+
+        [Authorize]
+        public ActionResult Player(WebStreamMediaType type, string itemId)
+        {
+            PlayerViewModel model = new PlayerViewModel();
+
+            // get profile
+            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+                Settings.ActiveSettings.DefaultTVProfile :
+                Settings.ActiveSettings.DefaultMediaProfile;
+            var profile = GetProfile(GetStreamControl(type), defaultProfile);
+ 
+            // get size
+            model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
 
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
+            model.URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters);
 
-            // generate view
-            return PartialView(new PlayerViewModel
-            {
-                Transcoders = profiles,
-                Transcoder = profile.Name,
-                Player = player,
-                PlayerViewName = viewName,
-                URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters),
-                Size = playerSize
-            });
+            // generic part
+            return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
+        }
+
+        //
+        // Player
+        [Authorize]
+        public ActionResult MusicPlayer(string albumId)
+        {
+            AlbumPlayerViewModel model = new AlbumPlayerViewModel();
+            WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
+            model.Tracks = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 
         private IWebStreamingService GetStreamControl(WebStreamMediaType type)

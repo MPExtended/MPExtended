@@ -52,22 +52,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Tracks(string album)
+        public ActionResult Album(string album)
         {
             var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
             if (trackList != null)
             {
                 return View(trackList);
-            }
-            return null;
-        }
-
-        public ActionResult Play(string track)
-        {
-            var musicTrack = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
-            if (musicTrack != null)
-            {
-                return View(musicTrack);
             }
             return null;
         }

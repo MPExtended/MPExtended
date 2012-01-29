@@ -90,7 +90,9 @@
     <Compile Include="Transcoders\VLCManaged.cs" />
     <Compile Include="Transcoders\VLCWrapper.cs" />
     <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
+    <Compile Include="Transcoders\VLCWrapperPseudoStreaming.cs" />
     <Compile Include="Transcoders\VLCWrapperRTSP.cs" />
+    <Compile Include="Units\FLVMetadataInjector.cs" />
     <Compile Include="Units\ImpersonationInputUnit.cs" />
     <Compile Include="Units\InjectStreamUnit.cs" />
     <Compile Include="Units\EncoderUnit.cs" />
