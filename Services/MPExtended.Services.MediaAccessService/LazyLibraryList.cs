@@ -115,7 +115,8 @@ namespace MPExtended.Services.MediaAccessService
             return items
                 .ToDictionary(x => x.Key, x => x.Value.Value)
                 .Where(x => x.Value.Supported)
-                .SelectMany(x => x.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type));
+                .SelectMany(x => x.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type))
+                .GroupBy(x => x.Id, (key, results) => results.OrderByDescending(res => res.Score).First());
         }
     }
 }
