@@ -135,18 +135,49 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
-            string sql = "SELECT idMovie, strTitle FROM movieinfo WHERE strTitle LIKE @search";
-            return ReadList<WebSearchResult>(sql, delegate (SQLiteDataReader reader) 
+            var param = new SQLiteParameter("@search", "%" + text + "%");
+            string sql = "SELECT idMovie, strTitle, iYear, strGenre FROM movieinfo WHERE strTitle LIKE @search";
+            IEnumerable<WebSearchResult> titleResults = ReadList<WebSearchResult>(sql, delegate (SQLiteDataReader reader) 
             {
                 string title = reader.ReadString(1);
+                string genres = reader.ReadString(3);
                 return new WebSearchResult()
                 {
                     Type = WebMediaType.Movie,
                     Id = reader.ReadIntAsString(0),
                     Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
+                    Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                    Details = new SerializableDictionary<string>()
+                    {
+                        { "Year", reader.ReadIntAsString(2) },
+                        { "Genres", genres == "unknown" ? String.Empty : genres }
+                    }
                 };
-            }, new SQLiteParameter("@search", "%" + text + "%"));
+            }, param);
+
+            string actorSql = "SELECT a.strActor, mi.idMovie, mi.strTitle, mi.iYear, mi.strGenre " +
+                              "FROM actors a " +
+                              "LEFT JOIN actorlinkmovie alm ON alm.idActor = a.idActor " +
+                              "INNER JOIN movieinfo mi ON alm.idMovie = mi.idMovie " + 
+                              "WHERE a.strActor LIKE @search";
+            IEnumerable<WebSearchResult> actorResults = ReadList<WebSearchResult>(actorSql, delegate(SQLiteDataReader reader)
+            {
+                string genres = reader.ReadString(4);
+                return new WebSearchResult()
+                {
+                    Type = WebMediaType.Movie,
+                    Id = reader.ReadIntAsString(1),
+                    Title = reader.ReadString(2),
+                    Score = (int)Math.Round(40 + (decimal)text.Length / reader.ReadString(0).Length * 30),
+                    Details = new SerializableDictionary<string>()
+                    {
+                        { "Year", reader.ReadIntAsString(3) },
+                        { "Genres", genres == "unknown" ? String.Empty : genres }
+                    }
+                };
+            }, param);
+
+            return titleResults.Concat(actorResults);
         }
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
