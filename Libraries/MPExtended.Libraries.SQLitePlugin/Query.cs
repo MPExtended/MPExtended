@@ -25,8 +25,9 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public class Query : IDisposable
     {
-        SQLiteConnection db;
-        SQLiteCommand cmd;
+        private SQLiteConnection db;
+        private bool ownDbHandle;
+        private SQLiteCommand cmd;
 
         public SQLiteDataReader Reader
         {
@@ -34,16 +35,10 @@ namespace MPExtended.Libraries.SQLitePlugin
             private set;
         }
 
-        public Query(string databasePath, string query)
-            : this(databasePath, query, new SQLiteParameter[] { })
+        public Query(SQLiteConnection database, string query, SQLiteParameter[] parameters)
         {
-        }
-
-        public Query(string databasePath, string query, SQLiteParameter[] parameters)
-        {
-            string connectionString = "Data Source=" + databasePath + ";Read Only=True";
-            db = new SQLiteConnection(connectionString);
-            db.Open();
+            db = database;
+            ownDbHandle = false;
             cmd = db.CreateCommand();
             cmd.CommandText = query;
             foreach (SQLiteParameter param in parameters)
@@ -51,13 +46,37 @@ namespace MPExtended.Libraries.SQLitePlugin
             Reader = cmd.ExecuteReader();
         }
 
+        public Query(SQLiteConnection database, string query)
+            : this(database, query, new SQLiteParameter[] { })
+        {
+        }
+
+        public Query(string databasePath, string query, SQLiteParameter[] parameters)
+        {
+            db = Database.OpenDatabase(databasePath);
+            ownDbHandle = true;
+            cmd = db.CreateCommand();
+            cmd.CommandText = query;
+            foreach (SQLiteParameter param in parameters)
+                cmd.Parameters.Add(param);
+            Reader = cmd.ExecuteReader();
+        }
+
+        public Query(string databasePath, string query)
+            : this(databasePath, query, new SQLiteParameter[] { })
+        {
+        }
+
         public void Dispose()
         {
             Reader.Close();
-            Reader.Dispose();
+            Reader.Dispose();  
             cmd.Dispose();
-            db.Close();
-            db.Dispose();
+            if (ownDbHandle)
+            {
+                db.Close();
+                db.Dispose();
+            }
         }
     }
 }

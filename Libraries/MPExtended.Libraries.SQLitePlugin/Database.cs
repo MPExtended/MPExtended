@@ -15,13 +15,18 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
+using System.Text;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
     public abstract class Database
     {
+        private SQLiteConnection _connection;
+
         public string DatabasePath
         {
             get;
@@ -37,12 +42,28 @@ namespace MPExtended.Libraries.SQLitePlugin
             DatabasePath = databasePath;
         }
 
+        protected void OpenDatabase()
+        {
+            _connection = OpenDatabase(DatabasePath);
+        }
+
+        protected void CloseDatabase()
+        {
+            _connection.Close();
+            _connection.Dispose();
+            _connection = null;
+        }
+
         protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
         {
-            using(Query query = new Query(DatabasePath, queryString, parameters)) {
-                if(query.Reader.Read()) {
+            using (Query query = CreateQuery(queryString, parameters))
+            {
+                if (query.Reader.Read())
+                {
                     return builder(query.Reader);
-                } else {
+                }
+                else
+                {
                     return defaultValue;
                 }
             }
@@ -67,7 +88,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             List<T> ret = new List<T>();
 
-            using (Query query = new Query(DatabasePath, queryString, parameters))
+            using (Query query = CreateQuery(queryString, parameters))
             {
                 while (query.Reader.Read())
                 {
@@ -83,6 +104,26 @@ namespace MPExtended.Libraries.SQLitePlugin
         protected List<T> ReadList<T>(string queryString, Delegates<T>.CreateMethod builder)
         {
             return ReadList<T>(queryString, builder, new SQLiteParameter[] { });
+        }
+
+        private Query CreateQuery(string queryString, SQLiteParameter[] parameters)
+        {
+            if (_connection == null)
+            {
+                return new Query(DatabasePath, queryString, parameters);
+            }
+            else
+            {
+                return new Query(_connection, queryString, parameters);
+            }
+        }
+
+        internal static SQLiteConnection OpenDatabase(string databasePath)
+        {
+            string connectionString = "Data Source=" + databasePath + ";Read Only=True";
+            var db = new SQLiteConnection(connectionString);
+            db.Open();
+            return db;
         }
     }
 }

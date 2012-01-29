@@ -135,6 +135,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
+            OpenDatabase();
             var param = new SQLiteParameter("@search", "%" + text + "%");
             string sql = "SELECT idMovie, strTitle, iYear, strGenre FROM movieinfo WHERE strTitle LIKE @search";
             IEnumerable<WebSearchResult> titleResults = ReadList<WebSearchResult>(sql, delegate (SQLiteDataReader reader) 
@@ -177,6 +178,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 };
             }, param);
 
+            CloseDatabase();
             return titleResults.Concat(actorResults);
         }
 

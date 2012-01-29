@@ -263,6 +263,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
+            OpenDatabase();
             SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
 
             string artistSql = "SELECT DISTINCT strArtist, strAlbumArtist, strAlbum FROM tracks WHERE strArtist LIKE @search";
@@ -348,6 +349,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     }).Concat(new[] { albumResult });
             }, param).SelectMany(x => x);
 
+            CloseDatabase();
             return artists.Concat(songs).Concat(albums);
         }
 

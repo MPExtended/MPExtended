@@ -32,6 +32,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     {
         public IEnumerable<WebSearchResult> Search(string text)
         {
+            OpenDatabase();
             IEnumerable<WebSearchResult> results;
             SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
 
@@ -163,6 +164,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             }
             
             // return
+            CloseDatabase();
             return results;
         }
     }
