@@ -25,7 +25,7 @@
             <LineBreak />
             
             Forum:<LineBreak />
-            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://forum.team-mediaportal.com/webservice-mobile-access-537/">MediaPortal forum</Hyperlink><LineBreak />
+            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://forum.team-mediaportal.com/mpextended-555/">MediaPortal forum</Hyperlink><LineBreak />
             <LineBreak />
             
             IRC:<LineBreak />
@@ -37,7 +37,7 @@
             Version:<LineBreak />
             &#160;&#160;&#160;
                 <TextBlock Name="tbVersion">
-                    <Run Name="lblVersion">0.4.0</Run>
+                    <Run Name="lblVersion">x.x.x</Run>
                     (<Hyperlink Name="hbUpdates" RequestNavigate="hbUpdates_RequestNavigate" NavigateUri="">check for updates</Hyperlink>)
                 </TextBlock>
             <LineBreak />
