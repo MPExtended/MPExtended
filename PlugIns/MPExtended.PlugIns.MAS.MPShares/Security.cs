@@ -44,7 +44,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return false;
         }
 
-        public static bool IsAllowedPath(ILogger log, string path, IEnumerable<Share> shares)
+        public static bool IsAllowedPath(string path, IEnumerable<Share> shares)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             catch (Exception e)
             {
-                log.Error(String.Format("Exception during IsAllowedPath with path = {0}", path), e);
+                Log.Error(String.Format("Exception during IsAllowedPath with path = {0}", path), e);
             }
             return false;
         }

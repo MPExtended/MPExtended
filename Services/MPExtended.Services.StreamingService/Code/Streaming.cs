@@ -167,7 +167,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier]) 
                 {
-                    Log.Trace("StartStream called with identifier {0}", identifier);
+                    Log.Debug("StartStream with identifier {0} for file {1}", identifier, Streams[identifier].Context.Source.GetDebugName());
 
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
@@ -176,7 +176,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
-                    Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
+                    Log.Debug("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
                     sharing.StartStream(stream.Context, infoRef);
                 
                     // get transcoder
@@ -355,6 +355,11 @@ namespace MPExtended.Services.StreamingService.Code
             return null;
         }
 
+        public Resolution CalculateSize(TranscoderProfile profile, decimal displayAspectRatio)
+        {
+            return Resolution.Calculate(displayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+        }
+
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
             try
@@ -378,7 +383,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // default
-            return Resolution.Calculate(16 / 9, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+            return Resolution.Calculate(MediaInfoHelper.DEFAULT_ASPECT_RATIO, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)

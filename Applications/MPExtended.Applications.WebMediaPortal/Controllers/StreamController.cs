@@ -73,6 +73,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Download(WebStreamMediaType type, string item)
         {
             // Create URL to GetMediaItem
+            Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
@@ -89,11 +90,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
+                Log.Debug("Proxying download at {0}", fullUri.ToString());
                 GetStreamControl(type).AuthorizeStreaming();
                 ProxyStream(fullUri.ToString());
             }
             else if (streamMode == StreamType.Direct)
             {
+                Log.Debug("Redirecting user to download at {0}", fullUri.ToString()); 
                 GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
                 return Redirect(fullUri.ToString());
             }
@@ -110,6 +113,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
        
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}", identifier, type, itemId, transcoder);
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
             {
                 Log.Error("Streaming: InitStream failed");
@@ -129,6 +133,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
             }
+            Log.Debug("Stream started successfully, is at {0} with stream mode {1}", url, streamMode);
 
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
@@ -143,6 +148,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // kill stream (doesn't matter much if this doesn't happen, WSS kills streams automatically nowadays)
+            Log.Debug("Finished streami {0}", identifier);
             if (!GetStreamControl(type).FinishStream(identifier))
             {
                 Log.Error("Streaming: FinishStream failed");
@@ -156,6 +162,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             int read;
 
             // do request
+            Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
             WebResponse response = WebRequest.Create(sourceUrl).GetResponse();
             Stream sourceStream = response.GetResponseStream();
 
@@ -217,6 +224,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             // get transcoding profile
             string profileName = null;
+
             if (Request.QueryString["transcoder"] != null)
                 profileName = Request.QueryString["transcoder"];
             if (Request.Form["transcoder"] != null)
@@ -263,6 +271,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             model.TranscoderProfile = profile;
             model.Player = player;
             model.PlayerViewName = viewName;
+            Log.Debug("Created player with size={0} view={1} transcoder={2} url={3}", model.Size, viewName, profile.Name, model.URL);
             return PartialView("Player", model);
         }
 
@@ -280,7 +289,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
  
             // get size
-            model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
+            if(type == WebStreamMediaType.TV)
+            {
+                // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
+                // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
+                // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
+                model.Size = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
+            } 
+            else 
+            {
+                model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
+            }
 
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();

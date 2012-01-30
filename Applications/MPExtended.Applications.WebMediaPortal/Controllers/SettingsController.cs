@@ -67,7 +67,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             Settings.ActiveSettings = model.ToSettingModel(Settings.ActiveSettings);
+            Log.Info("Updating connection URLs to MAS {0} and TAS {1}", Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
+            MPEServices.LogServiceVersions();
             return RedirectToAction("Services");
         }
     }

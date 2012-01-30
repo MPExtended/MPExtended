@@ -45,6 +45,8 @@ namespace MPExtended.Libraries.Client
         public static bool IsTASStreamLocal { get { return holder.IsTASStreamLocal; } }
         public static string HttpTASStreamRoot { get { return holder.HttpTASStreamRoot; } }
 
+        public static void LogServiceVersions() { holder.LogServiceVersions(); }
+
         public static void SetConnectionUrls(string mas, string tas)
         {
             holder = new MPEServicesHolder(mas, tas);

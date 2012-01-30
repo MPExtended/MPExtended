@@ -63,7 +63,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
                 "INNER JOIN genre g ON glm.idGenre = g.idGenre " + 
                 "WHERE %where " +
-                "GROUP BY m.idMOvie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
+                "GROUP BY m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("m", "idMovie", "Id", DataReaders.ReadIntAsString),
