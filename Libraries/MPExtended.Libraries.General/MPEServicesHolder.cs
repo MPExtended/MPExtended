@@ -281,6 +281,13 @@ namespace MPExtended.Libraries.General
             }
         }
 
+        public void LogServiceVersions()
+        {
+            string masVersion = HasMASConnection ? MAS.GetServiceDescription().ServiceVersion : "<unconnected>";
+            string tasVersion = HasTASConnection ? TAS.GetServiceDescription().ServiceVersion : "<unconnected>";
+            Log.Debug("Connected to MAS version {0}, TAS version {1}", masVersion, tasVersion);
+        }
+
         private T CreateConnection<T>(string address, string service)
         {
             Uri addr = new Uri(address);
