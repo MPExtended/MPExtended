@@ -18,9 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Data.SQLite;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
@@ -120,7 +121,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return ArtworkRetriever.GetFileInfo(path);
             }
 
-            return new WebFileInfo(new FileInfo(path));
+            return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
         }
 
         public Stream GetFile(string path)
@@ -130,7 +131,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return ArtworkRetriever.GetStream(path);
             }
 
-            return new FileStream(path, FileMode.Open, FileAccess.Read);
+            return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
         }
 
         public IEnumerable<WebSearchResult> Search(string text)
