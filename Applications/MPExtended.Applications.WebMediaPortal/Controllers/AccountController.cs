@@ -22,6 +22,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using MPExtended.Libraries.Service;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
@@ -57,6 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);
                     ServiceAvailability.Reload();
+                    Log.Debug("User {0} logged in from host {1}", model.UserName, Request.UserHostAddress);
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -81,6 +83,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         public ActionResult LogOff()
         {
+            Log.Debug("User {0} logged out", HttpContext.User.Identity.Name);
             FormsService.SignOut();
             ServiceAvailability.Reload();
 
