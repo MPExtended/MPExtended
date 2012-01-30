@@ -206,7 +206,7 @@ namespace MPExtended.Services.TVAccessService
 
             if (type == null || type == WebTVSearchResultType.Program)
             {
-                result = result.Concat(_tvBusiness.SearchPrograms(text)
+                result = result.Concat(_tvBusiness.SearchPrograms("%" + text + "%")
                     .Select(program => new WebTVSearchResult()
                     {
                         Id = program.IdProgram.ToString(),
