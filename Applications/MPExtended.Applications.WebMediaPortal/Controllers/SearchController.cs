@@ -52,6 +52,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             list = list.Where(x => x.URL != null).OrderByDescending(x => x.Score);
+
+            // when there is one hit with a 100% score, just redirect to that page
+            if(list.Count() > 0 && list.First().Score == 100)
+            {
+                return Redirect(list.First().URL);
+            }
+
+            // else show all hits
             return View("Results", list);
         }
 
