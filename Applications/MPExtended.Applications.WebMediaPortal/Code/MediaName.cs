@@ -33,24 +33,21 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             {
                 switch (type)
                 {
-                    case WebStreamMediaType.File:
-                        return MPEServices.MAS.GetFileSystemFileBasicById(Settings.ActiveSettings.FileSystemProvider, id).Title;
                     case WebStreamMediaType.Movie:
                         return MPEServices.MAS.GetMovieBasicById(Settings.ActiveSettings.MovieProvider, id).Title;
                     case WebStreamMediaType.MusicAlbum:
                         return MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebStreamMediaType.MusicTrack:
                         return MPEServices.MAS.GetMusicTrackBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
-                    case WebStreamMediaType.Picture:
-                        return MPEServices.MAS.GetPictureBasicById(Settings.ActiveSettings.PicturesProvider, id).Title;
                     case WebStreamMediaType.Recording:
                         return MPEServices.TAS.GetRecordingById(Int32.Parse(id)).Title;
                     case WebStreamMediaType.TV:
                         return MPEServices.TAS.GetChannelBasicById(Int32.Parse(id)).DisplayName;
                     case WebStreamMediaType.TVEpisode:
                         return MPEServices.MAS.GetTVEpisodeBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
-                    case WebStreamMediaType.TVSeason:
                     case WebStreamMediaType.TVShow:
+                        return MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                    case WebStreamMediaType.TVSeason:
                     default:
                         return "";
                 }

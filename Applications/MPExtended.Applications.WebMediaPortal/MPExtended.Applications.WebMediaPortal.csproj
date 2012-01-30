@@ -97,6 +97,8 @@
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\MediaName.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Models\SearchResultsViewModel.cs" />
     <Compile Include="Mvc\DropdownExtensions.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
@@ -313,6 +315,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Skins\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Search\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
