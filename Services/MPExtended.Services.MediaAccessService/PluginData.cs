@@ -39,13 +39,5 @@ namespace MPExtended.Services.MediaAccessService
 
             return new Dictionary<string, string>();
         }
-
-        public ILogger Log
-        {
-            get
-            {
-                return new LogProxy();
-            }
-        }
     }
 }

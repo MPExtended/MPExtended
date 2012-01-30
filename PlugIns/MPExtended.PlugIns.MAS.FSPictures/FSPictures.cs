@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
@@ -57,7 +58,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             fullpath = Path.GetFullPath(fullpath);
             if (!fullpath.StartsWith(rootInfo))
             {
-                data.Log.Error("Got path {0} that doesn't start with the root {1}", fullpath, rootInfo);
+                Log.Error("Got path {0} that doesn't start with the root {1}", fullpath, rootInfo);
                 return "";
             }
 

@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
@@ -215,7 +216,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     string path = Path.GetFullPath(Path.Combine(share.Path, reldir));
 
                     // it is possible that someone tricks us into looking outside of the shareroot by a /../ path
-                    if (Security.IsInShare(data.Log, path, share))
+                    if (Security.IsInShare(path, share))
                     {
                         return path;
                     }
@@ -305,7 +306,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             catch (FormatException)
             {
-                data.Log.Warn("MPShares: Invalid base64 input {0}", encodedData);
+                Log.Warn("MPShares: Invalid base64 input {0}", encodedData);
                 return String.Empty;
             }
         }
