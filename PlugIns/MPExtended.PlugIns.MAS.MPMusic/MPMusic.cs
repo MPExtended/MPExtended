@@ -24,6 +24,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
@@ -130,8 +131,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     int i = 0;
                     string[] filenames = new string[] {
-                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg"),
-                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + ".jpg")
+                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + ".jpg", '_')
                     };
                     foreach (string file in filenames)
                     {
@@ -210,8 +211,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
                     int i = 0;
                     string[] filenames = new string[] {
-                        MakeFileName(x + "L.jpg"),
-                        MakeFileName(x + ".jpg")
+                        PathUtil.StripInvalidCharacters(x + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(x + ".jpg", '_')
                     };
                     foreach (string file in filenames)
                     {
@@ -377,28 +378,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             if (String.IsNullOrEmpty(artistName) || String.IsNullOrEmpty(albumName))
                 return string.Empty;
 
-            artistName = artistName.Trim(new char[] { '|', ' ' });
-            albumName = albumName.Replace(":", "_");
-
-            foreach (char ch in Path.GetInvalidFileNameChars())
-            {
-                artistName = artistName.Replace(ch, '_');
-                albumName = albumName.Replace(ch, '_');
-            }
+            artistName = PathUtil.StripInvalidCharacters(artistName, '_');
+            albumName = PathUtil.StripInvalidCharacters(albumName, '_');
 
             string thumbDir = configuration["cover"];
-            return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
-        }
-
-        private string MakeFileName(string text)
-        {
-            // This method should be compatible with Util.MakeFileName, in mediaportal/Core/Util/Util.cs:1840
-            text = text.Replace(':', '_');
-            foreach (char ch in Path.GetInvalidFileNameChars())
-            {
-                text = text.Replace(ch, '_');
-            }
-            return text;
+            return Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
         }
 
         private string EncodeTo64(string toEncode)
