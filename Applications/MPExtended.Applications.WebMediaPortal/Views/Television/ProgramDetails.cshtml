@@ -8,11 +8,11 @@
     <strong>@Model.StartTime</strong> till <strong>@Model.EndTime</strong> on channel <strong>@Model.ChannelName</strong><br />
     @{if (@Model.IsScheduled)
       {
-          @Html.ActionLink("Cancel schedule", "DeleteSchedule", new { programId = @Model.Id })
+          @Html.ActionLink("Cancel schedule", "DeleteSchedule", "Schedule", new { programId = @Model.Id }, new { })
       }
       else
       {
-          @Html.ActionLink("Schedule", "AddSchedule", new { programId = @Model.Id })
+          @Html.ActionLink("Schedule", "AddSchedule", "Schedule", new { programId = @Model.Id }, new { })
       }
     }
 </p>

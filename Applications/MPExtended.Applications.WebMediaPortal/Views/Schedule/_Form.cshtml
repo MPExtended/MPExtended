@@ -1,0 +1,66 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel
+@using (Html.BeginForm("Save", "Schedule"))
+{
+    @Html.HiddenFor(model => model.Id)
+    
+    @Html.ValidationSummary(false)
+    <br />
+    
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Title)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Channel)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Channel)
+                @Html.ValidationMessageFor(model => model.Channel)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.StartTime)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.StartTime)
+                @Html.ValidationMessageFor(model => model.StartTime)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.EndTime)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.EndTime)
+                @Html.ValidationMessageFor(model => model.EndTime)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ScheduleType)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.ScheduleType)
+                @Html.ValidationMessageFor(model => model.ScheduleType)
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Save" />
+            </td>
+        </tr>
+    </table>
+}

@@ -77,57 +77,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(new ProgramDetailsViewModel(program));
         }
 
-        public ActionResult DeleteSchedule(int programId)
-        {
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            int id = MPEServices.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
-            MPEServices.TAS.DeleteSchedule(id);
-            return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
-        }
-
-        public ActionResult AddSchedule(int programId)
-        {
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            if (program == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(new AddScheduleViewModel(program));
-        }
-
-        [HttpPost]
-        public ActionResult AddSchedule(FormCollection fc, int programId)
-        {
-            WebScheduleType type;
-            if (!Enum.TryParse<WebScheduleType>(fc["type"], out type))
-            {
-                // TODO: error message
-                type = WebScheduleType.Once;
-            }
-
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            if (program == null)
-            {
-                return HttpNotFound();
-            }
-
-            MPEServices.TAS.AddSchedule(program.IdChannel, program.Title, program.StartTime, program.EndTime, type);
-            return RedirectToAction("ProgramDetails", new { programId = programId });
-        }
-
-        public ActionResult Schedules()
-        {
-            var list = MPEServices.TAS.GetSchedules(SortField.Name, SortOrder.Asc).Select(x => new ScheduleViewModel(x));
-            return View(list);
-        }
-
-        public ActionResult DeleteScheduleById(int id)
-        {
-            MPEServices.TAS.DeleteSchedule(id);
-            return RedirectToAction("Schedules");
-        }
-
         public ActionResult WatchLiveTV(int channelId)
         {
             var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
