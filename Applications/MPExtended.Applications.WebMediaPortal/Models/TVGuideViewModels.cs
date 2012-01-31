@@ -150,6 +150,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string Title { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+        public bool IsScheduled { get; private set; }
 
         public bool IsCurrent
         {
@@ -168,6 +169,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
             StartTime = program.StartTime;
             EndTime = program.EndTime;
+            IsScheduled = program.IsScheduled;
 
             this.guideStart = guideStart;
             this.guideEnd = guideEnd;
