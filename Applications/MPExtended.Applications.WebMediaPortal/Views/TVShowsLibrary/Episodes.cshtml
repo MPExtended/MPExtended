@@ -1,7 +1,8 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.TVShow.WebTVEpisodeBasic>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.TVSeasonViewModel
 @{
-    ViewBag.Title = "Episodes";
+	ViewBag.Title = String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber);
 }
+
 <style type="text/css">
     .column
     {
@@ -13,20 +14,18 @@
         max-width: 300px;
     }
 </style>
-<h2>Episodes</h2>
+<h2>@String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber)</h2>
 
 <div class="column">
-    <img class="img" src="@Url.Action("Image", new { season = @Model.ElementAt(0).SeasonId })" alt="" />
+    <img class="img" src="@Url.Action("Image", new { season = @Model.Season.Id })" alt="" />
 </div>
 
 <div class="column">
     <ul>
-        @foreach (var episode in Model)
+        @foreach (var episode in Model.Episodes)
         {
-           
-            <li>@Html.ActionLink("Episode " + episode.EpisodeNumber + " - " + episode.Title, "Details", new { episode = episode.Id })
-            </li>
-            
+            <li>@Html.ActionLink(String.Format(UIStrings.EpisodeDisplay, episode.EpisodeNumber, episode.Title), "Details", new { episode = episode.Id })
+            </li>   
         }
     </ul>
 </div>

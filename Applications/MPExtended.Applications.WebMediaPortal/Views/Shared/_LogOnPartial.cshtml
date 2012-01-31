@@ -1,7 +1,9 @@
-﻿@if(Request.IsAuthenticated) {
-    <text>Welcome <b>@Context.User.Identity.Name</b>!
-    [ @Html.ActionLink("Log off", "LogOff", "Account") ]</text>
+﻿@if (Request.IsAuthenticated)
+{
+    @Html.Raw(String.Format(UIStrings.WelcomeUsername, Context.User.Identity.Name))
+    <text>[ @Html.ActionLink(UIStrings.LogOff, "LogOff", "Account") ]</text>
 }
-else {
-    @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
+else
+{
+    <text>[ @Html.ActionLink(UIStrings.LogOn, "LogOn", "Account") ]</text>
 }

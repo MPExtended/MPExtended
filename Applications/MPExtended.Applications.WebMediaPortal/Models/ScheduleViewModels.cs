@@ -25,6 +25,7 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -32,37 +33,37 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public static Dictionary<WebScheduleType, string> ScheduleTypeNames = new Dictionary<WebScheduleType, string>()
             {
-                { WebScheduleType.Once, "Once" },
-                { WebScheduleType.Daily, "Daily" },
-                { WebScheduleType.Weekly, "Weekly" },
-                { WebScheduleType.EveryTimeOnThisChannel, "Every time on this channel" },
-                { WebScheduleType.EveryTimeOnEveryChannel, "Every time on every channel" },
-                { WebScheduleType.Weekends, "Weekends" },
-                { WebScheduleType.WorkingDays, "Working days" },
-                { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Weekly on this channel" }
+                { WebScheduleType.Once, FormStrings.ScheduleTypeOnce },
+                { WebScheduleType.Daily, FormStrings.ScheduleTypeDaily },
+                { WebScheduleType.Weekly, FormStrings.ScheduleTypeWeekly },
+                { WebScheduleType.EveryTimeOnThisChannel, FormStrings.ScheduleTypeEveryTimeOnThisChannel },
+                { WebScheduleType.EveryTimeOnEveryChannel, FormStrings.ScheduleTypeEveryTimeOnEveryChannel },
+                { WebScheduleType.Weekends, FormStrings.ScheduleTypeWeekends },
+                { WebScheduleType.WorkingDays, FormStrings.ScheduleTypeWorkingDays },
+                { WebScheduleType.WeeklyEveryTimeOnThisChannel, FormStrings.ScheduleTypeWeeklyOnThisChannel }
             };
 
         public int ProgramId { get; set; }
         public int Id { get; set; }
 
-        [Required]
         [StringLength(255)]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public string Title { get; set; }
 
-        [DisplayName("Start time")]
-        [Required]
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleStartTime")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public DateTime? StartTime { get; set; }
 
-        [DisplayName("End time")]
-        [Required]
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleEndTime")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public DateTime? EndTime { get; set; }
-
-        [DisplayName("Schedule type")]
-        [ListChoice("ScheduleTypeList", AllowNull = false, ErrorMessage = "Select a valid schedule type")]
+   
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleType")]
+        [ListChoice("ScheduleTypeList", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ScheduleSelectValidType")]
         public WebScheduleType ScheduleType { get; set; }
 
-        [DisplayName("Channel")]
-        [ListChoice("ChannelList", AllowNull = false, ErrorMessage = "Select a valid channel")]
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleChannel")]
+        [ListChoice("ChannelList", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ScheduleSelectValidChannel")]
         public int Channel { get; set; }
 
         public string ChannelName { get; private set; }

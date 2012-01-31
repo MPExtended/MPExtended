@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 
@@ -166,7 +167,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public TVGuideProgramViewModel(WebProgramBasic program, DateTime guideStart, DateTime guideEnd)
         {
             Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
+            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
             StartTime = program.StartTime;
             EndTime = program.EndTime;
             IsScheduled = program.IsScheduled;
@@ -208,7 +209,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public ProgramDetailsViewModel(WebProgramBasic program)
         {
             Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
+            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
             Description = program.Description;
             StartTime = program.StartTime;
             EndTime = program.EndTime;

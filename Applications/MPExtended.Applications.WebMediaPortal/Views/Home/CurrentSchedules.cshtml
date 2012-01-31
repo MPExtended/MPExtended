@@ -2,7 +2,7 @@
 
 @if (@Model != null && @Model.Count(p => p.Title != "") > 0)
 {
-    <h2>Today's schedules</h2>
+    <h2>@UIStrings.TodaysSchedules</h2>
     <div>
         <ul>
             @foreach (var schedule in Model)

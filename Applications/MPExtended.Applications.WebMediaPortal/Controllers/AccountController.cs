@@ -25,6 +25,7 @@ using System.Web.Security;
 using MPExtended.Libraries.Service;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -70,7 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError("", FormStrings.UsernamePasswordIncorrect);
                 }
             }
 

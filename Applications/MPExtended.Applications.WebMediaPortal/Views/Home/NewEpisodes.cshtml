@@ -1,15 +1,15 @@
-﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.EpisodeModel>
+﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.TVEpisodeViewModel>
 
 @if (@Model != null && @Model.Count() > 0)
 {
-    <h2>Latest Episodes</h2>
+    <h2>@UIStrings.LatestEpisodes</h2>
     <div>
         @foreach (var episode in Model)
         {
             <div class="column">
                 <div class="row">
                     @Html.ActionLink(episode.Show.Title + " - " + episode.Season.SeasonNumber + "x" + episode.Episode.EpisodeNumber, 
-                        "Details", "TVShowsLibrary", new { episode = episode.Episode.Id }, null)
+                        UIStrings.Details, "TVShowsLibrary", new { episode = episode.Episode.Id }, null)
                 </div>
                 <div class="row">
                     <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Episode.Id })" alt="" />

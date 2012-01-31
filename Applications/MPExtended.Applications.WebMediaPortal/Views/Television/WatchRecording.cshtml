@@ -1,10 +1,10 @@
 ﻿@model MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic
 @{
-    ViewBag.Title = "Recording";
+    ViewBag.Title = String.Format(UIStrings.WatchingRecording, Model.Title);
 }
 
-<h2>Recording</h2>
-You are watching: <strong>@Model.Title</strong>
+<h2>@UIStrings.Play</h2>
+@Html.Raw(String.Format(UIStrings.YouAreWatchingRecording, Model.Title))
 <br />
 <br />
 

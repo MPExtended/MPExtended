@@ -45,22 +45,26 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Seasons(string show)
         {
+            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, show);
             var seasons = MPEServices.MAS.GetTVSeasonsBasicForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
-            if (seasons != null)
+            return View(new TVShowViewModel()
             {
-                return View(seasons);
-            }
-            return null;
+                Show = showObj,
+                Seasons = seasons
+            });
         }
 
         public ActionResult Episodes(string season)
         {
+            var seasonObj = MPEServices.MAS.GetTVSeasonBasicById(Settings.ActiveSettings.TVShowProvider, season);
+            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
             var episodes = MPEServices.MAS.GetTVEpisodesBasicForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
-            if (episodes != null)
+            return View(new TVSeasonViewModel()
             {
-                return View(episodes);
-            }
-            return null;
+                Season = seasonObj,
+                Show = showObj,
+                Episodes = episodes
+            });
         }
 
         public ActionResult Image(string season)
@@ -109,13 +113,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var fullEpisode = MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
             if (fullEpisode != null)
             {
-                EpisodeModel model = new EpisodeModel()
+                return View(new TVEpisodeViewModel()
                 {
                     Episode = fullEpisode,
                     Show = MPEServices.MAS.GetTVShowDetailedById(fullEpisode.PID, fullEpisode.ShowId),
                     Season = MPEServices.MAS.GetTVSeasonDetailedById(fullEpisode.PID, fullEpisode.SeasonId)
-                };
-                return View(model);
+                });
             }
             return null;
         }

@@ -21,18 +21,20 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using System.Runtime.Serialization;
+using MPExtended.Applications.WebMediaPortal.Mvc;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public enum StreamType
     {
-        [Description("Direct: best performance, works only on local network")]
+        [LocalizedDescription(typeof(FormStrings), "DirectStreamingProfileDescription")]
         Direct,
 
-        [Description("Direct when possible, proxied otherwise")]
+        [LocalizedDescription(typeof(FormStrings), "DirectWhenPossibleDescription")]
         DirectWhenPossible,
 
-        [Description("Proxied: instantly stops timeshiftings, works over the internet")]
+        [LocalizedDescription(typeof(FormStrings), "ProxiedStreamingProfileDescription")]
         Proxied,
     }
 

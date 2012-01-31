@@ -1,13 +1,12 @@
-﻿@using MPExtended.Services.TVAccessService.Interfaces
-@using MPExtended.Services.StreamingService.Interfaces
-@model WebRecordingBasic
+﻿@using MPExtended.Services.StreamingService.Interfaces
+@model MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic
 @{
-    ViewBag.Title = "Recording";
+    ViewBag.Title = Model.Title;
 }
 
 <h2>@Model.Title</h2>
 <ul>
-<li>Recorded on: @Model.StartTime.ToShortDateString()</li>
-<li>@Html.ActionLink("Watch", "WatchRecording", new { id = Model.Id })</li>
-<li>@Html.ActionLink("Download", "Download", "Stream", new { item = Model.Id, type = WebStreamMediaType.Recording }, new { })</li>
+<li>@UIStrings.RecordedOn: @Model.StartTime.ToShortDateString()</li>
+<li>@Html.ActionLink(UIStrings.Play, "WatchRecording", new { id = Model.Id })</li>
+<li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = WebStreamMediaType.Recording }, new { })</li>
 </ul>

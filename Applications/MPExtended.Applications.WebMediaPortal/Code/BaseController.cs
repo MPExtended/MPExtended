@@ -17,10 +17,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
+using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.Service;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
@@ -66,6 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             SetViewBagProperties(ViewBag);
+            LoadLanguage();
         }
 
         private void SetViewBagProperties(dynamic bag)
@@ -74,6 +80,54 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             bag.FullVersion = VersionUtil.GetFullVersionString();
             bag.Styles = new List<string>();
             bag.Scripts = new List<string>();
+        }
+
+        private void LoadLanguage()
+        {
+            // when possible, optimize
+            if (Request.Params["language"] == null && Session["languageCultureInfo"] != null)
+            {
+                Thread.CurrentThread.CurrentCulture = (CultureInfo)Session["languageCultureInfo"];
+                Thread.CurrentThread.CurrentUICulture = (CultureInfo)Session["languageCultureInfo"];
+                return;
+            }
+
+            // load a list of languages in order of preference
+            List<string> languages = new List<string>();
+            if (Request.Params["language"] != null)
+                languages.Add(Request.Params["language"]);
+            if (Session["language"] != null)
+                languages.Add((string)Session["language"]);
+            if (Request.UserLanguages != null)
+                languages.AddRange(Request.UserLanguages);
+
+            // load the highest-ranked available language
+            foreach (string language in languages)
+            {
+                try
+                {
+                    // check if we've got resources for this language
+                    CultureInfo ci = CultureInfo.CreateSpecificCulture(language);
+                    ResourceManager manager = new ResourceManager(typeof(UIStrings));
+                    if (manager.GetResourceSet(ci, true, true) == null)
+                        continue;
+
+                    Thread.CurrentThread.CurrentUICulture = ci;
+                    Thread.CurrentThread.CurrentCulture = ci;
+                    break;
+                }
+                catch (CultureNotFoundException)
+                {
+                    // just fall through to next language, or don't set a custom language in worst-case
+                }
+                catch (MissingManifestResourceException)
+                {
+                    // just fall through to next language, or don't set a custom language in worst-case
+                }
+            }
+
+            // cache the cultureinfo
+            Session["languageCultureInfo"] = Thread.CurrentThread.CurrentUICulture;
         }
     }
 }
