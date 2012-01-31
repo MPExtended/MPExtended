@@ -12,18 +12,21 @@
         <th>Channel</th>
         <th>Start time</th>
         <th>End time</th>
-        <th></th>
+        <th colspan="2"></th>
     </tr>
     
     @foreach (var item in Model) {
         <tr>
             <td>@Html.DisplayFor(x => item.Title)</td>
-            <td>@Html.DisplayFor(x => item.Type)</td>
+            <td>@item.ScheduleTypeName</td>
             <td>@Html.DisplayFor(x => item.ChannelName)</td>
             <td>@Html.DisplayFor(x => item.StartTimeFormatted)</td>
             <td>@Html.DisplayFor(x => item.EndTimeFormatted)</td>
             <td>
                 @Html.ActionLink("Delete", "DeleteScheduleById", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditSchedule", new { id = item.Id }) 
             </td>
         </tr>
     }

@@ -1,11 +1,13 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.AddScheduleViewModel
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel
 @{
     ViewBag.Title = "Add schedule";
 }
 
 <h2>Add schedule</h2>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Save", "Schedule"))
 {
+    @Html.HiddenFor(model => model.ProgramId)
+
     @Html.ValidationSummary(false)
     <br />
     
@@ -15,8 +17,8 @@
                 @Html.LabelFor(model => model.Title)
             </td>
             <td>
-                @Html.EditorFor(model => model.Title)
-                @Html.ValidationMessageFor(model => model.Title)
+                @Html.DisplayFor(model => model.Title)
+                @Html.HiddenFor(model => model.Title)
             </td>
         </tr>
 
@@ -25,8 +27,8 @@
                 @Html.LabelFor(model => model.Channel)
             </td>
             <td>
-                @Html.DropDownListFor(model => model.Channel)
-                @Html.ValidationMessageFor(model => model.Channel)
+                @Html.DisplayFor(model => model.ChannelName)
+                @Html.HiddenFor(model => model.Channel)
             </td>
         </tr>
 
@@ -35,8 +37,8 @@
                 @Html.LabelFor(model => model.StartTime)
             </td>
             <td>
-                @Html.EditorFor(model => model.StartTime)
-                @Html.ValidationMessageFor(model => model.StartTime)
+                @Html.DisplayFor(model => model.StartTime)
+                @Html.HiddenFor(model => model.StartTime)
             </td>
         </tr>
 
@@ -45,8 +47,8 @@
                 @Html.LabelFor(model => model.EndTime)
             </td>
             <td>
-                @Html.EditorFor(model => model.EndTime)
-                @Html.ValidationMessageFor(model => model.EndTime)
+                @Html.DisplayFor(model => model.EndTime)
+                @Html.HiddenFor(model => model.EndTime)
             </td>
         </tr>
 

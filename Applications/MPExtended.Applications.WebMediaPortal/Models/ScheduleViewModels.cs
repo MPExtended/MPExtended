@@ -42,75 +42,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Weekly on this channel" }
             };
 
-        public int Id { get; set; }
-        public string Title { get; set; }
-
-        public int ChannelId { get; set; }
-        public string ChannelName { get; set; }
-
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-
-        public string StartTimeFormatted { get; set; }
-        public string EndTimeFormatted { get; set; }
-
-        public string Type { get; set; }
-
-        public ScheduleViewModel(WebScheduleBasic schedule)
-        {
-            Id = schedule.Id;
-            Title = schedule.ProgramName;
-            StartTime = schedule.StartTime;
-            EndTime = schedule.EndTime;
-            ChannelId = schedule.IdChannel;
-
-            switch(schedule.ScheduleType)
-            {
-                case WebScheduleType.Daily:
-                case WebScheduleType.EveryTimeOnThisChannel:
-                case WebScheduleType.Once:
-                case WebScheduleType.Weekends:
-                case WebScheduleType.Weekly:
-                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
-                case WebScheduleType.WorkingDays:
-                    ChannelName = MPEServices.TAS.GetChannelBasicById(ChannelId).DisplayName;
-                    break;
-                case WebScheduleType.EveryTimeOnEveryChannel:
-                    ChannelName = "";
-                    break;
-            }
-
-            switch (schedule.ScheduleType)
-            {
-                case WebScheduleType.Daily:
-                case WebScheduleType.Weekends:
-                case WebScheduleType.WorkingDays:
-                    StartTimeFormatted = schedule.StartTime.ToString("t");
-                    EndTimeFormatted = schedule.EndTime.ToString("t");
-                    break;
-                case WebScheduleType.Weekly:
-                    StartTimeFormatted = schedule.StartTime.ToString("dddd") + " " + schedule.StartTime.ToString("t");
-                    EndTimeFormatted = schedule.EndTime.ToString("dddd") + " " + schedule.EndTime.ToString("t");
-                    break;
-                case WebScheduleType.Once:
-                default:
-                    StartTimeFormatted = schedule.StartTime.ToString("g");
-                    EndTimeFormatted = schedule.EndTime.ToString("g");
-                    break;
-                case WebScheduleType.EveryTimeOnEveryChannel:
-                case WebScheduleType.EveryTimeOnThisChannel:
-                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
-                    // they don't have a time associated with them
-                    break;
-            }
-
-            Type = ScheduleTypeNames[schedule.ScheduleType];
-        }
-    }
-
-    public class AddScheduleViewModel
-    {
         public int ProgramId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -132,6 +65,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("ChannelList", AllowNull = false, ErrorMessage = "Select a valid channel")]
         public int Channel { get; set; }
 
+        public string ChannelName { get; private set; }
+        public string StartTimeFormatted { get; private set; }
+        public string EndTimeFormatted { get; private set; }
+
         public IEnumerable<SelectListItem> ChannelList
         {
             get
@@ -141,12 +78,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public string ScheduleTypeName
+        {
+            get
+            {
+                return ScheduleTypeNames[ScheduleType];
+            }
+        }
+
         public IEnumerable<SelectListItem> ScheduleTypeList
         {
             get
             {
-                return ScheduleViewModel.ScheduleTypeNames
-                   .Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Value });
+                return ScheduleTypeNames.Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Value });
             }
         }
 
@@ -158,19 +102,73 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public AddScheduleViewModel()
+        public ScheduleViewModel()
         {
             StartTime = null;
             EndTime = null;
         }
 
-        public AddScheduleViewModel(WebProgramBasic program)
+        private ScheduleViewModel(DateTime startTime, DateTime endTime, string title, int channelId)
         {
-            StartTime = program.StartTime;
-            EndTime = program.EndTime;
-            Title = program.Title;
-            Channel = program.IdChannel;
+            StartTime = startTime;
+            EndTime = endTime;
+            Title = title;
+            Channel = channelId;
+        }
+
+        public ScheduleViewModel(WebProgramBasic program)
+            : this (program.StartTime, program.EndTime, program.Title, program.IdChannel)
+        {
             ProgramId = program.Id;
+
+            ChannelName = MPEServices.TAS.GetChannelBasicById(program.IdChannel).DisplayName;
+        }
+
+        public ScheduleViewModel(WebScheduleBasic schedule)
+            : this (schedule.StartTime, schedule.EndTime, schedule.ProgramName, schedule.IdChannel)
+        {
+            Id = schedule.Id;
+            ScheduleType = schedule.ScheduleType;
+
+            switch (ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.Once:
+                case WebScheduleType.Weekends:
+                case WebScheduleType.Weekly:
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                case WebScheduleType.WorkingDays:
+                    ChannelName = MPEServices.TAS.GetChannelBasicById(schedule.IdChannel).DisplayName;
+                    break;
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                    ChannelName = "";
+                    break;
+            }
+
+            switch (ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                case WebScheduleType.Weekends:
+                case WebScheduleType.WorkingDays:
+                    StartTimeFormatted = StartTime.Value.ToString("t");
+                    EndTimeFormatted = EndTime.Value.ToString("t");
+                    break;
+                case WebScheduleType.Weekly:
+                    StartTimeFormatted = StartTime.Value.ToString("dddd") + " " + StartTime.Value.ToString("t");
+                    EndTimeFormatted = EndTime.Value.ToString("dddd") + " " + EndTime.Value.ToString("t");
+                    break;
+                case WebScheduleType.Once:
+                default:
+                    StartTimeFormatted = StartTime.Value.ToString("g");
+                    EndTimeFormatted = EndTime.Value.ToString("g");
+                    break;
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                    // they don't have a time associated with them
+                    break;
+            }
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.AddScheduleViewModel
-@{
-    ViewBag.Title = "Add schedule";
-}
-
-<h2>Add schedule</h2>
-@using (Html.BeginForm())
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel
+@using (Html.BeginForm("Save", "Schedule"))
 {
+    @Html.HiddenFor(model => model.Id)
+    
     @Html.ValidationSummary(false)
     <br />
     
@@ -15,8 +12,8 @@
                 @Html.LabelFor(model => model.Title)
             </td>
             <td>
-                @Html.DisplayFor(model => model.Title)
-                @Html.HiddenFor(model => model.Title)
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
             </td>
         </tr>
 
@@ -25,8 +22,8 @@
                 @Html.LabelFor(model => model.Channel)
             </td>
             <td>
-                @Html.DisplayFor(model => model.Channel)
-                @Html.HiddenFor(model => model.Channel)
+                @Html.DropDownListFor(model => model.Channel)
+                @Html.ValidationMessageFor(model => model.Channel)
             </td>
         </tr>
 
@@ -35,8 +32,8 @@
                 @Html.LabelFor(model => model.StartTime)
             </td>
             <td>
-                @Html.DisplayFor(model => model.StartTime)
-                @Html.HiddenFor(model => model.StartTime)
+                @Html.EditorFor(model => model.StartTime)
+                @Html.ValidationMessageFor(model => model.StartTime)
             </td>
         </tr>
 
@@ -45,8 +42,8 @@
                 @Html.LabelFor(model => model.EndTime)
             </td>
             <td>
-                @Html.DisplayFor(model => model.EndTime)
-                @Html.HiddenFor(model => model.EndTime)
+                @Html.EditorFor(model => model.EndTime)
+                @Html.ValidationMessageFor(model => model.EndTime)
             </td>
         </tr>
 
@@ -62,7 +59,7 @@
 
         <tr>
             <td colspan="2">
-                <input type="submit" value="Create" />
+                <input type="submit" value="Save" />
             </td>
         </tr>
     </table>

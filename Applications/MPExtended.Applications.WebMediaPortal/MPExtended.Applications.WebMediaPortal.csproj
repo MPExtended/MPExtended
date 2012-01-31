@@ -97,6 +97,7 @@
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\MediaName.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Mvc\DropdownExtensions.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
@@ -300,10 +301,10 @@
     <Content Include="Views\Home\NewEpisodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\AddScheduleForm.cshtml" />
+    <Content Include="Views\Schedule\AddScheduleForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\Schedules.cshtml" />
+    <Content Include="Views\Schedule\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Television\Recording.cshtml" />
@@ -318,7 +319,13 @@
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\AddScheduleByProgram.cshtml" />
+    <Content Include="Views\Schedule\AddScheduleByProgram.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Schedule\EditSchedule.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Schedule\_Form.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
