@@ -149,15 +149,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("TVProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVProfile")]
         public string SelectedTVProfile { get; set; }
 
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVShowDatabase")]
+        [LocalizedDisplayName(typeof(FormStrings), "TVShowDatabase")]
         [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVShowDatabase")]
         public int? TVShowProvider { get; set; }
 
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMovieDatabase")]
+        [LocalizedDisplayName(typeof(FormStrings), "MovieDatabase")]
         [ListChoice("MovieDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMovieDatabase")]
         public int? MovieProvider { get; set; }
 
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicDatabase")]
+        [LocalizedDisplayName(typeof(FormStrings), "MusicDatabase")]
         [ListChoice("MusicDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicDatabase")]
         public int? MusicProvider { get; set; }
 
