@@ -77,8 +77,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string episodeRegexWhere = "0";
             if (episodeResult.Success)
             {
-                episodeRegexWhere = "((os.Pretty_Name = @show OR ls.Parsed_Name = @show) AND e.SeasonIndex = @season AND e.EpisodeIndex = @episode)";
-                parameters.Add(new SQLiteParameter("@show", episodeResult.Groups[1].Value.Trim()));
+                episodeRegexWhere = "((os.Pretty_Name LIKE @show OR ls.Parsed_Name LIKE @show) AND e.SeasonIndex = @season AND e.EpisodeIndex = @episode)";
+                parameters.Add(new SQLiteParameter("@show", "%" + episodeResult.Groups[1].Value.Trim() + "%"));
                 parameters.Add(new SQLiteParameter("@season", episodeResult.Groups[2].Value));
                 parameters.Add(new SQLiteParameter("@episode", episodeResult.Groups[3].Value));
             }
@@ -118,15 +118,28 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 score = Math.Max(score, valid.Count() > 0 ? valid.Max(x => 20 + (int)Math.Round((decimal)text.Length / x.Length * 40)) : 0);
 
                 // regex match
-                if (result.Details["ShowName"] == episodeResult.Groups[1].Value.Trim() &&
-                    result.Details["SeasonNumber"] == episodeResult.Groups[2].Value &&
-                    result.Details["EpisodeNumber"] == episodeResult.Groups[3].Value)
+                if (episodeResult.Success &&
+                       (result.Details["ShowName"].Contains(episodeResult.Groups[1].Value.Trim(), false) &&
+                        result.Details["SeasonNumber"] == episodeResult.Groups[2].Value &&
+                        result.Details["EpisodeNumber"] == episodeResult.Groups[3].Value))
                     score = 100;
 
                 // set score and return
                 result.Score = score;
                 return result;
             }, parameters.ToArray());
+
+
+            // when there are multiple matches with 100%, set them all to 95% as we apparantly aren't sure
+            if (episodes.Count(x => x.Score == 100) > 1)
+            {
+                episodes = episodes.Select(x =>
+                {
+                    if (x.Score == 100)
+                        x.Score = 95;
+                    return x;
+                });
+            }
             results = results.Concat(episodes);
             #endregion
 
