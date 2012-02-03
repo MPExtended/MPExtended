@@ -85,13 +85,17 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 AggregateCatalog catalog = new AggregateCatalog();
-                catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
+                catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly())); // for PluginData
                 if (Installation.GetFileLayoutType() == FileLayoutType.Source)
                 {
                     string pluginRoot = Path.Combine(Installation.GetSourceRootDirectory(), "PlugIns");
                     foreach (string pdir in Directory.GetDirectories(pluginRoot))
                     {
+#if DEBUG
                         string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
+#else
+                        string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Release"));
+#endif
                         if (Directory.Exists(dir))
                             catalog.Catalogs.Add(new DirectoryCatalog(dir));
                     }
