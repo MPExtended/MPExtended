@@ -241,6 +241,24 @@
   <data name="ScheduleTypeWorkingDays" xml:space="preserve">
     <value>Working days</value>
   </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>{0} (album) by {1}</value>
+  </data>
+  <data name="SearchResultChannelGroup" xml:space="preserve">
+    <value>{0} (channel group)</value>
+  </data>
+  <data name="SearchResultProgram" xml:space="preserve">
+    <value>{0} ({1} on {2})</value>
+  </data>
+  <data name="SearchResultRecording" xml:space="preserve">
+    <value>{0} (recorded on {1})</value>
+  </data>
+  <data name="SearchResultSchedule" xml:space="preserve">
+    <value>{0} (schedule)</value>
+  </data>
+  <data name="SearchResultTrack" xml:space="preserve">
+    <value>{0} by {1}</value>
+  </data>
   <data name="ServerService" xml:space="preserve">
     <value>Server service</value>
   </data>

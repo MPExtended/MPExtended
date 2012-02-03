@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.SearchResultsViewModel>
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title = UIStrings.Search;
 }
 
-<h2>Search</h2>
+<h2>@UIStrings.Search</h2>
 
 @if (Model.Count() == 0)
 {
-    <em>Sorry, your search didn't yield any results.</em>
+    <em>@UIStrings.SorryYourSearchDidNotYieldAnyResults</em>
 }
 
 <ul>

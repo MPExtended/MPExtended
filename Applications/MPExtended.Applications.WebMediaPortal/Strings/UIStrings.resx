@@ -343,4 +343,14 @@
   <data name="EditSchedule" xml:space="preserve">
     <value>Edit schedule</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchFieldPlaceholder" xml:space="preserve">
+    <value>Search...</value>
+    <comment>Placeholder in the search field when no text has been entered</comment>
+  </data>
+  <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">
+    <value>Sorry, your search didn't yield any results.</value>
+  </data>
 </root>

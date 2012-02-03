@@ -457,6 +457,24 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string SearchFieldPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchFieldPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Season {0}.
         /// </summary>
         public static string Season {
@@ -489,6 +507,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string SorryAnErrorOccurred {
             get {
                 return ResourceManager.GetString("SorryAnErrorOccurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, your search didn&apos;t yield any results..
+        /// </summary>
+        public static string SorryYourSearchDidNotYieldAnyResults {
+            get {
+                return ResourceManager.GetString("SorryYourSearchDidNotYieldAnyResults", resourceCulture);
             }
         }
         

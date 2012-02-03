@@ -27,7 +27,7 @@
         <div id="search">
             @using (Html.BeginForm("Results", "Search", FormMethod.Get))
             {
-                <input type="text" name="text" placeholder="Search..." onblur="this.form.submit();" />
+                <input type="text" name="text" placeholder="@UIStrings.SearchFieldPlaceholder" onblur="this.form.submit();" />
             }
         </div>
 

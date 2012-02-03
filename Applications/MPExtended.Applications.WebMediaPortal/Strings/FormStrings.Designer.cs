@@ -430,6 +430,60 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} (album) by {1}.
+        /// </summary>
+        public static string SearchResultAlbum {
+            get {
+                return ResourceManager.GetString("SearchResultAlbum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (channel group).
+        /// </summary>
+        public static string SearchResultChannelGroup {
+            get {
+                return ResourceManager.GetString("SearchResultChannelGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} ({1} on {2}).
+        /// </summary>
+        public static string SearchResultProgram {
+            get {
+                return ResourceManager.GetString("SearchResultProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (recorded on {1}).
+        /// </summary>
+        public static string SearchResultRecording {
+            get {
+                return ResourceManager.GetString("SearchResultRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (schedule).
+        /// </summary>
+        public static string SearchResultSchedule {
+            get {
+                return ResourceManager.GetString("SearchResultSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} by {1}.
+        /// </summary>
+        public static string SearchResultTrack {
+            get {
+                return ResourceManager.GetString("SearchResultTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server service.
         /// </summary>
         public static string ServerService {

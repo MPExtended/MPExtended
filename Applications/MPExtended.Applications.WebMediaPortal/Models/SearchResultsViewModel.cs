@@ -21,6 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -52,9 +53,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             switch (result.Type)
             {                
                 case WebMediaType.MusicAlbum:
-                    return result.Title + " (album) by " + result.Details["Artist"];
+                    return String.Format(FormStrings.SearchResultAlbum, result.Title, result.Details["Artist"]);
                 case WebMediaType.MusicTrack:
-                    return result.Title + " by " + result.Details["Artist"];
+                    return String.Format(FormStrings.SearchResultTrack, result.Title, result.Details["Artist"]);
 
                 case WebMediaType.TVEpisode:
                     return String.Format("{0} ({1} {2}x{3})", result.Title, result.Details["ShowName"], result.Details["SeasonNumber"], result.Details["EpisodeNumber"]);
@@ -69,13 +70,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             switch (result.Type)
             {
                 case WebTVSearchResultType.Recording:
-                    return String.Format("{0} (recorded on {1})", result.Title, result.StartTime);
+                    return String.Format(FormStrings.SearchResultRecording, result.Title, result.StartTime);
                 case WebTVSearchResultType.Schedule:
-                    return String.Format("{0} (scheduled)", result.Title);
+                    return String.Format(FormStrings.SearchResultSchedule, result.Title);
                 case WebTVSearchResultType.TVGroup:
-                    return String.Format("{0} (channel group)", result.Title);
+                    return String.Format(FormStrings.SearchResultChannelGroup, result.Title);
                 case WebTVSearchResultType.Program:
-                    return String.Format("{0} ({1} on {2})", result.Title, result.StartTime, result.ChannelName);
+                    return String.Format(FormStrings.SearchResultProgram, result.Title, result.StartTime, result.ChannelName);
 
                 default:
                     return result.Title;
