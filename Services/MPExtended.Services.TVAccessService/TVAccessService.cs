@@ -131,6 +131,11 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return new List<WebTVSearchResult>();
+            }
+
             text = text.ToLower();
             IEnumerable<WebTVSearchResult> result = new List<WebTVSearchResult>();
 
