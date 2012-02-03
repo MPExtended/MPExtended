@@ -113,7 +113,21 @@ namespace MPExtended.Services.TVAccessService
         #region TV Server
         public WebResult TestConnectionToTVService()
         {
-            return RemoteControl.IsConnected;
+            if (!RemoteControl.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+                TvDatabase.Version.ListAll();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to connected to TV service database", ex);
+                return false;
+            }
         }
 
         public string ReadSettingFromDatabase(string tagName)
