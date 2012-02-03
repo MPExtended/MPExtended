@@ -102,5 +102,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Name = x }).ToList();
         }
+
+        public static string FixNameReader(SQLiteDataReader reader, int index)
+        {
+            // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
+            // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
+            string data = reader.ReadString(index);
+            if (data.Length > 0)
+                return data;
+            return reader.ReadString(index - 1);
+        }
     }
 }

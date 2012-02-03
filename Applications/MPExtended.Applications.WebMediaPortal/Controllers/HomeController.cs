@@ -57,14 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var tmp = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
-                var list = tmp.Select(x => new TVEpisodeViewModel
-                {
-                    Episode = x,
-                    Season = MPEServices.MAS.GetTVSeasonDetailedById(x.PID, x.SeasonId),
-                    Show = MPEServices.MAS.GetTVShowDetailedById(x.PID, x.ShowId)
-                }).ToList();
-
+                var list = MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, 3, SortBy.TVDateAired, OrderBy.Desc);
                 return PartialView(list);
             }
             catch (Exception)
@@ -90,7 +83,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             try
             {
-                var list = 
+                var list =
                     from x in MPEServices.TAS.GetSchedules()
                     where CheckScheduleIsOnDate(x, DateTime.Now)
                     select new ScheduleViewModel(x);
