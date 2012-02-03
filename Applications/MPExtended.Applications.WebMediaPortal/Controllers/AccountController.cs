@@ -29,6 +29,7 @@ using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [SessionState(System.Web.SessionState.SessionStateBehavior.Required)]
     public class AccountController : BaseController
     {
         public IFormsAuthenticationService FormsService { get; set; }

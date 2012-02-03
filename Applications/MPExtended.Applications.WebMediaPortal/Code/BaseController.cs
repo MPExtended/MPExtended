@@ -30,17 +30,18 @@ using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
+    // Requiring a session state results in the execution of requests being serialized, which is awful for the performance of certain
+    // pages, especially those with a lot of images. 
+    [SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     public class BaseController : Controller
     {
+        private static AvailabilityModel availabilityModel = new AvailabilityModel();
+
         protected AvailabilityModel ServiceAvailability
         {
             get
             {
-                if (Session["availabilityModel"] == null)
-                {
-                    Session["availabilityModel"] = new AvailabilityModel();
-                }
-                return Session["availabilityModel"] as AvailabilityModel;
+                return availabilityModel;
             }
         }
 
@@ -84,20 +85,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         private void LoadLanguage()
         {
-            // when possible, optimize
-            if (Request.Params["language"] == null && Session["languageCultureInfo"] != null)
-            {
-                Thread.CurrentThread.CurrentCulture = (CultureInfo)Session["languageCultureInfo"];
-                Thread.CurrentThread.CurrentUICulture = (CultureInfo)Session["languageCultureInfo"];
-                return;
-            }
-
             // load a list of languages in order of preference
             List<string> languages = new List<string>();
             if (Request.Params["language"] != null)
                 languages.Add(Request.Params["language"]);
-            if (Session["language"] != null)
-                languages.Add((string)Session["language"]);
             if (Request.UserLanguages != null)
                 languages.AddRange(Request.UserLanguages);
 
@@ -125,9 +116,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     // just fall through to next language, or don't set a custom language in worst-case
                 }
             }
-
-            // cache the cultureinfo
-            Session["languageCultureInfo"] = Thread.CurrentThread.CurrentUICulture;
         }
     }
 }
