@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,10 +20,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Libraries.SQLitePlugin
+namespace MPExtended.Libraries.Service.Util
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Delegate)]
-    public class MergeListReaderAttribute : Attribute
+    public static class StringExtensions
     {
+        public static bool Contains(this string str, string value, StringComparison comparison)
+        {
+            return str.IndexOf(value, comparison) >= 0;
+        }
+
+        public static bool Contains(this string str, string value, bool caseSensitive)
+        {
+            return Contains(str, value, caseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }

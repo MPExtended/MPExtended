@@ -65,8 +65,13 @@
     <Compile Include="CustomReaders.cs" />
     <Compile Include="MPTVSeries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.SQLitePlugin\MPExtended.Libraries.SQLitePlugin.csproj">
       <Project>{19467BF5-89FA-4BA3-A4C3-3A382573A20F}</Project>
       <Name>MPExtended.Libraries.SQLitePlugin</Name>

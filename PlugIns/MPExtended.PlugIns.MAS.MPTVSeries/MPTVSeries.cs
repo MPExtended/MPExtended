@@ -31,7 +31,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Name", "MP-TVSeries")]
     [ExportMetadata("Id", 6)]
-    public class MPTVSeries : Database, ITVShowLibrary
+    public partial class MPTVSeries : Database, ITVShowLibrary
     {
         private Dictionary<string, string> configuration;
         public bool Supported { get; set; }
@@ -270,39 +270,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "IMDB_ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadString, "IMDB")),
                 new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
             });
-        }
-
-
-        public IEnumerable<WebSearchResult> Search(string text)
-        {
-            SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
-            string showSql = "SELECT ID, Pretty_Name FROM online_series WHERE Pretty_Name LIKE @search";
-            IEnumerable<WebSearchResult> shows = ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
-                {
-                    Type = WebMediaType.TVShow,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
-
-            string episodeSql = "SELECT EpisodeID, EpisodeName FROM online_episodes WHERE EpisodeName LIKE @search";
-            IEnumerable<WebSearchResult> episodes = ReadList<WebSearchResult>(episodeSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
-                {
-                    Type = WebMediaType.TVEpisode,
-                    Id = reader.ReadString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
-
-            return shows.Union(episodes);
         }
 
         public IEnumerable<WebGenre> GetAllGenres()

@@ -11,5 +11,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public string Id { get; set; }
         public string Title { get; set; }
         public int Score { get; set; }
+        public SerializableDictionary<string> Details { get; set; }
+
+        public WebSearchResult()
+        {
+            Details = new SerializableDictionary<string>();
+        }
     }
 }

@@ -122,6 +122,11 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebSearchResult> Search(string text)
         {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return new List<WebSearchResult>();
+            }
+
             return MovieLibraries.SearchAll(text).AsQueryable()
                 .Concat(MusicLibraries.SearchAll(text).AsQueryable())
                 .Concat(PictureLibraries.SearchAll(text).AsQueryable())

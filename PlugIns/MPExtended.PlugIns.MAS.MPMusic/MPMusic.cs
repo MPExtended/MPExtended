@@ -264,45 +264,93 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
+            OpenDatabase();
             SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
-            string artistSql = "SELECT DISTINCT strArtist FROM tracks WHERE strArtist LIKE @search";
+
+            string artistSql = "SELECT DISTINCT strArtist, strAlbumArtist, strAlbum FROM tracks WHERE strArtist LIKE @search";
             IEnumerable<WebSearchResult> artists = ReadList<IEnumerable<WebSearchResult>>(artistSql, delegate(SQLiteDataReader reader)
             {
-                return reader.ReadPipeList(0).Select(name => new WebSearchResult()
-                {
-                    Type = WebMediaType.MusicArtist,
-                    Id = name,
-                    Title = name,
-                    Score = (int)Math.Round((decimal)text.Length / name.Length * 100)
-                });
+                IEnumerable<string> albumArtists = reader.ReadPipeList(1);
+                return reader.ReadPipeList(0)
+                    .Where(name => name.Contains(text))
+                    .Select(name => new WebSearchResult()
+                    {
+                        Type = WebMediaType.MusicArtist,
+                        Id = name,
+                        Title = name,
+                        Score = (int)Math.Round(40 + (decimal)text.Length / name.Length * 40)
+                    })
+                    .Concat(new[] { new WebSearchResult() 
+                        {
+                            Type = WebMediaType.MusicAlbum,
+                            Id = (string)AlbumIdReader(reader, 2),
+                            Title = reader.ReadString(2),
+                            Score = (int)Math.Round(20 + (decimal)text.Length / reader.ReadString(0).Length * 40),
+                            Details = new SerializableDictionary<string>()
+                            {
+                                { "Artist", albumArtists.First() },
+                                { "ArtistId", albumArtists.First() }
+                            }
+                        }
+                    });
             }, param).SelectMany(x => x);
 
-            string songSql = "SELECT DISTINCT idTrack, strTitle FROM tracks WHERE strTitle LIKE @search";
+            string songSql = "SELECT DISTINCT idTrack, strTitle, strAlbumArtist, strAlbum, iDuration, iYear FROM tracks WHERE strTitle LIKE @search";
             IEnumerable<WebSearchResult> songs = ReadList<WebSearchResult>(songSql, delegate(SQLiteDataReader reader)
             {
+                IEnumerable<string> allArtists = reader.ReadPipeList(2);
                 string title = reader.ReadString(1);
                 return new WebSearchResult()
                 {
                     Type = WebMediaType.MusicTrack,
                     Id = reader.ReadIntAsString(0),
                     Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
+                    Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                    Details = new SerializableDictionary<string>()
+                    {
+                        { "Artist", allArtists.First() },
+                        { "ArtistId", allArtists.First() },
+                        { "Album", reader.ReadString(3) },
+                        { "AlbumId", (string)AlbumIdReader(reader, 3) },
+                        { "Duration", reader.ReadIntAsString(4) },
+                        { "Year", reader.ReadIntAsString(5) }
+                    }
                 };
             }, param);
 
-            string albumsSql = "SELECT DISTINCT strAlbumArtist, strAlbum FROM tracks WHERE strAlbum LIKE @search";
-            IEnumerable<WebSearchResult> albums = ReadList<WebSearchResult>(albumsSql, delegate(SQLiteDataReader reader)
+            string albumsSql = 
+                "SELECT DISTINCT strAlbumArtist, strAlbum " +
+                "FROM tracks " +
+                "WHERE strAlbum LIKE @search";
+            IEnumerable<WebSearchResult> albums = ReadList<IEnumerable<WebSearchResult>>(albumsSql, delegate(SQLiteDataReader reader)
             {
                 string title = reader.ReadString(1);
-                return new WebSearchResult()
+                IEnumerable<string> artistList = reader.ReadPipeList(0);
+                var albumResult = new WebSearchResult()
                 {
-                    Type = WebMediaType.MusicTrack,
+                    Type = WebMediaType.MusicAlbum,
                     Id = (string)AlbumIdReader(reader, 1),
                     Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
+                    Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                    Details = new SerializableDictionary<string>()
+                    {
+                        { "Artist", artistList.First().Trim() },
+                        { "ArtistId", artistList.First().Trim() }
+                    }
                 };
-            }, param);
 
+                string allArtists = String.Join("", artistList);
+                return artistList
+                    .Select(name => new WebSearchResult()
+                    {
+                        Type = WebMediaType.MusicArtist,
+                        Id = name,
+                        Title = name,
+                        Score = (int)Math.Round((decimal)name.Length / allArtists.Length * 30)
+                    }).Concat(new[] { albumResult });
+            }, param).SelectMany(x => x);
+
+            CloseDatabase();
             return artists.Concat(songs).Concat(albums);
         }
 

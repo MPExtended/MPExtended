@@ -19,9 +19,18 @@
     <div id="header">
         <div id='logo'></div>
         <h1>WebMediaPortal</h1>
+
         <div id="logindisplay">
             @Html.Partial("_LogOnPartial")
         </div>
+
+        <div id="search">
+            @using (Html.BeginForm("Results", "Search", FormMethod.Get))
+            {
+                <input type="text" name="text" placeholder="Search..." onblur="this.form.submit();" />
+            }
+        </div>
+
         <div class="navigation">
             <ul id="navlist">
                 <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
