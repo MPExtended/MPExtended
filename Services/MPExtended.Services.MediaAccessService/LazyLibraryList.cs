@@ -131,9 +131,20 @@ namespace MPExtended.Services.MediaAccessService
 
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
-            return items
-                .ToDictionary(x => x.Key, x => x.Value.Value)
-                .SelectMany(x => x.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type))
+            List<WebSearchResult> originalResults = new List<WebSearchResult>();
+            foreach (var library in items)
+            {
+                try
+                {
+                    originalResults.AddRange(library.Value.Value.Search(text).Finalize((int)library.Value.Metadata["Id"], type));
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Search failed in library " + library.Value.Metadata["Name"], ex);
+                }
+            }
+
+            return originalResults
                 .GroupBy(x => x.Id, (key, results) => results.OrderByDescending(res => res.Score).First());
         }
     }
