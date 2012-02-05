@@ -139,16 +139,19 @@ namespace MPExtended.Libraries.SQLitePlugin
             // execute query
             Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
             result = new List<T>();
-            using (Query query = new Query(db.DatabasePath, prepared.Item1, prepared.Item2))
+            using (DatabaseConnection connection = db.OpenConnection())
             {
-                while (query.Reader.Read())
+                using (Query query = connection.CreateQuery(prepared.Item1, prepared.Item2))
                 {
-                    T obj = factory.CreateObject(query.Reader);
-                    if (finalize != null)
+                    while (query.Reader.Read())
                     {
-                        obj = finalize(obj);
+                        T obj = factory.CreateObject(query.Reader);
+                        if (finalize != null)
+                        {
+                            obj = finalize(obj);
+                        }
+                        result.Add(obj);
                     }
-                    result.Add(obj);
                 }
             }
 
@@ -413,10 +416,13 @@ namespace MPExtended.Libraries.SQLitePlugin
             // execute the query
             Tuple<string, SQLiteParameter[]> prepared = PrepareQuery();
             string sql = "SELECT COUNT(*) AS count FROM (" + prepared.Item1 + ") tbl";
-            using (Query query = new Query(db.DatabasePath, sql, prepared.Item2))
+            using (DatabaseConnection conn = db.OpenConnection())
             {
-                query.Reader.Read();
-                return query.Reader.ReadInt32(0);
+                using (Query query = conn.CreateQuery(sql, prepared.Item2))
+                {
+                    query.Reader.Read();
+                    return query.Reader.ReadInt32(0);
+                }
             }
         }
     }

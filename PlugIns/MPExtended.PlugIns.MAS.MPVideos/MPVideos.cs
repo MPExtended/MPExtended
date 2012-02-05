@@ -53,7 +53,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, " +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
-                    "GROUP_CONCAT(g.strGenre, '|') AS genres " + 
+                    "GROUP_CONCAT(g.strGenre, '|') AS genres " +
                 "FROM movie m " +
                 "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
@@ -61,7 +61,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
                 "INNER JOIN actors a ON alm.idActor = a.idActor " +
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
-                "INNER JOIN genre g ON glm.idGenre = g.idGenre " + 
+                "INNER JOIN genre g ON glm.idGenre = g.idGenre " +
                 "WHERE %where " +
                 "GROUP BY m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
@@ -116,7 +116,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public WebFileInfo GetFileInfo(string path)
         {
-            if(path.StartsWith("http://"))
+            if (path.StartsWith("http://"))
             {
                 return ArtworkRetriever.GetFileInfo(path);
             }
@@ -136,51 +136,52 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
-            OpenDatabase();
-            var param = new SQLiteParameter("@search", "%" + text + "%");
-            string sql = "SELECT idMovie, strTitle, iYear, strGenre FROM movieinfo WHERE strTitle LIKE @search";
-            IEnumerable<WebSearchResult> titleResults = ReadList<WebSearchResult>(sql, delegate (SQLiteDataReader reader) 
+            using (DatabaseConnection connection = OpenConnection())
             {
-                string title = reader.ReadString(1);
-                string genres = reader.ReadString(3);
-                return new WebSearchResult()
+                var param = new SQLiteParameter("@search", "%" + text + "%");
+                string sql = "SELECT idMovie, strTitle, iYear, strGenre FROM movieinfo WHERE strTitle LIKE @search";
+                IEnumerable<WebSearchResult> titleResults = ReadList<WebSearchResult>(sql, delegate(SQLiteDataReader reader)
                 {
-                    Type = WebMediaType.Movie,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
-                    Details = new SerializableDictionary<string>()
+                    string title = reader.ReadString(1);
+                    string genres = reader.ReadString(3);
+                    return new WebSearchResult()
+                    {
+                        Type = WebMediaType.Movie,
+                        Id = reader.ReadIntAsString(0),
+                        Title = title,
+                        Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                        Details = new SerializableDictionary<string>()
                     {
                         { "Year", reader.ReadIntAsString(2) },
                         { "Genres", genres == "unknown" ? String.Empty : genres }
                     }
-                };
-            }, param);
+                    };
+                }, param);
 
-            string actorSql = "SELECT a.strActor, mi.idMovie, mi.strTitle, mi.iYear, mi.strGenre " +
-                              "FROM actors a " +
-                              "LEFT JOIN actorlinkmovie alm ON alm.idActor = a.idActor " +
-                              "INNER JOIN movieinfo mi ON alm.idMovie = mi.idMovie " + 
-                              "WHERE a.strActor LIKE @search";
-            IEnumerable<WebSearchResult> actorResults = ReadList<WebSearchResult>(actorSql, delegate(SQLiteDataReader reader)
-            {
-                string genres = reader.ReadString(4);
-                return new WebSearchResult()
+                string actorSql = "SELECT a.strActor, mi.idMovie, mi.strTitle, mi.iYear, mi.strGenre " +
+                                  "FROM actors a " +
+                                  "LEFT JOIN actorlinkmovie alm ON alm.idActor = a.idActor " +
+                                  "INNER JOIN movieinfo mi ON alm.idMovie = mi.idMovie " +
+                                  "WHERE a.strActor LIKE @search";
+                IEnumerable<WebSearchResult> actorResults = ReadList<WebSearchResult>(actorSql, delegate(SQLiteDataReader reader)
                 {
-                    Type = WebMediaType.Movie,
-                    Id = reader.ReadIntAsString(1),
-                    Title = reader.ReadString(2),
-                    Score = (int)Math.Round(40 + (decimal)text.Length / reader.ReadString(0).Length * 30),
-                    Details = new SerializableDictionary<string>()
+                    string genres = reader.ReadString(4);
+                    return new WebSearchResult()
+                    {
+                        Type = WebMediaType.Movie,
+                        Id = reader.ReadIntAsString(1),
+                        Title = reader.ReadString(2),
+                        Score = (int)Math.Round(40 + (decimal)text.Length / reader.ReadString(0).Length * 30),
+                        Details = new SerializableDictionary<string>()
                     {
                         { "Year", reader.ReadIntAsString(3) },
                         { "Genres", genres == "unknown" ? String.Empty : genres }
                     }
-                };
-            }, param);
+                    };
+                }, param);
 
-            CloseDatabase();
-            return titleResults.Concat(actorResults);
+                return titleResults.Concat(actorResults);
+            }
         }
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)

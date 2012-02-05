@@ -25,7 +25,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public abstract class Database
     {
-        private SQLiteConnection _connection;
+        private DatabaseConnection currentConnection;
 
         public string DatabasePath
         {
@@ -42,29 +42,33 @@ namespace MPExtended.Libraries.SQLitePlugin
             DatabasePath = databasePath;
         }
 
-        protected void OpenDatabase()
+        public DatabaseConnection OpenConnection()
         {
-            _connection = OpenDatabase(DatabasePath);
-        }
-
-        protected void CloseDatabase()
-        {
-            _connection.Close();
-            _connection.Dispose();
-            _connection = null;
+            if (currentConnection == null || !currentConnection.IsOpen)
+            {
+                currentConnection = new DatabaseConnection(this);
+                return currentConnection;
+            }
+            else
+            {
+                return new DatabaseConnection(currentConnection.Connection, false);
+           }
         }
 
         protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
         {
-            using (Query query = CreateQuery(queryString, parameters))
+            using (DatabaseConnection connection = OpenConnection())
             {
-                if (query.Reader.Read())
+                using (Query query = new Query(connection, queryString, parameters))
                 {
-                    return builder(query.Reader);
-                }
-                else
-                {
-                    return defaultValue;
+                    if (query.Reader.Read())
+                    {
+                        return builder(query.Reader);
+                    }
+                    else
+                    {
+                        return defaultValue;
+                    }
                 }
             }
         }
@@ -88,13 +92,16 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             List<T> ret = new List<T>();
 
-            using (Query query = CreateQuery(queryString, parameters))
+            using (DatabaseConnection connection = OpenConnection())
             {
-                while (query.Reader.Read())
+                using (Query query = new Query(connection, queryString, parameters))
                 {
-                    T item = builder(query.Reader);
-                    if (item != null)
-                        ret.Add(item);
+                    while (query.Reader.Read())
+                    {
+                        T item = builder(query.Reader);
+                        if (item != null)
+                            ret.Add(item);
+                    }
                 }
             }
 
@@ -104,26 +111,6 @@ namespace MPExtended.Libraries.SQLitePlugin
         protected List<T> ReadList<T>(string queryString, Delegates<T>.CreateMethod builder)
         {
             return ReadList<T>(queryString, builder, new SQLiteParameter[] { });
-        }
-
-        private Query CreateQuery(string queryString, SQLiteParameter[] parameters)
-        {
-            if (_connection == null)
-            {
-                return new Query(DatabasePath, queryString, parameters);
-            }
-            else
-            {
-                return new Query(_connection, queryString, parameters);
-            }
-        }
-
-        internal static SQLiteConnection OpenDatabase(string databasePath)
-        {
-            string connectionString = "Data Source=" + databasePath + ";Read Only=True";
-            var db = new SQLiteConnection(connectionString);
-            db.Open();
-            return db;
         }
     }
 }

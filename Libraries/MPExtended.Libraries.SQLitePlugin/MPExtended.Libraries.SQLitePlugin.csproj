@@ -64,6 +64,7 @@
     <Compile Include="AllowSQLCompareAttribute.cs" />
     <Compile Include="AllowSQLSortAttribute.cs" />
     <Compile Include="AutoFiller.cs" />
+    <Compile Include="DatabaseConnection.cs" />
     <Compile Include="DataReaders.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Delegates.cs" />

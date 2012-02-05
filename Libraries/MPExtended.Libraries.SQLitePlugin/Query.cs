@@ -25,8 +25,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public class Query : IDisposable
     {
-        private SQLiteConnection db;
-        private bool ownDbHandle;
+        private DatabaseConnection db;
         private SQLiteCommand cmd;
 
         public SQLiteDataReader Reader
@@ -35,35 +34,18 @@ namespace MPExtended.Libraries.SQLitePlugin
             private set;
         }
 
-        public Query(SQLiteConnection database, string query, SQLiteParameter[] parameters)
+        public Query(DatabaseConnection database, string query, params SQLiteParameter[] parameters)
         {
             db = database;
-            ownDbHandle = false;
-            cmd = db.CreateCommand();
+            cmd = db.Connection.CreateCommand();
             cmd.CommandText = query;
             foreach (SQLiteParameter param in parameters)
                 cmd.Parameters.Add(param);
             Reader = cmd.ExecuteReader();
         }
 
-        public Query(SQLiteConnection database, string query)
+        public Query(DatabaseConnection database, string query)
             : this(database, query, new SQLiteParameter[] { })
-        {
-        }
-
-        public Query(string databasePath, string query, SQLiteParameter[] parameters)
-        {
-            db = Database.OpenDatabase(databasePath);
-            ownDbHandle = true;
-            cmd = db.CreateCommand();
-            cmd.CommandText = query;
-            foreach (SQLiteParameter param in parameters)
-                cmd.Parameters.Add(param);
-            Reader = cmd.ExecuteReader();
-        }
-
-        public Query(string databasePath, string query)
-            : this(databasePath, query, new SQLiteParameter[] { })
         {
         }
 
@@ -72,11 +54,6 @@ namespace MPExtended.Libraries.SQLitePlugin
             Reader.Close();
             Reader.Dispose();  
             cmd.Dispose();
-            if (ownDbHandle)
-            {
-                db.Close();
-                db.Dispose();
-            }
         }
     }
 }
