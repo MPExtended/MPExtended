@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
+using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
 
@@ -28,7 +29,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabPluginConfig.xaml
     /// </summary>
-    public partial class TabPluginConfig : Page
+    public partial class TabPluginConfig : Page, ITabCloseCallback
     {
         private Dictionary<string, List<PluginConfigItem>> pluginConfigurations;
 
@@ -47,9 +48,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        public void TabClosed()
+        {
+            sectionPluginSettings.Save();
+        }
+
         private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             KeyValuePair<string, List<PluginConfigItem>> item = (KeyValuePair<string, List<PluginConfigItem>>)cbPluginConfigs.SelectedValue;
+            sectionPluginSettings.Save();
             sectionPluginSettings.SetPluginConfig(item.Key, item.Value);
         }
     }

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
 
@@ -30,7 +31,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabAuthentication.xaml
     /// </summary>
-    public partial class TabAuthentication : Page
+    public partial class TabAuthentication : Page, ITabCloseCallback
     {
         private ObservableCollection<User> users = new ObservableCollection<User>();
 
@@ -47,19 +48,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             cbEnable.IsChecked = Configuration.Services.AuthenticationEnabled;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void TabClosed()
         {
             Configuration.Services.Users = users.ToList();
             Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
-            if (Configuration.Services.Save())
-            {
-                string message = "Updated users and passwords. Please restart the service for the changes to take affect.";
-                MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Save failed", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            Configuration.Services.Save();
+            Service.ReloadConfiguration();
         }
 
         private void miDelete_Click(object sender, RoutedEventArgs e)

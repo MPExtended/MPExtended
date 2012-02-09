@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
-	Title="TabWebMediaPortal" Unloaded="Page_Unloaded">
+	Title="TabWebMediaPortal">
     <Grid>
         <GroupBox Header="Hosting" Height="88" HorizontalAlignment="Left" Margin="10,10,0,0" Name="gbServices" VerticalAlignment="Top" Width="538">
             <Grid>

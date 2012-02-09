@@ -21,8 +21,7 @@
         <Label Content="Password:" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,172,0,0" Name="label2" VerticalAlignment="Top" Width="82" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="100,140,0,0" Name="txtUsername" VerticalAlignment="Top" Width="200" TextChanged="textChanged"/>
         <PasswordBox Height="23" HorizontalAlignment="Left" Margin="100,175,0,0" Name="txtPassword" VerticalAlignment="Top" Width="200" PasswordChanged="textChanged"/>
-        <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="100,209,0,0" Name="btnTest" VerticalAlignment="Top" Width="94" Click="btnTest_Click" />
-        <Button Content="Save" Height="23" HorizontalAlignment="Left" Margin="206,209,0,0" Name="btnSave" VerticalAlignment="Top" Width="94" IsEnabled="False" Click="btnSave_Click"/>
+        <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="100,209,0,0" Name="btnTest" VerticalAlignment="Top" Width="200" Click="btnTest_Click" />
         <Label Content="Credentials invalid!" Height="74" HorizontalAlignment="Left" Margin="100,238,0,0" Name="lblTestResult" VerticalAlignment="Top" FontWeight="Bold" Width="448" />
     </Grid>
 </Page>

@@ -99,6 +99,7 @@
     <Compile Include="Code\PrivateUserSessionService.cs" />
     <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
+    <Compile Include="Code\Service.cs" />
     <Compile Include="Code\StartupArguments.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />
     <Compile Include="Code\UserServices.cs" />

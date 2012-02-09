@@ -187,8 +187,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void Save()
         {
+            if (mPlugin == null)
+            {
+                return;
+            }
+
             try
             {
                 List<PluginConfigItem> newConfig = new List<PluginConfigItem>();
@@ -217,14 +222,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
 
                 Configuration.Media.PluginConfiguration[mPlugin] = newConfig;
-                if (Configuration.Media.Save())
-                {
-                    MessageBox.Show("Successfully updated config, please restart service for the changes to take affect.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Failed to update config!", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                Configuration.Media.Save();
+                Service.ReloadConfiguration();
             }
             catch (Exception ex)
             {

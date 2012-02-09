@@ -22,15 +22,15 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using MPExtended.Libraries.Service;
 using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
     /// <summary>
     /// Interaction logic for TabConfiguration.xaml
     /// </summary>
-    public partial class TabConfiguration : Page
+    public partial class TabConfiguration : Page, ITabCloseCallback
     {
         public TabConfiguration()
         {
@@ -44,16 +44,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void TabClosed()
         {
             Configuration.Services.Port = Int32.Parse(txtPort.Text);
             Configuration.Services.BonjourName = txtServiceName.Text;
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
-            Configuration.Services.Save();
 
-            MessageBox.Show("Configuration updated. Please restart the service for the changes to take effect.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+            Configuration.Services.Save();
+            Service.ReloadConfiguration();
         }
 
         private string GetServiceName()

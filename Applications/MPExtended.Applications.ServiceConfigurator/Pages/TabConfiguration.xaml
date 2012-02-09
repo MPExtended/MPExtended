@@ -46,7 +46,5 @@
                 <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="118,0,0,6" Name="btnTestCredentials" VerticalAlignment="Bottom" Width="120" Click="btnTestCredentials_Click" />
             </Grid>
         </GroupBox>
-
-        <Button Content="Save" Name="btnSave" MinWidth="80" Margin="0,0,12,12" MinHeight="23" Click="btnSave_Click" HorizontalAlignment="Right" Width="100" Height="23" VerticalAlignment="Bottom" />
     </Grid>
 </Page>
