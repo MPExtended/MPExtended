@@ -108,6 +108,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
+                Log.Warn("User {0} requested a stream but hasn't opened a player page - denying access to stream", Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
        
