@@ -43,7 +43,7 @@ namespace MPExtended.Libraries.Service.Hosting
         {
             try
             {
-                ServiceStartup.RegisterStartupCondition(STARTUP_CONDITION);
+                ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
 
                 // rotate log files if possible
                 LogRotation rotation = new LogRotation();
@@ -86,7 +86,7 @@ namespace MPExtended.Libraries.Service.Hosting
                     }
                 });
 
-                ServiceStartup.StartupConditionCompleted(STARTUP_CONDITION);
+                ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
                 return true;
             }
             catch (Exception ex)
@@ -101,6 +101,7 @@ namespace MPExtended.Libraries.Service.Hosting
             try
             {
                 Log.Debug("Closing MPExtended ServiceHost...");
+                ServiceState.TriggerStoppingEvent();
                 wcf.Stop();
                 ThreadManager.AbortAll();
                 Log.Flush();

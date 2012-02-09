@@ -23,6 +23,7 @@ using System.ServiceModel.Web;
 using System.Threading;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Transcoders;
@@ -56,9 +57,17 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Streaming(StreamingService serviceInstance)
         {
-            sharing = new WatchSharing();
             service = serviceInstance;
+            sharing = new WatchSharing();
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
+            ServiceState.Stopping += delegate()
+            {
+                foreach(var identifier in Streams.Select(x => x.Value.Identifier).ToList())
+                {
+                    Log.Warn("Killing stream {0} because of service stop", identifier);
+                    KillStream(identifier);
+                }
+            };
         }
 
         public void Dispose()

@@ -22,10 +22,13 @@ using System.Text;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    public class ServiceStartup
+    public class ServiceState
     {
         public delegate void ServiceStartedEventHandler();
         public static event ServiceStartedEventHandler Started;
+
+        public delegate void ServiceStoppingEventHandler();
+        public static event ServiceStoppingEventHandler Stopping;
 
         public static List<string> waitConditions = new List<string>();
 
@@ -51,6 +54,21 @@ namespace MPExtended.Libraries.Service.Hosting
                             Started();
                         }
                     });
+                }
+            }
+        }
+
+        internal static void TriggerStoppingEvent()
+        {
+            if (Stopping != null)
+            {
+                try
+                {
+                    Stopping();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Failed to handle Stopping event", ex);
                 }
             }
         }
