@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Security.Principal;
 using System.Windows;
 using MPExtended.Libraries.Service;
 
@@ -28,6 +29,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal class UacServiceHelper
     {
+        public static bool IsAdmin()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal p = new WindowsPrincipal(id);
+            return p.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
         public static bool StartService()
         {
             return RunUacServiceHandler("start");

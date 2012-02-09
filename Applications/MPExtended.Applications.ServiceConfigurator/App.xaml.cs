@@ -40,6 +40,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             // make sure to start only once
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
+                UserServices.Setup(host: false);
                 UserServices.Private.OpenConfigurator();
                 this.Shutdown(0);
                 return;
