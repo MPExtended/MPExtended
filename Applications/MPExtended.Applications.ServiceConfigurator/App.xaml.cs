@@ -72,10 +72,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                 }
             }
 
-#if !DEBUG
-            // change to installation directory
-            Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
-#endif
+            if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
+            {
+                // change to installation directory
+                Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
+            }
 
             // set startup form
             this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);

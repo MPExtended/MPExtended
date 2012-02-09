@@ -144,14 +144,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnSaveLog_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".log";
-            dlg.Filter = "Log file (.log)|*.log";
-            if (dlg.ShowDialog() == true)
-            {
-                string fullpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs", mSelectedLog);
-                File.Copy(fullpath, dlg.FileName);
-            }
+            LogExporter.ExportWithFileChooser();
         }
 
         public void ScrollToLastItem(ListView lv)

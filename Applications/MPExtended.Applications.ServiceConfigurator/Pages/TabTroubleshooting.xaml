@@ -3,14 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabTroubleshooting">
 
     <Grid>
-        <TextBox BorderThickness="0" Text="To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues)." TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
+        <TextBox BorderThickness="0" Text="{x:Static strings:UI.TroubleshootingHeaderText}" TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
         <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
-        <Label Content="Test Links for" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label Content="{x:Static strings:UI.TestLinksFor}" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
         <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
         
         <Grid Name="gridLinks" Margin="6,160,15,40">
@@ -24,21 +25,21 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Media:" />
+            <Label Grid.Row="0" Grid.Column="0" Content="{x:Static strings:UI.Media}" />
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
                 <Hyperlink  Name="hlTestLinkMediaAccess" RequestNavigate="Hyperlink_RequestNavigate">
                     <TextBlock Name="tbTestLinkMediaAccess" Text="ServiceDescription.xml" />
                 </Hyperlink>    
             </TextBlock>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="TV Server:" />
+            <Label Grid.Row="1" Grid.Column="0" Content="{x:Static strings:UI.TVServer}" />
             <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
                 <Hyperlink Name="hlTestLinkTvAccess" RequestNavigate="Hyperlink_RequestNavigate">
                     <TextBlock Name="tbTestLinkTvAccess" Text="ServiceDescription.xml" />
                 </Hyperlink>
             </TextBlock>
-            
-            <Label Grid.Row="2" Grid.Column="0" Content="Streaming:" />
+
+            <Label Grid.Row="2" Grid.Column="0" Content="{x:Static strings:UI.Streaming}" />
             <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
                 <Hyperlink Name="hlTestLinkStreaming" RequestNavigate="Hyperlink_RequestNavigate">
                     <TextBlock Name="tbTestLinkStreaming" Text="ServiceDescription.xml" />
@@ -46,6 +47,6 @@
             </TextBlock>
         </Grid>
 
-        <Button Content="Export logs and configuration" Height="23" HorizontalAlignment="Left" Margin="15,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
+        <Button Content="{x:Static strings:UI.ExportLogsAndConfiguration}" Height="23" HorizontalAlignment="Left" Margin="15,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
     </Grid>
 </Page>

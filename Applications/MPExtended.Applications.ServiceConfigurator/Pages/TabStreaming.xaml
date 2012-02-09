@@ -3,42 +3,35 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	  Title="TabStreaming"
       Initialized="Page_Initialized">
 
     <Grid>
-        <Label Content="Default language" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="lblDefaultLanguage" VerticalAlignment="Top" />
-        <TextBlock Height="43" HorizontalAlignment="Stretch" Margin="18,38,14,0" Name="tbDefaultLanguage" VerticalAlignment="Top" TextWrapping="Wrap" Grid.ColumnSpan="2">
-            Some clients don't support configuring the audio and subtitle language on a per-stream basis. You can configure the default audio and subtitle language for these clients here.
-        </TextBlock>
-        <Label Content="Default audio language:" Height="28" HorizontalAlignment="Left" Margin="12,78,0,0" Name="lblDefaultAudio" VerticalAlignment="Top" />
+        <Label Content="{x:Static strings:UI.DefaultLanguage}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="lblDefaultLanguage" VerticalAlignment="Top" />
+        <TextBlock Height="43" HorizontalAlignment="Stretch" Margin="18,38,14,0" Name="tbDefaultLanguage" VerticalAlignment="Top" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{x:Static strings:UI.DefaultLanguageExplanation}" />
+
+        <Label Content="{x:Static strings:UI.DefaultAudioLanguage}" Height="28" HorizontalAlignment="Left" Margin="12,78,0,0" Name="lblDefaultAudio" VerticalAlignment="Top" />
         <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,80,12,0" Name="cbAudio" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
-        <Label Content="Default subtitle language:" Height="28" HorizontalAlignment="Left" Margin="12,112,0,0" Name="lblDefaultSubtitle" VerticalAlignment="Top" />
+        <Label Content="{x:Static strings:UI.DefaultSubtitleLanguage}" Height="28" HorizontalAlignment="Left" Margin="12,112,0,0" Name="lblDefaultSubtitle" VerticalAlignment="Top" />
         <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,114,12,0" Name="cbSubtitle" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
-        <Button Content="Save" Height="23" HorizontalAlignment="Right" Margin="0,145,12,0" Name="btnSave" VerticalAlignment="Top" Width="75" Click="btnSave_Click" />
 
-        <Label Content="Streaming Profiles" Height="28" HorizontalAlignment="Left" Margin="12,144,0,0" Name="lblStreamingProfiles" VerticalAlignment="Top" FontWeight="Bold" />
-        <Label Content="To change the streaming profiles (for advanced users only), you need to edit the Streaming.xml file:" Height="28" HorizontalAlignment="Left" Margin="12,173,0,0" Name="lblEditStreaming" VerticalAlignment="Top" Grid.ColumnSpan="2" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="18,199,0,0" Name="tbStreamingXml" VerticalAlignment="Top">
-            <Hyperlink  Name="hlStreamingConfigLocation" NavigateUri="not used" RequestNavigate="Hyperlink_RequestNavigate">Streaming.xml</Hyperlink>
-        </TextBlock>
-
-        <Label Content="Active Streams" FontWeight="Bold" Height="28" Margin="12,228,12,194" Name="label1" Grid.ColumnSpan="2" />
-        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="18,262,12,12" Name="lvActiveStreams" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
+        <Label Content="{x:Static strings:UI.ActiveStreams}" FontWeight="Bold" Height="28" Margin="12,144,0,278" Name="label1" />
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="18,180,12,12" Name="lvActiveStreams" VerticalAlignment="Stretch">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Kick Session" Name="miKickUserSession" Click="miKickUserSession_Click" />
+                    <MenuItem Header="{x:Static strings:UI.StreamingKickSession}" Name="miKickUserSession" Click="miKickUserSession_Click" />
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="Client" Width="140" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientIP}" Header="IP Address" Width="100"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="Profile" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="Progress"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="File"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="{x:Static strings:UI.StreamingClient}" Width="140" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientIP}" Header="{x:Static strings:UI.StreamingIPAddress}" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="{x:Static strings:UI.StreamingProfile}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="{x:Static strings:UI.StreamingProgress}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="{x:Static strings:UI.StreamingFile}"/>
                 </GridView>
             </ListView.View>
         </ListView>

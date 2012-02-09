@@ -160,11 +160,11 @@ namespace MPExtended.Applications.ServiceConfigurator
         {
             if (_running)
             {
-                MenuStartCloseMp.Header = "Close MediaPortal";
+                MenuStartCloseMp.Header = Strings.UI.TrayCloseMediaPortal;
             }
             else
             {
-                MenuStartCloseMp.Header = "Start MediaPortal";
+                MenuStartCloseMp.Header = Strings.UI.TrayStartMediaPortal;
             }
         }
 
@@ -252,12 +252,12 @@ namespace MPExtended.Applications.ServiceConfigurator
             {
                 // service not installed
                 mServiceController = null;
-                lblServiceState.Content = "Not installed";
+                lblServiceState.Content = Strings.UI.ServiceNotInstalled;
                 btnStartStopService.IsEnabled = false;
                 if (Installation.GetFileLayoutType() != FileLayoutType.Source)
                 {
                     Log.Error("MPExtended Service not installed");
-                    MessageBox.Show("MPExtended Service not installed. Please make sure your installation is correct.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Strings.UI.ServiceNotInstalledPopup, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -295,23 +295,23 @@ namespace MPExtended.Applications.ServiceConfigurator
             switch (_status)
             {
                 case ServiceControllerStatus.Stopped:
-                    btnStartStopService.Content = "Start";
-                    lblServiceState.Content = "Service stopped";
+                    btnStartStopService.Content = Strings.UI.Start;
+                    lblServiceState.Content = Strings.UI.ServiceStopped;
                     lblServiceState.Foreground = Brushes.Red;
                     break;
                 case ServiceControllerStatus.Running:
-                    btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service started";
+                    btnStartStopService.Content = Strings.UI.Stop;
+                    lblServiceState.Content = Strings.UI.ServiceStarted;
                     lblServiceState.Foreground = Brushes.Green;
                     break;
                 case ServiceControllerStatus.StartPending:
-                    btnStartStopService.Content = "Stop";
-                    lblServiceState.Content = "Service starting";
+                    btnStartStopService.Content = Strings.UI.Stop;
+                    lblServiceState.Content = Strings.UI.ServiceStarting;
                     lblServiceState.Foreground = Brushes.Teal;
                     break;
                 default:
                     lblServiceState.Foreground = Brushes.Teal;
-                    lblServiceState.Content = "Service " + _status.ToString();
+                    lblServiceState.Content = Strings.UI.ServiceUnknown;
                     break;
             }
         }

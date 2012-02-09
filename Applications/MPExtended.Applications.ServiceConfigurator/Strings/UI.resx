@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionNeedsAdmin" xml:space="preserve">
+    <value>This action needs administrative rights.</value>
+  </data>
+  <data name="ActiveStreams" xml:space="preserve">
+    <value>Active streams</value>
+  </data>
+  <data name="ConfigureWebMPPort" xml:space="preserve">
+    <value>You can configure the port on which WebMediaPortal runs here.</value>
+  </data>
+  <data name="DefaultAudioLanguage" xml:space="preserve">
+    <value>Default audio language:</value>
+  </data>
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Default language</value>
+  </data>
+  <data name="DefaultLanguageExplanation" xml:space="preserve">
+    <value>Some clients don't support configuring the audio and subtitle language on a per-stream basis. You can configure the default audio and subtitle language for tehse clients here.</value>
+  </data>
+  <data name="DefaultSubtitleLanguage" xml:space="preserve">
+    <value>Default subtitle language:</value>
+  </data>
+  <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
+    <value>Discarding invalid changes made on the social tab.</value>
+  </data>
+  <data name="ExportedLogsAndConfig" xml:space="preserve">
+    <value>Exported logs and configuration data to {0}</value>
+  </data>
+  <data name="ExportLogsAndConfiguration" xml:space="preserve">
+    <value>Export logs and configuration</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Login failed.</value>
+  </data>
+  <data name="LoginSuccessful" xml:space="preserve">
+    <value>Login successful!</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="ServiceNotInstalled" xml:space="preserve">
+    <value>Not installed</value>
+  </data>
+  <data name="ServiceNotInstalledPopup" xml:space="preserve">
+    <value>MPExtended Service is not installed. Please make sure your installation is correct.</value>
+  </data>
+  <data name="ServiceStarted" xml:space="preserve">
+    <value>Service started</value>
+  </data>
+  <data name="ServiceStarting" xml:space="preserve">
+    <value>Service stopping</value>
+  </data>
+  <data name="ServiceStopped" xml:space="preserve">
+    <value>Service stopped</value>
+  </data>
+  <data name="ServiceUnknown" xml:space="preserve">
+    <value>Service status unknown</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Streaming</value>
+  </data>
+  <data name="StreamingClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="StreamingFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="StreamingIPAddress" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="StreamingKickSession" xml:space="preserve">
+    <value>Kick session</value>
+  </data>
+  <data name="StreamingProfile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="StreamingProgress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="SubtitlesDisabled" xml:space="preserve">
+    <value>Disable subtitles</value>
+  </data>
+  <data name="SubtitlesExternal" xml:space="preserve">
+    <value>Use external .srt file</value>
+  </data>
+  <data name="SubtitlesFirstStream" xml:space="preserve">
+    <value>First stream in file</value>
+  </data>
+  <data name="TabAuthentication" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="TabConfiguration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="TabLogs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="TabPlugins" xml:space="preserve">
+    <value>Plugins</value>
+  </data>
+  <data name="TabProject" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="TabQRCode" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="TabSocial" xml:space="preserve">
+    <value>Social</value>
+  </data>
+  <data name="TabStreaming" xml:space="preserve">
+    <value>Streaming</value>
+  </data>
+  <data name="TabTroubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
+  <data name="TabWebMediaPortal" xml:space="preserve">
+    <value>WebMediaPortal</value>
+  </data>
+  <data name="TestingCredentials" xml:space="preserve">
+    <value>Testing credentials, please wait...</value>
+  </data>
+  <data name="TestLinksFor" xml:space="preserve">
+    <value>Test links for</value>
+  </data>
+  <data name="TrayCloseMediaPortal" xml:space="preserve">
+    <value>Close MediaPortal</value>
+  </data>
+  <data name="TrayExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="TrayHibernate" xml:space="preserve">
+    <value>Hibernate</value>
+  </data>
+  <data name="TrayLock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="TrayLogOff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="TrayMonitorOff" xml:space="preserve">
+    <value>Monitor off</value>
+  </data>
+  <data name="TrayOpenConfigurator" xml:space="preserve">
+    <value>Open MPExtended Configurator</value>
+  </data>
+  <data name="TrayOpenWebMP" xml:space="preserve">
+    <value>Open WebMediaPortal</value>
+  </data>
+  <data name="TrayPowermodes" xml:space="preserve">
+    <value>Powermodes</value>
+  </data>
+  <data name="TrayReboot" xml:space="preserve">
+    <value>Reboot</value>
+  </data>
+  <data name="TrayScreensaver" xml:space="preserve">
+    <value>Screensaver</value>
+  </data>
+  <data name="TrayShutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="TrayStartMediaPortal" xml:space="preserve">
+    <value>Start MediaPortal</value>
+  </data>
+  <data name="TraySuspend" xml:space="preserve">
+    <value>Suspend</value>
+  </data>
+  <data name="TrayTooltip" xml:space="preserve">
+    <value>MPExtended</value>
+  </data>
+  <data name="TroubleshootingHeaderText" xml:space="preserve">
+    <value>To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues).</value>
+  </data>
+  <data name="TVServer" xml:space="preserve">
+    <value>TVServer</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occured. Please file a bugreport with the service's log files attached.</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>MPExtended Configurator</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add account</value>
+  </data>
+  <data name="AuthenticationIntroText" xml:space="preserve">
+    <value>You can configure authentication for MPExtended here. It is recommended that you enable authentication and change the password (or delete) of the default account, admin. Never make an installation accessible from the internet without using authentication and secure passwords.</value>
+  </data>
+  <data name="Autodetection" xml:space="preserve">
+    <value>Autodetection</value>
+  </data>
+  <data name="AutodetectionText" xml:space="preserve">
+    <value>The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves. This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed.</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>check for updates</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>checking for updates...</value>
+  </data>
+  <data name="CredentialValidationFailed" xml:space="preserve">
+    <value>Sorry, the network credentials you entered are invalid. </value>
+  </data>
+  <data name="CredentialValidationSuccessful" xml:space="preserve">
+    <value>Successfully validated the network credentials.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete account</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation:</value>
+  </data>
+  <data name="DownloadBonjour" xml:space="preserve">
+    <value>Download Bonjour.</value>
+  </data>
+  <data name="EnableAuthentication" xml:space="preserve">
+    <value>Enable authentication (recommended!)</value>
+  </data>
+  <data name="EnableAutodetection" xml:space="preserve">
+    <value>Enable autodetection</value>
+  </data>
+  <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
+    <value>failed to retrieve update information</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Forum:</value>
+  </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>Homepage:</value>
+  </data>
+  <data name="IncludeAuthentication" xml:space="preserve">
+    <value>Include authentication for user:</value>
+  </data>
+  <data name="IRCText" xml:space="preserve">
+    <value>IRC:
+   irc.freenode.net / channel #mp-extended</value>
+  </data>
+  <data name="MPExtendedIntroduction" xml:space="preserve">
+    <value>MPExtended is an open source project that aims at providing access to MediaPortal from all over the world, using clients for your webbrowser, Android, iOS and more.
+
+This is the service component, which provides access to the databases and media files for all clients.</value>
+  </data>
+  <data name="NetworkDrives" xml:space="preserve">
+    <value>Network drives</value>
+  </data>
+  <data name="NetworkDrivesText" xml:space="preserve">
+    <value>If you have put your media files on a different system (such as a dedicated server or a NAS), MPExtended needs the credentials for this drive to access them. Usually this are the credentials of your Windows account.</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>no update available</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PortText" xml:space="preserve">
+    <value>You can configure the port on which the services listen here.</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QR Code</value>
+  </data>
+  <data name="QRCodeIntroText" xml:space="preserve">
+    <value>You can scan the QR code with supported clients to add this MPExtended installation automatically.</value>
+  </data>
+  <data name="SaveBarcodeAsImageFile" xml:space="preserve">
+    <value>Save barcode as image file</value>
+  </data>
+  <data name="SavedBarcodeTo" xml:space="preserve">
+    <value>Saved barcode to {0}!</value>
+  </data>
+  <data name="SaveToFile" xml:space="preserve">
+    <value>Save to file</value>
+  </data>
+  <data name="ServiceName" xml:space="preserve">
+    <value>Service Name</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>update available: version {0}, released on {1}</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="LogFile" xml:space="preserve">
+    <value>Log file:</value>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>Log files</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Plugin" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="ScrollToEnd" xml:space="preserve">
+    <value>Scroll to end</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Site</value>
+  </data>
+  <data name="SocialIntroText" xml:space="preserve">
+    <value>MPExtended supports synchronization of the movies and shows you watch in clients to Trakt and follw.it. You can configure your account for these sites here.</value>
+  </data>
+  <data name="LogAndConfigurationArchive" xml:space="preserve">
+    <value>Log and configuration archive (.zip)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+</root>

@@ -105,7 +105,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
             lblTestResult.Foreground = Brushes.Black;
-            lblTestResult.Content = "Testing credentials, please wait...";
+            lblTestResult.Content = Strings.UI.TestingCredentials;
             btnTest.IsEnabled = false;
             worker = new BackgroundWorker();
             worker.DoWork += delegate(object s, DoWorkEventArgs args)
@@ -118,13 +118,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 if ((bool)args.Result)
                 {
-                    lblTestResult.Content = "Login successful!";
+                    lblTestResult.Content = Strings.UI.LoginSuccessful;
                     lblTestResult.Foreground = Brushes.Green;
                     canSave = true;
                 }
                 else
                 {
-                    lblTestResult.Content = "Login failed.";
+                    lblTestResult.Content = Strings.UI.LoginFailed;
                     lblTestResult.Foreground = Brushes.Red;
                     canSave = false;
                 }
@@ -169,7 +169,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
             else if (dirty)
             {
-                MessageBox.Show("Discarding invalid changes made on the social tab.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Strings.UI.DiscardingInvalidChangesSocialTab, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

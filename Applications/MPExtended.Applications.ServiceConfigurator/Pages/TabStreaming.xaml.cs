@@ -38,7 +38,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabStreaming.xaml
     /// </summary>
-    public partial class TabStreaming : Page
+    public partial class TabStreaming : Page, ITabCloseCallback
     {
         private DispatcherTimer mSessionWatcher;
         private ObservableCollection<WpfStreamingSession> mStreamingSessions = new ObservableCollection<WpfStreamingSession>();
@@ -62,14 +62,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             // set valid items
             cbAudio.DataContext = new Dictionary<string, string>() { 
-                { "first", "First stream in file" } 
+                { "first", Strings.UI.SubtitlesFirstStream } 
             }.Concat(languages);
 
             cbSubtitle.DataContext = new Dictionary<string, string>()
             {
-                { "none", "Disable subtitles" },
-                { "first", "First stream in file" },
-                { "external", "Use external .srt file" }
+                { "none", Strings.UI.SubtitlesDisabled },
+                { "first", Strings.UI.SubtitlesFirstStream },
+                { "external", Strings.UI.SubtitlesExternal }
             }.Concat(languages);
 
             // set default item
@@ -78,24 +78,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         }
 
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void TabClosed()
         {
             Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
             Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
             Configuration.Streaming.Save();
-            MessageBox.Show("Saved default language selection!", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Page_Initialized(object sender, EventArgs e)
         {
             mSessionWatcher.Start();
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
-            Process.Start(new ProcessStartInfo(folder));
-            e.Handled = true;
         }
 
         private void activeSessionWatcher_Tick(object sender, EventArgs e)

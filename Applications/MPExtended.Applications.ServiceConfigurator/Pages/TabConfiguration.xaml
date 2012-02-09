@@ -3,47 +3,46 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabGeneral">
 
     <Grid>        
-        <GroupBox Header="Services" Height="109" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="{x:Static strings:UI.Services}" Height="109" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="256">
             <Grid>
-                <TextBlock Height="37" Margin="6,6,6,0" Name="tbPort" Text="You can configure the port on which the services listen here." TextWrapping="Wrap" VerticalAlignment="Top" />
-                <Label Content="Port" Height="28" HorizontalAlignment="Left" Margin="0,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
+                <TextBlock Height="37" Margin="6,6,6,0" Name="tbPort" Text="{x:Static strings:UI.PortText}" TextWrapping="Wrap" VerticalAlignment="Top" />
+                <Label Content="{x:Static strings:UI.Port}" Height="28" HorizontalAlignment="Left" Margin="0,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
                 <TextBox Height="23"  Margin="80,51,0,0" Name="txtPort" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Text="4322" IsReadOnly="False" IsEnabled="True" />
             </Grid>
         </GroupBox>
         
-        <GroupBox Header="Autodetection" Height="237" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="237" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
             <Grid>
                 <TextBlock TextWrapping="Wrap" Height="139" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="228">
-                    The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves.
+                    <Run Text="{x:Static strings:UI.AutodetectionText}" />
                     <LineBreak />
-                    This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed, else you can download it
-                    <Hyperlink NavigateUri="http://support.apple.com/kb/DL999" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>.
+                    <Hyperlink NavigateUri="http://support.apple.com/kb/DL999" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="{x:Static strings:UI.DownloadBonjour}" />
+                    </Hyperlink>
                 </TextBlock>
 
-                <CheckBox Content="Enable autodetection" Height="16" HorizontalAlignment="Left" Margin="10,155,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
-                <Label Content="Service Name" Height="28" HorizontalAlignment="Left" Margin="6,177,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" />
+                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="10,155,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
+                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,177,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="99,179,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="139" />
             </Grid>
         </GroupBox>
         
-        <GroupBox Header="Network drives" Height="255" HorizontalAlignment="Left" Margin="12,127,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="Network drives" Height="220" HorizontalAlignment="Left" Margin="12,127,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="256">
             <Grid>
-                <TextBlock Height="158" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="232" TextWrapping="Wrap">
-                    If you have put your media files on a different system (such as a dedicated server or a NAS), MPExtended needs the credentials for this drive to access them. Usually this are the credentials of your Windows account.
-                    <Bold>Note: streaming not yet supported. Configure the service to run as a different user for streaming.</Bold>
-                </TextBlock>
-                <Label Content="Username" FontWeight="Bold" Name="lblUsername" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,61" Width="78" Height="28" />
+                <TextBlock Height="158" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="232" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
+                <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblUsername" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,61" Width="78" Height="28" />
                 <TextBox Name="txtNetworkUser"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="118,0,0,64" Width="120" Height="23" />
 
-                <Label Content="Password" FontWeight="Bold" Name="lblPassword" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,32" Width="78" Height="28" />
+                <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblPassword" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,32" Width="78" Height="28" />
                 <PasswordBox Name="txtNetworkPassword" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="118,0,0,35" Width="120" Height="23" />
                 
-                <Button Content="Test" Height="23" HorizontalAlignment="Left" Margin="118,0,0,6" Name="btnTestCredentials" VerticalAlignment="Bottom" Width="120" Click="btnTestCredentials_Click" />
+                <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="118,0,0,6" Name="btnTestCredentials" VerticalAlignment="Bottom" Width="120" Click="btnTestCredentials_Click" />
             </Grid>
         </GroupBox>
     </Grid>

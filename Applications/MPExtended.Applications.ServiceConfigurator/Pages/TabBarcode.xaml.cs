@@ -72,11 +72,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             SaveFileDialog diag = new SaveFileDialog();
             diag.Filter = "JPEG Image|*.jpg";
-            diag.Title = "Save Barcode as Image File";
+            diag.Title = Strings.UI.SaveBarcodeAsImageFile;
             if (diag.ShowDialog() == true)
             {
                 ((BitmapSource)imgQRCode.Source).ToWinFormsBitmap().Save(diag.FileName);
-                MessageBox.Show(String.Format("Saved QR-code to {0}", diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format(Strings.UI.SavedBarcodeTo, diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

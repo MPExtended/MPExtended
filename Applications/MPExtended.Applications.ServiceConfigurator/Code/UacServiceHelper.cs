@@ -74,7 +74,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 if (Process.Start(info) == null)
                 {
                     // The user didn't accept the UAC prompt.
-                    MessageBox.Show("This action needs administrative rights.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show(Strings.UI.ActionNeedsAdmin, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     return false;
                 }
             }
