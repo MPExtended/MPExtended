@@ -116,6 +116,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
         }
 
+        public static void Shutdown()
+        {
+            if (type == ConnectionMode.SelfHosting)
+            {
+                try
+                {
+                    ussHost.Close();
+                    privateHost.Close();
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to stop USS ServiceHost", ex);
+                }
+            }
+        }
+
         private static T CreateChannel<T>(ref T original, string address)
         {
             // if channel is working, just return it

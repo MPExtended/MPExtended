@@ -85,8 +85,13 @@ namespace MPExtended.Applications.ServiceConfigurator
         {
             if (lastTabIndex != tcMainTabs.SelectedIndex)
             {
-                TabItem item = tcMainTabs.SelectedItem as TabItem;
+                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                {
+                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                }
 
+                // create new tab
+                TabItem item = tcMainTabs.SelectedItem as TabItem;
                 Frame f = new Frame();
                 f.Source = new Uri((string)item.Tag, UriKind.Relative);
                 item.Content = f;
@@ -111,6 +116,16 @@ namespace MPExtended.Applications.ServiceConfigurator
                 // If the form close button is triggered, cancel the event and hide the form.
                 e.Cancel = true;
                 this.Hide();
+            }
+            else
+            {
+                // When we exit the app, make sure to unload the tab and stop USS.
+                UserServices.Shutdown();
+
+                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                {
+                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                }
             }
         }
 

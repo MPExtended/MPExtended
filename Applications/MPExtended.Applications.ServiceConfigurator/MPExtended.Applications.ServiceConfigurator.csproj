@@ -94,6 +94,7 @@
     <Compile Include="Code\CredentialTester.cs" />
     <Compile Include="Code\ErrorHandling.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
+    <Compile Include="Code\ITabCloseCallback.cs" />
     <Compile Include="Code\LogExporter.cs" />
     <Compile Include="Code\PrivateUserSessionService.cs" />
     <Compile Include="Code\QRCodeGenerator.cs" />
