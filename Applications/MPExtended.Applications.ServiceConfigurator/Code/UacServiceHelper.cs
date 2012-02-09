@@ -38,20 +38,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
         public static bool StartService()
         {
-            return RunUacServiceHandler("start");
+            return RunUacServiceHandler("/command:service /action:start");
         }
 
         public static bool StopService()
         {
-            return RunUacServiceHandler("stop");
+            return RunUacServiceHandler("/command:service /action:stop");
         }
 
         public static bool RestartService()
         {
-            return RunUacServiceHandler("restart");
+            return RunUacServiceHandler("/command:service /action:restart");
         }
 
-        private static bool RunUacServiceHandler(String _parameters)
+        private static bool RunUacServiceHandler(string parameters)
         {
             try
             {
@@ -60,17 +60,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 if (Installation.GetFileLayoutType() == FileLayoutType.Source)
                 {
                     info.FileName = Path.Combine(Installation.GetSourceRootDirectory(),
-                        "Applications", "MPExtended.Applications.UacServiceHandler", "bin", "Debug", "MPExtended.Applications.UacServiceHandler.exe");
+                        "Applications", "MPExtended.Applications.UacServiceHandler", "bin", Installation.GetSourceBuildDirectoryName(), "MPExtended.Applications.UacServiceHandler.exe");
                 }
                 else
                 {
-
                     info.FileName = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Applications.UacServiceHandler.exe");
                 }
 
                 info.UseShellExecute = true;
                 info.Verb = "runas"; // Provides Run as Administrator
-                info.Arguments = _parameters;
+                info.Arguments = parameters;
 
                 if (Process.Start(info) == null)
                 {
@@ -81,7 +80,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
             catch (Exception ex)
             {
-                Log.Error("Error starting uac service handler", ex);
+                Log.Error("Error starting UacServiceHandler", ex);
                 return false;
             }
             return true;

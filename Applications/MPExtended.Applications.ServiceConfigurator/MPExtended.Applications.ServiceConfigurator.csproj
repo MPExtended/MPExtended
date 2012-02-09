@@ -245,10 +245,6 @@
       <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
       <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Applications.UacServiceHandler\MPExtended.Applications.UacServiceHandler.csproj">
-      <Project>{CA3022CA-1E84-485C-8AB3-1116407E32CA}</Project>
-      <Name>MPExtended.Applications.UacServiceHandler</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\Libraries\Artwork\globe.png">

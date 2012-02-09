@@ -318,7 +318,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
             else
             {
-                Log.Debug("StartStopService: has admin rights, start/stop ourselves");
+                Log.Debug("StartStopService: have admin rights, start/stop ourselves");
                 switch (mServiceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:

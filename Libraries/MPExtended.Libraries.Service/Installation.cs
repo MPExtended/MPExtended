@@ -116,6 +116,15 @@ namespace MPExtended.Libraries.Service
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
         }
 
+        public static string GetSourceBuildDirectoryName()
+        {
+#if DEBUG
+            return "Debug";
+#else
+            return "Release";
+#endif
+        }
+
         public static string GetInstallDirectory(MPExtendedProduct product)
         {
             if (GetFileLayoutType() != FileLayoutType.Installed)
