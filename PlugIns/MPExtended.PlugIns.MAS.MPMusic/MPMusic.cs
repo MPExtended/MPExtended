@@ -301,6 +301,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     IEnumerable<string> allArtists = reader.ReadPipeList(2);
                     string title = reader.ReadString(1);
+                    string artist = allArtists.Count() == 0 ? String.Empty : allArtists.First();
                     return new WebSearchResult()
                     {
                         Type = WebMediaType.MusicTrack,
@@ -309,8 +310,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
                         Details = new SerializableDictionary<string>()
                     {
-                        { "Artist", allArtists.First() },
-                        { "ArtistId", allArtists.First() },
+                        { "Artist", artist },
+                        { "ArtistId", artist },
                         { "Album", reader.ReadString(3) },
                         { "AlbumId", (string)AlbumIdReader(reader, 3) },
                         { "Duration", reader.ReadIntAsString(4) },
