@@ -78,6 +78,7 @@
     <Compile Include="Properties\GitVersion.cs" />
     <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
     <Compile Include="Hosting\ServiceState.cs" />
+    <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />

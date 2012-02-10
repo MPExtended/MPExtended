@@ -26,6 +26,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -89,31 +90,22 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo)
             {
+                ChannelLogos logos = new ChannelLogos();
+
                 // get display name
                 int idChannel = MediaType == WebStreamMediaType.TV ?
                     Int32.Parse(Id) :
                     MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
-                string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');
-
-                // find directory
-                string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
-                if (!Directory.Exists(tvLogoDir))
+                var channel = MPEServices.TAS.GetChannelBasicById(idChannel);
+                string location = logos.FindLocation(channel.DisplayName);
+                if(location == null)
                 {
-                    Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
-                    return new WebFileInfo() { Exists = false };
-                }
-
-                // find image
-                DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
-                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelFileName.ToLowerInvariant());
-                if (matched.Count() == 0)
-                {
-                    Log.Debug("Did not find tv logo {0}", channelFileName);
+                    Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.DisplayName, idChannel);
                     return new WebFileInfo() { Exists = false };
                 }
 
                 // great, return it
-                return new WebFileInfo(matched.First().FullName);
+                return new WebFileInfo(location);
             }
 
             return path != null ? new WebFileInfo(path) : base.GetFileInfo();
