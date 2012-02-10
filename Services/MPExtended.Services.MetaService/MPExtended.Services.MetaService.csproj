@@ -49,12 +49,16 @@
     </Compile>
     <Compile Include="BackgroundThread.cs" />
     <Compile Include="CompositionHinter.cs" />
+    <Compile Include="CachingServiceDetector.cs" />
+    <Compile Include="BaseServiceDetector.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ICompositionHinter.cs" />
+    <Compile Include="IServiceDetector.cs" />
     <Compile Include="IServicePublisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MetaService.cs" />
     <Compile Include="ServiceClientFactory.cs" />
-    <Compile Include="ServiceDetector.cs" />
+    <Compile Include="AdhocServiceDetector.cs" />
     <Compile Include="WCFMetaService.cs" />
     <Compile Include="Zeroconf.cs" />
     <Compile Include="ZeroconfPublisher.cs" />

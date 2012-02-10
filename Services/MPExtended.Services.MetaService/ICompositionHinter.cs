@@ -18,14 +18,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace MPExtended.Services.MetaService
 {
-    internal interface IServicePublisher
+    interface ICompositionHinter
     {
-        bool Publish(IServiceDetector detector);
-        void PublishAsync(IServiceDetector detector);
-        void Unpublish();
+        string GetConfiguredTVServerAddress();
+        IList<IPEndPoint> GetTVServersInLocalNetwork();
+        void StartDiscovery();
     }
 }

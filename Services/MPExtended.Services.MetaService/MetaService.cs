@@ -42,14 +42,18 @@ namespace MPExtended.Services.MetaService
         }
 
         private IServicePublisher[] publishers;
-        private ServiceDetector detector;
+        private IServiceDetector detector;
         private bool initialized;
 
         public MetaService()
         {
             ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
-            detector = new ServiceDetector();
+
+            ICompositionHinter hinter = new CompositionHinter();
+            hinter.StartDiscovery();
+            detector = new CachingServiceDetector(new AdhocServiceDetector(hinter), hinter);
             publishers = new IServicePublisher[] { new ZeroconfPublisher() };
+
             initialized = false;
             ServiceState.Started += delegate()
             {

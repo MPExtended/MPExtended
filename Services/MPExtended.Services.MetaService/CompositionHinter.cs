@@ -27,7 +27,7 @@ using ZeroconfService;
 
 namespace MPExtended.Services.MetaService
 {
-    internal class CompositionHinter
+    internal class CompositionHinter : ICompositionHinter
     {
         private string tveAddress;
         private List<IPEndPoint> tvServerAddresses;
@@ -52,7 +52,7 @@ namespace MPExtended.Services.MetaService
             return tveAddress;
         }
 
-        public List<IPEndPoint> GetTVServersInLocalNetwork()
+        public IList<IPEndPoint> GetTVServersInLocalNetwork()
         {
             return tvServerAddresses;
         }
@@ -99,7 +99,7 @@ namespace MPExtended.Services.MetaService
             service.ResolveWithTimeout(Zeroconf.TIMEOUT);
         }
 
-        void ZeroconfDiscoverResolvedService(NetService service)
+        private void ZeroconfDiscoverResolvedService(NetService service)
         {
 
             foreach (var address in service.Addresses)

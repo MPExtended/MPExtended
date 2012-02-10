@@ -30,7 +30,7 @@ namespace MPExtended.Services.MetaService
     {
         private List<NetService> publishedServices = new List<NetService>();
 
-        public bool Publish(ServiceDetector detector)
+        public bool Publish(IServiceDetector detector)
         {
             if (!Zeroconf.IsEnabled)
             {
@@ -78,7 +78,7 @@ namespace MPExtended.Services.MetaService
             return true;
         }
 
-        public void PublishAsync(ServiceDetector detector)
+        public void PublishAsync(IServiceDetector detector)
         {
             ThreadManager.Start("ZeroconfPublish", delegate()
             {

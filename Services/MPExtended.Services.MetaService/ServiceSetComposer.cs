@@ -32,9 +32,9 @@ namespace MPExtended.Services.MetaService
 
         public string OurAddress { get; set; }
 
-        private CompositionHinter hinter;
+        private ICompositionHinter hinter;
 
-        public ServiceSetComposer(CompositionHinter hinter)
+        public ServiceSetComposer(ICompositionHinter hinter)
         {
             this.hinter = hinter;
         }

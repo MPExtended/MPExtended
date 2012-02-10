@@ -19,13 +19,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    internal interface IServicePublisher
+    interface IServiceDetector
     {
-        bool Publish(IServiceDetector detector);
-        void PublishAsync(IServiceDetector detector);
-        void Unpublish();
+        ServiceSetComposer CreateSetComposer();
+        IList<WebService> GetActiveServices();
+        IList<WebService> GetInstalledServices();
+        bool HasActiveMAS { get; }
+        bool HasActiveTAS { get; }
+        bool HasActiveWSS { get; }
+        bool HasUI { get; }
     }
 }

@@ -25,9 +25,9 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    internal class ServiceDetector
+    internal class AdhocServiceDetector : BaseServiceDetector
     {
-        public bool HasActiveMAS
+        public override bool HasActiveMAS
         {
             get
             {
@@ -45,7 +45,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public bool HasActiveTAS
+        public override bool HasActiveTAS
         {
             get
             {
@@ -63,7 +63,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public bool HasActiveWSS
+        public override bool HasActiveWSS
         {
             get
             {
@@ -81,7 +81,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public bool HasUI
+        public override bool HasUI
         {
             get
             {
@@ -89,44 +89,9 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        private CompositionHinter hinter;
-
-        public ServiceDetector()
+        public AdhocServiceDetector(ICompositionHinter hinter)
+            : base (hinter)
         {
-            hinter = new CompositionHinter();
-            hinter.StartDiscovery();
-        }
-
-        public ServiceSetComposer CreateSetComposer()
-        {
-            ServiceSetComposer composer = new ServiceSetComposer(hinter);
-            composer.OurAddress = NetworkInformation.GetIPAddresses().First();
-
-            composer.HasActiveMAS = HasActiveMAS;
-            composer.HasActiveTAS = HasActiveTAS;
-            composer.HasActiveWSS = HasActiveWSS;
-            composer.HasActiveUI = HasUI;
-
-            return composer;
-        }
-
-        public List<WebService> GetInstalledServices()
-        {
-            return Installation.GetInstalledServices().Select(x => x.ToWebService()).ToList();
-        }
-
-        public List<WebService> GetActiveServices()
-        {
-            List<WebService> list = new List<WebService>()
-            {
-                WebService.MediaAccessService
-            };
-
-            if (HasActiveMAS) list.Add(WebService.MediaAccessService);
-            if (HasActiveTAS) list.Add(WebService.TVAccessService);
-            if (HasActiveWSS) list.Add(WebService.StreamingService);
-            if (HasUI) list.Add(WebService.UserSessionService);
-            return list;
         }
     }
 }
