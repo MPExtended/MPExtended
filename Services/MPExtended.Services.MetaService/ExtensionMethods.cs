@@ -24,30 +24,6 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    internal static class WebServiceSetExtensionMethods
-    {
-        public static bool IsSubsetOf(this WebServiceSet we, WebServiceSet compare)
-        {
-            return 
-                !IsSameAs(we, compare) && 
-                (we.MAS == null || we.MAS == compare.MAS) &&
-                (we.MASStream == null || we.MASStream == compare.MASStream) &&
-                (we.TAS == null || we.TAS == compare.TAS) &&
-                (we.TASStream == null || we.TASStream == compare.TASStream) &&
-                (we.UI == null || we.UI == compare.UI);
-        }
-
-        public static bool IsSameAs(this WebServiceSet we, WebServiceSet compare)
-        {
-            return
-                we.MAS == compare.MAS &&
-                we.MASStream == compare.MASStream &&
-                we.TAS == compare.TAS &&
-                we.TASStream == compare.TASStream &&
-                we.UI == compare.UI;
-        }
-    }
-
     internal static class ServiceConfigurationExtensionMethods
     {
         public static WebService ToWebService(this ServiceConfiguration service)

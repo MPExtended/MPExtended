@@ -50,6 +50,7 @@ namespace MPExtended.Services.MetaService
                 bool add = true;
                 do
                 {
+                    loopAgain = false;
                     foreach (WebServiceSet acceptedSet in uniqueSets)
                     {
                         if (acceptedSet.IsSubsetOf(set))
@@ -64,7 +65,7 @@ namespace MPExtended.Services.MetaService
                             break;
                         }
                     }
-                } while (loopAgain);
+                } while (loopAgain && add);
 
                 if (add)
                 {

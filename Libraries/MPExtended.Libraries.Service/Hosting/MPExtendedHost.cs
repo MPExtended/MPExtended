@@ -62,11 +62,10 @@ namespace MPExtended.Libraries.Service.Hosting
                 // start the WCF services
                 wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
 
-                // start the background threads
+                // init all services
                 var services = Installation.GetAvailableServices().Where(x => x.InitClass != null && x.InitMethod != null);
                 foreach (var service in services)
                 {
-                    string name = service.Service.ToString() + "Background";
                     BindingFlags flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod;
                     service.InitClass.InvokeMember(service.InitMethod, flags, null, null, null);
                 }
