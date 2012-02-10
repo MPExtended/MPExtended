@@ -6,8 +6,7 @@
       xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
-	  Title="TabStreaming"
-      Initialized="Page_Initialized">
+	  Title="TabStreaming">
 
     <Grid>
         <Label Content="{x:Static strings:UI.DefaultLanguage}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="lblDefaultLanguage" VerticalAlignment="Top" />

@@ -75,19 +75,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // set default item
             cbAudio.SelectedValue = Configuration.Streaming.DefaultAudioStream;
             cbSubtitle.SelectedValue = Configuration.Streaming.DefaultSubtitleStream;
+
+            // start observing
+            mSessionWatcher.Start();
         }
 
 
         public void TabClosed()
         {
+            mSessionWatcher.Stop();
             Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
             Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
             Configuration.Streaming.Save();
-        }
-
-        private void Page_Initialized(object sender, EventArgs e)
-        {
-            mSessionWatcher.Start();
         }
 
         private void activeSessionWatcher_Tick(object sender, EventArgs e)
@@ -111,7 +110,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void miKickUserSession_Click(object sender, RoutedEventArgs e)
         {
             WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
-            bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
+            if (session != null)
+            {
+                bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
+            }
         }
     }
 }
