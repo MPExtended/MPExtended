@@ -18,6 +18,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
 
-        public String Summary { get; set; }
+        public string Show { get; set; }
+        public string Summary { get; set; }
     }
 }

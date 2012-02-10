@@ -59,9 +59,18 @@ namespace MPExtended.Libraries.Service
     public static class Installation
     {
         private static List<ServiceAssemblyAttribute> installedServices;
+        private static FileLayoutType? fileLayoutType;
 
         public static FileLayoutType GetFileLayoutType()
         {
+            if(fileLayoutType.HasValue)
+            {
+                return fileLayoutType.Value;
+            }
+
+            // Default to binary installation as we don't have to recognize that
+            fileLayoutType = FileLayoutType.Installed;
+
             // Source distribution: search for a parent directory with the GlobalVersion.cs file
             string binDir = AppDomain.CurrentDomain.BaseDirectory;
             DirectoryInfo info = new DirectoryInfo(binDir);
@@ -69,13 +78,14 @@ namespace MPExtended.Libraries.Service
             {
                 if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
                 {
-                    return FileLayoutType.Source;
+                    fileLayoutType = FileLayoutType.Source;
+                    break;
                 }
                 info = info.Parent;
             } while (info != null);
 
-            // No source, so it's binary
-            return FileLayoutType.Installed;
+            // Return
+            return fileLayoutType.Value;
         }
 
         public static string GetSourceRootDirectory()
@@ -104,6 +114,15 @@ namespace MPExtended.Libraries.Service
 
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
+        }
+
+        public static string GetSourceBuildDirectoryName()
+        {
+#if DEBUG
+            return "Debug";
+#else
+            return "Release";
+#endif
         }
 
         public static string GetInstallDirectory(MPExtendedProduct product)
@@ -168,7 +187,7 @@ namespace MPExtended.Libraries.Service
         {
             if (GetFileLayoutType() == FileLayoutType.Source)
             {
-                return Path.Combine(GetSourceRootDirectory(), "Config", "Debug");
+                return Path.Combine(GetSourceRootDirectory(), "Config");
             }
             else
             {
@@ -181,20 +200,52 @@ namespace MPExtended.Libraries.Service
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
         }
 
+        internal static bool IsDebugBuild()
+        {
+            var attrs = (AssemblyConfigurationAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
+            if (attrs.Length > 0)
+            {
+                return attrs.First().Configuration == "Debug";
+            }
+            return false;
+        }
+
         internal static List<ServiceAssemblyAttribute> GetAvailableServices()
         {
             if (installedServices == null)
             {
-                string directory = Installation.GetFileLayoutType() == FileLayoutType.Installed ?
-                    Installation.GetInstallDirectory(MPExtendedProduct.Service) :
-                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                if (GetFileLayoutType() == FileLayoutType.Installed)
+                {
+                    installedServices = Directory.GetFiles(GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Services.*.dll")
+                        .Select(path => Assembly.LoadFrom(path))
+                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
+                        .ToList();
+                }
+                else
+                {
+                    // Loading the assemblies in a mix-and-match style from different directories doesn't work and gives all kind of 
+                    // weird errors, such as MethodMissingException in some classes from an assembly. So we now prefer to load all assemblies
+                    // from the directory where the current assembly runs, and fallback to the Services directory only if some services aren't
+                    // available in our own directory. This makes those services unstable, but that should only happen in non-hosting processes
+                    // such as the configurator. The configurator does load USS from it's own directory (it has a reference) so the only things
+                    // that don't work are MAS, TAS and WSS but those aren't used there anyway. However, it does need to know whether they are
+                    // available because it configures the display of tabs based upon the installed services. This isn't relevant for installed
+                    // services, because everything is loaded from the same directory there anyway. 
 
-                var files = Directory.GetFiles(directory, "MPExtended.Services.*.dll");
+                    var myDir = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "MPExtended.Services.*.dll")
+                        .Where(x => !x.Contains(".Interfaces.dll"));
+                    var myFileNames = myDir.Select(x => Path.GetFileName(x));
+                    var serviceFiles = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
+                        .Select(x => Path.Combine(x, "bin", IsDebugBuild() ? "Debug" : "Release"))
+                        .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
+                        .Where(x => !x.Contains(".Interfaces.dll") && !myFileNames.Contains(Path.GetFileName(x)))
+                        .GroupBy(x => Path.GetFileName(x), (x, y) => y.First());
 
-                installedServices = files
-                    .Select(path => Assembly.LoadFrom(path))
-                    .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
-                    .ToList();
+                    installedServices = myDir.Concat(serviceFiles)
+                        .Select(path => Assembly.LoadFrom(path))
+                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
+                        .ToList();
+                }
             }
 
             return installedServices;

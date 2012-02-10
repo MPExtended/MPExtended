@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -47,12 +48,15 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
                 // get media info and save it to the cache
                 TsBuffer buf = new TsBuffer(source.Id);
+                string path = buf.GetCurrentFilePath();
+                Log.Debug("Using path {0} from TS buffer {1} as source for {2}", path, source.Id, source.GetDebugName());
                 WebMediaInfo info = GetMediaInfo(buf.GetCurrentFilePath(), true);
                 TvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
                 return info;
             }
             else if (!source.Exists)
             {
+                Log.Warn("Trying to load mediainfo for {0}, which doesn't seem to exist", source.GetDebugName());
                 throw new FileNotFoundException();
             }
             else if (source.SupportsDirectAccess)
@@ -65,6 +69,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             else
             {
                 // not (yet?) supported
+                Log.Warn("Loading mediainfo for {0} isn't supported yet", source.GetDebugName());
                 throw new NotSupportedException();
             }
         }
@@ -94,7 +99,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             {
                 if (source == null || !File.Exists(source))
                 {
-                    Log.Warn("GetMediaInfo: File " + source + " doesn't exist or is not accessible");
+                    Log.Warn("GetMediaInfo: File {0} doesn't exist or is not accessible", source);
                     return null;
                 }
 
@@ -253,10 +258,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         private static string LookupCountryCode(string languageName)
         {
-            var language = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
-                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
-                .FirstOrDefault(x => x.DisplayName == languageName || x.EnglishName == languageName || x.NativeName == languageName || x.Name == languageName);
+            var language = CultureDatabase.GetLanguage(languageName);
             return language != null ? language.TwoLetterISOLanguageName : "ext";
         }
     }

@@ -17,25 +17,31 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
+using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.Service;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Applications.WebMediaPortal.Models;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
+    // Requiring a session state results in the execution of requests being serialized, which is awful for the performance of certain
+    // pages, especially those with a lot of images. 
+    [SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     public class BaseController : Controller
     {
+        private static AvailabilityModel availabilityModel = new AvailabilityModel();
+
         protected AvailabilityModel ServiceAvailability
         {
             get
             {
-                if (Session["availabilityModel"] == null)
-                {
-                    Session["availabilityModel"] = new AvailabilityModel();
-                }
-                return Session["availabilityModel"] as AvailabilityModel;
+                return availabilityModel;
             }
         }
 
@@ -58,16 +64,58 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     Model = filterContext.Exception
                 },
             };
-            (filterContext.Result as ViewResult).ViewBag.Availability = ServiceAvailability;
-            (filterContext.Result as ViewResult).ViewBag.Version = VersionUtil.GetVersionName();
-            (filterContext.Result as ViewResult).ViewBag.BuildVersion = VersionUtil.GetBuildVersion().ToString();
             (filterContext.Result as ViewResult).ViewBag.Request = filterContext.HttpContext.Request.Url;
+            SetViewBagProperties((filterContext.Result as ViewResult).ViewBag);
             filterContext.ExceptionHandled = true;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.Availability = ServiceAvailability;
+            SetViewBagProperties(ViewBag);
+            LoadLanguage();
+        }
+
+        private void SetViewBagProperties(dynamic bag)
+        {
+            bag.Availability = ServiceAvailability;
+            bag.FullVersion = VersionUtil.GetFullVersionString();
+            bag.Styles = new List<string>();
+            bag.Scripts = new List<string>();
+        }
+
+        private void LoadLanguage()
+        {
+            // load a list of languages in order of preference
+            List<string> languages = new List<string>();
+            if (Request.Params["language"] != null)
+                languages.Add(Request.Params["language"]);
+            if (Request.UserLanguages != null)
+                languages.AddRange(Request.UserLanguages);
+
+            // load the highest-ranked available language
+            foreach (string language in languages)
+            {
+                try
+                {
+                    // check if we've got resources for this language
+                    CultureInfo ci = CultureInfo.CreateSpecificCulture(language);
+                    ResourceManager manager = new ResourceManager(typeof(UIStrings));
+                    if (manager.GetResourceSet(ci, true, true) == null)
+                        continue;
+
+                    Thread.CurrentThread.CurrentUICulture = ci;
+                    Thread.CurrentThread.CurrentCulture = ci;
+                    break;
+                }
+                catch (CultureNotFoundException)
+                {
+                    // just fall through to next language, or don't set a custom language in worst-case
+                }
+                catch (MissingManifestResourceException)
+                {
+                    // just fall through to next language, or don't set a custom language in worst-case
+                }
+            }
         }
     }
 }

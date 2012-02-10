@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabProject">
@@ -10,35 +11,32 @@
     <Grid>
         <Label Content="MPExtended" Height="28" Name="lblAbout" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" />
         <TextBlock Margin="12,44,12,0" Name="tbGeneral" VerticalAlignment="Top" TextWrapping="Wrap">
-            MPExtended is an open source project that aims at providing access to MediaPortal from all over the world, using clients for your webbrowser, Android, iOS and more.<LineBreak />
-            <LineBreak />
-            This is the service component, which provides access to the databases and media files for all clients.<LineBreak />
+            <Run Text="{x:Static strings:UI.MPExtendedIntroduction}" />
             <LineBreak />
             <LineBreak />
             
-            Homepage:<LineBreak />
+            <Run Text="{x:Static strings:UI.Homepage}" /><LineBreak />
             &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://mpextended.github.com/">http://mpextended.github.com/</Hyperlink><LineBreak />
             <LineBreak />
             
-            Documentation:<LineBreak />
+            <Run Text="{x:Static strings:UI.Documentation}" /><LineBreak />
             &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://wiki.team-mediaportal.com/1_MEDIAPORTAL_1/17_Extensions/Remote_Access/MPExtended">MediaPortal wiki</Hyperlink><LineBreak />
             <LineBreak />
             
-            Forum:<LineBreak />
-            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://forum.team-mediaportal.com/webservice-mobile-access-537/">MediaPortal forum</Hyperlink><LineBreak />
+            <Run Text="{x:Static strings:UI.Forum}" /><LineBreak />
+            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://forum.team-mediaportal.com/mpextended-555/">MediaPortal forum</Hyperlink><LineBreak />
             <LineBreak />
             
-            IRC:<LineBreak />
-            &#160;&#160;&#160;irc.freenode.net / channel #mp-extended<LineBreak />
+            <Run Text="{x:Static strings:UI.IRCText}" />
             <LineBreak />
             
             <LineBreak />
             
-            Version:<LineBreak />
+            <Run Text="{x:Static strings:UI.Version}" /><LineBreak />
             &#160;&#160;&#160;
                 <TextBlock Name="tbVersion">
-                    <Run Name="lblVersion">0.4.0</Run>
-                    (<Hyperlink Name="hbUpdates" RequestNavigate="hbUpdates_RequestNavigate" NavigateUri="">check for updates</Hyperlink>)
+                    <Run Name="lblVersion">x.x.x</Run>
+                    (<Hyperlink Name="hbUpdates" RequestNavigate="hbUpdates_RequestNavigate" NavigateUri=""><Run Text="{x:Static strings:UI.CheckForUpdates}" /></Hyperlink>)
                 </TextBlock>
             <LineBreak />
         </TextBlock>

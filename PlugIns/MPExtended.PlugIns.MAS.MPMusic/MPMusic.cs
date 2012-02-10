@@ -24,6 +24,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
@@ -45,6 +46,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             Supported = File.Exists(DatabasePath);
         }
 
+        #region Tracks
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
         {
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
@@ -96,7 +98,9 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             return LoadAllTracks<WebMusicTrackDetailed>().Where(x => x.Id == trackId).First();
         }
+        #endregion
 
+        #region Albums
         public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
         {
             string sql = "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
@@ -127,8 +131,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     int i = 0;
                     string[] filenames = new string[] {
-                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg"),
-                        MakeFileName(album.Artists.Distinct().First() + "-" + album.Title + ".jpg")
+                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + ".jpg", '_')
                     };
                     foreach (string file in filenames)
                     {
@@ -155,9 +159,33 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             return (GetAllAlbums() as LazyQuery<WebMusicAlbumBasic>).Where(x => x.Id == albumId).First();
         }
+        #endregion
 
-        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        #region Artists
+        private class DetailedArtistInfo
         {
+            public string Name { get; set; }
+            public string Styles { get; set; }
+            public string Tones { get; set; }
+            public string Biography { get; set; }
+        }
+
+        public IEnumerable<WebMusicArtistDetailed> GetAllArtistsDetailed()
+        {
+            // pre-load advanced info
+            string infoSql = "SELECT strArtist, strStyles, strTones, strAMGBio FROM artistinfo";
+            var detInfo = ReadList<DetailedArtistInfo>(infoSql, delegate(SQLiteDataReader reader)
+            {
+                return new DetailedArtistInfo()
+                {
+                    Name = reader.ReadString(0),
+                    Styles = reader.ReadString(1),
+                    Tones = reader.ReadString(2),
+                    Biography = reader.ReadString(3),
+                };
+            }).ToDictionary(x => x.Name, x => x);
+
+            // then load all artists
             string sql = "SELECT DISTINCT strArtist FROM tracks " +
                          "UNION " +
                          "SELECT DISTINCT stralbumArtist FROM tracks ";
@@ -170,14 +198,21 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 .OrderBy(x => x)
                 .Select(x =>
                 {
-                    var artist = new WebMusicArtistBasic();
+                    var artist = new WebMusicArtistDetailed();
                     artist.Id = x;
                     artist.Title = x;
 
+                    if (detInfo.ContainsKey(x))
+                    {
+                        artist.Styles = detInfo[x].Styles;
+                        artist.Tones = detInfo[x].Tones;
+                        artist.Biography = detInfo[x].Biography;
+                    }
+
                     int i = 0;
                     string[] filenames = new string[] {
-                        MakeFileName(x + "L.jpg"),
-                        MakeFileName(x + ".jpg")
+                        PathUtil.StripInvalidCharacters(x + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(x + ".jpg", '_')
                     };
                     foreach (string file in filenames)
                     {
@@ -197,57 +232,127 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     }
 
                     return artist;
-                })
-                .ToList();
+                });
+        }
+
+        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        {
+            return GetAllArtistsDetailed().Select(x => ArtistDetailedToArtistBasic(x));
+        }
+
+        public WebMusicArtistDetailed GetArtistDetailedById(string artistId)
+        {
+            return GetAllArtistsDetailed().Where(x => x.Id == artistId).First();
         }
 
         public WebMusicArtistBasic GetArtistBasicById(string artistId)
         {
-            return GetAllArtists().Where(x => x.Id == artistId).First();
+            return ArtistDetailedToArtistBasic(GetAllArtistsDetailed().Where(x => x.Id == artistId).First());
         }
+
+        private WebMusicArtistBasic ArtistDetailedToArtistBasic(WebMusicArtistDetailed det)
+        {
+            return new WebMusicArtistBasic()
+            {
+                Artwork = det.Artwork,
+                Id = det.Id,
+                PID = det.PID,
+                Title = det.Title
+            };
+        }
+        #endregion
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
-            SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
-            string artistSql = "SELECT DISTINCT strArtist FROM tracks WHERE strArtist LIKE @search";
-            IEnumerable<WebSearchResult> artists = ReadList<IEnumerable<WebSearchResult>>(artistSql, delegate(SQLiteDataReader reader)
+            using (DatabaseConnection connection = OpenConnection())
             {
-                return reader.ReadPipeList(0).Select(name => new WebSearchResult()
-                {
-                    Type = WebMediaType.MusicArtist,
-                    Id = name,
-                    Title = name,
-                    Score = (int)Math.Round((decimal)text.Length / name.Length * 100)
-                });
-            }, param).SelectMany(x => x);
+                SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
 
-            string songSql = "SELECT DISTINCT idTrack, strTitle FROM tracks WHERE strTitle LIKE @search";
-            IEnumerable<WebSearchResult> songs = ReadList<WebSearchResult>(songSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
+                string artistSql = "SELECT DISTINCT strArtist, strAlbumArtist, strAlbum FROM tracks WHERE strArtist LIKE @search";
+                IEnumerable<WebSearchResult> artists = ReadList<IEnumerable<WebSearchResult>>(artistSql, delegate(SQLiteDataReader reader)
                 {
-                    Type = WebMediaType.MusicTrack,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
+                    IEnumerable<string> albumArtists = reader.ReadPipeList(1);
+                    return reader.ReadPipeList(0)
+                        .Where(name => name.Contains(text))
+                        .Select(name => new WebSearchResult()
+                        {
+                            Type = WebMediaType.MusicArtist,
+                            Id = name,
+                            Title = name,
+                            Score = (int)Math.Round(40 + (decimal)text.Length / name.Length * 40)
+                        })
+                        .Concat(new[] { new WebSearchResult() 
+                        {
+                            Type = WebMediaType.MusicAlbum,
+                            Id = (string)AlbumIdReader(reader, 2),
+                            Title = reader.ReadString(2),
+                            Score = (int)Math.Round(20 + (decimal)text.Length / reader.ReadString(0).Length * 40),
+                            Details = new SerializableDictionary<string>()
+                            {
+                                { "Artist", albumArtists.First() },
+                                { "ArtistId", albumArtists.First() }
+                            }
+                        }
+                    });
+                }, param).SelectMany(x => x);
 
-            string albumsSql = "SELECT DISTINCT strAlbumArtist, strAlbum FROM tracks WHERE strAlbum LIKE @search";
-            IEnumerable<WebSearchResult> albums = ReadList<WebSearchResult>(albumsSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
+                string songSql = "SELECT DISTINCT idTrack, strTitle, strAlbumArtist, strAlbum, iDuration, iYear FROM tracks WHERE strTitle LIKE @search";
+                IEnumerable<WebSearchResult> songs = ReadList<WebSearchResult>(songSql, delegate(SQLiteDataReader reader)
                 {
-                    Type = WebMediaType.MusicTrack,
-                    Id = (string)AlbumIdReader(reader, 1),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
+                    IEnumerable<string> allArtists = reader.ReadPipeList(2);
+                    string title = reader.ReadString(1);
+                    return new WebSearchResult()
+                    {
+                        Type = WebMediaType.MusicTrack,
+                        Id = reader.ReadIntAsString(0),
+                        Title = title,
+                        Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                        Details = new SerializableDictionary<string>()
+                    {
+                        { "Artist", allArtists.First() },
+                        { "ArtistId", allArtists.First() },
+                        { "Album", reader.ReadString(3) },
+                        { "AlbumId", (string)AlbumIdReader(reader, 3) },
+                        { "Duration", reader.ReadIntAsString(4) },
+                        { "Year", reader.ReadIntAsString(5) }
+                    }
+                    };
+                }, param);
 
-            return artists.Concat(songs).Concat(albums);
+                string albumsSql =
+                    "SELECT DISTINCT strAlbumArtist, strAlbum " +
+                    "FROM tracks " +
+                    "WHERE strAlbum LIKE @search";
+                IEnumerable<WebSearchResult> albums = ReadList<IEnumerable<WebSearchResult>>(albumsSql, delegate(SQLiteDataReader reader)
+                {
+                    string title = reader.ReadString(1);
+                    IEnumerable<string> artistList = reader.ReadPipeList(0);
+                    var albumResult = new WebSearchResult()
+                    {
+                        Type = WebMediaType.MusicAlbum,
+                        Id = (string)AlbumIdReader(reader, 1),
+                        Title = title,
+                        Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                        Details = new SerializableDictionary<string>()
+                    {
+                        { "Artist", artistList.First().Trim() },
+                        { "ArtistId", artistList.First().Trim() }
+                    }
+                    };
+
+                    string allArtists = String.Join("", artistList);
+                    return artistList
+                        .Select(name => new WebSearchResult()
+                        {
+                            Type = WebMediaType.MusicArtist,
+                            Id = name,
+                            Title = name,
+                            Score = (int)Math.Round((decimal)name.Length / allArtists.Length * 30)
+                        }).Concat(new[] { albumResult });
+                }, param).SelectMany(x => x);
+
+                return artists.Concat(songs).Concat(albums);
+            }
         }
 
         public IEnumerable<WebGenre> GetAllGenres()
@@ -322,33 +427,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             if (String.IsNullOrEmpty(artistName) || String.IsNullOrEmpty(albumName))
                 return string.Empty;
 
-            artistName = artistName.Trim(new char[] { '|', ' ' });
-            albumName = albumName.Replace(":", "_");
-
-            foreach (char ch in Path.GetInvalidFileNameChars())
-            {
-                artistName = artistName.Replace(ch, '_');
-                albumName = albumName.Replace(ch, '_');
-            }
+            artistName = PathUtil.StripInvalidCharacters(artistName, '_');
+            albumName = PathUtil.StripInvalidCharacters(albumName, '_');
 
             string thumbDir = configuration["cover"];
-            return System.IO.Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
-        }
-
-        private string MakeFileName(string text)
-        {
-            // This method should be compatible with Util.MakeFileName, in mediaportal/Core/Util/Util.cs:1840
-            text = text.Replace(':', '_');
-            foreach (char ch in Path.GetInvalidFileNameChars())
-            {
-                text = text.Replace(ch, '_');
-            }
-            return text;
+            return Path.Combine(thumbDir, "Albums", artistName + "-" + albumName + "L.jpg");
         }
 
         private string EncodeTo64(string toEncode)
         {
-            byte[] toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(toEncode);
             return Convert.ToBase64String(toEncodeAsBytes);
         }
 
@@ -357,7 +445,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             try
             {
                 byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-                return Encoding.ASCII.GetString(encodedDataAsBytes);
+                return Encoding.UTF8.GetString(encodedDataAsBytes);
             }
             catch (FormatException)
             {

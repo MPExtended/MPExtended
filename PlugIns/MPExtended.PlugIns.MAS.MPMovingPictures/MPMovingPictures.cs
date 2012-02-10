@@ -30,7 +30,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
     [Export(typeof(IMovieLibrary))]
     [ExportMetadata("Name", "Moving Pictures")]
     [ExportMetadata("Id", 3)]
-    public class MPMovingPictures : Database, IMovieLibrary
+    public partial class MPMovingPictures : Database, IMovieLibrary
     {
         // TODO: according to the devs movingpictures is quite easy usable from outside MP. Investigate using that way:
         // - it's better for compatibility
@@ -159,22 +159,6 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         public WebMovieDetailed GetMovieDetailedById(string movieId)
         {
             return GetAllMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
-        }
-
-        public IEnumerable<WebSearchResult> Search(string text)
-        {
-            string showSql = "SELECT id, title FROM movie_info WHERE title LIKE @search";
-            return ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
-                {
-                    Type = WebMediaType.Movie,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, new SQLiteParameter("@search", "%" + text + "%"));
         }
 
         public IEnumerable<WebGenre> GetAllGenres()

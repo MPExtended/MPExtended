@@ -265,12 +265,14 @@ namespace MPExtended.Services.StreamingService.Code
         public virtual string GetUniqueIdentifier()
         {
             string ident = String.Format("{0}-{1}-{2}-{3}-{4}", MediaType, Provider, Id, FileType, Offset);
-            return String.Concat(ident.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
+            return PathUtil.StripInvalidCharacters(ident);
         }
 
         public virtual string GetDebugName()
         {
-            return String.Format("mediatype={0} provider={1} id={2} filetype={3} offset={4}", MediaType, Provider, Id, FileType, Offset);
+            string pathResult = GetPath();
+            string path = pathResult == null || pathResult.Length == 0 ? "(unknown)" : pathResult;
+            return String.Format("mediatype={0} provider={1} id={2} filetype={3} offset={4} path={5}", MediaType, Provider, Id, FileType, Offset, path);
         }
 
         public override string ToString()

@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 
@@ -133,7 +134,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                data.Log.Warn("Failed in recursive picture search", ex);
+                Log.Warn("Failed in recursive picture search", ex);
                 return new List<T>();
             }
         }
@@ -166,7 +167,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                data.Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
+                Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
 
             return pic;
@@ -189,7 +190,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                data.Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
+                Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
 
             return pic;

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
@@ -38,6 +39,7 @@ namespace MPExtended.Services.TVAccessService
                 return null;
             }
 
+            // See TvEngine3/TVLibrary/TvService/Scheduler/Scheduler.cs:1295 (SetupRecordingFolder) for the default fallback paths from MP
             return new WebCard
             {
                 CAM = card.CAM,
@@ -54,10 +56,12 @@ namespace MPExtended.Services.TVAccessService
                 netProvider = card.netProvider,
                 PreloadCard = card.PreloadCard,
                 Priority = card.Priority,
-                RecordingFolder = card.RecordingFolder,
+                RecordingFolder = card.RecordingFolder != String.Empty ? card.RecordingFolder : 
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal TV Server", "recordings"),
                 RecordingFormat = card.RecordingFormat,
                 SupportSubChannels = card.supportSubChannels,
-                TimeShiftFolder = card.TimeShiftFolder
+                TimeShiftFolder = card.TimeShiftFolder != String.Empty ? card.TimeShiftFolder :
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal TV Server", "timeshiftbuffer"),
             };
         }
 

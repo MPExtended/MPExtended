@@ -15,13 +15,18 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
+using System.Text;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
     public abstract class Database
     {
+        private DatabaseConnection currentConnection;
+
         public string DatabasePath
         {
             get;
@@ -37,13 +42,33 @@ namespace MPExtended.Libraries.SQLitePlugin
             DatabasePath = databasePath;
         }
 
+        public DatabaseConnection OpenConnection()
+        {
+            if (currentConnection == null || !currentConnection.IsOpen)
+            {
+                currentConnection = new DatabaseConnection(this);
+                return currentConnection;
+            }
+            else
+            {
+                return new DatabaseConnection(currentConnection.Connection, false);
+           }
+        }
+
         protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
         {
-            using(Query query = new Query(DatabasePath, queryString, parameters)) {
-                if(query.Reader.Read()) {
-                    return builder(query.Reader);
-                } else {
-                    return defaultValue;
+            using (DatabaseConnection connection = OpenConnection())
+            {
+                using (Query query = new Query(connection, queryString, parameters))
+                {
+                    if (query.Reader.Read())
+                    {
+                        return builder(query.Reader);
+                    }
+                    else
+                    {
+                        return defaultValue;
+                    }
                 }
             }
         }
@@ -67,13 +92,16 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             List<T> ret = new List<T>();
 
-            using (Query query = new Query(DatabasePath, queryString, parameters))
+            using (DatabaseConnection connection = OpenConnection())
             {
-                while (query.Reader.Read())
+                using (Query query = new Query(connection, queryString, parameters))
                 {
-                    T item = builder(query.Reader);
-                    if (item != null)
-                        ret.Add(item);
+                    while (query.Reader.Read())
+                    {
+                        T item = builder(query.Reader);
+                        if (item != null)
+                            ret.Add(item);
+                    }
                 }
             }
 

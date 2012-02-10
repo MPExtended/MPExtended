@@ -37,7 +37,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier);
+        bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout);
 
         // startPosition is in seconds
         [OperationContract]
@@ -60,5 +60,17 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        bool AuthorizeStreaming();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        bool AuthorizeRemoteHostForStreaming(string host);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId);
     }
 }

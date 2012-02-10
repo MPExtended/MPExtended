@@ -312,7 +312,7 @@ div#title
     font-size:1.1em;
     display:block;
     text-align:right;
-    margin:10px;
+    margin: 10px 10px 4px 10px;
     color: #8A8575;
 }
 
@@ -332,6 +332,18 @@ div#title
 {
     color: #F6855E;
     text-decoration: none;
+}
+
+#search
+{
+    font-size: 1.1em;
+    text-align: right;
+    margin-right: 10px;
+}
+
+#search input
+{
+    width: 200px;
 }
 
 /* Styles for validation helpers

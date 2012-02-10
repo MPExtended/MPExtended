@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalVersion.cs">
-      <Link>GlobalVersion.cs</Link>
+      <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="MPEServices.cs" />
     <Compile Include="MPEServicesHolder.cs" />

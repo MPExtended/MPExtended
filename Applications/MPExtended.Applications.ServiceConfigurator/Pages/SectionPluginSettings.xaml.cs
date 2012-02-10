@@ -106,7 +106,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             Button btnSelectFolder = new Button();
             btnSelectFolder.Click += new RoutedEventHandler(btnSelectFolder_Click);
-            btnSelectFolder.Content = "Browse";
+            btnSelectFolder.Content = Strings.UI.Browse;
             btnSelectFolder.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFolder.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFolder.Margin = new Thickness(0, rowHeight, 10, 0);
@@ -159,7 +159,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             Button btnSelectFile = new Button();
             btnSelectFile.Click += new RoutedEventHandler(btnSelectFile_Click);
-            btnSelectFile.Content = "Select";
+            btnSelectFile.Content = Strings.UI.Select;
             btnSelectFile.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFile.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFile.Margin = new Thickness(0, rowHeight, 10, 0);
@@ -187,8 +187,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void Save()
         {
+            if (mPlugin == null)
+            {
+                return;
+            }
+
             try
             {
                 List<PluginConfigItem> newConfig = new List<PluginConfigItem>();
@@ -217,14 +222,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
 
                 Configuration.Media.PluginConfiguration[mPlugin] = newConfig;
-                if (Configuration.Media.Save())
-                {
-                    MessageBox.Show("Successfully updated config, please restart service for the changes to take affect.", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Failed to update config!", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                Configuration.Media.Save();
+                Service.ReloadConfiguration();
             }
             catch (Exception ex)
             {

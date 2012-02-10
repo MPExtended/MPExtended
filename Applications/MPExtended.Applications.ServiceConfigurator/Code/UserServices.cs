@@ -20,12 +20,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using MPExtended.Libraries.Service;
+using MPExtended.Services.UserSessionService;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal static class UserServices
     {
+        private enum ConnectionMode
+        {
+            SelfHosting,
+            RemoteConnection,
+            Failure
+        }
+
+        private static ConnectionMode type;
+
+        private static ServiceHost ussHost;
+        private static ServiceHost privateHost;
+        private static IUserSessionService ussInstance;
+        private static IPrivateUserSessionService privateInstance;
         private static IUserSessionService ussConnection;
         private static IPrivateUserSessionService privateConnection;
 
@@ -33,7 +48,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             get
             {
-                return CreateChannel<IUserSessionService>(ref ussConnection, "net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation");
+                if (type == ConnectionMode.RemoteConnection)
+                {
+                    return CreateChannel<IUserSessionService>(ref ussConnection, "net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation");
+                }
+                else if (type == ConnectionMode.SelfHosting)
+                {
+                    return ussInstance;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -41,7 +67,68 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             get
             {
-                return CreateChannel<IPrivateUserSessionService>(ref privateConnection, "net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate");
+                if (type == ConnectionMode.RemoteConnection)
+                {
+                    return CreateChannel<IPrivateUserSessionService>(ref privateConnection, "net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate");
+                }
+                else if (type == ConnectionMode.SelfHosting)
+                {
+                    return privateInstance;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public static void Setup(bool host)
+        {
+            if (!host)
+            {
+                type = ConnectionMode.RemoteConnection;
+                return;
+            }
+
+            try
+            {
+                ussHost = new ServiceHost(typeof(UserSessionService));
+                privateHost = new ServiceHost(typeof(PrivateUserSessionService));
+
+                Log.Debug("Opening ServiceHost...");
+                ussHost.Open();
+                privateHost.Open();
+
+                Log.Info("UserSessionService started...");
+                type = ConnectionMode.SelfHosting;
+                ussInstance = new UserSessionService();
+                privateInstance = new PrivateUserSessionService();
+            }
+            catch (AddressAlreadyInUseException)
+            {
+                Log.Info("Address for UserSessionService is already in use");
+                type = ConnectionMode.RemoteConnection;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to start service", ex);
+                type = ConnectionMode.Failure;
+            }
+        }
+
+        public static void Shutdown()
+        {
+            if (type == ConnectionMode.SelfHosting)
+            {
+                try
+                {
+                    ussHost.Close();
+                    privateHost.Close();
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to stop USS ServiceHost", ex);
+                }
             }
         }
 
@@ -54,7 +141,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
 
             // try to close a faulted channel
-            if(original != null)
+            if (original != null)
             {
                 try
                 {

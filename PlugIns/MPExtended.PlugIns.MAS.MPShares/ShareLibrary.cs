@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
@@ -215,7 +216,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     string path = Path.GetFullPath(Path.Combine(share.Path, reldir));
 
                     // it is possible that someone tricks us into looking outside of the shareroot by a /../ path
-                    if (Security.IsInShare(data.Log, path, share))
+                    if (Security.IsInShare(path, share))
                     {
                         return path;
                     }
@@ -292,22 +293,20 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         private string EncodeTo64(string toEncode)
         {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(toEncode);
+            return Convert.ToBase64String(toEncodeAsBytes);
         }
 
         private string DecodeFrom64(string encodedData)
         {
             try
             {
-                byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-                string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-                return returnValue;
+                byte[] encodedDataAsBytes = Convert.FromBase64String(encodedData);
+                return Encoding.UTF8.GetString(encodedDataAsBytes);
             }
             catch (FormatException)
             {
-                data.Log.Warn("MPShares: Invalid base64 input {0}", encodedData);
+                Log.Warn("MPShares: Invalid base64 input {0}", encodedData);
                 return String.Empty;
             }
         }

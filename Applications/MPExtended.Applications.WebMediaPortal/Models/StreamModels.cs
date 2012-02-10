@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
@@ -41,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             return new List<StreamTarget>() {
                 new StreamTarget(VideoPlayer.VLC, false, "pc-vlc-audio"),
-                new StreamTarget(VideoPlayer.Flash, false, "pc-flash-audio")
+                new StreamTarget(VideoPlayer.FlashAudio, false, "pc-flash-audio")
             };
         }
 
@@ -49,7 +50,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             return new List<StreamTarget>() {
                 new StreamTarget(VideoPlayer.VLC, true, "pc-vlc-video"),
-                new StreamTarget(VideoPlayer.Flash, true, "pc-flash-video")
+                new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video")
             };
         }
     }
@@ -58,10 +59,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public IEnumerable<string> Transcoders { get; set; }
         public string Transcoder { get; set; }
+        public WebTranscoderProfile TranscoderProfile { get; set; }
         public VideoPlayer Player { get; set; }
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
         public string URL { get; set; }
+        public WebStreamMediaType MediaType { get; set; }
+        public string MediaId { get; set; }
 
         public SettingModel Settings
         {
@@ -85,9 +89,32 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
     }
 
+    public class AlbumPlayerViewModel : PlayerViewModel
+    {
+        public IEnumerable<WebMusicTrackBasic> Tracks { get; set; }
+
+        public AlbumPlayerViewModel()
+        {
+            MediaType = WebStreamMediaType.MusicAlbum;
+        }
+
+        public string GetTranscoderForTrack(WebMusicTrackBasic track)
+        {
+            if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg")
+            {
+                return "Direct";
+            }
+            else
+            {
+                return Transcoder;
+            }
+        }
+    }
+
     public enum VideoPlayer
     {
-        Flash,
+        FlashVideo,
+        FlashAudio,
         VLC
     }
 }

@@ -110,14 +110,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".zip";
-            dlg.Filter = "Log and configuration archive (.zip)|*.zip";
-            if (dlg.ShowDialog() == true)
-            {
-                LogExporter.Export(dlg.FileName);
-                MessageBox.Show(String.Format("Exported logs and configuration data to {0}", dlg.FileName), "Export", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            LogExporter.ExportWithFileChooser();
         }
     }
 }

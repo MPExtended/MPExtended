@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -26,12 +27,22 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class MediaInfoHelper
     {
+        public static decimal DEFAULT_ASPECT_RATIO = (decimal)16 / 9; // most new material is 16:9 these days
+
         public static WebMediaInfo LoadMediaInfoOrSurrogate(MediaSource source)
         {
-            WebMediaInfo info = MediaInfoWrapper.GetMediaInfo(source);
-            if (info != null)
+            WebMediaInfo info;
+            try
             {
-                return info;
+                info = MediaInfoWrapper.GetMediaInfo(source);
+                if (info != null)
+                {
+                    return info;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to load MediaInfo for {0}", source.GetDebugName()), ex);
             }
 
             WebMediaInfo surr = new WebMediaInfo();
@@ -54,7 +65,7 @@ namespace MPExtended.Services.StreamingService.Code
                 new WebVideoStream()
                 {
                     Codec = "Unknown",
-                    DisplayAspectRatio = 16 / 9, // this class is primarily used for TV data and that's mostly 16:9 these days afaik
+                    DisplayAspectRatio = DEFAULT_ASPECT_RATIO, 
                     DisplayAspectRatioString = "16:9",
                     ID = 2,
                     Index = 0,

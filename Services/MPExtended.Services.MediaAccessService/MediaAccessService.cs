@@ -122,6 +122,11 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<WebSearchResult> Search(string text)
         {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return new List<WebSearchResult>();
+            }
+
             return MovieLibraries.SearchAll(text).AsQueryable()
                 .Concat(MusicLibraries.SearchAll(text).AsQueryable())
                 .Concat(PictureLibraries.SearchAll(text).AsQueryable())
@@ -303,6 +308,21 @@ namespace MPExtended.Services.MediaAccessService
         public WebMusicArtistBasic GetMusicArtistBasicById(int? provider, string id)
         {
             return MusicLibraries[provider].GetArtistBasicById(id).Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<WebMusicArtistDetailed> GetAllMusicArtistsDetailed(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return MusicLibraries[provider].GetAllArtistsDetailed().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<WebMusicArtistDetailed> GetMusicArtistsDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return MusicLibraries[provider].GetAllArtistsDetailed().AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Music);
+        }
+
+        public WebMusicArtistDetailed GetMusicArtistDetailedById(int? provider, string id)
+        {
+            return MusicLibraries[provider].GetArtistDetailedById(id).Finalize(provider, ProviderType.Music);
         }
 
         public IList<WebMusicTrackBasic> GetMusicTracksBasicForAlbum(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.SearchResultsViewModel>
+@{
+    ViewBag.Title = UIStrings.Search;
+}
+
+<h2>@UIStrings.Search</h2>
+
+@if (Model.Count() == 0)
+{
+    <em>@UIStrings.SorryYourSearchDidNotYieldAnyResults</em>
+}
+
+<ul>
+@foreach (var result in Model)
+{
+    <li><a href="@result.URL">@result.Title</a></li>
+}
+</ul>

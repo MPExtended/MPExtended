@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
+    [KnownType(typeof(WebArtworkDetailed))]
     public class WebArtwork
     {
         public WebFileType Type { get; set; }

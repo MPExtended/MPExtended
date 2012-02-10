@@ -25,8 +25,8 @@ namespace MPExtended.Libraries.SQLitePlugin
 {
     public class Query : IDisposable
     {
-        SQLiteConnection db;
-        SQLiteCommand cmd;
+        private DatabaseConnection db;
+        private SQLiteCommand cmd;
 
         public SQLiteDataReader Reader
         {
@@ -34,30 +34,26 @@ namespace MPExtended.Libraries.SQLitePlugin
             private set;
         }
 
-        public Query(string databasePath, string query)
-            : this(databasePath, query, new SQLiteParameter[] { })
+        public Query(DatabaseConnection database, string query, params SQLiteParameter[] parameters)
         {
-        }
-
-        public Query(string databasePath, string query, SQLiteParameter[] parameters)
-        {
-            string connectionString = "Data Source=" + databasePath + ";Read Only=True";
-            db = new SQLiteConnection(connectionString);
-            db.Open();
-            cmd = db.CreateCommand();
+            db = database;
+            cmd = db.Connection.CreateCommand();
             cmd.CommandText = query;
             foreach (SQLiteParameter param in parameters)
                 cmd.Parameters.Add(param);
             Reader = cmd.ExecuteReader();
         }
 
+        public Query(DatabaseConnection database, string query)
+            : this(database, query, new SQLiteParameter[] { })
+        {
+        }
+
         public void Dispose()
         {
             Reader.Close();
-            Reader.Dispose();
+            Reader.Dispose();  
             cmd.Dispose();
-            db.Close();
-            db.Dispose();
         }
     }
 }

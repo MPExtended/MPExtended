@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
@@ -43,7 +44,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return false;
         }
 
-        public static bool IsAllowedPath(ILogger log, string path, IEnumerable<Share> shares)
+        public static bool IsAllowedPath(string path, IEnumerable<Share> shares)
         {
             try
             {
@@ -70,12 +71,12 @@ namespace MPExtended.PlugIns.MAS.MPShares
             }
             catch (Exception e)
             {
-                log.Error(String.Format("Exception during IsAllowedPath with path = {0}", path), e);
+                Log.Error(String.Format("Exception during IsAllowedPath with path = {0}", path), e);
             }
             return false;
         }
 
-        public static bool IsInShare(ILogger log, string path, Share share)
+        public static bool IsInShare(string path, Share share)
         {
             try
             {
@@ -99,14 +100,14 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 bool retval = IsSubdir(share.Path, path);
                 if (!retval)
                 {
-                    log.Warn("Tried to access file {0} outside share {1}", path, share.Path);
+                    Log.Warn("Tried to access file {0} outside share {1}", path, share.Path);
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                log.Error(String.Format("Exception druing IsInShare with path = {0}", path), ex);
+                Log.Error(String.Format("Exception druing IsInShare with path = {0}", path), ex);
             }
             return false;
         }

@@ -69,7 +69,7 @@ namespace MPExtended.Services.StreamingService.Code
         public static Resolution Calculate(decimal destinationAspectRatio, int? maxWidth, int? maxHeight, int framesizeMultipleOff)
         {
             // get the aspect ratio for the height / width calculation, defaulting to 16:9
-            decimal displayAspect = destinationAspectRatio == 0 ? 16 / 9 : destinationAspectRatio;
+            decimal displayAspect = destinationAspectRatio == 0 ? MediaInfoHelper.DEFAULT_ASPECT_RATIO : destinationAspectRatio;
 
             // skip no resize situation
             if (maxWidth == null && maxHeight == null)

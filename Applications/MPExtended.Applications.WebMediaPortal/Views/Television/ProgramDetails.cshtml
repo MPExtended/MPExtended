@@ -5,14 +5,15 @@
 
 <h2>@Model.Title</h2>
 <p>
-    <strong>@Model.StartTime</strong> till <strong>@Model.EndTime</strong> on channel <strong>@Model.ChannelName</strong><br />
+    @Html.Raw(String.Format(UIStrings.ProgramChannelDetails, Model.StartTime, Model.EndTime, Model.ChannelName))
+    <br />
     @{if (@Model.IsScheduled)
       {
-          @Html.ActionLink("Cancel schedule", "DeleteSchedule", new { programId = @Model.Id })
+          @Html.ActionLink(UIStrings.CancelSchedule, "DeleteSchedule", "Schedule", new { programId = @Model.Id }, new { })
       }
       else
       {
-          @Html.ActionLink("Schedule", "AddSchedule", new { programId = @Model.Id })
+          @Html.ActionLink(UIStrings.CreateSchedule, "AddSchedule", "Schedule", new { programId = @Model.Id }, new { })
       }
     }
 </p>

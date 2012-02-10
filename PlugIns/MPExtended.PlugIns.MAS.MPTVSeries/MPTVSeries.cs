@@ -31,7 +31,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [Export(typeof(ITVShowLibrary))]
     [ExportMetadata("Name", "MP-TVSeries")]
     [ExportMetadata("Id", 6)]
-    public class MPTVSeries : Database, ITVShowLibrary
+    public partial class MPTVSeries : Database, ITVShowLibrary
     {
         private Dictionary<string, string> configuration;
         public bool Supported { get; set; }
@@ -107,17 +107,6 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 return true;
             });
 
-
-            Delegates.ReadValue fixNameReader = delegate(SQLiteDataReader reader, int index)
-            {
-                // MPTvSeries does some magic with the name: if it's empty in the online series, use the Parsed_Name from the local series. I prefer
-                // a complete database, but we can't fix that easily. See DB Classes/DBSeries.cs:359 in MPTvSeries source
-                string data = reader.ReadString(index);
-                if(data.Length > 0)
-                    return data;
-                return reader.ReadString(index - 1);
-            };
-
             string sql = 
                     "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
                         "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
@@ -132,7 +121,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("s", "ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadIntAsString, "TVDB")),
-                new SQLFieldMapping("s", "Pretty_Name", "Title", fixNameReader),
+                new SQLFieldMapping("s", "Pretty_Name", "Title", CustomReaders.FixNameReader),
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
@@ -243,9 +232,12 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string sql =                     
                     "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                         "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
-                        "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary " +
+                        "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary, " +
+                        "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
                     "FROM online_episodes e " +
                     "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                    "INNER JOIN online_series os ON os.ID = e.SeriesID " +
+                    "INNER JOIN local_series ls ON ls.ID = e.SeriesID " +
                     "WHERE e.Hidden = 0 AND %where " +
                     "GROUP BY e.EpisodeID, e.SeriesID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                          "e.FirstAired, e.GuestStars, e.Director, e.Writer " +
@@ -268,41 +260,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "IMDB_ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadString, "IMDB")),
-                new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString)
+                new SQLFieldMapping("e", "Summary", "Summary", DataReaders.ReadString),
+                new SQLFieldMapping("", "pretty_name", "Show", CustomReaders.FixNameReader)
             });
-        }
-
-
-        public IEnumerable<WebSearchResult> Search(string text)
-        {
-            SQLiteParameter param = new SQLiteParameter("@search", "%" + text + "%");
-            string showSql = "SELECT ID, Pretty_Name FROM online_series WHERE Pretty_Name LIKE @search";
-            IEnumerable<WebSearchResult> shows = ReadList<WebSearchResult>(showSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
-                {
-                    Type = WebMediaType.TVShow,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
-
-            string episodeSql = "SELECT EpisodeID, EpisodeName FROM online_episodes WHERE EpisodeName LIKE @search";
-            IEnumerable<WebSearchResult> episodes = ReadList<WebSearchResult>(episodeSql, delegate(SQLiteDataReader reader)
-            {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
-                {
-                    Type = WebMediaType.TVEpisode,
-                    Id = reader.ReadString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, param);
-
-            return shows.Union(episodes);
         }
 
         public IEnumerable<WebGenre> GetAllGenres()

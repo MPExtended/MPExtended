@@ -138,6 +138,19 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicArtistBasic GetMusicArtistBasicById(int? provider, string id);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMusicArtistDetailed> GetAllMusicArtistsDetailed(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMusicArtistDetailed> GetMusicArtistsDetailedByRange(int? provider, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebMusicArtistDetailed GetMusicArtistDetailedById(int? provider, string id);
+
+
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

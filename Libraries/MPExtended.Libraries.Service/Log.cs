@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
@@ -25,7 +26,40 @@ namespace MPExtended.Libraries.Service
 {
     public static class Log
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger;
+
+        static Log()
+        {
+            try
+            {
+                logger = LogManager.GetCurrentClassLogger();
+            }
+            catch (Exception ex)
+            {
+                // Oops. Logging failed to setup. This really shouldn't happen, but in all cases it's better to continue without logging then to crash. As this code is
+                // called during service startup, it even aborts installation - which we really don't want to. So write the exception we encountered during log setup to
+                // a file and continue without enabled logging.
+                // The only known case where this could happen is on WHS 2011, where it has problems with finding the ${onexception} LayoutRenderer (see issue #137). We
+                // should solve that properly, but that isn't done yet.
+                string path = Path.Combine(Installation.GetLogDirectory(), "LoggingFailure.log");
+                using (FileStream stream = File.Open(path, FileMode.Append))
+                {
+                    using (TextWriter writer = new StreamWriter(stream))
+                    {
+                        writer.WriteLine("[{0:yyyy-MM-dd HH:mm:ss}] Exception occured while setting up logging", DateTime.Now);
+                        do
+                        {
+                            writer.WriteLine("{0}: {1}", ex.GetType().FullName, ex.Message);
+                            writer.WriteLine(ex.StackTrace.ToString());
+                            writer.WriteLine();
+                            ex = ex.InnerException;
+                        } while (ex != null);
+                    }
+                }
+
+                logger = LogManager.CreateNullLogger();
+            }
+        }
 
         /// <summary>
         /// Log with level Trace

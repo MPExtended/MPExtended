@@ -25,6 +25,7 @@
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
               <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
+              <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
             
             <!-- General registry (installation path) -->
@@ -39,7 +40,7 @@
               <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
             </Component>
             <Component Id="Component_TAS_Interface" Guid="d917e28e-1bcb-4d4d-aa49-05c48fe3e89f">
-              <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
             </Component>
 
             <!-- MAS -->
@@ -60,6 +61,7 @@
               <Component Id="Component_MAS_Extensions" Guid="0a8f8159-497e-40f2-89d6-7c68969276f4">
                 <!-- general libraries -->
                 <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.dll" />
+                <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.pdb" />
                 <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
 
                 <!-- all plugins that we release -->
@@ -148,17 +150,17 @@
             <Directory Id="ConfigDefaultDirectory" Name="DefaultConfig">
               <!-- General config -->
               <Component Id="Component_General_Config" Guid="10b3c51a-e27c-436a-986d-8222ae9a8fed">
-                <File Source="$(var.SolutionDir)\Config\Release\Services.xml" />
+                <File Source="$(var.SolutionDir)\Config\Services.xml" />
               </Component>
 
               <!-- MAS config -->
               <Component Id="Component_MAS_Config" Guid="97c257cf-8806-4d20-b674-790be70e7976">
-                <File Source="$(var.SolutionDir)\Config\Release\MediaAccess.xml" />
+                <File Source="$(var.SolutionDir)\Config\MediaAccess.xml" />
               </Component>
 
               <!-- Stream config -->
               <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
-                <File Source="$(var.SolutionDir)\Config\Release\Streaming.xml" />
+                <File Source="$(var.SolutionDir)\Config\Streaming.xml" />
               </Component>
             </Directory>
 

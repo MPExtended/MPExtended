@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -31,6 +30,7 @@ using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -38,7 +38,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabStreaming.xaml
     /// </summary>
-    public partial class TabStreaming : Page
+    public partial class TabStreaming : Page, ITabCloseCallback
     {
         private DispatcherTimer mSessionWatcher;
         private ObservableCollection<WpfStreamingSession> mStreamingSessions = new ObservableCollection<WpfStreamingSession>();
@@ -56,48 +56,37 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             lvActiveStreams.ItemsSource = mStreamingSessions;
 
             // load language list
-            var languages = CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .Where(x => x.Parent == CultureInfo.InvariantCulture && x.TwoLetterISOLanguageName.Length == 2 && x.TwoLetterISOLanguageName != "iv")
-                .GroupBy(x => x.TwoLetterISOLanguageName, (key, items) => items.First())
+            var languages = CultureDatabase.GetLanguages()
                 .OrderBy(x => x.TwoLetterISOLanguageName)
                 .ToDictionary(x => x.TwoLetterISOLanguageName, x => String.Format("{0} ({1})", x.TwoLetterISOLanguageName, x.DisplayName));
 
             // set valid items
             cbAudio.DataContext = new Dictionary<string, string>() { 
-                { "first", "First stream in file" } 
+                { "first", Strings.UI.SubtitlesFirstStream } 
             }.Concat(languages);
 
             cbSubtitle.DataContext = new Dictionary<string, string>()
             {
-                { "none", "Disable subtitles" },
-                { "first", "First stream in file" },
-                { "external", "Use external .srt file" }
+                { "none", Strings.UI.SubtitlesDisabled },
+                { "first", Strings.UI.SubtitlesFirstStream },
+                { "external", Strings.UI.SubtitlesExternal }
             }.Concat(languages);
 
             // set default item
             cbAudio.SelectedValue = Configuration.Streaming.DefaultAudioStream;
             cbSubtitle.SelectedValue = Configuration.Streaming.DefaultSubtitleStream;
-        }
 
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
-            Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
-            Configuration.Streaming.Save();
-            MessageBox.Show("Saved default language selection!", "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void Page_Initialized(object sender, EventArgs e)
-        {
+            // start observing
             mSessionWatcher.Start();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+
+        public void TabClosed()
         {
-            string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
-            Process.Start(new ProcessStartInfo(folder));
-            e.Handled = true;
+            mSessionWatcher.Stop();
+            Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
+            Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
+            Configuration.Streaming.Save();
         }
 
         private void activeSessionWatcher_Tick(object sender, EventArgs e)
@@ -121,7 +110,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void miKickUserSession_Click(object sender, RoutedEventArgs e)
         {
             WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
-            bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
+            if (session != null)
+            {
+                bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
+            }
         }
     }
 }

@@ -80,6 +80,13 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return tmpPath;
             }
 
+            // create directory if unavailable
+            if (!Directory.Exists(Path.GetDirectoryName(tmpPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(tmpPath));
+            }
+
+            // download the image
             using (WebClient client = new WebClient())
             {
                 try

@@ -1,0 +1,8 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.AlbumViewModel
+@{
+    ViewBag.Title = String.Format(UIStrings.AlbumBy, Model.Album.Title, Model.Album.AlbumArtist);
+}
+
+<h2>@String.Format(UIStrings.AlbumBy, Model.Album.Title, Model.Album.AlbumArtist)</h2>
+
+@{Html.RenderAction("MusicPlayer", "Stream", new { albumId = @Model.Album.Id }); }

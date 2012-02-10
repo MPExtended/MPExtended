@@ -29,6 +29,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Social;
 using MPExtended.Libraries.Service;
 
@@ -37,7 +38,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabSocial.xaml
     /// </summary>
-    public partial class TabSocial : Page
+    public partial class TabSocial : Page, ITabCloseCallback
     {
         private class TestCredentialsData
         {
@@ -48,10 +49,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private string activeProvider;
         private BackgroundWorker worker;
 
+        private bool dirty;
+        private bool canSave;
+
         public TabSocial()
         {
             InitializeComponent();
             lblTestResult.Content = "";
+            canSave = true;
 
             if (Configuration.Streaming.WatchSharing["type"] == "none" || Configuration.Streaming.WatchSharing["type"] == "debug") // debug isn't supported in UI
             {
@@ -67,6 +72,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 txtUsername.Text = Configuration.Streaming.WatchSharing["username"];
             }
+
+            // make sure to set this after the setting of the radio boxes, to avoid saving when nothing has been changed
+            dirty = false;
         }
 
         private void radioButtonChanged(object sender, RoutedEventArgs e)
@@ -77,7 +85,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 case "none":
                     btnTest.IsEnabled = false;
-                    btnSave.IsEnabled = false;
                     txtUsername.IsEnabled = false;
                     txtPassword.IsEnabled = false;
                     break;
@@ -98,7 +105,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
             lblTestResult.Foreground = Brushes.Black;
-            lblTestResult.Content = "Testing credentials, please wait...";
+            lblTestResult.Content = Strings.UI.TestingCredentials;
             btnTest.IsEnabled = false;
             worker = new BackgroundWorker();
             worker.DoWork += delegate(object s, DoWorkEventArgs args)
@@ -111,14 +118,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 if ((bool)args.Result)
                 {
-                    lblTestResult.Content = "Login successful!";
+                    lblTestResult.Content = Strings.UI.LoginSuccessful;
                     lblTestResult.Foreground = Brushes.Green;
-                    btnSave.IsEnabled = true;
+                    canSave = true;
                 }
                 else
                 {
-                    lblTestResult.Content = "Login failed.";
+                    lblTestResult.Content = Strings.UI.LoginFailed;
                     lblTestResult.Foreground = Brushes.Red;
+                    canSave = false;
                 }
                 btnTest.IsEnabled = true;
             };
@@ -144,17 +152,25 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void InvalidateTestResults()
         {
-            btnSave.IsEnabled = false;
             lblTestResult.Content = "";
+            dirty = true;
+            canSave = false;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        public void TabClosed()
         {
-            Configuration.Streaming.WatchSharing["username"] = txtUsername.Text;
-            Configuration.Streaming.WatchSharing["passwordHash"] = GetImplementation().HashPassword(txtPassword.Password);
-            Configuration.Streaming.WatchSharing["type"] = activeProvider;
-            Configuration.Streaming.Save();
-            lblTestResult.Content = "Saved successfully, restart the service for the changes to take affect.";
+            if (canSave && dirty)
+            {
+                Configuration.Streaming.WatchSharing["username"] = txtUsername.Text;
+                Configuration.Streaming.WatchSharing["passwordHash"] = GetImplementation().HashPassword(txtPassword.Password);
+                Configuration.Streaming.WatchSharing["type"] = activeProvider;
+                Configuration.Streaming.Save();
+                Service.ReloadConfiguration();
+            }
+            else if (dirty)
+            {
+                MessageBox.Show(Strings.UI.DiscardingInvalidChangesSocialTab, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

@@ -17,11 +17,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Mvc;
+using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -29,50 +33,136 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public static Dictionary<WebScheduleType, string> ScheduleTypeNames = new Dictionary<WebScheduleType, string>()
             {
-                { WebScheduleType.Once, "Once" },
-                { WebScheduleType.Daily, "Daily" },
-                { WebScheduleType.Weekly, "Weekly" },
-                { WebScheduleType.EveryTimeOnThisChannel, "Every time on this channel" },
-                { WebScheduleType.EveryTimeOnEveryChannel, "Every time on every channel" },
-                { WebScheduleType.Weekends, "Weekends" },
-                { WebScheduleType.WorkingDays, "Working days" },
-                { WebScheduleType.WeeklyEveryTimeOnThisChannel, "Weekly on this channel" }
+                { WebScheduleType.Once, FormStrings.ScheduleTypeOnce },
+                { WebScheduleType.Daily, FormStrings.ScheduleTypeDaily },
+                { WebScheduleType.Weekly, FormStrings.ScheduleTypeWeekly },
+                { WebScheduleType.EveryTimeOnThisChannel, FormStrings.ScheduleTypeEveryTimeOnThisChannel },
+                { WebScheduleType.EveryTimeOnEveryChannel, FormStrings.ScheduleTypeEveryTimeOnEveryChannel },
+                { WebScheduleType.Weekends, FormStrings.ScheduleTypeWeekends },
+                { WebScheduleType.WorkingDays, FormStrings.ScheduleTypeWorkingDays },
+                { WebScheduleType.WeeklyEveryTimeOnThisChannel, FormStrings.ScheduleTypeWeeklyOnThisChannel }
             };
 
+        public int ProgramId { get; set; }
         public int Id { get; set; }
+
+        [StringLength(255)]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public string Title { get; set; }
 
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleStartTime")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
+        public DateTime? StartTime { get; set; }
 
-        public string StartTimeFormatted { get; set; }
-        public string EndTimeFormatted { get; set; }
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleEndTime")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
+        public DateTime? EndTime { get; set; }
+   
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleType")]
+        [ListChoice("ScheduleTypeList", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ScheduleSelectValidType")]
+        public WebScheduleType ScheduleType { get; set; }
 
-        public string Type { get; set; }
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleChannel")]
+        [ListChoice("ChannelList", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ScheduleSelectValidChannel")]
+        public int Channel { get; set; }
+
+        public string ChannelName { get; private set; }
+        public string StartTimeFormatted { get; private set; }
+        public string EndTimeFormatted { get; private set; }
+
+        public IEnumerable<SelectListItem> ChannelList
+        {
+            get
+            {
+                return MPEServices.TAS.GetAllChannelsBasic(SortField.Name)
+                        .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
+            }
+        }
+
+        public string ScheduleTypeName
+        {
+            get
+            {
+                return ScheduleTypeNames[ScheduleType];
+            }
+        }
+
+        public IEnumerable<SelectListItem> ScheduleTypeList
+        {
+            get
+            {
+                return ScheduleTypeNames.Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Value });
+            }
+        }
+
+        public bool IsFromProgram
+        {
+            get
+            {
+                return ProgramId != 0;
+            }
+        }
+
+        public ScheduleViewModel()
+        {
+            StartTime = null;
+            EndTime = null;
+        }
+
+        private ScheduleViewModel(DateTime startTime, DateTime endTime, string title, int channelId)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+            Title = title;
+            Channel = channelId;
+        }
+
+        public ScheduleViewModel(WebProgramBasic program)
+            : this (program.StartTime, program.EndTime, program.Title, program.IdChannel)
+        {
+            ProgramId = program.Id;
+
+            ChannelName = MPEServices.TAS.GetChannelBasicById(program.IdChannel).DisplayName;
+        }
 
         public ScheduleViewModel(WebScheduleBasic schedule)
+            : this (schedule.StartTime, schedule.EndTime, schedule.ProgramName, schedule.IdChannel)
         {
             Id = schedule.Id;
-            Title = schedule.ProgramName;
-            StartTime = schedule.StartTime;
-            EndTime = schedule.EndTime;
+            ScheduleType = schedule.ScheduleType;
 
-            switch (schedule.ScheduleType)
+            switch (ScheduleType)
+            {
+                case WebScheduleType.Daily:
+                case WebScheduleType.EveryTimeOnThisChannel:
+                case WebScheduleType.Once:
+                case WebScheduleType.Weekends:
+                case WebScheduleType.Weekly:
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                case WebScheduleType.WorkingDays:
+                    ChannelName = MPEServices.TAS.GetChannelBasicById(schedule.IdChannel).DisplayName;
+                    break;
+                case WebScheduleType.EveryTimeOnEveryChannel:
+                    ChannelName = "";
+                    break;
+            }
+
+            switch (ScheduleType)
             {
                 case WebScheduleType.Daily:
                 case WebScheduleType.Weekends:
                 case WebScheduleType.WorkingDays:
-                    StartTimeFormatted = schedule.StartTime.ToString("t");
-                    EndTimeFormatted = schedule.EndTime.ToString("t");
+                    StartTimeFormatted = StartTime.Value.ToString("t");
+                    EndTimeFormatted = EndTime.Value.ToString("t");
                     break;
                 case WebScheduleType.Weekly:
-                    StartTimeFormatted = schedule.StartTime.ToString("dddd") + " " + schedule.StartTime.ToString("t");
-                    EndTimeFormatted = schedule.EndTime.ToString("dddd") + " " + schedule.EndTime.ToString("t");
+                    StartTimeFormatted = StartTime.Value.ToString("dddd") + " " + StartTime.Value.ToString("t");
+                    EndTimeFormatted = EndTime.Value.ToString("dddd") + " " + EndTime.Value.ToString("t");
                     break;
                 case WebScheduleType.Once:
                 default:
-                    StartTimeFormatted = schedule.StartTime.ToString("g");
-                    EndTimeFormatted = schedule.EndTime.ToString("g");
+                    StartTimeFormatted = StartTime.Value.ToString("g");
+                    EndTimeFormatted = EndTime.Value.ToString("g");
                     break;
                 case WebScheduleType.EveryTimeOnEveryChannel:
                 case WebScheduleType.EveryTimeOnThisChannel:
@@ -80,24 +170,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     // they don't have a time associated with them
                     break;
             }
-
-            Type = ScheduleTypeNames[schedule.ScheduleType];
-        }
-    }
-
-    public class AddScheduleViewModel
-    {
-        public int ProgramId { get; set; }
-        public string ProgramTitle { get; set; }
-        public IEnumerable<SelectListItem> Types { get; set; }
-
-        public AddScheduleViewModel(WebProgramBasic program)
-        {
-            ProgramId = program.Id;
-            ProgramTitle = program.Title;
-            Types = ScheduleViewModel.ScheduleTypeNames
-                .Select(x => new SelectListItem() { Value = ((int)x.Key).ToString(), Text = x.Value })
-                .ToList();
         }
     }
 }

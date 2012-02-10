@@ -44,7 +44,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void hbUpdates_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            tbVersion.Text = String.Format("{0} (checking for updates...)", VersionUtil.GetVersionName());
+            tbVersion.Text = String.Format("{0} ({1})", VersionUtil.GetVersionName(), Strings.UI.CheckingForUpdates);
             e.Handled = true;
 
             versionChecker = new BackgroundWorker();
@@ -53,16 +53,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 string text;
                 if (!UpdateChecker.IsWorking())
                 {
-                    text = "failed to retrieve update information";
+                    text = Strings.UI.FailedToRetrieveUpdateInformation;
                 }
                 else if (UpdateChecker.IsUpdateAvailable())
                 {
-                    text = String.Format("update available: version {0}, released on {1:dd MMM yyyy}",
-                        UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
+                    text = String.Format(Strings.UI.UpdateAvailable, UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
                 }
                 else
                 {
-                    text = "no update available";
+                    text = Strings.UI.NoUpdateAvailable;
                 }
 
                 args.Result = String.Format("{0} ({1})", VersionUtil.GetVersionName(), text);

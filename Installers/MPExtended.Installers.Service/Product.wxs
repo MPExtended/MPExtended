@@ -14,7 +14,7 @@
     You must not remove this notice, or any other, from this software.
   -->
   <Product
-    Id="5d1637f2-5c2a-4810-8043-e041e7b997c2"
+    Id="*"
     UpgradeCode="21ae5680-f56d-4bb6-8835-87b5081b156d"
     Name="MPExtended Service"
     Language="1033"
@@ -31,7 +31,7 @@
     <!-- Disallow downgrades and support upgrades -->
     <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
     <Upgrade Id="21ae5680-f56d-4bb6-8835-87b5081b156d">
-      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.General.dll)" />
+      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
     </Upgrade>
     
     <!-- The stupid icon -->
@@ -67,9 +67,7 @@
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\NLog.config" />
 
         <!-- hosting -->
-        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.Hosting.dll" />
-        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.Hosting.pdb" />
-        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\ZeroconfService.dll" />
+
         
         <!-- let's just install the consolehost too, for debugging -->
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe" />

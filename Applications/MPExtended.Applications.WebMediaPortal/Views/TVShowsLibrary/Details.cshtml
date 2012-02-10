@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = @Model.Title;
 }
+
 <style type="text/css">
     .column
     {
@@ -18,14 +19,15 @@
         margin-right: 20px;
     }
 </style>
-<h2>
-    Details</h2>
+
+<h2>@Model.Title</h2>
+
 <div class="column">
     <img class="img" src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
 </div>
 <div class="column">
     <ul>
-        <li>Written by:
+        <li>@UIStrings.WrittenBy
             <ul>
                 @foreach (string writer in Model.Writers)
                 {
@@ -34,7 +36,7 @@
             </ul>
         </li>
 
-        <li>Guest starring:
+        <li>@UIStrings.GuestStarring
             <ul>
                 @foreach (string guestStar in Model.GuestStars)
                 {
@@ -43,10 +45,11 @@
             </ul>        
         </li>
 
-        <li>Aired @Model.FirstAired.ToShortDateString()</li>
+        <li>@String.Format(UIStrings.Aired, Model.FirstAired.ToShortDateString())</li>
+
         @if(ViewBag.ShowPlay) {
-            <li>@Html.ActionLink("Download", "Download", "Stream", new { item = Model.Id, type = Model.Type }, new { })</li>
-            <li>@Html.ActionLink("Play", "Play", new { episode = Model.Id })</li>
+            <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = Model.Type }, new { })</li>
+            <li>@Html.ActionLink(UIStrings.Play, "Play", new { episode = Model.Id })</li>
         }
     </ul>
 </div>

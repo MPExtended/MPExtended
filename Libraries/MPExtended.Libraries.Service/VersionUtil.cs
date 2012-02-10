@@ -17,18 +17,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
-using System.Reflection;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using MPExtended.Libraries.Service.Internal;
 
 namespace MPExtended.Libraries.Service
 {
     /// <summary>
     /// Utility to parse version information from MPExtended and MediaPortal
     /// 
-    /// We differentiate between 3 different versions for MPExtended:
+    /// We differentiate between 4 different versions for MPExtended:
     /// - The API version, defined by AssemblyVersion in GlobalVersion.cs. This is retrieved with GetVersion() and changes only
     ///   with new feature releases (minor/major). Only the first two numbers are relevant here.
     /// - The version name, defined by AssemblyInformationalVersion in GlobalVersion.cs. This is retrieved with GetVersioName()
@@ -37,6 +38,9 @@ namespace MPExtended.Libraries.Service
     /// - The build version, defined by AssemblyFileVersion in GlobalVersion.cs. This is retrieved with GetBuildVersion() and
     ///   changes with each release. As opposed to AssemblyInformationalVersion, this number always increments and has a meaning.
     ///   It is the number that is used for checking for updates. 
+    /// - The git build version, defined by AssemblyGitVersion in GitVersion.cs, only on this assembly. This is retrieved with
+    ///   GetGitVersion() and changes with each build. 
+    /// A full version string for logs can be retrieved with GetFullVersionString(). 
     /// </summary>
     public class VersionUtil
     {
@@ -77,6 +81,33 @@ namespace MPExtended.Libraries.Service
         {
             string ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(asm.Location).FileVersion;
             return new Version(ver);
+        }
+
+        public static string GetGitVersion()
+        {
+            var attributes = (AssemblyGitVersionAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyGitVersionAttribute), true);
+            if (attributes.Length == 0)
+            {
+                return null;
+            }
+            else
+            {
+                string fullHash = attributes.First().Commit;
+                return fullHash.Substring(0, Math.Min(fullHash.Length, 7));
+            }
+        }
+
+        public static string GetFullVersionString()
+        {
+            string gitVersion = GetGitVersion();
+            if (gitVersion.Length > 0)
+            {
+                return String.Format("{0} (commit {1})", GetVersionName(), gitVersion);
+            }
+            else
+            {
+                return string.Format("{0} (build {1})", GetVersionName(), GetBuildVersion());
+            }
         }
 
         public static MediaPortalVersion GetMediaPortalVersion()

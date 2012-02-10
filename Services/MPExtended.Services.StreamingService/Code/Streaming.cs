@@ -23,6 +23,7 @@ using System.ServiceModel.Web;
 using System.Threading;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Transcoders;
@@ -31,11 +32,6 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Streaming : IDisposable
     {
-#if DEBUG
-        private const int ALLOW_STREAM_IDLE_TIME = 30 * 1000; // use shorter time for debugging
-#else
-        private const int ALLOW_STREAM_IDLE_TIME = 2 * 60 * 1000; // 2 minutes seams reasonable for production
-#endif
         public const int STREAM_NONE = -2;
         public const int STREAM_DEFAULT = -1;
 
@@ -50,6 +46,9 @@ namespace MPExtended.Services.StreamingService.Code
             public string ClientIP { get; set; }
             public DateTime StartTime { get; set; } // date the stream was initialized (no use)
 
+            public int Timeout { get; set; } // in seconds!
+            public DateTime LastActivity { get; set; }
+
             public ITranscoder Transcoder { get; set; }
             public ReadTrackingStreamWrapper OutputStream { get; set; }
 
@@ -58,9 +57,17 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Streaming(StreamingService serviceInstance)
         {
-            sharing = new WatchSharing();
             service = serviceInstance;
+            sharing = new WatchSharing();
             ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
+            ServiceState.Stopping += delegate()
+            {
+                foreach(var identifier in Streams.Select(x => x.Value.Identifier).ToList())
+                {
+                    Log.Warn("Killing stream {0} because of service stop", identifier);
+                    KillStream(identifier);
+                }
+            };
         }
 
         public void Dispose()
@@ -86,21 +93,26 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 try
                 {
-                    lock (Streams)
-                    {
-                        var toDelete = Streams
-                            .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > ALLOW_STREAM_IDLE_TIME)
-                            .Select(x => x.Value.Identifier)
-                            .ToList();
+                    var toDelete = Streams
+                        .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))
+                        .Where(x => x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
+                        .Select(x => x.Value.Identifier)
+                        .ToList();
 
-                        foreach (string key in toDelete)
+                    if (toDelete.Count > 0)
+                    {
+                        lock (Streams)
                         {
-                            Log.Info("Stream {0} has been idle for {1} milliseconds, so cancel it", key, Streams[key].OutputStream.TimeSinceLastRead);
-                            service.FinishStream(key);
+                            foreach (string key in toDelete)
+                            {
+                                Log.Info("Stream {0} has been idle for {1} milliseconds with last activity at {2}, so cancel it", 
+                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                                service.FinishStream(key);
+                            }
                         }
                     }
 
-                    Thread.Sleep(ALLOW_STREAM_IDLE_TIME);
+                    Thread.Sleep(1000);
                 }
                 catch (ThreadAbortException)
                 {
@@ -115,6 +127,11 @@ namespace MPExtended.Services.StreamingService.Code
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source)
         {
+            return InitStream(identifier, clientDescription, source, 5 * 60);
+        }
+
+        public bool InitStream(string identifier, string clientDescription, MediaSource source, int timeout)
+        {
             if (!source.Exists)
             {
                 Log.Warn("Tried to start stream for non-existing file {0}", source.GetDebugName());
@@ -126,6 +143,8 @@ namespace MPExtended.Services.StreamingService.Code
             stream.ClientDescription = clientDescription;
             stream.ClientIP = WCFUtil.GetClientIPAddress();
             stream.StartTime = DateTime.Now;
+            stream.Timeout = timeout;
+            stream.LastActivity = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
@@ -157,7 +176,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier]) 
                 {
-                    Log.Trace("StartStream called with identifier {0}", identifier);
+                    Log.Debug("StartStream with identifier {0} for file {1}", identifier, Streams[identifier].Context.Source.GetDebugName());
 
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
@@ -166,7 +185,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
-                    Log.Trace("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
+                    Log.Debug("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
                     sharing.StartStream(stream.Context, infoRef);
                 
                     // get transcoder
@@ -250,6 +269,14 @@ namespace MPExtended.Services.StreamingService.Code
                     WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                     return Stream.Null;
                 }
+
+                WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
+
+                if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)
+                {
+                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled(Streams[identifier].Context);
+                }
+
                 return Streams[identifier].OutputStream;
             }
         }
@@ -329,11 +356,17 @@ namespace MPExtended.Services.StreamingService.Code
 
         public WebTranscodingInfo GetEncodingInfo(string identifier) 
         {
+            Streams[identifier].LastActivity = DateTime.Now;
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
                 return Streams[identifier].Context.TranscodingInfo;
 
             Log.Warn("Requested transcoding info for unknown identifier {0}", identifier);
             return null;
+        }
+
+        public Resolution CalculateSize(TranscoderProfile profile, decimal displayAspectRatio)
+        {
+            return Resolution.Calculate(displayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
@@ -359,7 +392,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // default
-            return Resolution.Calculate(16 / 9, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+            return Resolution.Calculate(MediaInfoHelper.DEFAULT_ASPECT_RATIO, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
         public Resolution CalculateSize(StreamContext context)

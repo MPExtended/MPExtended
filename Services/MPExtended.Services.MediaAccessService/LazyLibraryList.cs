@@ -30,15 +30,35 @@ namespace MPExtended.Services.MediaAccessService
         private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
         private ProviderType type;
 
-        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict, ProviderType type) 
+        public LazyLibraryList(ProviderType type)
         {
-            items = dict;
             this.type = type;
+        }
+
+        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict, ProviderType type) 
+            : this (type)
+        {
+            items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
+            foreach (var item in dict)
+            {
+                Add(item.Key, item.Value);
+            }
         }
 
         public void Add(int key, Lazy<T, IDictionary<string, object>> value) 
         {
-            items[key] = value;
+            try
+            {
+                if (value.Value.Supported)
+                {
+                    items[key] = value;
+                }
+            }
+            catch (Exception ex)
+            {
+                string name = value.Metadata.ContainsKey("Name") ? (string)value.Metadata["Name"] : "<unknown>";
+                Log.Error(String.Format("Failed to load plugin {0}", name), ex);
+            }
         }
 
         public T this[int? key]
@@ -53,7 +73,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             get
             {
-                return items.Where(x => x.Value.Value.Supported).Select(x => x.Key).ToList();
+                return items.Select(x => x.Key).ToList();
             }
         }
 
@@ -72,12 +92,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public int Count()
         {
-            return items.Count(x => x.Value.Value.Supported);
+            return items.Count;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return items.Where(x => x.Value.Value.Supported).Select(x => GetValue(x.Key)).GetEnumerator();
+            return items.Select(x => GetValue(x.Key)).GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -88,7 +108,7 @@ namespace MPExtended.Services.MediaAccessService
         // more specific methods below
         public int GetKeyByName(string name)
         {
-            var list = items.Where(x => x.Value.Value.Supported && (string)x.Value.Metadata["Name"] == name);
+            var list = items.Where(x => (string)x.Value.Metadata["Name"] == name);
             if (list.Count() > 0)
             {
                 return list.First().Key;
@@ -100,7 +120,6 @@ namespace MPExtended.Services.MediaAccessService
         public List<WebBackendProvider> GetAllAsBackendProvider()
         {
             return items.Values
-                .Where(x => x.Value.Supported)
                 .Select(x => new WebBackendProvider()
                 {
                     Name = (string)x.Metadata["Name"],
@@ -112,10 +131,21 @@ namespace MPExtended.Services.MediaAccessService
 
         public IEnumerable<WebSearchResult> SearchAll(string text)
         {
-            return items
-                .ToDictionary(x => x.Key, x => x.Value.Value)
-                .Where(x => x.Value.Supported)
-                .SelectMany(x => x.Value.Search(text).Finalize((int)items[x.Key].Metadata["Id"], type));
+            List<WebSearchResult> originalResults = new List<WebSearchResult>();
+            foreach (var library in items)
+            {
+                try
+                {
+                    originalResults.AddRange(library.Value.Value.Search(text).Finalize((int)library.Value.Metadata["Id"], type));
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Search failed in library " + library.Value.Metadata["Name"], ex);
+                }
+            }
+
+            return originalResults
+                .GroupBy(x => x.Id, (key, results) => results.OrderByDescending(res => res.Score).First());
         }
     }
 }

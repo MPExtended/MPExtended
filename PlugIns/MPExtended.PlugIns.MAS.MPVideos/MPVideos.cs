@@ -18,9 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Data.SQLite;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
@@ -52,7 +53,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, " +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
-                    "GROUP_CONCAT(g.strGenre, '|') AS genres " + 
+                    "GROUP_CONCAT(g.strGenre, '|') AS genres " +
                 "FROM movie m " +
                 "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
@@ -60,9 +61,9 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
                 "INNER JOIN actors a ON alm.idActor = a.idActor " +
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
-                "INNER JOIN genre g ON glm.idGenre = g.idGenre " + 
+                "INNER JOIN genre g ON glm.idGenre = g.idGenre " +
                 "WHERE %where " +
-                "GROUP BY m.idMOvie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
+                "GROUP BY m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("m", "idMovie", "Id", DataReaders.ReadIntAsString),
@@ -115,12 +116,12 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public WebFileInfo GetFileInfo(string path)
         {
-            if(path.StartsWith("http://"))
+            if (path.StartsWith("http://"))
             {
                 return ArtworkRetriever.GetFileInfo(path);
             }
 
-            return new WebFileInfo(new FileInfo(path));
+            return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
         }
 
         public Stream GetFile(string path)
@@ -130,23 +131,57 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return ArtworkRetriever.GetStream(path);
             }
 
-            return new FileStream(path, FileMode.Open, FileAccess.Read);
+            return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
         }
 
         public IEnumerable<WebSearchResult> Search(string text)
         {
-            string sql = "SELECT idMovie, strTitle FROM movieinfo WHERE strTitle LIKE @search";
-            return ReadList<WebSearchResult>(sql, delegate (SQLiteDataReader reader) 
+            using (DatabaseConnection connection = OpenConnection())
             {
-                string title = reader.ReadString(1);
-                return new WebSearchResult()
+                var param = new SQLiteParameter("@search", "%" + text + "%");
+                string sql = "SELECT idMovie, strTitle, iYear, strGenre FROM movieinfo WHERE strTitle LIKE @search";
+                IEnumerable<WebSearchResult> titleResults = ReadList<WebSearchResult>(sql, delegate(SQLiteDataReader reader)
                 {
-                    Type = WebMediaType.Movie,
-                    Id = reader.ReadIntAsString(0),
-                    Title = title,
-                    Score = (int)Math.Round((decimal)text.Length / title.Length * 100)
-                };
-            }, new SQLiteParameter("@search", "%" + text + "%"));
+                    string title = reader.ReadString(1);
+                    string genres = reader.ReadString(3);
+                    return new WebSearchResult()
+                    {
+                        Type = WebMediaType.Movie,
+                        Id = reader.ReadIntAsString(0),
+                        Title = title,
+                        Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
+                        Details = new SerializableDictionary<string>()
+                    {
+                        { "Year", reader.ReadIntAsString(2) },
+                        { "Genres", genres == "unknown" ? String.Empty : genres }
+                    }
+                    };
+                }, param);
+
+                string actorSql = "SELECT a.strActor, mi.idMovie, mi.strTitle, mi.iYear, mi.strGenre " +
+                                  "FROM actors a " +
+                                  "LEFT JOIN actorlinkmovie alm ON alm.idActor = a.idActor " +
+                                  "INNER JOIN movieinfo mi ON alm.idMovie = mi.idMovie " +
+                                  "WHERE a.strActor LIKE @search";
+                IEnumerable<WebSearchResult> actorResults = ReadList<WebSearchResult>(actorSql, delegate(SQLiteDataReader reader)
+                {
+                    string genres = reader.ReadString(4);
+                    return new WebSearchResult()
+                    {
+                        Type = WebMediaType.Movie,
+                        Id = reader.ReadIntAsString(1),
+                        Title = reader.ReadString(2),
+                        Score = (int)Math.Round(40 + (decimal)text.Length / reader.ReadString(0).Length * 30),
+                        Details = new SerializableDictionary<string>()
+                    {
+                        { "Year", reader.ReadIntAsString(3) },
+                        { "Genres", genres == "unknown" ? String.Empty : genres }
+                    }
+                    };
+                }, param);
+
+                return titleResults.Concat(actorResults);
+            }
         }
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)

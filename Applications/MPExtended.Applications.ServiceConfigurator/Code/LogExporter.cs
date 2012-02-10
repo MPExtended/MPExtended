@@ -21,6 +21,7 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 
@@ -60,6 +61,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 services.Element("users").Value = PasswordSubstitute;
                 services.Element("networkImpersonation").Element("password").Value = PasswordSubstitute;
                 services.Save(servicePart.GetStream());
+            }
+        }
+
+        public static void ExportWithFileChooser()
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".zip";
+            dlg.Filter = Strings.UI.LogAndConfigurationArchive + "|*.zip";
+            if (dlg.ShowDialog() == true)
+            {
+                Export(dlg.FileName);
+                MessageBox.Show(String.Format(Strings.UI.ExportedLogsAndConfig, dlg.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

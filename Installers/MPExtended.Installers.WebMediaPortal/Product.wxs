@@ -14,7 +14,7 @@
     You must not remove this notice, or any other, from this software.
   -->
   <Product
-    Id="d32fad0c-c885-4829-90a5-2d1259f935fa"
+    Id="*"
     UpgradeCode="1911d293-8311-457a-bd09-296fec9bc368"
     Name="MPExtended WebMediaPortal"
     Language="1033"
@@ -31,7 +31,7 @@
     <!-- Disallow downgrades and support upgrades -->
     <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
     <Upgrade Id="1911d293-8311-457a-bd09-296fec9bc368">
-      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.General.dll)" />
+      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
     </Upgrade>
     
     <!-- The icon -->

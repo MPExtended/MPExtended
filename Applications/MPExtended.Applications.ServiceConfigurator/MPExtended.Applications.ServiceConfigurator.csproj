@@ -79,6 +79,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Strings\UI.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UI.resx</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,10 +99,12 @@
     <Compile Include="Code\CredentialTester.cs" />
     <Compile Include="Code\ErrorHandling.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
+    <Compile Include="Code\ITabCloseCallback.cs" />
     <Compile Include="Code\LogExporter.cs" />
     <Compile Include="Code\PrivateUserSessionService.cs" />
     <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
+    <Compile Include="Code\Service.cs" />
     <Compile Include="Code\StartupArguments.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />
     <Compile Include="Code\UserServices.cs" />
@@ -106,10 +113,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\ServiceConfiguration.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\SectionPluginSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -156,9 +159,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\ServiceConfiguration.xaml.cs">
-      <DependentUpon>ServiceConfiguration.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\SectionPluginSettings.xaml.cs">
       <DependentUpon>SectionPluginSettings.xaml</DependentUpon>
     </Compile>
@@ -195,27 +195,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
@@ -252,10 +234,6 @@
       <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
       <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Applications.UacServiceHandler\MPExtended.Applications.UacServiceHandler.csproj">
-      <Project>{CA3022CA-1E84-485C-8AB3-1116407E32CA}</Project>
-      <Name>MPExtended.Applications.UacServiceHandler</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\Libraries\Artwork\globe.png">
@@ -267,6 +245,12 @@
     <Resource Include="..\..\Libraries\Artwork\TrayIcon.ico">
       <Link>Artwork\TrayIcon.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings\UI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

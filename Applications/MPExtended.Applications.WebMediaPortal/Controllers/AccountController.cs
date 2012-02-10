@@ -22,11 +22,14 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using MPExtended.Libraries.Service;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [SessionState(System.Web.SessionState.SessionStateBehavior.Required)]
     public class AccountController : BaseController
     {
         public IFormsAuthenticationService FormsService { get; set; }
@@ -56,6 +59,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);
+                    ServiceAvailability.Reload();
+                    Log.Debug("User {0} logged in from host {1}", model.UserName, Request.UserHostAddress);
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -67,7 +72,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError("", FormStrings.UsernamePasswordIncorrect);
                 }
             }
 
@@ -80,8 +85,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // **************************************
         public ActionResult LogOff()
         {
+            Log.Debug("User {0} logged out", HttpContext.User.Identity.Name);
             FormsService.SignOut();
-            Session.Abandon();
+            ServiceAvailability.Reload();
 
             return RedirectToAction("Index", "Home");
         }

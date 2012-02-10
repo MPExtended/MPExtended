@@ -40,6 +40,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             // make sure to start only once
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
+                UserServices.Setup(host: false);
                 UserServices.Private.OpenConfigurator();
                 this.Shutdown(0);
                 return;
@@ -71,10 +72,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                 }
             }
 
-#if !DEBUG
-            // change to installation directory
-            Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
-#endif
+            if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
+            {
+                // change to installation directory
+                Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
+            }
 
             // set startup form
             this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);

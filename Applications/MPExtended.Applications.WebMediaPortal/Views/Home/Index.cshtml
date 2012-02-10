@@ -1,33 +1,35 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿<h3>@UIStrings.Welcome</h3>
+
+<style type='text/css'>
+.item
+{
+    margin-top: 15px;
 }
-<style type="text/css">
-    .item
-    {
-        margin-top: 15px;
-    }
-    br.noFloat
-    {
-        clear: both;
-    }
-    .row
-    {
-        max-width: 150px;
-    }
-    .column
-    {
-        float: left;
-        margin-right: 25px;
-        max-width: 150px;
-        display: inline;
-    }
-    .img
-    {
-        max-width: 150px;
-    }
+
+br.noFloat
+{
+    clear: both;
+}
+
+.row
+{
+    max-width: 150px;
+}
+
+.column
+{
+    float: left;
+    margin-right: 25px;
+    max-width: 150px;
+    display: inline;
+}
+
+.img
+{
+    max-width: 150px;
+}
 </style>
-<h3>
-    Welcome</h3>
+
 <div>
     <div class="item">
         @{if(ViewBag.Availability.Movies) { Html.RenderAction("NewMovies", "Home"); }}

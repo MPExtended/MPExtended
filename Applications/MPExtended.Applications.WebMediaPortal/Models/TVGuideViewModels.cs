@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 
@@ -30,8 +31,38 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public struct TimeMarker
         {
             public DateTime Time { get; set; }
-            public string Format { get; set; }
             public bool Last { get; set; }
+
+            public string Format
+            {
+                get
+                {
+                    if (Time.Date == DateTime.Now.Date)
+                    {
+                        return Time.ToShortTimeString();
+                    }
+                    else
+                    {
+                        return Time.ToShortDateString() + " " + Time.ToShortTimeString();
+                    }
+                }
+            }
+
+            public string TimeFormat
+            {
+                get
+                {
+                    return Time.ToShortTimeString();
+                }
+            }
+
+            public string FullFormat
+            {
+                get
+                {
+                    return Time.ToShortDateString() + " " + Time.ToShortTimeString();
+                }
+            }
         }
 
         private IEnumerable<WebChannelGroup> groups;
@@ -67,17 +98,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     TimeMarker tm = new TimeMarker();
                     tm.Time = GuideStart.AddMinutes(i * 30);
                     tm.Last = i == 7;
-                    if (tm.Time.Date == DateTime.Now.Date)
-                    {
-                        tm.Format = tm.Time.ToShortTimeString();
-                    }
-                    else 
-                    {
-                        tm.Format = tm.Time.ToShortDateString() + " " + tm.Time.ToShortTimeString();
-                    }
 
                     yield return tm;
                 }
+            }
+        }
+
+        public string DateFormat
+        {
+            get
+            {
+                return GuideStart.ToShortDateString();
             }
         }
 
@@ -91,7 +122,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             GroupId = channelGroup.Id;
             GroupName = channelGroup.GroupName;
 
-            DateTime loadGuideEnd =guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
+            DateTime loadGuideEnd = guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
             Channels = MPEServices.TAS.GetChannelsBasic(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
         }
     }
@@ -120,6 +151,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string Title { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+        public bool IsScheduled { get; private set; }
 
         public bool IsCurrent
         {
@@ -135,9 +167,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public TVGuideProgramViewModel(WebProgramBasic program, DateTime guideStart, DateTime guideEnd)
         {
             Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
+            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
             StartTime = program.StartTime;
             EndTime = program.EndTime;
+            IsScheduled = program.IsScheduled;
 
             this.guideStart = guideStart;
             this.guideEnd = guideEnd;
@@ -176,7 +209,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public ProgramDetailsViewModel(WebProgramBasic program)
         {
             Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? "Unknown" : program.Title; // creating links with empty text doesn't work
+            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
             Description = program.Description;
             StartTime = program.StartTime;
             EndTime = program.EndTime;

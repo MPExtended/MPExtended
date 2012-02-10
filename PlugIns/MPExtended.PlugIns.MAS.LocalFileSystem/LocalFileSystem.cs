@@ -122,7 +122,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             };
         }
 
-        private static WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
+        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file)
         {
             return new WebFileBasic()
             {
@@ -136,7 +136,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             };
         }
 
-        private static WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir)
+        private WebFolderBasic ConvertDirectoryInfoToFolderBasic(DirectoryInfo dir)
         {
             return new WebFolderBasic()
             {
@@ -149,18 +149,23 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             };
         }
 
-        private static string EncodeTo64(string toEncode)
+        private string EncodeTo64(string toEncode)
         {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(toEncode);
+            return Convert.ToBase64String(toEncodeAsBytes);
         }
 
-        private static string DecodeFrom64(string encodedData)
+        private string DecodeFrom64(string encodedData)
         {
-            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
+            try
+            {
+                byte[] encodedDataAsBytes = Convert.FromBase64String(encodedData);
+                return Encoding.UTF8.GetString(encodedDataAsBytes);
+            }
+            catch (FormatException)
+            {
+                return String.Empty;
+            }
         }
     }
 }

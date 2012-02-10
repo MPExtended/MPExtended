@@ -31,12 +31,33 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// <summary>
     /// Interaction logic for TabServerLogs.xaml
     /// </summary>
-    public partial class TabServerLogs : Page
+    public partial class TabServerLogs : Page, ITabCloseCallback
     {
+        // If we just add simple strings to the log viewer, it always scrolls to the _first_ instance of this string in the
+        // list items, not to the last one, which is what we want. Instead make sure that all items in the collection are unique,
+        // so it always picks the correct line.
+        private class LogLine
+        {
+            public int Id { get; set; }
+            public string Text { get; set; }
+
+            public LogLine(int id, string text)
+            {
+                Id = id;
+                Text = text;
+            }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+
         private StreamReader mLogStreamReader = null;
         private long lastMaxOffset;
         private string mSelectedLog;
         private DispatcherTimer mLogUpdater;
+        private int lastListViewId = 0;
 
         public TabServerLogs()
         {
@@ -66,76 +87,85 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void LoadFile(string _file)
         {
             mSelectedLog = _file;
-
-            if (mSelectedLog != null)
+            if (mSelectedLog == null)
             {
-                lvLogViewer.Items.Clear();
-                string fullpath = Path.Combine(Installation.GetLogDirectory(), mSelectedLog);
+                return;
+            }
 
-                if (File.Exists(fullpath))
+            lvLogViewer.Items.Clear();
+            string fullpath = Path.Combine(Installation.GetLogDirectory(), mSelectedLog);
+
+            if (!File.Exists(fullpath))
+            {
+                Log.Warn("Selected non-existing file {0}", fullpath);
+                return;
+            }
+
+            // load all the current items
+            try
+            {
+                using (FileStream file = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    try
+                    using (StreamReader re = new StreamReader(file, Encoding.UTF8))
                     {
-                        FileStream file = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                        StreamReader re = new StreamReader(file, Encoding.UTF8);
                         string input = null;
                         while ((input = re.ReadLine()) != null)
                         {
-                            lvLogViewer.Items.Add(input);
+                            lvLogViewer.Items.Add(new LogLine(lastListViewId++, input));
                         }
-                        re.Close();
                     }
-                    catch (Exception ex)
-                    {
-                        ErrorHandling.ShowError(ex);
-                    }
-                    ScrollToLastItem(lvLogViewer);
-
-                    // start at the end of the file
-                    mLogStreamReader = new StreamReader(new FileStream(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-                    lastMaxOffset = mLogStreamReader.BaseStream.Length;
-                    mLogUpdater.Start();
-                }
-                else
-                {
-                    Log.Warn("Selected non-existing file {0}", mSelectedLog);   
                 }
             }
+            catch (Exception ex)
+            {
+                ErrorHandling.ShowError(ex);
+            }
+            ScrollToLastItem(lvLogViewer);
+
+            // start updater at the end of the file
+            mLogStreamReader = new StreamReader(new FileStream(fullpath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            lastMaxOffset = mLogStreamReader.BaseStream.Length;
+            mLogUpdater.Start();
         }
 
-        private void StopLogUpdater()
+        public void TabClosed()
         {
-            mLogUpdater.Stop();
+            if (mLogUpdater != null)
+            {
+                mLogUpdater.Stop();
+            }
+
             if (mLogStreamReader != null)
             {
                 mLogStreamReader.Close();
             }
         }
 
-        private delegate void AddLogDelegate(String _line);
+        private delegate void AddLogDelegate(string line);
         private void logUpdater_Tick(object sender, EventArgs e)
         {
-            //if the file size has not changed, idle
+            // If the file size has not changed, idle
             if (mLogStreamReader.BaseStream.Length == lastMaxOffset)
             {
                 return;
             }
 
-            //seek to the last max offset
+            // Seek to the last max offset
             mLogStreamReader.BaseStream.Seek(lastMaxOffset, SeekOrigin.Begin);
 
-            //read out of the file until the EOF
-            string line = "";
-            while ((line = mLogStreamReader.ReadLine()) != null)
+            // Read out of the file until the EOF
+            string readLine = "";
+            while ((readLine = mLogStreamReader.ReadLine()) != null)
             {
-                lvLogViewer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (AddLogDelegate)delegate(String _line)
+                // Add to the list view in the UI thread
+                lvLogViewer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (AddLogDelegate)delegate(string line)
                 {
-                    lvLogViewer.Items.Add(_line);
+                    lvLogViewer.Items.Add(new LogLine(lastListViewId++, line));
                     if (cbLogScrollToEnd.IsChecked == true)
                     {
                         ScrollToLastItem(lvLogViewer);
                     }
-                }, line);
+                }, readLine);
             }
 
             //update the last max offset
@@ -144,25 +174,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnSaveLog_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.DefaultExt = ".log";
-            dlg.Filter = "Log file (.log)|*.log";
-            if (dlg.ShowDialog() == true)
-            {
-                string fullpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs", mSelectedLog);
-                File.Copy(fullpath, dlg.FileName);
-            }
+            LogExporter.ExportWithFileChooser();
         }
 
         public void ScrollToLastItem(ListView lv)
         {
-            lv.SelectedItem = lv.Items.GetItemAt(lv.Items.Count - 1);
-            lv.ScrollIntoView(lv.SelectedItem);
-            ListViewItem item = lv.ItemContainerGenerator.ContainerFromItem(lv.SelectedItem) as ListViewItem;
-            if (item != null)
-            {
-                item.Focus();
-            }
+            lv.ScrollIntoView(lv.Items.GetItemAt(lv.Items.Count - 1));
         }
     }
 }

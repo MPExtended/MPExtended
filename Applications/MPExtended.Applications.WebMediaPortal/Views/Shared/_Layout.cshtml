@@ -1,33 +1,51 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
+    <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/TVGuide.css")" rel="stylesheet" type="text/css" />
+    @foreach (string style in ViewBag.Styles)
+    {
+        <link href="@Url.Content(style)" rel="Stylesheet" type="text/css" />
+    }
+
     <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    @foreach (string script in ViewBag.Scripts)
+    {
+        <script src="@Url.Content(script)" type="text/javascript"></script>
+    }
 </head>
 <body>
     <div id="header">
         <div id='logo'></div>
         <h1>WebMediaPortal</h1>
+
         <div id="logindisplay">
             @Html.Partial("_LogOnPartial")
         </div>
+
+        <div id="search">
+            @using (Html.BeginForm("Results", "Search", FormMethod.Get))
+            {
+                <input type="text" name="text" placeholder="@UIStrings.SearchFieldPlaceholder" onblur="this.form.submit();" />
+            }
+        </div>
+
         <div class="navigation">
             <ul id="navlist">
-                <li class="first">@Html.ActionLink("Home", "Index", "Home")</li>
-                @if (ViewBag.Availability.Music) { <li>@Html.ActionLink("Music", "Index", "MusicLibrary") </li> }
-                @if (ViewBag.Availability.Movies) { <li>@Html.ActionLink("Movies", "Index", "MovieLibrary") </li> }
-                @if (ViewBag.Availability.TVShows) { <li>@Html.ActionLink("TV Shows", "Index", "TVShowsLibrary") </li> }
+                <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
+                @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
+                @if (ViewBag.Availability.Movies) { <li>@Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") </li> }
+                @if (ViewBag.Availability.TVShows) { <li>@Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") </li> }
                 
                 @if (ViewBag.Availability.TAS)
                 {
-                    <li>@Html.ActionLink("TV Guide", "TVGuide", "Television")</li>
-                    <li>@Html.ActionLink("Recordings", "Recordings", "Television")</li>
-                    <li>@Html.ActionLink("Schedules", "Schedules", "Television")</li>
+                    <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
+                    <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
+                    <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
                 }
                 
-                <li>@Html.ActionLink("Settings", "Index", "Settings") </li>
+                <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
             </ul>
         </div>
     </div>

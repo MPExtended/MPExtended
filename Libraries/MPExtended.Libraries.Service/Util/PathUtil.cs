@@ -57,5 +57,11 @@ namespace MPExtended.Libraries.Service.Util
             }
             return path;
         }
+
+        public static string StripFileProtocolPrefix(string path)
+        {
+            Uri uri = new Uri(path);
+            return uri.Scheme == "file" ? uri.LocalPath : path;
+        }
     }
 }

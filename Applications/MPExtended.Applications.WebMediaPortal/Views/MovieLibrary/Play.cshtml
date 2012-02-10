@@ -1,9 +1,11 @@
 ﻿@model MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieDetailed
 @{
-    ViewBag.Title = "Watch movie";
+	ViewBag.Title = String.Format(UIStrings.WatchingMovie, Model.Title);
 }
-<h2>Play</h2>
-You are watching <strong>@Model.Title</strong><br /><br />
+
+<h2>@UIStrings.Play</h2>
+@Html.Raw(String.Format(UIStrings.YouAreWatchingMovie, Model.Title))
+<br /><br />
 
 @{Html.RenderAction("Player", "Stream", new
   {

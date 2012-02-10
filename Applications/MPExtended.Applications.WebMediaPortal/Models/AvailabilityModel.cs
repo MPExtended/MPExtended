@@ -34,6 +34,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public AvailabilityModel()
         {
+            Reload();
+        }
+
+        public void Reload()
+        {
             TAS = MPEServices.HasTASConnection;
             MAS = MPEServices.HasMASConnection;
 

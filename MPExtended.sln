@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAc
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
 		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
 		{D08E4B27-E77C-4258-B050-333D42AA7362} = {D08E4B27-E77C-4258-B050-333D42AA7362}
+		{456F3244-967E-4732-A2C4-0219B85521DC} = {456F3244-967E-4732-A2C4-0219B85521DC}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
 		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
 	EndProjectSection
@@ -98,23 +100,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Con
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D67F-77EE-408D-A6B1-FBCADBFA8732}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debug", "Debug", "{9258DFD4-52C6-4CB8-BD98-1C2CB4B9498F}"
 	ProjectSection(SolutionItems) = preProject
-		Config\Debug\MediaAccess.xml = Config\Debug\MediaAccess.xml
-		Config\Debug\Services.xml = Config\Debug\Services.xml
-		Config\Debug\Streaming.xml = Config\Debug\Streaming.xml
-		Config\Debug\WebMediaPortal.xml = Config\Debug\WebMediaPortal.xml
-		Config\Debug\WebMediaPortalHosting.xml = Config\Debug\WebMediaPortalHosting.xml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{D16BD20A-94B3-4E8C-A8E9-8F7BBF6F161C}"
-	ProjectSection(SolutionItems) = preProject
-		Config\Release\MediaAccess.xml = Config\Release\MediaAccess.xml
-		Config\Release\Services.xml = Config\Release\Services.xml
-		Config\Release\Streaming.xml = Config\Release\Streaming.xml
-		Config\Release\WebMediaPortal.xml = Config\Release\WebMediaPortal.xml
-		Config\Release\WebMediaPortalHosting.xml = Config\Release\WebMediaPortalHosting.xml
+		Config\MediaAccess.xml = Config\MediaAccess.xml
+		Config\Services.xml = Config\Services.xml
+		Config\Streaming.xml = Config\Streaming.xml
+		Config\WebMediaPortal.xml = Config\WebMediaPortal.xml
+		Config\WebMediaPortalHosting.xml = Config\WebMediaPortalHosting.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.USSTest", "Applications\MPExtended.Applications.Development.USSTest\MPExtended.Applications.Development.USSTest.csproj", "{B4064E77-5558-4932-BBD2-88B02E8F1F6F}"

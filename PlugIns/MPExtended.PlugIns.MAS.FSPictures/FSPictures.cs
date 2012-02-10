@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.PlugIns.MAS.FSPictures
@@ -57,7 +58,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             fullpath = Path.GetFullPath(fullpath);
             if (!fullpath.StartsWith(rootInfo))
             {
-                data.Log.Error("Got path {0} that doesn't start with the root {1}", fullpath, rootInfo);
+                Log.Error("Got path {0} that doesn't start with the root {1}", fullpath, rootInfo);
                 return "";
             }
 
@@ -67,7 +68,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             string text = fullpath.Substring(rootInfo.Length + 1);
-            byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(text);
+            byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(text);
             return Convert.ToBase64String(toEncodeAsBytes);
         }
 
@@ -79,7 +80,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
 
             byte[] encodedDataAsBytes = Convert.FromBase64String(id);
-            string path = ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            string path = Encoding.UTF8.GetString(encodedDataAsBytes);
             return Path.Combine(root, path);
         }
     }

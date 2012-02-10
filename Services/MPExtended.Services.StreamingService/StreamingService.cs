@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.ServiceModel;
 using MPExtended.Libraries.Client;
@@ -35,6 +36,7 @@ namespace MPExtended.Services.StreamingService
     public class StreamingService : IWebStreamingService, IStreamingService, IDisposable
     {
         private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
+        private static List<string> _authorizedHosts = new List<string>();
         private const int API_VERSION = 2;
 
         private Streaming _stream;
@@ -55,6 +57,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebStreamServiceDescription GetServiceDescription()
         {
+            AuthorizeStreaming();
             bool hasTv = MPEServices.HasTASConnection; // takes a while so don't execute it twice
             return new WebStreamServiceDescription()
             {
@@ -103,7 +106,7 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            return MediaInfo.MediaInfoWrapper.GetMediaInfo(new MediaSource(type, provider, itemId));
+            return MediaInfoHelper.LoadMediaInfoOrSurrogate(new MediaSource(type, provider, itemId));
         }
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier, int? playerPosition)
@@ -122,13 +125,67 @@ namespace MPExtended.Services.StreamingService
 
         public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
         {
+            if (type == WebStreamMediaType.TV)
+            {
+                try
+                {
+                    itemId = _timeshiftings[itemId].TimeShiftFileName;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Log.Error("Client tried to get stream size for non-existing timeshifting {0}, using default aspectratio", itemId);
+                    return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), MediaInfoHelper.DEFAULT_ASPECT_RATIO).ToWebResolution();
+                }
+            }
+
             return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
+        }
+
+        public bool AuthorizeStreaming()
+        {
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
+            {
+                _authorizedHosts.Add(WCFUtil.GetClientIPAddress());
+            }
+            return true;
+        }
+
+        public bool AuthorizeRemoteHostForStreaming(string host)
+        {
+            if (!_authorizedHosts.Contains(host))
+            {
+                _authorizedHosts.Add(host);
+            }
+            return true;
+        }
+
+        public WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId)
+        {
+            MediaSource source = new MediaSource(type, provider, itemId);
+            string path = source.GetPath();
+            if (path == null || path.Length == 0)
+            {
+                return new WebItemSupportStatus(false, "Cannot resolve item to a path");
+            }
+
+            if (!source.Exists)
+            {
+                return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
+            }
+
+            if (path.EndsWith(".IFO"))
+            {
+                return new WebItemSupportStatus(false, "Streaming DVD files is not supported");
+            }
+
+            return new WebItemSupportStatus() { Supported = true };
         }
         #endregion
 
         #region Streaming
-        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier)
+        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
         {
+            AuthorizeStreaming();
             if (type == WebStreamMediaType.TV)
             {
                 int channelId = Int32.Parse(itemId);
@@ -142,8 +199,9 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}", type, provider, itemId, clientDescription, identifier);
-            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId));
+            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}; idleTimeout={5}", 
+                type, provider, itemId, clientDescription, identifier, idleTimeout);
+            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
         public string StartStream(string identifier, string profileName, int startPosition)
@@ -186,6 +244,13 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
         {
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
+            {
+                Log.Warn("Host {0} isn't authorized to call GetMediaItem", WCFUtil.GetClientIPAddress());
+                WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);
+                return Stream.Null;
+            }
+
             MediaSource source = new MediaSource(type, provider, itemId);
             try
             {
@@ -196,11 +261,15 @@ namespace MPExtended.Services.StreamingService
                 
                 WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
 
+                // WCF removes the Content-Length header for some reason, so set it also as X-Content-Length (#96)  
+                WCFUtil.SetContentLength(source.GetFileInfo().Size);
+                WCFUtil.AddHeader("X-Content-Length", source.GetFileInfo().Size.ToString());
+
                 // there has to be a better way to do this
                 object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
                 if (mime != null)
                 {
-                    WCFUtil.AddHeader("Content-Type", mime.ToString());
+                    WCFUtil.SetContentType(mime.ToString());
                 }
 
                 return source.Retrieve();
@@ -216,6 +285,37 @@ namespace MPExtended.Services.StreamingService
         public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
             return _stream.CustomTranscoderData(identifier, action, parameters);
+        }
+
+        public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition)
+        {
+            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
+            {
+                Log.Warn("Host {0} isn't authorized to call DoStream", WCFUtil.GetClientIPAddress());
+                WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);
+                return Stream.Null;
+            }
+
+            // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
+            string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
+            Log.Debug("DoStream: using identifier {0}", identifier);
+
+            if (!InitStream(type, provider, itemId, clientDescription, identifier, 2))
+            {
+                Log.Info("DoStream: InitStream() failed");
+                FinishStream(identifier);
+                return Stream.Null;
+            }
+
+            if (StartStream(identifier, profileName, startPosition).Length == 0)
+            {
+                Log.Info("DoStream: StartStream failed");
+                FinishStream(identifier);
+                return Stream.Null;
+            }
+
+            Log.Trace("DoStream: succeeded, returning stream");
+            return RetrieveStream(identifier);
         }
         #endregion
 

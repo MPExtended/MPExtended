@@ -1,19 +1,14 @@
 ﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel>
-@{
-    ViewBag.Title = "CurrentSchedules";
-}
 
-@{
-    if (@Model != null && @Model.Count(p => p.Title != "") > 0)
-    {
-        <h2>Today's schedules</h2>
-        <div>
-            <ul>
-                @foreach (var schedule in Model)
-                {
-                    <li>@schedule.Title - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</li>       
-                }
-            </ul>
-        </div>
-    }   
-}
+@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+{
+    <h2>@UIStrings.TodaysSchedules</h2>
+    <div>
+        <ul>
+            @foreach (var schedule in Model)
+            {
+                <li>@schedule.Title - @schedule.StartTime.Value.ToShortTimeString() - @schedule.EndTime.Value.ToShortTimeString()</li>       
+            }
+        </ul>
+    </div>
+} 

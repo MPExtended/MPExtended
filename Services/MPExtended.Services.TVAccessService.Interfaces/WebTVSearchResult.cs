@@ -32,8 +32,8 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string Title { get; set; }
         public int Score { get; set; }
 
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
         // The reason this isn't a channel id here is that the search function is focused on speed: it should be able to give realtime results
         // while the user is typing. Having to do another request to lookup the display name of a channel doesn't help with that. 

@@ -3,14 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
-	Title="TabWebMediaPortal" Unloaded="Page_Unloaded">
+	Title="TabWebMediaPortal">
     <Grid>
-        <GroupBox Header="Hosting" Height="88" HorizontalAlignment="Left" Margin="10,10,0,0" Name="gbServices" VerticalAlignment="Top" Width="538">
+        <GroupBox Header="WebMediaPortal" Height="88" HorizontalAlignment="Left" Margin="10,10,0,0" Name="gbServices" VerticalAlignment="Top" Width="538">
             <Grid>
-                <TextBlock Height="19" Margin="6,6,6,0" Name="tbPort" Text="You can configure the port on which WebMediaPortal runs here." TextWrapping="Wrap" VerticalAlignment="Top" />
-                <Label Content="Port" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,29,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" />
+                <TextBlock Height="19" Margin="6,6,6,0" Name="tbPort" Text="{x:Static strings:UI.ConfigureWebMPPort}" TextWrapping="Wrap" VerticalAlignment="Top" />
+                <Label Content="{x:Static strings:UI.Port}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,29,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" />
                 <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="74,31,0,0" Name="txtPort" Text="8080" VerticalAlignment="Top" Width="158" />
             </Grid>
         </GroupBox>

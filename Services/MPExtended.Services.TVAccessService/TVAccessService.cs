@@ -113,7 +113,21 @@ namespace MPExtended.Services.TVAccessService
         #region TV Server
         public WebResult TestConnectionToTVService()
         {
-            return RemoteControl.IsConnected;
+            if (!RemoteControl.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+                TvDatabase.Version.ListAll();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to connected to TV service database", ex);
+                return false;
+            }
         }
 
         public string ReadSettingFromDatabase(string tagName)
@@ -131,6 +145,11 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return new List<WebTVSearchResult>();
+            }
+
             text = text.ToLower();
             IEnumerable<WebTVSearchResult> result = new List<WebTVSearchResult>();
 
@@ -199,13 +218,14 @@ namespace MPExtended.Services.TVAccessService
                         Id = schedule.IdSchedule.ToString(),
                         Score = 50 + (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 50),
                         Title = schedule.ProgramName,
-                        Type = WebTVSearchResultType.Schedule
+                        Type = WebTVSearchResultType.Schedule,
+                        ChannelName = Channel.Retrieve(schedule.IdChannel).DisplayName
                     }));
             }
 
             if (type == null || type == WebTVSearchResultType.Program)
             {
-                result = result.Concat(_tvBusiness.SearchPrograms(text)
+                result = result.Concat(_tvBusiness.SearchPrograms("%" + text + "%")
                     .Select(program => new WebTVSearchResult()
                     {
                         Id = program.IdProgram.ToString(),
@@ -257,6 +277,19 @@ namespace MPExtended.Services.TVAccessService
         public IList<WebRtspClient> GetStreamingClients()
         {
             return _tvControl.StreamingClients.Select(cl => cl.ToWebRtspClient()).ToList();
+        }
+
+        public IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation()
+        {
+            return GetCards().Select(x => x.RecordingFolder).Distinct()
+                .Select(x => DiskSpaceInformation.GetSpaceInformation(x))
+                .ToList();
+        }
+
+        public WebDiskSpaceInformation GetRecordingDiskInformationForCard(int id)
+        {
+            string folder = Card.Retrieve(id).ToWebCard().RecordingFolder;
+            return DiskSpaceInformation.GetSpaceInformation(folder);
         }
         #endregion
 
@@ -417,6 +450,12 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count };
         }
 
+        public IList<WebChannelBasic> GetAllChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
+        {
+            return Channel.ListAll().Where(ch => ch.IsTv).OrderBy(ch => sort == SortField.User ? ch.SortOrder : 1, order)
+                .Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
+        }
+
         public IList<WebChannelBasic> GetChannelsBasic(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
@@ -425,6 +464,12 @@ namespace MPExtended.Services.TVAccessService
         public IList<WebChannelBasic> GetChannelsBasicByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
             return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
+        }
+
+        public IList<WebChannelDetailed> GetAllChannelsDetailed(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
+        {
+            return Channel.ListAll().Where(ch => ch.IsTv).OrderBy(ch => sort == SortField.User ? ch.SortOrder : 1, order)
+                .Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelDetailed> GetChannelsDetailed(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -491,6 +536,12 @@ namespace MPExtended.Services.TVAccessService
             return new WebCount() { Count = _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count };
         }
 
+        public IList<WebChannelBasic> GetAllRadioChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
+        {
+            return Channel.ListAll().Where(ch => ch.IsRadio).OrderBy(ch => sort == SortField.User ? ch.SortOrder : 1, order)
+                .Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
+        }
+
         public IList<WebChannelBasic> GetRadioChannelsBasic(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
             return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
@@ -499,6 +550,12 @@ namespace MPExtended.Services.TVAccessService
         public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int groupId, int start, int end, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
         {
             return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
+        }
+
+        public IList<WebChannelDetailed> GetAllRadioChannelsDetailed(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
+        {
+            return Channel.ListAll().Where(ch => ch.IsRadio).OrderBy(ch => sort == SortField.User ? ch.SortOrder : 1, order)
+                .Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailed(int groupId, SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)

@@ -1,14 +1,13 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Music.WebMusicAlbumBasic>
-
+﻿@model MPExtended.Applications.WebMediaPortal.Models.ArtistViewModel
 @{
-    ViewBag.Title = "Albums";
+	ViewBag.Title = Model.Artist.Title;
 }
 
-<h3>Browse Albums</h3>
+<h3>@String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title)</h3>
 
 <ul>
-    @foreach (var album in Model)
+    @foreach (var album in Model.Albums)
     {
-          <li> @Html.ActionLink(album.Title, "Tracks", new { album = album.Id }) </li>     
+          <li> @Html.ActionLink(album.Title, "Album", new { album = album.Id }) </li>     
     }
 </ul>

@@ -17,10 +17,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -36,6 +38,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabBarcode : Page
     {
+        private BackgroundWorker BackgroundGenerator;
         private Dictionary<string, User> Users;
 
         public TabBarcode()
@@ -48,18 +51,39 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             cbUser.SelectedValuePath = "Value";
             cbUser.SelectedIndex = 0;
 
-            GenerateBarcode(null);
+            BackgroundGenerator = new BackgroundWorker();
+            BackgroundGenerator.DoWork += delegate(object s, DoWorkEventArgs args)
+            {
+                args.Result = GenerateBarcode((User)args.Argument);
+            };
+            BackgroundGenerator.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
+            {
+                imgQRCode.Source = (BitmapSource)args.Result;
+            };
+            BackgroundGenerator.WorkerSupportsCancellation = true;
         }
 
-        private void updateBarcode(object sender, EventArgs e)
+        private void UpdateBarcode(object sender, EventArgs e)
         {
-            if (cbIncludeAuth.IsChecked == true)
+            UpdateBarcode();
+        }
+
+        private void UpdateBarcode()
+        {
+            try
             {
-                GenerateBarcode((User)cbUser.SelectedValue);
-            } 
-            else 
+                if (cbIncludeAuth.IsChecked == true)
+                {
+                    BackgroundGenerator.RunWorkerAsync((User)cbUser.SelectedValue);
+                }
+                else
+                {
+                    BackgroundGenerator.RunWorkerAsync(null);
+                }
+            }
+            catch (InvalidOperationException ex)
             {
-                GenerateBarcode(null);
+                Log.Warn("Failed to start BackgroundWorker", ex);
             }
         }
 
@@ -72,18 +96,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             SaveFileDialog diag = new SaveFileDialog();
             diag.Filter = "JPEG Image|*.jpg";
-            diag.Title = "Save Barcode as Image File";
+            diag.Title = Strings.UI.SaveBarcodeAsImageFile;
             if (diag.ShowDialog() == true)
             {
                 ((BitmapSource)imgQRCode.Source).ToWinFormsBitmap().Save(diag.FileName);
-                MessageBox.Show(String.Format("Saved QR-code to {0}", diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format(Strings.UI.SavedBarcodeTo, diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         /// <summary>
         /// Generate a QR Barcode with the server information
         /// </summary>
-        private void GenerateBarcode(User auth)
+        private BitmapSource GenerateBarcode(User auth)
         {
             try
             {
@@ -112,18 +136,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
 
                 Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
-                imgQRCode.Source = bm.ToWpfBitmap();
+                return bm.ToWpfBitmap();
             }
             catch (Exception ex)
             {
                 Log.Error("Error generating barcode", ex);
+                return null;
             }
         }
 
         /// <summary>
         /// Get the machine name or a fallback
         /// </summary>
-        private static string GetServiceName()
+        private string GetServiceName()
         {
             try
             {

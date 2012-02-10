@@ -47,11 +47,11 @@ namespace MPExtended.Services.MetaService
 
         public MetaService()
         {
-            ServiceStartup.RegisterStartupCondition(STARTUP_CONDITION);
+            ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
             detector = new ServiceDetector();
             publishers = new IServicePublisher[] { new ZeroconfPublisher() };
             initialized = false;
-            ServiceStartup.Started += delegate()
+            ServiceState.Started += delegate()
             {
                 initialized = true;
             };
@@ -64,7 +64,7 @@ namespace MPExtended.Services.MetaService
                 {
                     publisher.PublishAsync(detector);
                 }
-                ServiceStartup.StartupConditionCompleted(STARTUP_CONDITION);
+                ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
             });
         }
 

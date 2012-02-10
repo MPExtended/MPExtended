@@ -41,13 +41,13 @@ namespace MPExtended.Libraries.Service.Hosting
         {
             try
             {
-                ServiceStartup.RegisterStartupCondition(STARTUP_CONDITION);
+                ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
 
                 // rotate log files if possible
                 LogRotation rotation = new LogRotation();
                 rotation.Rotate();
 
-                Log.Debug("Opening MPExtended ServiceHost version {0} (build {1})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion());
+                Log.Debug("Opening MPExtended ServiceHost version {0}", VersionUtil.GetFullVersionString());
 
                 // always log uncaught exceptions
                 AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e)
@@ -72,7 +72,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 }
 
 				// finish
-                ServiceStartup.StartupConditionCompleted(STARTUP_CONDITION);
+                ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
 				Log.Debug("Opened MPExtended ServiceHost");
                 return true;
             }
@@ -88,6 +88,7 @@ namespace MPExtended.Libraries.Service.Hosting
             try
             {
                 Log.Debug("Closing MPExtended ServiceHost...");
+                ServiceState.TriggerStoppingEvent();
                 wcf.Stop();
                 ThreadManager.AbortAll();
                 Log.Flush();

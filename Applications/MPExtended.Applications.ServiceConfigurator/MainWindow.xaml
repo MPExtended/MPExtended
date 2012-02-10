@@ -2,11 +2,64 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
-       Title="MPExtended Configurator" Height="490" MinHeight="490" Width="750" MinWidth="750" Closing="Window_Closing" Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png">
-    <Grid>
+        xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
+       Title="{x:Static strings:UI.WindowTitle}" 
+       Height="490"
+       MinHeight="490" 
+       Width="750"
+       MinWidth="750" 
+       Closing="Window_Closing" 
+       Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png">
+
+    <Grid Width="AUTO">
+        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-250,-250" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
+        <Image HorizontalAlignment="Left" Margin="6,0,11,11" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,143" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,165" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
+        
+        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="tcMainTabs_SelectionChanged" Visibility="Visible" Background="{x:Null}">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="0" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="{x:Static strings:UI.TabProject}" Width="140" Name="tiGeneral" Tag="Pages/TabProject.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabConfiguration}" Width="140" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabSocial}" Width="140" Name="tiSocial" Tag="Pages/TabSocial.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabLogs}" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabTroubleshooting}" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
+            </TabItem>
+        </TabControl>
+
         <tb:TaskbarIcon 
           IconSource="/Artwork/TrayIcon.ico"
-          ToolTipText="MPExtended Configuration" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
+          ToolTipText="{x:Static strings:UI.TrayTooltip}" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border
                   Background="White"
@@ -17,7 +70,7 @@
                   Width="160"
                   Height="40">
                     <TextBlock
-                        Text="MPExtended Configuration"
+                        Text="{x:Static strings:UI.TrayTooltip}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
                 </Border>
@@ -26,24 +79,22 @@
             <!-- Set a simple context menu  -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu Opened="ContextMenu_Opened" Name="taskbarItemContextMenu">
-                    <MenuItem Name="MenuOpenConfigurator" Header="Open MPExtended Configurator" Click="MenuOpenConfigurator_Click" />
-                    <MenuItem Name="MenuOpenWebMP" Header="Open WebMediaPortal" Click="MenuOpenWebMP_Click" />
-                    <MenuItem Name="MenuStartCloseMp" Header="Start MediaPortal" Click="MenuStartCloseMp_Click"/>
-                    <MenuItem Name="MenuPowermodes" Header="Powermodes">
-                        <MenuItem Name="MenuPowermodeScreensaverOn" Header="Screensaver" Click="MenuPowermodeScreensaverOn_Click"/>
-                        <MenuItem Name="MenuPowermodeMonitorOff" Header="Monitor Off" Click="MenuPowermodeMonitorOff_Click"/>
-                        <MenuItem Name="MenuPowermodeLock" Header="Lock" Click="MenuPowermodeLock_Click"/>
-                        <MenuItem Name="MenuPowermodeLogoff" Header="LogOff" Click="MenuPowermodeLogoff_Click"/>
-                        <MenuItem Name="MenuPowermodeSuspend" Header="Suspend" Click="MenuPowermodeSuspend_Click"/>
-                        <MenuItem Name="MenuPowermodeHibernate" Header="Hibernate" Click="MenuPowermodeHibernate_Click"/>
-                        <MenuItem Name="MenuPowermodeReboot" Header="Reboot" Click="MenuPowermodeReboot_Click"/>
-                        <MenuItem Name="MenuPowermodeShutdown" Header="Shutdown" Click="MenuPowermodeShutdown_Click"/>
+                    <MenuItem Name="MenuOpenConfigurator" Header="{x:Static strings:UI.TrayOpenConfigurator}" Click="MenuOpenConfigurator_Click" />
+                    <MenuItem Name="MenuOpenWebMP" Header="{x:Static strings:UI.TrayOpenWebMP}" Click="MenuOpenWebMP_Click" />
+                    <MenuItem Name="MenuStartCloseMp" Header="{x:Static strings:UI.TrayStartMediaPortal}" Click="MenuStartCloseMp_Click"/>
+                    <MenuItem Name="MenuPowermodes" Header="{x:Static strings:UI.TrayPowermodes}">
+                        <MenuItem Name="MenuPowermodeScreensaverOn" Header="{x:Static strings:UI.TrayScreensaver}" Click="MenuPowermodeScreensaverOn_Click"/>
+                        <MenuItem Name="MenuPowermodeMonitorOff" Header="{x:Static strings:UI.TrayMonitorOff}" Click="MenuPowermodeMonitorOff_Click"/>
+                        <MenuItem Name="MenuPowermodeLock" Header="{x:Static strings:UI.TrayLock}" Click="MenuPowermodeLock_Click"/>
+                        <MenuItem Name="MenuPowermodeLogoff" Header="{x:Static strings:UI.TrayLogOff}" Click="MenuPowermodeLogoff_Click"/>
+                        <MenuItem Name="MenuPowermodeSuspend" Header="{x:Static strings:UI.TraySuspend}" Click="MenuPowermodeSuspend_Click"/>
+                        <MenuItem Name="MenuPowermodeHibernate" Header="{x:Static strings:UI.TrayHibernate}" Click="MenuPowermodeHibernate_Click"/>
+                        <MenuItem Name="MenuPowermodeReboot" Header="{x:Static strings:UI.TrayReboot}" Click="MenuPowermodeReboot_Click"/>
+                        <MenuItem Name="MenuPowermodeShutdown" Header="{x:Static strings:UI.TrayShutdown}" Click="MenuPowermodeShutdown_Click"/>
                     </MenuItem>
-                    <MenuItem Name="MenuExit" Header="Exit"  Click="MenuExit_Click"/>
+                    <MenuItem Name="MenuExit" Header="{x:Static strings:UI.TrayExit}"  Click="MenuExit_Click"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-        
-        <Frame x:Name="MainFrame"></Frame>
     </Grid>
 </Window>

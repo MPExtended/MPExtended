@@ -3,16 +3,17 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabBarcode">
 
     <Grid>
-        <Label Content="QR Code" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
+        <Label Content="{x:Static strings:UI.QRCode}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
         <Image Margin="10,85,6,31" Name="imgQRCode" Stretch="Uniform" StretchDirection="Both" HorizontalAlignment="Stretch" OpacityMask="White" />
-        <CheckBox Content="Include authentication for user: " HorizontalAlignment="Left" Margin="10,0,0,6" Name="cbIncludeAuth" Height="19" VerticalAlignment="Bottom" Checked="updateBarcode" Unchecked="updateBarcode" />
-        <Label Content="You can scan the QR code with supported clients to add this MediaPortal automatically." Height="28" HorizontalAlignment="Left" Margin="10,44,0,0" Name="lblScan" VerticalAlignment="Top" />
-        <Button Content="Save To File" Margin="0,0,6,6" Name="btnSaveToFile" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="132" Click="btnSaveToFile_Click" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="201,0,0,6" Name="cbUser" VerticalAlignment="Bottom" Width="160" ItemsSource="{Binding}" SelectionChanged="updateBarcode" />
+        <CheckBox Content="{x:Static strings:UI.IncludeAuthentication}" HorizontalAlignment="Left" Margin="10,0,0,6" Name="cbIncludeAuth" Height="19" VerticalAlignment="Bottom" Checked="UpdateBarcode" Unchecked="UpdateBarcode" />
+        <Label Content="{x:Static strings:UI.QRCodeIntroText}" Height="28" HorizontalAlignment="Left" Margin="10,44,0,0" Name="lblScan" VerticalAlignment="Top" />
+        <Button Content="{x:Static strings:UI.SaveToFile}" Margin="0,0,6,6" Name="btnSaveToFile" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="132" Click="btnSaveToFile_Click" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="201,0,0,6" Name="cbUser" VerticalAlignment="Bottom" Width="160" ItemsSource="{Binding}" SelectionChanged="UpdateBarcode" />
     </Grid>
 </Page>

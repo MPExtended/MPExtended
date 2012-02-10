@@ -24,6 +24,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Mvc;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -98,7 +99,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 IEnumerable<SelectListItem> items = new List<SelectListItem>()
                 {
-                    new SelectListItem() { Text = "default", Value = "default" }
+                    new SelectListItem() { Text = FormStrings.DefaultSkinName, Value = "default" }
                 };
 
                 string path = HttpContext.Current.Server.MapPath("~/Skins");
@@ -132,43 +133,43 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        [DisplayName("Default TV group")]
-        [ListChoice("TVGroups", AllowNull = true, ErrorMessage="Please select a valid TV group")]
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVGroup")]
+        [ListChoice("TVGroups", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVGroup")]
         public int? SelectedGroup { get; set; }
 
-        [DisplayName("Default media streaming profile")]
-        [ListChoice("MediaProfiles", AllowNull = true, ErrorMessage="Please select a valid media streaming profile")]
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMediaStreamingProfile")]
+        [ListChoice("MediaProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMediaProfile")]
         public string SelectedMediaProfile { get; set; }
 
-        [DisplayName("Default music streaming profile")]
-        [ListChoice("AudioProfiles", AllowNull = true, ErrorMessage = "Please select a valid audio streaming profile")]
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicStreamingProfile")]
+        [ListChoice("AudioProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicProfile")]
         public string SelectedAudioProfile { get; set; }
 
-        [DisplayName("Default TV streaming profile")]
-        [ListChoice("TVProfiles", AllowNull = true, ErrorMessage = "Please select a valid TV streaming profile")]
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVStreamingProfile")]
+        [ListChoice("TVProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVProfile")]
         public string SelectedTVProfile { get; set; }
 
-        [DisplayName("TV Show database")]
-        [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessage = "Please select a valid TV show database")]
+        [LocalizedDisplayName(typeof(FormStrings), "TVShowDatabase")]
+        [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVShowDatabase")]
         public int? TVShowProvider { get; set; }
 
-        [DisplayName("Movie database")]
-        [ListChoice("MovieDatabases", AllowNull = true, ErrorMessage = "Please select a valid movie database")]
+        [LocalizedDisplayName(typeof(FormStrings), "MovieDatabase")]
+        [ListChoice("MovieDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMovieDatabase")]
         public int? MovieProvider { get; set; }
 
-        [DisplayName("Music database")]
-        [ListChoice("MusicDatabases", AllowNull = true, ErrorMessage = "Please select a valid music database")]
+        [LocalizedDisplayName(typeof(FormStrings), "MusicDatabase")]
+        [ListChoice("MusicDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicDatabase")]
         public int? MusicProvider { get; set; }
 
-        [DisplayName("Stream type")]
+        [LocalizedDisplayName(typeof(FormStrings), "StreamType")]
         public StreamType StreamType { get; set; }
 
-        [DisplayName("VLC player: enable deinterlacing by default?")]
+        [LocalizedDisplayName(typeof(FormStrings), "VLCPlayerEnableDeinterlacing")]
         public bool EnableDeinterlace { get; set; }
 
-        [DisplayName("Skin")]
-        [Required(ErrorMessage = "Please select a valid skin")]
-		[ListChoice("Skins", AllowNull = false, ErrorMessage = "Please select a valid skin")]
+        [LocalizedDisplayName(typeof(FormStrings), "Skin")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidSkin")]
+        [ListChoice("Skins", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidSkin")]
         public string Skin { get; set; }
 
         public SettingsViewModel()
@@ -243,14 +244,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class ServiceSettingsViewModel
     {
-        [DisplayName("Client service")]
-        [Required(ErrorMessage = "Please specify a valid MAS url")]
-        [CustomValidation(typeof(Validators), "ValidateMASUrl", ErrorMessage = "Failed to connect to the specified client service")]
+        [LocalizedDisplayName(typeof(FormStrings), "ClientService")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidClientService")]
+        [CustomValidation(typeof(Validators), "ValidateMASUrl", ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FailedToConnectToClient")]
         public string MASUrl { get; set; }
 
-        [DisplayName("Server service")]
-        [Required(ErrorMessage = "Please specify a valid TAS url")]
-        [CustomValidation(typeof(Validators), "ValidateTASUrl", ErrorMessage = "Failed to connect to the specified server service")]
+        [LocalizedDisplayName(typeof(FormStrings), "ServerService")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidServerService")]
+        [CustomValidation(typeof(Validators), "ValidateTASUrl", ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FailedToConnectToServer")]
         public string TASUrl { get; set; }
 
         public ServiceSettingsViewModel()

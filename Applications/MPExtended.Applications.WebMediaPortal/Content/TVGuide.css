@@ -77,3 +77,14 @@
 {
     background-color: #AFCAFA;
 }
+
+#TVGuide .program.scheduled
+{
+    background-color: #FA8787;
+    border: 1px solid #E3E3E3;
+}
+
+#TVGuide .program.scheduled a 
+{
+    color: white;
+}

@@ -1,12 +1,12 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.TVGuideViewModel
 @{
-    ViewBag.Title = "TV Guide";
+    ViewBag.Title = UIStrings.TVGuide;
 }
 
 @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
 {
     @Html.DropDownList("group", Model.Groups)
-    <button name="time" value="@Model.GuideStart.ToString("s")">Update</button>
+    <button name="time" value="@Model.GuideStart.ToString("s")">@UIStrings.Update</button>
 
     <br />
     <br />
@@ -14,7 +14,7 @@
     <div id="TVGuide">
         <div class="headerrow">
             <div class="headerspacer">
-                <button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier">Earlier</button>
+                <button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier">@UIStrings.Earlier</button>
             </div>
             <div class="programs">
                 @{  foreach (var marker in Model.TimeMarkers)
@@ -24,7 +24,7 @@
                                 @marker.Format
                                 @if (marker.Last)
                                 {
-                                    <button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later">Later</button>
+                                    <button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later">@UIStrings.Later</button>
                                 }
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                                 <div class="programcontainer" style="width: @program.GetCssPercentageWidth();">
                                 @{  if(program.GetPercentageWidth() > 1)
                                     {
-                                        <div class="program @(program.IsCurrent ? "current" : "")">
+                                        <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")">
                                             @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
                                         </div>
                                     }

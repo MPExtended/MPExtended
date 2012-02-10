@@ -91,22 +91,13 @@ namespace MPExtended.Libraries.Service.Util
 
         public static bool IsLocalAddress(IPAddress address)
         {
-            if (GetIPAddressList(true).Contains(address))
-            {
-                return true;
-            }
-
-            if (address.ToString() == "127.0.0.1" || address.ToString() == "::1")
-            {
-                return true;
-            }
-
-            return false;
+            return address.ToString() == "127.0.0.1" || address.ToString() == "::1" ||
+                GetIPAddressList(true).Contains(address);
         }
 
         public static bool IsLocalAddress(string address)
         {
-            return address == "localhost" || IsLocalAddress(IPAddress.Parse(address));
+            return address == "localhost" || address == "::1" || address == "127.0.0.1" || IsLocalAddress(IPAddress.Parse(address));
         }
 
         public static Dictionary<string, string> GetNetworkInterfaces(bool enableIPv6)
