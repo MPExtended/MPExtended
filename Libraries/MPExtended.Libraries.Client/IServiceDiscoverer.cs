@@ -22,12 +22,25 @@ using System.Text;
 
 namespace MPExtended.Libraries.Client
 {
+    public class SetDiscoveredEventArgs : EventArgs
+    {
+        public IServiceAddressSet Set { get; private set; }
+
+        public SetDiscoveredEventArgs(IServiceAddressSet set)
+        {
+            Set = set;
+        }
+    }
+
     public interface IServiceDiscoverer
     {
-        void Hint(string ip);
-        void SetDiscoverTimeout(TimeSpan timeout);
+        event EventHandler<SetDiscoveredEventArgs> SetDiscovered;
 
-        IEnumerable<IServiceSet> DiscoverAll();
-        IEnumerable<IServiceSet> DiscoverPrimary();
+        void Hint(string ip);
+
+        IEnumerable<IServiceAddressSet> DiscoverSets(TimeSpan timeout);
+
+        void StartDiscoveryAsync();
+        void StopDiscovery();
     }
 }

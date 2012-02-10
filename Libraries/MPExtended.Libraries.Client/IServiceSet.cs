@@ -32,10 +32,18 @@ namespace MPExtended.Libraries.Client
         IStreamingService MASStream { get; }
         IWebStreamingService MASStreamControl { get; }
 
+        bool HasMASConnection { get; }
+        bool HasMASStreamConnection { get; }
+
         ITVAccessService TAS { get; }
         IStreamingService TASStream { get; }
         IWebStreamingService TASStreamControl { get; }
 
+        bool HasTASConnection { get; }
+        bool HasTASStreamConnection { get; }
+        /*
         IUserSessionService USS { get; }
+        bool HasUSSConnection { get; set; }
+         */
     }
 }

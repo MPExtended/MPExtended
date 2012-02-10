@@ -48,17 +48,26 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Zeroconf.cs" />
     <Compile Include="MPEServices.cs" />
     <Compile Include="MPEServicesHolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IServiceDiscoverer.cs" />
     <Compile Include="IServiceAddressSet.cs" />
     <Compile Include="IServiceSet.cs" />
+    <Compile Include="ServiceAddressSet.cs" />
+    <Compile Include="ServiceDiscoverer.cs" />
+    <Compile Include="ServiceException.cs" />
+    <Compile Include="ServiceSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>

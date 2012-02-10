@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,19 +22,20 @@ using System.Text;
 
 namespace MPExtended.Libraries.Client
 {
-    public interface IServiceAddressSet
+    public class ServiceException : Exception
     {
-        string MAS { get; }
-        string MASStream { get; }
+        public ServiceException()
+        {
+        }
 
-        string TAS { get; }
-        string TASStream { get; }
+        public ServiceException(string message) 
+            : base(message) 
+        { 
+        }
 
-        string USS { get; }
-
-        string GetSetIdentifier();
-
-        IServiceSet Connect();
-        IServiceSet Connect(string username, string password);
+        public ServiceException(string message, Exception inner) 
+            : base(message, inner) 
+        { 
+        }
     }
 }
