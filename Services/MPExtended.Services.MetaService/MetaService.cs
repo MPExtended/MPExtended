@@ -62,7 +62,7 @@ namespace MPExtended.Services.MetaService
 
             ThreadManager.Start("ServicePublishing", delegate()
             {
-                // give it some time to publish
+                // give it some time to detect all service sets
                 Thread.Sleep(5000);
                 foreach (var publisher in publishers)
                 {

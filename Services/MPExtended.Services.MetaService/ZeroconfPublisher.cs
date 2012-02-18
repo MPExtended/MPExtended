@@ -58,6 +58,7 @@ namespace MPExtended.Services.MetaService
             // new style service sets
             foreach (WebServiceSet set in detector.CreateSetComposer().ComposeUnique())
             {
+                Log.Debug("Publishing service set {0}", set);
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["mac"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["mas"] = set.MAS != null ? set.MAS : String.Empty;

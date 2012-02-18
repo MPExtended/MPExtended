@@ -35,5 +35,10 @@ namespace MPExtended.Services.MetaService.Interfaces
                 this.TASStream == compare.TASStream &&
                 this.UI == compare.UI;
         }
+
+        public override string ToString()
+        {
+            return String.Format("MAS={0}; MASStream={1}; TAS={2}; TASStream={3}; UI={4}", MAS, MASStream, TAS, TASStream, UI);
+        }
     }
 }
