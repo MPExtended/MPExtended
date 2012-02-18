@@ -51,7 +51,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             return RunUacServiceHandler("/command:service /action:restart");
         }
 
-        private static bool RunUacServiceHandler(string parameters)
+        public static bool RunUacServiceHandler(string parameters)
         {
             try
             {

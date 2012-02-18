@@ -30,14 +30,24 @@ namespace MPExtended.Applications.UacServiceHandler
         [STAThread]
         public static void Main(string[] args)
         {
-            switch (GetArgument(args, "/command"))
+            try
             {
-                case "service":
-                    Service.Execute(GetArgument(args, "/action"));
-                    break;
-                default:
-                    DieWithUsage();
-                    break;
+                switch (GetArgument(args, "/command"))
+                {
+                    case "service":
+                        new WindowsServiceHandler("MPExtended Service").Execute(GetArgument(args, "/action"));
+                        break;
+                    case "webmphosting":
+                        new WindowsServiceHandler("MPExtended WebMediaPortal").Execute(GetArgument(args, "/action"));
+                        break;
+                    default:
+                        DieWithUsage();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 

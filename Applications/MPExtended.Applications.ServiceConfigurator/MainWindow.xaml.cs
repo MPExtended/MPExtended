@@ -276,20 +276,6 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
         }
 
-        private void RestartService(int timeoutMilliseconds)
-        {
-            // The timeout is the total timeout for two operations, so we reduce the timeout with the elapsed time after the first operation.
-            int startTime = Environment.TickCount;
-            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-
-            mServiceController.Stop();
-            mServiceController.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-
-            timeout -= TimeSpan.FromTicks(Environment.TickCount - startTime);
-            mServiceController.Start();
-            mServiceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
-        }
-
         private void HandleServiceState(ServiceControllerStatus _status)
         {
             switch (_status)
