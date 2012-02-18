@@ -26,7 +26,7 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    public class MetaService : IMetaService
+    public class MetaService : IMetaService, IProtectedMetaService
     {
         #region Initialization
         private const string STARTUP_CONDITION = "MetaService";
@@ -117,6 +117,14 @@ namespace MPExtended.Services.MetaService
         public WebBool HasUI()
         {
             return detector.HasUI;
+        }
+        #endregion
+
+        #region IProtectedMetaService implementation
+        public WebBool ReloadConfiguration()
+        {
+            // TODO
+            return true;
         }
         #endregion
     }

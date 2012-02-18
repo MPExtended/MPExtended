@@ -25,7 +25,7 @@ using MPExtended.Services.MetaService.Interfaces;
 namespace MPExtended.Services.MetaService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class WCFMetaService : IMetaService
+    public class WCFMetaService : IMetaService, IProtectedMetaService
     {
         public WebBool TestConnection()
         {
@@ -55,6 +55,11 @@ namespace MPExtended.Services.MetaService
         public WebServiceVersion GetVersion()
         {
             return MetaService.Instance.GetVersion();
+        }
+
+        public WebBool ReloadConfiguration()
+        {
+            return MetaService.Instance.ReloadConfiguration();
         }
     }
 }
