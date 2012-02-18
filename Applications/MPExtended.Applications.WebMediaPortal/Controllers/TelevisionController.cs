@@ -29,7 +29,7 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [Authorize]
+    [ServiceAuthorize]
     public class TelevisionController : BaseController
     {
         //

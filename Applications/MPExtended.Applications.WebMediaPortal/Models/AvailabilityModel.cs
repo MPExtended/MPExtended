@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -32,6 +33,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public bool TVShows { get; set; }
         public bool Music { get; set; }
 
+        public bool Authentication { get; set; }
+
         public AvailabilityModel()
         {
             Reload();
@@ -39,6 +42,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public void Reload()
         {
+            Authentication = Configuration.Services.AuthenticationEnabled;
+
             TAS = MPEServices.HasTASConnection;
             MAS = MPEServices.HasMASConnection;
 

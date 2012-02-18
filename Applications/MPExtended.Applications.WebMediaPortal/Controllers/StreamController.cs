@@ -69,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        [Authorize]
+        [ServiceAuthorize]
         public ActionResult Download(WebStreamMediaType type, string item)
         {
             // Create URL to GetMediaItem
@@ -276,7 +276,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return PartialView("Player", model);
         }
 
-        [Authorize]
+        [ServiceAuthorize]
         public ActionResult Player(WebStreamMediaType type, string itemId)
         {
             PlayerViewModel model = new PlayerViewModel();
@@ -312,7 +312,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
         }
 
-        [Authorize]
+        [ServiceAuthorize]
         public ActionResult MusicPlayer(string albumId)
         {
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
@@ -322,7 +322,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 
-        [Authorize]
+        [ServiceAuthorize]
         public ActionResult Playlist(WebStreamMediaType type, string itemId)
         {
             // save stream request

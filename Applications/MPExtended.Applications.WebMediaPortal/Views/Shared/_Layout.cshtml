@@ -21,7 +21,10 @@
         <h1>WebMediaPortal</h1>
 
         <div id="logindisplay">
+        @if (ViewBag.Availability.Authentication)
+        {
             @Html.Partial("_LogOnPartial")
+        }
         </div>
 
         <div id="search">

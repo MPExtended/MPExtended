@@ -27,6 +27,7 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
+    [ServiceAuthorize]
     public class ScheduleController : BaseController
     {
         //
