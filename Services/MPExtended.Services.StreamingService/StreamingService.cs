@@ -192,7 +192,7 @@ namespace MPExtended.Services.StreamingService
                 lock (_timeshiftings)
                 {
                     Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
-                    var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("webstreamingservice-" + identifier, channelId);
+                    var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
                     Log.Debug("Timeshifting started!");
                     _timeshiftings[identifier] = card;
                     itemId = card.TimeShiftFileName;
@@ -229,7 +229,7 @@ namespace MPExtended.Services.StreamingService
                 if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
                 {
                     Log.Info("Cancel timeshifting with identifier {0}",  identifier);
-                    MPEServices.TAS.CancelCurrentTimeShifting("webstreamingservice-" + identifier);
+                    MPEServices.TAS.CancelCurrentTimeShifting("mpextended-" + identifier);
                     _timeshiftings.Remove(identifier);
                 }
             }
