@@ -53,7 +53,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             // log the error
-            Log.Warn("Error during controller body", filterContext.Exception);
+            Log.Debug("During request {0}", filterContext.HttpContext.Request.RawUrl);
+            Log.Warn("Error happened in controller body", filterContext.Exception);
 
             // return exception page
             filterContext.Result = new ViewResult
