@@ -117,7 +117,7 @@ namespace MPExtended.Services.TVAccessService
                 SignalLevel = card.SignalLevel,
                 SignalQuality = card.SignalQuality,
                 TimeShiftFileName = card.TimeShiftFileName,
-                TimeshiftFolder = card.TimeshiftFolder,
+                TimeShiftFolder = card.TimeshiftFolder,
                 TimeShiftStarted = card.TimeShiftStarted != DateTime.MinValue ? card.TimeShiftStarted : new DateTime(2000, 1, 1),
                 Type = (WebCardType)card.Type,
                 User = card.User != null ? card.User.ToWebUser() : null
