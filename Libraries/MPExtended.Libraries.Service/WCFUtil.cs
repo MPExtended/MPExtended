@@ -136,7 +136,7 @@ namespace MPExtended.Libraries.Service
             }
             else
             {
-                return "";
+                return properties.Via.Host;
             }
         }
     }
