@@ -447,4 +447,7 @@ This is the service component, which provides access to the databases and media 
   <data name="Select" xml:space="preserve">
     <value>Select</value>
   </data>
+  <data name="DonateToMPExtended" xml:space="preserve">
+    <value>Donate to MPExtended</value>
+  </data>
 </root>

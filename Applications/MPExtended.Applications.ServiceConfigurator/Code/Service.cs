@@ -19,14 +19,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
+using MPExtended.Applications.UacServiceHandler;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal static class Service
     {
-        public static void ReloadConfiguration()
+        public const string SERVICE_NAME = "MPExtended Service";
+
+        public static bool ShouldRestart { get; set; }
+
+        public static void RestartService()
         {
-            // TODO: implement (#176)
+            // restart the service
+            if (!UacServiceHelper.IsAdmin())
+            {
+                Log.Debug("Service: no admin rights, use UacServiceHandler");
+                UacServiceHelper.RestartService();
+            }
+            else if (UacServiceHelper.IsAdmin())
+            {
+                Log.Debug("Service: have admin rights, restart ourselves");
+                var handler = new WindowsServiceHandler(SERVICE_NAME);
+                handler.Execute(ServiceCommand.Restart);
+            }
+
+            ShouldRestart = false;
         }
     }
 }
