@@ -91,4 +91,26 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [EnumMember]
         StartTime = 3
     }
+
+    // See TvEngine3/TVLibrary/TvLibrary.Interfaces/CardType.cs
+    [DataContract]
+    public enum WebCardType
+    {
+        [EnumMember]
+        Analog = 0,
+        [EnumMember]
+        DvbS = 1,
+        [EnumMember]
+        DvbT = 2,
+        [EnumMember]
+        DvbC = 3,
+        [EnumMember]
+        Atsc = 4,
+        [EnumMember]
+        RadioWebStream = 5,
+        [EnumMember]
+        DvbIP = 6,
+        [EnumMember]
+        Unknown = 7
+    }
 }

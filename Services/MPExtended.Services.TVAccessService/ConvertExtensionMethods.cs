@@ -39,6 +39,8 @@ namespace MPExtended.Services.TVAccessService
                 return null;
             }
 
+            //card.T
+
             // See TvEngine3/TVLibrary/TvService/Scheduler/Scheduler.cs:1295 (SetupRecordingFolder) for the default fallback paths from MP
             return new WebCard
             {
@@ -53,7 +55,7 @@ namespace MPExtended.Services.TVAccessService
                 IsChanged = card.IsChanged,
                 LastEpgGrab = card.LastEpgGrab != DateTime.MinValue ? card.LastEpgGrab : new DateTime(2000, 1, 1),
                 Name = card.Name,
-                netProvider = card.netProvider,
+                NetProvider = card.netProvider,
                 PreloadCard = card.PreloadCard,
                 Priority = card.Priority,
                 RecordingFolder = card.RecordingFolder != String.Empty ? card.RecordingFolder : 
@@ -117,7 +119,7 @@ namespace MPExtended.Services.TVAccessService
                 TimeShiftFileName = card.TimeShiftFileName,
                 TimeshiftFolder = card.TimeshiftFolder,
                 TimeShiftStarted = card.TimeShiftStarted != DateTime.MinValue ? card.TimeShiftStarted : new DateTime(2000, 1, 1),
-                Type = (int)card.Type,
+                Type = (WebCardType)card.Type,
                 User = card.User != null ? card.User.ToWebUser() : null
             };
         }

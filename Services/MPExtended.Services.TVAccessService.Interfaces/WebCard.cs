@@ -18,7 +18,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public bool IsChanged { get; set; }
         public DateTime LastEpgGrab { get; set; }
         public string Name { get; set; }
-        public int netProvider { get; set; }
+        public int NetProvider { get; set; }
         public bool PreloadCard { get; set; }
         public int Priority { get; set; }
         public string RecordingFolder { get; set; }
