@@ -100,7 +100,7 @@ namespace MPExtended.Libraries.ServiceLib
             }
             else
             {
-                return "";
+                return properties.Via.Host;
             }
         }
     }
