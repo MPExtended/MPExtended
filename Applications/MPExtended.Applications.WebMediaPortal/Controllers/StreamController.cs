@@ -132,7 +132,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // kill stream (doesn't matter much if this doesn't happen, WSS kills streams automatically nowadays)
-            Log.Debug("Finished streami {0}", identifier);
+            Log.Debug("Finished stream {0}", identifier);
             if (!GetStreamControl(type).FinishStream(identifier))
             {
                 Log.Error("Streaming: FinishStream failed");
@@ -164,10 +164,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // stream to output
-            while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+            try
             {
-                HttpContext.Response.OutputStream.Write(buffer, 0, read);
-                HttpContext.Response.OutputStream.Flush(); // TODO: is this needed?
+                while (HttpContext.Response.IsClientConnected && (read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    HttpContext.Response.OutputStream.Write(buffer, 0, read);
+                    HttpContext.Response.OutputStream.Flush(); // TODO: is this needed?
+                }
+            }
+            catch (HttpException ex)
+            {
+                Log.Warn(String.Format("HttpException while proxying stream {0}", sourceUrl), ex);
             }
         }
 
