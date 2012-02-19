@@ -144,17 +144,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Images\TVGuide\Calendar.gif" />
-    <Content Include="Content\Images\TVGuide\ChannelNameBG.png" />
-    <Content Include="Content\Images\TVGuide\ConnectWin7Search.png" />
-    <Content Include="Content\Images\TVGuide\Program.png" />
-    <Content Include="Content\Images\TVGuide\ProgramInfoDialogClose.png" />
-    <Content Include="Content\Images\TVGuide\ProgramLeftSeperator.png" />
-    <Content Include="Content\Images\TVGuide\ProgramOnAir.png" />
-    <Content Include="Content\Images\TVGuide\ProgramOnScheduled.png" />
-    <Content Include="Content\Images\TVGuide\ProgramRightSeperator.png" />
-    <Content Include="Content\Images\TVGuide\ProgramShortInfoBackground.png" />
-    <Content Include="Content\Images\TVGuide\Search.png" />
     <Content Include="Content\Images\logomp-small.png" />
     <Content Include="Content\TVGuide.css" />
     <Content Include="Global.asax" />
@@ -174,6 +163,7 @@
     <Content Include="Content\Themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
+    <Content Include="Scripts\TVGuide.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

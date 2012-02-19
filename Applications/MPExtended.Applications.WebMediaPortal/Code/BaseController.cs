@@ -71,8 +71,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            SetViewBagProperties(ViewBag);
             LoadLanguage();
+            SetViewBagProperties(ViewBag);
         }
 
         private void SetViewBagProperties(dynamic bag)
@@ -81,6 +81,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             bag.FullVersion = VersionUtil.GetFullVersionString();
             bag.Styles = new List<string>();
             bag.Scripts = new List<string>();
+            bag.Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
         }
 
         private void LoadLanguage()

@@ -88,3 +88,14 @@
 {
     color: white;
 }
+
+#TVGuideNavigation select 
+{
+    width: 250px;
+    margin-right: 10px;
+} 
+
+#TVGuideNavigation input
+{
+    width: 100px;
+}

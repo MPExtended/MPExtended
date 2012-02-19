@@ -39,12 +39,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return TVGuide();
         }
 
-        public ActionResult TVGuide(int? group = null, string time = null)
+        public ActionResult TVGuide(int? group = null, string time = null, string date = null)
         {
             DateTime startTime;
             if (time == null || !DateTime.TryParse(time, out startTime))
             {
                 startTime = DateTime.Now;
+            }
+
+            DateTime passedDate;
+            if (date != null && DateTime.TryParse(date, out passedDate))
+            {
+                startTime = new DateTime(passedDate.Year, passedDate.Month, passedDate.Day, startTime.Hour, startTime.Minute, startTime.Second);
             }
 
             var lastHour = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, 0, 0, DateTimeKind.Local);
