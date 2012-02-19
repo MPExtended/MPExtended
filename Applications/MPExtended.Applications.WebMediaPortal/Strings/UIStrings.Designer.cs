@@ -115,6 +115,105 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card.
+        /// </summary>
+        public static string Card {
+            get {
+                return ResourceManager.GetString("Card", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card details.
+        /// </summary>
+        public static string CardDetails {
+            get {
+                return ResourceManager.GetString("CardDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grabbing EPG.
+        /// </summary>
+        public static string CardGrabbingEPG {
+            get {
+                return ResourceManager.GetString("CardGrabbingEPG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card name.
+        /// </summary>
+        public static string CardName {
+            get {
+                return ResourceManager.GetString("CardName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recording file.
+        /// </summary>
+        public static string CardRecordingFile {
+            get {
+                return ResourceManager.GetString("CardRecordingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RTSP stream.
+        /// </summary>
+        public static string CardRTSPStream {
+            get {
+                return ResourceManager.GetString("CardRTSPStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tuner cards.
+        /// </summary>
+        public static string Cards {
+            get {
+                return ResourceManager.GetString("Cards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scrambled.
+        /// </summary>
+        public static string CardScrambled {
+            get {
+                return ResourceManager.GetString("CardScrambled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string CardState {
+            get {
+                return ResourceManager.GetString("CardState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeshifting file.
+        /// </summary>
+        public static string CardTimeshiftingFile {
+            get {
+                return ResourceManager.GetString("CardTimeshiftingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        public static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -147,6 +246,51 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Details {
             get {
                 return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available.
+        /// </summary>
+        public static string DiskInfoAvailable {
+            get {
+                return ResourceManager.GetString("DiskInfoAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disk.
+        /// </summary>
+        public static string DiskInfoDisk {
+            get {
+                return ResourceManager.GetString("DiskInfoDisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disk information.
+        /// </summary>
+        public static string DiskInformation {
+            get {
+                return ResourceManager.GetString("DiskInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string DiskInfoSize {
+            get {
+                return ResourceManager.GetString("DiskInfoSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used.
+        /// </summary>
+        public static string DiskInfoUsed {
+            get {
+                return ResourceManager.GetString("DiskInfoUsed", resourceCulture);
             }
         }
         
@@ -295,7 +439,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log On.
+        ///   Looks up a localized string similar to Log on.
         /// </summary>
         public static string LogOn {
             get {
@@ -327,6 +471,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Music {
             get {
                 return ResourceManager.GetString("Music", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
@@ -403,29 +556,11 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Channel.
-        /// </summary>
-        public static string ScheduleHeaderChannel {
-            get {
-                return ResourceManager.GetString("ScheduleHeaderChannel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to End time.
         /// </summary>
         public static string ScheduleHeaderEndTime {
             get {
                 return ResourceManager.GetString("ScheduleHeaderEndTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Program.
-        /// </summary>
-        public static string ScheduleHeaderProgram {
-            get {
-                return ResourceManager.GetString("ScheduleHeaderProgram", resourceCulture);
             }
         }
         
@@ -520,6 +655,33 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Streaming clients.
+        /// </summary>
+        public static string StreamingClients {
+            get {
+                return ResourceManager.GetString("StreamingClients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Today&apos;s schedules.
         /// </summary>
         public static string TodaysSchedules {
@@ -534,6 +696,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string TVGuide {
             get {
                 return ResourceManager.GetString("TVGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TV Server status.
+        /// </summary>
+        public static string TVServerStatus {
+            get {
+                return ResourceManager.GetString("TVServerStatus", resourceCulture);
             }
         }
         
@@ -561,6 +732,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string Username {
+            get {
+                return ResourceManager.GetString("Username", resourceCulture);
             }
         }
         
@@ -687,6 +867,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string WrittenBy {
             get {
                 return ResourceManager.GetString("WrittenBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         

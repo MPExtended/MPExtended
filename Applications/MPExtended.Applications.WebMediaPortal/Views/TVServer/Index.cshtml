@@ -1,0 +1,77 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.TVServerStatusViewModel
+@{
+    ViewBag.Title = UIStrings.TVServerStatus;
+}
+
+<h2>@UIStrings.Cards</h2>
+<table>
+    <tr>
+        <th>@UIStrings.Card</th>
+        <th>@UIStrings.CardName</th>
+        <th>@UIStrings.CardState</th>
+        <th>@UIStrings.CardGrabbingEPG</th>
+        <th>@UIStrings.Channel</th>
+        <th>@UIStrings.CardScrambled</th>
+        <th>@UIStrings.Username</th>
+        <th colspan="2">&nbsp;</th>
+    </tr>
+
+    @foreach (var card in Model.Cards)
+    {
+        <tr>
+            <td>@card.CardId</td>
+            <td>@card.Name</td>
+            <td>@card.State</td>
+            <td>@(card.GrabbingEPG ? UIStrings.Yes : UIStrings.No)</td>
+            <td>@card.ChannelName</td>
+            @if (card.IsActive)
+            {
+                <td>@(card.Scrambled ? UIStrings.Yes : UIStrings.No)</td>
+                <td>@card.Username</td>
+                if (!card.VirtualCard.IsRecording) {
+                    <td>@Html.ActionLink(UIStrings.Stop, "Stop", new { user = card.Username })</td>
+                } else {
+                    <td></td>
+                }
+                <td>@Html.ActionLink(UIStrings.Details, "Details", new { user = card.Username })</td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+        </tr>
+    }
+</table>
+<br />
+
+<h2>@UIStrings.DiskInformation</h2>
+<table>
+    <tr>
+        <th>@UIStrings.DiskInfoDisk</th>
+        <th>@UIStrings.DiskInfoUsed</th>
+        <th>@UIStrings.DiskInfoSize</th>
+        <th>@UIStrings.DiskInfoAvailable</th>
+    </tr>
+
+    @foreach (var disk in Model.DiskInformation)
+    {
+        <tr>
+            <td>@disk.Disk</td>
+            <td>@Math.Round(disk.Used, 1) GB</td>
+            <td>@Math.Round(disk.Size, 1) GB</td>
+            <td>
+                @if((disk.Size > 500 && disk.PercentageUsed > 95) || (disk.Size <= 500 && disk.PercentageUsed > 90))
+                {
+                    <span style="color: Red;">@Math.Round(100 - @disk.PercentageUsed)%</span>
+                } else {
+                    @Math.Round(100 - @disk.PercentageUsed)<text>%</text>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+@Html.Action("CurrentSchedules", "Home")

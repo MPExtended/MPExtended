@@ -99,6 +99,8 @@
     <Compile Include="Code\ServiceAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />
+    <Compile Include="Controllers\TVServerController.cs" />
+    <Compile Include="Models\TVServerStatusViewModels.cs" />
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
     <Compile Include="Mvc\LocalizedDescriptionAttribute.cs" />
@@ -357,6 +359,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVServer\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TVServer\Details.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

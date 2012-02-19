@@ -265,6 +265,18 @@
   <data name="Skin" xml:space="preserve">
     <value>Skin</value>
   </data>
+  <data name="StateIdle" xml:space="preserve">
+    <value>Idle</value>
+  </data>
+  <data name="StateRecording" xml:space="preserve">
+    <value>Recording</value>
+  </data>
+  <data name="StateScanning" xml:space="preserve">
+    <value>Scanning</value>
+  </data>
+  <data name="StateTimeshifting" xml:space="preserve">
+    <value>Timeshifting</value>
+  </data>
   <data name="StreamType" xml:space="preserve">
     <value>Stream type</value>
   </data>

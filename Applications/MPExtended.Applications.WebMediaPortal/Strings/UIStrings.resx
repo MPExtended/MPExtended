@@ -133,7 +133,7 @@
     <value>Latest recordings</value>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>Log On</value>
+    <value>Log on</value>
   </data>
   <data name="LogOnFailed" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
@@ -268,9 +268,6 @@
   <data name="ScheduleHeaderEndTime" xml:space="preserve">
     <value>End time</value>
   </data>
-  <data name="ScheduleHeaderProgram" xml:space="preserve">
-    <value>Program</value>
-  </data>
   <data name="ScheduleHeaderRepetition" xml:space="preserve">
     <value>Repetition</value>
   </data>
@@ -331,9 +328,6 @@
   <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
     <value>Your VLC version is too old to support deinterlacing in the browser. Update to version 1.1.0 or higher; but then you loose fullscreen support.</value>
   </data>
-  <data name="ScheduleHeaderChannel" xml:space="preserve">
-    <value>Channel</value>
-  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
@@ -352,5 +346,74 @@
   </data>
   <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">
     <value>Sorry, your search didn't yield any results.</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TVServerStatus" xml:space="preserve">
+    <value>TV Server status</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Tuner cards</value>
+  </data>
+  <data name="Card" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="CardDetails" xml:space="preserve">
+    <value>Card details</value>
+  </data>
+  <data name="CardGrabbingEPG" xml:space="preserve">
+    <value>Grabbing EPG</value>
+  </data>
+  <data name="CardName" xml:space="preserve">
+    <value>Card name</value>
+  </data>
+  <data name="CardRecordingFile" xml:space="preserve">
+    <value>Recording file</value>
+  </data>
+  <data name="CardRTSPStream" xml:space="preserve">
+    <value>RTSP stream</value>
+  </data>
+  <data name="CardScrambled" xml:space="preserve">
+    <value>Scrambled</value>
+  </data>
+  <data name="CardState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="CardTimeshiftingFile" xml:space="preserve">
+    <value>Timeshifting file</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="DiskInfoAvailable" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="DiskInfoDisk" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="DiskInformation" xml:space="preserve">
+    <value>Disk information</value>
+  </data>
+  <data name="DiskInfoSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="DiskInfoUsed" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="StreamingClients" xml:space="preserve">
+    <value>Streaming clients</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

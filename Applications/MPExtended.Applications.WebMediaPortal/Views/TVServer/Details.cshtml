@@ -1,0 +1,41 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.TVCardViewModel
+@{
+    ViewBag.Title = UIStrings.CardDetails;
+}
+
+<h2>@UIStrings.CardDetails</h2>
+
+<table>
+    <tr><th colspan="2">@UIStrings.CardDetails</th></tr>
+    <tr><td>@UIStrings.Card</td><td>@Model.CardId</td></tr>
+    <tr><td>@UIStrings.CardName</td><td>@Model.Name</td></tr>
+    <tr><td>@UIStrings.CardState</td><td>@Model.State</td></tr>
+    <tr><td>@UIStrings.Channel</td><td>@Model.ChannelName</td></tr>
+    <tr><td>@UIStrings.CardGrabbingEPG</td><td>@(Model.GrabbingEPG ? UIStrings.Yes : UIStrings.No)</td></tr>
+    <tr><td>@UIStrings.CardScrambled</td><td>@(Model.Scrambled ? UIStrings.Yes : UIStrings.No)</td></tr>
+    <tr><td>@UIStrings.CardTimeshiftingFile</td><td>@Model.VirtualCard.TimeShiftFileName</td></tr>
+    @if (!String.IsNullOrEmpty(Model.VirtualCard.RecordingFileName))
+    {
+        <tr><td>@UIStrings.CardRecordingFile</td><td>@Model.VirtualCard.RecordingFileName</td></tr>
+    }
+    <tr><td>@UIStrings.CardRTSPStream</td><td>@Model.VirtualCard.RTSPUrl</td></tr>
+    <tr><td>@UIStrings.Username</td><td>@Model.Username</td></tr>
+    @if (!Model.VirtualCard.IsRecording) {
+        <tr><td colspan="2">@Html.ActionLink(UIStrings.Stop, "Stop", new { user = Model.Username })</td></tr>
+    }
+</table>
+<br />
+
+@{
+    var clients = Model.GetAllClients();
+    if(clients.Any())
+    {
+        <h2>@UIStrings.StreamingClients</h2>
+        <ul>
+            @foreach (var ipAddress in clients)
+            {
+                <li>@ipAddress</li>
+            }
+        </ul>
+    }
+}
