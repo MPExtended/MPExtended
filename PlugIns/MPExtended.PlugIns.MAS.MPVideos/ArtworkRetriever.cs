@@ -34,9 +34,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         public static List<WebArtworkDetailed> ArtworkReader(SQLiteDataReader reader, int idx)
         {
             string url = reader.ReadString(idx);
+            Uri uri = new Uri(url);
             var item = new WebArtworkDetailed()
             {
-                Filetype = "jpg",
+                Filetype = Path.GetExtension(uri.LocalPath).Substring(1),
                 Id = url.GetHashCode().ToString(),
                 Offset = 0,
                 Rating = 1,
@@ -74,7 +75,13 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         private static string DownloadFile(string url)
         {
-            string tmpPath = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache", String.Format("cover_{0}.jpg", url.GetHashCode().ToString()));
+            return DownloadFile(new Uri(url));
+        }
+
+        private static string DownloadFile(Uri url)
+        {
+            string extension = Path.GetExtension(url.LocalPath);
+            string tmpPath = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache", String.Format("mpvideos_{0:X8}{1}", url.ToString().GetHashCode(), extension));
             if (File.Exists(tmpPath))
             {
                 return tmpPath;
