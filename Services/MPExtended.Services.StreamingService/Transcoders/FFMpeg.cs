@@ -30,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         public string Identifier { get; set; }
 
-        public string GetStreamURL()
+        public string GetStreamURL(StreamContext context)
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }

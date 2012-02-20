@@ -30,21 +30,14 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override void BuildPipeline(StreamContext context)
+        protected override void AddEncoderToPipeline(StreamContext context, bool hasInputReader)
         {
             // VLC doesn't support output parsing, but subclasses do
-            BuildPipeline(context, EncoderUnit.LogStream.None);
+            AddEncoderToPipeline(context, hasInputReader, EncoderUnit.LogStream.None);
         }
 
-        public void BuildPipeline(StreamContext context, EncoderUnit.LogStream log)
-        {            
-            // input
-            bool doInputReader = context.Source.NeedsInputReaderUnit;
-            if(doInputReader)
-            {
-                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
-            }
-
+        protected virtual void AddEncoderToPipeline(StreamContext context, bool hasInputReader, EncoderUnit.LogStream log)
+        {
             // get parameters
             VLCParameters vlcparam = GenerateVLCParameters(context);
             string path = @"\#OUT#";
@@ -56,7 +49,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
             string arguments = GenerateArguments(vlcparam.Input, sout, vlcArguments);
 
             // add the unit
-            EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            //bool readOutputStream = context
+            EncoderUnit.TransportMethod input = hasInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             EncoderUnit.TransportMethod outputMethod = readOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
             // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).

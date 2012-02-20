@@ -171,12 +171,13 @@
       <maxOutputWidth>800</maxOutputWidth>
       <maxOutputHeight>600</maxOutputHeight>
       
-      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP">
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:rtp{sdp=#ADDRESS#}</muxer>
         <options>--no-sout-rtp-sap --no-sout-standard-sap --sout-keep --ttl 1</options>
+        <rtspOutput>yes</rtspOutput>
       </transcoderConfiguration>
     </transcoder>
 
@@ -316,13 +317,14 @@
       <maxOutputWidth>854</maxOutputWidth>
       <maxOutputHeight>450</maxOutputHeight>
 
-      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperPseudoStreaming">
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+        <flvMetadataInjection>yes</flvMetadataInjection>
       </transcoderConfiguration>
     </transcoder>
   </transcoders>

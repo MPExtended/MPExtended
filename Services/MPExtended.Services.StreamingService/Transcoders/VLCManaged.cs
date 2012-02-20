@@ -31,16 +31,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        public override void BuildPipeline(StreamContext context)
+        protected override void AddEncoderToPipeline(StreamContext context, bool hasInputReader)
         {
             SetupAssemblyLoader();
-
-            // input
-            bool doInputReader = context.Source.NeedsInputReaderUnit;
-            if (doInputReader)
-            {
-                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
-            }
 
             // get parameters
             VLCParameters vlcparam = GenerateVLCParameters(context);
@@ -48,7 +41,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add the unit
             VLCManagedEncoder unit;
-            if (doInputReader)
+            if (hasInputReader)
             {
                 unit = new VLCManagedEncoder(vlcparam.Sout, vlcparam.Arguments, context, VLCManagedEncoder.InputMethod.NamedPipe);
             }

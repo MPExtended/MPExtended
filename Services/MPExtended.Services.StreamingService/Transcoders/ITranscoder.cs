@@ -30,6 +30,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         // position is in seconds
         void BuildPipeline(StreamContext context);
-        string GetStreamURL();
+        string GetStreamURL(StreamContext context);
     }
 }

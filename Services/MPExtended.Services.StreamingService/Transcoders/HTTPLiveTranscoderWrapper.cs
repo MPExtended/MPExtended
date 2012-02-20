@@ -44,7 +44,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             obj = toWrap;
         }
 
-        public string GetStreamURL()
+        public string GetStreamURL(StreamContext context)
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?parameters=&action=playlist&identifier=" + Identifier;
         }

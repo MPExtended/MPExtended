@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -28,8 +29,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal abstract class VLCBaseTranscoder : ITranscoder
     {
-        public string Identifier { get; set; }
-
         protected class VLCParameters
         {
             public string Sout { get; set; }
@@ -37,21 +36,64 @@ namespace MPExtended.Services.StreamingService.Transcoders
             public string[] Arguments { get; set; }
         }
 
-        public virtual string GetStreamURL()
+        public string Identifier { get; set; }
+
+        private string streamUrl;
+
+        public VLCBaseTranscoder()
         {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+            streamUrl = WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier={0}";
         }
+
+        public virtual string GetStreamURL(StreamContext context)
+        {
+            if (context.Profile.CodecParameters.ContainsKey("rtspOutput") && context.Profile.CodecParameters["rtspOutput"] == "yes")
+            {
+                Thread.Sleep(2500); // FIXME
+                return "rtsp://" + WCFUtil.GetCurrentHostname() + ":5544/" + Identifier + ".sdp";
+            }
+            else
+            {
+                return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
+            }
+        }
+
+        public virtual void BuildPipeline(StreamContext context)
+        {
+            // input
+            bool doInputReader = context.Source.NeedsInputReaderUnit;
+            if (doInputReader)
+            {
+                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
+            }
+
+            // then add the encoder (this should happen in position 5)
+            AddEncoderToPipeline(context, doInputReader);
+
+            // add the FLV metadata injection unit, when option is set
+            if (context.Profile.CodecParameters.ContainsKey("flvMetadataInjection") && context.Profile.CodecParameters["flvMetadataInjection"] == "yes")
+            {
+                context.Pipeline.AddDataUnit(new FLVMetadataInjector(context), 15);
+            }
+        }
+
+        protected abstract void AddEncoderToPipeline(StreamContext context, bool hasInputReader);
 
         protected VLCParameters GenerateVLCParameters(StreamContext context)
         {
-            var encmuxparam = GetEncoderMuxerParameters(context);
+            string muxer = context.Profile.CodecParameters["muxer"];
+            if (context.Profile.CodecParameters.ContainsKey("rtspOutput") && context.Profile.CodecParameters["rtspOutput"] == "yes")
+            {
+                muxer = muxer.Replace("#ADDRESS#", "rtsp://:5544/" + Identifier + ".sdp");
+            }
+
             return GenerateVLCParameters(
                 context,
                 context.Profile.CodecParameters.ContainsKey("options") ? context.Profile.CodecParameters["options"] : "",
                 context.Profile.CodecParameters.ContainsKey("tsOptions") ? context.Profile.CodecParameters["tsOptions"] : "",
                 context.Profile.CodecParameters.ContainsKey("disableSeeking") && context.Profile.CodecParameters["disableSeeking"] == "yes",
-                encmuxparam.Item1,
-                encmuxparam.Item2
+                context.Profile.CodecParameters["encoder"],
+                context.Profile.CodecParameters["muxer"]
             );
         }
 
@@ -126,15 +168,5 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 Input = inURL
             };
         }
-
-        protected virtual Tuple<string, string> GetEncoderMuxerParameters(StreamContext context)
-        {
-            return new Tuple<string, string>(
-                context.Profile.CodecParameters["encoder"],
-                context.Profile.CodecParameters["muxer"]
-            );
-        }
-
-        public abstract void BuildPipeline(StreamContext context);
     }
 }
