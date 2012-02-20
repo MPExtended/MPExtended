@@ -44,6 +44,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="ArtworkRetriever.cs" />
     <Compile Include="MyFilms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

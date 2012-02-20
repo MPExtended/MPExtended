@@ -38,6 +38,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
     {
         public bool Supported { get; set; }
         private string DatabasePath { get; set; }
+        private string PicturePath { get; set; }
 
         private Regex stripActorName;
         private Regex imdbId;
@@ -64,9 +65,11 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     return;
                 }
 
-                DatabasePath = configFile
+                var pelis = configFile
                     .Elements("section")
-                    .First(x => x.Attribute("name").Value == "pelis")
+                    .First(x => x.Attribute("name").Value == "pelis");
+
+                DatabasePath = pelis
                     .Elements("entry")
                     .First(x => x.Attribute("name").Value == "AntCatalog")
                     .Value;
@@ -77,6 +80,10 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     return;
                 }
 
+                PicturePath = pelis
+                    .Elements("entry")
+                    .First(x => x.Attribute("name").Value == "AntPicture")
+                    .Value;
                 Supported = true;
             }
             catch (Exception ex)
@@ -230,7 +237,40 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                 movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = match.Groups[1].Value });
             }
 
-            // TODO: There seems to be a name of a file in item.Attribute("Picture").Value, but I don't know in which directory that path is
+            // Picture path
+            if (item.Attribute("Picture") != null)
+            {
+                string name = item.Attribute("Picture").Value;
+                if (!Path.IsPathRooted(name))
+                {
+                    name = Path.Combine(PicturePath, name);
+                }
+                movie.Artwork.Add(new WebArtworkDetailed()
+                {
+                    Path = name,
+                    Type = WebFileType.Cover,
+                    Filetype = Path.GetExtension(name).Substring(1),
+                    Id = name.GetHashCode().ToString("X8"),
+                    Offset = 0,
+                    Rating = 1,
+                });
+            }
+
+            // Some movies point to an URL for fanart
+            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Fanart") != null)
+            {
+                string path = item.Element("CustomFields").Attribute("Fanart").Value;
+                Uri uri = new Uri(path);
+                movie.Artwork.Add(new WebArtworkDetailed()
+                {
+                    Path = path,
+                    Type = WebFileType.Backdrop,
+                    Filetype = Path.GetExtension(uri.LocalPath).Substring(1),
+                    Id = path.GetHashCode().ToString("X8"),
+                    Offset = 0,
+                    Rating = 1
+                });
+            }
 
             return movie;
         }
@@ -272,12 +312,22 @@ namespace MPExtended.PlugIns.MAS.MyFilms
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            if (path.StartsWith("http://"))
+            {
+                return ArtworkRetriever.GetFileInfo(path);
+            }
+
+            return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
         }
 
         public Stream GetFile(string path)
         {
-            return new FileStream(path, FileMode.Open);
+            if (path.StartsWith("http://"))
+            {
+                return ArtworkRetriever.GetStream(path);
+            }
+
+            return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
         }
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
