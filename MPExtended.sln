@@ -126,6 +126,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAS", "MAS", "{9885CC92-C6D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Client", "Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj", "{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installed", "Installed", "{B7E8B19E-117B-40EC-809B-2B15B9BD9B0C}"
+	ProjectSection(SolutionItems) = preProject
+		Config\Installed\Streaming.xml = Config\Installed\Streaming.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -492,5 +497,6 @@ Global
 		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
 		{CC3525EA-0721-4299-991B-1C7E01A15E6B} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
+		{B7E8B19E-117B-40EC-809B-2B15B9BD9B0C} = {A564D67F-77EE-408D-A6B1-FBCADBFA8732}
 	EndGlobalSection
 EndGlobal
