@@ -101,7 +101,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language, m.imdb_id, s.identifier " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, m.tagline, s.identifier " +
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
@@ -116,9 +116,9 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                                 " LEFT JOIN source_movie_info smi ON sid.id = smi.id " +
                                 ") s " +
                             "ON s.movie = m.id AND s.identifier != '' " +
-                         "WHERE %where " + 
-                         "GROUP BY m.id, m.date_added, m.backdropfullpath, m.coverfullpath, m.genres, m.score, m.runtime, m.title, m.year, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language, s.identifier " +
+                         "WHERE %where " +
+                         "GROUP BY m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, s.identifier " +
                          "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("m", "id", "Id", DataReaders.ReadIntAsString),
@@ -136,6 +136,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("m", "actors", "Actors", ActorReader),
                 new SQLFieldMapping("m", "summary", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString),
+                new SQLFieldMapping("m", "tagline", "Tagline", DataReaders.ReadString),
                 new SQLFieldMapping("m", "imdb_id", "ExternalId", ExternalIdReader, "IMDB"),
                 new SQLFieldMapping("s", "identifier", "ExternalId", ExternalIdReader, "TMDB")
             });
