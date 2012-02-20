@@ -39,6 +39,41 @@ button.later {
 	right: 0px;
 	cursor: pointer;
 }
+#TVGuide .otherday{
+	background: #198cbe;
+	background: -moz-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #198cbe), color-stop(100%, #0872a0));
+	background: -webkit-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -o-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -ms-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: linear-gradient(top, #198cbe 0%, #0872a0 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#198cbe', endColorstr='#0872a0', GradientType=0 );
+	border: none;
+	border-radius: 4px;
+	color: #cee8f4;
+	margin: 0px 2px 0px 2px;
+	padding: 4px 0px 0px 5px;
+	height: 20px !important;
+}
+
+#TVGuide .today{
+	background: #d1ee7a;
+	background: -moz-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d1ee7a), color-stop(100%, #b1dd2c));
+	background: -webkit-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -o-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -ms-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1ee7a', endColorstr='#b1dd2c', GradientType=0 );
+	border: none;
+	border-radius: 4px;
+	color: #4b6400;
+	text-shadow: #f0f9d3 0 1px 0;
+	font-weight: bold;
+	margin: 0px 2px 0px 2px;
+	padding: 4px 0px 0px 5px;
+	height: 20px !important;
+}
 
 #TVGuide .channelrow {
 	overflow: hidden;
