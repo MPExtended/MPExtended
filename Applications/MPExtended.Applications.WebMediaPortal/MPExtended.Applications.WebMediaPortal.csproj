@@ -95,6 +95,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Code\MediaInfoFormatter.cs" />
     <Compile Include="Code\MediaName.cs" />
     <Compile Include="Code\ServiceAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />

@@ -106,6 +106,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Recording(int id)
         {
             var rec = MPEServices.TAS.GetRecordingById(id);
+            if (rec == null)
+                return HttpNotFound();
+
+            var fileInfo = MPEServices.TAS.GetRecordingFileInfo(rec.Id);
+            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebStreamMediaType.Recording, null, rec.Id.ToString());
+            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
             return View(rec);
         }
 

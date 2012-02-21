@@ -48,6 +48,7 @@
         <li>@String.Format(UIStrings.Aired, Model.FirstAired.ToShortDateString())</li>
 
         @if(ViewBag.ShowPlay) {
+            <li>@ViewBag.Quality</li>
             <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = Model.Type }, new { })</li>
             <li>@Html.ActionLink(UIStrings.Play, "Play", new { episode = Model.Id })</li>
         }
