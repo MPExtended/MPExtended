@@ -78,8 +78,10 @@
                                 @{  if (program.GetPercentageWidth() > 1)
                                     {
                                         <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")"
-                                            onclick="location.href='@Url.Action("ProgramDetails", new { programId = program.Id })';">
-                                            @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
+                                            onclick="location.href='@program.GetPageLink(Url)';">
+                                            <a href="@program.GetPageLink(Url)" alt="@program.Title" title="@program.Title">
+                                                @program.Title
+                                            </a>
                                         </div>
                                     }
                                 }
