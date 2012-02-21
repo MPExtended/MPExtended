@@ -137,19 +137,20 @@ button {
 input {
 	padding: 4px 12px 4px;
 	margin: 5px 2px;
-	text-shadow: #01425e 0 1px 0;
-	font-weight: bold;
-	color: #85cfff;
 	text-decoration: none;
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	background: rgb(60,60,61); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(60,60,61,1) 0%, rgba(32,32,32,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(60,60,61,1)), color-stop(100%,rgba(32,32,32,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(60,60,61,1) 0%,rgba(32,32,32,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(60,60,61,1) 0%,rgba(32,32,32,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(60,60,61,1) 0%,rgba(32,32,32,1) 100%); /* IE10+ */
-    background: linear-gradient(top,  rgba(60,60,61,1) 0%,rgba(32,32,32,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c3c3d', endColorstr='#202020',GradientType=0 ); /* IE6-9 */
+	background: rgb(249,249,249); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(249,249,249,1)), color-stop(84%, rgba(232,232,232,1)), color-stop(95%, rgba(231,230,230,1)), color-stop(100%, rgba(232,232,232,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#e8e8e8', GradientType=0 ); /* IE6-9 */
+	border: 1px solid #E0E0E0 !important;
+	color: #000000;
+	font-weight: bold;
+	text-shadow: #f0f9d3 0 1px 0;
     border-radius: 5px;
 }
 

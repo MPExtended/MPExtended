@@ -20,11 +20,13 @@
 @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
 {
     @Html.Hidden("group", Model.GroupId)
-	<br />
+	<div class="earlier_wrap">
 	<button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier"></button>
+	</div>
+	<div class="later_wrap">
 	<button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later"></button>
-    <br />
-    <br />
+	</div>
+	<br />
     <div id="TVGuide">
 	  <div class="headerrow">
             <div class="headerspacer">
@@ -32,14 +34,14 @@
             </div>
             <div class="programs">
                 <div class="programcontainer">
-                    <div class="headertime @(Model.GuideStart.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.FirstDayHours * 2 * 93 - 8)px;">
+                    <div class="headertime @(Model.GuideStart.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.FirstDayHours * 2 * 93 - 4)px;">
                         @Model.GuideStart.ToString("dddd MM/dd/yyyy")
                     </div>
                 </div>
                 @if(Model.HasDateSplit)
                 {
                     <div class="programcontainer">
-                        <div class="headertime @(Model.GuideEnd.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.SecondDayHours * 2 * 93 - 8)px;">
+                        <div class="headertime @(Model.GuideEnd.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.SecondDayHours * 2 * 93 - 4)px;">
                             @Model.GuideEnd.ToString("dddd MM/dd/yyyy")
                         </div>
                     </div>
