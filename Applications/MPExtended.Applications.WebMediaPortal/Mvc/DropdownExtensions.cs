@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             }
 
             // do not call on htmlHelper to avoid a stack overflow: apparantly (IEnumerable<SelectListItem>value) is seen as object and we're called again
-            return SelectExtensions.DropDownListFor(htmlHelper, expression, (IEnumerable<SelectListItem>)value);
+            return SelectExtensions.DropDownListFor(htmlHelper, expression, (IEnumerable<SelectListItem>)value, htmlAttributes);
         }
     }
 }
