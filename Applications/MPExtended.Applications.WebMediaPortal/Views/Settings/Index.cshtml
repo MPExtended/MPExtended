@@ -17,7 +17,7 @@
             </td>
             <td>
             
-                @Html.DropDownListFor(x => x.Skin)
+                @Html.DropDownListFor(x => x.Skin, new { @class = "chzn-select" })
                 @Html.ValidationMessageFor(x => x.Skin)
             </td>
         </tr>
@@ -26,7 +26,7 @@
                 @Html.LabelFor(x => x.StreamType)
             </td>
             <td>
-                @Html.EnumDropDownListFor(x => x.StreamType)
+                @Html.EnumDropDownListFor(x => x.StreamType, new { @class = "chzn-select" })
                 @Html.ValidationMessageFor(x => x.StreamType)
             </td>
         </tr>
@@ -48,7 +48,7 @@
                 @Html.LabelFor(x => x.SelectedGroup)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedGroup)
+                @Html.DropDownListFor(x => x.SelectedGroup, new { @class = "chzn-select" })
                 @Html.ValidationMessageFor(x => x.SelectedGroup)
             </td>
         </tr>
@@ -57,7 +57,7 @@
                 @Html.LabelFor(x => x.SelectedTVProfile)
             </td>
             <td>
-                @Html.DropDownListFor(x => x.SelectedTVProfile)
+                @Html.DropDownListFor(x => x.SelectedTVProfile, new { @class = "chzn-select" })
                 @Html.ValidationMessageFor(x => x.SelectedTVProfile)
             </td>
         </tr>
@@ -70,7 +70,7 @@
                     @Html.LabelFor(x => x.SelectedMediaProfile)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.SelectedMediaProfile)
+                    @Html.DropDownListFor(x => x.SelectedMediaProfile, new { @class = "chzn-select" })
                     @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
                 </td>
             </tr>
@@ -79,7 +79,7 @@
                     @Html.LabelFor(x => x.SelectedAudioProfile)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.SelectedAudioProfile)
+                    @Html.DropDownListFor(x => x.SelectedAudioProfile, new { @class = "chzn-select" })
                     @Html.ValidationMessageFor(x => x.SelectedAudioProfile)
                 </td>
             </tr>
@@ -91,7 +91,7 @@
                     @Html.LabelFor(x => x.TVShowProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.TVShowProvider)
+                    @Html.DropDownListFor(x => x.TVShowProvider, new { @class = "chzn-select" })
                     @Html.ValidationMessageFor(x => x.TVShowProvider)
                 </td>
             </tr>
@@ -100,7 +100,7 @@
                     @Html.LabelFor(x => x.MovieProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.MovieProvider)
+                    @Html.DropDownListFor(x => x.MovieProvider, new { @class = "chzn-select" })
                     @Html.ValidationMessageFor(x => x.MovieProvider)
                 </td>
             </tr>
@@ -109,7 +109,7 @@
                     @Html.LabelFor(x => x.MusicProvider)
                 </td>
                 <td>
-                    @Html.DropDownListFor(x => x.MusicProvider)
+                    @Html.DropDownListFor(x => x.MusicProvider, new { @class = "chzn-select" })
                     @Html.ValidationMessageFor(x => x.MusicProvider)
                 </td>
             </tr>
