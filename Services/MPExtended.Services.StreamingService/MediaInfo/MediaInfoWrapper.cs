@@ -36,6 +36,11 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         private static Dictionary<string, WebMediaInfo> memoryCache = new Dictionary<string, WebMediaInfo>();
         private static Dictionary<string, Tuple<DateTime, WebMediaInfo>> tvCache = new Dictionary<string, Tuple<DateTime, WebMediaInfo>>();
 
+        public static void LoadCache()
+        {
+            // just a noop-method to make sure the static private variables are initialized
+        }
+
         public static WebMediaInfo GetMediaInfo(MediaSource source)
         {
             // we can't cache it for TV, unfortunately
