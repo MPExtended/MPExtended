@@ -85,7 +85,7 @@ TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/
 - Licensed under General Public License, version 2 or later, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
 - Source code available from http://www.team-mediaportal.com/
-- Version 1.2.1
+- Version 1.2.2
 
 UI/Hardcodet.Wpf.TaskbarNotification:
 - Copyright (C) 2009 Philipp Sumi, http://www.hardcodet.net/projects/wpf-notifyicon
