@@ -7,7 +7,7 @@ using System.ServiceModel.Web;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
-    [ServiceContract]
+    [ServiceContract(Namespace = "http://mpextended.github.com")]
     public interface IWebStreamingService
     {
         [OperationContract]
