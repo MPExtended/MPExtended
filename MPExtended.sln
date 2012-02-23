@@ -122,8 +122,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Web
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.WebMediaPortalIIS", "Installers\MPExtended.Installers.WebMediaPortalIIS\MPExtended.Installers.WebMediaPortalIIS.wixproj", "{03BBEB5C-398F-4120-87F0-6ED698C63402}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Client", "Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj", "{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetaService", "MetaService", "{AA75682E-6266-4043-9337-E8C05E5AAB98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MetaService.Interfaces", "Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj", "{14102199-B29C-4DA0-AD52-361BAE8C9BB8}"
@@ -136,6 +134,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installed", "Installed", "{
 	ProjectSection(SolutionItems) = preProject
 		Config\Installed\Streaming.xml = Config\Installed\Streaming.xml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Client", "Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj", "{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -450,12 +450,6 @@ Global
 		{03BBEB5C-398F-4120-87F0-6ED698C63402}.Release|Mixed Platforms.Build.0 = Release|x86
 		{03BBEB5C-398F-4120-87F0-6ED698C63402}.Release|x86.ActiveCfg = Release|x86
 		{03BBEB5C-398F-4120-87F0-6ED698C63402}.Release|x86.Build.0 = Release|x86
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|x86.ActiveCfg = Release|Any CPU
 		{14102199-B29C-4DA0-AD52-361BAE8C9BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14102199-B29C-4DA0-AD52-361BAE8C9BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14102199-B29C-4DA0-AD52-361BAE8C9BB8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -476,6 +470,16 @@ Global
 		{11B46BC9-331A-45CC-9F1D-2EC580197B36}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{11B46BC9-331A-45CC-9F1D-2EC580197B36}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{11B46BC9-331A-45CC-9F1D-2EC580197B36}.Release|x86.ActiveCfg = Release|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
