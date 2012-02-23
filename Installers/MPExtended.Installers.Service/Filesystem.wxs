@@ -123,8 +123,8 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe.config" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.pdb" />
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
+              <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
-              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.xml" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\NLog.config" Name="MPExtended.Applications.ServiceConfigurator.exe.nlog" />
             </Component>
