@@ -131,6 +131,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installed", "Installed", "{
 		Config\Installed\Streaming.xml = Config\Installed\Streaming.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.FillMediaInfoCache", "Applications\MPExtended.Applications.Development.FillMediaInfoCache\MPExtended.Applications.Development.FillMediaInfoCache.csproj", "{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -454,6 +456,16 @@ Global
 		{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}.Release|x86.ActiveCfg = Release|Any CPU
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Debug|x86.ActiveCfg = Debug|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Debug|x86.Build.0 = Debug|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Release|Any CPU.ActiveCfg = Release|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Release|x86.ActiveCfg = Release|x86
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -483,6 +495,7 @@ Global
 		{1E43D575-56AE-4F75-8FA0-D0EDC8501933} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{B4064E77-5558-4932-BBD2-88B02E8F1F6F} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
+		{935CB595-D115-4EEE-8FD8-D7F4E7DC67FE} = {6A5B523D-3FF5-4DA3-B182-17A1DC26CBAF}
 		{CEA12075-6DD2-442D-96F8-88A77EDCC16D} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{19467BF5-89FA-4BA3-A4C3-3A382573A20F} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{504A098A-8141-418A-9FC5-C7870C68C716} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
