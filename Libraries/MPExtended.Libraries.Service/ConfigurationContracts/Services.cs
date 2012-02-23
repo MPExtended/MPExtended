@@ -28,6 +28,16 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
     {
         private const string PASSWORD_KEY = "MPExtended Password Key"; // And here all our security goes out of the window: the key is on the internet.
 
+        public User()
+        {
+        }
+
+        public User(string username, string plainTextPassword)
+        {
+            Username = username;
+            SetPasswordFromPlaintext(plainTextPassword);
+        }
+
         public string Username { get; set; }
         public string EncryptedPassword { get; set; }
 

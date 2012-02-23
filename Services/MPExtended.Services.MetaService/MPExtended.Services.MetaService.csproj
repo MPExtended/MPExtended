@@ -47,6 +47,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="AccessRequests.cs" />
     <Compile Include="BackgroundThread.cs" />
     <Compile Include="CompositionHinter.cs" />
     <Compile Include="CachingServiceDetector.cs" />

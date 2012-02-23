@@ -32,7 +32,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         public WebBoolResult OpenConfigurator()
         {
             Application.Current.MainWindow.Show();
-            return new WebBoolResult(true);
+            return true;
+        }
+
+        public WebBoolResult RequestAccess(string clientName, string ipAddress)
+        {
+            string msg = String.Format(Strings.UI.AccessRequest, clientName, ipAddress);
+            MessageBoxResult result = MessageBox.Show(msg, "MPExtended",  MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            return result == MessageBoxResult.Yes;
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="IMetaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebAccessRequestResponse.cs" />
     <Compile Include="WebServiceSet.cs" />
     <Compile Include="WebServiceVersion.cs" />
   </ItemGroup>

@@ -82,6 +82,7 @@
     <Compile Include="Hosting\ServiceState.cs" />
     <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />
+    <Compile Include="Util\RandomGenerator.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Util\WifiRemote.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />

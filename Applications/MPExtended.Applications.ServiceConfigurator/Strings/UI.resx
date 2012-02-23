@@ -479,4 +479,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
     <value>please download Bonjour. </value>
   </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Do you want to give the application '{0}' (with IP address {1}) full access to the services?</value>
+  </data>
 </root>

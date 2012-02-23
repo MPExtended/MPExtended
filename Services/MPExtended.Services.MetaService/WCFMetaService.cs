@@ -58,6 +58,21 @@ namespace MPExtended.Services.MetaService
             return MetaService.Instance.GetVersion();
         }
 
+        public WebAccessRequestResponse CreateAccessRequest(string clientName)
+        {
+            return MetaService.Instance.CreateAccessRequest(clientName);
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatus(string token)
+        {
+            return MetaService.Instance.GetAccessRequestStatus(token);
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout)
+        {
+            return MetaService.Instance.GetAccessRequestStatusBlocking(token, timeout);
+        }
+
         public void DummyMethod()
         {
             return;
