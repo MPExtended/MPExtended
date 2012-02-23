@@ -263,7 +263,7 @@
     <value>&lt;strong&gt;{0}&lt;/strong&gt; till &lt;strong&gt;{1}&lt;/strong&gt; on channel &lt;strong&gt;{2}&lt;/strong&gt;</value>
   </data>
   <data name="RecordedOn" xml:space="preserve">
-    <value>Recorded on:</value>
+    <value>Recorded on</value>
   </data>
   <data name="ScheduleHeaderEndTime" xml:space="preserve">
     <value>End time</value>

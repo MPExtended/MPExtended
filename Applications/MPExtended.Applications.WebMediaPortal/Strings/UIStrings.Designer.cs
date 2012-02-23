@@ -529,7 +529,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recorded on:.
+        ///   Looks up a localized string similar to Recorded on.
         /// </summary>
         public static string RecordedOn {
             get {
