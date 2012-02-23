@@ -32,9 +32,9 @@ namespace MPExtended.Services.MetaService
         public abstract bool HasActiveWSS { get; }
         public abstract bool HasUI { get; }
 
-        private ICompositionHinter hinter;
+        private CompositionHinter hinter;
 
-        protected BaseServiceDetector(ICompositionHinter hinter)
+        protected BaseServiceDetector(CompositionHinter hinter)
         {
             this.hinter = hinter;
         }

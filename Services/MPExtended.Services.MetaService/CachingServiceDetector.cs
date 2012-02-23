@@ -82,7 +82,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public CachingServiceDetector(IServiceDetector realDetector, ICompositionHinter hinter)
+        public CachingServiceDetector(IServiceDetector realDetector, CompositionHinter hinter)
             : base (hinter)
         {
             this.realDetector = realDetector;

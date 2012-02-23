@@ -23,7 +23,7 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    interface IServiceDetector
+    internal interface IServiceDetector
     {
         ServiceSetComposer CreateSetComposer();
         IList<WebService> GetActiveServices();

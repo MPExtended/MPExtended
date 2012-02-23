@@ -24,26 +24,31 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using ZeroconfService;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    internal class CompositionHinter : ICompositionHinter
+    internal class CompositionHinter
     {
         private string tveAddress;
         private List<IPEndPoint> tvServerAddresses;
+        private List<INetworkDiscoverer> validDiscoverers;
+
+        public CompositionHinter(params INetworkDiscoverer[] discoverers)
+        {
+            validDiscoverers = discoverers.Where(x => x.IsAvailable()).ToList();
+        }
 
         public void StartDiscovery()
         {
             tveAddress = ReadConfiguredTVServerAddress();
             tvServerAddresses = new List<IPEndPoint>();
 
-            if (Zeroconf.IsEnabled)
+            foreach (var discoverer in validDiscoverers)
             {
-                NetServiceBrowser browser = new NetServiceBrowser();
-                browser.AllowMultithreadedCallbacks = true;
-                browser.DidFindService += new NetServiceBrowser.ServiceFound(ZeroconfDiscoverFoundService);
-                browser.DidRemoveService += new NetServiceBrowser.ServiceRemoved(ZeroconfDiscoverRemovedService);
-                browser.SearchForService(Zeroconf.TAS_SERVICE_TYPE, Zeroconf.DOMAIN);
+                discoverer.ServiceFound += new EventHandler<ServiceEventArgs>(FoundService);
+                discoverer.ServiceDisappeared += new EventHandler<ServiceEventArgs>(RemovedService);
+                discoverer.StartServiceSearch(WebService.TVAccessService);
             }
         }
 
@@ -77,45 +82,21 @@ namespace MPExtended.Services.MetaService
             return Dns.GetHostAddresses(hostname).Select(x => x.ToString()).First();
         }
 
-        private void ZeroconfDiscoverRemovedService(NetServiceBrowser browser, NetService service, bool moreComing)
+        private void RemovedService(object sender, ServiceEventArgs e)
         {
-            foreach (var address in service.Addresses)
+            Log.Trace("TAS at {0} disappeared", e.Endpoint);
+            lock (tvServerAddresses)
             {
-                IPEndPoint endpoint = (IPEndPoint)address;
-                if (service.Type == Zeroconf.TAS_SERVICE_TYPE && tvServerAddresses.Contains(endpoint))
-                {
-                    Log.Trace("TAS at {0}:{1} disappeared", endpoint.Address, endpoint.Port);
-                    lock (tvServerAddresses)
-                    {
-                        tvServerAddresses.Remove(endpoint);
-                    }
-                }
+                tvServerAddresses.Remove(e.Endpoint);
             }
         }
 
-        private void ZeroconfDiscoverFoundService(NetServiceBrowser browser, NetService service, bool moreComing)
+        private void FoundService(object sender, ServiceEventArgs e)
         {
-            service.DidResolveService += new NetService.ServiceResolved(ZeroconfDiscoverResolvedService);
-            service.ResolveWithTimeout(Zeroconf.TIMEOUT);
-        }
-
-        private void ZeroconfDiscoverResolvedService(NetService service)
-        {
-
-            foreach (var address in service.Addresses)
+            Log.Trace("Discovered TAS at {0}", e.Endpoint);
+            lock (tvServerAddresses)
             {
-                IPEndPoint endpoint = (IPEndPoint)address;
-                if (NetworkInformation.IsLocalAddress(endpoint.Address) || !NetworkInformation.IsValid(endpoint.Address, Configuration.Services.EnableIPv6))
-                    continue;
-
-                if (service.Type == Zeroconf.TAS_SERVICE_TYPE)
-                {
-                    Log.Trace("Discovered TAS at {0}:{1}", endpoint.Address, endpoint.Port);
-                    lock (tvServerAddresses)
-                    {
-                        tvServerAddresses.Add((IPEndPoint)address);
-                    }
-                }
+                tvServerAddresses.Add(e.Endpoint);
             }
         }
     }

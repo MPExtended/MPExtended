@@ -32,9 +32,9 @@ namespace MPExtended.Services.MetaService
 
         public string OurAddress { get; set; }
 
-        private ICompositionHinter hinter;
+        private CompositionHinter hinter;
 
-        public ServiceSetComposer(ICompositionHinter hinter)
+        public ServiceSetComposer(CompositionHinter hinter)
         {
             this.hinter = hinter;
         }
@@ -83,29 +83,33 @@ namespace MPExtended.Services.MetaService
             IMetaService tveMeta = tveAddress != null ? ServiceClientFactory.CreateMeta(tveAddress) : null;
 
             // Start with the most simple case: full singleseat
-            if (HasActiveMAS && HasActiveTAS && HasActiveWSS && HasActiveUI)
+            if (HasActiveMAS && HasActiveTAS && HasActiveWSS)
             {
-                sets.Add(CreateServiceSet(OurAddress, OurAddress, OurAddress));
+                sets.Add(CreateServiceSet(
+                    OurAddress,
+                    HasActiveTAS ? OurAddress : null,
+                    HasActiveUI ? OurAddress : null
+                ));
             }
 
             // Singleseat installation without using TV server
-            if (HasActiveMAS && HasActiveWSS && HasActiveUI)
+            if (HasActiveMAS && HasActiveWSS)
             {
-                sets.Add(CreateServiceSet(OurAddress, null, OurAddress));
+                sets.Add(CreateServiceSet(OurAddress, null, HasActiveUI ? OurAddress : null));
             }
 
             // Multiseat installation with UI + MAS + WSS on client and TAS + WSS on server (and we're the client)
-            if (HasActiveMAS && HasActiveWSS && HasActiveUI && !HasActiveTAS && tveMeta != null)
+            if (HasActiveMAS && HasActiveWSS && !HasActiveTAS && tveMeta != null)
             {
                 if (!tveMeta.GetActiveServices().Contains(WebService.MediaAccessService) &&
                     !tveMeta.HasUI())
                 {
-                    sets.Add(CreateServiceSet(OurAddress, tveAddress, OurAddress));
+                    sets.Add(CreateServiceSet(OurAddress, tveAddress, HasActiveUI ? OurAddress : null));
                 }
             }
 
             // Same as previous, but now we're the server
-            if (HasActiveTAS && HasActiveWSS && !HasActiveMAS && !HasActiveUI)
+            if (HasActiveTAS && HasActiveWSS && !HasActiveMAS)
             {
                 sets.Add(CreateServiceSet(null, OurAddress, null));
             }
@@ -120,7 +124,7 @@ namespace MPExtended.Services.MetaService
             }
 
             // Idem, but now we're the server
-            if (!HasActiveUI && HasActiveMAS && HasActiveTAS && HasActiveWSS)
+            if (HasActiveMAS && HasActiveTAS && HasActiveWSS)
             {
                 sets.Add(CreateServiceSet(OurAddress, OurAddress, null));
             }

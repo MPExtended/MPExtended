@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,15 +18,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
+using System.Net;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    interface ICompositionHinter
+    internal class ServiceEventArgs : EventArgs
     {
-        string GetConfiguredTVServerAddress();
-        IList<IPEndPoint> GetTVServersInLocalNetwork();
-        void StartDiscovery();
+        public WebService Service { get; set; }
+        public IPEndPoint Endpoint { get; set; }
+    }
+
+    internal interface INetworkDiscoverer
+    {
+        event EventHandler<ServiceEventArgs> ServiceFound;
+        event EventHandler<ServiceEventArgs> ServiceDisappeared;
+
+        bool IsAvailable();
+        IServicePublisher GetPublisher();
+
+        void StartServiceSearch(params WebService[] service);
+        void StopSearch();
     }
 }

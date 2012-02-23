@@ -92,7 +92,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public AdhocServiceDetector(ICompositionHinter hinter)
+        public AdhocServiceDetector(CompositionHinter hinter)
             : base (hinter)
         {
         }

@@ -49,7 +49,7 @@ namespace MPExtended.Services.MetaService
         {
             ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
 
-            ICompositionHinter hinter = new CompositionHinter();
+            CompositionHinter hinter = new CompositionHinter(new ZeroconfDiscoverer());
             hinter.StartDiscovery();
             detector = new CachingServiceDetector(new AdhocServiceDetector(hinter), hinter);
             publishers = new IServicePublisher[] { new ZeroconfPublisher() };
