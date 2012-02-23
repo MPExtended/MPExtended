@@ -66,9 +66,6 @@
     <None Include="..\..\Libraries\MPExtended.Libraries.Service\Hosting\App.config">
       <Link>App.config</Link>
     </None>
-    <None Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">

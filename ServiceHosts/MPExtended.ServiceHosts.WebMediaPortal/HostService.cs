@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {
@@ -37,6 +38,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
 
         protected override void OnStart(string[] args)
         {
+            Log.Setup("WebMediaPortalHosting.log", false);
             host = new IISExpressHost();
             Action start = host.Start;
             start.BeginInvoke(delegate(IAsyncResult param)

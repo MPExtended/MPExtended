@@ -62,8 +62,6 @@
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe" KeyPath="yes" Id="MainService"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe.config" />
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.dll" Id="Hosting_MPExtended.Libraries.Service.dll" />
-        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.dll" Id="Hosting_NLog.dll"/>
-        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\NLog.config" Id="Hosting_NLog.config"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\IISExpressTemplate.config" />
 
         <ServiceInstall
