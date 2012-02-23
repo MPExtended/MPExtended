@@ -112,7 +112,7 @@ namespace MPExtended.Libraries.Service
                 info = info.Parent;
             } while (info != null);
 
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
         }
 
@@ -195,19 +195,23 @@ namespace MPExtended.Libraries.Service
             }
         }
 
-        public static string GetLogDirectory()
+        public static string GetCacheDirectory()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs");
+            return EnsureDirectoryExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Cache"));
         }
 
-        internal static bool IsDebugBuild()
+        public static string GetLogDirectory()
         {
-            var attrs = (AssemblyConfigurationAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
-            if (attrs.Length > 0)
+            return EnsureDirectoryExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs"));
+        }
+
+        internal static string EnsureDirectoryExists(string dir)
+        {
+            if (!Directory.Exists(dir))
             {
-                return attrs.First().Configuration == "Debug";
+                Directory.CreateDirectory(dir);
             }
-            return false;
+            return dir;
         }
 
         internal static List<ServiceAssemblyAttribute> GetAvailableServices()
@@ -236,7 +240,7 @@ namespace MPExtended.Libraries.Service
                         .Where(x => !x.Contains(".Interfaces.dll"));
                     var myFileNames = myDir.Select(x => Path.GetFileName(x));
                     var serviceFiles = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
-                        .Select(x => Path.Combine(x, "bin", IsDebugBuild() ? "Debug" : "Release"))
+                        .Select(x => Path.Combine(x, "bin", GetSourceBuildDirectoryName()))
                         .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
                         .Where(x => !x.Contains(".Interfaces.dll") && !myFileNames.Contains(Path.GetFileName(x)))
                         .GroupBy(x => Path.GetFileName(x), (x, y) => y.First());
