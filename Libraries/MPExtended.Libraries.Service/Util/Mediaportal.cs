@@ -46,7 +46,6 @@ namespace MPExtended.Libraries.Service.Util
             }
             else
             {
-				Log.Info("Could not find MediaPortal client installation path key in registry, is MediaPortal client installed?");
                 return null;
             }
         }
@@ -60,7 +59,7 @@ namespace MPExtended.Libraries.Service.Util
                 string mpDirs = clientInstallDir == null ? null : Path.Combine(clientInstallDir, "MediaPortalDirs.xml");
                 if (mpDirs == null || !File.Exists(mpDirs))
                 {
-                    Log.Warn("Could not find MediaPortalDirs.xml");
+                    Log.Debug("Could not find MediaPortalDirs.xml");
                     return null;
                 }
 
@@ -68,7 +67,7 @@ namespace MPExtended.Libraries.Service.Util
                 var element = file.Elements("Dir").Where(x => x.Attribute("id").Value == type.ToString());
                 if (element.Count() == 0)
                 {
-                    Log.Warn("Could not find directory with id {0} in MediaPortalDirs.xml", type);
+                    Log.Debug("Could not find directory with id {0} in MediaPortalDirs.xml", type);
                     return null;
                 }
 
@@ -145,7 +144,7 @@ namespace MPExtended.Libraries.Service.Util
                 string path = GetConfigFilePath();
                 if(path == null || !File.Exists(path))
                 {
-                    Log.Info("MediaPortal configuration file does not exists");
+                    Log.Info("MediaPortal configuration file does not exists (this isn't a problem for server-only installations)");
                     return false;
                 }
 
@@ -153,9 +152,9 @@ namespace MPExtended.Libraries.Service.Util
                 hasValidConfig = true;
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Log.Warn("No valid MediaPortal config file detected");
+                Log.Warn("Error trying to detect valid MediaPortal configuration file", ex);
                 return false;
             }
         }
