@@ -9,7 +9,7 @@
             <div class="column">
                 <div class="row">
                     @Html.ActionLink(episode.Show + " - " + episode.SeasonNumber + "x" + episode.EpisodeNumber, 
-                        UIStrings.Details, "TVShowsLibrary", new { episode = episode.Id }, null)
+                        "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
                 </div>
                 <div class="row">
                     <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id })" alt="" />
