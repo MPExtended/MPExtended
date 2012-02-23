@@ -31,7 +31,8 @@ namespace MPExtended.Libraries.Client
     {
         public event EventHandler<SetDiscoveredEventArgs> SetDiscovered;
 
-        private const int DEFAULT_PORT = 4322;
+        internal const int DEFAULT_PORT = 4322;
+
         private const int CONNECT_TIMEOUT = 2500; // in milliseconds
         private const int READ_TIMEOUT = 15000; // in milliseconds
 

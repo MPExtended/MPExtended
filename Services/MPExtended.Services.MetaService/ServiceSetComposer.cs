@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using MPExtended.Services.MetaService.Interfaces;
 
@@ -79,7 +80,8 @@ namespace MPExtended.Services.MetaService
         protected IEnumerable<WebServiceSet> ComposeAll()
         {
             List<WebServiceSet> sets = new List<WebServiceSet>();
-            string tveAddress = hinter.GetConfiguredTVServerAddress();
+            IPEndPoint tveAddress = hinter.GetConfiguredTVServerAddress();
+            string tveAddressInSet = tveAddress != null ? tveAddress.ToString() : null;
             IMetaService tveMeta = tveAddress != null ? ServiceClientFactory.CreateMeta(tveAddress) : null;
 
             // Start with the most simple case: full singleseat
@@ -104,7 +106,7 @@ namespace MPExtended.Services.MetaService
                 if (!tveMeta.GetActiveServices().Contains(WebService.MediaAccessService) &&
                     !tveMeta.HasUI())
                 {
-                    sets.Add(CreateServiceSet(OurAddress, tveAddress, HasActiveUI ? OurAddress : null));
+                    sets.Add(CreateServiceSet(OurAddress, tveAddressInSet, HasActiveUI ? OurAddress : null));
                 }
             }
 
@@ -119,7 +121,7 @@ namespace MPExtended.Services.MetaService
             {
                 if (tveMeta.GetActiveServices().Contains(WebService.MediaAccessService))
                 {
-                    sets.Add(CreateServiceSet(tveAddress, tveAddress, OurAddress));
+                    sets.Add(CreateServiceSet(tveAddressInSet, tveAddressInSet, OurAddress));
                 }
             }
 

@@ -30,7 +30,7 @@ namespace MPExtended.Services.MetaService
 {
     internal class CompositionHinter
     {
-        private string tveAddress;
+        private IPEndPoint tveAddress;
         private List<IPEndPoint> tvServerAddresses;
         private List<INetworkDiscoverer> validDiscoverers;
 
@@ -52,7 +52,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        public string GetConfiguredTVServerAddress()
+        public IPEndPoint GetConfiguredTVServerAddress()
         {
             return tveAddress;
         }
@@ -62,7 +62,7 @@ namespace MPExtended.Services.MetaService
             return tvServerAddresses;
         }
 
-        protected string ReadConfiguredTVServerAddress()
+        protected IPEndPoint ReadConfiguredTVServerAddress()
         {
             // Try to read the TV server IP address from MediaPortal's configuration
             if (!Mediaportal.HasValidConfigFile())
@@ -79,7 +79,8 @@ namespace MPExtended.Services.MetaService
             string hostname = tvSection["hostname"];
 
             // Return as IP addresses
-            return Dns.GetHostAddresses(hostname).Select(x => x.ToString()).First();
+            var address = Dns.GetHostAddresses(hostname).First();
+            return new IPEndPoint(address, Configuration.DEFAULT_PORT);
         }
 
         private void RemovedService(object sender, ServiceEventArgs e)

@@ -28,6 +28,8 @@ namespace MPExtended.Libraries.Service
 {
     public class Configuration
     {
+        public const int DEFAULT_PORT = 4322;
+
         private static ConfigurationContracts.Services serviceConfig = null;
         private static MediaAccess mediaConfig = null;
         private static Streaming streamConfig = null;

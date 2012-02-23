@@ -302,7 +302,7 @@ namespace MPExtended.Libraries.Client
 
             // create channel factory
             ChannelFactory<T> factory = null;
-            if (addr.IsLoopback && addr.Port == 4322)
+            if (addr.IsLoopback && addr.Port == ServiceDiscoverer.DEFAULT_PORT)
             {
                 NetNamedPipeBinding binding = new NetNamedPipeBinding()
                 {

@@ -223,7 +223,7 @@ namespace MPExtended.Libraries.Client
         {
             // create channel factory
             ChannelFactory<T> factory = null;
-            if ((address.ToString() == "localhost" || address.ToString() == "127.0.0.1") && address.Port == 4322)
+            if ((address.ToString() == "localhost" || address.ToString() == "127.0.0.1") && address.Port == ServiceDiscoverer.DEFAULT_PORT)
             {
                 NetNamedPipeBinding binding = new NetNamedPipeBinding()
                 {

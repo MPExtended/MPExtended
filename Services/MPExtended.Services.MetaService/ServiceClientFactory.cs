@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
@@ -30,7 +31,17 @@ namespace MPExtended.Services.MetaService
 {
     internal static class ServiceClientFactory
     {
+        public static IMetaService CreateMeta(IPEndPoint address)
+        {
+            return CreateMeta(address.Address.ToString(), address.Port);
+        }
+
         public static IMetaService CreateMeta(string ip)
+        {
+            return CreateMeta(ip, Configuration.DEFAULT_PORT);
+        }
+
+        public static IMetaService CreateMeta(string ip, int port)
         {
             try
             {
