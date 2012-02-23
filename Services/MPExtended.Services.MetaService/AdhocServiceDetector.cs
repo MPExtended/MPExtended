@@ -71,6 +71,8 @@ namespace MPExtended.Services.MetaService
                 {
                     if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
                         return false;
+                    if (!HasActiveMAS && !HasActiveTAS)
+                        return false;
                     var wsd = ServiceClientFactory.CreateLocalWSS().GetServiceDescription();
                     return wsd.SupportsMedia || wsd.SupportsRecordings || wsd.SupportsTV;
                 }
@@ -85,7 +87,8 @@ namespace MPExtended.Services.MetaService
         {
             get
             {
-                return Installation.IsServiceInstalled(MPExtendedService.UserSessionService);
+                return Installation.IsServiceInstalled(MPExtendedService.UserSessionService) &&
+                    Mediaportal.HasValidConfigFile();
             }
         }
 
