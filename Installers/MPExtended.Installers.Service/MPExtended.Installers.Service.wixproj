@@ -49,7 +49,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
       <Name>MPExtended.Libraries.Client</Name>
-      <Project>{9d78fc9a-a66c-48ac-b528-1cceae5aaa63}</Project>
+      <Project>{06c11dab-29f1-4292-acad-0b6d1f30ddf3}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -138,6 +138,14 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
       <Name>MPExtended.Services.MediaAccessService</Name>
       <Project>{b7e31cd0-1494-4e60-8ac1-2b4656b44e8c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService\MPExtended.Services.MetaService.csproj">
+      <Name>MPExtended.Services.MetaService</Name>
+      <Project>{11b46bc9-331a-45cc-9f1d-2ec580197b36}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

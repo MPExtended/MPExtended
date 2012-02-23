@@ -18,7 +18,7 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="Service">
-            <!-- General -->
+            <!-- General libraries -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.dll" />
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
@@ -26,6 +26,13 @@
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
               <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
+            </Component>
+            
+            <!-- MetaService -->
+            <Component Id="Component_General_MetaService" Guid="fcd3c49f-3653-471b-a8aa-4f98dddfa64f">
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.dll" />
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.pdb" />
             </Component>
             
             <!-- General registry (installation path) -->
