@@ -535,6 +535,22 @@ div#title
     width: 6em;
 }
 
+/*episode thumbnails*/
+div.thumb_wrap{
+	position: relative;
+}
+div.thumb_title{
+	padding: 5px;
+	position: absolute;
+	bottom: 0px;
+	background: rgba(0,0,0,0.5);
+	margin: 0 0 4px;
+	width: 212px;
+}
+div.thumb_title a{
+	color: #ffffff;
+}
+
 /** Override jquery-ui.css **/
 .ui-widget-header
 {
