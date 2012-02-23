@@ -79,6 +79,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
+      <Link>Code\WindowsServiceHandler.cs</Link>
+    </Compile>
     <Compile Include="Strings\UI.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -9,12 +9,14 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         public string Profile { get; set; }
         public string Identifier { get; set; }
+
         public WebStreamMediaType SourceType { get; set; }
         public string SourceId { get; set; }
+        public string DisplayName { get; set; }
+
         public string ClientDescription { get; set; }
         public string ClientIPAddress { get; set; }
         public DateTime StartTime { get; set; }
-        public string DisplayName { get; set; }
 
         /// <summary>
         /// The place where the user started the playback. 

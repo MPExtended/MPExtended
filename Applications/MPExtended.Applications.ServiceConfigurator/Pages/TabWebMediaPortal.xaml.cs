@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -29,6 +30,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Applications.UacServiceHandler;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -47,10 +49,33 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         public void TabClosed()
         {
-            Configuration.WebMediaPortalHosting.Port = Int32.Parse(txtPort.Text);
-            Configuration.WebMediaPortalHosting.Save();
+            int port = Int32.Parse(txtPort.Text);
+            if(port != Configuration.WebMediaPortalHosting.Port)
+            {
+                Configuration.WebMediaPortalHosting.Port = port;
+                Configuration.WebMediaPortalHosting.Save();
 
-            // TODO: restart WebMP hosting process (#134)
+                // restart
+                if (UacServiceHelper.IsAdmin())
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            var wsh = new WindowsServiceHandler("MPExtended WebMediaPortal");
+                            wsh.Execute(ServiceCommand.Restart);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warn("Failed to restart WebMediaPortal hosting process", ex);
+                        }
+                    });
+                }
+                else
+                {
+                    UacServiceHelper.RunUacServiceHandler("/command:webmphosting /action:restart");
+                }
+            }
         }
     }
 }

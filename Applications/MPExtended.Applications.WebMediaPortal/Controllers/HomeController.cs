@@ -29,12 +29,11 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [Authorize]
+    [ServiceAuthorize]
     public class HomeController : BaseController
     {
         //
         // GET: /Home/
-        [Authorize]
         public ActionResult Index()
         {
             return View();

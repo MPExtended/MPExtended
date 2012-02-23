@@ -36,9 +36,9 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int SignalLevel { get; set; }
         public int SignalQuality { get; set; }
         public string TimeShiftFileName { get; set; }
-        public string TimeshiftFolder { get; set; }
+        public string TimeShiftFolder { get; set; }
         public DateTime TimeShiftStarted { get; set; }
-        public int Type { get; set; }
+        public WebCardType Type { get; set; }
         public WebUser User { get; set; }
     }
 }

@@ -251,7 +251,7 @@ input[type=text], input[type=password], select
 }
 
 /* Begin: Tables */
-table
+table.webmp
 {
 	border: 1px solid #000;
 	border-collapse: collapse;
@@ -260,13 +260,13 @@ table
 	width: 100%;
 }
 
-tr
+table.webmp tr
 {
 	border: 1px solid #000;
 	line-height: 25px;
 }
 
-th
+table.webmp th
 {
 	background-color: #9b9993;
 	color: #000;
@@ -274,12 +274,12 @@ th
 	text-align: left;
 }
 
-th, td
+table.webmp th, table.webmp td
 {
 	padding-left: 5px;
 }
 
-tr:hover
+table.webmp tr:hover
 {
 	background-color: #fff;
 }

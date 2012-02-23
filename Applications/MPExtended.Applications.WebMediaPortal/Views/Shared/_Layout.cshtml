@@ -3,7 +3,6 @@
 <head>
     <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/TVGuide.css")" rel="stylesheet" type="text/css" />
     @foreach (string style in ViewBag.Styles)
     {
         <link href="@Url.Content(style)" rel="Stylesheet" type="text/css" />
@@ -21,7 +20,10 @@
         <h1>WebMediaPortal</h1>
 
         <div id="logindisplay">
+        @if (ViewBag.Availability.Authentication)
+        {
             @Html.Partial("_LogOnPartial")
+        }
         </div>
 
         <div id="search">
@@ -43,6 +45,7 @@
                     <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
                     <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
                     <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
+                    <li>@Html.ActionLink(UIStrings.Status, "Index", "TVServer")</li>
                 }
                 
                 <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>

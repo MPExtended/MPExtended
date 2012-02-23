@@ -41,12 +41,10 @@ namespace MPExtended.Services.TVAccessService
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
-        private Dictionary<string, IUser> _tvUsers;
 
         #region Service
         public TVAccessService()
         {
-            _tvUsers = new Dictionary<string, IUser>();
             _tvBusiness = new TvBusinessLayer();
 
             // try to initialize Gentle and TVE API
@@ -80,23 +78,13 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        private IUser GetUserByUserName(string userName, bool create = false)
+        private IUser GetUserByUserName(string userName)
         {
-            if (userName == null)
-            {
-                Log.Warn("Used user with null name");
-                return null;
-            }
-            else if (!_tvUsers.ContainsKey(userName) && !create)
-            {
-                return null;
-            }
-            else if (!_tvUsers.ContainsKey(userName) && create)
-            {
-                _tvUsers.Add(userName, new TvControl.User(userName, false));
-            }
-
-            return _tvUsers[userName];
+            return Card.ListAll()
+                .Where(c => c.Enabled)
+                .SelectMany(c => _tvControl.GetUsersForCard(c.IdCard))
+                .Where(u => u.Name == userName)
+                .FirstOrDefault();
         }
 
         public WebTVServiceDescription GetServiceDescription()
@@ -593,7 +581,9 @@ namespace MPExtended.Services.TVAccessService
 
         public WebChannelState GetChannelState(int channelId, string userName)
         {
-            TvControl.ChannelState state = _tvControl.GetChannelState(channelId, GetUserByUserName(userName, true));
+            IUser user = new User();
+            user.Name = userName;
+            TvControl.ChannelState state = _tvControl.GetChannelState(channelId, user);
             Log.Trace("ChannelId: " + channelId + ", State: " + state.ToString());
             return state.ToWebChannelState(channelId);
         }
@@ -617,23 +607,28 @@ namespace MPExtended.Services.TVAccessService
 
         private VirtualCard SwitchTVServerToChannel(string userName, int channelId)
         {
+            // validate arguments
             if (String.IsNullOrEmpty(userName))
             {
                 Log.Error("Called SwitchTVServerToChannel with empty userName");
                 throw new ArgumentNullException("userName");
             }
 
+            // create the user
             Log.Debug("Starting timeshifting with username {0} on channel id {1}", userName, channelId);
-            IUser currentUser = GetUserByUserName(userName, true);
+            IUser currentUser = new User();
+            currentUser.Name = userName;
+            currentUser.IsAdmin = true;
 
+            // actually start timeshifting
             VirtualCard tvCard;
             Log.Debug("Starting timeshifting");
             TvResult result = _tvControl.StartTimeShifting(ref currentUser, channelId, out tvCard);
             Log.Trace("Tried to start timeshifting, result {0}", result);
 
+            // make sure result is correct and return
             if (result != TvResult.Succeeded)
             {
-                // TODO: should we retry?
                 Log.Error("Starting timeshifting failed with result {0}", result);
                 throw new Exception("Failed to start tv stream: " + result);
             }
@@ -644,11 +639,6 @@ namespace MPExtended.Services.TVAccessService
                 Log.Error("Couldn't get virtual card");
                 throw new Exception("Couldn't get virtual card");
             }
-
-            // set card id and channel id of user, required for heartbeat and stopping of timeshifting
-            currentUser.CardId = tvCard.Id;
-            currentUser.IdChannel = channelId;
-            _tvUsers[userName] = currentUser;
 
             return tvCard;
         }
@@ -674,6 +664,7 @@ namespace MPExtended.Services.TVAccessService
                 Log.Error("Tried to cancel timeshifting for invalid user {0}", userName);
                 throw new ArgumentException("Invalid username");
             }
+            Log.Debug("Canceling timeshifting for user {0}", userName);
 
             return _tvControl.StopTimeShifting(ref currentUser);
         }

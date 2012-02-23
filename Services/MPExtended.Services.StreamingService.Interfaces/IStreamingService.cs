@@ -8,7 +8,7 @@ using System.IO;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
-    [ServiceContract]
+    [ServiceContract(Namespace = "http://mpextended.github.com")]
     public interface IStreamingService
     {
         [OperationContract]

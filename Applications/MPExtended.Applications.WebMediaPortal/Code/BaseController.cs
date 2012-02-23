@@ -53,7 +53,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             // log the error
-            Log.Warn("Error during controller body", filterContext.Exception);
+            Log.Debug("During request {0}", filterContext.HttpContext.Request.RawUrl);
+            Log.Warn("Error happened in controller body", filterContext.Exception);
 
             // return exception page
             filterContext.Result = new ViewResult
@@ -71,8 +72,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            SetViewBagProperties(ViewBag);
             LoadLanguage();
+            SetViewBagProperties(ViewBag);
         }
 
         private void SetViewBagProperties(dynamic bag)
@@ -81,6 +82,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             bag.FullVersion = VersionUtil.GetFullVersionString();
             bag.Styles = new List<string>();
             bag.Scripts = new List<string>();
+            bag.Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
         }
 
         private void LoadLanguage()

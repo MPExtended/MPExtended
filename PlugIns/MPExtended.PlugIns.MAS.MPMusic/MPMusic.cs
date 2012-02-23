@@ -301,6 +301,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     IEnumerable<string> allArtists = reader.ReadPipeList(2);
                     string title = reader.ReadString(1);
+                    string artist = allArtists.Count() == 0 ? String.Empty : allArtists.First();
                     return new WebSearchResult()
                     {
                         Type = WebMediaType.MusicTrack,
@@ -309,8 +310,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
                         Details = new SerializableDictionary<string>()
                     {
-                        { "Artist", allArtists.First() },
-                        { "ArtistId", allArtists.First() },
+                        { "Artist", artist },
+                        { "ArtistId", artist },
                         { "Album", reader.ReadString(3) },
                         { "AlbumId", (string)AlbumIdReader(reader, 3) },
                         { "Duration", reader.ReadIntAsString(4) },
@@ -320,9 +321,12 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 }, param);
 
                 string albumsSql =
-                    "SELECT DISTINCT strAlbumArtist, strAlbum " +
-                    "FROM tracks " +
-                    "WHERE strAlbum LIKE @search";
+                    "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
+                        "CASE WHEN i.iYear ISNULL THEN MIN(t.iYear) ELSE i.iYear END AS year " +
+                    "FROM tracks t " +
+                    "LEFT JOIN albuminfo i ON t.strAlbum = i.strAlbum AND t.strArtist LIKE '%' || i.strArtist || '%' " +
+                    "WHERE t.strAlbum LIKE @search " +
+                    "GROUP BY t.strAlbumArtist, t.strAlbum ";
                 IEnumerable<WebSearchResult> albums = ReadList<IEnumerable<WebSearchResult>>(albumsSql, delegate(SQLiteDataReader reader)
                 {
                     string title = reader.ReadString(1);
@@ -336,7 +340,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         Details = new SerializableDictionary<string>()
                     {
                         { "Artist", artistList.First().Trim() },
-                        { "ArtistId", artistList.First().Trim() }
+                        { "ArtistId", artistList.First().Trim() },
+                        { "Year", reader.ReadIntAsString(2) }
                     }
                     };
 

@@ -30,7 +30,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [Authorize]
+    [ServiceAuthorize]
     public class MusicLibraryController : BaseController
     {
         public ActionResult Index()

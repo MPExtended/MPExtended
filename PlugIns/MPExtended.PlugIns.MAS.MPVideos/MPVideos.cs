@@ -55,13 +55,13 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres " +
                 "FROM movie m " +
-                "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
+                "LEFT JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
-                "INNER JOIN path p ON f.idPath = p.idPath " +
+                "LEFT JOIN path p ON f.idPath = p.idPath " +
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
-                "INNER JOIN actors a ON alm.idActor = a.idActor " +
+                "LEFT JOIN actors a ON alm.idActor = a.idActor " +
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
-                "INNER JOIN genre g ON glm.idGenre = g.idGenre " +
+                "LEFT JOIN genre g ON glm.idGenre = g.idGenre " +
                 "WHERE %where " +
                 "GROUP BY m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()

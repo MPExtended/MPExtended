@@ -232,6 +232,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Donate to MPExtended.
+        /// </summary>
+        public static string DonateToMPExtended {
+            get {
+                return ResourceManager.GetString("DonateToMPExtended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download Bonjour..
         /// </summary>
         public static string DownloadBonjour {

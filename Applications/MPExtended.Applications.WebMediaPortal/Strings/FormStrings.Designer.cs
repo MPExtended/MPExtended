@@ -502,6 +502,42 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Idle.
+        /// </summary>
+        public static string StateIdle {
+            get {
+                return ResourceManager.GetString("StateIdle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recording.
+        /// </summary>
+        public static string StateRecording {
+            get {
+                return ResourceManager.GetString("StateRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning.
+        /// </summary>
+        public static string StateScanning {
+            get {
+                return ResourceManager.GetString("StateScanning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeshifting.
+        /// </summary>
+        public static string StateTimeshifting {
+            get {
+                return ResourceManager.GetString("StateTimeshifting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stream type.
         /// </summary>
         public static string StreamType {

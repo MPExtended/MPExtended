@@ -17,12 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
@@ -99,6 +101,11 @@ namespace MPExtended.Applications.ServiceConfigurator
             }
         }
 
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            CommonEventHandlers.NavigateHyperlink(sender, e);
+        }
+
         #region Tray application
         protected override void OnStateChanged(EventArgs e)
         {
@@ -108,7 +115,24 @@ namespace MPExtended.Applications.ServiceConfigurator
             base.OnStateChanged(e);
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void btnOK_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+
+            // restart the service only when it is already running
+            if (mServiceController != null && mServiceController.Status == ServiceControllerStatus.Running && Service.ShouldRestart)
+            {
+                Service.RestartService();
+            }
+
+            // exit when we aren't running as tray app
+            if (!StartupArguments.RunAsTrayApp)
+            {
+                this.Close();
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             // When the application is closed, check whether the application is exiting from menu or forms close button
             if (!mIsAppExiting && StartupArguments.RunAsTrayApp)
@@ -238,7 +262,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             // try to load service
             try
             {
-                mServiceController = new ServiceController("MPExtended Service");
+                mServiceController = new ServiceController(Service.SERVICE_NAME);
                 HandleServiceState(mServiceController.Status);
 
                 // start service watcher
@@ -274,20 +298,6 @@ namespace MPExtended.Applications.ServiceConfigurator
                 ErrorHandling.ShowError(ex);
                 mServiceWatcher.Stop();
             }
-        }
-
-        private void RestartService(int timeoutMilliseconds)
-        {
-            // The timeout is the total timeout for two operations, so we reduce the timeout with the elapsed time after the first operation.
-            int startTime = Environment.TickCount;
-            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-
-            mServiceController.Stop();
-            mServiceController.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-
-            timeout -= TimeSpan.FromTicks(Environment.TickCount - startTime);
-            mServiceController.Start();
-            mServiceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
         }
 
         private void HandleServiceState(ServiceControllerStatus _status)

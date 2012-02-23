@@ -129,7 +129,7 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" Id="ConfiguratorExecutable" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe.config" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.pdb" />
-              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
+              <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.xml" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
@@ -167,7 +167,7 @@
 
               <!-- Stream config -->
               <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
-                <File Source="$(var.SolutionDir)\Config\Streaming.xml" />
+                <File Source="$(var.SolutionDir)\Config\Installed\Streaming.xml" />
               </Component>
             </Directory>
 

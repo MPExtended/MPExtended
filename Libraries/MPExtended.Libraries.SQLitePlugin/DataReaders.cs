@@ -50,8 +50,9 @@ namespace MPExtended.Libraries.SQLitePlugin
             {
                 if (reader.IsDBNull(idx))
                     return "";
-                else
-                    return reader.GetString(idx);
+
+                string str = reader.GetString(idx);
+                return String.IsNullOrWhiteSpace(str) ? String.Empty : str;
             }
             catch (InvalidCastException)
             {

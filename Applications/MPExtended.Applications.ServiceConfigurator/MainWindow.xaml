@@ -4,59 +4,14 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
        Title="{x:Static strings:UI.WindowTitle}" 
-       Height="490"
-       MinHeight="490" 
+       Height="550"
+       MinHeight="550" 
        Width="750"
        MinWidth="750" 
        Closing="Window_Closing" 
        Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png">
 
     <Grid Width="AUTO">
-        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-250,-250" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
-        <Image HorizontalAlignment="Left" Margin="6,0,11,11" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
-        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,143" />
-        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,165" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
-        
-        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="tcMainTabs_SelectionChanged" Visibility="Visible" Background="{x:Null}">
-            <TabControl.Resources>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Padding" Value="4" />
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate>
-                                <ContentPresenter Content="{TemplateBinding Content}">
-                                    <ContentPresenter.LayoutTransform>
-                                        <RotateTransform Angle="0" />
-                                    </ContentPresenter.LayoutTransform>
-                                </ContentPresenter>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-
-            <TabItem Header="{x:Static strings:UI.TabProject}" Width="140" Name="tiGeneral" Tag="Pages/TabProject.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabConfiguration}" Width="140" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabSocial}" Width="140" Name="tiSocial" Tag="Pages/TabSocial.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabLogs}" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabTroubleshooting}" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
-            </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
-            </TabItem>
-        </TabControl>
-
         <tb:TaskbarIcon 
           IconSource="/Artwork/TrayIcon.ico"
           ToolTipText="{x:Static strings:UI.TrayTooltip}" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
@@ -96,5 +51,60 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
+        
+        <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="tcMainTabs_SelectionChanged" Visibility="Visible" Background="{x:Null}" Margin="0,0,0,47">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Padding" Value="4" />
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="0" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="{x:Static strings:UI.TabProject}" Width="140" Name="tiGeneral" Tag="Pages/TabProject.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabConfiguration}" Width="140" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabSocial}" Width="140" Name="tiSocial" Tag="Pages/TabSocial.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabLogs}" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabTroubleshooting}" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
+            </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
+            </TabItem>
+        </TabControl>
+
+        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-241,-184" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
+        
+        <Image HorizontalAlignment="Left" Margin="6,0,11,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
+        
+        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="641,0,0,12" Name="btnOK" VerticalAlignment="Bottom" Width="75" Click="btnOK_Click"/>
+        <Separator Height="1" Name="separator" Width="145" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
+
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,480,0,0" Name="tbDonate" VerticalAlignment="Top">
+            <Hyperlink NavigateUri="http://mpextended.github.com/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
+                <Run Text="{x:Static strings:UI.DonateToMPExtended}" />
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>

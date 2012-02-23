@@ -54,7 +54,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
 
             Configuration.Services.Save();
-            Service.ReloadConfiguration();
+            Service.ShouldRestart = true;
         }
 
         private void miDelete_Click(object sender, RoutedEventArgs e)

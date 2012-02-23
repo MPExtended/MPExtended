@@ -1,3 +1,60 @@
+Database/Gentle:
+- Copyright (C) Morten Mertner, http://sourceforge.net/projects/gopf/
+- Licensed under Lesser General Public License, version 2.1, available on http://www.gnu.org/licenses/lgpl-2.1.html
+- Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
+- Version 1.5.0.29111 (custom build from MediaPortal)
+
+Database/MySql.Data.dll:
+- Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
+- Licensed under General Public License, version 2, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
+- Source code available from http://www.mysql.com/
+- Version 5.1.7 (version from MediaPortal)
+
+Database/System.Data.SQLite:
+- Public domain
+- Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
+- Version 1.0.76.0, SQLite 3.7.8
+
+Installer/WifiRemote_0.5.0.mpe1:
+- Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
+- Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
+- Source code available from http://code.google.com/p/wifiremote/
+- Version 0.5.0
+
+Installer/Microsoft_VC100_CRT_x86.msm:
+- Copyright (C) Microsoft Corporation. All rights reserved.
+- Rights granted to be redistributed unmodified. 
+
+Logging/NLog.dll:
+- Copyright (C) 2004 - 2011 by Jaroslaw Kowalski, http://nlog-project.org/
+- Licensed under 3-clause BSD license, available on https://github.com/jkowalski/NLog/raw/master/LICENSE.txt and http://opensource.org/licenses/BSD-3-Clause
+- Source code available from https://github.com/jkowalski/NLog/
+- Version 2.0.0.2000
+
+Logging/log4net.dll:
+- Copyright (C) 2001 - 2066 The Apache Software Foundation, http://logging.apache.org/log4net/
+- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
+- Source code available from http://logging.apache.org/log4net/
+- Version 1.2.10.0 (version from MediaPortal)
+
+Misc/zxing.dll:
+- Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
+- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
+- Source code available from http://code.google.com/p/zxing/
+- Version 1.0.4145.29580
+
+Misc/ZeroconfService.dll:
+- Copyright unknown
+- Licensed under the 2-clause BSD license, available on http://www.opensource.org/licenses/BSD-2-Clause
+- Source code available from http://code.google.com/p/zeroconfignetservices/
+- Version 0.6.0.0
+
+MVC:
+- Copyright (C) Microsoft Corporation. All rights reserved.
+- Licensed under Microsoft Public License (Ms-PL), available on http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
+- Downloaded from http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=22079
+- Version 3.0.0.0
+
 Streaming\ffmpeg.exe:
 - Copyright (C) 2000-2011 the FFmpeg developers, http://ffmpeg.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
@@ -35,52 +92,3 @@ UI/Hardcodet.Wpf.TaskbarNotification:
 - Licensed under Code Project Open License, version 1, available on http://www.codeproject.com/info/cpol10.aspx
 - Source code available from http://www.hardcodet.net/projects/wpf-notifyicon
 - Version 1.0.4
-
-Misc/zxing.dll:
-- Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://code.google.com/p/zxing/
-- Version 1.0.4145.29580
-
-Misc/ZeroconfService.dll:
-- Public Domain, made by Apple
-- Version 0.6.0.0
-
-Logging/NLog.dll:
-- Copyright (C) 2004 - 2011 by Jaroslaw Kowalski, http://nlog-project.org/
-- Licensed under 3-clause BSD license, available on https://github.com/jkowalski/NLog/raw/master/LICENSE.txt and http://opensource.org/licenses/BSD-3-Clause
-- Source code available from https://github.com/jkowalski/NLog/
-- Version 2.0.0.2000
-
-Logging/log4net.dll:
-- Copyright (C) 2001 - 2066 The Apache Software Foundation, http://logging.apache.org/log4net/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://logging.apache.org/log4net/
-- Version 1.2.10.0 (version from MediaPortal)
-
-Installer/WifiRemote_0.4.2.mpe1:
-- Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
-- Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
-- Source code available from http://code.google.com/p/wifiremote/
-- Version 0.4.2
-
-Installer/Microsoft_VC100_CRT_x86.msm:
-- Copyright (C) Microsoft Corporation. All rights reserved.
-- Rights granted to be redistributed unmodified. 
-
-Database/MySql.Data.dll:
-- Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
-- Licensed under General Public License, version 2, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
-- Source code available from http://www.mysql.com/
-- Version 5.1.7 (version from MediaPortal)
-
-Database/System.Data.SQLite:
-- Public domain
-- Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-- Version 1.0.76.0, SQLite 3.7.8
-
-Database/Gentle*:
-- Copyright (C) Morten Mertner, http://sourceforge.net/projects/gopf/
-- Licensed under Lesser General Public License, version 2.1, available on http://www.gnu.org/licenses/lgpl-2.1.html
-- Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
-- Version 1.5.0.29111 (custom build from MediaPortal)
