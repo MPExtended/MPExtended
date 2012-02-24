@@ -23,7 +23,7 @@ using System.ServiceModel.Dispatcher;
 using System.Runtime.Serialization.Json;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Libraries.Service
+namespace MPExtended.Libraries.Service.WCF
 {
     internal class CustomQueryStringConverter : QueryStringConverter
     {

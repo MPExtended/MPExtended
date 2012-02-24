@@ -27,7 +27,7 @@ using System.ServiceModel.Dispatcher;
 using System.Text;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Libraries.Service
+namespace MPExtended.Libraries.Service.WCF
 {
     public class WebExceptionHandling : WebHttpBehavior, IErrorHandler
     {

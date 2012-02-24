@@ -26,7 +26,7 @@ using System.ServiceModel.Channels;
 using System.Text;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Libraries.Service
+namespace MPExtended.Libraries.Service.WCF
 {
     public class WcfUsernameValidator : UserNamePasswordValidator
     {
@@ -47,6 +47,5 @@ namespace MPExtended.Libraries.Service
                 throw ex;
             }
         }
-
     }
 }
