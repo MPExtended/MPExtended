@@ -62,6 +62,13 @@ namespace MPExtended.Services.MetaService
             return tvServerAddresses;
         }
 
+        public IEnumerable<IServicePublisher> GetAvailablePublishers()
+        {
+            return validDiscoverers
+                .Select(x => x.GetPublisher())
+                .Where(x => x != null);
+        }
+
         protected IPEndPoint ReadConfiguredTVServerAddress()
         {
             // Try to read the TV server IP address from MediaPortal's configuration

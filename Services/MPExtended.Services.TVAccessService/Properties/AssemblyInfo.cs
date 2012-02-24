@@ -22,6 +22,5 @@ using System.Runtime.InteropServices;
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.TVAccessService,
     WCFType = typeof(MPExtended.Services.TVAccessService.TVAccessService),
-    ZeroconfType = "_mpextended-tas._tcp.",
     InitClass = typeof(MPExtended.Services.TVAccessService.BackgroundThread),
     InitMethod = "Setup")]

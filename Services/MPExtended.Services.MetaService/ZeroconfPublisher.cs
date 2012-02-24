@@ -29,24 +29,20 @@ namespace MPExtended.Services.MetaService
     internal class ZeroconfPublisher : IServicePublisher
     {
         private List<NetService> publishedServices = new List<NetService>();
+        private const string SET_SERVICE_TYPE = "_mpextended-set._tcp.";
 
         public bool Publish(IServiceDetector detector)
         {
-            if (!Zeroconf.IsEnabled)
-            {
-                return false;
-            }
-
             // old style services
             foreach (var srv in Installation.GetInstalledServices())
             {
-                if (srv.ZeroconfType == null)
+                if (!ZeroconfDiscoverer.serviceTypes.ContainsKey(srv.ToWebService()))
                     continue;
 
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
 
-                NetService net = new NetService(Zeroconf.DOMAIN, srv.ZeroconfType, GetComputerName(), srv.Port);
+                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], GetComputerName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -67,7 +63,7 @@ namespace MPExtended.Services.MetaService
                 additionalData["tasstream"] = set.TASStream != null ? set.TASStream : String.Empty;
                 additionalData["ui"] = set.UI != null ? set.UI : String.Empty;
 
-                NetService net = new NetService(Zeroconf.DOMAIN, Zeroconf.SET_SERVICE_TYPE, GetComputerName(), Configuration.Services.Port);
+                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, SET_SERVICE_TYPE, GetComputerName(), Configuration.Services.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);

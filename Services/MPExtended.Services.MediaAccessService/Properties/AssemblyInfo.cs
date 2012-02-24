@@ -23,5 +23,4 @@ using System.Runtime.InteropServices;
 // The hosting information
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.MediaAccessService,
-    WCFType = typeof(MPExtended.Services.MediaAccessService.MediaAccessService),
-    ZeroconfType = "_mpextended-mas._tcp.")]
+    WCFType = typeof(MPExtended.Services.MediaAccessService.MediaAccessService))]

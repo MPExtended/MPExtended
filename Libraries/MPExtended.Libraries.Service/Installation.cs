@@ -52,7 +52,6 @@ namespace MPExtended.Libraries.Service
     public class ServiceConfiguration
     {
         public MPExtendedService Service { get; set; }
-        public string ZeroconfType { get; set; }
         public int Port { get; set; }
     }
 
@@ -257,7 +256,6 @@ namespace MPExtended.Libraries.Service
             {
                 Port = Configuration.Services.Port,
                 Service = x.Service,
-                ZeroconfType = x.ZeroconfType
             }).ToList();
         }
 

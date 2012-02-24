@@ -21,5 +21,4 @@ using System.Runtime.InteropServices;
 // The hosting information
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.StreamingService,
-    WCFType = typeof(MPExtended.Services.StreamingService.StreamingService),
-    ZeroconfType = "_mpextended-wss._tcp.")]
+    WCFType = typeof(MPExtended.Services.StreamingService.StreamingService))]

@@ -32,16 +32,15 @@ namespace MPExtended.Services.MetaService
         public event EventHandler<ServiceEventArgs> ServiceFound;
         public event EventHandler<ServiceEventArgs> ServiceDisappeared;
 
-        private const int TIMEOUT = 10;
-        private const string DOMAIN = "";
+        internal const int TIMEOUT = 10;
+        internal const string DOMAIN = "";
 
-        private Dictionary<WebService, string> serviceTypes = new Dictionary<WebService, string>()
+        internal static Dictionary<WebService, string> serviceTypes = new Dictionary<WebService, string>()
         {
             { WebService.MediaAccessService, "_mpextended-mas._tcp." },
             { WebService.TVAccessService, "_mpextended-tas._tcp." },
             { WebService.UserSessionService, "_mpextended-uss._tcp." },
-            { WebService.StreamingService, "_mpextended-wss._tcp." },
-            { WebService.MetaService, "_mpextended-set._tcp." }
+            { WebService.StreamingService, "_mpextended-wss._tcp." }
         };
 
         private bool? isEnabled = null;
@@ -87,7 +86,10 @@ namespace MPExtended.Services.MetaService
             browser.AllowMultithreadedCallbacks = true;
             browser.DidFindService += new NetServiceBrowser.ServiceFound(DiscoverFoundService);
             browser.DidRemoveService += new NetServiceBrowser.ServiceRemoved(DiscoverRemovedService);
-            browser.SearchForService(Zeroconf.TAS_SERVICE_TYPE, Zeroconf.DOMAIN);
+            foreach(var srv in service)
+            {
+                browser.SearchForService(serviceTypes[srv], DOMAIN);
+            }
         }
 
         private void DiscoverRemovedService(NetServiceBrowser browser, NetService service, bool moreComing)
@@ -98,7 +100,7 @@ namespace MPExtended.Services.MetaService
         private void DiscoverFoundService(NetServiceBrowser browser, NetService service, bool moreComing)
         {
             service.DidResolveService += new NetService.ServiceResolved(DiscoverResolvedService);
-            service.ResolveWithTimeout(Zeroconf.TIMEOUT);
+            service.ResolveWithTimeout(TIMEOUT);
         }
 
         private void DiscoverResolvedService(NetService service)

@@ -41,7 +41,7 @@ namespace MPExtended.Services.MetaService
             }
         }
 
-        private IServicePublisher[] publishers;
+        private IEnumerable<IServicePublisher> publishers;
         private IServiceDetector detector;
         private bool initialized;
 
@@ -51,8 +51,8 @@ namespace MPExtended.Services.MetaService
 
             CompositionHinter hinter = new CompositionHinter(new ZeroconfDiscoverer());
             hinter.StartDiscovery();
+            publishers = hinter.GetAvailablePublishers();
             detector = new CachingServiceDetector(new AdhocServiceDetector(hinter), hinter);
-            publishers = new IServicePublisher[] { new ZeroconfPublisher() };
 
             initialized = false;
             ServiceState.Started += delegate()
