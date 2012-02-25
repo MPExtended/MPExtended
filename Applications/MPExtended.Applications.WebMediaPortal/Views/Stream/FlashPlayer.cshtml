@@ -5,10 +5,12 @@
 </div>
 <script type="text/javascript">
     jwplayer("videoplayer").setup({
-        flashplayer: "@Url.Content("~/Content/jwplayer/player.swf")",
         file: "@Html.Raw(@Model.URL)",
         type: "video",
         width: @Model.Size.Width,
-        height: @Model.Size.Height
+        height: @Model.Size.Height,
+        modes: [ 
+            { type: "flash", src: "@Url.Content("~/Content/jwplayer/player.swf")" } 
+        ]
     });
 </script>
