@@ -93,6 +93,17 @@ namespace MPExtended.Libraries.General
             return path;
         }
 
+        public static string GetPath(string filename, out string defaultPath)
+        {
+#if DEBUG
+            defaultPath = GetPath(filename);
+#else
+            MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
+            defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
+#endif
+            return GetPath(filename);
+        }
+
         internal static string PerformFolderSubstitution(string input)
         {
             string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);

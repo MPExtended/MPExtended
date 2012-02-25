@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.IO;
 
 namespace MPExtended.Libraries.General
 {
@@ -58,7 +59,9 @@ namespace MPExtended.Libraries.General
 
         public StreamingConfiguration()
         {
-            XElement file = XElement.Load(Configuration.GetPath("Streaming.xml"));
+            string defaultPath;
+            string path = Configuration.GetPath("Streaming.xml", out defaultPath);
+            XElement file = XElement.Load(path);
 
             DefaultAudioStream = file.Element("defaultStreams").Element("audio").Value;
             DefaultSubtitleStream = file.Element("defaultStreams").Element("subtitle").Value;
@@ -70,20 +73,13 @@ namespace MPExtended.Libraries.General
 
             WatchSharing = file.Element("watchsharing").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
 
-            Transcoders = file.Element("transcoders").Elements("transcoder").Select(x => new TranscoderProfile()
+            Transcoders = GetTranscoderProfilesFromNode(file.Element("transcoders")).ToList();
+
+            // update if default file has changed
+            if (File.GetLastWriteTime(defaultPath) > File.GetLastWriteTime(path))
             {
-                Name = x.Element("name").Value,
-                Description = x.Element("description").Value,
-                Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
-                Target = x.Element("target").Value,
-                Transport = x.Element("transport").Value,
-                MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
-                MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
-                MIME = x.Element("mime").Value,
-                HasVideoStream = x.Element("videoStream").Value == "true",
-                CodecParameters = x.Element("transcoderConfiguration").Descendants().ToDictionary(el => el.Name.LocalName, el => el.Value),
-                TranscoderImplementationClass = (string)x.Element("transcoderConfiguration").Attribute("implementation")
-            }).ToList();
+                LoadUpdatedDefaultFile(defaultPath);
+            }
         }
 
         public TranscoderProfile GetTranscoderProfileByName(string name) 
@@ -96,6 +92,45 @@ namespace MPExtended.Libraries.General
             }
 
             return list.First();
+        }
+
+        public void LoadUpdatedDefaultFile(string defaultFile)
+        {
+            bool save = false;
+
+            XElement defaultNode = XElement.Load(defaultFile);
+            var defaultProfiles = GetTranscoderProfilesFromNode(defaultNode.Element("transcoders"));
+            foreach (var transcoder in defaultProfiles)
+            {
+                if (!Transcoders.Any(x => x.Name == transcoder.Name))
+                {
+                    Transcoders.Add(transcoder);
+                    save = true;
+                }
+            }
+
+            if (save)
+            {
+                Save();
+            }
+        }
+
+        private IEnumerable<TranscoderProfile> GetTranscoderProfilesFromNode(XElement node)
+        {
+            return node.Elements("transcoder").Select(x => new TranscoderProfile()
+            {
+                Name = x.Element("name").Value,
+                Description = x.Element("description").Value,
+                Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
+                Target = x.Element("target").Value,
+                Transport = x.Element("transport").Value,
+                MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
+                MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
+                MIME = x.Element("mime").Value,
+                HasVideoStream = x.Element("videoStream").Value == "true",
+                CodecParameters = x.Element("transcoderConfiguration").Descendants().ToDictionary(el => el.Name.LocalName, el => el.Value),
+                TranscoderImplementationClass = (string)x.Element("transcoderConfiguration").Attribute("implementation")
+            });
         }
 
         public bool Save()
