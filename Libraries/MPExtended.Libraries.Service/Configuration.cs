@@ -105,7 +105,7 @@ namespace MPExtended.Libraries.Service
             return path;
         }
 
-        private static string GetDefaultPath(string filename)
+        public static string GetDefaultPath(string filename)
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {
