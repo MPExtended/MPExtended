@@ -31,10 +31,14 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (reader.IsDBNull(idx))
+                object val = reader.GetValue(idx);
+                if (val == null)
                     return 0;
-                else
-                    return reader.GetInt32(idx);
+                string sval = val.ToString();
+                if (String.IsNullOrEmpty(sval))
+                    return 0;
+
+                return Int32.Parse(sval, System.Globalization.CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
@@ -48,17 +52,12 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (reader.IsDBNull(idx))
+                object val = reader.GetValue(idx);
+                if (val == null)
                     return "";
 
-                string str = reader.GetString(idx);
-                return String.IsNullOrWhiteSpace(str) ? String.Empty : str;
-            }
-            catch (InvalidCastException)
-            {
-                // This is a workaround for the weird bug that for some reason numeric values throw an InvalidCastException. 
-                // See for example http://forum.team-mediaportal.com/webservice-mobile-access-537/webservice-general-media-access-webservice-89956/index7.html#post748640
-                return ReadInt32(reader, idx).ToString();
+                string sval = val.ToString();
+                return String.IsNullOrWhiteSpace(sval) ? String.Empty : sval;
             }
             catch (Exception)
             {
@@ -72,10 +71,13 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (reader.IsDBNull(idx))
+                object val = reader.GetValue(idx);
+                if (val == null)
                     return false;
-                else
-                    return reader.GetBoolean(idx);
+                if (val is int)
+                    return (int)val == 1;
+
+                return val.ToString() == "1";
             }
             catch (Exception)
             {
@@ -89,16 +91,16 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (!reader.IsDBNull(idx))
-                {
-                    string val = reader.GetString(idx);
-                    if(val.Length != 0) 
-                    {
-                        return DateTime.Parse(val);
-                    }
-                }
+                object val = reader.GetValue(idx);
+                if (val == null)
+                    return new DateTime(1970, 1, 1);
+                if (val is DateTime)
+                    return val;
 
-                return new DateTime(1970, 1, 1);
+                string sval = val.ToString();
+                if (String.IsNullOrWhiteSpace(sval))
+                    return new DateTime(1970, 1, 1);
+                return DateTime.Parse(sval);
             }
             catch (Exception)
             {
@@ -112,10 +114,14 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             try
             {
-                if (reader.IsDBNull(idx))
+                object val = reader.GetValue(idx);
+                if (val == null)
                     return 0;
-                else
-                    return reader.GetFloat(idx);
+                string sval = val.ToString();
+                if (String.IsNullOrEmpty(sval))
+                    return 0;
+
+                return Single.Parse(sval, System.Globalization.CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
@@ -127,41 +133,21 @@ namespace MPExtended.Libraries.SQLitePlugin
         [AllowSQLSort]
         public static object ReadIntAsString(SQLiteDataReader reader, int idx)
         {
-            return ReadInt32(reader, idx).ToString();
+            return ReadString(reader, idx);
         }
 
         [AllowSQLCompare]
         [AllowSQLSort]
         public static object ReadStringAsInt(SQLiteDataReader reader, int idx)
         {
-            string data = (string)ReadString(reader, idx);
-            if (String.IsNullOrEmpty(data))
-                return null;
-            try
-            {
-                return Int32.Parse(data);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return ReadInt32(reader, idx);
         }
 
         [AllowSQLCompare]
         [AllowSQLSort]
         public static object ReadStringAsFloat(SQLiteDataReader reader, int idx)
         {
-            string data = (string)ReadString(reader, idx);
-            if (String.IsNullOrEmpty(data))
-                return null;
-            try
-            {
-                return Single.Parse(data);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return ReadFloat(reader, idx);
         }
 
         public static object ReadList(SQLiteDataReader reader, int idx, char separator)
