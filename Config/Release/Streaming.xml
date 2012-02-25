@@ -216,6 +216,26 @@
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
+      <name>Flash Ultra LQ</name>
+      <description>Flash Ultra LQ</description>
+      <bandwidth>1000</bandwidth>
+      <target>pc-flash-video</target>
+      <transport>http</transport>
+      <mime>video/x-flv</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>640</maxOutputWidth>
+      <maxOutputHeight>350</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=450,venc=x264{profile=baseline},acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
       <name>Flash Audio</name>
       <description>Flash Audio</description>
       <bandwidth>256</bandwidth>
