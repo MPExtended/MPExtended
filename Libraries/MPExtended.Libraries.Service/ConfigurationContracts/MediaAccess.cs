@@ -60,11 +60,11 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
         public List<string> DisabledPlugins { get; set; }
 
-        public MediaAccess()
+        public MediaAccess(string path, string defaultPath)
         {
             try
             {
-                XElement file = XElement.Load(Configuration.GetPath("MediaAccess.xml"));
+                XElement file = XElement.Load(path);
 
                 DefaultPlugins = new DefaultPlugins()
                 {

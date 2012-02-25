@@ -89,9 +89,9 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
         public NetworkImpersonation NetworkImpersonation { get; set; }
 
-        public Services()
+        public Services(string path, string defaultPath)
         {
-            XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
+            XElement file = XElement.Load(path);
 
             AuthenticationEnabled = file.Element("users").Attribute("authenticationEnabled").Value == "true";
 

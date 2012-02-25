@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -56,9 +57,9 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
         public List<TranscoderProfile> Transcoders { get; set; }
 
-        public Streaming()
+        public Streaming(string path, string defaultPath)
         {
-            XElement file = XElement.Load(Configuration.GetPath("Streaming.xml"));
+            XElement file = XElement.Load(path);
 
             DefaultAudioStream = file.Element("defaultStreams").Element("audio").Value;
             DefaultSubtitleStream = file.Element("defaultStreams").Element("subtitle").Value;
@@ -70,7 +71,33 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
             WatchSharing = file.Element("watchsharing").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
 
-            Transcoders = file.Element("transcoders").Elements("transcoder").Select(x => new TranscoderProfile()
+            Transcoders = GetProfilesFromNode(file.Element("transcoders")).ToList();
+
+            // Update transcoder configuration with the ones from the default file if that one has changed
+            if (File.GetLastWriteTime(defaultPath) > File.GetLastWriteTime(path))
+            {
+                var defaultTranscoders = GetProfilesFromNode(XElement.Load(defaultPath).Element("transcoders"));
+                var currentTranscoders = Transcoders.ToDictionary(x => x.Name, x => x);
+                foreach (var transcoder in defaultTranscoders)
+                {
+                    if (currentTranscoders.ContainsKey(transcoder.Name))
+                    {
+                        currentTranscoders[transcoder.Name] = transcoder;
+                    }
+                    else 
+                    {
+                        currentTranscoders.Add(transcoder.Name, transcoder);
+                    }
+                }
+
+                Transcoders = currentTranscoders.Select(x => x.Value).ToList();
+                Save();
+            }
+        }
+
+        private IEnumerable<TranscoderProfile> GetProfilesFromNode(XElement node)
+        {
+            return node.Elements("transcoder").Select(x => new TranscoderProfile()
             {
                 Name = x.Element("name").Value,
                 Description = x.Element("description").Value,
@@ -83,7 +110,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 HasVideoStream = x.Element("videoStream").Value == "true",
                 CodecParameters = x.Element("transcoderConfiguration").Descendants().ToDictionary(el => el.Name.LocalName, el => el.Value),
                 TranscoderImplementationClass = (string)x.Element("transcoderConfiguration").Attribute("implementation")
-            }).ToList();
+            });
         }
 
         public TranscoderProfile GetTranscoderProfileByName(string name) 
