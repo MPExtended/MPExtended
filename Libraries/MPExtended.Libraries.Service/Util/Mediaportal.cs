@@ -30,7 +30,8 @@ namespace MPExtended.Libraries.Service.Util
         Config,
         Database,
         Thumbs,
-        Cache
+        Cache,
+        Skin
     }
 
     public static class Mediaportal

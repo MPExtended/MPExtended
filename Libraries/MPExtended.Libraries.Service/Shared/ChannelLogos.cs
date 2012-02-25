@@ -40,6 +40,7 @@ namespace MPExtended.Libraries.Service.Shared
             {
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal", "thumbs", "tv", "logo"),
                 Configuration.Streaming.TVLogoDirectory,
+                Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Skin), "aMPed", "Media", "Logos", "Channels"),
                 cacheDir
             };
 
