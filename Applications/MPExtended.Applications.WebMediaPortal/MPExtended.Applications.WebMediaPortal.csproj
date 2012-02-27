@@ -324,9 +324,6 @@
     <Folder Include="Skins\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Schedule\AddScheduleByProgram.cshtml" />
   </ItemGroup>
   <ItemGroup>

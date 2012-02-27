@@ -114,7 +114,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
        
             // Do a standard stream
             string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}", identifier, type, itemId, transcoder);
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}", identifier, type, itemId, transcoder, starttime);
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
             {
                 Log.Error("Streaming: InitStream failed");
@@ -201,29 +201,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(int item, string transcoder, int starttime = 0)
+        public ActionResult TV(string item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.TV, item, transcoder, starttime);
         }
 
-        public ActionResult Movie(int item, string transcoder, int starttime = 0)
+        public ActionResult Movie(string item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.Movie, item, transcoder, starttime);
         }
 
-        public ActionResult TVEpisode(int item, string transcoder, int starttime = 0)
+        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.TVEpisode, item, transcoder, starttime);
         }
 
-        public ActionResult Recording(int item, string transcoder, int starttime = 0)
+        public ActionResult Recording(string item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.Recording, item, transcoder, starttime);
         }
 
-        public ActionResult MusicTrack(int item, string transcoder, int starttime = 0)
+        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.MusicTrack, item, transcoder, starttime);
         }
 
         //
