@@ -29,6 +29,14 @@ namespace MPExtended.Libraries.Service
 {
     public static class WCFUtil
     {
+        private static bool IsRestEnabled
+        {
+            get
+            {
+                return OperationContext.Current.IncomingMessageVersion == MessageVersion.None;
+            }
+        }
+
         public static string GetCurrentRoot()
         {
             // first try the HTTP host header
@@ -62,70 +70,6 @@ namespace MPExtended.Libraries.Service
             return root.Host;
         }
 
-        public static void SetResponseCode(HttpStatusCode code)
-        {
-            try
-            {
-                WebOperationContext.Current.OutgoingResponse.StatusCode = code;
-            }
-            catch (InvalidOperationException)
-            {
-                // probably a net.pipe binding, just ignore it
-            }
-        }
-
-        public static void SetContentLength(long length)
-        {
-            try
-            {
-                // This doesn't work yet (#96)
-                WebOperationContext.Current.OutgoingResponse.ContentLength = length;
-                AddHeader(HttpResponseHeader.ContentLength, length.ToString());
-            }
-            catch (InvalidOperationException)
-            {
-                // probably a net.pipe binding, just ignore it
-            }
-        }
-
-
-        public static void SetContentType(string type)
-        {
-            try
-            {
-                WebOperationContext.Current.OutgoingResponse.ContentType = type;
-                //AddHeader(HttpResponseHeader.ContentType, type);
-            }
-            catch (InvalidOperationException)
-            {
-                // probably a net.pipe binding, just ignore it
-            }
-        }
-
-        public static void AddHeader(string header, string value)
-        {
-            try
-            {
-                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
-            }
-            catch (InvalidOperationException)
-            {
-                // probably a net.pipe binding, just ignore it
-            }
-        }
-
-        public static void AddHeader(HttpResponseHeader header, string value)
-        {
-            try
-            {
-                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
-            }
-            catch (InvalidOperationException)
-            {
-                // probably a net.pipe binding, just ignore it
-            }
-        }
-
         public static string GetClientIPAddress()
         {
             MessageProperties properties = OperationContext.Current.IncomingMessageProperties;
@@ -137,6 +81,49 @@ namespace MPExtended.Libraries.Service
             else
             {
                 return properties.Via.Host;
+            }
+        }
+
+        public static void SetResponseCode(HttpStatusCode code)
+        {
+            if(IsRestEnabled)
+            {
+                WebOperationContext.Current.OutgoingResponse.StatusCode = code;
+            }
+        }
+
+        public static void SetContentLength(long length)
+        {
+            if(IsRestEnabled)
+            {
+                // This doesn't work yet (#96)
+                //AddHeader(HttpResponseHeader.ContentLength, length.ToString());
+                WebOperationContext.Current.OutgoingResponse.ContentLength = length;
+            }
+        }
+
+
+        public static void SetContentType(string type)
+        {
+            if(IsRestEnabled)
+            {
+                WebOperationContext.Current.OutgoingResponse.ContentType = type;
+            }
+        }
+
+        public static void AddHeader(string header, string value)
+        {
+            if (IsRestEnabled)
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
+            }
+        }
+
+        public static void AddHeader(HttpResponseHeader header, string value)
+        {
+            if (IsRestEnabled)
+            {
+                WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
             }
         }
     }

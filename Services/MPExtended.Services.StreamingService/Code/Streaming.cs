@@ -262,7 +262,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             lock (Streams[identifier])
             {
-                WebOperationContext.Current.OutgoingResponse.ContentType = Streams[identifier].Context.Profile.MIME;
+                WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
                 if(Streams[identifier].OutputStream == null)
                 {
                     Log.Warn("Encountered null stream in RetrieveStream for identifier {0}", identifier);

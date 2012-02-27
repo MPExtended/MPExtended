@@ -65,7 +65,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             switch (action)
             {
                 case "segment":
-                    WebOperationContext.Current.OutgoingResponse.ContentType = context.Profile.MIME;
+                    WCFUtil.SetContentType(context.Profile.MIME);
                     string segmentPath = Path.Combine(segmenterUnit.TemporaryDirectory, Path.GetFileName(param));
                     if (!File.Exists(segmentPath))
                     {
@@ -75,7 +75,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                     return new FileStream(segmentPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
 
                 case "playlist":
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "application/vnd.apple.mpegurl";
+                    WCFUtil.SetContentType("application/vnd.apple.mpegurl");
                     string playlistPath = Path.Combine(segmenterUnit.TemporaryDirectory, "playlist.m3u8");
                     if (!File.Exists(playlistPath))
                     {
