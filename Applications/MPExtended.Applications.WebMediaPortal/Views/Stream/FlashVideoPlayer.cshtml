@@ -66,11 +66,13 @@
     });
 
     jwplayer('mediaspace').setup({
-        'flashplayer': '@Url.Content("~/Content/jwplayer/player.swf")',
         'controlbar': 'bottom',
         'width': '@Model.Size.Width',
         'height': '@Model.Size.Height',
-        'skin': '@Url.Content("~/Content/jwplayer/slim.zip")'
+        'skin': '@Url.Content("~/Content/jwplayer/slim.zip")',
+        'modes': [ 
+           { type: "flash", src: "@Url.Content("~/Content/jwplayer/player.swf")" } 
+        ]
     }).onTime(function (callback) {
         var pos = parseFloat(startPos) + callback.position;
         setText("elapsedText", pos.toString());

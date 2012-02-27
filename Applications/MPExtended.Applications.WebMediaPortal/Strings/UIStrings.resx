@@ -310,9 +310,6 @@
   <data name="VLCEnableDeinterlacing" xml:space="preserve">
     <value>enable deinterlacing</value>
   </data>
-  <data name="VLCFullscreenNotSupported" xml:space="preserve">
-    <value>Fullscreen might not work with your VLC version. Downgrade to VLC 1.0.x if you want fullscreen; but then you loose deinterlace support.</value>
-  </data>
   <data name="VLCPause" xml:space="preserve">
     <value>pause</value>
   </data>
@@ -326,7 +323,7 @@
     <value>switch fullscreen</value>
   </data>
   <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
-    <value>Your VLC version is too old to support deinterlacing in the browser. Update to version 1.1.0 or higher; but then you loose fullscreen support.</value>
+    <value>Your VLC version is too old to support deinterlacing in the browser. Update to version 1.1.11 or higher.</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
