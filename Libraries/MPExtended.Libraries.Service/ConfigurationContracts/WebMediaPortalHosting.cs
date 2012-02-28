@@ -27,11 +27,11 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
     {
         public int Port { get; set; }
 
-        public WebMediaPortalHosting()
+        public WebMediaPortalHosting(string path, string defaultPath)
         {
             try
             {
-                XElement file = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
+                XElement file = XElement.Load(path);
 
                 Port = Int32.Parse(file.Element("port").Value);
             }

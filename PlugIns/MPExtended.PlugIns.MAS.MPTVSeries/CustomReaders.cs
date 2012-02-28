@@ -58,15 +58,18 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         public static List<WebExternalId> ExternalIdReader(SQLiteDataReader reader, int idx, object param)
         {
             ExternalSiteReaderParameters args = (ExternalSiteReaderParameters)param;
-            string val = (string)args.Reader.Invoke(reader, idx);
             List<WebExternalId> list = new List<WebExternalId>();
-            if (!String.IsNullOrEmpty(val))
+            if (!reader.IsDBNull(idx))
             {
-                list.Add(new WebExternalId()
+                string val = (string)args.Reader.Invoke(reader, idx);
+                if (!String.IsNullOrEmpty(val) && val != "0")
                 {
-                    Site = args.Site,
-                    Id = val
-                });
+                    list.Add(new WebExternalId()
+                    {
+                        Site = args.Site,
+                        Id = val
+                    });
+                }
             }
             return list;
         }

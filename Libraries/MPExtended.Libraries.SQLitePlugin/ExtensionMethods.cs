@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static int ReadInt32(this SQLiteDataReader reader, string name)
         {
-            return (int)DataReaders.ReadInt32(reader, GetIndexOfField(reader, name));
+            return (int)DataReaders.ReadInt32(reader, reader.GetOrdinal(name));
         }
 
         public static string ReadString(this SQLiteDataReader reader, int idx)
@@ -42,7 +42,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static string ReadString(this SQLiteDataReader reader, string name)
         {
-            return (string)DataReaders.ReadString(reader, GetIndexOfField(reader, name));
+            return (string)DataReaders.ReadString(reader, reader.GetOrdinal(name));
         }
 
         public static bool ReadBoolean(this SQLiteDataReader reader, int idx)
@@ -52,7 +52,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static bool ReadBoolean(this SQLiteDataReader reader, string name)
         {
-            return (bool)DataReaders.ReadBoolean(reader, GetIndexOfField(reader, name));
+            return (bool)DataReaders.ReadBoolean(reader, reader.GetOrdinal(name));
         }
 
         public static DateTime ReadDateTime(this SQLiteDataReader reader, int idx)
@@ -62,7 +62,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static DateTime ReadDateTime(this SQLiteDataReader reader, string name)
         {
-            return (DateTime)DataReaders.ReadDateTime(reader, GetIndexOfField(reader, name));
+            return (DateTime)DataReaders.ReadDateTime(reader, reader.GetOrdinal(name));
         }
 
         public static float ReadFloat(this SQLiteDataReader reader, int idx)
@@ -72,7 +72,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static float ReadFloat(this SQLiteDataReader reader, string name)
         {
-            return (float)DataReaders.ReadFloat(reader, GetIndexOfField(reader, name));
+            return (float)DataReaders.ReadFloat(reader, reader.GetOrdinal(name));
         }
 
         public static IList<string> ReadList(this SQLiteDataReader reader, int idx, char separator)
@@ -82,7 +82,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static IList<string> ReadList(this SQLiteDataReader reader, string name, char separator)
         {
-            return (IList<string>)DataReaders.ReadList(reader, GetIndexOfField(reader, name), separator);
+            return (IList<string>)DataReaders.ReadList(reader, reader.GetOrdinal(name), separator);
         }
 
         public static IList<string> ReadPipeList(this SQLiteDataReader reader, int idx)
@@ -92,7 +92,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static IList<string> ReadPipeList(this SQLiteDataReader reader, string name)
         {
-            return (IList<string>)DataReaders.ReadPipeList(reader, GetIndexOfField(reader, name));
+            return (IList<string>)DataReaders.ReadPipeList(reader, reader.GetOrdinal(name));
         }
 
         public static string ReadIntAsString(this SQLiteDataReader reader, int idx)
@@ -102,7 +102,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static string ReadIntAsString(this SQLiteDataReader reader, string name)
         {
-            return (string)DataReaders.ReadIntAsString(reader, GetIndexOfField(reader, name));
+            return (string)DataReaders.ReadIntAsString(reader, reader.GetOrdinal(name));
         }
 
         public static IList<string> ReadStringAsList(this SQLiteDataReader reader, int idx)
@@ -112,20 +112,7 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public static IList<string> ReadStringAsList(this SQLiteDataReader reader, string name)
         {
-            return (IList<string>)DataReaders.ReadStringAsList(reader, GetIndexOfField(reader, name));
-        }
-
-        public static int GetIndexOfField(this SQLiteDataReader reader, string name)
-        {
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                if (name == reader.GetName(i))
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException();
+            return (IList<string>)DataReaders.ReadStringAsList(reader, reader.GetOrdinal(name));
         }
     }
 }

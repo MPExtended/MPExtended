@@ -18,6 +18,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
             Result = value;
         }
 
+        public override string ToString()
+        {
+            return Result.ToString();
+        }
+
         public override bool Equals(object obj)
         {
             WebResult r = obj is bool ? new WebResult((bool)obj) : obj as WebResult;

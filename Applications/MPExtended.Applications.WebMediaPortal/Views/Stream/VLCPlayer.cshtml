@@ -43,12 +43,7 @@
     }
 
     function goFullscreen() {
-        // yes, version checking is bad but otherwise we end up with loads of bug reports
-        var version = getVlcPlayer('vlcplayer').versionInfo();
-        if (version.substr(0, 4) == '1.1.' && !shownFullscreenMessage) {
-            alert("@Html.Raw(UIStrings.VLCFullscreenNotSupported)");
-            shownFullscreenMessage = true;
-        } 
+        // VLC 1.1.11 has fullscreen fixed again
         getVlcPlayer('vlcplayer').video.fullscreen = true;
     }
 

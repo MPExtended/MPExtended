@@ -63,6 +63,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Code\BackgroundThread.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaSource.cs" />
@@ -74,6 +75,8 @@
     <Compile Include="Code\WatchSharing.cs" />
     <Compile Include="Code\WatchSharingDebug.cs" />
     <Compile Include="Code\MediaInfoHelper.cs" />
+    <Compile Include="MediaInfo\IMediaInfoCache.cs" />
+    <Compile Include="MediaInfo\XmlCache.cs" />
     <Compile Include="Transcoders\IRetrieveHookTranscoder.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />

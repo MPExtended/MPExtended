@@ -769,6 +769,18 @@ namespace MPExtended.Services.TVAccessService
             return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
         }
 
+        public IDictionary<int, List<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        {
+            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList());
+        }
+
+        public IDictionary<int, List<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        {
+            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList());
+        }
+
         public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)
         {
             return Channel.Retrieve(channelId).CurrentProgram.ToWebProgramDetailed();

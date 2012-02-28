@@ -230,7 +230,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private LazyQuery<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
         {
             string sql =                     
-                    "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                    "SELECT e.CompositeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                         "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
                         "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary, " +
                         "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
@@ -244,7 +244,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("e", "EpisodeID", "Id", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("e", "CompositeID", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("e", "EpisodeID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadIntAsString, "TVDB")),
                 new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),

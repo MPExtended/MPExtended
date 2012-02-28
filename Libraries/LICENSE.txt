@@ -2,7 +2,7 @@ Database/Gentle:
 - Copyright (C) Morten Mertner, http://sourceforge.net/projects/gopf/
 - Licensed under Lesser General Public License, version 2.1, available on http://www.gnu.org/licenses/lgpl-2.1.html
 - Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
-- Version 1.5.0.29111 (custom build from MediaPortal)
+- Version 1.5.0.29112 (custom build from MediaPortal)
 
 Database/MySql.Data.dll:
 - Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
@@ -85,7 +85,7 @@ TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/
 - Licensed under General Public License, version 2 or later, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
 - Source code available from http://www.team-mediaportal.com/
-- Version 1.2.1
+- Version 1.2.2
 
 UI/Hardcodet.Wpf.TaskbarNotification:
 - Copyright (C) 2009 Philipp Sumi, http://www.hardcodet.net/projects/wpf-notifyicon

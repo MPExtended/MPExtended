@@ -38,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             // cards
             Cards = new List<TVCardViewModel>();
 
-            foreach (var card in cards)
+            foreach (var card in cards.OrderBy(c => c.IdCard))
             {
                 var match = activeCards.Where(vc => vc.Id == card.IdCard);
                 if (match.Any())

@@ -88,8 +88,15 @@ namespace MPExtended.Libraries.Service.Hosting
         {
             foreach (var host in hosts)
             {
-                // we have to indicate that it should hurry up with closing because it takes 10 seconds by default...
-                host.Close(new TimeSpan(0, 0, 0, 0, 250));
+                try
+                {
+                    // we have to indicate that it should hurry up with closing because it takes 10 seconds by default...
+                    host.Close(TimeSpan.FromMilliseconds(500));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(String.Format("Failed to close ServiceHost for {0}", host.Description.ServiceType.Name), ex);
+                }
             }
         }
     }

@@ -36,10 +36,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : BaseController
     {
-        // This is the timeout after which streams are automatically killed
+        // This is the timeout after which streams are automatically killed (in seconds)
         private const int STREAM_TIMEOUT = 5;
 		
         private static List<string> PlayerOpenedBy = new List<string>();
+        private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
+        
+        // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
+        private static Random randomGenerator = new Random();
 
         //
         // Streaming
@@ -103,7 +107,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime)
+        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -111,16 +115,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Warn("User {0} requested a stream but hasn't opened a player page - denying access to stream", Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
+
+            // Generate identifier from continuationId if possible, random otherwise
+            string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
+
+            // Kill previous stream, but only if we expect it to be still running (avoid useless calls in non-seek and proxied cases)
+            if (RunningStreams.ContainsKey(continuationId))
+            {
+                Log.Debug("Killing off old streaming for continuation {0} with identifier {1} first", continuationId, RunningStreams[continuationId]);
+                GetStreamControl(type).FinishStream(RunningStreams[continuationId]);
+            }
        
             // Do a standard stream
-            string identifier = "webmediaportal-" + Guid.NewGuid().ToString("D");
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}", identifier, type, itemId, transcoder);
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
+                identifier, type, itemId, transcoder, starttime, continuationId);
             if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
             }
 
+            RunningStreams[continuationId] = identifier;
             string url = GetStreamControl(type).StartStream(identifier, transcoder, starttime);
             if (String.IsNullOrEmpty(url))
             {
@@ -128,13 +143,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new EmptyResult();
             }
 
-            // Check stream type
+            // Check stream mode
             StreamType streamMode = Settings.ActiveSettings.StreamType;
             if (streamMode == StreamType.DirectWhenPossible)
             {
                 streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
             }
-            Log.Debug("Stream started successfully, is at {0} with stream mode {1}", url, streamMode);
+            Log.Debug("Stream started successfully, is at {0} and we're using stream mode {1}", url, streamMode);
 
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
@@ -150,6 +165,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // kill stream (doesn't matter much if this doesn't happen, WSS kills streams automatically nowadays)
             Log.Debug("Finished stream {0}", identifier);
+            RunningStreams.Remove(continuationId);
             if (!GetStreamControl(type).FinishStream(identifier))
             {
                 Log.Error("Streaming: FinishStream failed");
@@ -201,29 +217,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(int item, string transcoder, int starttime = 0)
+        public ActionResult TV(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TV, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.TV, item, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Movie(int item, string transcoder, int starttime = 0)
+        public ActionResult Movie(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.Movie, item, transcoder, starttime, continuationId);
         }
 
-        public ActionResult TVEpisode(int item, string transcoder, int starttime = 0)
+        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.TVEpisode, item, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Recording(int item, string transcoder, int starttime = 0)
+        public ActionResult Recording(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.Recording, item, transcoder, starttime, continuationId);
         }
 
-        public ActionResult MusicTrack(int item, string transcoder, int starttime = 0)
+        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item.ToString(), transcoder, starttime);
+            return GenerateStream(WebStreamMediaType.MusicTrack, item, transcoder, starttime, continuationId);
         }
 
         //
@@ -313,6 +329,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
+            parameters["continuationId"] = randomGenerator.Next(10000, 99999);
             model.URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters);
 
             // generic part

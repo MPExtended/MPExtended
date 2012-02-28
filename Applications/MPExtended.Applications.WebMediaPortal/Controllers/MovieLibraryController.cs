@@ -45,11 +45,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Details(string movie)
         {
             var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie != null)
-            {
-                return View(fullMovie);
-            }
-            return null;
+            if (fullMovie == null)
+                return HttpNotFound();
+
+            var fileInfo = MPEServices.MAS.GetFileInfo(fullMovie.PID, WebMediaType.Movie, WebFileType.Content, fullMovie.Id, 0);
+            var mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.Movie, fullMovie.PID, fullMovie.Id);
+            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
+            return View(fullMovie);
         }
 
         public ActionResult Play(string movie)

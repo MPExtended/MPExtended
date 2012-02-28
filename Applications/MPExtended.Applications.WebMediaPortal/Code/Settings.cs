@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -48,6 +49,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static SettingModel LoadSettings()
         {
+            return LoadSettings(true);
+        }
+
+        public static SettingModel LoadSettings(bool retry)
+        {
             // default values
             SettingModel settings = new SettingModel();
             settings.MASUrl = "auto://127.0.0.1:4322";
@@ -63,7 +69,17 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
             catch (Exception ex)
             {
-                Log.Debug("Exception in LoadSettings", ex);
+                if (retry)
+                {
+                    Log.Warn("Exception in LoadSettings (due to old configuration file?), overwriting with default file and retrying", ex);
+                    File.Copy(Configuration.GetDefaultPath("WebMediaPortal.xml"), Configuration.GetPath("WebMediaPortal.xml"));
+                    return LoadSettings(false);
+                }
+                else
+                {
+                    Log.Warn("Exception in LoadSettings, bailing out", ex);
+
+                }
             }
 
             return settings;

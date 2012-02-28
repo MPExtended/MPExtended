@@ -40,7 +40,7 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (serviceConfig == null)
-                    serviceConfig = new ConfigurationContracts.Services();
+                    serviceConfig = new ConfigurationContracts.Services(GetPath("Services.xml"), GetDefaultPath("Services.xml"));
 
                 return serviceConfig;
             }
@@ -51,7 +51,7 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (mediaConfig == null)
-                    mediaConfig = new MediaAccess();
+                    mediaConfig = new MediaAccess(GetPath("MediaAccess.xml"), GetDefaultPath("MediaAccess.xml"));
 
                 return mediaConfig;
             }
@@ -62,7 +62,7 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (streamConfig == null)
-                    streamConfig = new Streaming();
+                    streamConfig = new Streaming(GetPath("Streaming.xml"), GetDefaultPath("Streaming.xml"));
 
                 return streamConfig;
             }
@@ -73,7 +73,7 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (webmpHostingConfig == null)
-                    webmpHostingConfig = new WebMediaPortalHosting();
+                    webmpHostingConfig = new WebMediaPortalHosting(GetPath("WebMediaPortalHosting.xml"), GetDefaultPath("WebMediaPortalHosting.xml"));
 
                 return webmpHostingConfig;
             }
@@ -93,9 +93,7 @@ namespace MPExtended.Libraries.Service
                 else
                 {
                     // copy from default location
-                    MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
-                    string defaultPath = Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
-                    File.Copy(defaultPath, path);
+                    File.Copy(GetDefaultPath(filename), path);
 
                     // allow everyone to write to the config
                     var acl = File.GetAccessControl(path);
@@ -107,6 +105,19 @@ namespace MPExtended.Libraries.Service
             }
 
             return path;
+        }
+
+        public static string GetDefaultPath(string filename)
+        {
+            if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
+            {
+                MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
+                return Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
+            }
+            else
+            {
+                return GetPath(filename);
+            }
         }
 
         internal static string PerformFolderSubstitution(string input)

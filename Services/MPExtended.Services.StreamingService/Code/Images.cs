@@ -243,7 +243,7 @@ namespace MPExtended.Services.StreamingService.Code
                 { ".bmp", "image/x-ms-bmp" },
             };
             string mime = commonMimeTypes.ContainsKey(src.Extension) ? commonMimeTypes[src.Extension] : "application/octet-stream";
-            WebOperationContext.Current.OutgoingResponse.ContentType = mime;
+            WCFUtil.SetContentType(mime);
 
             return src.Retrieve();
         }

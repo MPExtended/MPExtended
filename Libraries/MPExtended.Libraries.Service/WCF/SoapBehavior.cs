@@ -27,7 +27,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Libraries.Service
+namespace MPExtended.Libraries.Service.WCF
 {
     public class SoapExceptionHandling : IErrorHandler, IEndpointBehavior
     {

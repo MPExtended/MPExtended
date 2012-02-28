@@ -100,12 +100,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Details(string episode)
         {
             var fullEpisode = MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
-            if (fullEpisode != null)
-            {
-                ViewBag.ShowPlay = fullEpisode.Path != null;
-                return View(fullEpisode);
-            }
-            return null;
+            if (fullEpisode == null)
+                return HttpNotFound();
+
+            var fileInfo = MPEServices.MAS.GetFileInfo(fullEpisode.PID, WebMediaType.TVEpisode, WebFileType.Content, fullEpisode.Id, 0);
+            var mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.TVEpisode, fullEpisode.PID, fullEpisode.Id);
+            ViewBag.ShowPlay = fullEpisode.Path != null;
+            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
+            return View(fullEpisode);
         }
 
         public ActionResult Play(string episode)
