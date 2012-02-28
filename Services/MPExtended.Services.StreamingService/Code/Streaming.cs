@@ -260,6 +260,13 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Stream RetrieveStream(string identifier)
         {
+            if (!Streams.ContainsKey(identifier))
+            {
+                Log.Warn("Client called RetrieveStream() for non-existing identifier", identifier);
+                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                return Stream.Null;
+            }
+
             lock (Streams[identifier])
             {
                 WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
