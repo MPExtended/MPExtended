@@ -33,5 +33,15 @@ namespace MPExtended.Libraries.Service.Util
         {
             return Contains(str, value, caseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
         }
+
+        public static string ToUpperFirst(this string str)
+        {
+            return str.Substring(0, 1).ToUpper() + str.Substring(1);
+        }
+
+        public static string ToLowerFirst(this string str)
+        {
+            return str.Substring(0, 1).ToLower() + str.Substring(1);
+        }
     }
 }
