@@ -40,19 +40,23 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         {
             serializer = new DataContractSerializer(typeof(Dictionary<string, WebMediaInfo>));
             path = Path.Combine(Installation.GetCacheDirectory(), "MediaInfo.xml");
+            cache = new Dictionary<string, WebMediaInfo>();
             if (File.Exists(path))
             {
-                Stopwatch timer = new Stopwatch();
-                timer.Start();
-                Stream inputStream = File.OpenRead(path);
-                cache = (Dictionary<string, WebMediaInfo>)serializer.ReadObject(inputStream);
-                inputStream.Close();
-                timer.Stop();
-                Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
-            }
-            else
-            {
-                cache = new Dictionary<string, WebMediaInfo>();
+                try
+                {
+                    Stopwatch timer = new Stopwatch();
+                    timer.Start();
+                    Stream inputStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    cache = (Dictionary<string, WebMediaInfo>)serializer.ReadObject(inputStream);
+                    inputStream.Close();
+                    timer.Stop();
+                    Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Loading MediaInfo cache failed", ex);
+                }
             }
 
             ThreadManager.Start("MICacheSave", delegate()
@@ -100,7 +104,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             lock (cache)
             {
                 Log.Debug("Writing {0} items to MediaInfo cache", cache.Count);
-                Stream outputStream = File.OpenWrite(path);
+                Stream outputStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
                 serializer.WriteObject(outputStream, cache);
                 outputStream.Close();
             }
