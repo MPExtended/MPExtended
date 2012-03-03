@@ -34,18 +34,13 @@
 #define PLATFORM_WIN32
 #endif
 
-// To fix compilation of vlc/libvlc.h under MSVC
-#ifdef PLATFORM_WIN32
+#ifdef PLATFORM_LINUX
 #define inline __inline
 #endif
 #include <vlc/libvlc.h>
-
 #include <vlc/libvlc_media.h>
+#include <vlc/libvlc_media_player.h>
 #include <vlc/libvlc_events.h>
-#include <vlc/libvlc_vlm.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #ifdef PLATFORM_LINUX
 #include <unistd.h>
@@ -54,19 +49,27 @@
 
 #ifdef PLATFORM_WIN32
 #include <Windows.h>
+
+// missing C99 support...
+#define snprintf _snprintf
+
+// missing stdbool.h
+#define bool _Bool
 #define true 1
 #define false 0
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define ENDLN(x) (x "\n")
 
-#define VERSION "0.1.1"
+#define LOG_INTERVAL 500
+
+#define VERSION "0.2.0"
 #define USER_AGENT "VLC Wrapper for MPExtended"
 #define HTTP_USER_AGENT "VLCWrapper/"VERSION
-
-#define MEDIA_NAME "Stream"
-
-#define LOG_INTERVAL 500
 
 #define STATE_NULL 0
 #define STATE_STARTED 1
@@ -82,31 +85,8 @@ const char *state_name[] = {
    "error"
 };
 
-// maybe this var should be locked when writing it
+// maybe this var should be locked when writing to it...
 int global_state = STATE_NULL;
-
-// this is copied from src/text/unicode.c in the vlc 1.1 source (don't care about UTF8 on Linux atm)
-char* FromLocale(const char *string) {
-#ifdef PLATFORM_WIN32
-	char *out;
-
-	int len = 1 + MultiByteToWideChar(CP_ACP, 0, string, -1, NULL, 0);
-	wchar_t *wide = malloc(len * sizeof(wchar_t));
-	if (wide == NULL)
-		return NULL;
-
-	MultiByteToWideChar(CP_ACP, 0, string, -1, wide, len);
-	len = 1 + WideCharToMultiByte(CP_UTF8, 0, wide, -1, NULL, 0, NULL, NULL);
-	out = malloc (len);
-	if (out != NULL)
-		WideCharToMultiByte(CP_UTF8, 0, wide, -1, out, len, NULL, NULL);
-
-	free(wide);
-	return out;
-#else
-   return string;
-#endif
-}
 
 void event_callback(const libvlc_event_t *event_data, void *data_void) {
    int data = *(int*)data_void;
@@ -125,17 +105,21 @@ void millisleep(int millisecs) {
 #if defined(PLATFORM_LINUX)
    usleep(millisecs * 1000);
 #elif defined(PLATFORM_WIN32)
-    Sleep(millisecs);
+   Sleep(millisecs);
 #endif
 }
 
 int main(int argc, char **argv) {
-   // MSVC wants variable declarations at start of function
+   // having these declarations at the start of the function is only needed for C compatibility
 	int i;
+   char *path;
 	char **vlc_argv;
+   char *soutOption;
 	int nr;
 	libvlc_instance_t *vlc;
-	libvlc_event_manager_t *eventManager;
+   libvlc_media_t *media;
+   libvlc_media_player_t *player;
+   libvlc_event_manager_t *eventManager;
 
    // init arguments
    if(argc < 3) {
@@ -144,11 +128,12 @@ int main(int argc, char **argv) {
    }
 
 	// print some information
-	fprintf(stdout, ENDLN("I VLCWrapper version %s"), VERSION);
-	fprintf(stdout, ENDLN("A path %s"), FromLocale(argv[1]));
+	path = argv[1];
+	fprintf(stdout, ENDLN("I VLCWrapper version %s, using VLC %s"), VERSION, libvlc_get_version());
+	fprintf(stdout, ENDLN("A path %s"), path);
 	fprintf(stdout, ENDLN("A config %s"), argv[2]);
    
-   // init state machine
+   // init state machine  
    global_state = STATE_NULL;
 
    // arguments (you shouldn't need these in normal usage; but we don't support all arguments by ourself yet)
@@ -164,34 +149,40 @@ int main(int argc, char **argv) {
    // init vlc
    vlc = libvlc_new(nr, vlc_argv);
    libvlc_set_user_agent(vlc, USER_AGENT, HTTP_USER_AGENT);
-    
-   // register for some events
-   eventManager = libvlc_vlm_get_event_manager(vlc);
-   register_event(eventManager, libvlc_VlmMediaInstanceStarted, STATE_STARTED);
-   register_event(eventManager, libvlc_VlmMediaInstanceStatusPlaying, STATE_PLAYING);
-   register_event(eventManager, libvlc_VlmMediaInstanceStatusError, STATE_ERROR);
-   register_event(eventManager, libvlc_VlmMediaInstanceStatusEnd, STATE_FINISHED);
-
-   // start broadcast    
-   libvlc_vlm_add_broadcast(vlc, MEDIA_NAME, FromLocale(argv[1]), argv[2], 0, NULL, true, false);
-   libvlc_vlm_play_media(vlc, MEDIA_NAME);
    
-   // wait till it's started or errored
+   // create media and set sout string
+   media = libvlc_media_new_path(vlc, path);
+   soutOption = (char*)malloc(strlen(argv[2]) * sizeof(char) + 6);
+   snprintf(soutOption, strlen(argv[2]) + 6, "sout=%s", argv[2]);
+   libvlc_media_add_option(media, soutOption);
+   
+   // create player and listen for events
+   player = libvlc_media_player_new_from_media(media);
+   eventManager = libvlc_media_player_event_manager(player);
+   register_event(eventManager, libvlc_MediaPlayerPlaying, STATE_PLAYING);
+   register_event(eventManager, libvlc_MediaPlayerEncounteredError, STATE_ERROR);
+   register_event(eventManager, libvlc_MediaPlayerEndReached, STATE_FINISHED);
+   
+   // start playing it
+   libvlc_media_player_play(player);
+   
+   // wait till it's started or stopped because of an error
    while(global_state != STATE_ERROR && global_state != STATE_PLAYING)
       millisleep(100);
-   
-   // let it play till it's ended
-   while(global_state == STATE_PLAYING) {
-      fprintf(stdout, ENDLN("P %d, %.9f"), 
-             libvlc_vlm_get_media_instance_time(vlc, MEDIA_NAME, 0),
-             libvlc_vlm_get_media_instance_position(vlc, MEDIA_NAME, 0));
-		fflush(stdout);
-      millisleep(LOG_INTERVAL);
-   }
 
-   // and stop
-   libvlc_vlm_stop_media(vlc, MEDIA_NAME);
-   libvlc_vlm_release(vlc);
+   // let it play till it has finished, while printing status information
+   while(global_state == STATE_PLAYING) {
+       fprintf(stdout, ENDLN("P %d"), libvlc_media_player_get_time(player));
+       fflush(stdout);
+       millisleep(LOG_INTERVAL);
+   }
+   
+   // stop playing
+   libvlc_media_player_stop(player);
+   
+   // release objects in memory
+   libvlc_media_release(media);
+   libvlc_media_player_release(player);
    libvlc_release(vlc);
    return 0;
 }
