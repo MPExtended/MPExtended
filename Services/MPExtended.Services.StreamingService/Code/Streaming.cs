@@ -141,13 +141,18 @@ namespace MPExtended.Services.StreamingService.Code
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
-            stream.ClientIP = WCFUtil.GetClientIPAddress();
             stream.StartTime = DateTime.Now;
             stream.Timeout = timeout;
             stream.LastActivity = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
+
+            // Some clients such as WebMP proxy the streams before relying it to the client. We should give these clients the option to
+            // forward the real IP address, so that we can show that one in the configurator too. However, to avoid abuse, we should show
+            // the real IP of the client too, so make up some nice text string. 
+            string realIp = WCFUtil.GetHeaderValue("forwardedFor", "X-Forwarded-For");
+            stream.ClientIP = realIp == null ? WCFUtil.GetClientIPAddress() : String.Format("{0} (via {1})", realIp, WCFUtil.GetClientIPAddress());
 
             lock (Streams)
             {

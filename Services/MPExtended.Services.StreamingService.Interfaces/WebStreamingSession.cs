@@ -15,6 +15,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string DisplayName { get; set; }
 
         public string ClientDescription { get; set; }
+        // Do not actually parse this as an IP address, because it isn't: it might have some comments in it too
         public string ClientIPAddress { get; set; }
         public DateTime StartTime { get; set; }
 

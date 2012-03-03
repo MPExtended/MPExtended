@@ -125,11 +125,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Debug("Killing off old streaming for continuation {0} with identifier {1} first", continuationId, RunningStreams[continuationId]);
                 GetStreamControl(type).FinishStream(RunningStreams[continuationId]);
             }
-       
-            // Do a standard stream
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
+
+            // Start the stream
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}",
                 identifier, type, itemId, transcoder, starttime, continuationId);
-            if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
+            if (!WCFClient.CallWithHeader(new WCFHeader<string>("forwardedFor", HttpContext.Request.UserHostAddress), GetStreamControl(type),
+                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT); }))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();

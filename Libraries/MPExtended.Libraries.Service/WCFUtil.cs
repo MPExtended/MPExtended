@@ -133,9 +133,38 @@ namespace MPExtended.Libraries.Service
 
         private static void SetCustomSOAPHeader<T>(string name, T value)
         {
-            MessageHeader<T> header = new MessageHeader<T>(value);
-            MessageHeader untyped = header.GetUntypedHeader(name, "http://mpextended.github.com/");
-            OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+            if (!IsRestEnabled)
+            {
+                MessageHeader<T> header = new MessageHeader<T>(value);
+                MessageHeader untyped = header.GetUntypedHeader(name, "http://mpextended.github.com/");
+                OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+            }
+        }
+
+        public static string GetHeaderValue(string soapHeaderName, string soapHeaderNamespace, string webHeaderName)
+        {
+            if (OperationContext.Current.IncomingMessageHeaders.FindHeader(soapHeaderName, soapHeaderNamespace) != -1)
+            {
+                return OperationContext.Current.IncomingMessageHeaders.GetHeader<string>(soapHeaderName, soapHeaderNamespace);
+            }
+
+            if (IsRestEnabled && WebOperationContext.Current.IncomingRequest.Headers[webHeaderName] != null)
+            {
+                return WebOperationContext.Current.IncomingRequest.Headers[webHeaderName];
+            }
+
+            return null;
+        }
+
+        public static string GetHeaderValue(string soapHeaderName, string webHeaderName)
+        {
+            return GetHeaderValue(soapHeaderName, "http://mpextended.github.com/", webHeaderName);
+        }
+
+        public static string GetHeaderValue(string headerName)
+        {
+            string soapHeaderName = headerName.Replace("-", "").ToLowerFirst();
+            return GetHeaderValue(soapHeaderName, headerName);
         }
     }
 }
