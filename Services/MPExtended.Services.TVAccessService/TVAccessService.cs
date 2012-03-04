@@ -611,7 +611,7 @@ namespace MPExtended.Services.TVAccessService
             if (String.IsNullOrEmpty(userName))
             {
                 Log.Error("Called SwitchTVServerToChannel with empty userName");
-                throw new ArgumentNullException("userName");
+                return null;
             }
 
             // create the user
@@ -630,14 +630,14 @@ namespace MPExtended.Services.TVAccessService
             if (result != TvResult.Succeeded)
             {
                 Log.Error("Starting timeshifting failed with result {0}", result);
-                throw new Exception("Failed to start tv stream: " + result);
+                return null;
             }
 
             Log.Debug("Timeshifting succeeded");
             if (tvCard == null)
             {
                 Log.Error("Couldn't get virtual card");
-                throw new Exception("Couldn't get virtual card");
+                return null;
             }
 
             return tvCard;
@@ -649,7 +649,7 @@ namespace MPExtended.Services.TVAccessService
             if (currentUser == null)
             {
                 Log.Error("Tried to send heartbeat for invalid user {0}", userName);
-                throw new ArgumentException("Invalid username");
+                return false;
             }
 
             _tvControl.HeartBeat(currentUser);
@@ -661,8 +661,8 @@ namespace MPExtended.Services.TVAccessService
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
             {
-                Log.Error("Tried to cancel timeshifting for invalid user {0}", userName);
-                throw new ArgumentException("Invalid username");
+                Log.Warn("Tried to cancel timeshifting for invalid user {0}", userName);
+                return false;
             }
             Log.Debug("Canceling timeshifting for user {0}", userName);
 
