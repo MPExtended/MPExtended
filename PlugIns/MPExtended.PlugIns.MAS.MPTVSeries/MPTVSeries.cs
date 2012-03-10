@@ -231,7 +231,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             string sql =                     
                     "SELECT e.CompositeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                        "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
+                        "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, MIN(l.FileDateAdded) AS dateAdded, " +
                         "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary, " +
                         "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
                     "FROM online_episodes e " +
@@ -252,6 +252,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", CustomReaders.ReadSeasonID),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
+                new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("e", "Rating", "Rating", DataReaders.ReadFloat),
