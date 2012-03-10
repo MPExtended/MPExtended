@@ -66,7 +66,7 @@ Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
 - Licensed under Lesser General Public License, version 3, available on http://www.gnu.org/licenses/lgpl-3.0.html
 - Source code available from http://mediainfo.sourceforge.net/
-- Version 0.7.50, 32-bit build
+- Version 0.7.53, 32-bit build
 
 Streaming\segmenter:
 - Copyright (C) 2009 Chase Douglas, http://code.google.com/p/httpsegmenter/
