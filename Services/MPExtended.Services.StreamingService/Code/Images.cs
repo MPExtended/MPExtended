@@ -154,12 +154,12 @@ namespace MPExtended.Services.StreamingService.Code
             }
             
             // get temporary filename
-            string tempDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            string tempDir = Path.Combine(Installation.GetCacheDirectory(), "imagecache");
             if (!Directory.Exists(tempDir))
             {
                 Directory.CreateDirectory(tempDir);
             }
-            string filename = String.Format("ex_{0}_{1}_{2}_{3}.jpg", source.GetUniqueIdentifier(), startPosition, 
+            string filename = String.Format("extract_{0}_{1}_{2}_{3}.jpg", source.GetUniqueIdentifier(), startPosition, 
                 maxWidth == null ? "null" : maxWidth.ToString(), maxHeight == null ? "null" : maxHeight.ToString());
             string tempFile = Path.Combine(tempDir, filename);
 
@@ -205,10 +205,10 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // create cache path
-            string tmpDir = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache");
+            string tmpDir = Path.Combine(Installation.GetCacheDirectory(), "imagecache");
             if (!Directory.Exists(tmpDir))
                 Directory.CreateDirectory(tmpDir);
-            string cachedPath = Path.Combine(tmpDir, String.Format("rs_{0}_{1}_{2}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight));
+            string cachedPath = Path.Combine(tmpDir, String.Format("resize_{0}_{1}_{2}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight));
 
             // check for existence on disk
             if (!File.Exists(cachedPath))

@@ -450,4 +450,7 @@ This is the service component, which provides access to the databases and media 
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Donate to MPExtended</value>
   </data>
+  <data name="CleanCaches" xml:space="preserve">
+    <value>Clean cache</value>
+  </data>
 </root>
