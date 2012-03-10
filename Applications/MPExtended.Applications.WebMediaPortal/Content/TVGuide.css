@@ -44,7 +44,7 @@
     width: 175px;
     float: left;
     padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
-    background-size: 50px 50px;
+    background-size: 48px 48px;
     background-position: left center;
     background-repeat: no-repeat;
 }
