@@ -761,24 +761,46 @@ namespace MPExtended.Services.TVAccessService
         #region EPG
         public IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
+            }
         }
 
         public IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
+            }
         }
 
-        public IDictionary<int, List<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
-                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList());
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                    .Select(ch => new WebChannelPrograms<WebProgramBasic>()
+                    {
+                        IdChannel = ch.IdChannel,
+                        Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList()
+                    })
+                    .ToList();
+            }
         }
 
-        public IDictionary<int, List<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
-                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList());
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                    .Select(ch => new WebChannelPrograms<WebProgramDetailed>()
+                    {
+                        IdChannel = ch.IdChannel,
+                        Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList()
+                    })
+                    .ToList();
+            }
         }
 
         public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)

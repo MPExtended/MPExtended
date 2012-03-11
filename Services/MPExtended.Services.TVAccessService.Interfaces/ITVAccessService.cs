@@ -278,11 +278,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IDictionary<int, List<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IDictionary<int, List<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

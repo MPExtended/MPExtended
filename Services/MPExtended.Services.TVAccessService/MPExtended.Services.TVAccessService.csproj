@@ -93,6 +93,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="CacheLifetimeToken.cs" />
     <Compile Include="DiskSpaceInformation.cs" />
     <Compile Include="EnumerableExtensionMethods.cs" />
     <Compile Include="ConvertExtensionMethods.cs" />
