@@ -361,7 +361,7 @@ namespace MPExtended.Services.TVAccessService
                 StarRating = p.StarRating,
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
-                DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
+                DurationInMinutes = (int)((p.EndTime - p.StartTime).TotalMinutes),
                 IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
@@ -382,7 +382,7 @@ namespace MPExtended.Services.TVAccessService
                 Id = p.IdProgram,
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
-                DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
+                DurationInMinutes = (int)((p.EndTime - p.StartTime).TotalMinutes),
                 IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
