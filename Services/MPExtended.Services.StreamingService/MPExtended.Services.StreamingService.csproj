@@ -86,9 +86,12 @@
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
     <Compile Include="Transcoders\VLCBaseTranscoder.cs" />
+    <Compile Include="Transcoders\VLCHTTPLiveStreamer.cs" />
     <Compile Include="Transcoders\VLCManaged.cs" />
     <Compile Include="Transcoders\VLCWrapper.cs" />
+    <Compile Include="Transcoders\VLCWrapperHTTPLiveStreaming.cs" />
     <Compile Include="Units\FLVMetadataInjector.cs" />
+    <Compile Include="Units\HTTPLiveStreamUnit.cs" />
     <Compile Include="Units\ImpersonationInputUnit.cs" />
     <Compile Include="Units\InjectStreamUnit.cs" />
     <Compile Include="Units\EncoderUnit.cs" />

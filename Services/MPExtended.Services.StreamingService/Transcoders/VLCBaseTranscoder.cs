@@ -80,7 +80,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         protected abstract void AddEncoderToPipeline(bool hasInputReader);
 
-        protected VLCParameters GenerateVLCParameters()
+        protected virtual VLCParameters GenerateVLCParameters()
         {
             string muxer = Context.Profile.CodecParameters["muxer"];
             if (Context.Profile.CodecParameters.ContainsKey("rtspOutput") && Context.Profile.CodecParameters["rtspOutput"] == "yes")
@@ -97,7 +97,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             );
         }
 
-        protected VLCParameters GenerateVLCParameters(string options, string tsOptions, bool disableSeeking, string encoderOptions, string muxerOptions)
+        protected virtual VLCParameters GenerateVLCParameters(string options, string tsOptions, bool disableSeeking, string encoderOptions, string muxerOptions)
         {
             List<string> arguments = options.Split(' ').Where(x => x.Length > 0).ToList();
 

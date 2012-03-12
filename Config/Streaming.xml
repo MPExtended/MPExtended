@@ -327,5 +327,49 @@
         <flvMetadataInjection>yes</flvMetadataInjection>
       </transcoderConfiguration>
     </transcoder>
+
+    <!-- HTTP Live Streaming tests -->
+    <transcoder>
+      <name>HTTP Live Streaming HQ</name>
+      <description>HTTP Live Streaming</description>
+      <bandwidth>3000</bandwidth>
+      <target>ios</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime> <!-- this is ignored-->
+      <videoStream>true</videoStream>
+      <maxOutputWidth>960</maxOutputWidth>
+      <maxOutputHeight>640</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=15</httpLiveOptions>
+      </transcoderConfiguration>
+    </transcoder>
+    <transcoder>
+      <name>HTTP Live Streaming LQ</name>
+      <description>HTTP Live Streaming</description>
+      <bandwidth>3000</bandwidth>
+      <target>ios</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime> <!-- this is ignored-->
+      <videoStream>true</videoStream>
+      <maxOutputWidth>480</maxOutputWidth>
+      <maxOutputHeight>320</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=96,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=15</httpLiveOptions>
+      </transcoderConfiguration>
+    </transcoder>
   </transcoders>
 </appconfig>

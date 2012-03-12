@@ -28,7 +28,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal class VLC : VLCBaseTranscoder
     {
-        protected bool readOutputStream = true;
+        protected bool ReadOutputStream { get; set; }
+
+        public VLC()
+            : base ()
+        {
+            ReadOutputStream = true;
+        }
 
         protected override void AddEncoderToPipeline(bool hasInputReader)
         {
@@ -51,7 +57,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             // add the unit
             //bool readOutputStream = context
             EncoderUnit.TransportMethod input = hasInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit.TransportMethod outputMethod = readOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            EncoderUnit.TransportMethod outputMethod = ReadOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
             // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).
             EncoderUnit unit = new EncoderUnit(Context.Profile.CodecParameters["path"], arguments, input, outputMethod, log);
