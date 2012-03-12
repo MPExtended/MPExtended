@@ -30,26 +30,27 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal class Direct : ITranscoder, IRetrieveHookTranscoder
     {
         public string Identifier { get; set; }
+        public StreamContext Context { get; set; }
 
-        public string GetStreamURL(StreamContext context)
+        public string GetStreamURL()
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void BuildPipeline(StreamContext context)
+        public void BuildPipeline()
         {
             // we ignore our arguments :)
-            context.TranscodingInfo.Supported = false;
-            context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
+            Context.TranscodingInfo.Supported = false;
+            Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
             return;
         }
 
-        public void RetrieveStreamCalled(StreamContext context)
+        public void RetrieveStreamCalled()
         {
-            WCFUtil.SetContentLength(context.Source.GetFileInfo().Size);
+            WCFUtil.SetContentLength(Context.Source.GetFileInfo().Size);
 
             // there has to be a better way to do this
-            object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(context.Source.GetFileInfo().Name), "Content Type");
+            object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(Context.Source.GetFileInfo().Name), "Content Type");
             if (mime != null)
             {
                 WCFUtil.SetContentType(mime.ToString());

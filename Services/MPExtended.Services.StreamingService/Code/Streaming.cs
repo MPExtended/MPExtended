@@ -192,6 +192,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // get transcoder
                     stream.Transcoder = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.TranscoderImplementationClass));
                     stream.Transcoder.Identifier = identifier;
+                    stream.Transcoder.Context = stream.Context;
 
                     // get audio and subtitle id
                     if (stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
@@ -236,7 +237,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // build the pipeline
                     stream.Context.Pipeline = new Pipeline();
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.BuildPipeline(stream.Context);
+                    stream.Transcoder.BuildPipeline();
 
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();
@@ -249,7 +250,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
 
                     Log.Info("Started stream with identifier " + identifier);
-                    return stream.Transcoder.GetStreamURL(stream.Context);
+                    return stream.Transcoder.GetStreamURL();
                 }
             }
             catch (Exception ex)
@@ -282,7 +283,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)
                 {
-                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled(Streams[identifier].Context);
+                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled();
                 }
 
                 return Streams[identifier].OutputStream;
@@ -296,7 +297,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
                     return Stream.Null;
 
-                return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
+                return ((ICustomActionTranscoder)Streams[identifier].Transcoder).CustomActionData(action, parameters);
             }
         }
 

@@ -30,16 +30,16 @@ namespace MPExtended.Services.StreamingService.Transcoders
     {
         protected bool readOutputStream = true;
 
-        protected override void AddEncoderToPipeline(StreamContext context, bool hasInputReader)
+        protected override void AddEncoderToPipeline(bool hasInputReader)
         {
             // VLC doesn't support output parsing, but subclasses do
-            AddEncoderToPipeline(context, hasInputReader, EncoderUnit.LogStream.None);
+            AddEncoderToPipeline(hasInputReader, EncoderUnit.LogStream.None);
         }
 
-        protected virtual void AddEncoderToPipeline(StreamContext context, bool hasInputReader, EncoderUnit.LogStream log)
+        protected virtual void AddEncoderToPipeline(bool hasInputReader, EncoderUnit.LogStream log)
         {
             // get parameters
-            VLCParameters vlcparam = GenerateVLCParameters(context);
+            VLCParameters vlcparam = GenerateVLCParameters();
             string path = @"\#OUT#";
             string sout = vlcparam.Sout.Replace("#OUT#", path);
 
@@ -54,9 +54,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             EncoderUnit.TransportMethod outputMethod = readOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
             // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).
-            EncoderUnit unit = new EncoderUnit(context.Profile.CodecParameters["path"], arguments, input, outputMethod, log);
+            EncoderUnit unit = new EncoderUnit(Context.Profile.CodecParameters["path"], arguments, input, outputMethod, log);
             unit.DebugOutput = false; // change this for debugging
-            context.Pipeline.AddDataUnit(unit, 5);
+            Context.Pipeline.AddDataUnit(unit, 5);
         }
 
         protected virtual string GenerateArguments(string input, string sout, string args)

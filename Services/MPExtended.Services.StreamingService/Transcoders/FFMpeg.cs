@@ -29,65 +29,66 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal class FFMpeg : ITranscoder
     {
         public string Identifier { get; set; }
+        public StreamContext Context { get; set; }
 
-        public string GetStreamURL(StreamContext context)
+        public string GetStreamURL()
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void BuildPipeline(StreamContext context)
+        public void BuildPipeline()
         {
             // add input
-            bool doInputReader = context.Source.NeedsInputReaderUnit;
+            bool doInputReader = Context.Source.NeedsInputReaderUnit;
             if (doInputReader)
             {
-                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
+                Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
             }
 
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
             string mappings = "";
-            if (context.AudioTrackId != null)
+            if (Context.AudioTrackId != null)
             {
-                mappings = String.Format("-map v:0 -map a:{0}", context.MediaInfo.AudioStreams.First(x => x.ID == context.AudioTrackId).Index);
+                mappings = String.Format("-map v:0 -map a:{0}", Context.MediaInfo.AudioStreams.First(x => x.ID == Context.AudioTrackId).Index);
             }
 
             // calculate full argument string
             string arguments;
-            bool doResize = !context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true";
-            if (context.Profile.HasVideoStream && doResize)
+            bool doResize = !Context.Profile.CodecParameters.ContainsKey("noResize") || Context.Profile.CodecParameters["noResize"] != "true";
+            if (Context.Profile.HasVideoStream && doResize)
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
-                    context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
-                    context.OutputSize, context.OutputSize.Width, context.OutputSize.Height,
-                    mappings, context.Profile.CodecParameters["codecParameters"]
+                    Context.StartPosition != 0 ? "-ss " + (Context.StartPosition / 1000) : "",
+                    Context.OutputSize, Context.OutputSize.Width, Context.OutputSize.Height,
+                    mappings, Context.Profile.CodecParameters["codecParameters"]
                 );
             }
             else
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
-                    context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
-                    mappings, context.Profile.CodecParameters["codecParameters"]
+                    Context.StartPosition != 0 ? "-ss " + (Context.StartPosition / 1000) : "",
+                    mappings, Context.Profile.CodecParameters["codecParameters"]
                 );
             }
 
             // fix input thing
             if (!doInputReader)
-                arguments = arguments.Replace("#IN#", context.Source.GetPath());
+                arguments = arguments.Replace("#IN#", Context.Source.GetPath());
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             EncoderUnit unit = new EncoderUnit(Configuration.Streaming.FFMpegPath, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
             unit.DebugOutput = false; // change this for debugging
-            context.Pipeline.AddDataUnit(unit, 5);
+            Context.Pipeline.AddDataUnit(unit, 5);
 
             // setup output parsing
-            var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
-            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, context.StartPosition);
+            var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, Context.StartPosition);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
-            context.Pipeline.AddLogUnit(logunit, 6);
+            Context.Pipeline.AddLogUnit(logunit, 6);
         }
     }
 }

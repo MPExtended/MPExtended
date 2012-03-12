@@ -27,14 +27,14 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal class VLCWrapper : VLC
     {
-        protected override void AddEncoderToPipeline(StreamContext context, bool hasInputReader)
+        protected override void AddEncoderToPipeline(bool hasInputReader)
         {
-            base.AddEncoderToPipeline(context, hasInputReader, EncoderUnit.LogStream.StandardOut);
+            base.AddEncoderToPipeline(hasInputReader, EncoderUnit.LogStream.StandardOut);
 
             // setup output parsing
-            var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
-            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo, context.MediaInfo, context.StartPosition);
-            context.Pipeline.AddLogUnit(logunit, 6);
+            var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
+            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo, Context.MediaInfo, Context.StartPosition);
+            Context.Pipeline.AddLogUnit(logunit, 6);
         }
 
         protected override string GenerateArguments(string input, string sout, string args)

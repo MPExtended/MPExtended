@@ -37,6 +37,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         }
 
         public string Identifier { get; set; }
+        public StreamContext Context { get; set; }
 
         private string streamUrl;
 
@@ -45,9 +46,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             streamUrl = WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier={0}";
         }
 
-        public virtual string GetStreamURL(StreamContext context)
+        public virtual string GetStreamURL()
         {
-            if (context.Profile.CodecParameters.ContainsKey("rtspOutput") && context.Profile.CodecParameters["rtspOutput"] == "yes")
+            if (Context.Profile.CodecParameters.ContainsKey("rtspOutput") && Context.Profile.CodecParameters["rtspOutput"] == "yes")
             {
                 Thread.Sleep(2500); // FIXME
                 return "rtsp://" + WCFUtil.GetCurrentHostname() + ":5544/" + Identifier + ".sdp";
@@ -58,76 +59,75 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
         }
 
-        public virtual void BuildPipeline(StreamContext context)
+        public virtual void BuildPipeline()
         {
             // input
-            bool doInputReader = context.Source.NeedsInputReaderUnit;
+            bool doInputReader = Context.Source.NeedsInputReaderUnit;
             if (doInputReader)
             {
-                context.Pipeline.AddDataUnit(context.Source.GetInputReaderUnit(), 1);
+                Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
             }
 
             // then add the encoder (this should happen in position 5)
-            AddEncoderToPipeline(context, doInputReader);
+            AddEncoderToPipeline(doInputReader);
 
             // add the FLV metadata injection unit, when option is set
-            if (context.Profile.CodecParameters.ContainsKey("flvMetadataInjection") && context.Profile.CodecParameters["flvMetadataInjection"] == "yes")
+            if (Context.Profile.CodecParameters.ContainsKey("flvMetadataInjection") && Context.Profile.CodecParameters["flvMetadataInjection"] == "yes")
             {
-                context.Pipeline.AddDataUnit(new FLVMetadataInjector(context), 15);
+                Context.Pipeline.AddDataUnit(new FLVMetadataInjector(Context), 15);
             }
         }
 
-        protected abstract void AddEncoderToPipeline(StreamContext context, bool hasInputReader);
+        protected abstract void AddEncoderToPipeline(bool hasInputReader);
 
-        protected VLCParameters GenerateVLCParameters(StreamContext context)
+        protected VLCParameters GenerateVLCParameters()
         {
-            string muxer = context.Profile.CodecParameters["muxer"];
-            if (context.Profile.CodecParameters.ContainsKey("rtspOutput") && context.Profile.CodecParameters["rtspOutput"] == "yes")
+            string muxer = Context.Profile.CodecParameters["muxer"];
+            if (Context.Profile.CodecParameters.ContainsKey("rtspOutput") && Context.Profile.CodecParameters["rtspOutput"] == "yes")
             {
                 muxer = muxer.Replace("#ADDRESS#", "rtsp://:5544/" + Identifier + ".sdp");
             }
 
             return GenerateVLCParameters(
-                context,
-                context.Profile.CodecParameters.ContainsKey("options") ? context.Profile.CodecParameters["options"] : "",
-                context.Profile.CodecParameters.ContainsKey("tsOptions") ? context.Profile.CodecParameters["tsOptions"] : "",
-                context.Profile.CodecParameters.ContainsKey("disableSeeking") && context.Profile.CodecParameters["disableSeeking"] == "yes",
-                context.Profile.CodecParameters["encoder"],
-                context.Profile.CodecParameters["muxer"]
+                Context.Profile.CodecParameters.ContainsKey("options") ? Context.Profile.CodecParameters["options"] : "",
+                Context.Profile.CodecParameters.ContainsKey("tsOptions") ? Context.Profile.CodecParameters["tsOptions"] : "",
+                Context.Profile.CodecParameters.ContainsKey("disableSeeking") && Context.Profile.CodecParameters["disableSeeking"] == "yes",
+                Context.Profile.CodecParameters["encoder"],
+                Context.Profile.CodecParameters["muxer"]
             );
         }
 
-        protected VLCParameters GenerateVLCParameters(StreamContext context, string options, string tsOptions, bool disableSeeking, string encoderOptions, string muxerOptions)
+        protected VLCParameters GenerateVLCParameters(string options, string tsOptions, bool disableSeeking, string encoderOptions, string muxerOptions)
         {
             List<string> arguments = options.Split(' ').Where(x => x.Length > 0).ToList();
 
             // input
             string inURL = "";
-            if (context.Source.NeedsInputReaderUnit)
+            if (Context.Source.NeedsInputReaderUnit)
             {
                 inURL = "stream://#IN#";
             }
             else
             {
-                inURL = context.Source.GetPath();
+                inURL = Context.Source.GetPath();
             }
 
             // add tv options if specified
-            if ((context.IsTv || context.MediaInfo.Container == "MPEG-TS") && tsOptions.Length > 0)
+            if ((Context.IsTv || Context.MediaInfo.Container == "MPEG-TS") && tsOptions.Length > 0)
             {
                 arguments.AddRange(tsOptions.Split(' ').Where(x => x.Length > 0));
             }
 
             // position (disabling this is probably a bad idea as some things (watch sharing, transcoding info) fail then, which results in faulty clients.)
-            if (context.StartPosition > 0 && !disableSeeking)
+            if (Context.StartPosition > 0 && !disableSeeking)
             {
-                arguments.Add("--start-time=" + (context.StartPosition / 1000));
+                arguments.Add("--start-time=" + (Context.StartPosition / 1000));
             }
 
             // audio track 
-            if (context.AudioTrackId != null)
+            if (Context.AudioTrackId != null)
             {
-                arguments.Add("--audio-track=" + context.MediaInfo.AudioStreams.Where(x => x.ID == context.AudioTrackId).First().Index);
+                arguments.Add("--audio-track=" + Context.MediaInfo.AudioStreams.Where(x => x.ID == Context.AudioTrackId).First().Index);
             }
             else
             {
@@ -136,13 +136,13 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // subtitle selection
             string subtitleTranscoder;
-            if (context.SubtitleTrackId == null)
+            if (Context.SubtitleTrackId == null)
             {
                 subtitleTranscoder = "scodec=none";
             } 
             else
             {
-                WebSubtitleStream stream = context.MediaInfo.SubtitleStreams.First(x => x.ID == context.SubtitleTrackId);
+                WebSubtitleStream stream = Context.MediaInfo.SubtitleStreams.First(x => x.ID == Context.SubtitleTrackId);
                 if (stream.Filename != null)
                 {
                     arguments.Add("--sub-file=" + stream.Filename);
@@ -156,8 +156,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // create parameters
             string sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
-            if (!context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true")
-                sout += ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height;
+            if (!Context.Profile.CodecParameters.ContainsKey("noResize") || Context.Profile.CodecParameters["noResize"] != "true")
+                sout += ",width=" + Context.OutputSize.Width + ",height=" + Context.OutputSize.Height;
             sout += "}" + muxerOptions;
 
             // return
