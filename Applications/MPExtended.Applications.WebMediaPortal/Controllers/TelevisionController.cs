@@ -69,8 +69,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId)
         {
-            // 48x48 is the same as background-size in TVGuide.css
-            var logo = MPEServices.TASStream.GetArtworkResized(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0, 48, 48);
+            // 50x50 is the same as background-size in TVGuide.css
+            var logo = MPEServices.TASStream.GetArtworkResized(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0, 50, 50);
             return File(logo, "image/png");
         }
 
