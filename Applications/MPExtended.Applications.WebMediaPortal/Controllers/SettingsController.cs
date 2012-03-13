@@ -35,6 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Index()
         {
             ViewBag.Version = VersionUtil.GetFullVersionString();
+            ServiceAvailability.Reload();
 
             return View(new SettingsViewModel(Settings.ActiveSettings));
         }
