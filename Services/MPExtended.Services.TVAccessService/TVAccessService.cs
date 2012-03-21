@@ -269,8 +269,10 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation()
         {
-            return GetCards().Select(x => x.RecordingFolder).Distinct()
+            return GetCards()
+                .Select(x => x.RecordingFolder).Distinct()
                 .Select(x => DiskSpaceInformation.GetSpaceInformation(x))
+                .GroupBy(x => x.Disk, (key, list) => list.First())
                 .ToList();
         }
 
