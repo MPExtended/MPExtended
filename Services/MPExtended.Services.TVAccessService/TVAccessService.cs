@@ -259,7 +259,7 @@ namespace MPExtended.Services.TVAccessService
                 .Where(users => users != null)
                 .SelectMany(user => user)
                 .Select(user => new VirtualCard(user, RemoteControl.HostName))
-                .Where(tvCard => tvCard.IsTimeShifting || !tvCard.IsRecording);
+                .Where(tvCard => tvCard.IsTimeShifting || tvCard.IsRecording);
         }
 
         public IList<WebRtspClient> GetStreamingClients()
