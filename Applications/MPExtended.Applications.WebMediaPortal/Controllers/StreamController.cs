@@ -116,8 +116,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            // Generate identifier from continuationId if possible, random otherwise
+            // Generate random identifier, and continuationId if needed
             string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
+            if (continuationId == null)
+            {
+                continuationId = "none-provided-" + randomGenerator.Next(10000, 99999).ToString();
+            }
 
             // Kill previous stream, but only if we expect it to be still running (avoid useless calls in non-seek and proxied cases)
             if (RunningStreams.ContainsKey(continuationId))
@@ -366,6 +370,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
+            parameters["continuationId"] = "playlist-" + randomGenerator.Next(10000, 99999);
             string url = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
 
             // create playlist
