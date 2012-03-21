@@ -64,6 +64,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BackgroundThread.cs" />
+    <Compile Include="Code\Downloads.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaSource.cs" />

@@ -40,10 +40,12 @@ namespace MPExtended.Services.StreamingService
         private const int API_VERSION = 2;
 
         private Streaming _stream;
+        private Downloads _downloads;
 
         public StreamingService()
         {
             _stream = new Streaming(this);
+            _downloads = new Downloads();
         }
 
         public void Dispose()
@@ -120,7 +122,9 @@ namespace MPExtended.Services.StreamingService
 
         public List<WebStreamingSession> GetStreamingSessions()
         {
-            return _stream.GetStreamingSessions();
+            return _stream.GetStreamingSessions()
+                .Concat(_downloads.GetActiveSessions())
+                .ToList();
         }
 
         public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
@@ -256,30 +260,14 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
-            MediaSource source = new MediaSource(type, provider, itemId);
             try
             {
-                if (!source.Exists)
-                {
-                    throw new FileNotFoundException();
-                }
-                
-                WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
-                WCFUtil.SetContentLength(source.GetFileInfo().Size);
-
-                // there has to be a better way to do this
-                object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
-                if (mime != null)
-                {
-                    WCFUtil.SetContentType(mime.ToString());
-                }
-
-                return source.Retrieve();
+                return _downloads.Download(type, provider, itemId);
             }
             catch (Exception ex)
             {
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                Log.Info(String.Format("GetMediaItem() failed for {0}", source.GetDebugName()), ex);
+                Log.Info(String.Format("GetMediaItem() failed for type={0}; provider={1}; itemId={2}", type, provider, itemId), ex);
                 return Stream.Null;
             }
         }

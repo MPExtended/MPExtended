@@ -37,6 +37,8 @@ namespace MPExtended.Services.StreamingService.Code
             readTimer.Start();
         }
 
+        public bool IsClosed { get; set; }
+
         public long TimeSinceLastRead
         {
             get { return readTimer.ElapsedMilliseconds; }
@@ -72,6 +74,12 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 wrappedStream.Position = value;
             }
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            IsClosed = true;
         }
 
         public override void Flush()
