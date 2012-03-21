@@ -13,8 +13,11 @@
     <tr><td>@UIStrings.Channel</td><td>@Model.ChannelName</td></tr>
     <tr><td>@UIStrings.CardGrabbingEPG</td><td>@(Model.GrabbingEPG ? UIStrings.Yes : UIStrings.No)</td></tr>
     <tr><td>@UIStrings.CardScrambled</td><td>@(Model.Scrambled ? UIStrings.Yes : UIStrings.No)</td></tr>
-    <tr><td>@UIStrings.CardTimeshiftingFile</td><td>@Model.VirtualCard.TimeShiftFileName</td></tr>
-    @if (!String.IsNullOrEmpty(Model.VirtualCard.RecordingFileName))
+    @if (Model.VirtualCard.IsTimeShifting)
+    {
+        <tr><td>@UIStrings.CardTimeshiftingFile</td><td>@Model.VirtualCard.TimeShiftFileName</td></tr>
+    }
+    @if (Model.VirtualCard.IsRecording)
     {
         <tr><td>@UIStrings.CardRecordingFile</td><td>@Model.VirtualCard.RecordingFileName</td></tr>
     }
