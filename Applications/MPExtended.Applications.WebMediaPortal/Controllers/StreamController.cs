@@ -79,6 +79,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
+            queryString["clientDescription"] = "WebMediaPortal download";
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
             string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;

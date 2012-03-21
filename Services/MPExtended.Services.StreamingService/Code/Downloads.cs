@@ -34,6 +34,7 @@ namespace MPExtended.Services.StreamingService.Code
         private class DownloadContext
         {
             public string ClientIP { get; set; }
+            public string ClientDescription { get; set; }
             public MediaSource Source { get; set; }
             public DateTime StartTime { get; set; }
             public ReadTrackingStreamWrapper Stream { get; set; }
@@ -41,7 +42,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private List<DownloadContext> runningDownloads = new List<DownloadContext>();
 
-        public Stream Download(WebStreamMediaType type, int? provider, string itemId)
+        public Stream Download(string clientDescription, WebStreamMediaType type, int? provider, string itemId)
         {
             // validate source first
             MediaSource source = new MediaSource(type, provider, itemId);
@@ -53,6 +54,7 @@ namespace MPExtended.Services.StreamingService.Code
             // create context
             DownloadContext context = new DownloadContext()
             {
+                ClientDescription = clientDescription, 
                 Source = source,
                 StartTime = DateTime.Now,
                 Stream = new ReadTrackingStreamWrapper(source.Retrieve())
@@ -89,7 +91,7 @@ namespace MPExtended.Services.StreamingService.Code
                 .Where(context => context.Stream.TimeSinceLastRead < IDLE_TIMEOUT)
                 .Select(context => new WebStreamingSession()
                 {
-                    ClientDescription = "Download",
+                    ClientDescription = String.IsNullOrEmpty(context.ClientDescription) ? "Download" : context.ClientDescription,
                     ClientIPAddress = context.ClientIP,
                     DisplayName = context.Source.GetMediaDisplayName(),
                     Identifier = String.Empty,
