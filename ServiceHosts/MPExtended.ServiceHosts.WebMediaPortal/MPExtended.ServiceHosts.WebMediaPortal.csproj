@@ -60,6 +60,7 @@
     <None Include="app.config" />
     <None Include="IISExpressTemplate.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="NLog.config">
       <SubType>Designer</SubType>

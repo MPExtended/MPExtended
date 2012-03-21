@@ -45,36 +45,54 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             InitializeComponent();
 
             txtPort.Text = Configuration.WebMediaPortalHosting.Port.ToString();
+            txtHTTPSPort.Text = Configuration.WebMediaPortalHosting.PortTLS.ToString();
+            cbHTTPS.IsChecked = Configuration.WebMediaPortalHosting.EnableTLS;
+            txtHTTPSPort.IsEnabled = Configuration.WebMediaPortalHosting.EnableTLS;
         }
 
         public void TabClosed()
         {
-            int port = Int32.Parse(txtPort.Text);
-            if(port != Configuration.WebMediaPortalHosting.Port)
-            {
-                Configuration.WebMediaPortalHosting.Port = port;
-                Configuration.WebMediaPortalHosting.Save();
+            Configuration.WebMediaPortalHosting.Port = Int32.Parse(txtPort.Text);
+            Configuration.WebMediaPortalHosting.EnableTLS = cbHTTPS.IsChecked.GetValueOrDefault(false);
+            Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);
+            Configuration.WebMediaPortalHosting.Save();
 
-                // restart
-                if (UacServiceHelper.IsAdmin())
+            // restart
+            if (UacServiceHelper.IsAdmin())
+            {
+                Task.Factory.StartNew(() =>
                 {
-                    Task.Factory.StartNew(() =>
+                    try
                     {
-                        try
-                        {
-                            var wsh = new WindowsServiceHandler("MPExtended WebMediaPortal");
-                            wsh.Execute(ServiceCommand.Restart);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warn("Failed to restart WebMediaPortal hosting process", ex);
-                        }
-                    });
-                }
-                else
-                {
-                    UacServiceHelper.RunUacServiceHandler("/command:webmphosting /action:restart");
-                }
+                        var wsh = new WindowsServiceHandler("MPExtended WebMediaPortal");
+                        wsh.Execute(ServiceCommand.Restart);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warn("Failed to restart WebMediaPortal hosting process", ex);
+                    }
+                });
+            }
+            else
+            {
+                UacServiceHelper.RunUacServiceHandler("/command:webmphosting /action:restart");
+            }
+        }
+
+        private void ChangeHTTPSCheckbox(object sender, RoutedEventArgs e)
+        {
+            txtHTTPSPort.IsEnabled = cbHTTPS.IsChecked.GetValueOrDefault(false);
+        }
+
+        private void txtHTTPSPort_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!cbHTTPS.IsChecked.GetValueOrDefault(false))
+                return;
+
+            int port;
+            if (!Int32.TryParse(txtHTTPSPort.Text, out port) || port < 44300 || port > 44399)
+            {
+                MessageBox.Show(Strings.UI.HTTPSInvalidPort, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

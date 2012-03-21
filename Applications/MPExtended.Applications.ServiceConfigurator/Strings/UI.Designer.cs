@@ -277,6 +277,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable HTTPS.
+        /// </summary>
+        public static string EnableHTTPS {
+            get {
+                return ResourceManager.GetString("EnableHTTPS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         public static string Export {
@@ -327,6 +336,35 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         public static string Homepage {
             get {
                 return ResourceManager.GetString("Homepage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. 
+        ///
+        ///Please note that it isn&apos;t possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. .
+        /// </summary>
+        public static string HTTPSDisclaimer {
+            get {
+                return ResourceManager.GetString("HTTPSDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The port you entered for HTTPS is invalid. You can use only ports 44300 until 44399 for HTTPS. .
+        /// </summary>
+        public static string HTTPSInvalidPort {
+            get {
+                return ResourceManager.GetString("HTTPSInvalidPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTPS Port:.
+        /// </summary>
+        public static string HTTPSPort {
+            get {
+                return ResourceManager.GetString("HTTPSPort", resourceCulture);
             }
         }
         
@@ -469,7 +507,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Port.
+        ///   Looks up a localized string similar to Port:.
         /// </summary>
         public static string Port {
             get {

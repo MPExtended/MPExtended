@@ -52,7 +52,6 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 tempConfigFile = Path.GetTempFileName();
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}", tempConfigFile);
-                Log.Debug("Listening on port {0}", generator.Port);
 
                 // lookup IIS Express location
                 string iisExpress = null;

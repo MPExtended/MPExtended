@@ -30,21 +30,10 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
         public string TemplatePath { get; set; }
         public string PhysicalSitePath { get; set; }
 
-        public int Port
-        {
-            get
-            {
-                return Configuration.WebMediaPortalHosting.Port;
-            }
-        }
-
         public bool GenerateConfigFile(string outputFile)
         {
             try
             {
-                // parse config
-                int port = Configuration.WebMediaPortalHosting.Port;
-
                 // create config
                 XElement file = XElement.Load(TemplatePath);
                 XElement site = file.Element("system.applicationHost").Element("sites").Elements("site").First(x => x.Attribute("name").Value == "WebMediaPortal");
@@ -59,9 +48,21 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 site.Element("bindings").Add(
                     new XElement("binding",
                         new XAttribute("protocol", "http"),
-                        new XAttribute("bindingInformation", String.Format(":{0}:", Port))
+                        new XAttribute("bindingInformation", String.Format("*:{0}:", Configuration.WebMediaPortalHosting.Port))
                     )
                 );
+                Log.Debug("Wrote binding for http on port {0}", Configuration.WebMediaPortalHosting.Port);
+
+                if (Configuration.WebMediaPortalHosting.EnableTLS)
+                {
+                    site.Element("bindings").Add(
+                        new XElement("binding",
+                            new XAttribute("protocol", "https"),
+                            new XAttribute("bindingInformation", String.Format("*:{0}:", Configuration.WebMediaPortalHosting.PortTLS))
+                        )
+                    );
+                    Log.Debug("Wrote binding for https on port {0}", Configuration.WebMediaPortalHosting.PortTLS);
+                }
 
                 file.Save(outputFile);
                 return true;

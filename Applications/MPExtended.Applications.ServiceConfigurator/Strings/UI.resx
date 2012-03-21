@@ -157,7 +157,7 @@
     <value>Media</value>
   </data>
   <data name="Port" xml:space="preserve">
-    <value>Port</value>
+    <value>Port:</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
     <value>Not installed</value>
@@ -452,5 +452,19 @@ This is the service component, which provides access to the databases and media 
   </data>
   <data name="CleanCaches" xml:space="preserve">
     <value>Clean cache</value>
+  </data>
+  <data name="EnableHTTPS" xml:space="preserve">
+    <value>Enable HTTPS</value>
+  </data>
+  <data name="HTTPSDisclaimer" xml:space="preserve">
+    <value>Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. 
+
+Please note that it isn't possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. </value>
+  </data>
+  <data name="HTTPSInvalidPort" xml:space="preserve">
+    <value>The port you entered for HTTPS is invalid. You can use only ports 44300 until 44399 for HTTPS. </value>
+  </data>
+  <data name="HTTPSPort" xml:space="preserve">
+    <value>HTTPS Port:</value>
   </data>
 </root>
