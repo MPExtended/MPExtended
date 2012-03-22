@@ -134,6 +134,7 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Skins\aredon\Home\Index.css" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -361,12 +362,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skins\aredon\Television\TVGuide.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\TVShowsLibrary\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\TVShowsLibrary\Seasons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skins\aredon\Shared\_Layout.cshtml" />
