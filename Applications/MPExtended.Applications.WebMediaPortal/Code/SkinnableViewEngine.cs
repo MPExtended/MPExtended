@@ -40,6 +40,14 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
         }
 
+        public string BaseDirectory
+        {
+            get
+            {
+                return "~/Skins/" + Skin;
+            }
+        }
+
         public SkinnableViewEngine()
         {
         }
@@ -61,6 +69,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 "~/Skins/" + skin + "/{1}/{0}.vbhtml",
                 "~/Skins/" + skin + "/Shared/{0}.cshtml",
                 "~/Skins/" + skin + "/Shared/{0}.vbhtml",
+                "~/Views/{1}/{0}.cshtml",
+                "~/Views/{1}/{0}.vbhtml",
+                "~/Views/Shared/{0}.cshtml",
+                "~/Views/Shared/{0}.vbhtml",
             };
 
             PartialViewLocationFormats = new string[] {
@@ -68,7 +80,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 "~/Skins/" + skin + "/{1}/{0}.vbhtml",
                 "~/Skins/" + skin + "/Shared/{0}.cshtml",
                 "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-
+                "~/Views/{1}/{0}.cshtml",
+                "~/Views/{1}/{0}.vbhtml",
+                "~/Views/Shared/{0}.cshtml",
+                "~/Views/Shared/{0}.vbhtml",
             };
 
             ViewLocationFormats = new string[] {
@@ -76,6 +91,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 "~/Skins/" + skin + "/{1}/{0}.vbhtml",
                 "~/Skins/" + skin + "/Shared/{0}.cshtml",
                 "~/Skins/" + skin + "/Shared/{0}.vbhtml",
+                "~/Views/{1}/{0}.cshtml",
+                "~/Views/{1}/{0}.vbhtml",
+                "~/Views/Shared/{0}.cshtml",
+                "~/Views/Shared/{0}.vbhtml",
             };
         }
     }

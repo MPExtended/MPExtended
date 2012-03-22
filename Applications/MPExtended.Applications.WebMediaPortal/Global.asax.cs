@@ -65,7 +65,6 @@ namespace MPExtended.Applications.WebMediaPortal
             // set view engine
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new SkinnableViewEngine(Settings.ActiveSettings.Skin));
-            ViewEngines.Engines.Add(new RazorViewEngine());
         }
     }
 }
