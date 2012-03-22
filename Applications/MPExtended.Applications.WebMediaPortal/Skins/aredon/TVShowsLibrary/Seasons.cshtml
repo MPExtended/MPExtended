@@ -1,0 +1,34 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.TVShowViewModel
+@{
+	ViewBag.Title = Model.Show.Title;
+}
+
+<style type="text/css">
+    .column
+    {
+        float: left;
+        margin-right: 20px;
+    }
+    .img
+    {
+        max-width: 700px;
+    }
+</style>
+
+<h2>@Model.Show.Title</h2>
+
+<div class="column">
+    <img class="img" src="@Url.Action("SeriesFanart", new { show = Model.Show.Id })" alt="" />
+</div>
+
+<div class="column">
+    <ul>
+        @foreach (var season in Model.Seasons)
+        {
+            if (!season.SeasonNumber.Equals(0))
+            {
+                <li>@Html.ActionLink(String.Format(UIStrings.Season, season.SeasonNumber), "Episodes", new { season = season.Id })</li>
+            }
+        }
+    </ul>
+</div>

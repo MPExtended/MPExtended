@@ -168,6 +168,8 @@
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
     <Content Include="Views\Television\TVGuide.js" />
+    <Content Include="Skins\aredon\Site.css" />
+    <Content Include="Skins\aredon\Television\TVGuide.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -324,6 +326,9 @@
     <Content Include="Views\Stream\Player.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Skins\aredon\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Schedule\AddScheduleByProgram.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -355,7 +360,31 @@
     <Content Include="Views\TVServer\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Skins\" />
+    <Content Include="Skins\aredon\Television\TVGuide.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\TVShowsLibrary\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\TVShowsLibrary\Seasons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Settings\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Home\NewEpisodes.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Home\NewMovies.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\_ViewStart.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
