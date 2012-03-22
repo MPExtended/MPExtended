@@ -3,14 +3,9 @@
     ViewBag.Title = UIStrings.Recordings;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("Television/Recordings.css")" />
-}
-
-
 <h2>@UIStrings.YourRecordings</h2>
 
-<ul class="recordingList">
+<ul class="list">
     @foreach (var recording in Model)
     {
         <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", new { id = recording.Id })</li>

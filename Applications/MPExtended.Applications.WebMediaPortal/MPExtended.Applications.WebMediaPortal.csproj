@@ -148,10 +148,7 @@
   <ItemGroup>
     <Content Include="Content\Images\logomp-small.png" />
     <Content Include="Views\Home\Index.css" />
-    <Content Include="Views\MovieLibrary\Movies.css" />
-    <Content Include="Views\MusicLibrary\Index.css" />
     <Content Include="Views\Stream\FlashVideoPlayer.css" />
-    <Content Include="Views\Television\Recordings.css" />
     <Content Include="Views\Television\TVGuide.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -171,7 +168,6 @@
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
     <Content Include="Views\Television\TVGuide.js" />
-    <Content Include="Views\TVShowsLibrary\TVShows.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

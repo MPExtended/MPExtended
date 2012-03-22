@@ -3,12 +3,9 @@
 	ViewBag.Title = UIStrings.Music;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("MusicLibrary/Index.css")" />
-}
-
 <h2>@UIStrings.YourArtists</h2>
-<ul class="artistList">
+
+<ul class="list">
     @if (Model != null)
     {
         foreach (var artist in Model)

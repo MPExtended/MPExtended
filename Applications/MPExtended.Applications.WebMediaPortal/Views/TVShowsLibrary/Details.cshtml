@@ -3,16 +3,12 @@
     ViewBag.Title = @Model.Title;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("TVShowsLibrary/TVShows.css")" />
-}
-
 <h2>@Model.Title</h2>
 
-<div class="detailsColumn">
-    <img class="img" src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
+<div class="imageColumn">
+    <img src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
 </div>
-<div class="detailsColumn">
+<div class="dataColumn">
     <ul>
         <li>@UIStrings.WrittenBy
             <ul>
@@ -42,6 +38,6 @@
     </ul>
 </div>
 
-<p>
+<div class="textColumn">
     @Model.Summary
-</p>
+</div>

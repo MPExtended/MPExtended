@@ -3,13 +3,9 @@
 	ViewBag.Title = UIStrings.Movies;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("MovieLibrary/Movies.css")" />
-}
-
 <h2>@UIStrings.YourMovies</h2>
 
-<ul class="movieList">
+<ul class="list">
     @foreach (var movie in Model)
     {
         <li>@Html.ActionLink(movie.Title, UIStrings.Details, new { movie = movie.Id })</li>

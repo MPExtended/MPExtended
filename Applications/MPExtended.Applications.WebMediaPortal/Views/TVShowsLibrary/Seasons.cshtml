@@ -3,17 +3,13 @@
 	ViewBag.Title = Model.Show.Title;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("TVShowsLibrary/TVShows.css")" />
-}
-
 <h2>@Model.Show.Title</h2>
 
-<div class="seasonColumn">
-    <img class="img" src="@Url.Action("SeriesFanart", new { show = Model.Show.Id })" alt="" />
+<div class="imageColumn extended">
+    <img src="@Url.Action("SeriesFanart", new { show = Model.Show.Id })" alt="" />
 </div>
 
-<div class="seasonColumn">
+<div class="listColumn">
     <ul>
         @foreach (var season in Model.Seasons)
         {

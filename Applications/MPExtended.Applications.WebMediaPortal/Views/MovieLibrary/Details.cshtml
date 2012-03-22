@@ -3,17 +3,13 @@
     ViewBag.Title = Model.Title;
 }
 
-@section HeadHtml {
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("MovieLibrary/Movies.css")" />
-}
-
 <h2>@Model.Title</h2>
 
-<div class="column">
-    <img class="img" src="@Url.Action("Image", new { movie = @Model.Id })" alt="" />
+<div class="imageColumn">
+    <img src="@Url.Action("Image", new { movie = @Model.Id })" alt="" />
 </div>
 
-<div class="column">
+<div class="dataColumn">
     <ul>
         <li>@Model.Year</li>
         <li>@String.Join(", ", Model.Genres)</li>
@@ -24,6 +20,6 @@
     </ul>
 </div>
 
-<div class="subcolumn">
+<div class="textColumn">
     @Model.Summary
 </div>
