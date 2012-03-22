@@ -87,8 +87,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         {
             bag.Availability = ServiceAvailability;
             bag.FullVersion = VersionUtil.GetFullVersionString();
-            bag.Styles = new List<string>();
-            bag.Scripts = new List<string>();
             bag.Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
         }
 
