@@ -121,7 +121,7 @@
     <value>This action needs administrative rights.</value>
   </data>
   <data name="ActiveStreams" xml:space="preserve">
-    <value>Active streams</value>
+    <value>Currently active streams</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
     <value>You can configure the port on which WebMediaPortal runs here.</value>
@@ -466,5 +466,8 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   </data>
   <data name="HTTPSPort" xml:space="preserve">
     <value>HTTPS Port:</value>
+  </data>
+  <data name="TabActivity" xml:space="preserve">
+    <value>Activity</value>
   </data>
 </root>

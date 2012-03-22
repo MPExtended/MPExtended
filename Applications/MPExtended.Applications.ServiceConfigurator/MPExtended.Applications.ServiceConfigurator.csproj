@@ -82,6 +82,9 @@
     <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
       <Link>Code\WindowsServiceHandler.cs</Link>
     </Compile>
+    <Compile Include="Pages\TabActivity.xaml.cs">
+      <DependentUpon>TabActivity.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Strings\UI.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,6 +119,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\TabActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\SectionPluginSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

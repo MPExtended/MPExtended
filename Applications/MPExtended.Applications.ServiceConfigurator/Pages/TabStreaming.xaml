@@ -16,23 +16,5 @@
         <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,80,12,0" Name="cbAudio" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
         <Label Content="{x:Static strings:UI.DefaultSubtitleLanguage}" Height="28" HorizontalAlignment="Left" Margin="12,112,0,0" Name="lblDefaultSubtitle" VerticalAlignment="Top" />
         <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="213,114,12,0" Name="cbSubtitle" VerticalAlignment="Top" Grid.ColumnSpan="2" ItemsSource="{Binding}" DisplayMemberPath="Value" SelectedValuePath="Key" />
-
-        <Label Content="{x:Static strings:UI.ActiveStreams}" FontWeight="Bold" Height="28" Margin="12,144,0,278" Name="label1" />
-        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="18,180,12,12" Name="lvActiveStreams" VerticalAlignment="Stretch">
-            <ListView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static strings:UI.StreamingKickSession}" Name="miKickUserSession" Click="miKickUserSession_Click" />
-                </ContextMenu>
-            </ListView.ContextMenu>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="{x:Static strings:UI.StreamingClient}" Width="140" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClientIP}" Header="{x:Static strings:UI.StreamingIPAddress}" Width="100"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="{x:Static strings:UI.StreamingProfile}" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="{x:Static strings:UI.StreamingProgress}"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="{x:Static strings:UI.StreamingFile}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
     </Grid>
 </Page>

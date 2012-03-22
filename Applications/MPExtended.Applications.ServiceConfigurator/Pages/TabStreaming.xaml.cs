@@ -40,20 +40,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabStreaming : Page, ITabCloseCallback
     {
-        private DispatcherTimer mSessionWatcher;
-        private ObservableCollection<WpfStreamingSession> mStreamingSessions = new ObservableCollection<WpfStreamingSession>();
-
         public TabStreaming()
         {
-            // session watcher (started in Page_Initialized, which is called via InitializeComponent)
-            mSessionWatcher = new DispatcherTimer();
-            mSessionWatcher.Interval = TimeSpan.FromSeconds(2);
-            mSessionWatcher.Tick += activeSessionWatcher_Tick;
-
             InitializeComponent();
-
-            // actually show the list
-            lvActiveStreams.ItemsSource = mStreamingSessions;
 
             // load language list
             var languages = CultureDatabase.GetLanguages()
@@ -75,45 +64,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // set default item
             cbAudio.SelectedValue = Configuration.Streaming.DefaultAudioStream;
             cbSubtitle.SelectedValue = Configuration.Streaming.DefaultSubtitleStream;
-
-            // start observing
-            mSessionWatcher.Start();
         }
 
 
         public void TabClosed()
         {
-            mSessionWatcher.Stop();
             Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
             Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
             Configuration.Streaming.Save();
-        }
-
-        private void activeSessionWatcher_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                List<WebStreamingSession> tmp = MPEServices.MASStreamControl.GetStreamingSessions();
-
-                if (tmp != null)
-                {
-                    mStreamingSessions.UpdateStreamingList(tmp);
-                }
-            }
-            catch (CommunicationException)
-            {
-                mStreamingSessions.Clear();
-                Log.Warn("No connection to service");
-            }
-        }
-
-        private void miKickUserSession_Click(object sender, RoutedEventArgs e)
-        {
-            WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
-            if (session != null)
-            {
-                bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
-            }
         }
     }
 }

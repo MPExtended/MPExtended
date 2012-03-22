@@ -70,7 +70,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active streams.
+        ///   Looks up a localized string similar to Currently active streams.
         /// </summary>
         public static string ActiveStreams {
             get {
@@ -782,6 +782,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         public static string SubtitlesFirstStream {
             get {
                 return ResourceManager.GetString("SubtitlesFirstStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activity.
+        /// </summary>
+        public static string TabActivity {
+            get {
+                return ResourceManager.GetString("TabActivity", resourceCulture);
             }
         }
         

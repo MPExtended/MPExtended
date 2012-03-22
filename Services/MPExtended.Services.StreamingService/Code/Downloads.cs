@@ -96,7 +96,7 @@ namespace MPExtended.Services.StreamingService.Code
                     DisplayName = context.Source.GetMediaDisplayName(),
                     Identifier = String.Empty,
                     PlayerPosition = 0,
-                    Profile = String.Empty,
+                    Profile = "Download",
                     SourceId = context.Source.Id,
                     SourceType = context.Source.MediaType,
                     StartPosition = 0,
