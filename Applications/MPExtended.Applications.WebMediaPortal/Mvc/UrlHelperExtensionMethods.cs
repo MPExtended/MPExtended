@@ -27,16 +27,21 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
-        public static string ViewContent(this UrlHelper helper, string viewContentPath)
+        public static string ViewLocalPath(this UrlHelper helper, string viewFile)
         {
             var relativePath = ViewEngines.Engines.OfType<SkinnableViewEngine>()
-                .Select(sve => sve.BaseDirectory + "/" + viewContentPath)
+                .Select(sve => sve.BaseDirectory + "/" + viewFile)
                 .FirstOrDefault(path => File.Exists(helper.RequestContext.HttpContext.Server.MapPath(path)));
             if (relativePath == null)
             {
-                relativePath = "~/Views/" + viewContentPath;
+                relativePath = "~/Views/" + viewFile;
             }
-            return helper.Content(relativePath);
+            return relativePath;
+        }
+
+        public static string ViewContent(this UrlHelper helper, string viewContentPath)
+        {
+            return helper.Content(helper.ViewLocalPath(viewContentPath));
         }
     }
 }
