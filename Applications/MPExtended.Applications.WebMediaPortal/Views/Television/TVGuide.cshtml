@@ -12,7 +12,7 @@
     @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
     {
         @Html.DropDownList("group", Model.Groups)
-        @* @Html.TextBox("date", Model.GuideStart.ToShortDateString()) *@
+        @Html.TextBox("date", Model.GuideStart.ToShortDateString())
         @Html.Hidden("time", Model.GuideStart.ToString("s"))
     }
 </div>
