@@ -1,101 +1,184 @@
-﻿#TVGuide .headerrow 
-{
-    padding: 2px 5px;
-    height: 25px;
+﻿#TVGuide .headerrow {
+	padding: 2px 5px;
+	height: 25px;
+	margin: 0px -15px;
+	position: relative;
 }
-
-#TVGuide .headerspacer
-{
-    width: 230px;    
-    float: left;
-    text-align: right;
+#TVGuide .headerspacer {
+	width: 198px;
+	float: left;
+	text-align: right;
 }
-
-#TVGuide .headertime
-{
-    border-left: 1px solid #8A8575;
-    padding-left: 5px;
-    height: 100%;
+#TVGuide .headertime {
+	font-family: 'Ubuntu', sans-serif;
+	border-left: 1px solid #E8E8E8;
+	padding-left: 6px;
+	font-size: 12px;
+	width: 87px;
+	height: 100%;
 }
-
-#TVGuide .headerrow button.earlier
-{
-    margin-right: 10px;
+button.earlier {
+	margin-right: 10px;
+	border: none;
+	background: top left no-repeat url('Images/left.gif');
+	background-position: 50% 50%;
+	cursor: pointer;
+	width: inherit;
+	height: inherit;
 }
-
-#TVGuide .headerrow button.later
-{
-    float: right;
+div.earlier_wrap {
+	position: fixed;
+	margin-left: -55px;
+	margin-top: 20px;
+	width: 40px;
+	height: 50px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 0px;
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(254,254,254,1) 69%, rgba(246,246,246,1) 80%, rgba(238,238,238,1) 86%, rgba(208,208,208,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(69%, rgba(254,254,254,1)), color-stop(80%, rgba(246,246,246,1)), color-stop(86%, rgba(238,238,238,1)), color-stop(100%, rgba(208,208,208,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(254,254,254,1) 69%, rgba(246,246,246,1) 80%, rgba(238,238,238,1) 86%, rgba(208,208,208,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(254,254,254,1) 69%, rgba(246,246,246,1) 80%, rgba(238,238,238,1) 86%, rgba(208,208,208,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(254,254,254,1) 69%, rgba(246,246,246,1) 80%, rgba(238,238,238,1) 86%, rgba(208,208,208,1) 100%); /* IE10+ */
+	background: linear-gradient(left, rgba(255,255,255,1) 0%, rgba(254,254,254,1) 69%, rgba(246,246,246,1) 80%, rgba(238,238,238,1) 86%, rgba(208,208,208,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#d0d0d0', GradientType=1 ); /* IE6-9 */
 }
-
-#TVGuide .channelrow
-{
-    overflow: hidden;
-    clear: both;
-    padding: 2px 5px;
-    height: 50px;
-    margin-bottom: 4px;
-    border: 1px solid #8A8575;
+button.later {
+	margin-right: 10px;
+	border: none;
+	background: top left no-repeat url('Images/right.gif');
+	position: absolute;
+	/*right: 0px;*/
+	background-position: 50% 50%;
+	width: inherit;
+	height: inherit;
+	cursor: pointer;
 }
-
-#TVGuide .channelname
-{
-    height: 35px; /* 50px height of .channelrow minus padding-top */
-    width: 175px;
-    float: left;
-    padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
-    background-size: 50px 50px;
-    background-position: left center;
-    background-repeat: no-repeat;
+div.later_wrap {
+	width: 40px;
+	height: 50px;
+	border-top-right-radius: 8px;
+	border-top-left-radius: 0px;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 0px;
+	margin-left: 945px;
+	margin-top: 20px;
+	position: fixed;
+	background: rgb(208,208,208); /* Old browsers */
+	background: -moz-linear-gradient(left, rgba(208,208,208,1) 0%, rgba(238,238,238,1) 14%, rgba(246,246,246,1) 20%, rgba(254,254,254,1) 31%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(208,208,208,1)), color-stop(14%, rgba(238,238,238,1)), color-stop(20%, rgba(246,246,246,1)), color-stop(31%, rgba(254,254,254,1)), color-stop(100%, rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left, rgba(208,208,208,1) 0%, rgba(238,238,238,1) 14%, rgba(246,246,246,1) 20%, rgba(254,254,254,1) 31%, rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, rgba(208,208,208,1) 0%, rgba(238,238,238,1) 14%, rgba(246,246,246,1) 20%, rgba(254,254,254,1) 31%, rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left, rgba(208,208,208,1) 0%, rgba(238,238,238,1) 14%, rgba(246,246,246,1) 20%, rgba(254,254,254,1) 31%, rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(left, rgba(208,208,208,1) 0%, rgba(238,238,238,1) 14%, rgba(246,246,246,1) 20%, rgba(254,254,254,1) 31%, rgba(255,255,255,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d0d0d0', endColorstr='#ffffff', GradientType=1 ); /* IE6-9 */
 }
-
-#TVGuide .programs 
-{
-    height: 100%;
-    overflow: hidden;
+#TVGuide .otherday {
+	background: rgb(232,232,232); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(232,232,232,1) 0%, rgba(231,230,230,1) 5%, rgba(232,232,232,1) 16%, rgba(249,249,249,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(232,232,232,1)), color-stop(5%, rgba(231,230,230,1)), color-stop(16%, rgba(232,232,232,1)), color-stop(100%, rgba(249,249,249,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(232,232,232,1) 0%, rgba(231,230,230,1) 5%, rgba(232,232,232,1) 16%, rgba(249,249,249,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(232,232,232,1) 0%, rgba(231,230,230,1) 5%, rgba(232,232,232,1) 16%, rgba(249,249,249,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(232,232,232,1) 0%, rgba(231,230,230,1) 5%, rgba(232,232,232,1) 16%, rgba(249,249,249,1) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(232,232,232,1) 0%, rgba(231,230,230,1) 5%, rgba(232,232,232,1) 16%, rgba(249,249,249,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#f9f9f9', GradientType=0 ); /* IE6-9 */
+	border: 1px solid #E8E8E8;
+	color: #686e72;
+	font-weight: bold;
+	margin: 0px;
+	padding: 4px 0px 0px 5px;
+	height: 20px !important;
 }
-
-#TVGuide .programcontainer
-{
-    float: left;
-    height: 100%;
+#TVGuide .today {
+	background: rgb(249,249,249); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(249,249,249,1)), color-stop(84%, rgba(232,232,232,1)), color-stop(95%, rgba(231,230,230,1)), color-stop(100%, rgba(232,232,232,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(249,249,249,1) 0%, rgba(232,232,232,1) 84%, rgba(231,230,230,1) 95%, rgba(232,232,232,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#e8e8e8', GradientType=0 ); /* IE6-9 */
+	border: 1px solid #E8E8E8;
+	color: #000000;
+	text-shadow: #f0f9d3 0 1px 0;
+	font-weight: bold;
+	margin: 0px;
+	padding: 4px 0px 0px 5px;
+	height: 20px !important;
 }
-
-#TVGuide .program 
-{
-    height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
-    margin: 2px 5px 2px 0px;
-    padding: 2px;
-    background-color: #DFE7F5;
-    border: 1px solid #DFE7F5;
-    border-radius: 2px;
-    color: #8A8575;
-    overflow: hidden;
+#TVGuide .channelrow {
+	overflow: hidden;
+	clear: both;
+	padding: 2px 5px;
+	height: 50px;
+	margin: 0px -15px;
+	border-top: thin solid #E8E8E8;
 }
-
-#TVGuide .program.current
-{
-    background-color: #AFCAFA;
+#TVGuide .channelname {
+	height: 35px; /* 50px height of .channelrow minus padding-top */
+	width: 145px;
+	float: left;
+	padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
+	background-size: 50px 50px;
+	background-position: left center;
+	background-repeat: no-repeat;
 }
-
-#TVGuide .program.scheduled
-{
-    background-color: #FA8787;
-    border: 1px solid #E3E3E3;
+#TVGuide .channelname a {
+	color: #043A62;
 }
-
-#TVGuide .program.scheduled a 
-{
-    color: white;
+#TVGuide .programs {
+	height: 100%;
+	overflow: hidden;
 }
-
-#TVGuideNavigation select 
-{
-    width: 250px;
-    margin-right: 10px;
-} 
-
-#TVGuideNavigation input
-{
-    width: 100px;
+#TVGuide .programcontainer {
+	float: left;
+	height: 100%;
+}
+#TVGuide .program {
+	height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
+	margin: 2px 3px 2px 3px;
+	padding: 5px 5px 2px 5px;
+	cursor: pointer;
+	background: #198cbe;
+	background: -moz-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #198cbe), color-stop(100%, #0872a0));
+	background: -webkit-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -o-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: -ms-linear-gradient(top, #198cbe 0%, #0872a0 100%);
+	background: linear-gradient(top, #198cbe 0%, #0872a0 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#198cbe', endColorstr='#0872a0', GradientType=0 );
+	border: none;
+	border-radius: 4px;
+	color: #cee8f4;
+	overflow: hidden;
+}
+#TVGuide .program a {
+	font-size: 12px;
+	color: #cee8f4;
+	text-shadow: #01425e 0 1px 0;
+	font-weight: bold;
+}
+#TVGuide .program.current {
+	background: #d1ee7a;
+	background: -moz-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d1ee7a), color-stop(100%, #b1dd2c));
+	background: -webkit-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -o-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: -ms-linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+	background: linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1ee7a', endColorstr='#b1dd2c', GradientType=0 );
+}
+#TVGuide .program.current a {
+	color: #4b6400;
+	text-shadow: #f0f9d3 0 1px 0;
+	font-weight: bold;
+}
+#TVGuideNavigation select {
+	width: 250px;
+	margin-right: 10px;
+}
+#TVGuideNavigation input {
+	width: 75px;
 }

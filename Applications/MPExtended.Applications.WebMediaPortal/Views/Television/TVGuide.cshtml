@@ -14,7 +14,7 @@
 <div id="TVGuideNavigation">
     @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
     {
-        @Html.DropDownList("group", Model.Groups)
+        @Html.DropDownList("group", Model.Groups, new { @class = "chzn-select" })
         @Html.TextBox("date", Model.GuideStart.ToShortDateString())
         @Html.Hidden("time", Model.GuideStart.ToString("s"))
     }
@@ -23,27 +23,47 @@
 @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
 {
     @Html.Hidden("group", Model.GroupId)
-    <br />
-    <br />
-
+	<div class="earlier_wrap">
+	<button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier"></button>
+	</div>
+	<div class="later_wrap">
+	<button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later"></button>
+	</div>
+	<br />
     <div id="TVGuide">
+	  <div class="headerrow">
+            <div class="headerspacer">
+                &nbsp;
+            </div>
+            <div class="programs">
+                <div class="programcontainer">
+                    <div class="headertime @(Model.GuideStart.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.FirstDayHours * 2 * 93 - 4)px;">
+                        @Model.GuideStart.ToString("dddd MM/dd/yyyy")
+                    </div>
+                </div>
+                @if(Model.HasDateSplit)
+                {
+                    <div class="programcontainer">
+                        <div class="headertime @(Model.GuideEnd.Date == DateTime.Today ? "today" : "otherday") day" style="width: @(Model.SecondDayHours * 2 * 93 - 4)px;">
+                            @Model.GuideEnd.ToString("dddd MM/dd/yyyy")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
         <div class="headerrow">
             <div class="headerspacer">
-                <button name="time" value="@Model.EarlierGuideStart.ToString("s")" class="earlier">@UIStrings.Earlier</button>
+                &nbsp;
             </div>
             <div class="programs">
                 @{  foreach (var marker in Model.TimeMarkers)
                     {
-                        <div class="programcontainer" style="width: 12.5%;">
+                        <div class="programcontainer">
                             <div class="headertime">
-                                @marker.Format
-                                @if (marker.Last)
-                                {
-                                    <button name="time" value="@Model.LaterGuideStart.ToString("s")" class="later">@UIStrings.Later</button>
-                                }
+                                @marker.TimeFormat
                             </div>
-                        </div>
-                    }
+                        </div>        
+                    }   
                 }
             </div>
         </div>
@@ -60,8 +80,11 @@
                                 <div class="programcontainer" style="width: @program.GetCssPercentageWidth();">
                                 @{  if (program.GetPercentageWidth() > 1)
                                     {
-                                        <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")">
-                                            @Html.ActionLink(program.Title, "ProgramDetails", new { programId = program.Id }, new { alt = program.Title })
+                                        <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")"
+                                            onclick="location.href='@program.GetPageLink(Url)';">
+                                            <a href="@program.GetPageLink(Url)" alt="@program.Title" title="@program.Title">
+                                                @program.Title
+                                            </a>
                                         </div>
                                     }
                                 }
