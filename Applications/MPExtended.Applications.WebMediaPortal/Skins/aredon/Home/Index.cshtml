@@ -1,0 +1,49 @@
+﻿<h3>@UIStrings.Welcome</h3>
+
+<style type='text/css'>
+.item
+{
+    margin-top: 15px;
+}
+
+br.noFloat
+{
+    clear: both;
+}
+
+.row
+{
+    width: 222px;
+}
+
+.column
+{
+    float: left;
+    margin-right: 10px;
+   	width: 222px;
+    display: inline;
+}
+
+.img
+{
+    width: 222px;
+}
+</style>
+
+<div>
+    <div class="item">
+        @{if(ViewBag.Availability.Movies) { Html.RenderAction("NewMovies", "Home"); }}
+    </div>
+    <br class="noFloat" />
+    <div class="item">
+        @{if(ViewBag.Availability.TVShows) { Html.RenderAction("NewEpisodes", "Home"); }}
+    </div>
+    <br class="noFloat" />
+    <div class="item">
+        @{if(ViewBag.Availability.TAS) { Html.RenderAction("NewRecordings", "Home"); }}
+    </div>
+    <br class="noFloat" />
+    <div class="item">
+        @{if(ViewBag.Availability.TAS) { Html.RenderAction("CurrentSchedules", "Home"); }}
+    </div>
+</div>

@@ -4,22 +4,28 @@
 }
 
 <style type="text/css">
-    .sidebar
+    .column
     {
-        float: right;
-	    width: 300px;
+        float: left;
+        margin-right: 10px;
     }
-    
-    .sidebar img
+    .img
     {
         max-width: 300px;
+    }
+    .column subcolumn
+    {
+        max-width: 500px;
+        margin-right: 20px;
     }
 </style>
 
 <h2>@Model.Title</h2>
 
-<div class="sidebar">
-    <img src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
+<div class="column">
+    <img class="img" src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
+</div>
+<div class="column">
     <ul>
         <li>@UIStrings.WrittenBy
             <ul>
@@ -48,5 +54,6 @@
         }
     </ul>
 </div>
-
-<p>@Model.Summary</p>
+<div class="subcolumn">
+    @Model.Summary
+</div>

@@ -7,13 +7,12 @@
         @foreach (var episode in Model)
         {
             <div class="column">
-                <div class="thumb_wrap">
-				    <div class="thumb_title">
-                        @Html.ActionLink(episode.Show + " - " + episode.SeasonNumber + "x" + episode.EpisodeNumber, "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
-                    </div>
-                    <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id })">
-                        <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id })" alt="" border="" />
-                    </a>
+                <div class="row">
+                    @Html.ActionLink(episode.Show + " - " + episode.SeasonNumber + "x" + episode.EpisodeNumber, 
+                        "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
+                </div>
+                <div class="row">
+                    <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id })" alt="" />
                 </div>
             </div>
         }
