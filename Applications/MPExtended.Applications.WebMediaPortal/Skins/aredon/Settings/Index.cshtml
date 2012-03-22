@@ -1,0 +1,126 @@
+﻿@model MPExtended.Applications.WebMediaPortal.Models.SettingsViewModel
+@{
+    ViewBag.Title = "Settings";
+}
+
+<h2>Settings</h2>
+@Html.ActionLink("Configure service URLs", "Services")
+<br /><br />
+
+@using (Html.BeginForm())
+{
+    <div>
+    <table class="webmp">
+         <tr>
+            <td>
+                @Html.LabelFor(x => x.Skin)
+            </td>
+            <td>
+            
+                @Html.DropDownListFor(x => x.Skin, new { @class = "chzn-select" })
+                @Html.ValidationMessageFor(x => x.Skin)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.StreamType)
+            </td>
+            <td>
+                @Html.EnumDropDownListFor(x => x.StreamType, new { @class = "chzn-select" })
+                @Html.ValidationMessageFor(x => x.StreamType)
+            </td>
+        </tr>
+		<tr>
+			<td>
+                @Html.LabelFor(x => x.EnableDeinterlace)
+            </td>
+            <td>
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "true") Yes
+                &nbsp;&nbsp;&nbsp;&nbsp; 
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "false") No
+                @Html.ValidationMessageFor(x => x.EnableDeinterlace)
+            </td>
+        </tr>
+        @{  if(Model.ShowTASConfiguration)
+            {
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.SelectedGroup)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedGroup, new { @class = "chzn-select" })
+                @Html.ValidationMessageFor(x => x.SelectedGroup)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.SelectedTVProfile)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.SelectedTVProfile, new { @class = "chzn-select" })
+                @Html.ValidationMessageFor(x => x.SelectedTVProfile)
+            </td>
+        </tr>
+            }
+        }
+        @{  if (Model.ShowMASConfiguration)
+            {
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.SelectedMediaProfile)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.SelectedMediaProfile, new { @class = "chzn-select" })
+                    @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.SelectedAudioProfile)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.SelectedAudioProfile, new { @class = "chzn-select" })
+                    @Html.ValidationMessageFor(x => x.SelectedAudioProfile)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.TVShowProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.TVShowProvider, new { @class = "chzn-select" })
+                    @Html.ValidationMessageFor(x => x.TVShowProvider)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.MovieProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.MovieProvider, new { @class = "chzn-select" })
+                    @Html.ValidationMessageFor(x => x.MovieProvider)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.MusicProvider)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.MusicProvider, new { @class = "chzn-select" })
+                    @Html.ValidationMessageFor(x => x.MusicProvider)
+                </td>
+            </tr>
+            }
+        }
+    </table>
+    <br />
+    <input type="submit" value="Save" />
+    </div>
+}
+
+<br />
+<h2>About</h2>
+This is WebMediaPortal <strong>@ViewBag.Version</strong>.

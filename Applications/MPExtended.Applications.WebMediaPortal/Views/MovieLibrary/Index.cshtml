@@ -3,25 +3,9 @@
 	ViewBag.Title = UIStrings.Movies;
 }
 
-<style type="text/css">
-    .movieList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .movieList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-        
-    }
-</style>
-
 <h2>@UIStrings.YourMovies</h2>
 
-<ul class="movieList">
+<ul class="list">
     @foreach (var movie in Model)
     {
         <li>@Html.ActionLink(movie.Title, UIStrings.Details, new { movie = movie.Id })</li>

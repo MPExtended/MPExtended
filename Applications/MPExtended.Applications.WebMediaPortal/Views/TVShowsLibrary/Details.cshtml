@@ -3,29 +3,12 @@
     ViewBag.Title = @Model.Title;
 }
 
-<style type="text/css">
-    .column
-    {
-        float: left;
-        margin-right: 10px;
-    }
-    .img
-    {
-        max-width: 300px;
-    }
-    .column subcolumn
-    {
-        max-width: 500px;
-        margin-right: 20px;
-    }
-</style>
-
 <h2>@Model.Title</h2>
 
-<div class="column">
-    <img class="img" src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
+<div class="imageColumn">
+    <img src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
 </div>
-<div class="column">
+<div class="dataColumn">
     <ul>
         <li>@UIStrings.WrittenBy
             <ul>
@@ -54,6 +37,7 @@
         }
     </ul>
 </div>
-<div class="subcolumn">
+
+<div class="textColumn">
     @Model.Summary
 </div>

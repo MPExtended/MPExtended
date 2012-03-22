@@ -3,24 +3,9 @@
     ViewBag.Title = UIStrings.Recordings;
 }
 
-<style type="text/css">
-    .recordingList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .recordingList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-        
-    }
-</style>
 <h2>@UIStrings.YourRecordings</h2>
 
-<ul class="recordingList">
+<ul class="list">
     @foreach (var recording in Model)
     {
         <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", new { id = recording.Id })</li>

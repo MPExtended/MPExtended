@@ -5,12 +5,9 @@
 
 <h2>@UIStrings.YourTVShows</h2>
 
-<div class="column">
 <ul>
     @foreach (var show in Model)
     {
         <li>@Html.ActionLink(show.Title, "Seasons", new { show = show.Id })</li>       
     }
 </ul>
-</div>
-
