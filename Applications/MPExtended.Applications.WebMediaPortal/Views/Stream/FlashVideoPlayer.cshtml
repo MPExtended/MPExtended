@@ -1,33 +1,10 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.PlayerViewModel
-<script src="@Url.Content("~/Scripts/dragdealer.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Content/jwplayer/jwplayer.js")" type="text/javascript"></script>
-<style type="text/css">
-    .dragdealer
-    {
-        position: relative;
-        height: 15px;
-        width: 570px;
-        background: #EEE;
-    }
-    .dragdealer .handle
-    {
-        position: absolute;
-        cursor: pointer;
-    }
-    .dragdealer .red-bar
-    {
-        width: 10px;
-        height: 15px;
-        background: #CC0000;
-        color: #FFF;
-        line-height: 15px;
-        text-align: center;
-    }
-    .dragdealer .disabled
-    {
-        background: #898989;
-    }
-</style>
+           
+@section HeadHtml {
+    <script src="@Url.Content("~/Scripts/dragdealer.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/jwplayer/jwplayer.js")" type="text/javascript"></script>
+    <link rel="Stylesheet" type='text/css" href="@Url.ViewContent("Stream/FlashVideoPlayer.css")" />
+}
 
 <div id="mediaspace">
     @Html.Raw(UIStrings.InstallFlashPlayerToUseThisPlayer)

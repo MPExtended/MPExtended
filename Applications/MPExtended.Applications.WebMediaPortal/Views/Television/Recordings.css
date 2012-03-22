@@ -1,0 +1,13 @@
+﻿.recordingList
+{
+    overflow: hidden;
+    min-width: 1000px;
+}
+    
+.recordingList li
+{
+    width: 250px;
+    float: left;
+    margin: 15px;
+        
+}

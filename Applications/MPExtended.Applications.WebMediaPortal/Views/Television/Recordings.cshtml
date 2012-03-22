@@ -3,21 +3,11 @@
     ViewBag.Title = UIStrings.Recordings;
 }
 
-<style type="text/css">
-    .recordingList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .recordingList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-        
-    }
-</style>
+@section HeadHtml {
+    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("Television/Recordings.css")" />
+}
+
+
 <h2>@UIStrings.YourRecordings</h2>
 
 <ul class="recordingList">

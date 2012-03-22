@@ -1,0 +1,33 @@
+﻿/* Details */
+.detailsColumn
+{
+    float: left;
+    margin-right: 10px;
+}
+
+.detailsColumn .img
+{
+    max-width: 300px;
+}
+
+/* Episodes */
+.episodeColumn
+{
+    float: left;
+    margin-right: 10px;
+}
+.episodeColumn .img
+{
+    max-width: 300px;
+}
+    
+/* Seasons */
+.seasonColumn
+{
+    float: left;
+    margin-right: 100px;
+}
+.seasonColumn .img
+{
+    max-width: 700px;
+}

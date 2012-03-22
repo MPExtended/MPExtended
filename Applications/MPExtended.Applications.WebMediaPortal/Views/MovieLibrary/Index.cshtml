@@ -3,21 +3,9 @@
 	ViewBag.Title = UIStrings.Movies;
 }
 
-<style type="text/css">
-    .movieList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .movieList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-        
-    }
-</style>
+@section HeadHtml {
+    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("MovieLibrary/Movies.css")" />
+}
 
 <h2>@UIStrings.YourMovies</h2>
 

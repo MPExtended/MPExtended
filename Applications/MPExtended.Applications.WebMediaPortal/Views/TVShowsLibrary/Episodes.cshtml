@@ -3,24 +3,17 @@
 	ViewBag.Title = String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber);
 }
 
-<style type="text/css">
-    .column
-    {
-        float: left;
-        margin-right: 10px;
-    }
-    .img
-    {
-        max-width: 300px;
-    }
-</style>
+@section HeadHtml {
+    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("TVShowsLibrary/TVShows.css")" />
+}
+
 <h2>@String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber)</h2>
 
-<div class="column">
+<div class="episodeColumn">
     <img class="img" src="@Url.Action("Image", new { season = @Model.Season.Id })" alt="" />
 </div>
 
-<div class="column">
+<div class="episodeColumn">
     <ul>
         @foreach (var episode in Model.Episodes)
         {

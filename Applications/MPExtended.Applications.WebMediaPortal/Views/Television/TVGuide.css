@@ -1,0 +1,101 @@
+﻿#TVGuide .headerrow 
+{
+    padding: 2px 5px;
+    height: 25px;
+}
+
+#TVGuide .headerspacer
+{
+    width: 230px;    
+    float: left;
+    text-align: right;
+}
+
+#TVGuide .headertime
+{
+    border-left: 1px solid #8A8575;
+    padding-left: 5px;
+    height: 100%;
+}
+
+#TVGuide .headerrow button.earlier
+{
+    margin-right: 10px;
+}
+
+#TVGuide .headerrow button.later
+{
+    float: right;
+}
+
+#TVGuide .channelrow
+{
+    overflow: hidden;
+    clear: both;
+    padding: 2px 5px;
+    height: 50px;
+    margin-bottom: 4px;
+    border: 1px solid #8A8575;
+}
+
+#TVGuide .channelname
+{
+    height: 35px; /* 50px height of .channelrow minus padding-top */
+    width: 175px;
+    float: left;
+    padding: 15px 0 0 55px; /* 15px is to have text in center and 55px is size of background image */
+    background-size: 50px 50px;
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+#TVGuide .programs 
+{
+    height: 100%;
+    overflow: hidden;
+}
+
+#TVGuide .programcontainer
+{
+    float: left;
+    height: 100%;
+}
+
+#TVGuide .program 
+{
+    height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
+    margin: 2px 5px 2px 0px;
+    padding: 2px;
+    background-color: #DFE7F5;
+    border: 1px solid #DFE7F5;
+    border-radius: 2px;
+    color: #8A8575;
+    overflow: hidden;
+}
+
+#TVGuide .program.current
+{
+    background-color: #AFCAFA;
+}
+
+#TVGuide .program.scheduled
+{
+    background-color: #FA8787;
+    border: 1px solid #E3E3E3;
+}
+
+#TVGuide .program.scheduled a 
+{
+    color: white;
+}
+
+#TVGuideNavigation select 
+{
+    width: 250px;
+    margin-right: 10px;
+} 
+
+#TVGuideNavigation input
+{
+    width: 100px;
+}

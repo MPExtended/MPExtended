@@ -3,22 +3,9 @@
     ViewBag.Title = Model.Title;
 }
 
-<style type="text/css">
-    .column
-    {
-        float: left;
-        margin-right: 10px;
-    }
-    .img
-    {
-        max-width: 300px;
-    }
-    .column subcolumn
-    {
-        max-width: 500px;
-        margin-right: 20px;
-    }
-</style>
+@section HeadHtml {
+    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("MovieLibrary/Movies.css")" />
+}
 
 <h2>@Model.Title</h2>
 

@@ -1,0 +1,12 @@
+﻿.artistList
+{
+    overflow: hidden;
+    min-width: 1000px;
+}
+    
+.artistList li
+{
+    width: 250px;
+    float: left;
+    margin: 15px;
+}

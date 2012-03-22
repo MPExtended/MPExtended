@@ -3,29 +3,16 @@
     ViewBag.Title = @Model.Title;
 }
 
-<style type="text/css">
-    .column
-    {
-        float: left;
-        margin-right: 10px;
-    }
-    .img
-    {
-        max-width: 300px;
-    }
-    .column subcolumn
-    {
-        max-width: 500px;
-        margin-right: 20px;
-    }
-</style>
+@section HeadHtml {
+    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("TVShowsLibrary/TVShows.css")" />
+}
 
 <h2>@Model.Title</h2>
 
-<div class="column">
+<div class="detailsColumn">
     <img class="img" src="@Url.Action("EpisodeImage", new { episode = @Model.Id })" alt="" />
 </div>
-<div class="column">
+<div class="detailsColumn">
     <ul>
         <li>@UIStrings.WrittenBy
             <ul>
@@ -54,6 +41,7 @@
         }
     </ul>
 </div>
-<div class="subcolumn">
+
+<p>
     @Model.Summary
-</div>
+</p>
