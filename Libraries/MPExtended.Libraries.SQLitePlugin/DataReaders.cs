@@ -35,7 +35,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 if (val == null)
                     return 0;
                 string sval = val.ToString();
-                if (String.IsNullOrEmpty(sval))
+                if (String.IsNullOrWhiteSpace(sval))
                     return 0;
 
                 return Int32.Parse(sval, System.Globalization.CultureInfo.InvariantCulture);

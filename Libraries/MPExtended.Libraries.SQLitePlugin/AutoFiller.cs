@@ -90,9 +90,16 @@ namespace MPExtended.Libraries.SQLitePlugin
                 // set value
                 if (Attribute.IsDefined(datareader, typeof(MergeListReaderAttribute)))
                 {
-                    foreach (object row in (IEnumerable)res)
+                    if (res != null && res is IEnumerable)
                     {
-                        (autofillProperties[item.Key.PropertyName].GetValue(obj, null) as IList).Add(row);
+                        foreach (object row in (IEnumerable)res)
+                        {
+                            (autofillProperties[item.Key.PropertyName].GetValue(obj, null) as IList).Add(row);
+                        }
+                    }
+                    else if (res != null)
+                    {
+                        (autofillProperties[item.Key.PropertyName].GetValue(obj, null) as IList).Add(res);
                     }
                 }
                 else
