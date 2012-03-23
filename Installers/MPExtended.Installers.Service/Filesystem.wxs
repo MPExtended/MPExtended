@@ -73,6 +73,8 @@
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.pdb" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
