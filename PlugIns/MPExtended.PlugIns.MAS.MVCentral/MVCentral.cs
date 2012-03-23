@@ -31,7 +31,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
     [Export(typeof(IMusicLibrary))]
     [ExportMetadata("Name", "mvCentral")]
     [ExportMetadata("Id", 12)]
-    public class MVCentral : Database, IMusicLibrary
+    public partial class MVCentral : Database, IMusicLibrary
     {
         public bool Supported { get; private set; }
 
@@ -229,11 +229,6 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         public Stream GetFile(string path)
         {
             return new FileStream(path, FileMode.Open, FileAccess.Read);
-        }
-
-        public IEnumerable<WebSearchResult> Search(string text)
-        {
-            return new List<WebSearchResult>();
         }
 
         public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)

@@ -47,6 +47,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Search.cs" />
     <Compile Include="MVCentral.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
