@@ -29,7 +29,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 namespace MPExtended.PlugIns.MAS.MVCentral
 {
     [Export(typeof(IMusicLibrary))]
-    [ExportMetadata("Name", "MP MyMusic")]
+    [ExportMetadata("Name", "mvCentral")]
     [ExportMetadata("Id", 12)]
     public class MVCentral : Database, IMusicLibrary
     {
@@ -87,30 +87,29 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
             // Unavailable fields: TrackNumber, Year, Genres, 
-            string sql = "SELECT t.id, t.date_added, t.track, t.rating, a.id, a.album, p.id, p.artist, " +
+            string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, a.id AS album_id, a.album, p.id AS artist_id, p.artist, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " + 
                          "FROM track_info t " +
-                         "INNER JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
-                         "INNER JOIN local_media l ON l.id = lt.local_media_id " +
-                         "INNER JOIN album_info__track_info at ON at.track_info_id = t.id " +
-                         "INNER JOIN album_info a ON at.album_info_id = a.id " +
-                         "INNER JOIN artist_info__track_info pt ON pt.track_info_id = t.id " + 
-                         "INNER JOIN artist_info p ON pt.artist_info_id = p.id " + 
+                         "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
+                         "LEFT JOIN local_media l ON l.id = lt.local_media_id " +
+                         "LEFT JOIN album_info__track_info at ON at.track_info_id = t.id " +
+                         "LEFT JOIN album_info a ON at.album_info_id = a.id " +
+                         "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = t.id " +
+                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " + 
                          "WHERE %where " + 
                          "GROUP BY t.id, t.date_added, t.track, t.rating, a.id, a.album, p.id, p.artist ";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("t", "id", "Id", DataReaders.ReadString),
+                new SQLFieldMapping("", "track_id", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("", "path", "Path", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "date_added", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("p", "id", "ArtistId", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("", "artist_id", "ArtistId", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("p", "artist", "Artist", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("a", "id", "AlbumId", DataReaders.ReadString),
+                new SQLFieldMapping("", "album_id", "AlbumId", DataReaders.ReadString),
                 new SQLFieldMapping("a", "album", "Album", DataReaders.ReadString),
                 new SQLFieldMapping("t", "track", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("l", "duration", "Duration", PlayTimeReader),
                 new SQLFieldMapping("t", "rating", "Rating", DataReaders.ReadFloat),
-                // TODO: Artists
             }, delegate(T item)
             {
                 if (item is WebMusicTrackDetailed)
@@ -124,7 +123,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
 
         private object PlayTimeReader(SQLiteDataReader reader, int idx)
         {
-            return (int)DataReaders.ReadInt32(reader, idx) / 1000;
+            return reader.ReadInt32(idx) / 1000;
         }
         #endregion
 
@@ -148,16 +147,16 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                             "GROUP_CONCAT(p.id, '|') AS artist_id, GROUP_CONCAT(p.artist, '|') AS artist_name " +
                          "FROM album_info a " +
                          "LEFT JOIN album_info__track_info at ON at.album_info_id = a.id " +
-                         "INNER JOIN artist_info__track_info pt ON pt.track_info_id = at.track_info_id " +
-                         "INNER JOIN artist_info p ON pt.artist_info_id = p.id " +
-                         "WHERE %where " +
-                         "GROUP BY a.id, a.album, a.date_added, a.yearreleased, a.rating, a.artfullpath ";
+                         "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = at.track_info_id " +
+                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
+                         "GROUP BY a.id, a.album, a.date_added, a.yearreleased, a.rating, a.artfullpath " +
+                         "HAVING COUNT(p.id) > 0 AND %where "; // We abuse SQL a bit here due to the inavailability of a album_info__artist_info table
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("a", "id", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("a", "album", "Title", DataReaders.ReadString),
-                new SQLFieldMapping("", "albumartist_id", "AlbumArtistId", DataReaders.ReadString),
-                new SQLFieldMapping("", "albumartist_name", "AlbumArtist", DataReaders.ReadString),
+                new SQLFieldMapping("", "albumartist_id", "AlbumArtistId", AlbumArtistReader),
+                new SQLFieldMapping("", "albumartist_name", "AlbumArtist", AlbumArtistReader),
                 new SQLFieldMapping("", "artist_id", "ArtistsId", DataReaders.ReadPipeList),
                 new SQLFieldMapping("", "artist_name", "Artists", DataReaders.ReadPipeList),
                 new SQLFieldMapping("a", "date_added", "DateAdded", DataReaders.ReadDateTime),
@@ -165,6 +164,12 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("a", "rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("a", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover),
             });
+        }
+
+        [AllowSQLCompare("('|' || %field || '|') LIKE '%|' || %prepared || '|%'")]
+        private object AlbumArtistReader(SQLiteDataReader reader, int idx)
+        {
+            return ((List<string>)reader.ReadPipeList(idx)).FirstOrDefault();
         }
         #endregion
 
