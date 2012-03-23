@@ -104,6 +104,10 @@
     <Compile Include="Models\TVServerStatusViewModels.cs" />
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
+    <Compile Include="Mvc\AssetManager.cs" />
+    <Compile Include="Mvc\HtmlHelperExtensionMethods.cs" />
+    <Compile Include="Mvc\JQueryDocumentReadyScript.cs" />
+    <Compile Include="Mvc\JQueryHelper.cs" />
     <Compile Include="Mvc\LocalizedDescriptionAttribute.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Models\SearchResultsViewModel.cs" />
@@ -134,6 +138,15 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\Images\bg.png" />
+    <Content Include="Content\Images\calendar.gif" />
+    <Content Include="Content\Images\header_gradient.png" />
+    <Content Include="Content\Images\left.gif" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\nav_gradient.png" />
+    <Content Include="Content\Images\right.gif" />
+    <Content Include="Content\Images\today_gradient.png" />
+    <Content Include="Content\Images\tvguide_button_bg.png" />
     <Content Include="Skins\aredon\Home\Index.css" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -380,6 +393,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skins\aredon\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

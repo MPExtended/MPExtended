@@ -1,0 +1,4 @@
+﻿@model System.DateTime?
+@Html.TextBox("", Model.HasValue ? Model.Value.ToShortDateString() + " " + Model.Value.ToShortTimeString() : String.Empty, new { @class = "dateTimeInput" })
+@Html.jQuery().EnableUI()
+@Html.jQuery().AddDateTimePicker(".dateTimeInput")

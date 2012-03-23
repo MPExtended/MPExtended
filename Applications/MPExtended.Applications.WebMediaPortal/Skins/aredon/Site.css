@@ -525,3 +525,10 @@ select
     text-shadow: #f0f9d3 0 1px 0;
     font-weight: bold;
 }
+
+.ui-datepicker-trigger 
+{
+    margin-left: 3px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+}

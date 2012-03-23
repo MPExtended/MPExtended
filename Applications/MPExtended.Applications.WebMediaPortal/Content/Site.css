@@ -329,3 +329,11 @@ input[type=text], input[type=password], select
 {
     width: 6em;
 }
+
+/******************** jQuery UI styling ************************/
+.ui-datepicker-trigger 
+{
+    margin-left: 3px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+}
