@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -81,25 +82,49 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
                 foreach (XElement plugin in file.Element("pluginConfiguration").Elements("plugin"))
                 {
-                    PluginConfiguration[plugin.Attribute("name").Value] = new List<PluginConfigItem>();
-                    foreach(var x in plugin.Elements())
+                    PluginConfiguration[plugin.Attribute("name").Value] = ReadPluginConfig(plugin);
+                }
+
+                // Add configuration for new plugins, if there is one available
+                if (File.GetLastWriteTime(defaultPath) > File.GetLastWriteTime(path))
+                {
+                    var defaultPlugins = XElement.Load(defaultPath)
+                        .Element("pluginConfiguration")
+                        .Elements("plugin");
+                    foreach (var plugin in defaultPlugins)
                     {
-                        ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
-                        string value = type == ConfigType.File || type == ConfigType.Folder ? Configuration.PerformFolderSubstitution(x.Value) : x.Value;
-                        PluginConfiguration[plugin.Attribute("name").Value].Add(new PluginConfigItem()
+                        var name = plugin.Attribute("name").Value;
+                        if (!PluginConfiguration.ContainsKey(name))
                         {
-                            DisplayName = x.Attribute("displayname").Value,
-                            Name = x.Name.LocalName,
-                            Type = type,
-                            Value = value
-                        });
+                            PluginConfiguration[name] = ReadPluginConfig(plugin);
+                        }
                     }
+
+                    Save();
                 }
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to load MediaAccess configuration", ex);
             }
+        }
+
+        private List<PluginConfigItem> ReadPluginConfig(XElement plugin)
+        {
+            var list = new List<PluginConfigItem>();
+            foreach (var x in plugin.Elements())
+            {
+                ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
+                string value = type == ConfigType.File || type == ConfigType.Folder ? Configuration.PerformFolderSubstitution(x.Value) : x.Value;
+                list.Add(new PluginConfigItem()
+                {
+                    DisplayName = x.Attribute("displayname").Value,
+                    Name = x.Name.LocalName,
+                    Type = type,
+                    Value = value
+                });
+            }
+            return list;
         }
 
         public bool Save()
