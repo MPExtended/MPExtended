@@ -29,9 +29,12 @@
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
     <!-- Disallow downgrades and support upgrades -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation." AllowSameVersionUpgrades="yes" />
+    <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
     <Upgrade Id="1911d293-8311-457a-bd09-296fec9bc368">
-      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" 
+                      IncludeMinimum="yes" Minimum="0.0.0.0" 
+                      IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
     </Upgrade>
     
     <!-- The icon -->
