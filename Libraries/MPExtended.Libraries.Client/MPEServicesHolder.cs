@@ -23,6 +23,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -302,7 +303,8 @@ namespace MPExtended.Libraries.Client
 
             // create channel factory
             ChannelFactory<T> factory = null;
-            if (addr.IsLoopback && addr.Port == 4322)
+            bool isLocal = addr.IsLoopback || NetworkInformation.GetIPAddresses().Contains(addr.Host);
+            if (isLocal && addr.Port == 4322)
             {
                 NetNamedPipeBinding binding = new NetNamedPipeBinding()
                 {
