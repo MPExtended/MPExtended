@@ -5,6 +5,7 @@
 *.log
 [Tt]humbs.db
 *.resharper
+_ReSharper*
 *~
 *.vssscc
 [Dd]ebug
