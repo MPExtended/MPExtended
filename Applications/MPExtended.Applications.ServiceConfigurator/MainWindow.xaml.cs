@@ -117,6 +117,12 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
+            // deactive the current tab too, as this is a close action of the user and should have the same effect as selecting another tab
+            if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+            {
+                (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+            }
+
             this.Hide();
 
             // restart the service only when it is already running
