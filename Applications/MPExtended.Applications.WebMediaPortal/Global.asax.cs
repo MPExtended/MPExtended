@@ -65,6 +65,9 @@ namespace MPExtended.Applications.WebMediaPortal
             // set view engine
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new SkinnableViewEngine(Settings.ActiveSettings.Skin));
+
+            // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
+            Configuration.EnableChangeWatching();
         }
     }
 }
