@@ -1083,6 +1083,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter both a username and password for this user. .
+        /// </summary>
+        public static string UserMustHaveNameAndPassword {
+            get {
+                return ResourceManager.GetString("UserMustHaveNameAndPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         public static string Username {

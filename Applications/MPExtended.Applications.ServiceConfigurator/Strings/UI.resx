@@ -470,4 +470,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="TabActivity" xml:space="preserve">
     <value>Activity</value>
   </data>
+  <data name="UserMustHaveNameAndPassword" xml:space="preserve">
+    <value>Please enter both a username and password for this user. </value>
+  </data>
 </root>
