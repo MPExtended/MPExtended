@@ -31,6 +31,7 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.TVAccessService.Interfaces;
 using TvControl;
 using TvDatabase;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
@@ -129,6 +130,40 @@ namespace MPExtended.Services.TVAccessService
             setting.Value = value;
             setting.Persist();
             return true;
+        }
+
+
+        /// <summary>
+        /// Return external media info for recording
+        /// </summary>
+        /// <param name="type">Type of item</param>
+        /// <param name="id">Id of recording</param>
+        /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
+        public SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
+        {
+            return GetExternalMediaInfoForMpTvServer(type, id);
+        }
+
+        private SerializableDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
+        {
+            if (type == WebTvMediaType.Recording)
+            {
+                return new SerializableDictionary<string>()
+                {
+                    { "Type", "mp recording" },
+                    { "Id", id }
+                };
+            }
+            else if (type == WebTvMediaType.TV)
+            {
+                return new SerializableDictionary<string>()
+                {
+                    { "Type", "mp tvchannel" },
+                    { "Id", id }
+                };
+            }
+
+            return null;
         }
 
         public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
@@ -259,7 +294,7 @@ namespace MPExtended.Services.TVAccessService
                 .Where(users => users != null)
                 .SelectMany(user => user)
                 .Select(user => new VirtualCard(user, RemoteControl.HostName))
-                .Where(tvCard => tvCard.IsTimeShifting || tvCard.IsRecording);
+                .Where(tvCard => tvCard.IsTimeShifting || !tvCard.IsRecording);
         }
 
         public IList<WebRtspClient> GetStreamingClients()
@@ -269,10 +304,8 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation()
         {
-            return GetCards()
-                .Select(x => x.RecordingFolder).Distinct()
+            return GetCards().Select(x => x.RecordingFolder).Distinct()
                 .Select(x => DiskSpaceInformation.GetSpaceInformation(x))
-                .GroupBy(x => x.Disk, (key, list) => list.First())
                 .ToList();
         }
 

@@ -6,6 +6,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
+using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
@@ -28,6 +29,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResult WriteSettingToDatabase(string tagName, string value);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
