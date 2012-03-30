@@ -7,16 +7,6 @@ using System.Text;
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
     [DataContract]
-    public enum WebTvMediaType
-    {
-        // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType, except for TV and Recording values
-        [EnumMember]
-        TV = -2,
-        [EnumMember]
-        Recording = -1
-    }
-
-    [DataContract]
     public enum ChannelState
     {
         [EnumMember]
