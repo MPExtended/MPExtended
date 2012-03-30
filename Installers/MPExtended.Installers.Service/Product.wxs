@@ -51,8 +51,8 @@
     <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
     
     <!-- WifiRemote installer -->
-    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.5.0.mpe1" />
-    <Property Id="WifiRemotePackagedVersion" Value="0.5.0.0" />
+    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.6.1.mpe1" />
+    <Property Id="WifiRemotePackagedVersion" Value="0.6.1.0" />
     <CustomAction Id="WifiRemoteInstaller" BinaryKey="CustomActionLibrary" DllEntry="InstallWifiRemote" Execute="immediate" Return="check" />
     <InstallExecuteSequence>
       <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
