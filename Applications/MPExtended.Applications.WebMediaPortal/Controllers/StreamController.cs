@@ -79,7 +79,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
-            queryString["clientDescription"] = "WebMediaPortal download";
+            queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
             string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
@@ -113,7 +113,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
-                Log.Warn("User {0} requested a stream but hasn't opened a player page - denying access to stream", Request.UserHostAddress);
+                Log.Warn("User {0} (host {1}) requested a stream but hasn't opened a player page - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
 
@@ -132,10 +132,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // Start the stream
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}",
+            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
                 identifier, type, itemId, transcoder, starttime, continuationId);
+            string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
             if (!WCFClient.CallWithHeader(new WCFHeader<string>("forwardedFor", HttpContext.Request.UserHostAddress), GetStreamControl(type),
-                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT); }))
+                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT); }))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
