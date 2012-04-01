@@ -154,7 +154,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "FROM season s " +
                         "INNER JOIN online_series o ON s.SeriesID = o.ID " +
                         "INNER JOIN local_series l ON s.SeriesID = l.ID " +
-                        "WHERE (o.Pretty_Name = @show OR l.Parsed_Name = @show) AND s.SeasonIndex = @season " +
+                        "WHERE s.HasLocalFiles = 1 AND (o.Pretty_Name = @show OR l.Parsed_Name = @show) AND s.SeasonIndex = @season " +
                         "GROUP BY s.ID, s.SeasonIndex, s.SeriesID, o.Pretty_Name ";
                     results = ReadList<WebSearchResult>(sql, delegate(SQLiteDataReader reader)
                     {

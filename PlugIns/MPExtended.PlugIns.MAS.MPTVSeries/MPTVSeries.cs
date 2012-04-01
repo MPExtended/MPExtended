@@ -172,13 +172,21 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private LazyQuery<T> GetAllSeasons<T>() where T : WebTVSeasonBasic, new()
         {
             // preload watched count
-            string csql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes GROUP BY SeriesID, SeasonIndex";
+            string csql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
+                          "FROM online_episodes e " +
+                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                          "WHERE e.Hidden = 0 " + 
+                          "GROUP BY e.SeriesID, e.SeasonIndex ";
             var episodeCountTable = ReadList<KeyValuePair<string, int>>(csql, delegate(SQLiteDataReader reader)
             {
                 return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
             }).ToDictionary(x => x.Key, x => x.Value);
 
-            string wsql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes WHERE Watched = 0 GROUP BY SeriesID, SeasonIndex";
+            string wsql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
+                          "FROM online_episodes e " +
+                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                          "WHERE e.Hidden = 0 AND e.Watched = 0 " +
+                          "GROUP BY e.SeriesID, e.SeasonIndex ";
             var episodeUnwatchedCountTable = ReadList<KeyValuePair<string, int>>(wsql, delegate(SQLiteDataReader reader)
             {
                 return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
@@ -190,7 +198,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "s.BannerFileNames " +
                     "FROM season s " +
                     "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
-                    "WHERE %where " +
+                    "WHERE HasLocalFiles = 1 AND %where " +
                     "GROUP BY s.ID, s.SeriesID, s.SeasonIndex " + 
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
