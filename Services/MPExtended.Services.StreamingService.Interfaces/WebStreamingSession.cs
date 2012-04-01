@@ -29,6 +29,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
         /// </summary>
         public int PlayerPosition { get; set; }
 
+        /// <summary>
+        /// Percentage of the file the user is at
+        /// </summary>
+        public int PercentageProgress { get; set; }
+
         public WebTranscodingInfo TranscodingInfo { get; set; }
     }
 }

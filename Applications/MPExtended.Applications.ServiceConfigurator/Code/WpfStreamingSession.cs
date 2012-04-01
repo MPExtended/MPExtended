@@ -58,7 +58,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             {
                 TimeSpan span = TimeSpan.FromMilliseconds(newSession.PlayerPosition);
                 span = span.Subtract(TimeSpan.FromMilliseconds(span.Milliseconds)); // don't show the damn milliseconds
-                String progress = span.ToString("g");
+                String progress = span.ToString("g") + " (" + newSession.PercentageProgress + "%)";
                 if (this.Progress == null || !this.Progress.Equals(progress))
                 {
                     this.Progress = progress;

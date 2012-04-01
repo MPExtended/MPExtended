@@ -352,6 +352,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                     StartPosition = s.Context.StartPosition,
                     PlayerPosition = s.Context.GetPlayerPosition(),
+                    PercentageProgress = (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
                     TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
                 }).ToList();
             }

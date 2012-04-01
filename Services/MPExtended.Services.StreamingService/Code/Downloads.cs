@@ -38,6 +38,7 @@ namespace MPExtended.Services.StreamingService.Code
             public MediaSource Source { get; set; }
             public DateTime StartTime { get; set; }
             public ReadTrackingStreamWrapper Stream { get; set; }
+            public WebMediaInfo MediaInfo { get; set; }
         }
 
         private List<DownloadContext> runningDownloads = new List<DownloadContext>();
@@ -57,7 +58,8 @@ namespace MPExtended.Services.StreamingService.Code
                 ClientDescription = clientDescription, 
                 Source = source,
                 StartTime = DateTime.Now,
-                Stream = new ReadTrackingStreamWrapper(source.Retrieve())
+                Stream = new ReadTrackingStreamWrapper(source.Retrieve()),
+                MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(source) // for playerposition view
             };
 
             // see comment in Streaming.cs:151
@@ -89,19 +91,23 @@ namespace MPExtended.Services.StreamingService.Code
 
             return runningDownloads
                 .Where(context => context.Stream.TimeSinceLastRead < IDLE_TIMEOUT)
-                .Select(context => new WebStreamingSession()
-                {
-                    ClientDescription = String.IsNullOrEmpty(context.ClientDescription) ? "Download" : context.ClientDescription,
-                    ClientIPAddress = context.ClientIP,
-                    DisplayName = context.Source.GetMediaDisplayName(),
-                    Identifier = String.Empty,
-                    PlayerPosition = 0,
-                    Profile = "Download",
-                    SourceId = context.Source.Id,
-                    SourceType = context.Source.MediaType,
-                    StartPosition = 0,
-                    StartTime = context.StartTime,
-                    TranscodingInfo = null
+                .Select(context => {
+                    double percentage = 1.0 * context.Stream.ReadBytes / context.Source.GetFileInfo().Size;
+                    return new WebStreamingSession()
+                    {
+                        ClientDescription = String.IsNullOrEmpty(context.ClientDescription) ? "Download" : context.ClientDescription,
+                        ClientIPAddress = context.ClientIP,
+                        DisplayName = context.Source.GetMediaDisplayName(),
+                        Identifier = String.Empty,
+                        PercentageProgress = (int)Math.Round(percentage * 100.0),
+                        PlayerPosition = (int)Math.Round(percentage * context.MediaInfo.Duration),
+                        Profile = "Download",
+                        SourceId = context.Source.Id,
+                        SourceType = context.Source.MediaType,
+                        StartPosition = 0,
+                        StartTime = context.StartTime,
+                        TranscodingInfo = null
+                    };
                 });
         }
     }
