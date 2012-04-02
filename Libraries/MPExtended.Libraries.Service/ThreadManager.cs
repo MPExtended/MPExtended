@@ -38,16 +38,12 @@ namespace MPExtended.Libraries.Service
 
         private static List<Thread> threads = new List<Thread>();
 
-        public static void Add(Thread t)
-        {
-            threads.Add(t);
-        }
-
         public static void Remove(Thread t)
         {
             threads.Remove(t);
         }
 
+        [Obsolete("Please use the modern replacements of low-level threading, such as the Task Parallel Library, Timers or BackgroundWorkers.")]
         public static Thread Start(string name, ThreadStart method) 
         {
             return Start(new ThreadStartArguments()
@@ -59,6 +55,7 @@ namespace MPExtended.Libraries.Service
             });
         }
 
+        [Obsolete("Please use the modern replacements of low-level threading, such as the Task Parallel Library, Timers or BackgroundWorkers.")]
         public static Thread Start(string name, ParameterizedThreadStart method, object parameter)
         {
             return Start(new ThreadStartArguments()

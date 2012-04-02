@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Service.Hosting
@@ -74,7 +75,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 }
 
                 // do the zeroconf publish
-                ThreadManager.Start("Zeroconf", delegate()
+                Task.Factory.StartNew(delegate()
                 {
                     try
                     {
