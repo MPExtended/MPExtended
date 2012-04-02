@@ -129,7 +129,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public virtual WebFileInfo GetFileInfo()
         {
-            if(fileInfoCache != null)
+            if (fileInfoCache != null)
             {
                 return fileInfoCache;
             }
@@ -239,7 +239,14 @@ namespace MPExtended.Services.StreamingService.Code
                         int channelId;
                         if (!Int32.TryParse(Id, out channelId))
                         {
-                            channelId = MPEServices.TAS.GetActiveCards().First(x => x.TimeShiftFileName == Id).IdChannel;
+                            var cards = MPEServices.TAS.GetActiveCards().ToList();
+                            if (!cards.Any(x => x.TimeShiftFileName == Id))
+                            {
+                                Log.Info("Cannot find card for timeshift buffer {0} (but did find {1}), what's happening?!", 
+                                    Id, String.Join(", ", cards.Select(x => x.TimeShiftFileName)));
+                                return String.Empty;
+                            }
+                            channelId = cards.First(x => x.TimeShiftFileName == Id).IdChannel;
                         }
                         return MPEServices.TAS.GetChannelBasicById(channelId).DisplayName;
                     case WebStreamMediaType.TVEpisode:
@@ -257,7 +264,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             catch (Exception ex)
             {
-                Log.Warn("Could not load display name of media", ex);
+                Log.Warn(String.Format("Could not load display name of media {0}", GetDebugName()), ex);
             }
             return "";
         }
