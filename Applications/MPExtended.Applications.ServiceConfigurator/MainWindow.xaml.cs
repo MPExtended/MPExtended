@@ -74,7 +74,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);
             }
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal) || !IsWebMediaPortalServiceAvailable())
             {
                 tcMainTabs.Items.Remove(tiWebMediaPortal);
             }
@@ -105,6 +105,21 @@ namespace MPExtended.Applications.ServiceConfigurator
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
         }
+
+        private bool IsWebMediaPortalServiceAvailable()
+        {
+            try
+            {
+                ServiceController controller = new ServiceController("MPExtended WebMediaPortal");
+                string tmp = controller.DisplayName;
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }
+
 
         #region Tray application
         protected override void OnStateChanged(EventArgs e)
