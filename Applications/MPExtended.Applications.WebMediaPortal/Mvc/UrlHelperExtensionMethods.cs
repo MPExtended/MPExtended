@@ -51,7 +51,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 
         public static string GenerateViewContentUrl(string viewContentPath, HttpContextBase httpContext)
         {
-            return ViewLocalPath(httpContext, viewContentPath);
+            return UrlHelper.GenerateContentUrl(ViewLocalPath(httpContext, viewContentPath), httpContext);
         }
     }
 }
