@@ -42,7 +42,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 return;
             }
 
-            serviceName = GetServiceName();
+            serviceName = Configuration.Services.GetServiceName();
             foreach (ServiceConfiguration srv in services)
             {
                 // We also send a list of usernames and password hashes, so that clients can detect if they match across MPExtended
@@ -89,24 +89,6 @@ namespace MPExtended.Libraries.Service.Hosting
             {
                 Log.Trace("Bonjour not installed");
                 return false;
-            }
-        }
-
-        private string GetServiceName()
-        {
-            string value = Configuration.Services.BonjourName;
-            if (!String.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            try
-            {
-                return System.Environment.MachineName;
-            }
-            catch (Exception)
-            {
-                return "MPExtended Services";
             }
         }
 

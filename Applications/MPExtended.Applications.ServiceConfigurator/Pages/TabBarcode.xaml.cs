@@ -114,7 +114,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 ServerDescription desc = new ServerDescription();
                 desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
-                desc.Name = GetServiceName();
+                desc.Name = Configuration.Services.GetServiceName();
                 desc.QRVersion = 1;
 
                 desc.Services = new List<ServiceDescription>();
@@ -142,21 +142,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 Log.Error("Error generating barcode", ex);
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// Get the machine name or a fallback
-        /// </summary>
-        private string GetServiceName()
-        {
-            try
-            {
-                return System.Environment.MachineName;
-            }
-            catch (InvalidOperationException)
-            {
-                return "MPExtended Service";
             }
         }
     }
