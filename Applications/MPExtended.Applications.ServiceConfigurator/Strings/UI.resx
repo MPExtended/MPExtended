@@ -124,7 +124,7 @@
     <value>Currently active streams</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>You can configure the port on which WebMediaPortal runs here.</value>
+    <value>You can configure the port on which WebMediaPortal runs here. If you change this value from the default of 8080, you have to configure your firewall manually. </value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
     <value>Default audio language:</value>
@@ -457,7 +457,7 @@ This is the service component, which provides access to the databases and media 
     <value>Enable HTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. 
+    <value>Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. You also have to configure your firewall manually to allow these connections.
 
 Please note that it isn't possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. </value>
   </data>

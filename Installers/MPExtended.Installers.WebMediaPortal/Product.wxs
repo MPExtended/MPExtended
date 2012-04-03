@@ -89,8 +89,9 @@
           Id="FirewallException"
           Name="MPExtended WebMediaPortal"
           Scope="any"
+          Profile="all"
           Protocol="tcp"
-          Program="[#MainService]" />
+          Port="8080" />
       </Component>
     </DirectoryRef>
 

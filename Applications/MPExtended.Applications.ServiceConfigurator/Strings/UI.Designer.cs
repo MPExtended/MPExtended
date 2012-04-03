@@ -151,7 +151,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can configure the port on which WebMediaPortal runs here..
+        ///   Looks up a localized string similar to You can configure the port on which WebMediaPortal runs here. If you change this value from the default of 8080, you have to configure your firewall manually. .
         /// </summary>
         public static string ConfigureWebMPPort {
             get {
@@ -340,7 +340,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. 
+        ///   Looks up a localized string similar to Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. You also have to configure your firewall manually to allow these connections.
         ///
         ///Please note that it isn&apos;t possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. .
         /// </summary>
