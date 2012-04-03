@@ -118,6 +118,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 desc.QRVersion = 1;
 
                 desc.Services = new List<ServiceDescription>();
+                User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;
                 foreach (var srv in Installation.GetInstalledServices())
                 {
                     var srvdesc = new ServiceDescription()
@@ -128,8 +129,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                     if (auth != null)
                     {
-                        srvdesc.User = auth.Username;
-                        srvdesc.Password = auth.GetPassword();
+                        srvdesc.User = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).Username;
+                        srvdesc.Password = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).GetPassword();
                     }
 
                     desc.Services.Add(srvdesc);

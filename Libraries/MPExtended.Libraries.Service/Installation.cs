@@ -257,12 +257,24 @@ namespace MPExtended.Libraries.Service
 
         public static List<ServiceConfiguration> GetInstalledServices()
         {
-            return GetAvailableServices().Select(x => new ServiceConfiguration()
+            var list = GetAvailableServices().Select(x => new ServiceConfiguration()
             {
                 Port = Configuration.Services.Port,
                 Service = x.Service,
                 ZeroconfType = x.ZeroconfType
             }).ToList();
+
+            if (WifiRemote.IsInstalled)
+            {
+                list.Add(new ServiceConfiguration()
+                {
+                    Port = WifiRemote.Port,
+                    Service = MPExtendedService.WifiRemote,
+                    ZeroconfType = WifiRemote.ZeroconfName
+                });
+            }
+
+            return list;
         }
 
         public static bool IsServiceInstalled(MPExtendedService srv)
