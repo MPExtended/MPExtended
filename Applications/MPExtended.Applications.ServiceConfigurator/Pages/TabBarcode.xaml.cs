@@ -38,6 +38,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabBarcode : Page
     {
+        private const int QR_VERSION = 1;
+        private const string GENERATOR_APP = "MPExtended";
+
         private BackgroundWorker BackgroundGenerator;
         private Dictionary<string, User> Users;
 
@@ -112,10 +115,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 ServerDescription desc = new ServerDescription();
+
+                desc.QRVersion = QR_VERSION;
+                desc.GeneratorApp = GENERATOR_APP;
+
                 desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
                 desc.Name = Configuration.Services.GetServiceName();
-                desc.QRVersion = 1;
 
                 desc.Services = new List<ServiceDescription>();
                 User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;
