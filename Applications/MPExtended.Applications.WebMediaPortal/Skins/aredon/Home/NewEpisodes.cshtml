@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.TVShow.WebTVEpisodeDetailed>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
 
-@if (@Model != null && @Model.Count() > 0)
+@if (Model.Availability.TVShows)
 {
     <h2>@UIStrings.LatestEpisodes</h2>
     <div>
-        @foreach (var episode in Model)
+        @foreach (var episode in Model.GetLastAiredTVEpisodes())
         {
             <div class="column">
                 <div class="thumb_wrap">

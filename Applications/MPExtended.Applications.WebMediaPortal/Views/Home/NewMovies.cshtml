@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
 
-@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+@if (Model.Availability.Movies)
 {
     <h2>@UIStrings.LatestMovies</h2>
     <div>
-        @foreach (var movie in Model)
+        @foreach (var movie in Model.GetLastAddedMovies())
         {
             <div class="column">
                 <div class="row">

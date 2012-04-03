@@ -1,11 +1,11 @@
-﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.ScheduleViewModel>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
 
-@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+@if (Model.Availability.TAS && Model.GetTodaysSchedules().Count() > 0)
 {
     <h2>@UIStrings.TodaysSchedules</h2>
     <div>
         <ul>
-            @foreach (var schedule in Model)
+            @foreach (var schedule in Model.GetTodaysSchedules())
             {
                 <li>@schedule.Title - @schedule.StartTime.Value.ToShortTimeString() - @schedule.EndTime.Value.ToShortTimeString()</li>       
             }

@@ -101,6 +101,7 @@
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />
     <Compile Include="Controllers\TVServerController.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\TVServerStatusViewModels.cs" />
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
