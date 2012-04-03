@@ -85,7 +85,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(new FileInfo(path));
+            return new WebFileInfo(path);
         }
 
         public Stream GetFile(string path)

@@ -121,7 +121,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return ArtworkRetriever.GetFileInfo(path);
             }
 
-            return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)
