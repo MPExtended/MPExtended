@@ -33,14 +33,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     [ServiceAuthorize]
     public class TVShowsLibraryController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(string genre = null)
         {
-            var series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
-            if (series != null)
+            IEnumerable<WebTVShowBasic> series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
+            if (!String.IsNullOrEmpty(genre))
             {
-                return View(series);
+                series = series.Where(x => x.Genres.Contains(genre));
             }
-            return null;
+
+            return View(series);
         }
 
         public ActionResult Seasons(string show)
