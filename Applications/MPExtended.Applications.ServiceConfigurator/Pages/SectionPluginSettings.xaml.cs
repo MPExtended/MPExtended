@@ -223,7 +223,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 Configuration.Media.PluginConfiguration[mPlugin] = newConfig;
                 Configuration.Media.Save();
-                Service.ShouldRestart = true;
             }
             catch (Exception ex)
             {

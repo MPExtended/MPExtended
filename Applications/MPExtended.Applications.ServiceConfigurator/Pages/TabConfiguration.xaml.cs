@@ -53,7 +53,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
 
             Configuration.Services.Save();
-            Service.ShouldRestart = true;
         }
 
         private string GetServiceName()

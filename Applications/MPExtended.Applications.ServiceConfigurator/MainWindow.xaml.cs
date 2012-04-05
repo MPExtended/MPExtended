@@ -85,19 +85,26 @@ namespace MPExtended.Applications.ServiceConfigurator
         /// </summary>
         private void tcMainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lastTabIndex != tcMainTabs.SelectedIndex)
+            try
             {
-                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                if (lastTabIndex != tcMainTabs.SelectedIndex)
                 {
-                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
-                }
+                    if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                    {
+                        (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                    }
 
-                // create new tab
-                TabItem item = tcMainTabs.SelectedItem as TabItem;
-                Frame f = new Frame();
-                f.Source = new Uri((string)item.Tag, UriKind.Relative);
-                item.Content = f;
-                lastTabIndex = tcMainTabs.SelectedIndex;
+                    // create new tab
+                    TabItem item = tcMainTabs.SelectedItem as TabItem;
+                    Frame f = new Frame();
+                    f.Source = new Uri((string)item.Tag, UriKind.Relative);
+                    item.Content = f;
+                    lastTabIndex = tcMainTabs.SelectedIndex;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to change tab", ex);
             }
         }
 
@@ -132,24 +139,25 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            // deactive the current tab too, as this is a close action of the user and should have the same effect as selecting another tab
-            if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+            try
             {
-                (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                // deactive the current tab too, as this is a close action of the user and should have the same effect as selecting another tab
+                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                {
+                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                }
+
+                this.Hide();
+
+                // exit when we aren't running as tray app
+                if (!StartupArguments.RunAsTrayApp)
+                {
+                    this.Close();
+                }
             }
-
-            this.Hide();
-
-            // restart the service only when it is already running
-            if (mServiceController != null && mServiceController.Status == ServiceControllerStatus.Running && Service.ShouldRestart)
+            catch (Exception ex)
             {
-                Service.RestartService();
-            }
-
-            // exit when we aren't running as tray app
-            if (!StartupArguments.RunAsTrayApp)
-            {
-                this.Close();
+                Log.Error("Failed to handle OK click event", ex);
             }
         }
 
@@ -283,7 +291,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             // try to load service
             try
             {
-                mServiceController = new ServiceController(Service.SERVICE_NAME);
+                mServiceController = new ServiceController("MPExtended Service");
                 HandleServiceState(mServiceController.Status);
 
                 // start service watcher

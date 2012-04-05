@@ -45,13 +45,13 @@ namespace MPExtended.Libraries.Service.Hosting
             {
                 ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
 
-                // rotate log files if possible
+                // rotate log files before we write to them, if possible
                 LogRotation rotation = new LogRotation();
                 rotation.Rotate();
 
                 Log.Debug("Opening MPExtended ServiceHost version {0}", VersionUtil.GetFullVersionString());
 
-                // always log uncaught exceptions
+                // always log uncaught exceptions that cause the program to exit
                 AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e)
                 {
                     Log.Error("Unhandled exception", (Exception)e.ExceptionObject);
@@ -60,6 +60,9 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Fatal("Terminating because of previous exception");
                     }
                 };
+
+                // start watching the configuration files for changes
+                Configuration.EnableChangeWatching();
 
                 // start the WCF services
                 wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
@@ -86,7 +89,9 @@ namespace MPExtended.Libraries.Service.Hosting
                     }
                 });
 
+                // finally finish the startup
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
+                Log.Trace("Opening MPExtended ServiceHost");
                 return true;
             }
             catch (Exception ex)

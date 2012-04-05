@@ -165,7 +165,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 Configuration.Streaming.WatchSharing["passwordHash"] = GetImplementation().HashPassword(txtPassword.Password);
                 Configuration.Streaming.WatchSharing["type"] = activeProvider;
                 Configuration.Streaming.Save();
-                Service.ShouldRestart = true;
             }
             else if (dirty)
             {
