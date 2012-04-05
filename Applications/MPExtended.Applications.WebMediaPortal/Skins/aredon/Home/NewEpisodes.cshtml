@@ -12,7 +12,7 @@
                         @Html.ActionLink(episode.Show + " - " + episode.SeasonNumber + "x" + episode.EpisodeNumber, "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
                     </div>
                     <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id })">
-                        <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id })" alt="" border="" />
+                        <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 222 })" alt="" border="" />
                     </a>
                 </div>
             </div>

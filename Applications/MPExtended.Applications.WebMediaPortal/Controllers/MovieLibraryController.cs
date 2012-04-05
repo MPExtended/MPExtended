@@ -64,9 +64,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Image(string movie)
+        public ActionResult Image(string movie, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0);
+            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height);
             if (image != null)
             {
                 return File(image, "image/jpg");

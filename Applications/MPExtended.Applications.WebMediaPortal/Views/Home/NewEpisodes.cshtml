@@ -12,7 +12,7 @@
                         "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id })" alt="" />
+                    <img class="img" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="" />
                 </div>
             </div>
         }

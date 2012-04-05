@@ -6,7 +6,7 @@
 <h2>@String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber)</h2>
 
 <div class="imageColumn">
-    <img src="@Url.Action("Image", new { season = @Model.Season.Id })" alt="" />
+    <img src="@Url.Action("Image", new { season = @Model.Season.Id, width = 300 })" alt="" />
 </div>
 
 <div class="listColumn">

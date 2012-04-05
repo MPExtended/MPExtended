@@ -49,7 +49,7 @@
         @{  foreach (var channel in @Model.Channels)
             {
                 <div class="channelrow">
-                    <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id }));">
+                    <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id, width = 50, height = 50 }));">
                         @Html.ActionLink(channel.DisplayName, "WatchLiveTV", new { channelId = channel.Id })
                     </div>
                     <div class="programs">
