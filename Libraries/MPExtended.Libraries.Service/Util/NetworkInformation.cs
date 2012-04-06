@@ -72,7 +72,7 @@ namespace MPExtended.Libraries.Service.Util
             var info = NetworkInterface.GetAllNetworkInterfaces()
                 .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                 .SelectMany(x => x.GetIPProperties().UnicastAddresses)
-                .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork) // TODO: IPv6 support
                 .Where(x => x.IPv4Mask != null)
                 .First();
 
@@ -97,7 +97,25 @@ namespace MPExtended.Libraries.Service.Util
 
         public static bool IsLocalAddress(string address)
         {
-            return address == "localhost" || address == "::1" || address == "127.0.0.1" || IsLocalAddress(IPAddress.Parse(address));
+            if(address == "localhost" || address == "::1" || address == "127.0.0.1")
+            {
+                return true;
+            }
+
+            bool isLocal = Dns.GetHostAddresses(address)
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && Configuration.Services.EnableIPv6)
+                .Any(x => IsLocalAddress(x));
+            if(isLocal)
+            {
+                return true;
+            }
+
+            IPAddress ipAddr;
+            if(IPAddress.TryParse(address, out ipAddr))
+            {
+                return IsLocalAddress(ipAddr);
+            }
+            return false;
         }
 
         public static Dictionary<string, string> GetNetworkInterfaces(bool enableIPv6)

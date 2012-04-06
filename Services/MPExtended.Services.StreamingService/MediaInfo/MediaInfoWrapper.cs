@@ -43,17 +43,15 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         public static WebMediaInfo GetMediaInfo(MediaSource source)
         {
-            // we can't cache it for TV, unfortunately
+            // we can't use our persistent cache for TV unfortunately, but we do cache them in memory for 60 seconds
             if (source.MediaType == WebStreamMediaType.TV)
             {
-                // cache tv files for 60 seconds
                 if (tvCache.ContainsKey(source.Id) && DateTime.Now - tvCache[source.Id].Item1 > TimeSpan.FromSeconds(60))
                 {
-                    // cache is valid, use it
                     return tvCache[source.Id].Item2;
                 }
 
-                // get media info and save it to the cache
+                // save it to our memory cache for a while
                 TsBuffer buf = new TsBuffer(source.Id);
                 string path = buf.GetCurrentFilePath();
                 Log.Debug("Using path {0} from TS buffer {1} as source for {2}", path, source.Id, source.GetDebugName());
@@ -62,7 +60,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 return info;
             }
 
-            // load this item from cache, if possible
+            // load this item from persistent disk cache, if possible
             if (persistentCache.HasForSource(source))
             {
                 return persistentCache.GetForSource(source);
@@ -72,13 +70,13 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             if (!source.Exists)
             {
                 Log.Warn("Trying to load mediainfo for {0}, which doesn't seem to exist", source.GetDebugName());
-                throw new FileNotFoundException();
+                return null;
             }
             else if (!source.SupportsDirectAccess)
             {
                 // not (yet?) supported
                 Log.Warn("Loading mediainfo for non-direct access source {0} isn't supported yet", source.GetDebugName());
-                throw new NotSupportedException();
+                return null;
             }
         
             // actually load it
@@ -87,7 +85,10 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             {
                 outInfo = DoLoadMediaInfo(source.GetPath(), false);
             }
-            persistentCache.Save(source, outInfo);
+            if (outInfo != null)
+            {
+                persistentCache.Save(source, outInfo);
+            }
             return outInfo;
         }
 
