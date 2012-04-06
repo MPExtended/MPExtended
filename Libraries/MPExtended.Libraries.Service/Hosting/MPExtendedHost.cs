@@ -104,7 +104,6 @@ namespace MPExtended.Libraries.Service.Hosting
                 Log.Debug("Closing MPExtended ServiceHost...");
                 ServiceState.TriggerStoppingEvent();
                 wcf.Stop();
-                ThreadManager.AbortAll();
                 Log.Flush();
                 return true;
             }
