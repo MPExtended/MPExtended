@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Timers;
 using MPExtended.Libraries.VLCManaged;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
@@ -51,7 +51,10 @@ namespace MPExtended.Services.StreamingService.Units
         private InputMethod inputMethod;
         private string inputPath = null;
         private VLCTranscoder transcoder; // VLCNative object, not ITranscoder
-        private Thread infoReader;
+
+        private Timer inputTimer;
+        private Reference<WebTranscodingInfo> infoReference;
+        private TranscodingInfoCalculator calculator;
 
         private NamedPipe transcoderInputStream;
 
@@ -126,8 +129,27 @@ namespace MPExtended.Services.StreamingService.Units
 
             // TODO: wait for state machine
 
-            // setup data thread
-            infoReader = ThreadManager.Start("VLCInfoThread", InfoThread, context.StartPosition);
+            // setup the data reading
+            infoReference = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
+            if (context.MediaInfo.Duration > 0)
+            {
+                Log.Trace("VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
+                calculator = new TranscodingInfoCalculator(context.StartPosition, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
+            }
+            else
+            {
+                Log.Trace("VLCManagedInfo: duration unknown");
+                calculator = new TranscodingInfoCalculator(context.StartPosition, 25, POLL_DATA_TIME);
+            }
+
+            // and setup the timer
+            inputTimer = new Timer()
+            {
+                AutoReset = true,
+                Interval = POLL_DATA_TIME
+            };
+            inputTimer.Elapsed += InfoTimerTick;
+            inputTimer.Start();
             return true;
         }
 
@@ -143,7 +165,7 @@ namespace MPExtended.Services.StreamingService.Units
                 Log.Info("VLCManagedEncoder: Failed to close data output stream", e);
             }
 
-            infoReader.Abort();
+            inputTimer.Enabled = false;
             Log.Trace("VLCManagedEncoder: Trying to stop vlc");
             transcoder.StopTranscoding();
             transcoder = null;
@@ -152,21 +174,8 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private void InfoThread(object passedPosition)
+        private void InfoTimerTick(object source, ElapsedEventArgs args)
         {
-            var einfo = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
-            TranscodingInfoCalculator calculator;
-            if (context.MediaInfo.Duration > 0)
-            {
-                Log.Trace("VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
-                calculator = new TranscodingInfoCalculator((int)passedPosition, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
-            }
-            else
-            {
-                Log.Trace("VLCManagedInfo: duration unknown");
-                calculator = new TranscodingInfoCalculator((int)passedPosition, 25, POLL_DATA_TIME);
-            }
-
             while (true)
             {
                 try
@@ -175,18 +184,12 @@ namespace MPExtended.Services.StreamingService.Units
                     float position = transcoder.GetPosition();
                     Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
                     calculator.NewPercentage(position);
-                    calculator.SaveStats(einfo);
-                }
-                catch (ThreadAbortException)
-                {
-                    break;
+                    calculator.SaveStats(infoReference);
                 }
                 catch (Exception ex)
                 {
                     Log.Warn("Failed to get VLC data", ex);
                 }
-
-                Thread.Sleep(POLL_DATA_TIME);
             }
         }
     }

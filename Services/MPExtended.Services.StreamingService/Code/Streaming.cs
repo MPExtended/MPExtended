@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Web;
-//using System.Threading;
 using System.Timers;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
@@ -85,7 +84,7 @@ namespace MPExtended.Services.StreamingService.Code
             try
             {
                 sharing.Dispose();
-                ThreadManager.Abort("StreamTimeout");
+                timeoutTimer.Stop();
                 foreach (string identifier in Streams.Keys)
                 {
                     EndStream(identifier);
