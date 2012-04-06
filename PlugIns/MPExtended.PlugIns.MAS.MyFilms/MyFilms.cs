@@ -32,7 +32,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 namespace MPExtended.PlugIns.MAS.MyFilms
 {
     [Export(typeof(IMovieLibrary))]
-    [ExportMetadata("Name", "My Films")]
+    [ExportMetadata("Name", "My Films (Ant Movie Catalog only)")]
     [ExportMetadata("Id", 13)]
     public partial class MyFilms : IMovieLibrary
     {
@@ -50,8 +50,13 @@ namespace MPExtended.PlugIns.MAS.MyFilms
             {
                 // load database path
                 string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
-                XElement configFile = XElement.Load(configPath);
+                if (!File.Exists(configPath))
+                {
+                    Supported = false;
+                    return;
+                }
 
+                XElement configFile = XElement.Load(configPath);
                 string currentConfigNode = configFile
                     .Elements("section")
                     .First(x => x.Attribute("name").Value == "MyFilms")
@@ -60,7 +65,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     .Value;
                 if (currentConfigNode != "pelis")
                 {
-                    Log.Info("MyFilms: currently selected config is {0}, only pelis is supported at the moment", currentConfigNode);
+                    Log.Info("MyFilms: currently selected config is {0}, only pelis (Ant Movie Catalog) is supported at the moment", currentConfigNode);
                     Supported = false;
                     return;
                 }
