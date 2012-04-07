@@ -89,10 +89,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             return GenerateVLCParameters(
-                Context.Profile.CodecParameters.ContainsKey("options") ? Context.Profile.CodecParameters["options"] : "",
-                Context.Profile.CodecParameters.ContainsKey("tsOptions") ? Context.Profile.CodecParameters["tsOptions"] : "",
+                Context.Profile.CodecParameters.ContainsKey("options") ? Context.Profile.CodecParameters["options"] : String.Empty,
+                Context.Profile.CodecParameters.ContainsKey("tsOptions") ? Context.Profile.CodecParameters["tsOptions"] : String.Empty,
                 Context.Profile.CodecParameters.ContainsKey("disableSeeking") && Context.Profile.CodecParameters["disableSeeking"] == "yes",
-                Context.Profile.CodecParameters["encoder"],
+                Context.Profile.CodecParameters.ContainsKey("encoder") ? Context.Profile.CodecParameters["encoder"] : String.Empty,
                 Context.Profile.CodecParameters["muxer"]
             );
         }
@@ -155,10 +155,18 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // create parameters
-            string sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
-            if (!Context.Profile.CodecParameters.ContainsKey("noResize") || Context.Profile.CodecParameters["noResize"] != "true")
-                sout += ",width=" + Context.OutputSize.Width + ",height=" + Context.OutputSize.Height;
-            sout += "}" + muxerOptions;
+            string sout;
+            if (!String.IsNullOrEmpty(encoderOptions))
+            {
+			    sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
+				if (!Context.Profile.CodecParameters.ContainsKey("noResize") || Context.Profile.CodecParameters["noResize"] != "true")
+					sout += ",width=" + Context.OutputSize.Width + ",height=" + Context.OutputSize.Height;
+				sout += "}" + muxerOptions;
+            }
+            else
+            {
+                sout = "#" + muxerOptions.Substring(1);
+            }
 
             // return
             return new VLCParameters()

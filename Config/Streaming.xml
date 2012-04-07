@@ -180,6 +180,26 @@
         <rtspOutput>yes</rtspOutput>
       </transcoderConfiguration>
     </transcoder>
+    
+    <!-- Remux only streaming, still experimental -->
+    <transcoder>
+      <name>Remux-only</name>
+      <description>Remux-only</description>
+      <bandwidth>2000</bandwidth>
+      <target>android</target>
+      <transport>http</transport>
+      <mime>video/MP2T</mime>
+      <videoStream>true</videoStream>
+      <maxOutputWidth>400</maxOutputWidth>
+      <maxOutputHeight>300</maxOutputHeight>
+
+      <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.0\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw</options>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </transcoderConfiguration>
+    </transcoder>
 
     <!-- Direct streaming for WebMediaPortal -->
     <transcoder>
