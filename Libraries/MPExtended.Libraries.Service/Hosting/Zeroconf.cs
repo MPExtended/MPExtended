@@ -28,7 +28,7 @@ using ZeroconfService;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    internal class Zeroconf
+    public class Zeroconf
     {
         private const string DOMAIN = ""; // whole network
 
@@ -77,7 +77,7 @@ namespace MPExtended.Libraries.Service.Hosting
             Log.Info("Published Bonjour services");
         }
 
-        private bool CheckBonjourInstallation()
+        public static bool CheckBonjourInstallation()
         {
             try
             {
