@@ -35,6 +35,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
 
@@ -57,6 +58,7 @@ namespace MPExtended.Services.StreamingService.Units
 
         private string identifier;
         private Process segmenterApplication;
+        private Thread monitorThread;
         private string siteRoot;
 
         public HTTPLiveStreamingUnit(string identifier)
@@ -91,7 +93,8 @@ namespace MPExtended.Services.StreamingService.Units
                 segmenterApplication = new Process();
                 segmenterApplication.StartInfo = start;
                 segmenterApplication.Start();
-                ThreadManager.Start("HTTPLiveSegmenter", MonitorThread);
+                monitorThread = new Thread(MonitorThread);
+                monitorThread.Start();
             }
             catch (Exception ex)
             {
@@ -141,7 +144,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
 
             // this really, really isn't the best way to do it but it's the easiest
-            ThreadManager.Start("HTTPLiveCleanup", delegate()
+            Task.Factory.StartNew(delegate ()
             {
                 try
                 {

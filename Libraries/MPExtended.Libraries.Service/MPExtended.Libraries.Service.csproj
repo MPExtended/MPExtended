@@ -95,7 +95,6 @@
     <Compile Include="Util\NetworkShareImpersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />
-    <Compile Include="ThreadManager.cs" />
     <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\IPAddressExtensions.cs" />
     <Compile Include="Util\Mediaportal.cs" />

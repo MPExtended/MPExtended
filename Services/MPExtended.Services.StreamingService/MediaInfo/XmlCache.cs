@@ -22,8 +22,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading;
+using System.Timers;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -35,6 +36,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         private Dictionary<string, WebMediaInfo> cache;
         private bool isDirty = false;
         private string path;
+        private Timer flushTimer;
 
         public XmlCache()
         {
@@ -59,25 +61,27 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 }
             }
 
-            ThreadManager.Start("MICacheSave", delegate()
+            // save every minute
+            flushTimer = new Timer()
             {
-                try
+                Interval = 60 * 1000,
+                AutoReset = true
+            };
+            flushTimer.Elapsed += delegate(object sender, ElapsedEventArgs e)
+            {
+                if(isDirty)
                 {
-                    while (true)
-                    {
-                        Thread.Sleep(60 * 1000);
-                        if (isDirty)
-                        {
-                            isDirty = false;
-                            SaveToDisk();
-                        }
-                    }
-                }
-                catch (ThreadAbortException)
-                {
+                    isDirty = false;
                     SaveToDisk();
                 }
-            });
+            };
+            flushTimer.Start();
+
+            // also save on exit
+            ServiceState.Stopping += delegate()
+            {
+                SaveToDisk();
+            };
         }
 
         public bool HasForSource(MediaSource src)

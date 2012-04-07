@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Threading;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
