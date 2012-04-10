@@ -3,11 +3,9 @@
     ViewBag.Title = UIStrings.TVGuide;
 }
 
-@section HeadHtml {
-    @Html.jQuery().EnableUI()
-    <script type="text/javascript" src="@Url.ViewContent("Television/TVGuide.js")"></script>
-    <link type="text/css" rel="stylesheet" href="@Url.ViewContent("Television/TVGuide.css")" />
-}
+@Html.jQuery().EnableUI()
+@Html.Assets().AddViewScript("Television/TVGuide.js")
+@Html.Assets().AddViewStylesheet("Television/TVGuide.css")
 
 <div id="TVGuideNavigation">
     @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
