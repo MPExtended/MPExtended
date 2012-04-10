@@ -20,7 +20,7 @@
     Language="1033"
     Version="!(bind.FileVersion.MPExtended.Libraries.Service.dll)"
     Manufacturer="MPExtended">
-    <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" />
+    <Package Manufacturer="MPExtended" InstallerVersion="300" Compressed="yes" InstallScope="perMachine" />
 
     <!-- Enable this for debugging (avoids creating a restore point, makes the installer a lot faster) -->
     <!-- <Property Id="MSIFASTINSTALL" Value="3" /> -->
@@ -29,12 +29,13 @@
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
     <!-- Disallow downgrades and support upgrades -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."  AllowSameVersionUpgrades="yes" />
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation." AllowSameVersionUpgrades="yes" MigrateFeatures="no" />
     <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
     <Upgrade Id="21ae5680-f56d-4bb6-8835-87b5081b156d">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" 
-                      IncludeMinimum="yes" Minimum="0.0.0.0" 
-                      IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED"
+                      IncludeMinimum="yes" Minimum="0.0.0.0"
+                      IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)"
+                      OnlyDetect="no" />
     </Upgrade>
     
     <!-- The stupid icon -->
@@ -66,6 +67,10 @@
 
     <!-- Run configurator after installation -->
     <CustomAction Id="LaunchConfigurator" FileKey="ConfiguratorExecutable" ExeCommand="/Open" Impersonate="yes" Return="asyncNoWait" />
+
+    <!-- Generic wix configuration -->
+    <FeatureRef Id="Feature_All" />
+    <Property Id="WIXUI_INSTALLDIR" Value="MPEXTENDEDDIRECTORY" />
     
     <!-- Service -->
     <DirectoryRef Id="InstallDirectory">
@@ -122,7 +127,5 @@
     <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)\Libraries\Installer\banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)\Libraries\Installer\dialog.bmp" />
     <Binary Id="ExitDialogBitmap" SourceFile="$(var.SolutionDir)\Libraries\Installer\exitdialog.bmp" />
-
-    <FeatureRef Id="Feature_All" />
   </Product>
 </Wix>
