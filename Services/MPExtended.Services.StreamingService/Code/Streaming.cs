@@ -125,11 +125,6 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public bool InitStream(string identifier, string clientDescription, MediaSource source)
-        {
-            return InitStream(identifier, clientDescription, source, 5 * 60);
-        }
-
         public bool InitStream(string identifier, string clientDescription, MediaSource source, int timeout)
         {
             if (!source.Exists)
@@ -382,6 +377,11 @@ namespace MPExtended.Services.StreamingService.Code
             return Resolution.Calculate(displayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
+        public Resolution CalculateSize(StreamContext context)
+        {
+            return CalculateSize(context.Profile, context.Source, context.MediaInfo);
+        }
+
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
             try
@@ -406,11 +406,6 @@ namespace MPExtended.Services.StreamingService.Code
 
             // default
             return Resolution.Calculate(MediaInfoHelper.DEFAULT_ASPECT_RATIO, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
-        }
-
-        public Resolution CalculateSize(StreamContext context)
-        {
-            return CalculateSize(context.Profile, context.Source, context.MediaInfo);
         }
     }
 }

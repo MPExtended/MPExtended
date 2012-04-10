@@ -24,8 +24,10 @@ using System.Text;
 using System.Threading;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Services.StreamingService.Code {
-    internal class StreamCopy {
+namespace MPExtended.Services.StreamingService.Code
+{
+    internal class StreamCopy
+    {
         private const int _defaultBufferSize = 0x10000;
         private byte[] buffer;
         private Stream source;
@@ -33,19 +35,24 @@ namespace MPExtended.Services.StreamingService.Code {
         private int bufferSize;
         private string log;
 
-        private StreamCopy(Stream source, Stream destination, int bufferSize, string log) {
+        private StreamCopy(Stream source, Stream destination, int bufferSize, string log)
+        {
             this.source = source;
             this.destination = destination;
             this.bufferSize = bufferSize;
             this.log = log;
         }
 
-        private void CopyStream(bool retry) {
+        private void CopyStream(bool retry)
+        {
             // do a parallel read
             buffer = new byte[bufferSize];
-            try {
+            try
+            {
                 source.BeginRead(buffer, 0, buffer.Length, MediaReadAsyncCallback, new object());
-            } catch (NotSupportedException e) {
+            }
+            catch (NotSupportedException e)
+            {
                 // we only do a workaround for TsBuffer here, nothing for other errors
                 if (!(source is TsBuffer))
                     throw;
@@ -54,7 +61,8 @@ namespace MPExtended.Services.StreamingService.Code {
                 Log.Error(string.Format("StreamCopy {0}: NotSupportedException when trying to read from TsBuffer", log), e);
                 Log.Info("StreamCopy {0}: TsBuffer dump: CanRead {1}, CanWrite {2}", log, stream.CanRead, stream.CanWrite);
                 Log.Info("StreamCopy {0}:\r\n{1}", log, stream.DumpStatus());
-                if (retry) {
+                if (retry)
+                {
                     Thread.Sleep(500);
                     Log.Info("StreamCopy {0}: Trying to recover", log);
                     CopyStream(false);
@@ -62,54 +70,70 @@ namespace MPExtended.Services.StreamingService.Code {
             }
         }
 
-        private void CopyStream() {
+        private void CopyStream()
+        {
             CopyStream(true);
         }
 
-        private void MediaReadAsyncCallback(IAsyncResult ar) {
-            try {
+        private void MediaReadAsyncCallback(IAsyncResult ar)
+        {
+            try
+            {
                 int read = source.EndRead(ar);
                 if (read == 0) // we're done
                     return;
 
                 // write it to the destination
                 //Log.Info("StreamCopy {0}: writing {1} bytes", log, read);
-                destination.BeginWrite(buffer, 0, read, writeResult => {
-                    try {
+                destination.BeginWrite(buffer, 0, read, writeResult =>
+                {
+                    try
+                    {
                         destination.EndWrite(writeResult);
                         destination.Flush();
 
                         // and read again...
                         source.BeginRead(buffer, 0, buffer.Length, MediaReadAsyncCallback, new object());
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         HandleException(e, "inner");
                     }
                 }, null);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 HandleException(e, "outer");
             }
         }
 
 
-        private void HandleException(Exception e, string type) {
-            if (e is IOException) {
+        private void HandleException(Exception e, string type)
+        {
+            if (e is IOException)
+            {
                 // end of pipe etc
                 Log.Info("StreamCopy {0}: IOException in {1} stream copy, is usually ok: {2}", log, type, e.Message);
-            } else {
+            }
+            else
+            {
                 Log.Error(string.Format("StreamCopy {0}: Failure in {1} stream copy", log, type), e);
             }
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier, int bufferSize) {
+        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier, int bufferSize)
+        {
             StreamCopy copy = new StreamCopy(original, destination, bufferSize, logIdentifier);
             copy.CopyStream();
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier) {
+        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier)
+        {
             AsyncStreamCopy(original, destination, logIdentifier, _defaultBufferSize);
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination) {
+        public static void AsyncStreamCopy(Stream original, Stream destination)
+        {
             AsyncStreamCopy(original, destination, "", _defaultBufferSize);
         }
     }
