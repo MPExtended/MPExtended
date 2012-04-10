@@ -187,7 +187,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // do request
             Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
-            WebResponse response = WebRequest.Create(sourceUrl).GetResponse();
+            WebRequest request = WebRequest.Create(sourceUrl);
+            request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
+            WebResponse response = request.GetResponse();
             Stream sourceStream = response.GetResponseStream();
 
             // set headers and disable buffer
