@@ -83,13 +83,19 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
             string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
-            Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
+            UriBuilder fullUri = new UriBuilder(rootUrl + "GetMediaItem?" + queryString.ToString());
 
             // Check stream type
             StreamType streamMode = Settings.ActiveSettings.StreamType;
             if (streamMode == StreamType.DirectWhenPossible)
             {
                 streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
+            }
+
+            // If we connect to the services at localhost, actually give the extern IP address to users
+            if (fullUri.Host == "localhost" || fullUri.Host == "127.0.0.1")
+            {
+                fullUri.Host = NetworkInformation.GetIPAddresses().First();
             }
 
             // Do the actual streaming
