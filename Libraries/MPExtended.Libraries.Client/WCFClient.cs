@@ -22,7 +22,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 
-namespace MPExtended.Libraries.Service
+namespace MPExtended.Libraries.Client
 {
     public class WCFHeader<TContent>
     {
@@ -39,6 +39,11 @@ namespace MPExtended.Libraries.Service
 
         public WCFHeader(string name, TContent content)
             : this ("http://mpextended.github.com/", name, content)
+        {
+        }
+
+        public WCFHeader(string name)
+            : this(name, default(TContent))
         {
         }
     }
@@ -60,6 +65,38 @@ namespace MPExtended.Libraries.Service
         public static TResult CallWithHeader<TResult, THeader>(WCFHeader<THeader> header, object client, Func<TResult> method)
         {
             return CallWithHeader<TResult, THeader>(header.HeaderNamespace, header.Name, header.Content, client, method);
+        }
+
+        public static OperationContextScope EnterOperationScope(object client)
+        {
+            return new OperationContextScope((IContextChannel)client);
+        }
+
+        public static TResult GetHeader<TResult>(WCFHeader<TResult> header)
+        {
+            return OperationContext.Current.IncomingMessageHeaders.GetHeader<TResult>(header.Name, header.HeaderNamespace);
+        }
+
+        public static TResult GetHeader<TResult>(WCFHeader<TResult> header, TResult defaultValue)
+        {
+            try
+            {
+                return GetHeader(header);
+            }
+            catch(MessageHeaderException)
+            {
+                return defaultValue;
+            }
+        }
+
+        public static TResult GetHeader<TResult>(string header)
+        {
+            return GetHeader(new WCFHeader<TResult>(header));
+        }
+
+        public static TResult GetHeader<TResult>(string header, TResult defaultValue)
+        {
+            return GetHeader(new WCFHeader<TResult>(header), defaultValue);
         }
     }
 }

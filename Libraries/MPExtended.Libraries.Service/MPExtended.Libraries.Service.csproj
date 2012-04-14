@@ -82,7 +82,6 @@
     <Compile Include="Util\CultureDatabase.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Util\WifiRemote.cs" />
-    <Compile Include="WCFClient.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
     <Compile Include="Hosting\BaseAddresses.cs" />
     <Compile Include="Hosting\LogRotation.cs" />
