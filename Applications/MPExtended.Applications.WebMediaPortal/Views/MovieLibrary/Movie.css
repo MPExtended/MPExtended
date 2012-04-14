@@ -1,0 +1,15 @@
+﻿.movie
+{
+    height: 200px;
+    width: 170px;
+    margin: 8px 8px 8px 8px;
+    float: left;
+    
+}
+
+.movieDetails
+{
+    height: 55px;
+    width:  60px;
+    margin: 2px 2px 2px 2px;
+}

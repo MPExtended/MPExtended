@@ -1,13 +1,20 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.ArtistViewModel
+﻿@Html.Assets().AddViewStylesheet("MusicLibrary/Albums.css")
+
+@model MPExtended.Applications.WebMediaPortal.Models.ArtistViewModel
 @{
 	ViewBag.Title = Model.Artist.Title;
 }
 
 <h3>@String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title)</h3>
 
-<ul>
     @foreach (var album in Model.Albums)
     {
-          <li> @Html.ActionLink(album.Title, "Album", new { album = album.Id }) </li>     
+    <a href="@Url.Action("Album", new { album = album.Id })">
+         <div class="album">
+            <img  height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" />
+           <p style="float: left">
+               @album.Title
+           </p>
+        </div>
+            </a>
     }
-</ul>
