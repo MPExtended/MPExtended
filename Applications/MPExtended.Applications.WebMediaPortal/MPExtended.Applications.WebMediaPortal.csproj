@@ -159,7 +159,6 @@
   <ItemGroup>
     <Content Include="Content\Images\logomp-small.png" />
     <Content Include="Views\Home\Index.css" />
-    <Content Include="Views\MovieLibrary\Movie.css" />
     <Content Include="Views\Stream\FlashVideoPlayer.css" />
     <Content Include="Views\Television\TVGuide.css" />
     <Content Include="Global.asax" />
