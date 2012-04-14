@@ -28,7 +28,7 @@ using ZeroconfService;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    internal class Zeroconf
+    public class Zeroconf
     {
         private const string DOMAIN = ""; // whole network
 
@@ -74,20 +74,20 @@ namespace MPExtended.Libraries.Service.Hosting
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
                 net.Publish();
             }
-            Log.Info("Published bonjour services");
+            Log.Info("Published Bonjour services");
         }
 
-        private bool CheckBonjourInstallation()
+        public static bool CheckBonjourInstallation()
         {
             try
             {
                 Version ver = NetService.DaemonVersion;
-                Log.Trace("Bonjour version {0} installed", ver.ToString());
+                Log.Debug("Using installed Bonjour version {0}", ver.ToString());
                 return true;
             }
             catch (Exception)
             {
-                Log.Trace("Bonjour not installed");
+                Log.Debug("Bonjour not installed");
                 return false;
             }
         }
@@ -100,7 +100,7 @@ namespace MPExtended.Libraries.Service.Hosting
 
         private void PublishedService(NetService service)
         {
-            Log.Debug("Published service {0}", service.Type);
+            Log.Trace("Published service {0}", service.Type);
         }
     }
 }

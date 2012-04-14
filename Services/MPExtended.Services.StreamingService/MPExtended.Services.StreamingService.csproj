@@ -43,9 +43,6 @@
       <HintPath>..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCManaged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -63,7 +60,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="Code\BackgroundThread.cs" />
+    <Compile Include="Code\Initialization.cs" />
     <Compile Include="Code\Downloads.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />
     <Compile Include="Code\Images.cs" />

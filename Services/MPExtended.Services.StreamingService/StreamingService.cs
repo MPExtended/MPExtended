@@ -170,6 +170,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId)
         {
+            // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId);
             string path = source.GetPath();
             if (path == null || path.Length == 0)
@@ -177,14 +178,34 @@ namespace MPExtended.Services.StreamingService
                 return new WebItemSupportStatus(false, "Cannot resolve item to a path");
             }
 
-            if (!source.Exists)
+            // some checks based upon the file info. apparantly people have broken files in their connections
+            var fileinfo = source.GetFileInfo();
+            if (!fileinfo.Exists)
             {
+                // add a special warning message for files that are on a network drive, as this often causes problems
+                Uri uri = new Uri(path);
+                if (uri.IsUnc && !NetworkInformation.IsLocalAddress(uri.Host))
+                {
+                    return new WebItemSupportStatus(false, "File is on an inaccessible network share");
+                }
+
                 return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
             }
+            if (fileinfo.Size == 0)
+            {
+                return new WebItemSupportStatus(false, "This file has a size of 0KB");
+            }
 
+            // we don't support some things yet
             if (path.EndsWith(".IFO"))
             {
                 return new WebItemSupportStatus(false, "Streaming DVD files is not supported");
+            }
+
+            // while corrupt files may work, it's probably a better idea to warn early. check for a valid file using mediainfo
+            if (MediaInfo.MediaInfoWrapper.GetMediaInfo(source) == null)
+            {
+                return new WebItemSupportStatus(false, "This file might be corrupt");
             }
 
             return new WebItemSupportStatus() { Supported = true };

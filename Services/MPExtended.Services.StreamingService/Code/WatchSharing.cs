@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Social;
@@ -42,6 +43,24 @@ namespace MPExtended.Services.StreamingService.Code
         private const int KEEP_ONLINE_ALIVE_CYCLES = 5;
 #endif
 
+        private class WatchSharingTimer : System.Timers.Timer
+        {
+            public string Identifier { get; set; }
+            public int Iteration { get; set; }
+            public int CanceledWaitIterations { get; set; }
+
+            public WatchSharingTimer(string identifier)
+                : base()
+            {
+                AutoReset = true;
+                Interval = CYCLE_TIME;
+
+                Identifier = identifier;
+                Iteration = 0;
+                CanceledWaitIterations = -1;
+            }
+        }
+
         private class StreamState
         {
             public string Id { get; set; }
@@ -51,7 +70,7 @@ namespace MPExtended.Services.StreamingService.Code
             public int Runtime { get; set; } // in milliseconds
             public bool Canceled { get; set; }
             public bool Stale { get; set; }
-            public Thread BackgroundThread { get; set; }
+            public WatchSharingTimer BackgroundTimer { get; set; }
         }
 
         private bool enabled;
@@ -139,8 +158,24 @@ namespace MPExtended.Services.StreamingService.Code
                     state.Runtime = (int)context.MediaInfo.Duration;
                 }
 
+                // send start watching event
+                Task.Factory.StartNew(delegate()
+                {
+                    if (state.Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                    {
+                        service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
+                    }
+                    else if (state.Context.Source.MediaType == WebStreamMediaType.Movie)
+                    {
+                        service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
+                    }
+                });
+
+                // and start the background timer
                 streams[identifier] = state;
-                state.BackgroundThread = ThreadManager.Start("WatchWorker", new ParameterizedThreadStart(this.BackgroundWorker), identifier);
+                state.BackgroundTimer = new WatchSharingTimer(identifier);
+                state.BackgroundTimer.Elapsed += TimerElapsed;
+                state.BackgroundTimer.Start();
             }
             else
             {
@@ -169,8 +204,8 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     Log.Debug("WatchSharing: seeing {0}% as finished for {1}", progress, identifier);
 
-                    // send the finished event in a background thread
-                    ThreadManager.Start("FinishWatching", delegate()
+                    // send the finished event in the background thread
+                    Task.Factory.StartNew(delegate ()
                     {
                         if (streams[identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
                         {
@@ -182,8 +217,7 @@ namespace MPExtended.Services.StreamingService.Code
                         }
 
                         // kill it
-                        streams[identifier].BackgroundThread.Abort();
-                        ThreadManager.Remove(streams[identifier].BackgroundThread);
+                        streams[identifier].BackgroundTimer.Enabled = false;
                         streams.Remove(identifier);
                         Log.Debug("WatchSharing: finished handling {0}", identifier);
                     });
@@ -215,97 +249,72 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        private void BackgroundWorker(object identifier)
+        private void TimerElapsed(object source, ElapsedEventArgs args)
         {
-            string id = (string)identifier;
-            int iteration = 0;
-            int canceledWaitIterations = -1;
-
-            // start by sending the start watching event (which we do here so that it doesn't block starting the stream)
-            if (streams[id].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+            try
             {
-                service.StartWatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor);
-            }
-            else if (streams[id].Context.Source.MediaType == WebStreamMediaType.Movie)
-            {
-                service.StartWatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor);
-            }
+                WatchSharingTimer wst = (WatchSharingTimer)source;
 
-            // and then we don't have to do anything immediately
-            Thread.Sleep(CYCLE_TIME);
-
-            while (true)
-            {
-                try
+                // check if canceled
+                if (streams[wst.Identifier].Canceled)
                 {
-                    // check if canceled
-                    if (streams[id].Canceled)
-                    {
-                        Log.Debug("WatchSharing: stream {0} is canceled", streams[id].Id);
-                        canceledWaitIterations = canceledWaitIterations == -1 ? KEEP_ONLINE_ALIVE_CYCLES : canceledWaitIterations - 1;
+                    Log.Debug("WatchSharing: stream {0} is canceled", streams[wst.Identifier].Id);
+                    wst.CanceledWaitIterations = wst.CanceledWaitIterations == -1 ? KEEP_ONLINE_ALIVE_CYCLES : wst.CanceledWaitIterations - 1;
 
-                        // user definitely canceled
-                        if (canceledWaitIterations == 0)
-                        {
-                            // notify service
-                            Log.Debug("WatchSharing: definitely killing stream {0} with cancelwatching event", streams[id].Id);
-                            lock (service)
-                            {
-                                if (streams[id].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
-                                {
-                                    service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor);
-                                }
-                                else if (streams[id].Context.Source.MediaType == WebStreamMediaType.Movie)
-                                {
-                                    service.CancelWatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor);
-                                }
-                            }
-
-                            // and kill us
-                            streams[id].Stale = true;
-                            return;
-                        }
-                    }
-                    else
+                    // user definitely canceled
+                    if (wst.CanceledWaitIterations == 0)
                     {
-                        canceledWaitIterations = -1;
-                    }
-
-                    // only send every x iterations the status, when we know for sure that we have a value and stream isn't canceled yet
-                    if (streams[id].Canceled)
-                    {
-                        Log.Trace("WatchSharing: stream canceled");
-                        // try again next iteration (++iteration is NOT called this time so that we don't create a gap when the stream crashed)
-                    } 
-                    else if (++iteration % service.UpdateInterval == 0)
-                    {
-                        // send position
-                        Log.Debug("WatchSharing: syncing status for {0}", streams[id].Id);
+                        // notify service
+                        Log.Debug("WatchSharing: definitely killing stream {0} with cancelwatching event", streams[wst.Identifier].Id);
                         lock (service)
                         {
-                            if (streams[id].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                            if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
                             {
-                                service.WatchingEpisode((WebTVEpisodeDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
+                                service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
-                            else if (streams[id].Context.Source.MediaType == WebStreamMediaType.Movie)
+                            else if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
                             {
-                                service.WatchingMovie((WebMovieDetailed)streams[id].MediaDescriptor, CalculateWatchPosition(id));
+                                service.CancelWatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
                         }
-                    }
 
-                    // wait till next iteration
-                    Thread.Sleep(CYCLE_TIME); // run each minute
+                        // and kill us
+                        streams[wst.Identifier].Stale = true;
+                        wst.Enabled = false;
+                        return;
+                    }
                 }
-                catch (ThreadAbortException) 
+                else
                 {
-                    // just exit
-                    return;
+                    wst.CanceledWaitIterations = -1;
                 }
-                catch (Exception e)
+
+                // only send every x iterations the status, when we know for sure that we have a value and stream isn't canceled yet
+                if (streams[wst.Identifier].Canceled)
                 {
-                    Log.Warn("Failed in watch sharing", e);
+                    Log.Trace("WatchSharing: stream canceled");
+                    // try again next iteration (++iteration is NOT called this time so that we don't create a gap when the stream crashed)
+                } 
+                else if (++wst.Iteration % service.UpdateInterval == 0)
+                {
+                    // send position
+                    Log.Debug("WatchSharing: syncing status for {0}", streams[wst.Identifier].Id);
+                    lock (service)
+                    {
+                        if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                        {
+                            service.WatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
+                        }
+                        else if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
+                        {
+                            service.WatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
+                        }
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Log.Warn("Failed in watch sharing", e);
             }
         }
 

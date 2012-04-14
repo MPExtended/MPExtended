@@ -214,7 +214,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebChannelBasic");
+                Log.Warn("Tried to convert a null Channel to WebChannelBasic");
                 return null;
             }
 
@@ -232,7 +232,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebProgramBasic");
+                Log.Warn("Tried to convert a null Channel to WebProgramBasic");
                 return null;
             }
 
@@ -247,7 +247,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebProgramDetailed");
+                Log.Warn("Tried to convert a null Channel to WebProgramDetailed");
                 return null;
             }
 

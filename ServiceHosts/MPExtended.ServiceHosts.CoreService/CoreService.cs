@@ -24,6 +24,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.ServiceHosts.CoreService
@@ -40,6 +41,7 @@ namespace MPExtended.ServiceHosts.CoreService
 
         protected override void OnStart(string[] args)
         {
+            Log.Setup("Service.log", false);
             host = new MPExtendedHost();
             host.Open();
         }

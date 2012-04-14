@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NLog;
+using MPExtended.Libraries.Service.Logging;
 
 namespace MPExtended.Libraries.Service
 {
@@ -30,224 +30,113 @@ namespace MPExtended.Libraries.Service
 
         static Log()
         {
-            try
+            logger = new Logger();
+        }
+
+        public static void Setup(string fileName, bool consoleLogging)
+        {
+            List<ILogDestination> destination = new List<ILogDestination>();
+            destination.Add(new FileDestination(LogLevel.Debug, Path.Combine(Installation.GetLogDirectory(), fileName)));
+            if (consoleLogging)
             {
-                logger = LogManager.GetCurrentClassLogger();
+                destination.Add(new ConsoleDestination(LogLevel.Trace));
             }
-            catch (Exception ex)
-            {
-                // Oops. Logging failed to setup. This really shouldn't happen, but in all cases it's better to continue without logging then to crash. As this code is
-                // called during service startup, it even aborts installation - which we really don't want to. So write the exception we encountered during log setup to
-                // a file and continue without enabled logging.
-                // The only known case where this could happen is on WHS 2011, where it has problems with finding the ${onexception} LayoutRenderer (see issue #137). We
-                // should solve that properly, but that isn't done yet.
-                string path = Path.Combine(Installation.GetLogDirectory(), "LoggingFailure.log");
-                using (FileStream stream = File.Open(path, FileMode.Append))
-                {
-                    using (TextWriter writer = new StreamWriter(stream))
-                    {
-                        writer.WriteLine("[{0:yyyy-MM-dd HH:mm:ss}] Exception occured while setting up logging", DateTime.Now);
-                        do
-                        {
-                            writer.WriteLine("{0}: {1}", ex.GetType().FullName, ex.Message);
-                            writer.WriteLine(ex.StackTrace.ToString());
-                            writer.WriteLine();
-                            ex = ex.InnerException;
-                        } while (ex != null);
-                    }
-                }
-
-                logger = LogManager.CreateNullLogger();
-            }
+            logger = new Logger(destination.ToArray());
         }
 
-        /// <summary>
-        /// Log with level Trace
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Trace(String _msg)
-        {
-            logger.Trace(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Trace
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Trace(String _msg, Exception ex)
-        {
-            logger.TraceException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Trace
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Values for the message</param>
-        public static void Trace(String _msg, params object[] args)
-        {
-            logger.Trace(_msg, args);
-        }
-
-        /// <summary>
-        /// Log with level Debug
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Debug(String _msg)
-        {
-            logger.Debug(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Debug
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Debug(String _msg, Exception ex)
-        {
-            logger.DebugException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Debug
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Values for the message</param>
-        public static void Debug(String _msg, params object[] args)
-        {
-            logger.Debug(_msg, args);
-        }
-
-        /// <summary>
-        /// Log with level Info
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Info(String _msg)
-        {
-            logger.Info(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Info
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Info(String _msg, Exception ex)
-        {
-            logger.InfoException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Info
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Values for the message</param>
-        public static void Info(String _msg, params object[] args)
-        {
-            logger.Info(_msg, args);
-        }
-
-        /// <summary>
-        /// Log with level Warn
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Warn(String _msg)
-        {
-            logger.Warn(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Warn
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Warn(String _msg, Exception ex)
-        {
-            logger.WarnException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Warn
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Values for the message</param>
-        public static void Warn(String _msg, params object[] args)
-        {
-            logger.Warn(_msg, args);
-        }
-
-        /// <summary>
-        /// Log with level Error
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Error(String _msg)
-        {
-            logger.Error(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Error
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Error(String _msg, Exception ex)
-        {
-            logger.ErrorException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Error
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Error(String _msg, params object[] arg)
-        {
-            logger.Error(_msg, arg);
-        }
-
-        /// <summary>
-        /// Log with level Fatal
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        public static void Fatal(String _msg)
-        {
-            logger.Fatal(_msg);
-        }
-
-        /// <summary>
-        /// Log with level Fatal
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Exception that will be logged</param>
-        public static void Fatal(String _msg, Exception ex)
-        {
-            logger.FatalException(_msg, ex);
-        }
-
-        /// <summary>
-        /// Log with level Fatal
-        /// </summary>
-        /// <param name="_msg">Message that will be logged</param>
-        /// <param name="ex">Values for the message</param>
-        public static void Fatal(String _msg, params object[] args)
-        {
-            logger.Trace(_msg, args);
-        }
-
-        /// <summary>
-        /// Flush all logs to disk
-        /// </summary>
         public static void Flush()
         {
-            NLog.LogManager.Flush();
+            logger.Flush();
         }
 
-        /// <summary>
-        /// Direct access to the NLog Logger instance (for advanced logging)
-        /// </summary>
-        public static Logger AdvancedLogger
+        public static void Trace(String _msg)
         {
-            get { return logger; }
+            logger.LogLine(LogLevel.Trace, _msg);
+        }
+
+        public static void Trace(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Trace, _msg, ex);
+        }
+
+        public static void Trace(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Trace, _msg, args);
+        }
+
+        public static void Debug(String _msg)
+        {
+            logger.LogLine(LogLevel.Debug, _msg);
+        }
+
+        public static void Debug(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Debug, _msg, ex);
+        }
+
+        public static void Debug(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Debug, _msg, args);
+        }
+
+        public static void Info(String _msg)
+        {
+            logger.LogLine(LogLevel.Info, _msg);
+        }
+
+        public static void Info(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Info, _msg, ex);
+        }
+
+        public static void Info(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Info, _msg, args);
+        }
+
+        public static void Warn(String _msg)
+        {
+            logger.LogLine(LogLevel.Warn, _msg);
+        }
+
+        public static void Warn(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Warn, _msg, ex);
+        }
+
+        public static void Warn(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Warn, _msg, args);
+        }
+
+        public static void Error(String _msg)
+        {
+            logger.LogLine(LogLevel.Error, _msg);
+        }
+
+        public static void Error(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Error, _msg, ex);
+        }
+
+        public static void Error(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Error, _msg, args);
+        }
+
+        public static void Fatal(String _msg)
+        {
+            logger.LogLine(LogLevel.Fatal, _msg);
+        }
+
+        public static void Fatal(String _msg, Exception ex)
+        {
+            logger.LogLine(LogLevel.Fatal, _msg, ex);
+        }
+
+        public static void Fatal(String _msg, params object[] args)
+        {
+            logger.LogLine(LogLevel.Fatal, _msg, args);
         }
     }
 }

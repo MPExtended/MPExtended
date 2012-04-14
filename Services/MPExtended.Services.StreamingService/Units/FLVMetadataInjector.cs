@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
 
@@ -36,7 +36,7 @@ namespace MPExtended.Services.StreamingService.Units
         public bool IsLogStreamConnected { get; set; }
 
         private StreamContext context;
-        private Thread doInjectionThread;
+        private Task injectionTask;
         private NamedPipe pipeClient;
         private NamedPipe pipeServer;
 
@@ -59,7 +59,7 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Start()
         {
-            doInjectionThread = ThreadManager.Start("FLVMetadataInjection", delegate()
+            injectionTask = Task.Factory.StartNew(delegate()
             {
                 DataOutputStream = pipeClient;
 
@@ -83,14 +83,14 @@ namespace MPExtended.Services.StreamingService.Units
                 String bytesToFileNew = ByteArrayToString(bytes);
                 pipeServer.Write(bytes, 0, result);
 
-                MPExtended.Services.StreamingService.Code.StreamCopy.AsyncStreamCopy(InputStream, pipeServer);
-            });
+                StreamCopy.AsyncStreamCopy(InputStream, pipeServer);
+            }, TaskCreationOptions.LongRunning);
             return true;
         }
 
         public bool Stop()
         {
-            ThreadManager.Abort(doInjectionThread);
+            // do not abort the injection here - it automatically stops as it's input stream ends, and it only makes things more complicated in the implementation
             return true;
         }
 

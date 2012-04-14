@@ -106,11 +106,38 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves. This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed..
+        ///   Looks up a localized string similar to The services support autodetection via Bonjour/Zeroconf, which allows clients on the local network to automatically find the services and configure themselves..
         /// </summary>
         public static string AutodetectionText {
             get {
                 return ResourceManager.GetString("AutodetectionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking your Bonjour installation....
+        /// </summary>
+        public static string BonjourChecking {
+            get {
+                return ResourceManager.GetString("BonjourChecking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bonjour isn&apos;t installed on your computer. To use this feature, .
+        /// </summary>
+        public static string BonjourNotInstalled {
+            get {
+                return ResourceManager.GetString("BonjourNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to please download Bonjour. .
+        /// </summary>
+        public static string BonjourNotInstalledDownload {
+            get {
+                return ResourceManager.GetString("BonjourNotInstalledDownload", resourceCulture);
             }
         }
         
@@ -246,15 +273,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         public static string DonateToMPExtended {
             get {
                 return ResourceManager.GetString("DonateToMPExtended", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Download Bonjour..
-        /// </summary>
-        public static string DownloadBonjour {
-            get {
-                return ResourceManager.GetString("DownloadBonjour", resourceCulture);
             }
         }
         

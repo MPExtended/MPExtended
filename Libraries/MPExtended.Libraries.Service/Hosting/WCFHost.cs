@@ -20,9 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using System.IO;
-using System.Threading;
-using System.Reflection;
 
 namespace MPExtended.Libraries.Service.Hosting
 {

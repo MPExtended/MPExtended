@@ -316,7 +316,7 @@
     <value>Autodetection</value>
   </data>
   <data name="AutodetectionText" xml:space="preserve">
-    <value>The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves. This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed.</value>
+    <value>The services support autodetection via Bonjour/Zeroconf, which allows clients on the local network to automatically find the services and configure themselves.</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>check for updates</value>
@@ -335,9 +335,6 @@
   </data>
   <data name="Documentation" xml:space="preserve">
     <value>Documentation:</value>
-  </data>
-  <data name="DownloadBonjour" xml:space="preserve">
-    <value>Download Bonjour.</value>
   </data>
   <data name="EnableAuthentication" xml:space="preserve">
     <value>Enable authentication (recommended!)</value>
@@ -472,5 +469,14 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   </data>
   <data name="UserMustHaveNameAndPassword" xml:space="preserve">
     <value>Please enter both a username and password for this user. </value>
+  </data>
+  <data name="BonjourChecking" xml:space="preserve">
+    <value>Checking your Bonjour installation...</value>
+  </data>
+  <data name="BonjourNotInstalled" xml:space="preserve">
+    <value>Bonjour isn't installed on your computer. To use this feature, </value>
+  </data>
+  <data name="BonjourNotInstalledDownload" xml:space="preserve">
+    <value>please download Bonjour. </value>
   </data>
 </root>

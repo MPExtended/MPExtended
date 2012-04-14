@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.ServiceHosts.ConsoleHost
@@ -27,6 +28,8 @@ namespace MPExtended.ServiceHosts.ConsoleHost
     {
         static void Main(string[] args)
         {
+            Log.Setup("ConsoleHost.log", true);
+
             var host = new MPExtendedHost();
             host.Open();
 

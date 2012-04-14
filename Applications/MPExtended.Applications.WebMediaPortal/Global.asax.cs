@@ -51,6 +51,8 @@ namespace MPExtended.Applications.WebMediaPortal
 
         protected void Application_Start()
         {
+            Log.Setup("WebMediaPortal.log", false);
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
