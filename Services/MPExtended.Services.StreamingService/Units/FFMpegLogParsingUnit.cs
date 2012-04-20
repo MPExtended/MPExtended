@@ -50,7 +50,14 @@ namespace MPExtended.Services.StreamingService.Units
             data.Value.Failed = false;
             processThread = new Thread(delegate()
             {
-                ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
+                try
+                {
+                    ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("FFMpegLogParsing brutally came to an end", ex);
+                }
             });
             processThread.Name = "FFMpegLogParsing";
             processThread.Start();
