@@ -34,7 +34,8 @@ namespace MPExtended.Libraries.Service
         TVAccessService,
         StreamingService,
         UserSessionService,
-        MetaService
+        MetaService,
+        WifiRemote
     }
 
     public enum MPExtendedProduct
@@ -256,11 +257,22 @@ namespace MPExtended.Libraries.Service
 
         public static List<ServiceConfiguration> GetInstalledServices()
         {
-            return GetAvailableServices().Select(x => new ServiceConfiguration()
+            var list = GetAvailableServices().Select(x => new ServiceConfiguration()
             {
                 Port = Configuration.Services.Port,
                 Service = x.Service,
             }).ToList();
+
+            if (WifiRemote.IsInstalled)
+            {
+                list.Add(new ServiceConfiguration()
+                {
+                    Port = WifiRemote.Port,
+                    Service = MPExtendedService.WifiRemote,
+                });
+            }
+
+            return list;
         }
 
         public static bool IsServiceInstalled(MPExtendedService srv)

@@ -214,7 +214,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebChannelBasic");
+                Log.Warn("Tried to convert a null Channel to WebChannelBasic");
                 return null;
             }
 
@@ -232,7 +232,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebProgramBasic");
+                Log.Warn("Tried to convert a null Channel to WebProgramBasic");
                 return null;
             }
 
@@ -247,7 +247,7 @@ namespace MPExtended.Services.TVAccessService
         {
             if (ch == null)
             {
-                Log.Warn("Tried to convert a null Card to WebProgramDetailed");
+                Log.Warn("Tried to convert a null Channel to WebProgramDetailed");
                 return null;
             }
 
@@ -325,6 +325,13 @@ namespace MPExtended.Services.TVAccessService
 
     internal static class WebProgramExtensionMethods
     {
+        private static IEnumerable<Schedule> AllSchedules;
+
+        public static IDisposable CacheSchedules()
+        {
+            return new CacheLifetimeToken<IEnumerable<Schedule>>(val => AllSchedules = val, () => AllSchedules = Schedule.ListAll());
+        }
+
         public static WebProgramDetailed ToWebProgramDetailed(this Program p)
         {
             if (p == null)
@@ -361,8 +368,9 @@ namespace MPExtended.Services.TVAccessService
                 StarRating = p.StarRating,
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
-                DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
-                IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
+                DurationInMinutes = (int)((p.EndTime - p.StartTime).TotalMinutes),
+                IsScheduled = (AllSchedules == null ? Schedule.ListAll() : AllSchedules)
+                                    .Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
 
@@ -382,7 +390,7 @@ namespace MPExtended.Services.TVAccessService
                 Id = p.IdProgram,
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
-                DurationInMinutes = (p.EndTime - p.StartTime).Minutes,
+                DurationInMinutes = (int)((p.EndTime - p.StartTime).TotalMinutes),
                 IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }

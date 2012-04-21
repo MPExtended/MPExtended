@@ -25,12 +25,6 @@ Installer/Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
 
-Logging/NLog.dll:
-- Copyright (C) 2004 - 2011 by Jaroslaw Kowalski, http://nlog-project.org/
-- Licensed under 3-clause BSD license, available on https://github.com/jkowalski/NLog/raw/master/LICENSE.txt and http://opensource.org/licenses/BSD-3-Clause
-- Source code available from https://github.com/jkowalski/NLog/
-- Version 2.0.0.2000
-
 Logging/log4net.dll:
 - Copyright (C) 2001 - 2066 The Apache Software Foundation, http://logging.apache.org/log4net/
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -66,7 +60,7 @@ Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
 - Licensed under Lesser General Public License, version 3, available on http://www.gnu.org/licenses/lgpl-3.0.html
 - Source code available from http://mediainfo.sourceforge.net/
-- Version 0.7.50, 32-bit build
+- Version 0.7.53, 32-bit build
 
 Streaming\segmenter:
 - Copyright (C) 2009 Chase Douglas, http://code.google.com/p/httpsegmenter/

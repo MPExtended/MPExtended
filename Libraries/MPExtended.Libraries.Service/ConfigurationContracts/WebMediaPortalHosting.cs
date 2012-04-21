@@ -27,17 +27,38 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
     {
         public int Port { get; set; }
 
+        public bool EnableTLS { get; set; }
+        public int PortTLS { get; set; }
+
         public WebMediaPortalHosting(string path, string defaultPath)
         {
+            // default settings
+            Port = 8080;
+            EnableTLS = false;
+            PortTLS = 44300;
+
+            // load available settings from file (only port can be required as it was present in the first release)
             try
             {
                 XElement file = XElement.Load(path);
 
                 Port = Int32.Parse(file.Element("port").Value);
+                if (file.Element("tls") != null)
+                {
+                    EnableTLS = file.Element("tls").Attribute("enable").Value == "yes";
+                    PortTLS = Int32.Parse(file.Element("tls").Value);
+                }
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to open WebMediaPortalHosting.xml", ex);
+            }
+
+            // validate port tls 
+            if (EnableTLS && (PortTLS < 44300 || PortTLS > 44399))
+            {
+                Log.Error("TLS port {0} not valid, only 44300-44399 allowed by IIS Express, using port 44300", PortTLS);
+                PortTLS = 44300;
             }
         }
 
@@ -48,6 +69,15 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 XElement file = XElement.Load(Configuration.GetPath("WebMediaPortalHosting.xml"));
 
                 file.Element("port").Value = Port.ToString();
+
+                // remove already existing <tls> nodes, if it is there
+                file.Elements("tls").Remove();
+
+                // add new <tls> node
+                file.Add(new XElement("tls",
+                    new XAttribute("enable", EnableTLS ? "yes" : "no"),
+                    PortTLS)
+                );
 
                 file.Save(Configuration.GetPath("WebMediaPortalHosting.xml"));
                 return true;

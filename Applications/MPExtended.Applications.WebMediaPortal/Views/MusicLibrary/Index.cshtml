@@ -3,23 +3,9 @@
 	ViewBag.Title = UIStrings.Music;
 }
 
-<style type="text/css">
-    .artistList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .artistList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-    }
-</style>
-
 <h2>@UIStrings.YourArtists</h2>
-<ul class="artistList">
+
+<ul class="list">
     @if (Model != null)
     {
         foreach (var artist in Model)

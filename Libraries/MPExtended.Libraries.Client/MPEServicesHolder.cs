@@ -23,6 +23,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -93,7 +94,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (MASConnection == null || ((ICommunicationObject)MASConnection).State == CommunicationState.Faulted)
                 {
-                    MASConnection = CreateConnection<IMediaAccessService>(MASUrl, "MediaAccessService");
+                    MASConnection = CreateConnection<IMediaAccessService>(MASUrl, "MediaAccessService", false);
                 }
 
                 return MASConnection;
@@ -131,7 +132,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (WSSForMAS == null || ((ICommunicationObject)WSSForMAS).State == CommunicationState.Faulted)
                 {
-                    WSSForMAS = CreateConnection<IWebStreamingService>(MASUrl, "StreamingService");
+                    WSSForMAS = CreateConnection<IWebStreamingService>(MASUrl, "StreamingService/soap",false);
                 }
 
                 return WSSForMAS;
@@ -144,7 +145,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (StreamForMAS == null || ((ICommunicationObject)StreamForMAS).State == CommunicationState.Faulted)
                 {
-                    StreamForMAS = CreateConnection<IStreamingService>(MASUrl, "StreamingService");
+                    StreamForMAS = CreateConnection<IStreamingService>(MASUrl, "StreamingService/soapstream", true);
                 }
 
                 return StreamForMAS;
@@ -191,7 +192,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (TASConnection == null || ((ICommunicationObject)TASConnection).State == CommunicationState.Faulted)
                 {
-                    TASConnection = CreateConnection<ITVAccessService>(TASUrl, "TVAccessService");
+                    TASConnection = CreateConnection<ITVAccessService>(TASUrl, "TVAccessService", false);
                 }
 
                 return TASConnection;
@@ -228,7 +229,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (WSSForTAS == null || ((ICommunicationObject)WSSForTAS).State == CommunicationState.Faulted)
                 {
-                    WSSForTAS = CreateConnection<IWebStreamingService>(TASUrl, "StreamingService");
+                    WSSForTAS = CreateConnection<IWebStreamingService>(TASUrl, "StreamingService/soap", false);
                 }
 
                 return WSSForTAS;
@@ -241,7 +242,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (StreamForTAS == null || ((ICommunicationObject)StreamForTAS).State == CommunicationState.Faulted)
                 {
-                    StreamForTAS = CreateConnection<IStreamingService>(TASUrl, "StreamingService");
+                    StreamForTAS = CreateConnection<IStreamingService>(TASUrl, "StreamingService/soapstream", true);
                 }
 
                 return StreamForTAS;
@@ -289,7 +290,7 @@ namespace MPExtended.Libraries.Client
             Log.Debug("Connected to MAS version {0}, TAS version {1}", masVersion, tasVersion);
         }
 
-        private T CreateConnection<T>(string address, string service)
+        private T CreateConnection<T>(string address, string service, bool isStream)
         {
             Uri addr = new Uri(address);
 
@@ -302,12 +303,17 @@ namespace MPExtended.Libraries.Client
 
             // create channel factory
             ChannelFactory<T> factory = null;
-            if (addr.IsLoopback && addr.Port == ServiceDiscoverer.DEFAULT_PORT)
+            bool isLocal = addr.IsLoopback || NetworkInformation.GetIPAddresses().Contains(addr.Host);
+            if (isLocal && addr.Port == ServiceDiscoverer.DEFAULT_PORT)
             {
                 NetNamedPipeBinding binding = new NetNamedPipeBinding()
                 {
                     MaxReceivedMessageSize = 100000000
                 };
+                if (isStream)
+                {
+                    binding.TransferMode = TransferMode.StreamedResponse;
+                }
                 binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
                 binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
 
@@ -322,6 +328,10 @@ namespace MPExtended.Libraries.Client
                 {
                     MaxReceivedMessageSize = 100000000
                 };
+                if (isStream)
+                {
+                    binding.TransferMode = TransferMode.StreamedResponse;
+                }
                 binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
                 binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
 

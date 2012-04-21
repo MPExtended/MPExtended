@@ -79,16 +79,23 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
+            queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
             string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
-            Uri fullUri = new Uri(rootUrl + "GetMediaItem?" + queryString.ToString());
+            UriBuilder fullUri = new UriBuilder(rootUrl + "GetMediaItem?" + queryString.ToString());
 
             // Check stream type
             StreamType streamMode = Settings.ActiveSettings.StreamType;
             if (streamMode == StreamType.DirectWhenPossible)
             {
                 streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
+            }
+
+            // If we connect to the services at localhost, actually give the extern IP address to users
+            if (fullUri.Host == "localhost" || fullUri.Host == "127.0.0.1")
+            {
+                fullUri.Host = NetworkInformation.GetIPAddresses().First();
             }
 
             // Do the actual streaming
@@ -112,12 +119,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Check if there is actually a player requested for this stream
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
             {
-                Log.Warn("User {0} requested a stream but hasn't opened a player page - denying access to stream", Request.UserHostAddress);
+                Log.Warn("User {0} (host {1}) requested a stream but hasn't opened a player page - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
 
-            // Generate identifier from continuationId if possible, random otherwise
+            // Generate random identifier, and continuationId if needed
             string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
+            if (continuationId == null)
+            {
+                continuationId = "none-provided-" + randomGenerator.Next(10000, 99999).ToString();
+            }
 
             // Kill previous stream, but only if we expect it to be still running (avoid useless calls in non-seek and proxied cases)
             if (RunningStreams.ContainsKey(continuationId))
@@ -125,11 +136,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Debug("Killing off old streaming for continuation {0} with identifier {1} first", continuationId, RunningStreams[continuationId]);
                 GetStreamControl(type).FinishStream(RunningStreams[continuationId]);
             }
-       
-            // Do a standard stream
+
+            // Start the stream
             Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
                 identifier, type, itemId, transcoder, starttime, continuationId);
-            if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, "WebMediaPortal", identifier, STREAM_TIMEOUT))
+            string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
+            if (!WCFClient.CallWithHeader(new WCFHeader<string>("forwardedFor", HttpContext.Request.UserHostAddress), GetStreamControl(type),
+                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT); }))
             {
                 Log.Error("Streaming: InitStream failed");
                 return new EmptyResult();
@@ -180,7 +193,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // do request
             Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
-            WebResponse response = WebRequest.Create(sourceUrl).GetResponse();
+            WebRequest request = WebRequest.Create(sourceUrl);
+            request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
+            WebResponse response = request.GetResponse();
             Stream sourceStream = response.GetResponseStream();
 
             // set headers and disable buffer
@@ -365,6 +380,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
+            parameters["continuationId"] = "playlist-" + randomGenerator.Next(10000, 99999);
             string url = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
 
             // create playlist

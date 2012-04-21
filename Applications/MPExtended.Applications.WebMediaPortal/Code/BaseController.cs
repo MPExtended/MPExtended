@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using MPExtended.Libraries.Service;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Applications.WebMediaPortal.Models;
@@ -43,6 +44,13 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             {
                 return availabilityModel;
             }
+        }
+
+        protected override void Initialize(RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+            // make sure the thread locale is set before the model state is validated, which uses the thread locale
+            LoadLanguage(requestContext.HttpContext.Request);
         }
 
         protected override void OnException(ExceptionContext filterContext)
@@ -72,7 +80,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            LoadLanguage();
             SetViewBagProperties(ViewBag);
         }
 
@@ -80,19 +87,17 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         {
             bag.Availability = ServiceAvailability;
             bag.FullVersion = VersionUtil.GetFullVersionString();
-            bag.Styles = new List<string>();
-            bag.Scripts = new List<string>();
             bag.Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
         }
 
-        private void LoadLanguage()
+        private static void LoadLanguage(HttpRequestBase request)
         {
             // load a list of languages in order of preference
             List<string> languages = new List<string>();
-            if (Request.Params["language"] != null)
-                languages.Add(Request.Params["language"]);
-            if (Request.UserLanguages != null)
-                languages.AddRange(Request.UserLanguages);
+            if (request.Params["language"] != null)
+                languages.Add(request.Params["language"]);
+            if (request.UserLanguages != null)
+                languages.AddRange(request.UserLanguages);
 
             // load the highest-ranked available language
             foreach (string language in languages)
@@ -111,11 +116,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 }
                 catch (CultureNotFoundException)
                 {
-                    // just fall through to next language, or don't set a custom language in worst-case
+                    // just fall through to next language, or don't set a custom language worst case
                 }
                 catch (MissingManifestResourceException)
                 {
-                    // just fall through to next language, or don't set a custom language in worst-case
+                    // just fall through to next language, or don't set a custom language worst case
                 }
             }
         }

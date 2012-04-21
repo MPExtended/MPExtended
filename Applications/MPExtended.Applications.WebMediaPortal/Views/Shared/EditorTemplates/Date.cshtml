@@ -1,0 +1,4 @@
+﻿@model System.DateTime?
+@Html.TextBox("", Model.HasValue ? Model.Value.ToShortDateString() : String.Empty, new { @class = "dateInput" })
+@Html.jQuery().EnableUI()
+@Html.jQuery().AddDatePicker(".dateInput", ViewData.ContainsKey("openOnFocus") ? (bool)ViewData["openOnFocus"] : false)

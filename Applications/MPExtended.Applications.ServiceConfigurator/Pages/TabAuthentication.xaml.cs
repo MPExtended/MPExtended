@@ -54,7 +54,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
 
             Configuration.Services.Save();
-            Service.ShouldRestart = true;
         }
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
@@ -65,6 +64,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            if (String.IsNullOrEmpty(txtUsername.Text) || String.IsNullOrEmpty(txtPassword.Password))
+            {
+                MessageBox.Show(Strings.UI.UserMustHaveNameAndPassword, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             User u = new User() { Username = txtUsername.Text };
             u.SetPasswordFromPlaintext(txtPassword.Password);
             users.Add(u);

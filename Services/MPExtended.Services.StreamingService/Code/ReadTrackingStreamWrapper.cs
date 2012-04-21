@@ -29,17 +29,26 @@ namespace MPExtended.Services.StreamingService.Code
     {
         private Stream wrappedStream;
         private Stopwatch readTimer;
+        private long readBytes;
 
         public ReadTrackingStreamWrapper(Stream toWrap)
         {
             wrappedStream = toWrap;
+            readBytes = 0;
             readTimer = new Stopwatch();
             readTimer.Start();
         }
 
+        public bool IsClosed { get; set; }
+
         public long TimeSinceLastRead
         {
             get { return readTimer.ElapsedMilliseconds; }
+        }
+
+        public long ReadBytes
+        {
+            get { return readBytes; } 
         }
 
         public override bool CanRead
@@ -74,6 +83,12 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
+        public override void Close()
+        {
+            base.Close();
+            IsClosed = true;
+        }
+
         public override void Flush()
         {
             wrappedStream.Flush();
@@ -82,6 +97,7 @@ namespace MPExtended.Services.StreamingService.Code
         public override int Read(byte[] buffer, int offset, int count)
         {
             readTimer.Restart();
+            readBytes += count;
             return wrappedStream.Read(buffer, offset, count);
         }
 

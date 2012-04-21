@@ -29,9 +29,12 @@
     <Media Id="1" Cabinet="data.cab" EmbedCab="yes" />
 
     <!-- Disallow downgrades and support upgrades -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."/>
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Cannot downgrade, try a reinstallation."  AllowSameVersionUpgrades="yes" />
+    <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
     <Upgrade Id="21ae5680-f56d-4bb6-8835-87b5081b156d">
-      <UpgradeVersion Property="OLDAPPFOUND" IncludeMinimum="yes" Minimum="0.0.0.0" IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" 
+                      IncludeMinimum="yes" Minimum="0.0.0.0" 
+                      IncludeMaximum="no" Maximum="!(bind.FileVersion.MPExtended.Libraries.Service.dll)" />
     </Upgrade>
     
     <!-- The stupid icon -->
@@ -48,8 +51,8 @@
     <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
     
     <!-- WifiRemote installer -->
-    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.5.0.mpe1" />
-    <Property Id="WifiRemotePackagedVersion" Value="0.5.0.0" />
+    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.6.1.mpe1" />
+    <Property Id="WifiRemotePackagedVersion" Value="0.6.1.0" />
     <CustomAction Id="WifiRemoteInstaller" BinaryKey="CustomActionLibrary" DllEntry="InstallWifiRemote" Execute="immediate" Return="check" />
     <InstallExecuteSequence>
       <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
@@ -64,7 +67,6 @@
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe" KeyPath="yes" Id="MainService"/>
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.pdb" />
         <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\MPExtended.ServiceHosts.CoreService.exe.config" />
-        <File Source="$(var.MPExtended.ServiceHosts.CoreService.TargetDir)\NLog.config" />
         
         <!-- let's just install the consolehost too, for debugging -->
         <File Source="$(var.MPExtended.ServiceHosts.ConsoleHost.TargetDir)\MPExtended.ServiceHosts.ConsoleHost.exe" />
@@ -94,8 +96,9 @@
           Id="FirewallException"
           Name="MPExtended Service"
           Scope="any"
+          Profile="all"
           Protocol="tcp"
-          Program="[#MainService]" />
+          Port="4322" />
       </Component>
     </DirectoryRef>
     

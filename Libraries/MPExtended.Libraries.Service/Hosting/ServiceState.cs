@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -47,7 +48,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 waitConditions.Remove(conditionName);
                 if (waitConditions.Count == 0)
                 {
-                    ThreadManager.Start("ServiceStarted", delegate()
+                    Task.Factory.StartNew(delegate()
                     {
                         Log.Debug("Triggering ServiceState.Started event");
                         if (Started != null)

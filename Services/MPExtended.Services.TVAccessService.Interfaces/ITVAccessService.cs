@@ -35,6 +35,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null);
         #endregion
 
@@ -278,11 +282,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IDictionary<int, List<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IDictionary<int, List<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -1,29 +1,29 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
+﻿@Html.Assets().AddViewStylesheet("MovieLibrary/Movie.css")
+@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
 @{
-	ViewBag.Title = UIStrings.Movies;
+    ViewBag.Title = UIStrings.Movies;
 }
-
-<style type="text/css">
-    .movieList
-    {
-        overflow: hidden;
-        min-width: 1000px;
-    }
-    
-    .movieList li
-    {
-        width: 250px;
-        float: left;
-        margin: 15px;
-        
-    }
-</style>
-
 <h2>@UIStrings.YourMovies</h2>
+@foreach (var movie in Model)
+{
+    
+    <a href="@Url.Action(UIStrings.Details, "MovieLibrary", new { movie = movie.Id })">
+        <div class="movie">
+            <img alt="@movie.Title Cover" height="138" width="100" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id, width = 100 })" />
+            <div class="movieDetails" style="float: right">
+                <div class="movieControls">
+                <a href="@Url.Action("Play", "MovieLibrary", new { movie = movie.Id })">
+                    <img height="16" width="12" src="/Content/Images/btnPlay.png" />
+                </a>
+                </div>
+                <p style="margin: 2px;">@movie.Genres.FirstOrDefault()</p>
+                <p  style="margin: 2px;">@movie.Runtime min.</p>
 
-<ul class="movieList">
-    @foreach (var movie in Model)
-    {
-        <li>@Html.ActionLink(movie.Title, UIStrings.Details, new { movie = movie.Id })</li>
-    }
-</ul>
+            </div>
+            <p style="float: none"></p>
+            <p style="float: left;">
+                @movie.Title
+            </p>
+        </div>
+    </a>
+}

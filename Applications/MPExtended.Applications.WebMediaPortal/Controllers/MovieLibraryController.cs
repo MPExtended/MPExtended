@@ -23,6 +23,7 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
@@ -32,14 +33,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         //
         // GET: /MovieLibrary/
-        public ActionResult Index()
+        public ActionResult Index(string genre = null)
         {
-            var movieList = MPEServices.MAS.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort:SortBy.Title, order:OrderBy.Asc);
-            if (movieList != null)
+            IEnumerable<WebMovieBasic> movieList = MPEServices.MAS.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
+            if (!String.IsNullOrEmpty(genre))
             {
-                return View(movieList);
+                movieList = movieList.Where(x => x.Genres.Contains(genre));
             }
-            return null;
+
+            return View(movieList);
         }
 
         public ActionResult Details(string movie)
@@ -64,9 +66,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Image(string movie)
+        public ActionResult Image(string movie, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0);
+            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height);
             if (image != null)
             {
                 return File(image, "image/jpg");

@@ -696,11 +696,12 @@ namespace MPExtended.Services.MediaAccessService
             try
             {
                 path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
+                WebFileInfo retVal = null;
 
                 try
                 {
                     // first try it the usual way
-                    return GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
+                    retVal = GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -709,13 +710,16 @@ namespace MPExtended.Services.MediaAccessService
                     {
                         using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
                         {
-                            var ret = new WebFileInfo(path);
-                            ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
-                            ret.OnNetworkDrive = true;
-                            return ret;
+                            retVal = new WebFileInfo(path);
+                            retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
+                            retVal.OnNetworkDrive = true;
                         }
                     }
                 }
+
+                // Make sure to always the path property, even if the file doesn't exist. This makes debugging a lot easier, as you get actual paths in your logs now. 
+                retVal.Path = path;
+                return retVal;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -732,7 +736,8 @@ namespace MPExtended.Services.MediaAccessService
 
             return new WebFileInfo()
             {
-                Exists = false
+                Exists = false,
+                Path = String.IsNullOrWhiteSpace(path) ? null : path
             };
         }
 

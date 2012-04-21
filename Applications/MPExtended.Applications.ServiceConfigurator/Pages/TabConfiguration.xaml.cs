@@ -17,13 +17,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -38,10 +41,42 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             // load config
             txtPort.Text = Configuration.Services.Port.ToString();
-            cbBonjourEnabled.IsChecked = Configuration.Services.BonjourEnabled;
             txtServiceName.Text = GetServiceName();
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
+
+            // check if bonjour is enabled
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += delegate(object source, DoWorkEventArgs args)
+            {
+                args.Result = Zeroconf.CheckBonjourInstallation();
+            };
+            bw.RunWorkerCompleted += delegate (object source, RunWorkerCompletedEventArgs args)
+            {
+                tbAutodetection.Inlines.Clear();
+                tbAutodetection.Inlines.Add(Strings.UI.AutodetectionText);
+
+                if (!(bool)args.Result)
+                {
+                    tbAutodetection.Inlines.Add(new LineBreak());
+                    tbAutodetection.Inlines.Add(Strings.UI.BonjourNotInstalled);
+                    Hyperlink link = new Hyperlink();
+                    link.NavigateUri = new Uri("http://support.apple.com/kb/DL999");
+                    link.RequestNavigate += CommonEventHandlers.NavigateHyperlink;
+                    link.Inlines.Add(Strings.UI.BonjourNotInstalledDownload);
+                    tbAutodetection.Inlines.Add(link);
+
+                    cbBonjourEnabled.IsChecked = false;
+                }
+                else
+                {
+                    lblServiceName.IsEnabled = true;
+                    cbBonjourEnabled.IsEnabled = true;
+                    cbBonjourEnabled.IsChecked = Configuration.Services.BonjourEnabled;
+                    txtServiceName.IsEnabled = true;
+                }
+            };
+            bw.RunWorkerAsync();
         }
 
         public void TabClosed()
@@ -53,7 +88,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
 
             Configuration.Services.Save();
-            Service.ShouldRestart = true;
         }
 
         private string GetServiceName()

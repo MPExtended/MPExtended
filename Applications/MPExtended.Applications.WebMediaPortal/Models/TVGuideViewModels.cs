@@ -69,6 +69,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public DateTime GuideStart { get; private set; }
         public DateTime GuideEnd { get; private set; }
+        public bool HasDateSplit { get; private set; }
+        public int FirstDayHours { get; private set; }
+        public int SecondDayHours { get; private set; }
 
         public int GroupId { get; private set; }
         public string GroupName { get; private set; }
@@ -118,6 +121,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             GuideStart = guideStart;
             GuideEnd = guideEnd;
+            HasDateSplit = GuideStart.Date != GuideEnd.Date;
+            if (!HasDateSplit)
+            {
+                FirstDayHours = (GuideEnd - GuideStart).Hours;
+                SecondDayHours = 0;
+            }
+            else
+            {
+                FirstDayHours = 24 - GuideStart.Hour;
+                SecondDayHours = GuideEnd.Hour;
+            }
+
 
             GroupId = channelGroup.Id;
             GroupName = channelGroup.GroupName;
@@ -161,6 +176,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        private WebProgramBasic program;
         private DateTime guideStart;
         private DateTime guideEnd;
 
@@ -174,6 +190,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             this.guideStart = guideStart;
             this.guideEnd = guideEnd;
+            this.program = program;
         }
 
         public double GetPercentageWidth()
@@ -193,6 +210,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             // convert to string
             var invariantCulture = System.Globalization.CultureInfo.InvariantCulture;
             return string.Format(invariantCulture, "{0:0.00}%", GetPercentageWidth());
+        }
+
+        public string GetPageLink(UrlHelper helper)
+        {
+            if (IsCurrent)
+            {
+                return helper.Action("WatchLiveTV", "Television", new { channelId = program.IdChannel });
+            }
+            else
+            {
+                return helper.Action("ProgramDetails", "Television", new { programId = Id });
+            }
         }
     }
 

@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.StreamingService.Code {
+namespace MPExtended.Services.StreamingService.Code
+{
     /* Thanks to StackOverflow: http://stackoverflow.com/questions/2980463/how-do-i-assign-by-reference-to-a-class-field-in-c
      * 
      * Example:
@@ -28,22 +29,27 @@ namespace MPExtended.Services.StreamingService.Code {
      *   x = new Reference<int>( () => y, z => { y=z; } );
      * </code>
      */
-    internal sealed class Reference<T> {
+    internal sealed class Reference<T>
+    {
         private readonly Func<T> getMethod;
         private readonly Action<T> setMethod;
 
-        public Reference(Func<T> get, Action<T> set) {
+        public Reference(Func<T> get, Action<T> set)
+        {
             this.getMethod = get;
             this.setMethod = set;
         }
 
-        public T Value { 
-            get { 
+        public T Value
+        {
+            get
+            {
                 return getMethod();
-            } 
-            set {
+            }
+            set
+            {
                 setMethod(value);
-            } 
+            }
         }
     }
 }

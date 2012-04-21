@@ -33,14 +33,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     [ServiceAuthorize]
     public class TVShowsLibraryController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(string genre = null)
         {
-            var series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
-            if (series != null)
+            IEnumerable<WebTVShowBasic> series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
+            if (!String.IsNullOrEmpty(genre))
             {
-                return View(series);
+                series = series.Where(x => x.Genres.Contains(genre));
             }
-            return null;
+
+            return View(series);
         }
 
         public ActionResult Seasons(string show)
@@ -67,9 +68,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             });
         }
 
-        public ActionResult Image(string season)
+        public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0);
+            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0, width, height);
             if (image != null)
             {
                 return File(image, "image/jpg");
@@ -77,9 +78,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult EpisodeImage(string episode)
+        public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0);
+            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0, width, height);
             if (image != null)
             {
                 return File(image, "image/jpg");
@@ -87,9 +88,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult SeriesFanart(string show)
+        public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtwork(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0);
+            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height);
             if (image != null)
             {
                 return File(image, "image/jpg");

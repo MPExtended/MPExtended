@@ -5,12 +5,12 @@
 *.log
 [Tt]humbs.db
 *.resharper
+_ReSharper*
 *~
 *.vssscc
 [Dd]ebug
 [Rr]elease
-!Config/Debug
-!Config/Release
 Libraries/Streaming/vlc*/plugins/*.dat
 Libraries/MPExtended.Libraries.Service/Properties/GitVersion.cs
 Installers/MPExtended.Installers.WebMediaPortal/WWW.wxs
+Installers/MPExtended.Installers.WebMediaPortalIIS/WWW.wxs

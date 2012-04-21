@@ -51,6 +51,8 @@ namespace MPExtended.Applications.WebMediaPortal
 
         protected void Application_Start()
         {
+            Log.Setup("WebMediaPortal.log", false);
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
@@ -65,7 +67,9 @@ namespace MPExtended.Applications.WebMediaPortal
             // set view engine
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new SkinnableViewEngine(Settings.ActiveSettings.Skin));
-            ViewEngines.Engines.Add(new RazorViewEngine());
+
+            // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
+            Configuration.EnableChangeWatching();
         }
     }
 }

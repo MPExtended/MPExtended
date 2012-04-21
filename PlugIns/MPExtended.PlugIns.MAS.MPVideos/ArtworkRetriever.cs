@@ -81,7 +81,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         private static string DownloadFile(Uri url)
         {
             string extension = Path.GetExtension(url.LocalPath);
-            string tmpPath = Path.Combine(Path.GetTempPath(), "MPExtended", "imagecache", String.Format("mpvideos_{0:X8}{1}", url.ToString().GetHashCode(), extension));
+            string tmpPath = Path.Combine(Installation.GetCacheDirectory(), "imagecache", String.Format("mpvideos_{0:X8}{1}", url.ToString().GetHashCode(), extension));
             if (File.Exists(tmpPath))
             {
                 return tmpPath;

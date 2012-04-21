@@ -40,10 +40,12 @@ namespace MPExtended.Services.StreamingService
         private const int API_VERSION = 2;
 
         private Streaming _stream;
+        private Downloads _downloads;
 
         public StreamingService()
         {
             _stream = new Streaming(this);
+            _downloads = new Downloads();
         }
 
         public void Dispose()
@@ -120,7 +122,9 @@ namespace MPExtended.Services.StreamingService
 
         public List<WebStreamingSession> GetStreamingSessions()
         {
-            return _stream.GetStreamingSessions();
+            return _stream.GetStreamingSessions()
+                .Concat(_downloads.GetActiveSessions())
+                .ToList();
         }
 
         public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
@@ -166,6 +170,7 @@ namespace MPExtended.Services.StreamingService
 
         public WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId)
         {
+            // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId);
             string path = source.GetPath();
             if (path == null || path.Length == 0)
@@ -173,14 +178,34 @@ namespace MPExtended.Services.StreamingService
                 return new WebItemSupportStatus(false, "Cannot resolve item to a path");
             }
 
-            if (!source.Exists)
+            // some checks based upon the file info. apparantly people have broken files in their connections
+            var fileinfo = source.GetFileInfo();
+            if (!fileinfo.Exists)
             {
+                // add a special warning message for files that are on a network drive, as this often causes problems
+                Uri uri = new Uri(path);
+                if (uri.IsUnc && !NetworkInformation.IsLocalAddress(uri.Host))
+                {
+                    return new WebItemSupportStatus(false, "File is on an inaccessible network share");
+                }
+
                 return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
             }
+            if (fileinfo.Size == 0)
+            {
+                return new WebItemSupportStatus(false, "This file has a size of 0KB");
+            }
 
+            // we don't support some things yet
             if (path.EndsWith(".IFO"))
             {
                 return new WebItemSupportStatus(false, "Streaming DVD files is not supported");
+            }
+
+            // while corrupt files may work, it's probably a better idea to warn early. check for a valid file using mediainfo
+            if (MediaInfo.MediaInfoWrapper.GetMediaInfo(source) == null)
+            {
+                return new WebItemSupportStatus(false, "This file might be corrupt");
             }
 
             return new WebItemSupportStatus() { Supported = true };
@@ -247,7 +272,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(WebStreamMediaType type, int? provider, string itemId)
+        public Stream GetMediaItem(string clientDescription, WebStreamMediaType type, int? provider, string itemId)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -256,33 +281,14 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
-            MediaSource source = new MediaSource(type, provider, itemId);
             try
             {
-                if (!source.Exists)
-                {
-                    throw new FileNotFoundException();
-                }
-                
-                WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
-
-                // WCF removes the Content-Length header for some reason, so set it also as X-Content-Length (#96)  
-                WCFUtil.SetContentLength(source.GetFileInfo().Size);
-                WCFUtil.AddHeader("X-Content-Length", source.GetFileInfo().Size.ToString());
-
-                // there has to be a better way to do this
-                object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
-                if (mime != null)
-                {
-                    WCFUtil.SetContentType(mime.ToString());
-                }
-
-                return source.Retrieve();
+                return _downloads.Download(clientDescription, type, provider, itemId);
             }
             catch (Exception ex)
             {
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                Log.Info(String.Format("GetMediaItem() failed for {0}", source.GetDebugName()), ex);
+                Log.Info(String.Format("GetMediaItem() failed for type={0}; provider={1}; itemId={2}", type, provider, itemId), ex);
                 return Stream.Null;
             }
         }

@@ -63,10 +63,12 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="ITVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebCard.cs" />
     <Compile Include="WebChannelBasic.cs" />
     <Compile Include="WebChannelDetailed.cs" />
     <Compile Include="WebChannelGroup.cs" />
+    <Compile Include="WebChannelPrograms.cs" />
     <Compile Include="WebChannelState.cs" />
     <Compile Include="WebCount.cs" />
     <Compile Include="WebDiskSpaceInformation.cs" />

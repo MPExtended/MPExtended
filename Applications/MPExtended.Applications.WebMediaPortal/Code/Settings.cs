@@ -72,7 +72,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 if (retry)
                 {
                     Log.Warn("Exception in LoadSettings (due to old configuration file?), overwriting with default file and retrying", ex);
-                    File.Copy(Configuration.GetDefaultPath("WebMediaPortal.xml"), Configuration.GetPath("WebMediaPortal.xml"));
+                    File.Copy(Configuration.GetDefaultPath("WebMediaPortal.xml"), Configuration.GetPath("WebMediaPortal.xml"), true);
                     return LoadSettings(false);
                 }
                 else

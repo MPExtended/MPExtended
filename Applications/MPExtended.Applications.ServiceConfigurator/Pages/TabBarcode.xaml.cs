@@ -38,6 +38,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabBarcode : Page
     {
+        private const int QR_VERSION = 1;
+        private const string GENERATOR_APP = "MPExtended";
+
         private BackgroundWorker BackgroundGenerator;
         private Dictionary<string, User> Users;
 
@@ -112,12 +115,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 ServerDescription desc = new ServerDescription();
+
+                desc.QRVersion = QR_VERSION;
+                desc.GeneratorApp = GENERATOR_APP;
+
                 desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
-                desc.Name = GetServiceName();
-                desc.QRVersion = 1;
+                desc.Name = Configuration.Services.GetServiceName();
 
                 desc.Services = new List<ServiceDescription>();
+                User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;
                 foreach (var srv in Installation.GetInstalledServices())
                 {
                     var srvdesc = new ServiceDescription()
@@ -128,8 +135,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                     if (auth != null)
                     {
-                        srvdesc.User = auth.Username;
-                        srvdesc.Password = auth.GetPassword();
+                        srvdesc.User = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).Username;
+                        srvdesc.Password = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).GetPassword();
                     }
 
                     desc.Services.Add(srvdesc);
@@ -142,21 +149,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 Log.Error("Error generating barcode", ex);
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// Get the machine name or a fallback
-        /// </summary>
-        private string GetServiceName()
-        {
-            try
-            {
-                return System.Environment.MachineName;
-            }
-            catch (InvalidOperationException)
-            {
-                return "MPExtended Service";
             }
         }
     }

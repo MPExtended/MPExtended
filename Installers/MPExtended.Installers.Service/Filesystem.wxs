@@ -24,7 +24,6 @@
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
-              <File Source="$(var.SolutionDir)\Libraries\Logging\NLog.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
             
@@ -80,6 +79,8 @@
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.pdb" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
@@ -133,7 +134,6 @@
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
-              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\NLog.config" Name="MPExtended.Applications.ServiceConfigurator.exe.nlog" />
             </Component>
 
             <!-- WSS -->

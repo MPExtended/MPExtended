@@ -172,13 +172,21 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private LazyQuery<T> GetAllSeasons<T>() where T : WebTVSeasonBasic, new()
         {
             // preload watched count
-            string csql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes GROUP BY SeriesID, SeasonIndex";
+            string csql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
+                          "FROM online_episodes e " +
+                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                          "WHERE e.Hidden = 0 " + 
+                          "GROUP BY e.SeriesID, e.SeasonIndex ";
             var episodeCountTable = ReadList<KeyValuePair<string, int>>(csql, delegate(SQLiteDataReader reader)
             {
                 return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
             }).ToDictionary(x => x.Key, x => x.Value);
 
-            string wsql = "SELECT SeriesID, SeasonIndex, COUNT(*) AS count FROM online_episodes WHERE Watched = 0 GROUP BY SeriesID, SeasonIndex";
+            string wsql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
+                          "FROM online_episodes e " +
+                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                          "WHERE e.Hidden = 0 AND e.Watched = 0 " +
+                          "GROUP BY e.SeriesID, e.SeasonIndex ";
             var episodeUnwatchedCountTable = ReadList<KeyValuePair<string, int>>(wsql, delegate(SQLiteDataReader reader)
             {
                 return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
@@ -190,7 +198,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "s.BannerFileNames " +
                     "FROM season s " +
                     "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
-                    "WHERE %where " +
+                    "WHERE HasLocalFiles = 1 AND %where " +
                     "GROUP BY s.ID, s.SeriesID, s.SeasonIndex " + 
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -231,7 +239,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             string sql =                     
                     "SELECT e.CompositeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
-                        "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, " +
+                        "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, MIN(l.FileDateAdded) AS dateAdded, " +
                         "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary, " +
                         "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
                     "FROM online_episodes e " +
@@ -252,6 +260,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", CustomReaders.ReadSeasonID),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "filename", "Path", DataReaders.ReadPipeList),
+                new SQLFieldMapping("", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "FirstAired", "FirstAired", DataReaders.ReadDateTime),
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("e", "Rating", "Rating", DataReaders.ReadFloat),

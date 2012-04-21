@@ -57,9 +57,6 @@
     <Reference Include="MySql.Data">
       <HintPath>..\..\Libraries\Database\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\Libraries\Logging\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
@@ -94,6 +91,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="BackgroundThread.cs" />
+    <Compile Include="CacheLifetimeToken.cs" />
     <Compile Include="DiskSpaceInformation.cs" />
     <Compile Include="EnumerableExtensionMethods.cs" />
     <Compile Include="ConvertExtensionMethods.cs" />

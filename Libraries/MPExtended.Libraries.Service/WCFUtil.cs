@@ -86,7 +86,8 @@ namespace MPExtended.Libraries.Service
 
         public static void SetResponseCode(HttpStatusCode code)
         {
-            if(IsRestEnabled)
+            SetCustomSOAPHeader("responseCode", (int)code);
+            if (IsRestEnabled)
             {
                 WebOperationContext.Current.OutgoingResponse.StatusCode = code;
             }
@@ -94,17 +95,19 @@ namespace MPExtended.Libraries.Service
 
         public static void SetContentLength(long length)
         {
+            SetCustomSOAPHeader("contentLength", length);
             if(IsRestEnabled)
             {
                 // This doesn't work yet (#96)
-                //AddHeader(HttpResponseHeader.ContentLength, length.ToString());
                 WebOperationContext.Current.OutgoingResponse.ContentLength = length;
+                AddHeader("X-Content-Length", length.ToString());
             }
         }
 
 
         public static void SetContentType(string type)
         {
+            SetCustomSOAPHeader("contentType", type);
             if(IsRestEnabled)
             {
                 WebOperationContext.Current.OutgoingResponse.ContentType = type;
@@ -113,8 +116,9 @@ namespace MPExtended.Libraries.Service
 
         public static void AddHeader(string header, string value)
         {
+            SetCustomSOAPHeader(header.Replace("-", "").ToLowerFirst(), value);
             if (IsRestEnabled)
-            {
+            { 
                 WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
             }
         }
@@ -125,6 +129,42 @@ namespace MPExtended.Libraries.Service
             {
                 WebOperationContext.Current.OutgoingResponse.Headers.Add(header, value);
             }
+        }
+
+        private static void SetCustomSOAPHeader<T>(string name, T value)
+        {
+            if (!IsRestEnabled)
+            {
+                MessageHeader<T> header = new MessageHeader<T>(value);
+                MessageHeader untyped = header.GetUntypedHeader(name, "http://mpextended.github.com/");
+                OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+            }
+        }
+
+        public static string GetHeaderValue(string soapHeaderName, string soapHeaderNamespace, string webHeaderName)
+        {
+            if (OperationContext.Current.IncomingMessageHeaders.FindHeader(soapHeaderName, soapHeaderNamespace) != -1)
+            {
+                return OperationContext.Current.IncomingMessageHeaders.GetHeader<string>(soapHeaderName, soapHeaderNamespace);
+            }
+
+            if (IsRestEnabled && WebOperationContext.Current.IncomingRequest.Headers[webHeaderName] != null)
+            {
+                return WebOperationContext.Current.IncomingRequest.Headers[webHeaderName];
+            }
+
+            return null;
+        }
+
+        public static string GetHeaderValue(string soapHeaderName, string webHeaderName)
+        {
+            return GetHeaderValue(soapHeaderName, "http://mpextended.github.com/", webHeaderName);
+        }
+
+        public static string GetHeaderValue(string headerName)
+        {
+            string soapHeaderName = headerName.Replace("-", "").ToLowerFirst();
+            return GetHeaderValue(soapHeaderName, headerName);
         }
     }
 }

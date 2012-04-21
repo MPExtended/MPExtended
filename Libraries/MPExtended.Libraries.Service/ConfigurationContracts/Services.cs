@@ -156,5 +156,22 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 return false;
             }
         }
+
+        public string GetServiceName()
+        {
+            if (!String.IsNullOrWhiteSpace(BonjourName))
+            {
+                return BonjourName;
+            }
+
+            try
+            {
+                return System.Environment.MachineName;
+            }
+            catch (Exception)
+            {
+                return "MPExtended Services";
+            }
+        }
     }
 }

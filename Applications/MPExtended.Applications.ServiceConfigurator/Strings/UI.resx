@@ -121,10 +121,10 @@
     <value>This action needs administrative rights.</value>
   </data>
   <data name="ActiveStreams" xml:space="preserve">
-    <value>Active streams</value>
+    <value>Currently active streams</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>You can configure the port on which WebMediaPortal runs here.</value>
+    <value>You can configure the port on which WebMediaPortal runs here. If you change this value from the default of 8080, you have to configure your firewall manually. </value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
     <value>Default audio language:</value>
@@ -157,7 +157,7 @@
     <value>Media</value>
   </data>
   <data name="Port" xml:space="preserve">
-    <value>Port</value>
+    <value>Port:</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
     <value>Not installed</value>
@@ -316,7 +316,7 @@
     <value>Autodetection</value>
   </data>
   <data name="AutodetectionText" xml:space="preserve">
-    <value>The services support autodetection via Bonjour/Zeroconf. This allows clients on the local network to automatically find the services and configure themselves. This requires that Apple Bonjour is installed on this computer. If you have installed iTunes, it is already installed.</value>
+    <value>The services support autodetection via Bonjour/Zeroconf, which allows clients on the local network to automatically find the services and configure themselves.</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>check for updates</value>
@@ -335,9 +335,6 @@
   </data>
   <data name="Documentation" xml:space="preserve">
     <value>Documentation:</value>
-  </data>
-  <data name="DownloadBonjour" xml:space="preserve">
-    <value>Download Bonjour.</value>
   </data>
   <data name="EnableAuthentication" xml:space="preserve">
     <value>Enable authentication (recommended!)</value>
@@ -449,5 +446,37 @@ This is the service component, which provides access to the databases and media 
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Donate to MPExtended</value>
+  </data>
+  <data name="CleanCaches" xml:space="preserve">
+    <value>Clean cache</value>
+  </data>
+  <data name="EnableHTTPS" xml:space="preserve">
+    <value>Enable HTTPS</value>
+  </data>
+  <data name="HTTPSDisclaimer" xml:space="preserve">
+    <value>Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. You also have to configure your firewall manually to allow these connections.
+
+Please note that it isn't possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. </value>
+  </data>
+  <data name="HTTPSInvalidPort" xml:space="preserve">
+    <value>The port you entered for HTTPS is invalid. You can use only ports 44300 until 44399 for HTTPS. </value>
+  </data>
+  <data name="HTTPSPort" xml:space="preserve">
+    <value>HTTPS Port:</value>
+  </data>
+  <data name="TabActivity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="UserMustHaveNameAndPassword" xml:space="preserve">
+    <value>Please enter both a username and password for this user. </value>
+  </data>
+  <data name="BonjourChecking" xml:space="preserve">
+    <value>Checking your Bonjour installation...</value>
+  </data>
+  <data name="BonjourNotInstalled" xml:space="preserve">
+    <value>Bonjour isn't installed on your computer. To use this feature, </value>
+  </data>
+  <data name="BonjourNotInstalledDownload" xml:space="preserve">
+    <value>please download Bonjour. </value>
   </data>
 </root>

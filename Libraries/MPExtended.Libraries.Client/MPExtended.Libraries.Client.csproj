@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}</ProjectGuid>
+    <ProjectGuid>{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MPExtended.Libraries.Client</RootNamespace>

@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -111,6 +112,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
             LogExporter.ExportWithFileChooser();
+        }
+
+        private void btnCleanCache_Click(object sender, RoutedEventArgs e)
+        {
+            // do not call Installation.GetCacheDirectory() twice as it also creates the directory
+            string directory = Installation.GetCacheDirectory();
+            Directory.Delete(directory, true);
+            Directory.CreateDirectory(directory);
         }
     }
 }

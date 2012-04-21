@@ -48,10 +48,19 @@ namespace MPExtended.Services.StreamingService.Units
         {
             data.Value.Failed = false;
             vlcIsStarted = false;
-            processThread = ThreadManager.Start("VLCLogParsing", delegate()
+            processThread = new Thread(delegate()
             {
-                ParseOutputStream(InputStream, data, position, false);
+                try
+                {
+                    ParseOutputStream(InputStream, data, position, false);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("VLCLogParsing failed with exception", ex);
+                }
             });
+            processThread.Name = "VLCLogParsing";
+            processThread.Start();
             return true;
         }
 

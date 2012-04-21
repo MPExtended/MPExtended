@@ -1,18 +1,17 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.TVGuideViewModel
 @{
     ViewBag.Title = UIStrings.TVGuide;
-    ViewBag.Scripts.Add("~/Scripts/jquery-ui.min.js");
-    ViewBag.Scripts.Add("~/Scripts/jquery.ui.datepicker-" + ViewBag.Language + ".js");
-    ViewBag.Styles.Add("~/Content/Themes/base/jquery-ui.css");
-    ViewBag.Scripts.Add("~/Scripts/TVGuide.js");
-    ViewBag.Styles.Add("~/Content/TVGuide.css");
 }
+
+@Html.jQuery().EnableUI()
+@Html.Assets().AddViewStylesheet("Television/TVGuide.css")
+@Html.Assets().AddViewScript("Television/TVGuide.js")
 
 <div id="TVGuideNavigation">
     @using (Html.BeginForm("TVGuide", "Television", FormMethod.Get))
     {
         @Html.DropDownList("group", Model.Groups)
-        @Html.TextBox("date", Model.GuideStart.ToShortDateString())
+        @Html.EditorFor(model => model.GuideStart, "Date", "date", new { openOnFocus = true })
         @Html.Hidden("time", Model.GuideStart.ToString("s"))
     }
 </div>
@@ -48,7 +47,7 @@
         @{  foreach (var channel in @Model.Channels)
             {
                 <div class="channelrow">
-                    <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id }));">
+                    <div class="channelname" style="background-image: url(@Url.Action("ChannelLogo", new { channelId = channel.Id, width = 50, height = 50 }));">
                         @Html.ActionLink(channel.DisplayName, "WatchLiveTV", new { channelId = channel.Id })
                     </div>
                     <div class="programs">

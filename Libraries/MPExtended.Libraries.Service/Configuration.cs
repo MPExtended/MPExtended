@@ -28,7 +28,7 @@ namespace MPExtended.Libraries.Service
 {
     public class Configuration
     {
-        public const int DEFAULT_PORT = 4322;
+        private static FileSystemWatcher watcher;
 
         private static ConfigurationContracts.Services serviceConfig = null;
         private static MediaAccess mediaConfig = null;
@@ -125,6 +125,37 @@ namespace MPExtended.Libraries.Service
             string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             input = input.Replace("%ProgramData%", cappdata);
             return input;
+        }
+
+        public static void EnableChangeWatching()
+        {
+            if (watcher != null)
+            {
+                return;
+            }
+
+            watcher = new FileSystemWatcher(Installation.GetConfigurationDirectory(), "*.xml");
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
+            {
+                string fileName = Path.GetFileName(e.FullPath);
+                if (fileName == "Services.xml") serviceConfig = null;
+                if (fileName == "MediaAccess.xml") mediaConfig = null;
+                if (fileName == "Streaming.xml") streamConfig = null;
+                if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig = null;
+            });
+
+            // start watching
+            watcher.EnableRaisingEvents = true;
+        }
+
+        public static void DisableChangeWatching()
+        {
+            if (watcher != null)
+            {
+                watcher.EnableRaisingEvents = false;
+                watcher = null;
+            }
         }
     }
 }

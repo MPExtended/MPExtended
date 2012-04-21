@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Web;
-using System.Threading;
+using System.Timers;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.ConfigurationContracts;
 using MPExtended.Libraries.Service.Hosting;
@@ -38,6 +38,7 @@ namespace MPExtended.Services.StreamingService.Code
         private WatchSharing sharing;
         private StreamingService service;
         private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
+        private Timer timeoutTimer;
 
         private class ActiveStream
         {
@@ -59,7 +60,15 @@ namespace MPExtended.Services.StreamingService.Code
         {
             service = serviceInstance;
             sharing = new WatchSharing();
-            ThreadManager.Start("StreamTimeout", TimeoutStreamsWorker);
+
+            timeoutTimer = new Timer()
+            {
+                AutoReset = true,
+                Interval = 1000,
+            };
+            timeoutTimer.Elapsed += new ElapsedEventHandler(TimeoutStreamsTick);
+            timeoutTimer.Start();
+
             ServiceState.Stopping += delegate()
             {
                 foreach(var identifier in Streams.Select(x => x.Value.Identifier).ToList())
@@ -75,7 +84,7 @@ namespace MPExtended.Services.StreamingService.Code
             try
             {
                 sharing.Dispose();
-                ThreadManager.Abort("StreamTimeout");
+                timeoutTimer.Stop();
                 foreach (string identifier in Streams.Keys)
                 {
                     EndStream(identifier);
@@ -87,47 +96,33 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        private void TimeoutStreamsWorker()
+        private void TimeoutStreamsTick(object source, ElapsedEventArgs args)
         {
-            while (true)
+            try
             {
-                try
-                {
-                    var toDelete = Streams
-                        .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))
-                        .Where(x => x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
-                        .Select(x => x.Value.Identifier)
-                        .ToList();
+                var toDelete = Streams
+                    .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))
+                    .Where(x => x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
+                    .Select(x => x.Value.Identifier)
+                    .ToList();
 
-                    if (toDelete.Count > 0)
+                if (toDelete.Count > 0)
+                {
+                    lock (Streams)
                     {
-                        lock (Streams)
+                        foreach (string key in toDelete)
                         {
-                            foreach (string key in toDelete)
-                            {
-                                Log.Info("Stream {0} has been idle for {1} milliseconds with last activity at {2}, so cancel it", 
-                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
-                                service.FinishStream(key);
-                            }
+                            Log.Info("Stream {0} has been idle for {1} milliseconds with last activity at {2}, so cancel it", 
+                                key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                            service.FinishStream(key);
                         }
                     }
-
-                    Thread.Sleep(1000);
-                }
-                catch (ThreadAbortException)
-                {
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Log.Warn("Error in timeout stream worker", ex);
                 }
             }
-        }
-
-        public bool InitStream(string identifier, string clientDescription, MediaSource source)
-        {
-            return InitStream(identifier, clientDescription, source, 5 * 60);
+            catch (Exception ex)
+            {
+                Log.Warn("Error in TimeoutStreamsTick", ex);
+            }
         }
 
         public bool InitStream(string identifier, string clientDescription, MediaSource source, int timeout)
@@ -141,13 +136,18 @@ namespace MPExtended.Services.StreamingService.Code
             ActiveStream stream = new ActiveStream();
             stream.Identifier = identifier;
             stream.ClientDescription = clientDescription;
-            stream.ClientIP = WCFUtil.GetClientIPAddress();
             stream.StartTime = DateTime.Now;
             stream.Timeout = timeout;
             stream.LastActivity = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
+
+            // Some clients such as WebMP proxy the streams before relying it to the client. We should give these clients the option to
+            // forward the real IP address, so that we can show that one in the configurator too. However, to avoid abuse, we should show
+            // the real IP of the client too, so make up some nice text string. 
+            string realIp = WCFUtil.GetHeaderValue("forwardedFor", "X-Forwarded-For");
+            stream.ClientIP = realIp == null ? WCFUtil.GetClientIPAddress() : String.Format("{0} (via {1})", realIp, WCFUtil.GetClientIPAddress());
 
             lock (Streams)
             {
@@ -347,6 +347,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                     StartPosition = s.Context.StartPosition,
                     PlayerPosition = s.Context.GetPlayerPosition(),
+                    PercentageProgress = (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
                     TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
                 }).ToList();
             }
@@ -376,6 +377,11 @@ namespace MPExtended.Services.StreamingService.Code
             return Resolution.Calculate(displayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
         }
 
+        public Resolution CalculateSize(StreamContext context)
+        {
+            return CalculateSize(context.Profile, context.Source, context.MediaInfo);
+        }
+
         public Resolution CalculateSize(TranscoderProfile profile, MediaSource source, WebMediaInfo info = null)
         {
             try
@@ -400,11 +406,6 @@ namespace MPExtended.Services.StreamingService.Code
 
             // default
             return Resolution.Calculate(MediaInfoHelper.DEFAULT_ASPECT_RATIO, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
-        }
-
-        public Resolution CalculateSize(StreamContext context)
-        {
-            return CalculateSize(context.Profile, context.Source, context.MediaInfo);
         }
     }
 }

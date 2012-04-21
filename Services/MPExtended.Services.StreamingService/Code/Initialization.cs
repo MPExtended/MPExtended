@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.MediaInfo;
 
@@ -28,10 +29,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public static void Initialize()
         {
-            ThreadManager.Start("MICacheLoad", delegate()
-            {
-                MediaInfoWrapper.LoadCache();
-            });
+            Task.Factory.StartNew(() => MediaInfoWrapper.LoadCache());
         }
     }
 }

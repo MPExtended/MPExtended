@@ -17,19 +17,19 @@
             </Grid>
         </GroupBox>
         
-        <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="237" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="214" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
             <Grid>
-                <TextBlock TextWrapping="Wrap" Height="139" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="228">
+                <TextBlock TextWrapping="Wrap" Height="120" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="228">
+                    <!-- This text is automatically updated at runtime -->
                     <Run Text="{x:Static strings:UI.AutodetectionText}" />
                     <LineBreak />
-                    <Hyperlink NavigateUri="http://support.apple.com/kb/DL999" RequestNavigate="Hyperlink_RequestNavigate">
-                        <Run Text="{x:Static strings:UI.DownloadBonjour}" />
-                    </Hyperlink>
+                    <LineBreak />
+                    <Run Text="{x:Static strings:UI.BonjourChecking}" />
                 </TextBlock>
 
-                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="10,155,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" />
-                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,177,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="99,179,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="139" />
+                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="10,0,0,37" Name="cbBonjourEnabled" VerticalAlignment="Bottom" IsEnabled="false" />
+                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,3" Name="lblServiceName" VerticalAlignment="Bottom" FontWeight="Bold" IsEnabled="false" />
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="99,0,0,6" Name="txtServiceName" Text="" VerticalAlignment="Bottom" Width="139" IsEnabled="false" />
             </Grid>
         </GroupBox>
         

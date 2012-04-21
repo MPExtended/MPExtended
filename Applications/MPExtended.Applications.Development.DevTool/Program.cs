@@ -50,7 +50,8 @@ namespace MPExtended.Applications.Development.DevTool
                 new InterfaceCheck(),
                 new DocGen.DocDevTool(),
                 new WixFSGenerator(),
-                new MyGengoImporter()
+                new MyGengoImporter(),
+                new InstallLayoutExporter()
             };
             do
             {

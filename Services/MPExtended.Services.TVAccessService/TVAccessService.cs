@@ -131,6 +131,39 @@ namespace MPExtended.Services.TVAccessService
             return true;
         }
 
+        /// <summary>
+        /// Return external media info for recording
+        /// </summary>
+        /// <param name="type">Type of item</param>
+        /// <param name="id">Id of recording</param>
+        /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
+        public SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
+        {
+            return GetExternalMediaInfoForMpTvServer(type, id);
+        }
+
+        private SerializableDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
+        {
+            if (type == WebTvMediaType.Recording)
+            {
+                return new SerializableDictionary<string>()
+               {
+                   { "Type", "mp recording" },
+                   { "Id", id }
+               };
+            }
+            else if (type == WebTvMediaType.TV)
+            {
+                return new SerializableDictionary<string>()
+               {
+                   { "Type", "mp tvchannel" },
+                   { "Id", id }
+               };
+            }
+
+            return null;
+        }
+
         public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
             if (String.IsNullOrWhiteSpace(text))
@@ -259,7 +292,7 @@ namespace MPExtended.Services.TVAccessService
                 .Where(users => users != null)
                 .SelectMany(user => user)
                 .Select(user => new VirtualCard(user, RemoteControl.HostName))
-                .Where(tvCard => tvCard.IsTimeShifting || !tvCard.IsRecording);
+                .Where(tvCard => tvCard.IsTimeShifting || tvCard.IsRecording);
         }
 
         public IList<WebRtspClient> GetStreamingClients()
@@ -269,8 +302,10 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation()
         {
-            return GetCards().Select(x => x.RecordingFolder).Distinct()
+            return GetCards()
+                .Select(x => x.RecordingFolder).Distinct()
                 .Select(x => DiskSpaceInformation.GetSpaceInformation(x))
+                .GroupBy(x => x.Disk, (key, list) => list.First())
                 .ToList();
         }
 
@@ -611,7 +646,7 @@ namespace MPExtended.Services.TVAccessService
             if (String.IsNullOrEmpty(userName))
             {
                 Log.Error("Called SwitchTVServerToChannel with empty userName");
-                throw new ArgumentNullException("userName");
+                return null;
             }
 
             // create the user
@@ -630,14 +665,14 @@ namespace MPExtended.Services.TVAccessService
             if (result != TvResult.Succeeded)
             {
                 Log.Error("Starting timeshifting failed with result {0}", result);
-                throw new Exception("Failed to start tv stream: " + result);
+                return null;
             }
 
             Log.Debug("Timeshifting succeeded");
             if (tvCard == null)
             {
                 Log.Error("Couldn't get virtual card");
-                throw new Exception("Couldn't get virtual card");
+                return null;
             }
 
             return tvCard;
@@ -649,7 +684,7 @@ namespace MPExtended.Services.TVAccessService
             if (currentUser == null)
             {
                 Log.Error("Tried to send heartbeat for invalid user {0}", userName);
-                throw new ArgumentException("Invalid username");
+                return false;
             }
 
             _tvControl.HeartBeat(currentUser);
@@ -661,8 +696,8 @@ namespace MPExtended.Services.TVAccessService
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
             {
-                Log.Error("Tried to cancel timeshifting for invalid user {0}", userName);
-                throw new ArgumentException("Invalid username");
+                Log.Warn("Tried to cancel timeshifting for invalid user {0}", userName);
+                return false;
             }
             Log.Debug("Canceling timeshifting for user {0}", userName);
 
@@ -761,24 +796,46 @@ namespace MPExtended.Services.TVAccessService
         #region EPG
         public IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList();
+            }
         }
 
         public IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetPrograms(Channel.Retrieve(channelId), startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList();
+            }
         }
 
-        public IDictionary<int, List<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
-                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList());
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                    .Select(ch => new WebChannelPrograms<WebProgramBasic>()
+                    {
+                        IdChannel = ch.IdChannel,
+                        Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList()
+                    })
+                    .ToList();
+            }
         }
 
-        public IDictionary<int, List<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
         {
-            return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
-                .ToDictionary(ch => ch.IdChannel, ch => _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList());
+            using (var cache = WebProgramExtensionMethods.CacheSchedules())
+            {
+                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                    .Select(ch => new WebChannelPrograms<WebProgramDetailed>()
+                    {
+                        IdChannel = ch.IdChannel,
+                        Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList()
+                    })
+                    .ToList();
+            }
         }
 
         public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)

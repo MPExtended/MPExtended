@@ -54,6 +54,7 @@
     <Compile Include="DocGen\TASGenerator.cs" />
     <Compile Include="DocGen\WSSGenerator.cs" />
     <Compile Include="IDevTool.cs" />
+    <Compile Include="InstallLayoutExporter.cs" />
     <Compile Include="InterfaceCheck.cs" />
     <Compile Include="MyGengoImporter.cs" />
     <Compile Include="Program.cs" />

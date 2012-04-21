@@ -4,8 +4,8 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
        Title="{x:Static strings:UI.WindowTitle}" 
-       Height="550"
-       MinHeight="550" 
+       Height="600"
+       MinHeight="600" 
        Width="750"
        MinWidth="750" 
        Closing="Window_Closing" 
@@ -51,7 +51,22 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-        
+
+        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-241,-184" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
+
+        <Image HorizontalAlignment="Left" Margin="6,0,11,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
+
+        <Button Content="OK" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnOK" VerticalAlignment="Bottom" Width="75" Click="btnOK_Click"/>
+        <Separator Height="1" Name="separator" Width="145" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
+
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,0,0,8" Name="tbDonate" VerticalAlignment="Bottom">
+            <Hyperlink NavigateUri="http://mpextended.github.com/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
+                <Run Text="{x:Static strings:UI.DonateToMPExtended}" />
+            </Hyperlink>
+        </TextBlock>
+
         <TabControl Name="tcMainTabs" TabStripPlacement="Left" SelectionChanged="tcMainTabs_SelectionChanged" Visibility="Visible" Background="{x:Null}" Margin="0,0,0,47">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -82,6 +97,8 @@
             </TabItem>
             <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
             </TabItem>
+            <TabItem Header="{x:Static strings:UI.TabActivity}" Width="140" Name="tiActivity" Tag="Pages/TabActivity.xaml">
+            </TabItem>
             <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
             </TabItem>
             <TabItem Header="{x:Static strings:UI.TabLogs}" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
@@ -91,20 +108,5 @@
             <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
             </TabItem>
         </TabControl>
-
-        <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-241,-184" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
-        
-        <Image HorizontalAlignment="Left" Margin="6,0,11,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
-        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
-        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
-        
-        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="641,0,0,12" Name="btnOK" VerticalAlignment="Bottom" Width="75" Click="btnOK_Click"/>
-        <Separator Height="1" Name="separator" Width="145" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
-
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,480,0,0" Name="tbDonate" VerticalAlignment="Top">
-            <Hyperlink NavigateUri="http://mpextended.github.com/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
-                <Run Text="{x:Static strings:UI.DonateToMPExtended}" />
-            </Hyperlink>
-        </TextBlock>
     </Grid>
 </Window>

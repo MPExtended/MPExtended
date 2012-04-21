@@ -37,6 +37,9 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            // setup logging
+            Log.Setup("ServiceConfigurator.log", false);
+
             // make sure to start only once
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {

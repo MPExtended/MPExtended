@@ -42,5 +42,8 @@
     <plugin name="MP MyVideo">
       <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </plugin>
+    <plugin name="mvCentral">
+      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
+    </plugin>
   </pluginConfiguration>
 </appconfig>

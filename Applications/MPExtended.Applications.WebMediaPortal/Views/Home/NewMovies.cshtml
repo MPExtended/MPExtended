@@ -1,17 +1,17 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieBasic>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
 
-@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+@if (Model.Availability.Movies)
 {
     <h2>@UIStrings.LatestMovies</h2>
     <div>
-        @foreach (var movie in Model)
+        @foreach (var movie in Model.GetLastAddedMovies())
         {
             <div class="column">
                 <div class="row">
                     @Html.ActionLink(movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id })" alt="" />
+                    <img class="img" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id, width = 150 })" alt="" />
                 </div>
             </div>
         }

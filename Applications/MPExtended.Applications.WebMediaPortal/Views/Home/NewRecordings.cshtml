@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
+﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
 
-@if (@Model != null && @Model.Count(p => p.Title != "") > 0)
+@if (Model.Availability.TAS)
 {
     <h2>@UIStrings.LatestRecordings</h2>
     <ul>
-        @foreach (var recording in Model)
+        @foreach (var recording in Model.GetLastRecordings())
         {
             <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })</li>
         }

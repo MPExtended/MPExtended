@@ -15,6 +15,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string DisplayName { get; set; }
 
         public string ClientDescription { get; set; }
+        // Do not actually parse this as an IP address, because it isn't: it might have some comments in it too
         public string ClientIPAddress { get; set; }
         public DateTime StartTime { get; set; }
 
@@ -27,6 +28,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
         /// The current place of the player.
         /// </summary>
         public int PlayerPosition { get; set; }
+
+        /// <summary>
+        /// Percentage of the file the user is at
+        /// </summary>
+        public int PercentageProgress { get; set; }
 
         public WebTranscodingInfo TranscodingInfo { get; set; }
     }

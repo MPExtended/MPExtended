@@ -47,6 +47,7 @@
             </TextBlock>
         </Grid>
 
-        <Button Content="{x:Static strings:UI.ExportLogsAndConfiguration}" Height="23" HorizontalAlignment="Left" Margin="15,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
+        <Button Content="{x:Static strings:UI.CleanCaches}" Height="23" HorizontalAlignment="Right" Margin="0,0,15,12" Name="btnCleanCache" VerticalAlignment="Bottom" Width="100" Click="btnCleanCache_Click" />
+        <Button Content="{x:Static strings:UI.ExportLogsAndConfiguration}" Height="23" HorizontalAlignment="Left" Margin="12,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
     </Grid>
 </Page>

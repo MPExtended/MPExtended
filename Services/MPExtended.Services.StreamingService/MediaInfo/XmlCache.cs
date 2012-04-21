@@ -22,8 +22,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading;
+using System.Timers;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -35,45 +36,52 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         private Dictionary<string, WebMediaInfo> cache;
         private bool isDirty = false;
         private string path;
+        private Timer flushTimer;
 
         public XmlCache()
         {
             serializer = new DataContractSerializer(typeof(Dictionary<string, WebMediaInfo>));
             path = Path.Combine(Installation.GetCacheDirectory(), "MediaInfo.xml");
+            cache = new Dictionary<string, WebMediaInfo>();
             if (File.Exists(path))
-            {
-                Stopwatch timer = new Stopwatch();
-                timer.Start();
-                Stream inputStream = File.OpenRead(path);
-                cache = (Dictionary<string, WebMediaInfo>)serializer.ReadObject(inputStream);
-                inputStream.Close();
-                timer.Stop();
-                Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
-            }
-            else
-            {
-                cache = new Dictionary<string, WebMediaInfo>();
-            }
-
-            ThreadManager.Start("MICacheSave", delegate()
             {
                 try
                 {
-                    while (true)
-                    {
-                        Thread.Sleep(60 * 1000);
-                        if (isDirty)
-                        {
-                            isDirty = false;
-                            SaveToDisk();
-                        }
-                    }
+                    Stopwatch timer = new Stopwatch();
+                    timer.Start();
+                    Stream inputStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    cache = (Dictionary<string, WebMediaInfo>)serializer.ReadObject(inputStream);
+                    inputStream.Close();
+                    timer.Stop();
+                    Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
                 }
-                catch (ThreadAbortException)
+                catch (Exception ex)
                 {
+                    Log.Warn("Loading MediaInfo cache failed", ex);
+                }
+            }
+
+            // save every minute
+            flushTimer = new Timer()
+            {
+                Interval = 60 * 1000,
+                AutoReset = true
+            };
+            flushTimer.Elapsed += delegate(object sender, ElapsedEventArgs e)
+            {
+                if(isDirty)
+                {
+                    isDirty = false;
                     SaveToDisk();
                 }
-            });
+            };
+            flushTimer.Start();
+
+            // also save on exit
+            ServiceState.Stopping += delegate()
+            {
+                SaveToDisk();
+            };
         }
 
         public bool HasForSource(MediaSource src)
@@ -100,7 +108,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             lock (cache)
             {
                 Log.Debug("Writing {0} items to MediaInfo cache", cache.Count);
-                Stream outputStream = File.OpenWrite(path);
+                Stream outputStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
                 serializer.WriteObject(outputStream, cache);
                 outputStream.Close();
             }
