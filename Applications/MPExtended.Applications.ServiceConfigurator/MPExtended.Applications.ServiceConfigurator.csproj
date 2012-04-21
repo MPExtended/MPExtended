@@ -69,6 +69,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ZeroconfService">
+      <HintPath>..\..\Libraries\Misc\ZeroconfService.dll</HintPath>
+    </Reference>
     <Reference Include="zxing">
       <HintPath>..\..\Libraries\Misc\zxing.dll</HintPath>
     </Reference>
@@ -81,6 +84,7 @@
     <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
       <Link>Code\WindowsServiceHandler.cs</Link>
     </Compile>
+    <Compile Include="Code\Zeroconf.cs" />
     <Compile Include="Pages\TabActivity.xaml.cs">
       <DependentUpon>TabActivity.xaml</DependentUpon>
     </Compile>

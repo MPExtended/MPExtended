@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.MetaService.Interfaces;
@@ -60,7 +61,7 @@ namespace MPExtended.Services.MetaService
                 initialized = true;
             };
 
-            ThreadManager.Start("ServicePublishing", delegate()
+            Task.Factory.StartNew(delegate()
             {
                 // give it some time to detect all service sets
                 Thread.Sleep(5000);

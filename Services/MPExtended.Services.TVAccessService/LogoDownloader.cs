@@ -22,7 +22,8 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
@@ -34,28 +35,29 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
-    public class BackgroundThread
+    public class LogoDownloader
     {
-        private List<string> alreadyHandledClients = new List<string>();
-        private List<WebChannelBasic> channelLogosRequired = new List<WebChannelBasic>();
+        private static Timer backgroundTimer;
+        private static LogoDownloader logoDownloader;
 
         public static void Setup()
         {
             // start the thread when the service has been start up
             ServiceState.Started += delegate()
             {
-                ThreadManager.Start("TASClientLink", delegate()
-                {
-                    BackgroundThread thread = new BackgroundThread();
-                    thread.Run();
-                });
+                logoDownloader = new LogoDownloader();
+                Task.Factory.StartNew(logoDownloader.Init);
             };
         }
 
-        internal void Run()
+        private ChannelLogos logos;
+        private List<string> alreadyHandledClients = new List<string>();
+        private List<WebChannelBasic> channelLogosRequired = new List<WebChannelBasic>();
+
+        private void Init()
         {
             // load list of channel logos that we don't have yet
-            ChannelLogos logos = new ChannelLogos();
+            logos = new ChannelLogos();
             TVAccessService tas = new TVAccessService(); // FIXME
             channelLogosRequired = tas.GetAllChannelsBasic()
                 .Where(ch => logos.FindLocation(ch.DisplayName) == null)
@@ -68,42 +70,65 @@ namespace MPExtended.Services.TVAccessService
                 return;
             }
 
-            // loop forever
-            while (true)
+            // try downloading them on starting and exit if successful
+            if (PerformCheck())
             {
-                IServiceDiscoverer discoverer = new ServiceDiscoverer();
-                foreach (IServiceAddressSet set in discoverer.DiscoverSets(TimeSpan.FromSeconds(15)))
+                return;
+            }
+
+            // setup timer
+            backgroundTimer = new Timer()
+            {
+                AutoReset = true,
+                Interval = 60 * 60 * 1000,
+            };
+            backgroundTimer.Elapsed += new ElapsedEventHandler(TimerElapsed);
+            backgroundTimer.Start();
+        }
+
+        private void TimerElapsed(object source, ElapsedEventArgs args)
+        {
+            if (PerformCheck())
+            {
+                backgroundTimer.Stop();
+            }
+        }
+
+        private bool PerformCheck()
+        {
+            IServiceDiscoverer discoverer = new ServiceDiscoverer();
+            foreach (IServiceAddressSet set in discoverer.DiscoverSets(TimeSpan.FromSeconds(15)))
+            {
+                Log.Trace("Found service set {0} with MAS streams at {1}", set.GetSetIdentifier(), set.MASStream);
+                string ipAddress = set.MASStream.Substring(0, set.MASStream.IndexOf(':'));
+                if (!alreadyHandledClients.Contains(set.MASStream) && !NetworkInformation.IsLocalAddress(ipAddress))
                 {
-                    Log.Trace("Found service set {0} with MAS streams at {1}", set.GetSetIdentifier(), set.MASStream);
-                    string ipAddress = set.MASStream.Substring(0, set.MASStream.IndexOf(':'));
-                    if (!alreadyHandledClients.Contains(set.MASStream) && !NetworkInformation.IsLocalAddress(ipAddress))
+                    Log.Debug("Going to download channel logos from MAS installation at {0}", set.MASStream);
+                    if(!DownloadChannelLogos(logos, set.Connect()))
                     {
-                        Log.Debug("Going to download channel logos from MAS installation at {0}", set.MASStream);
-                        if(!DownloadChannelLogos(logos, set.Connect()))
+                        Log.Debug("Failed to download them without authorization, trying all our local accounts");
+                        foreach (var user in Configuration.Services.Users)
                         {
-                            Log.Debug("Failed to download them without authorization, trying all our local accounts");
-                            foreach (var user in Configuration.Services.Users)
+                            if (DownloadChannelLogos(logos, set.Connect(user.Username, user.GetPassword())))
                             {
-                                if (DownloadChannelLogos(logos, set.Connect(user.Username, user.GetPassword())))
-                                {
-                                    Log.Debug("Downloaded channel logos with account {0}", user.Username);
-                                    break;
-                                }
+                                Log.Debug("Downloaded channel logos with account {0}", user.Username);
+                                break;
                             }
                         }
-                        alreadyHandledClients.Add(set.MASStream);
                     }
+                    alreadyHandledClients.Add(set.MASStream);
                 }
+            }
 
-                // exit if we got all the logos
-                if (channelLogosRequired.Count == 0)
-                {
-                    Log.Trace("Yeah, got all channel logos now!");
-                    break;
-                }
-
-                // try again after an hour
-                Thread.Sleep(TimeSpan.FromHours(1));
+            // exit if we got all the logos
+            if (channelLogosRequired.Count == 0)
+            {
+                Log.Trace("Yes, got all channel logos now!");
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

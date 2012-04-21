@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using ZeroconfService;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
@@ -42,7 +43,7 @@ namespace MPExtended.Services.MetaService
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
 
-                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], GetComputerName(), srv.Port);
+                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], Configuration.Services.GetServiceName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -63,7 +64,7 @@ namespace MPExtended.Services.MetaService
                 additionalData["tasstream"] = set.TASStream != null ? set.TASStream : String.Empty;
                 additionalData["ui"] = set.UI != null ? set.UI : String.Empty;
 
-                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, SET_SERVICE_TYPE, GetComputerName(), Configuration.Services.Port);
+                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, SET_SERVICE_TYPE, Configuration.Services.GetServiceName(), Configuration.Services.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
@@ -77,34 +78,12 @@ namespace MPExtended.Services.MetaService
 
         public void PublishAsync(IServiceDetector detector)
         {
-            ThreadManager.Start("ZeroconfPublish", delegate()
-            {
-                Publish(detector);
-            });
-            return;
+            Task.Factory.StartNew(() => Publish(detector));
         }
 
         public void Unpublish()
         {
             // bonjour cleans up automatically
-        }
-
-        private string GetComputerName()
-        {
-            string value = Configuration.Services.BonjourName;
-            if (!String.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            try
-            {
-                return System.Environment.MachineName;
-            }
-            catch (Exception)
-            {
-                return "MPExtended Services";
-            }
         }
 
         private void FailedToPublishService(NetService service, DNSServiceException error)
