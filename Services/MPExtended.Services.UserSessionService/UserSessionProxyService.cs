@@ -21,6 +21,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService
@@ -73,7 +74,7 @@ namespace MPExtended.Services.UserSessionService
             }
         }
 
-        public WebResult TestConnection()
+        public WebBoolResult TestConnection()
         {
             try
             {
@@ -83,36 +84,36 @@ namespace MPExtended.Services.UserSessionService
             {
                 // don't even log them, they're too much noice
                 //Log.Trace("No connection to user session service", e);
-                return new WebResult(false);
+                return new WebBoolResult(false);
             }
         }
 
-        public WebResult IsMediaPortalRunning()
+        public WebBoolResult IsMediaPortalRunning()
         {
             return Proxy.IsMediaPortalRunning();
         }
 
-        public WebResult StartMediaPortal()
+        public WebBoolResult StartMediaPortal()
         {
             return Proxy.StartMediaPortal();
         }
 
-        public WebResult StartMediaPortalBlocking()
+        public WebBoolResult StartMediaPortalBlocking()
         {
             return Proxy.StartMediaPortalBlocking();
         }
 
-        public WebResult SetMediaPortalForeground()
+        public WebBoolResult SetMediaPortalForeground()
         {
             return Proxy.SetMediaPortalForeground();
         }
 
-        public WebResult SetPowerMode(WebPowerMode powerMode)
+        public WebBoolResult SetPowerMode(WebPowerMode powerMode)
         {
             return Proxy.SetPowerMode(powerMode);
         }
 
-        public WebResult CloseMediaPortal()
+        public WebBoolResult CloseMediaPortal()
         {
             return Proxy.CloseMediaPortal();
         }

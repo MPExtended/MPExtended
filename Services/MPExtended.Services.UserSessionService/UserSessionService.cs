@@ -27,6 +27,7 @@ using System.Xml.Linq;
 using Microsoft.Win32;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService
@@ -69,27 +70,27 @@ namespace MPExtended.Services.UserSessionService
             MPPath = Path.Combine(mpdir, "MediaPortal.exe");
         }
 
-        public WebResult TestConnection()
+        public WebBoolResult TestConnection()
         {
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
 
-        public WebResult IsMediaPortalRunning()
+        public WebBoolResult IsMediaPortalRunning()
         {
-            return new WebResult(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0);
+            return new WebBoolResult(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0);
         }
 
-        public WebResult StartMediaPortal()
+        public WebBoolResult StartMediaPortal()
         {
             LaunchMediaPortal();
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
 
-        public WebResult StartMediaPortalBlocking()
+        public WebBoolResult StartMediaPortalBlocking()
         {
             if (!LaunchMediaPortal())
             {
-                return new WebResult(false);
+                return new WebBoolResult(false);
             }
 
             while (!IsMediaPortalRunning().Result)
@@ -97,7 +98,7 @@ namespace MPExtended.Services.UserSessionService
                 System.Threading.Thread.Sleep(500);
             }
 
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
 
         private bool LaunchMediaPortal()
@@ -125,7 +126,7 @@ namespace MPExtended.Services.UserSessionService
             }
         }
 
-        public WebResult SetMediaPortalForeground()
+        public WebBoolResult SetMediaPortalForeground()
         {
             try
             {
@@ -145,7 +146,7 @@ namespace MPExtended.Services.UserSessionService
             return false;
         }
 
-        public WebResult SetPowerMode(WebPowerMode powerMode)
+        public WebBoolResult SetPowerMode(WebPowerMode powerMode)
         {
             try
             {
@@ -176,7 +177,7 @@ namespace MPExtended.Services.UserSessionService
                 Log.Warn("The powerMode " + powerMode + " is not valid");
             }
 
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
 
         private RestartOptions MapPowerMode(WebPowerMode powerMode)
@@ -200,7 +201,7 @@ namespace MPExtended.Services.UserSessionService
             }
         }
 
-        public WebResult CloseMediaPortal()
+        public WebBoolResult CloseMediaPortal()
         {
             Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath));
             if (processes != null && processes.Length == 1)
@@ -208,7 +209,7 @@ namespace MPExtended.Services.UserSessionService
                 processes[0].CloseMainWindow();
             }
 
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
     }
 }
