@@ -259,7 +259,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             throw new NotImplementedException();
         }
 
-        public void SavePlaylist(string playlistId, IEnumerable<Services.MediaAccessService.Interfaces.Playlist.WebPlaylistItem> playlistItems)
+        public bool SavePlaylist(string playlistId, IEnumerable<Services.MediaAccessService.Interfaces.Playlist.WebPlaylistItem> playlistItems)
         {
             throw new NotImplementedException();
         }
@@ -270,7 +270,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         }
 
 
-        public void DeletePlaylist(string playlistId)
+        public bool DeletePlaylist(string playlistId)
         {
             throw new NotImplementedException();
         }

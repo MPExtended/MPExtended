@@ -551,7 +551,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return track;
         }
 
-        public void SavePlaylist(string playlistId, IEnumerable<WebPlaylistItem> playlistItems)
+        public bool SavePlaylist(string playlistId, IEnumerable<WebPlaylistItem> playlistItems)
         {
             String path = GetPlaylistPath(playlistId);
             PlayList mpPlaylist = new PlayList();
@@ -564,7 +564,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 mpPlaylist.Add(mpItem);
             }
 
-            factory.Save(mpPlaylist, path);
+            return factory.Save(mpPlaylist, path);
         }
         private string GetPlaylistPath()
         {
@@ -595,16 +595,18 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         }
 
 
-        public void DeletePlaylist(string playlistId)
+        public bool DeletePlaylist(string playlistId)
         {
             try
             {
                 String fileName = GetPlaylistPath(playlistId);
                 File.Delete(fileName);
+                return true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unable to delete playlist " + playlistId, ex);
+                return false;
             }
         }
 

@@ -24,6 +24,6 @@ namespace MediaPortal.Playlists
   {
     bool Load(PlayList playlist, string fileName);
     bool Load(PlayList playlist, string fileName, string label);
-    void Save(PlayList playlist, string fileName);
+    bool Save(PlayList playlist, string fileName);
   }
 }

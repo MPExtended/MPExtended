@@ -30,9 +30,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         bool PlaylistSupported { get; }
         IEnumerable<WebPlaylist> GetPlaylists();
         IEnumerable<WebPlaylistItem> GetPlaylistItems(String playlistId);
-        void SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
+        bool SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
         String CreatePlaylist(String playlistName);
-        void DeletePlaylist(String playlistId);
+        bool DeletePlaylist(String playlistId);
     }
 
     public interface IMusicLibrary : ILibrary, IPlaylist

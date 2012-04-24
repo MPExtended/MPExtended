@@ -165,7 +165,7 @@ namespace MediaPortal.Playlists
       return true;
     }
 
-    public void Save(PlayList playlist, string fileName)
+    public bool Save(PlayList playlist, string fileName)
     {
       try
       {
@@ -179,10 +179,12 @@ namespace MediaPortal.Playlists
             writer.WriteLine("{0}", item.FileName);
           }
         }
+        return true;
       }
       catch (Exception e)
       {
         Log.Info("failed to save a playlist {0}. err: {1} stack: {2}", fileName, e.Message, e.StackTrace);
+        return false;
       }
     }
   }

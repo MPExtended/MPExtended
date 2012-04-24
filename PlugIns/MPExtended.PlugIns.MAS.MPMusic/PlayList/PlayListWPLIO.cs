@@ -82,7 +82,7 @@ namespace MediaPortal.Playlists
       return false;
     }
 
-    public void Save(PlayList playlist, string fileName)
+    public bool Save(PlayList playlist, string fileName)
     {
       throw new Exception("The method or operation is not implemented.");
     }

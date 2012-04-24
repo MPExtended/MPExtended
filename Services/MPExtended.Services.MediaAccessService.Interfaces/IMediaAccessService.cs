@@ -480,31 +480,31 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddPlaylistItem(int? provider, string playlistId, WebMediaType type, string id, int? position);
+        WebBoolResult AddPlaylistItem(int? provider, string playlistId, WebMediaType type, string id, int? position);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids);
+        WebBoolResult AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void RemovePlaylistItem(int? provider, string playlistId, int position);
+        WebBoolResult RemovePlaylistItem(int? provider, string playlistId, int position);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void RemovePlaylistItems(int? provider, string playlistId, string positions);
+        WebBoolResult RemovePlaylistItems(int? provider, string playlistId, string positions);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void MovePlaylistItem(int? provider, string playlistId, int oldPosition, int newPosition);
+        WebBoolResult MovePlaylistItem(int? provider, string playlistId, int oldPosition, int newPosition);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        String CreatePlaylist(int? provider, String playlistName);
+        WebStringResult CreatePlaylist(int? provider, String playlistName);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        void DeletePlaylist(int? provider, String id);
+        WebBoolResult DeletePlaylist(int? provider, String id);
 
         #endregion
     }
