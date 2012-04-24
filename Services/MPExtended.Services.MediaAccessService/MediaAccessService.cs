@@ -29,6 +29,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -767,7 +768,7 @@ namespace MPExtended.Services.MediaAccessService
                 }
 
                 // try to load it from a network drive
-                if(info.OnNetworkDrive && info.Exists)
+                if (info.OnNetworkDrive && info.Exists)
                 {
                     using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
                     {
@@ -786,6 +787,89 @@ namespace MPExtended.Services.MediaAccessService
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
+        }
+        #endregion
+
+        #region Playlist
+        public IList<Interfaces.Playlist.WebPlaylist> GetPlaylists(int? provider)
+        {
+            return MusicLibraries[provider].GetPlaylists().Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<Interfaces.Playlist.WebPlaylistItem> GetPlaylistItems(int? provider, string playlistId)
+        {
+            return MusicLibraries[provider].GetPlaylistItems(playlistId).Finalize(provider, ProviderType.Music);
+        }
+
+        public void AddPlaylistItem(int? provider, string playlistId, WebMediaType type, string id, int? position)
+        {
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            AddPlaylistItemToPlaylist(provider, id, position, playlist);
+            
+            MusicLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        private void AddPlaylistItemToPlaylist(int? provider, string id, int? position, IList<Interfaces.Playlist.WebPlaylistItem> playlist)
+        {
+            WebMusicTrackBasic track = MusicLibraries[provider].GetTrackBasicById(id);
+            if (position != null)
+            {
+                playlist.Insert((int)position, new Interfaces.Playlist.WebPlaylistItem(track));
+            }
+            else
+            {
+                playlist.Add(new Interfaces.Playlist.WebPlaylistItem(track));
+            }
+        }
+
+        public void AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids)
+        {
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            int pos = position != null ? (int)position : playlist.Count - 1;
+            string[] splitIds = ids.Split(new char[]{'|'}, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < splitIds.Length; i++)
+            {
+                AddPlaylistItemToPlaylist(provider, splitIds[i], pos + i, playlist);
+            }
+            MusicLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public void RemovePlaylistItem(int? provider, string playlistId, int position)
+        {
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            playlist.RemoveAt(position);
+            MusicLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public void RemovePlaylistItems(int? provider, string playlistId, string positions)
+        {
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            string[] splitIds = positions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string p in splitIds)
+            {
+                int pos = Int32.Parse(p);
+                playlist.RemoveAt(pos);
+            }
+            MusicLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public void MovePlaylistItem(int? provider, string playlistId, int oldPosition, int newPosition)
+        {
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            WebPlaylistItem item = playlist[oldPosition];
+            playlist.RemoveAt(oldPosition);
+            playlist.Insert(newPosition, item);
+            MusicLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public string CreatePlaylist(int? provider, string playlistName)
+        {
+            return MusicLibraries[provider].CreatePlaylist(playlistName);
+        }
+
+        public void DeletePlaylist(int? provider, string id)
+        {
+            MusicLibraries[provider].DeletePlaylist(id);
         }
         #endregion
     }

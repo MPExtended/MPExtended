@@ -268,5 +268,16 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         {
             throw new NotImplementedException();
         }
+
+
+        public void DeletePlaylist(string playlistId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PlaylistSupported
+        {
+            get { return false; }
+        }
     }
 }

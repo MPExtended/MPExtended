@@ -463,11 +463,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public IEnumerable<WebPlaylist> GetPlaylists()
         {
-            String playlistPath = configuration["playlist"];
+            String path = GetPlaylistPath();
             List<WebPlaylist> returnList = new List<WebPlaylist>();
-            
 
-            String[] playlists = Directory.GetFiles(playlistPath);
+
+            String[] playlists = Directory.GetFiles(path);
 
             foreach(String p in playlists)
             {
@@ -492,7 +492,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             if (success)
             {
-                WebPlaylist webPlaylist = new WebPlaylist(EncodeTo64(path), mpPlaylist.Name, path);
+                WebPlaylist webPlaylist = new WebPlaylist() { Id = EncodeTo64(Path.GetFileName(path)), Title = mpPlaylist.Name, Path = new List<string>() { path } };
                 webPlaylist.ItemCount = mpPlaylist.Count;
                 return webPlaylist;
             }
@@ -506,7 +506,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         public IEnumerable<WebPlaylistItem> GetPlaylistItems(string playlistId)
         {
             PlayList mpPlaylist = new PlayList();
-            String path = DecodeFrom64(playlistId);
+            String path = GetPlaylistPath(playlistId);
             IPlayListIO factory = PlayListFactory.CreateIO(path);
             bool success = factory.Load(mpPlaylist, path);
 
@@ -547,14 +547,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         private WebMusicTrackBasic GetMusicTrack(string fileName)
         {
-            WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().Where(x => x.Path.Contains(fileName)).First();
+            WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().First(x => x.Path.Contains(fileName));
             return track;
         }
 
         public void SavePlaylist(string playlistId, IEnumerable<WebPlaylistItem> playlistItems)
         {
+            String path = GetPlaylistPath(playlistId);
             PlayList mpPlaylist = new PlayList();
-            String path = DecodeFrom64(playlistId);
             IPlayListIO factory = PlayListFactory.CreateIO(path);
 
             foreach(WebPlaylistItem i in playlistItems)
@@ -566,14 +566,24 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             factory.Save(mpPlaylist, path);
         }
+        private string GetPlaylistPath()
+        {
+            String playlistPath = configuration["playlist"];
+
+            return playlistPath;
+        }
+        private string GetPlaylistPath(string playlistId)
+        {
+            return Path.Combine(GetPlaylistPath(), DecodeFrom64(playlistId));
+        }
 
         public string CreatePlaylist(string playlistName)
         {
-            String playlistPath = configuration["playlist"];
+            String path = GetPlaylistPath();
             try
             {
-                String fileName = Path.Combine(playlistPath, playlistName + ".m3u");
-                File.Create(fileName);
+                String fileName = playlistName + ".m3u";
+                File.Create(Path.Combine(path, fileName));
                 return EncodeTo64(fileName);
             }
             catch(Exception ex)
@@ -582,6 +592,25 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
 
             return null;
+        }
+
+
+        public void DeletePlaylist(string playlistId)
+        {
+            try
+            {
+                String fileName = GetPlaylistPath(playlistId);
+                File.Delete(fileName);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to delete playlist " + playlistId, ex);
+            }
+        }
+
+        public bool PlaylistSupported
+        {
+            get { return true; }
         }
     }
 }

@@ -27,10 +27,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
     public interface IPlaylist
     {
+        bool PlaylistSupported { get; }
         IEnumerable<WebPlaylist> GetPlaylists();
         IEnumerable<WebPlaylistItem> GetPlaylistItems(String playlistId);
         void SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
         String CreatePlaylist(String playlistName);
+        void DeletePlaylist(String playlistId);
     }
 
     public interface IMusicLibrary : ILibrary, IPlaylist

@@ -35,6 +35,7 @@
     <plugin name="MP MyMusic">
       <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
       <cover type="folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
+      <playlist type="folder" displayname="Playlists Location">C:\Users\DieBagger\Documents\My Playlists</playlist>
     </plugin>
     <plugin name="FS Pictures">
       <root type="folder" displayname="Root Folder"></root>

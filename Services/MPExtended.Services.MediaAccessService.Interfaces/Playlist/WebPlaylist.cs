@@ -5,17 +5,10 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
 {
-    public class WebPlaylist : WebMediaItem
+    public class WebPlaylist : WebMediaItem, ITitleSortable
     {
-        public WebPlaylist(String id, String name, String path)
-        {
-            this.Type = WebMediaType.Playlist;
-            this.Id = id;
-            this.Path = new List<String>();
-            this.Path.Add(path);
-        }
-
-        public String Name;
+        public WebMediaType Type { get { return WebMediaType.Playlist; } }
+        public String Title { get; set; }
         public int ItemCount { get; set; }
     }
 }
