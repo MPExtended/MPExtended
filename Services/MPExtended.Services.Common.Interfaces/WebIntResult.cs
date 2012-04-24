@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.TVAccessService.Interfaces
+namespace MPExtended.Services.Common.Interfaces
 {
-    public class WebResult
+    public class WebIntResult
     {
-        public bool Result { get; set; }
+        public int Result { get; set; }
 
-        public WebResult()
+        public WebIntResult()
         {
         }
 
-        public WebResult(bool value)
+        public WebIntResult(int value)
         {
             Result = value;
         }
@@ -25,31 +25,31 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         public override bool Equals(object obj)
         {
-            WebResult r = obj is bool ? new WebResult((bool)obj) : obj as WebResult;
+            WebIntResult r = obj is string ? new WebIntResult((int)obj) : obj as WebIntResult;
             return (object)r != null && this.Result == r.Result;
         }
 
         public override int GetHashCode()
         {
-            return Result ? 1 : 0;
+            return Result.GetHashCode();
         }
 
-        public static bool operator ==(WebResult a, WebResult b)
+        public static bool operator ==(WebIntResult a, WebIntResult b)
         {
             return Object.ReferenceEquals(a, b) || (((object)a) != null && ((object)b) != null && a.Result == b.Result);
         }
 
-        public static bool operator !=(WebResult a, WebResult b)
+        public static bool operator !=(WebIntResult a, WebIntResult b)
         {
             return !(a == b);
         }
 
-        public static implicit operator WebResult(bool value)
+        public static implicit operator WebIntResult(int value)
         {
-            return new WebResult(value);
+            return new WebIntResult(value);
         }
 
-        public static implicit operator bool(WebResult value)
+        public static implicit operator int(WebIntResult value)
         {
             return value.Result;
         }

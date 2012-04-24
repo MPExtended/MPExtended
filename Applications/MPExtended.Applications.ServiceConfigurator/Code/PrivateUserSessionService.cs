@@ -21,6 +21,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Windows;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
@@ -28,10 +29,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     internal class PrivateUserSessionService : IPrivateUserSessionService
     {
-        public WebResult OpenConfigurator()
+        public WebBoolResult OpenConfigurator()
         {
             Application.Current.MainWindow.Show();
-            return new WebResult(true);
+            return new WebBoolResult(true);
         }
     }
 }

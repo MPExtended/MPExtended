@@ -23,6 +23,7 @@ using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
@@ -153,9 +154,9 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetAllCategories().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
         }
 
-        public WebItemCount GetMovieCount(int? provider, string genre, string actor = null)
+        public WebIntResult GetMovieCount(int? provider, string genre, string actor = null)
         {
-            return new WebItemCount() { Count = MovieLibraries[provider].GetAllMovies().AsQueryable().CommonFilter(genre, actor).Count() };
+            return MovieLibraries[provider].GetAllMovies().AsQueryable().CommonFilter(genre, actor).Count();
         }
 
         public IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string genre = null, string actor = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -188,9 +189,9 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
         }
 
-        public WebItemCount GetMovieGenresCount(int? provider)
+        public WebIntResult GetMovieGenresCount(int? provider)
         {
-            return new WebItemCount() { Count = MovieLibraries[provider].GetAllGenres().AsQueryable().Count() };
+            return MovieLibraries[provider].GetAllGenres().AsQueryable().Count();
         }
 
         public WebMovieBasic GetMovieBasicById(int? provider, string id)
@@ -213,9 +214,9 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetAllMovies().AsQueryable().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
         }
 
-        public WebItemCount GetMovieActorCount(int? provider)
+        public WebIntResult GetMovieActorCount(int? provider)
         {
-            return new WebItemCount() { Count = GetAllMovieActors(provider).Count };
+            return GetAllMovieActors(provider).Count;
         }
         #endregion
 
@@ -225,19 +226,19 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllCategories().AsQueryable().Finalize(provider, ProviderType.Music);
         }
 
-        public WebItemCount GetMusicTrackCount(int? provider, string genre = null)
+        public WebIntResult GetMusicTrackCount(int? provider, string genre = null)
         {
-            return new WebItemCount() { Count = MusicLibraries[provider].GetAllTracks().AsQueryable().FilterGenre(genre).Count() };
+            return MusicLibraries[provider].GetAllTracks().AsQueryable().FilterGenre(genre).Count();
         }
 
-        public WebItemCount GetMusicAlbumCount(int? provider, string genre = null, string category = null)
+        public WebIntResult GetMusicAlbumCount(int? provider, string genre = null, string category = null)
         {
-            return new WebItemCount() { Count = MusicLibraries[provider].GetAllAlbums().AsQueryable().FilterGenre(genre).Count() };
+            return MusicLibraries[provider].GetAllAlbums().AsQueryable().FilterGenre(genre).Count();
         }
 
-        public WebItemCount GetMusicArtistCount(int? provider)
+        public WebIntResult GetMusicArtistCount(int? provider)
         {
-            return new WebItemCount() { Count = MusicLibraries[provider].GetAllArtists().AsQueryable().Count() };
+            return MusicLibraries[provider].GetAllArtists().AsQueryable().Count();
         }
 
         public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(int? provider, string genre = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -275,9 +276,9 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Music);
         }
 
-        public WebItemCount GetMusicGenresCount(int? provider)
+        public WebIntResult GetMusicGenresCount(int? provider)
         {
-            return new WebItemCount() { Count = MusicLibraries[provider].GetAllGenres().AsQueryable().Count() };
+            return MusicLibraries[provider].GetAllGenres().AsQueryable().Count();
         }
 
         public WebMusicTrackDetailed GetMusicTrackDetailedById(int? provider, string id)
@@ -347,9 +348,9 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Pictures
-        public WebItemCount GetPictureCount(int? provider)
+        public WebIntResult GetPictureCount(int? provider)
         {
-            return new WebItemCount() { Count = PictureLibraries[provider].GetAllPicturesBasic().AsQueryable().Count() };
+            return PictureLibraries[provider].GetAllPicturesBasic().AsQueryable().Count();
         }
 
         public IList<WebPictureBasic> GetAllPicturesBasic(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -409,9 +410,9 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
         }
 
-        public WebItemCount GetTVShowGenresCount(int? provider)
+        public WebIntResult GetTVShowGenresCount(int? provider)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllGenres().AsQueryable().Count() };
+            return TVShowLibraries[provider].GetAllGenres().AsQueryable().Count();
         }
 
         public IList<WebTVShowBasic> GetAllTVShowsBasic(int? provider, string genre = null, string actor = null, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -525,29 +526,29 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetEpisodeDetailed(id).Finalize(provider, ProviderType.TVShow);
         }
 
-        public WebItemCount GetTVEpisodeCount(int? provider)
+        public WebIntResult GetTVEpisodeCount(int? provider)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Count() };
+            return TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Count();
         }
 
-        public WebItemCount GetTVEpisodeCountForTVShow(int? provider, string id)
+        public WebIntResult GetTVEpisodeCountForTVShow(int? provider, string id)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Where(e => e.ShowId == id).Count() };
+            return TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Where(e => e.ShowId == id).Count();
         }
 
-        public WebItemCount GetTVEpisodeCountForSeason(int? provider, string id)
+        public WebIntResult GetTVEpisodeCountForSeason(int? provider, string id)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Where(e => e.SeasonId == id).Count() };
+            return TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().Where(e => e.SeasonId == id).Count();
         }
 
-        public WebItemCount GetTVShowCount(int? provider, string genre = null, string actor = null)
+        public WebIntResult GetTVShowCount(int? provider, string genre = null, string actor = null)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().CommonFilter(genre, actor).Count() };
+            return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().CommonFilter(genre, actor).Count();
         }
 
-        public WebItemCount GetTVSeasonCountForTVShow(int? provider, string id)
+        public WebIntResult GetTVSeasonCountForTVShow(int? provider, string id)
         {
-            return new WebItemCount() { Count = TVShowLibraries[provider].GetAllSeasonsBasic().AsQueryable().Where(x => x.ShowId == id).Count() };
+            return TVShowLibraries[provider].GetAllSeasonsBasic().AsQueryable().Where(x => x.ShowId == id).Count();
         }
 
         public IList<WebActor> GetAllTVShowActors(int? provider, SortBy? sort = SortBy.Name, OrderBy? order = OrderBy.Asc)
@@ -560,16 +561,16 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().SelectMany(x => x.Actors).Distinct().SortMediaItemList(sort, order, SortBy.Name).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
         }
 
-        public WebItemCount GetTVShowActorCount(int? provider)
+        public WebIntResult GetTVShowActorCount(int? provider)
         {
-            return new WebItemCount() { Count = GetAllTVShowActors(provider).Count };
+            return GetAllTVShowActors(provider).Count;
         }
         #endregion
 
         #region Filesystem
-        public WebItemCount GetFileSystemDriveCount(int? provider)
+        public WebIntResult GetFileSystemDriveCount(int? provider)
         {
-            return new WebItemCount() { Count = FileSystemLibraries[provider].GetDriveListing().AsQueryable().Count() };
+            return FileSystemLibraries[provider].GetDriveListing().AsQueryable().Count();
         }
 
         public IList<WebDriveBasic> GetAllFileSystemDrives(int? provider, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -592,9 +593,9 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public WebItemCount GetFileSystemFoldersCount(int? provider, string id)
+        public WebIntResult GetFileSystemFoldersCount(int? provider, string id)
         {
-            return new WebItemCount() { Count = FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().Count() };
+            return FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().Count();
         }
 
         public IList<WebFileBasic> GetAllFileSystemFiles(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -607,9 +608,9 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public WebItemCount GetFileSystemFilesCount(int? provider, string id)
+        public WebIntResult GetFileSystemFilesCount(int? provider, string id)
         {
-            return new WebItemCount() { Count = FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().Count() };
+            return FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().Count();
         }
 
         public IList<WebFilesystemItem> GetAllFileSystemFilesAndFolders(int? provider, string id, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
@@ -626,12 +627,11 @@ namespace MPExtended.Services.MediaAccessService
             return listA.Concat(listB).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public WebItemCount GetFileSystemFilesAndFoldersCount(int? provider, string id)
+        public WebIntResult GetFileSystemFilesAndFoldersCount(int? provider, string id)
         {
             var listA = FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().Select(x => x.ToWebFilesystemItem());
             var listB = FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().Select(x => x.ToWebFilesystemItem());
-            int count = listA.Count() + listB.Count();
-            return new WebItemCount() { Count = count };
+            return listA.Count() + listB.Count();
         }
 
         public WebDriveBasic GetFileSystemDriveBasicById(int? provider, string id)
