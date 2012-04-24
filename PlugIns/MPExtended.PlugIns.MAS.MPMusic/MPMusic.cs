@@ -27,6 +27,9 @@ using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
+using MediaPortal.Playlists;
+using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
@@ -456,6 +459,129 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 return String.Empty;
             }
+        }
+
+        public IEnumerable<WebPlaylist> GetPlaylists()
+        {
+            String playlistPath = configuration["playlist"];
+            List<WebPlaylist> returnList = new List<WebPlaylist>();
+            
+
+            String[] playlists = Directory.GetFiles(playlistPath);
+
+            foreach(String p in playlists)
+            {
+                if (PlayListFactory.IsPlayList(p))
+                {
+                    WebPlaylist webPlaylist = GetPlaylist(p);
+                    if (webPlaylist != null)
+                    {
+                        returnList.Add(webPlaylist);
+                    }
+                }
+            }
+
+            return returnList;
+        }
+
+        private WebPlaylist GetPlaylist(String path)
+        {
+            PlayList mpPlaylist = new PlayList();
+            IPlayListIO factory = PlayListFactory.CreateIO(path);
+            bool success = factory.Load(mpPlaylist, path);
+
+            if (success)
+            {
+                WebPlaylist webPlaylist = new WebPlaylist(EncodeTo64(path), mpPlaylist.Name, path);
+                webPlaylist.ItemCount = mpPlaylist.Count;
+                return webPlaylist;
+            }
+            else
+            {
+                Log.Warn("Couldn't parse playlist " + path);
+                return null;
+            }
+        }
+
+        public IEnumerable<WebPlaylistItem> GetPlaylistItems(string playlistId)
+        {
+            PlayList mpPlaylist = new PlayList();
+            String path = DecodeFrom64(playlistId);
+            IPlayListIO factory = PlayListFactory.CreateIO(path);
+            bool success = factory.Load(mpPlaylist, path);
+
+            if (success)
+            {
+                List<WebPlaylistItem> retList = new List<WebPlaylistItem>();
+                foreach(PlayListItem i in mpPlaylist)
+                {
+                    WebPlaylistItem webItem = new WebPlaylistItem();
+                    WebMusicTrackBasic track = GetMusicTrack(i.FileName);
+
+                    webItem.Title = i.Description;
+                    webItem.Duration = i.Duration;
+                    webItem.Path = new List<String>();
+                    webItem.Path.Add(i.FileName);
+
+                    if (track != null)
+                    {
+                        webItem.Id = track.Id;
+                        webItem.Type = track.Type;
+                        webItem.DateAdded = track.DateAdded;
+                    }
+                    else
+                    {
+                        Log.Warn("Couldn't get track information for " + i.FileName);
+                    }
+
+                    retList.Add(webItem);
+                }
+                return retList;
+            }
+            else
+            {
+                Log.Warn("Couldn't load playlist " + playlistId);
+                return null;
+            }
+        }
+
+        private WebMusicTrackBasic GetMusicTrack(string fileName)
+        {
+            WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().Where(x => x.Path.Contains(fileName)).First();
+            return track;
+        }
+
+        public void SavePlaylist(string playlistId, IEnumerable<WebPlaylistItem> playlistItems)
+        {
+            PlayList mpPlaylist = new PlayList();
+            String path = DecodeFrom64(playlistId);
+            IPlayListIO factory = PlayListFactory.CreateIO(path);
+
+            foreach(WebPlaylistItem i in playlistItems)
+            {
+                PlayListItem mpItem = new PlayListItem(i.Title, i.Path[0], i.Duration);
+                mpItem.Type = PlayListItem.PlayListItemType.Audio;
+                mpPlaylist.Add(mpItem);
+            }
+
+            factory.Save(mpPlaylist, path);
+        }
+
+        public string CreatePlaylist(string playlistName)
+        {
+            String playlistPath = configuration["playlist"];
+            try
+            {
+                String fileName = Path.Combine(playlistPath, playlistName + ".m3u");
+                File.Create(fileName);
+                return EncodeTo64(fileName);
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Unable to create playlist " + playlistName, ex);
+            }
+
+            return null;
         }
     }
 }

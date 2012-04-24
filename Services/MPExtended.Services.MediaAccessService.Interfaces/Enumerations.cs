@@ -30,7 +30,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Folder = 9,
         [EnumMember]
-        Drive = 10
+        Drive = 10,
+        [EnumMember]
+        Playlist = 11
     }
 
     [DataContract]

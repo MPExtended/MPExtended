@@ -56,6 +56,14 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="MPMusic.cs" />
+    <Compile Include="PlayList\IPlayListIO.cs" />
+    <Compile Include="PlayList\PlayList.cs" />
+    <Compile Include="PlayList\PlayListB4sIO.cs" />
+    <Compile Include="PlayList\PlayListFactory.cs" />
+    <Compile Include="PlayList\PlayListItem.cs" />
+    <Compile Include="PlayList\PlayListM3uIO.cs" />
+    <Compile Include="PlayList\PlayListPLSIO.cs" />
+    <Compile Include="PlayList\PlayListWPLIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

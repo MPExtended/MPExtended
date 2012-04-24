@@ -9,6 +9,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -24,7 +25,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id);
     }
 
-    public interface IMusicLibrary : ILibrary
+    public interface IPlaylist
+    {
+        IEnumerable<WebPlaylist> GetPlaylists();
+        IEnumerable<WebPlaylistItem> GetPlaylistItems(String playlistId);
+        void SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
+        String CreatePlaylist(String playlistName);
+    }
+
+    public interface IMusicLibrary : ILibrary, IPlaylist
     {
         IEnumerable<WebMusicTrackBasic> GetAllTracks();
         IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed();

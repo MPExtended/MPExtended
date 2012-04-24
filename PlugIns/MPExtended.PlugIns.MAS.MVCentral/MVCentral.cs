@@ -248,5 +248,25 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             if (type == WebMediaType.MusicTrack) dict.Add("Type", "mvcentral track");
             return dict;
         }
+
+        public IEnumerable<Services.MediaAccessService.Interfaces.Playlist.WebPlaylist> GetPlaylists()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Services.MediaAccessService.Interfaces.Playlist.WebPlaylistItem> GetPlaylistItems(string playlistId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SavePlaylist(string playlistId, IEnumerable<Services.MediaAccessService.Interfaces.Playlist.WebPlaylistItem> playlistItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string CreatePlaylist(string playlistName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
