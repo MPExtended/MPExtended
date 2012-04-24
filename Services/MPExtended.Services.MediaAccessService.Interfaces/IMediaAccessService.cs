@@ -476,7 +476,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebPlaylistItem> GetPlaylistItems(int? provider, string playlistId);
+        IList<WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebPlaylistItem> GetPlaylistItemsByRange(int? provider, string playlistId, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebIntResult GetPlaylistItemsCount(int? provider, string playlistId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

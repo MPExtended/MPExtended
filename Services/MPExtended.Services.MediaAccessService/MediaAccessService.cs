@@ -796,22 +796,37 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetPlaylists().Finalize(provider, ProviderType.Music);
         }
 
-        public IList<Interfaces.Playlist.WebPlaylistItem> GetPlaylistItems(int? provider, string playlistId)
+        public IList<Interfaces.Playlist.WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
         {
             return MusicLibraries[provider].GetPlaylistItems(playlistId).Finalize(provider, ProviderType.Music);
         }
 
+        public IList<WebPlaylistItem> GetPlaylistItemsByRange(int? provider, string playlistId, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return GetAllPlaylistItems(provider, playlistId).AsQueryable().TakeRange(start, end).Finalize(provider, ProviderType.Music);
+        }
+
+        public WebIntResult GetPlaylistItemsCount(int? provider, string playlistId)
+        {
+            return MusicLibraries[provider].GetPlaylistItems(playlistId).AsQueryable().Count();
+        }
+
+        private IEnumerable<WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId)
+        {
+            return MusicLibraries[provider].GetPlaylistItems(playlistId);
+        }
+
         public WebBoolResult AddPlaylistItem(int? provider, string playlistId, WebMediaType type, string id, int? position)
         {
-            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).Finalize(provider, type);
 
             if (AddPlaylistItemToPlaylist(provider, id, position, playlist))
             {
-                return new WebBoolResult(MusicLibraries[provider].SavePlaylist(playlistId, playlist));
+                return MusicLibraries[provider].SavePlaylist(playlistId, playlist);
             }
             else
             {
-                return new WebBoolResult(false);
+                return false;
             }
         }
 
@@ -839,19 +854,19 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebBoolResult AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids)
         {
-            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).Finalize(provider, type);
             int pos = position != null ? (int)position : playlist.Count - 1;
             string[] splitIds = ids.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < splitIds.Length; i++)
             {
                 AddPlaylistItemToPlaylist(provider, splitIds[i], pos + i, playlist);
             }
-            return new WebBoolResult(MusicLibraries[provider].SavePlaylist(playlistId, playlist));
+            return MusicLibraries[provider].SavePlaylist(playlistId, playlist);
         }
 
         public WebBoolResult RemovePlaylistItem(int? provider, string playlistId, int position)
         {
-            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
 
             if (position >= 0 && position < playlist.Count)
             {
@@ -860,14 +875,14 @@ namespace MPExtended.Services.MediaAccessService
             else
             {
                 Log.Warn("Index out of bound for removing playlist item: " + position);
-                return new WebBoolResult(false);
+                return false;
             }
-            return new WebBoolResult(MusicLibraries[provider].SavePlaylist(playlistId, playlist));
+            return MusicLibraries[provider].SavePlaylist(playlistId, playlist);
         }
 
         public WebBoolResult RemovePlaylistItems(int? provider, string playlistId, string positions)
         {
-            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
             string[] splitIds = positions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string p in splitIds)
             {
@@ -882,36 +897,36 @@ namespace MPExtended.Services.MediaAccessService
                     return new WebBoolResult(false);
                 }
             }
-            return new WebBoolResult(MusicLibraries[provider].SavePlaylist(playlistId, playlist));
+            return MusicLibraries[provider].SavePlaylist(playlistId, playlist);
 
         }
 
         public WebBoolResult MovePlaylistItem(int? provider, string playlistId, int oldPosition, int newPosition)
         {
 
-            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetPlaylistItems(provider, playlistId);
+            IList<Interfaces.Playlist.WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
             if (oldPosition >= 0 && oldPosition < playlist.Count && newPosition >= 0 && newPosition < playlist.Count)
             {
                 WebPlaylistItem item = playlist[oldPosition];
                 playlist.RemoveAt(oldPosition);
                 playlist.Insert(newPosition, item);
-                return new WebBoolResult(MusicLibraries[provider].SavePlaylist(playlistId, playlist));
+                return MusicLibraries[provider].SavePlaylist(playlistId, playlist);
             }
             else
             {
                 Log.Warn("Indexes out of bound for moving playlist item");
             }
-            return new WebBoolResult(false);
+            return false;
         }
 
         public WebStringResult CreatePlaylist(int? provider, string playlistName)
         {
-            return new WebStringResult(MusicLibraries[provider].CreatePlaylist(playlistName));
+            return MusicLibraries[provider].CreatePlaylist(playlistName);
         }
 
         public WebBoolResult DeletePlaylist(int? provider, string id)
         {
-            return new WebBoolResult(MusicLibraries[provider].DeletePlaylist(id));
+            return MusicLibraries[provider].DeletePlaylist(id);
         }
         #endregion
     }

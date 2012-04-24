@@ -58,7 +58,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Asc = 0,
         [EnumMember]
-        Desc = 1
+        Desc = 1,
+        [EnumMember]
+        Custom = 2
     }
 
     [DataContract]
@@ -91,6 +93,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [EnumMember]
         Type = 12,
         [EnumMember]
-        Name = 13
+        Name = 13,
+        [EnumMember]
+        Custom = 14
     }
 }
