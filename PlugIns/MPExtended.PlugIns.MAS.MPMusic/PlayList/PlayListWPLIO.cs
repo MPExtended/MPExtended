@@ -62,7 +62,7 @@ namespace MediaPortal.Playlists
               if (srcNode.InnerText.Length > 0)
               {
                 fileName = srcNode.InnerText;
-                PathUtil.GetQualifiedFilename(basePath, ref fileName);
+                fileName = PathUtil.GetAbsolutePath(basePath, fileName);
                 PlayListItem newItem = new PlayListItem(fileName, fileName, 0);
                 newItem.Type = PlayListItem.PlayListItemType.Audio;
                 string description;

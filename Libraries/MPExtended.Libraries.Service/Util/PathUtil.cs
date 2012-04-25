@@ -64,48 +64,9 @@ namespace MPExtended.Libraries.Service.Util
             return uri.Scheme == "file" ? uri.LocalPath : path;
         }
 
-        public static void GetQualifiedFilename(string strBasePath, ref string strFileName)
+        public static string GetAbsolutePath(string basePath, string relativePath)
         {
-            if (strFileName == null) return;
-            if (strFileName.Length <= 2) return;
-            if (strFileName[1] == ':') return;
-            strBasePath = RemoveTrailingSlash(strBasePath);
-            while (strFileName.StartsWith(@"..\") || strFileName.StartsWith("../"))
-            {
-                strFileName = strFileName.Substring(3);
-                int pos = strBasePath.LastIndexOf(@"\");
-                if (pos > 0)
-                {
-                    strBasePath = strBasePath.Substring(0, pos);
-                }
-                else
-                {
-                    pos = strBasePath.LastIndexOf(@"/");
-                    if (pos > 0)
-                    {
-                        strBasePath = strBasePath.Substring(0, pos);
-                    }
-                }
-            }
-            if (strBasePath.Length == 2 && strBasePath[1] == ':')
-                strBasePath += @"\";
-            strFileName = Path.Combine(strBasePath, strFileName);
-        }
-
-        public static string RemoveTrailingSlash(string strLine)
-        {
-            if (strLine == null) return string.Empty;
-            if (strLine.Length == 0) return string.Empty;
-            string strPath = strLine;
-            while (strPath.Length > 0)
-            {
-                if (strPath[strPath.Length - 1] == '\\' || strPath[strPath.Length - 1] == '/')
-                {
-                    strPath = strPath.Substring(0, strPath.Length - 1);
-                }
-                else break;
-            }
-            return strPath;
+            return Path.GetFullPath(Path.Combine(basePath, relativePath));
         }
     }
 }

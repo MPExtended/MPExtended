@@ -153,7 +153,7 @@ namespace MediaPortal.Playlists
       }
       else
       {
-        PathUtil.GetQualifiedFilename(basePath, ref fileName);
+        fileName = PathUtil.GetAbsolutePath(basePath, fileName);
         newItem.FileName = fileName;
         newItem.Type = PlayListItem.PlayListItemType.Audio;
       }
