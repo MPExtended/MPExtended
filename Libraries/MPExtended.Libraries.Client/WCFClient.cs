@@ -50,23 +50,6 @@ namespace MPExtended.Libraries.Client
 
     public class WCFClient
     {
-        public static TResult CallWithHeader<TResult, THeader>(string headerNamespace, string headerName, THeader headerContent, object client, Func<TResult> method)
-        {
-            using (var scope = new OperationContextScope((IContextChannel)client))
-            {
-                MessageHeader<THeader> header = new System.ServiceModel.MessageHeader<THeader>(headerContent);
-                MessageHeader untyped = header.GetUntypedHeader(headerName, headerNamespace);
-                OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
-
-                return method.Invoke();
-            }
-        }
-
-        public static TResult CallWithHeader<TResult, THeader>(WCFHeader<THeader> header, object client, Func<TResult> method)
-        {
-            return CallWithHeader<TResult, THeader>(header.HeaderNamespace, header.Name, header.Content, client, method);
-        }
-
         public static OperationContextScope EnterOperationScope(object client)
         {
             return new OperationContextScope((IContextChannel)client);
@@ -97,6 +80,18 @@ namespace MPExtended.Libraries.Client
         public static TResult GetHeader<TResult>(string header, TResult defaultValue)
         {
             return GetHeader(new WCFHeader<TResult>(header), defaultValue);
+        }
+
+        public static void SetHeader<TContent>(WCFHeader<TContent> wcfHeader)
+        {
+            MessageHeader<TContent> header = new System.ServiceModel.MessageHeader<TContent>(wcfHeader.Content);
+            MessageHeader untyped = header.GetUntypedHeader(wcfHeader.Name, wcfHeader.HeaderNamespace);
+            OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+        }
+
+        public static void SetHeader<TContent>(string header, TContent content)
+        {
+            SetHeader(new WCFHeader<TContent>(header, content));
         }
     }
 }
