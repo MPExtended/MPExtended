@@ -68,8 +68,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, album, WebArtworkType.Cover, 0, width, height);
-            return File(image, "image/jpg");
+            using (var scope = WCFClient.EnterOperationScope(MPEServices.MASStream))
+            {
+                var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, album, WebArtworkType.Cover, 0, width, height);
+                return File(image, WCFClient.GetHeader<string>("contentType"));
+            }
         }
     }
 }
