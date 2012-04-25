@@ -119,7 +119,7 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public string ReadSettingFromDatabase(string tagName)
+        public WebStringResult ReadSettingFromDatabase(string tagName)
         {
             return _tvBusiness.GetSetting(tagName, "").Value;
         }
@@ -631,12 +631,12 @@ namespace MPExtended.Services.TVAccessService
             return SwitchTVServerToChannel(userName, channelId).ToWebVirtualCard();
         }
 
-        public string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).RTSPUrl;
         }
 
-        public string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).TimeShiftFileName;
         }

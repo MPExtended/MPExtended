@@ -24,7 +24,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string ReadSettingFromDatabase(string tagName);
+        WebStringResult ReadSettingFromDatabase(string tagName);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -257,11 +257,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId);
+        WebStringResult SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId);
+        WebStringResult SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -741,7 +741,7 @@ namespace MPExtended.Services.MediaAccessService
             };
         }
 
-        public bool IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
+        public WebBoolResult IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
             WebFileInfo info = GetFileInfo(provider, mediatype, filetype, id, offset);
             return info.Exists && info.IsLocalFile;
