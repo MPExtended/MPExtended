@@ -142,7 +142,7 @@ namespace MPExtended.Services.MediaAccessService
             return Search(text).TakeRange(start, end).ToList();
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id)
         {
             return GetLibrary(provider, type).GetExternalMediaInfo(type, id);
         }

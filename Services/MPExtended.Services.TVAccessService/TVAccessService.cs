@@ -138,28 +138,28 @@ namespace MPExtended.Services.TVAccessService
         /// <param name="type">Type of item</param>
         /// <param name="id">Id of recording</param>
         /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
-        public SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
         {
             return GetExternalMediaInfoForMpTvServer(type, id);
         }
 
-        private SerializableDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
+        private WebDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
         {
             if (type == WebTvMediaType.Recording)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp recording" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp recording" },
+                    { "Id", id }
+                };
             }
             else if (type == WebTvMediaType.TV)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp tvchannel" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp tvchannel" },
+                    { "Id", id }
+                };
             }
 
             return null;

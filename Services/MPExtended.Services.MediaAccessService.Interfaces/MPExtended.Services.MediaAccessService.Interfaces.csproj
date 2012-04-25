@@ -78,7 +78,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />

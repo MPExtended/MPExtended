@@ -60,6 +60,10 @@
       <Project>{19467BF5-89FA-4BA3-A4C3-3A382573A20F}</Project>
       <Name>MPExtended.Libraries.SQLitePlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>

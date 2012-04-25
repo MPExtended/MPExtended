@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace MPExtended.Services.MediaAccessService.Interfaces
+namespace MPExtended.Services.Common.Interfaces
 {
     [Serializable]
-    public class SerializableDictionary<TValue> : ISerializable,
+    public class WebDictionary<TValue> : ISerializable,
         IEnumerable<KeyValuePair<string, TValue>>, System.Collections.IEnumerable
     {
         private Dictionary<string, TValue> dict = new Dictionary<string, TValue>();
 
-        public SerializableDictionary()
+        public WebDictionary()
         {
         }
 
-        public SerializableDictionary(Dictionary<string, TValue> input)
+        public WebDictionary(Dictionary<string, TValue> input)
         {
             dict = input;
         }
 
-        public SerializableDictionary(SerializationInfo info, StreamingContext context) 
+        public WebDictionary(SerializationInfo info, StreamingContext context) 
         {
             foreach (SerializationEntry item in info)
             {

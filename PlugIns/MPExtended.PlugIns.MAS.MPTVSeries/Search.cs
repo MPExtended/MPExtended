@@ -23,6 +23,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
@@ -102,7 +103,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         Type = WebMediaType.TVEpisode,
                         Id = reader.ReadIntAsString(0),
                         Title = title,
-                        Details = new SerializableDictionary<string>()
+                        Details = new WebDictionary<string>()
                     {
                         { "EpisodeNumber", reader.ReadIntAsString(2) },
                         { "SeasonNumber", reader.ReadIntAsString(3) },
@@ -165,7 +166,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                             Id = reader.ReadString(0),
                             Title = showTitle + " (season " + reader.ReadInt32(1) + ")",
                             Score = 100,
-                            Details = new SerializableDictionary<string>()
+                            Details = new WebDictionary<string>()
                         {
                             { "SeasonNumber", reader.ReadIntAsString(1) },
                             { "ShowId", reader.ReadIntAsString(2) },
