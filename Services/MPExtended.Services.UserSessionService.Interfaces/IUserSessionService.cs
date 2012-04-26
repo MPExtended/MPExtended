@@ -16,6 +16,10 @@ namespace MPExtended.Services.UserSessionService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebUserServiceDescription GetServiceDescription();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResult IsMediaPortalRunning();
 
         [OperationContract]
