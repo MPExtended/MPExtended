@@ -88,7 +88,6 @@
     <Compile Include="WebFileInfo.cs" />
     <Compile Include="WebGenre.cs" />
     <Compile Include="WebObject.cs" />
-    <Compile Include="WebItemCount.cs" />
     <Compile Include="WebMediaItem.cs" />
     <Compile Include="WebSearchResult.cs" />
     <Compile Include="SortInterfaces.cs" />
