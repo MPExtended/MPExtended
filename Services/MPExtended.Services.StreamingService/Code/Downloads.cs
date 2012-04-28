@@ -70,10 +70,10 @@ namespace MPExtended.Services.StreamingService.Code
             WCFUtil.SetContentLength(source.GetFileInfo().Size);
 
             // FIXME: there has to be a better way to do this
-            object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
+            string mime = MIME.GetFromFilename(source.GetFileInfo().Name);
             if (mime != null)
             {
-                WCFUtil.SetContentType(mime.ToString());
+                WCFUtil.SetContentType(mime);
             }
 
             // finally, save the context and return
