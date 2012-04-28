@@ -24,7 +24,7 @@ button.earlier
 {
     margin-right: 10px;
     border: none;
-    background: top left no-repeat url('../../../Content/Images/left.gif');
+    background: top left no-repeat url('../Content/Images/left.gif');
     background-position: 50% 50%;
     cursor: pointer;
     width: inherit;
@@ -54,7 +54,7 @@ button.later
 {
     margin-right: 10px;
     border: none;
-    background: top left no-repeat url('../../../Content/Images/right.gif');
+    background: top left no-repeat url('../Content/Images/right.gif');
     position: absolute; /*right: 0px;*/
     background-position: 50% 50%;
     width: inherit;

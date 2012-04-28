@@ -135,15 +135,12 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Content\Images\bg.png" />
+    <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
-    <Content Include="Content\Images\header_gradient.png" />
-    <Content Include="Content\Images\left.gif" />
-    <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\nav_gradient.png" />
-    <Content Include="Content\Images\right.gif" />
-    <Content Include="Content\Images\today_gradient.png" />
-    <Content Include="Content\Images\tvguide_button_bg.png" />
+    <Content Include="Skins\aredon\Content\Images\bg.png" />
+    <Content Include="Skins\aredon\Content\Images\left.gif" />
+    <Content Include="Skins\aredon\Content\Images\logo.png" />
+    <Content Include="Skins\aredon\Content\Images\right.gif" />
     <Content Include="Skins\aredon\Home\Index.css" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -392,6 +389,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Content\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
