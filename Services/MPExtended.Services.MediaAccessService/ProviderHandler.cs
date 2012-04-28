@@ -91,11 +91,7 @@ namespace MPExtended.Services.MediaAccessService
                     string pluginRoot = Path.Combine(Installation.GetSourceRootDirectory(), "PlugIns");
                     foreach (string pdir in Directory.GetDirectories(pluginRoot))
                     {
-#if DEBUG
-                        string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Debug"));
-#else
-                        string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", "Release"));
-#endif
+                        string dir = Path.GetFullPath(Path.Combine(pluginRoot, pdir, "bin", Installation.GetSourceBuildDirectoryName()));
                         if (Directory.Exists(dir))
                             catalog.Catalogs.Add(new DirectoryCatalog(dir));
                     }

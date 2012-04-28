@@ -47,7 +47,7 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             foreach (var generator in generators)
             {
                 string projectName = "MPExtended.Services." + generator.Item1 + ".Interfaces";
-                Assembly asm = Assembly.LoadFrom(Path.Combine(rootpath, "Services", projectName, "bin", "Debug", projectName + ".dll"));
+                Assembly asm = Assembly.LoadFrom(Path.Combine(rootpath, "Services", projectName, "bin", Installation.GetSourceBuildDirectoryName(), projectName + ".dll"));
                 Generator gen = (Generator)Activator.CreateInstance(generator.Item2, asm);
                 gen.Output = new StreamWriter(Path.Combine(outputDir, generator.Item3));
                 gen.UserStream = OutputStream;
