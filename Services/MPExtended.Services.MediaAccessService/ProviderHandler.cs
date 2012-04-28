@@ -66,11 +66,11 @@ namespace MPExtended.Services.MediaAccessService
 
             try
             {
-                MovieLibraries = new LazyLibraryList<IMovieLibrary>(FilterDisabled(MovieLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Movie);
-                MusicLibraries = new LazyLibraryList<IMusicLibrary>(FilterDisabled(MusicLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Music);
-                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(FilterDisabled(TVShowLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.TVShow);
-                PictureLibraries = new LazyLibraryList<IPictureLibrary>(FilterDisabled(PictureLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Picture);
-                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(FilterDisabled(FileSystemLibrariesLoaded).ToDictionary(x => (int)x.Metadata["Id"], x => x), ProviderType.Filesystem);
+                MovieLibraries = new LazyLibraryList<IMovieLibrary>(CreateList(MovieLibrariesLoaded), ProviderType.Movie);
+                MusicLibraries = new LazyLibraryList<IMusicLibrary>(CreateList(MusicLibrariesLoaded), ProviderType.Music);
+                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(CreateList(TVShowLibrariesLoaded), ProviderType.TVShow);
+                PictureLibraries = new LazyLibraryList<IPictureLibrary>(CreateList(PictureLibrariesLoaded), ProviderType.Picture);
+                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(CreateList(FileSystemLibrariesLoaded), ProviderType.Filesystem);
             }
             catch (Exception ex)
             {
@@ -118,9 +118,34 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
-        private IEnumerable<Lazy<T, IDictionary<string, object>>> FilterDisabled<T>(Lazy<T, IDictionary<string, object>>[] list) 
+        private Dictionary<int, Lazy<T, IDictionary<string, object>>> CreateList<T>(Lazy<T, IDictionary<string, object>>[] list)
         {
-            return list.Where(x => !Configuration.Media.DisabledPlugins.Contains((string)x.Metadata["Name"]));
+            var dict = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
+            foreach (var item in list)
+            {
+                try
+                {
+                    if (!item.Metadata.ContainsKey("Id") || !item.Metadata.ContainsKey("Name"))
+                    {
+                        Log.Warn("A plugin is missing required metadata, skipped loading this plugin");
+                        continue;
+                    }
+
+                    if (Configuration.Media.DisabledPlugins.Contains((string)item.Metadata["Name"]))
+                    {
+                        Log.Debug("Skipping plugin {0} because it is disabled", (string)item.Metadata["Name"]);
+                        continue;
+                    }
+
+                    dict[(int)item.Metadata["Id"]] = item;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Failed to read metadata from a plugin", ex);
+                }
+            }
+
+            return dict;
         }
         #endregion
 
