@@ -5,3 +5,8 @@
     margin: 5px 5px 5px 5px;
     float: left;
 }
+
+.album p
+{
+    float: left;
+}

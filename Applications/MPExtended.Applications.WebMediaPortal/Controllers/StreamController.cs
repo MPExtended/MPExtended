@@ -141,11 +141,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
                 identifier, type, itemId, transcoder, starttime, continuationId);
             string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
-            if (!WCFClient.CallWithHeader(new WCFHeader<string>("forwardedFor", HttpContext.Request.UserHostAddress), GetStreamControl(type),
-                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT); }))
+            using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
-                Log.Error("Streaming: InitStream failed");
-                return new EmptyResult();
+                WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
+                if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT))
+                {
+                    Log.Error("Streaming: InitStream failed");
+                    return new EmptyResult();
+                }
             }
 
             RunningStreams[continuationId] = identifier;

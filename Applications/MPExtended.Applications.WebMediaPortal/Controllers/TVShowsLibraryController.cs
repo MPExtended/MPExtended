@@ -70,32 +70,20 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0, width, height));
         }
 
         public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0, width, height));
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height));
         }
 
         public ActionResult Details(string episode)

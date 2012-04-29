@@ -21,6 +21,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService
@@ -85,6 +86,16 @@ namespace MPExtended.Services.UserSessionService
                 //Log.Trace("No connection to user session service", e);
                 return new WebResult(false);
             }
+        }
+
+        public WebUserServiceDescription GetServiceDescription()
+        {
+            return new WebUserServiceDescription()
+            {
+                ApiVersion = UserSessionService.API_VERSION,
+                ServiceVersion = VersionUtil.GetVersionName(),
+                IsAvailable = TestConnection()
+            };
         }
 
         public WebResult IsMediaPortalRunning()

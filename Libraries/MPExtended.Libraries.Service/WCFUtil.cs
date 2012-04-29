@@ -29,6 +29,8 @@ namespace MPExtended.Libraries.Service
 {
     public static class WCFUtil
     {
+        internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
+
         private static bool IsRestEnabled
         {
             get
@@ -131,13 +133,18 @@ namespace MPExtended.Libraries.Service
             }
         }
 
+        internal static MessageHeader CreateCustomSOAPHeader<T>(string name, T value)
+        {
+            MessageHeader<T> header = new MessageHeader<T>(value);
+            MessageHeader untyped = header.GetUntypedHeader(name, HEADER_NAMESPACE);
+            return untyped;
+        }
+
         private static void SetCustomSOAPHeader<T>(string name, T value)
         {
             if (!IsRestEnabled)
             {
-                MessageHeader<T> header = new MessageHeader<T>(value);
-                MessageHeader untyped = header.GetUntypedHeader(name, "http://mpextended.github.com/");
-                OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+                OperationContext.Current.OutgoingMessageHeaders.Add(CreateCustomSOAPHeader(name, value));
             }
         }
 
@@ -158,7 +165,7 @@ namespace MPExtended.Libraries.Service
 
         public static string GetHeaderValue(string soapHeaderName, string webHeaderName)
         {
-            return GetHeaderValue(soapHeaderName, "http://mpextended.github.com/", webHeaderName);
+            return GetHeaderValue(soapHeaderName, HEADER_NAMESPACE, webHeaderName);
         }
 
         public static string GetHeaderValue(string headerName)

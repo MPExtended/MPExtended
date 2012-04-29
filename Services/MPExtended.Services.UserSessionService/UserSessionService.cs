@@ -34,6 +34,8 @@ namespace MPExtended.Services.UserSessionService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class UserSessionService : IUserSessionService
     {
+        internal const int API_VERSION = 4;
+
         /// <summary>
         /// The SetSuspendState function suspends the system by shutting power down. Depending on the Hibernate parameter, the system either enters a suspend (sleep) state or hibernation (S4). If the ForceFlag parameter is TRUE, the system suspends operation immediately; if it is FALSE, the system requests permission from all applications and device drivers before doing so.
         /// </summary>
@@ -72,6 +74,16 @@ namespace MPExtended.Services.UserSessionService
         public WebResult TestConnection()
         {
             return new WebResult(true);
+        }
+
+        public WebUserServiceDescription GetServiceDescription()
+        {
+            return new WebUserServiceDescription()
+            {
+                ApiVersion = API_VERSION,
+                ServiceVersion = VersionUtil.GetVersionName(),
+                IsAvailable = true
+            };
         }
 
         public WebResult IsMediaPortalRunning()

@@ -7,14 +7,14 @@
 
 <h3>@String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title)</h3>
 
-    @foreach (var album in Model.Albums)
-    {
+@foreach (var album in Model.Albums)
+{
     <a href="@Url.Action("Album", new { album = album.Id })">
-         <div class="album">
-            <img  height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" />
-           <p style="float: left">
-               @album.Title
-           </p>
+        <div class="album">
+            <img height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" />
+            <p>
+                @album.Title
+            </p>
         </div>
-            </a>
-    }
+    </a>
+}

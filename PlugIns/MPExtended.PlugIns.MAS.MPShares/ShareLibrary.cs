@@ -117,7 +117,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Share share = GetShare(id);
                 return new DirectoryInfo(path)
                     .GetFiles()
-                    .Where(file => share.Extensions.Contains(file.Extension))
+                    .Where(file => share.Extensions.Any(x => x.Equals(file.Extension, StringComparison.CurrentCultureIgnoreCase)))
                     .Select(file => ConvertFileInfoToFileBasic(file, share));
             }
 

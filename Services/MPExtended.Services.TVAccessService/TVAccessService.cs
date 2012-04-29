@@ -18,14 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Text;
 using System.ServiceModel;
-using System.ServiceModel.Web;
-using Gentle.Provider.MySQL;
-using Gentle.Provider.SQLServer;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -37,7 +33,7 @@ namespace MPExtended.Services.TVAccessService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVAccessService : ITVAccessService
     {
-        private const int API_VERSION = 2;
+        private const int API_VERSION = 4;
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
@@ -93,7 +89,7 @@ namespace MPExtended.Services.TVAccessService
             {
                 HasConnectionToTVServer = RemoteControl.IsConnected,
                 ApiVersion = API_VERSION,
-                ServiceVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
+                ServiceVersion = VersionUtil.GetVersionName(),
             };
         }
         #endregion

@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -68,12 +69,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string movie, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height));
         }
     }
 }

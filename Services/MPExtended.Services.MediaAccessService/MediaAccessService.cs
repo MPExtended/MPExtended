@@ -40,11 +40,7 @@ namespace MPExtended.Services.MediaAccessService
     public class MediaAccessService : ProviderHandler, IMediaAccessService
     {
         #region General
-        private const int MOVIE_API = 3;
-        private const int MUSIC_API = 3;
-        private const int PICTURES_API = 3;
-        private const int TVSHOWS_API = 3;
-        private const int FILESYSTEM_API = 3;
+        private const int API_VERSION = 4;
 
         private ILibrary GetLibrary(int? provider, WebMediaType type)
         {
@@ -75,12 +71,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             return new WebMediaServiceDescription()
             {
-                MovieApiVersion = MOVIE_API,
-                MusicApiVersion = MUSIC_API,
-                PicturesApiVersion = PICTURES_API,
-                TvShowsApiVersion = TVSHOWS_API,
-                FilesystemApiVersion = FILESYSTEM_API,
-
+                ApiVersion = API_VERSION,
                 ServiceVersion = VersionUtil.GetVersionName(),
 
                 AvailableFileSystemLibraries = FileSystemLibraries.GetAllAsBackendProvider(),

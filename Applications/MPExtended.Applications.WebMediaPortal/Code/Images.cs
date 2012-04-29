@@ -17,33 +17,31 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using System.Net;
+using System.IO;
+using MPExtended.Libraries.Client;
 
-namespace MPExtended.Libraries.Service.Logging
+namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal class FileDestination : ILogDestination, IDisposable
+    internal static class Images
     {
-        public LogLevel MinimumLevel { get; private set; }
-        public TextWriter Output { get; private set; }
-
-        public string LogFormat
+        public static ActionResult ReturnFromService(Func<Stream> method)
         {
-            get { return "{0:yyyy-MM-dd HH:mm:ss.fffff} [{1}({2})] {3}: "; }
-        }
+            using (var scope = WCFClient.EnterOperationScope(MPEServices.MASStream))
+            {
+                var image = method.Invoke();
 
-        public FileDestination(LogLevel level, string filename)
-        {
-            MinimumLevel = level;
+                var returnCode = WCFClient.GetHeader<int>("responseCode");
+                if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
+                {
+                    return new HttpStatusCodeResult(returnCode);
+                }
 
-            Stream file = File.Open(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
-            Output = new StreamWriter(file, Encoding.UTF8, 4096);
-        }
-
-        public void Dispose()
-        {
-            Output.Close();
+                return new FileStreamResult(image, WCFClient.GetHeader<string>("contentType", "image/jpeg"));
+            }
         }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="ServiceDiscoverer.cs" />
     <Compile Include="ServiceException.cs" />
     <Compile Include="ServiceSet.cs" />
+    <Compile Include="WCFClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">

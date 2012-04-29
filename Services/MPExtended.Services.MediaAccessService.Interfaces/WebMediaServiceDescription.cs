@@ -7,12 +7,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 {
     public class WebMediaServiceDescription
     {
-        public int MovieApiVersion { get; set; }
-        public int MusicApiVersion { get; set; }
-        public int PicturesApiVersion { get; set; }
-        public int TvShowsApiVersion { get; set; }
-        public int FilesystemApiVersion { get; set; }
-
+        public int ApiVersion { get; set; }
         public string ServiceVersion { get; set; }
 
         public List<WebBackendProvider> AvailableMovieLibraries { get; set; }

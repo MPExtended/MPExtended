@@ -37,7 +37,7 @@ namespace MPExtended.Services.StreamingService
     {
         private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
         private static List<string> _authorizedHosts = new List<string>();
-        private const int API_VERSION = 2;
+        private const int API_VERSION = 4;
 
         private Streaming _stream;
         private Downloads _downloads;
@@ -66,7 +66,7 @@ namespace MPExtended.Services.StreamingService
                 SupportsMedia = MPEServices.HasMASConnection,
                 SupportsRecordings = hasTv,
                 SupportsTV = hasTv,
-                ServiceVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
+                ServiceVersion = VersionUtil.GetVersionName(),
                 ApiVersion = API_VERSION,
             };
         }

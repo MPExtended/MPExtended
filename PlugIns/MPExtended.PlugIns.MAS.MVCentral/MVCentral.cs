@@ -38,8 +38,16 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         [ImportingConstructor]
         public MVCentral(IPluginData data)
         {
-            DatabasePath = data.GetConfiguration("mvCentral")["database"];
-            Supported = File.Exists(DatabasePath);
+            var config = data.GetConfiguration("mvCentral");
+            if (config.ContainsKey("database"))
+            {
+                DatabasePath = config["database"];
+                Supported = File.Exists(DatabasePath);
+            }
+            else
+            {
+                Supported = false;
+            }
         }
 
         [MergeListReader]
@@ -88,15 +96,15 @@ namespace MPExtended.PlugIns.MAS.MVCentral
 
             // Unavailable fields: TrackNumber, Year, Genres, 
             string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, a.id AS album_id, a.album, p.id AS artist_id, p.artist, " +
-                            "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " + 
+                            "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " +
                          "FROM track_info t " +
                          "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
                          "LEFT JOIN local_media l ON l.id = lt.local_media_id " +
                          "LEFT JOIN album_info__track_info at ON at.track_info_id = t.id " +
                          "LEFT JOIN album_info a ON at.album_info_id = a.id " +
                          "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = t.id " +
-                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " + 
-                         "WHERE %where " + 
+                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
+                         "WHERE %where " +
                          "GROUP BY t.id, t.date_added, t.track, t.rating, a.id, a.album, p.id, p.artist ";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
@@ -235,9 +243,9 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         {
             var dict = new SerializableDictionary<string>();
             dict.Add("Id", id);
-            if(type == WebMediaType.MusicAlbum) dict.Add("Type", "mvcentral album");
-            if(type == WebMediaType.MusicArtist) dict.Add("Type", "mvcentral artist");
-            if(type == WebMediaType.MusicTrack) dict.Add("Type", "mvcentral track");
+            if (type == WebMediaType.MusicAlbum) dict.Add("Type", "mvcentral album");
+            if (type == WebMediaType.MusicArtist) dict.Add("Type", "mvcentral artist");
+            if (type == WebMediaType.MusicTrack) dict.Add("Type", "mvcentral track");
             return dict;
         }
     }
