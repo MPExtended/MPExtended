@@ -1,43 +1,38 @@
-Database/Gentle:
+Database\Gentle:
 - Copyright (C) Morten Mertner, http://sourceforge.net/projects/gopf/
 - Licensed under Lesser General Public License, version 2.1, available on http://www.gnu.org/licenses/lgpl-2.1.html
 - Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
 - Version 1.5.0.29112 (custom build from MediaPortal)
 
-Database/MySql.Data.dll:
+Database\MySql.Data.dll:
 - Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
 - Licensed under General Public License, version 2, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
 - Source code available from http://www.mysql.com/
 - Version 5.1.7 (version from MediaPortal)
 
-Database/System.Data.SQLite:
+Database\System.Data.SQLite:
 - Public domain
 - Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-- Version 1.0.76.0, SQLite 3.7.8
+- Source file is sqlite-netFx40-static-binary-bundle-Win32-2010-1.0.80.0.zip 
+- Version 1.0.80.0, SQLite 3.7.11
 
-Installer/WifiRemote_0.5.0.mpe1:
+Installer\WifiRemote_0.6.1.mpe1:
 - Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://code.google.com/p/wifiremote/
 - Version 0.5.0
 
-Installer/Microsoft_VC100_CRT_x86.msm:
+Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
 
-Logging/log4net.dll:
-- Copyright (C) 2001 - 2066 The Apache Software Foundation, http://logging.apache.org/log4net/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://logging.apache.org/log4net/
-- Version 1.2.10.0 (version from MediaPortal)
-
-Misc/zxing.dll:
+Misc\zxing.dll:
 - Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
 - Source code available from http://code.google.com/p/zxing/
 - Version 1.0.4145.29580
 
-Misc/ZeroconfService.dll:
+Misc\ZeroconfService.dll:
 - Copyright unknown
 - Licensed under the 2-clause BSD license, available on http://www.opensource.org/licenses/BSD-2-Clause
 - Source code available from http://code.google.com/p/zeroconfignetservices/
@@ -60,7 +55,7 @@ Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
 - Licensed under Lesser General Public License, version 3, available on http://www.gnu.org/licenses/lgpl-3.0.html
 - Source code available from http://mediainfo.sourceforge.net/
-- Version 0.7.53, 32-bit build
+- Version 0.7.56, 32-bit build
 
 Streaming\segmenter:
 - Copyright (C) 2009 Chase Douglas, http://code.google.com/p/httpsegmenter/
@@ -79,9 +74,15 @@ TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/
 - Licensed under General Public License, version 2 or later, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
 - Source code available from http://www.team-mediaportal.com/
-- Version 1.2.2
+- Version 1.2.3
 
-UI/Hardcodet.Wpf.TaskbarNotification:
+TVEngine3\log4net.dll:
+- Copyright (C) 2001 - 2066 The Apache Software Foundation, http://logging.apache.org/log4net/
+- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
+- Source code available from http://logging.apache.org/log4net/
+- Version 1.2.10.0 (version from MediaPortal)
+
+UI\Hardcodet.Wpf.TaskbarNotification:
 - Copyright (C) 2009 Philipp Sumi, http://www.hardcodet.net/projects/wpf-notifyicon
 - Licensed under Code Project Open License, version 1, available on http://www.codeproject.com/info/cpol10.aspx
 - Source code available from http://www.hardcodet.net/projects/wpf-notifyicon
