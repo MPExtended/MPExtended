@@ -24,6 +24,7 @@ using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using TvControl;
 using TvDatabase;
@@ -95,7 +96,7 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region TV Server
-        public WebResult TestConnectionToTVService()
+        public WebBoolResult TestConnectionToTVService()
         {
             if (!RemoteControl.IsConnected)
             {
@@ -114,12 +115,12 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public string ReadSettingFromDatabase(string tagName)
+        public WebStringResult ReadSettingFromDatabase(string tagName)
         {
             return _tvBusiness.GetSetting(tagName, "").Value;
         }
 
-        public WebResult WriteSettingToDatabase(string tagName, string value)
+        public WebBoolResult WriteSettingToDatabase(string tagName, string value)
         {
             Setting setting = _tvBusiness.GetSetting(tagName, "");
             setting.Value = value;
@@ -133,28 +134,28 @@ namespace MPExtended.Services.TVAccessService
         /// <param name="type">Type of item</param>
         /// <param name="id">Id of recording</param>
         /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
-        public SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
         {
             return GetExternalMediaInfoForMpTvServer(type, id);
         }
 
-        private SerializableDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
+        private WebDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
         {
             if (type == WebTvMediaType.Recording)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp recording" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp recording" },
+                    { "Id", id }
+                };
             }
             else if (type == WebTvMediaType.TV)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp tvchannel" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp tvchannel" },
+                    { "Id", id }
+                };
             }
 
             return null;
@@ -313,18 +314,18 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Schedules
-        public WebResult StartRecordingManual(string userName, int channelId, string title)
+        public WebBoolResult StartRecordingManual(string userName, int channelId, string title)
         {
             Log.Debug("Start recording manual on channel " + channelId + ", userName: " + userName);
             return AddSchedule(channelId, title, DateTime.Now, DateTime.Now.AddDays(1), 0);
         }
 
-        public WebResult AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType)
+        public WebBoolResult AddSchedule(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType)
         {
             return AddScheduleDetailed(channelId, title, startTime, endTime, scheduleType, -1, -1, "", -1);
         }
 
-        public WebResult AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
+        public WebBoolResult AddScheduleDetailed(int channelId, string title, DateTime startTime, DateTime endTime, WebScheduleType scheduleType, int preRecordInterval, int postRecordInterval, string directory, int priority)
         {
             try
             {
@@ -377,7 +378,7 @@ namespace MPExtended.Services.TVAccessService
             return Schedule.Retrieve(scheduleId).ToWebSchedule();
         }
 
-        public WebResult CancelSchedule(int programId)
+        public WebBoolResult CancelSchedule(int programId)
         {
             try
             {
@@ -407,7 +408,7 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public WebResult DeleteSchedule(int scheduleId)
+        public WebBoolResult DeleteSchedule(int scheduleId)
         {
             // TODO: the workflow in this method doesn't make any sense at all
             try
@@ -626,12 +627,12 @@ namespace MPExtended.Services.TVAccessService
             return SwitchTVServerToChannel(userName, channelId).ToWebVirtualCard();
         }
 
-        public string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).RTSPUrl;
         }
 
-        public string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).TimeShiftFileName;
         }
@@ -674,7 +675,7 @@ namespace MPExtended.Services.TVAccessService
             return tvCard;
         }
 
-        public WebResult SendHeartbeat(string userName)
+        public WebBoolResult SendHeartbeat(string userName)
         {
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
@@ -687,7 +688,7 @@ namespace MPExtended.Services.TVAccessService
             return true;
         }
 
-        public WebResult CancelCurrentTimeShifting(string userName)
+        public WebBoolResult CancelCurrentTimeShifting(string userName)
         {
             IUser currentUser = GetUserByUserName(userName);
             if (currentUser == null)
@@ -890,7 +891,7 @@ namespace MPExtended.Services.TVAccessService
             return Program.Retrieve(programId).ToWebProgramDetailed();
         }
 
-        public WebResult GetProgramIsScheduledOnChannel(int channelId, int programId)
+        public WebBoolResult GetProgramIsScheduledOnChannel(int channelId, int programId)
         {
             Program program = Program.Retrieve(programId);
             Channel channel = Channel.Retrieve(channelId);
@@ -898,7 +899,7 @@ namespace MPExtended.Services.TVAccessService
             return channel.ReferringSchedule().Any(schedule => schedule.IsRecordingProgram(program, false));
         }
 
-        public WebResult GetProgramIsScheduled(int programId)
+        public WebBoolResult GetProgramIsScheduled(int programId)
         {
             Program p = Program.Retrieve(programId);
             return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0;

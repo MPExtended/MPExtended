@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
@@ -21,7 +22,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileInfo GetFileInfo(string path);
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);
-        SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id);
+        WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id);
     }
 
     public interface IMusicLibrary : ILibrary

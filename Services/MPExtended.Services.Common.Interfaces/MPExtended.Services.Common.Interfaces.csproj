@@ -5,13 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{486855C1-9B6A-4ECD-9337-2916AF999873}</ProjectGuid>
+    <ProjectGuid>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.PlugIns.MAS.MyFilms</RootNamespace>
-    <AssemblyName>MPExtended.PlugIns.MAS.MyFilms</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>MPExtended.Services.Common.Interfaces</RootNamespace>
+    <AssemblyName>MPExtended.Services.Common.Interfaces</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,13 +31,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\MPExtendedKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -44,23 +52,11 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="ArtworkRetriever.cs" />
-    <Compile Include="MyFilms.cs" />
+    <Compile Include="WebDictionary.cs" />
+    <Compile Include="WebIntResult.cs" />
+    <Compile Include="WebStringResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
-      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
-      <Name>MPExtended.Libraries.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
-      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
-      <Name>MPExtended.Services.Common.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
-      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
-      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
-    </ProjectReference>
+    <Compile Include="WebBoolResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

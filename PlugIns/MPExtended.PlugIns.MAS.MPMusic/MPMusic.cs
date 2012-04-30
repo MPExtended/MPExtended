@@ -25,6 +25,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
@@ -287,7 +288,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                             Id = (string)AlbumIdReader(reader, 2),
                             Title = reader.ReadString(2),
                             Score = (int)Math.Round(20 + (decimal)text.Length / reader.ReadString(0).Length * 40),
-                            Details = new SerializableDictionary<string>()
+                            Details = new WebDictionary<string>()
                             {
                                 { "Artist", albumArtists.First() },
                                 { "ArtistId", albumArtists.First() }
@@ -308,7 +309,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         Id = reader.ReadIntAsString(0),
                         Title = title,
                         Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
-                        Details = new SerializableDictionary<string>()
+                        Details = new WebDictionary<string>()
                     {
                         { "Artist", artist },
                         { "ArtistId", artist },
@@ -337,7 +338,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                         Id = (string)AlbumIdReader(reader, 1),
                         Title = title,
                         Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
-                        Details = new SerializableDictionary<string>()
+                        Details = new WebDictionary<string>()
                     {
                         { "Artist", artistList.First().Trim() },
                         { "ArtistId", artistList.First().Trim() },
@@ -388,12 +389,12 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.MusicAlbum)
             {
                 var album = GetAlbumBasicById(id);
-                return new SerializableDictionary<string>()
+                return new WebDictionary<string>()
                 {
                     { "Type", "mpmusic album" },
                     { "Album", album.Title },
@@ -402,7 +403,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
             else if (type == WebMediaType.MusicTrack)
             {
-                return new SerializableDictionary<string>()
+                return new WebDictionary<string>()
                 {
                     { "Type", "mpmusic track" },
                     { "Id", GetTrackBasicById(id).Id }
@@ -410,7 +411,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
             else if (type == WebMediaType.MusicArtist)
             {
-                return new SerializableDictionary<string>()
+                return new WebDictionary<string>()
                 {
                     { "Type", "mpmusic album" },
                     { "Artist", GetArtistBasicById(id).Title }

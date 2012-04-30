@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {
@@ -12,7 +13,7 @@ namespace MPExtended.Services.UserSessionService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult TestConnection();
+        WebBoolResult TestConnection();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -20,26 +21,26 @@ namespace MPExtended.Services.UserSessionService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult IsMediaPortalRunning();
+        WebBoolResult IsMediaPortalRunning();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult StartMediaPortal();
+        WebBoolResult StartMediaPortal();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult StartMediaPortalBlocking();
+        WebBoolResult StartMediaPortalBlocking();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult SetMediaPortalForeground();
+        WebBoolResult SetMediaPortalForeground();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult SetPowerMode(WebPowerMode powerMode);
+        WebBoolResult SetPowerMode(WebPowerMode powerMode);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult CloseMediaPortal();
+        WebBoolResult CloseMediaPortal();
     }
 }

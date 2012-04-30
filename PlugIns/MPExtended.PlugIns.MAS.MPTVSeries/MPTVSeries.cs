@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
@@ -302,12 +303,12 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return new FileStream(path, FileMode.Open);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.TVSeason)
             {
                 var season = GetSeasonBasic(id);
-                return new SerializableDictionary<string>()
+                return new WebDictionary<string>()
                 {
                     { "Type", "mptvseries season" },
                     { "SeasonIndex", season.SeasonNumber.ToString() },
@@ -315,7 +316,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 };
             }
 
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", type == WebMediaType.TVShow ? "mptvseries show" : "mptvseries episode" },
                 { "Id", id.ToString() }
