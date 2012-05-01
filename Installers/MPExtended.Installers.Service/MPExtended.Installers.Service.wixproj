@@ -135,6 +135,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\PlugIns\MPExtended.PlugIns.MAS.MyFilms\MPExtended.PlugIns.MAS.MyFilms.csproj">
+      <Name>MPExtended.PlugIns.MAS.MyFilms</Name>
+      <Project>{486855c1-9b6a-4ecd-9337-2916af999873}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.ConsoleHost\MPExtended.ServiceHosts.ConsoleHost.csproj">
       <Name>MPExtended.ServiceHosts.ConsoleHost</Name>
       <Project>{15a4b23a-240b-481b-8c49-6021000a9206}</Project>
@@ -146,6 +154,14 @@
     <ProjectReference Include="..\..\ServiceHosts\MPExtended.ServiceHosts.CoreService\MPExtended.ServiceHosts.CoreService.csproj">
       <Name>MPExtended.ServiceHosts.CoreService</Name>
       <Project>{9a9d8c7d-13b9-48ca-95b2-d06cb3348b4e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+      <Project>{251ac131-5afc-4b27-acf1-9e943caba872}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
