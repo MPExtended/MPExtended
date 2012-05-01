@@ -22,6 +22,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
@@ -190,9 +191,9 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", "moving pictures" },
                 { "Id", id }

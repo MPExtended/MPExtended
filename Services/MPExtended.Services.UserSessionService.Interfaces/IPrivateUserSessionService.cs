@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {
@@ -10,6 +11,6 @@ namespace MPExtended.Services.UserSessionService.Interfaces
     public interface IPrivateUserSessionService
     {
         [OperationContract]
-        WebResult OpenConfigurator();
+        WebBoolResult OpenConfigurator();
     }
 }

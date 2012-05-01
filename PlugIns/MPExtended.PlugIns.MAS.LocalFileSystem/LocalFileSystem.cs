@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
@@ -111,10 +112,10 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             string path = GetFileBasic(id).Path.First();
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", File.Exists(path) ? "file" : "folder" },
                 { "Path", path },

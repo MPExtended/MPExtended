@@ -63,7 +63,6 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="ITVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebCard.cs" />
     <Compile Include="WebChannelBasic.cs" />
     <Compile Include="WebChannelDetailed.cs" />
@@ -76,13 +75,18 @@
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />
     <Compile Include="WebRecordingBasic.cs" />
-    <Compile Include="WebResult.cs" />
     <Compile Include="WebRtspClient.cs" />
     <Compile Include="WebTVSearchResult.cs" />
     <Compile Include="WebTVServiceDescription.cs" />
     <Compile Include="WebScheduleBasic.cs" />
     <Compile Include="WebUser.cs" />
     <Compile Include="WebVirtualCard.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

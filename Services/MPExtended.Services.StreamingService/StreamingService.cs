@@ -25,6 +25,7 @@ using System.ServiceModel;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -150,7 +151,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
 
-        public bool AuthorizeStreaming()
+        public WebBoolResult AuthorizeStreaming()
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()))
             {
@@ -159,7 +160,7 @@ namespace MPExtended.Services.StreamingService
             return true;
         }
 
-        public bool AuthorizeRemoteHostForStreaming(string host)
+        public WebBoolResult AuthorizeRemoteHostForStreaming(string host)
         {
             if (!_authorizedHosts.Contains(host))
             {
@@ -213,7 +214,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Streaming
-        public bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
+        public WebBoolResult InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
         {
             AuthorizeStreaming();
             if (type == WebStreamMediaType.TV)
@@ -234,14 +235,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
-        public string StartStream(string identifier, string profileName, int startPosition)
+        public WebStringResult StartStream(string identifier, string profileName, int startPosition)
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000);
         }
 
-        public string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
+        public WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
         {
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
@@ -249,7 +250,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
         }
 
-        public bool FinishStream(string identifier)
+        public WebBoolResult FinishStream(string identifier)
         {
             Log.Debug("Called FinishStream with ident={0}", identifier);
             _stream.KillStream(identifier);
@@ -318,7 +319,7 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
-            if (StartStream(identifier, profileName, startPosition).Length == 0)
+            if (String.IsNullOrEmpty(StartStream(identifier, profileName, startPosition)))
             {
                 Log.Info("DoStream: StartStream failed");
                 FinishStream(identifier);

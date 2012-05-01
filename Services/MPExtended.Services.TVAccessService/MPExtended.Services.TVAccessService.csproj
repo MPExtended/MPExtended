@@ -118,6 +118,10 @@
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
       <Name>MPExtended.Services.StreamingService.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
       <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
       <Name>MPExtended.Services.TVAccessService.Interfaces</Name>

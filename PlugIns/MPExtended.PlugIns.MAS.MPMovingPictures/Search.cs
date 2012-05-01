@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
@@ -42,7 +43,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                     Type = WebMediaType.Movie,
                     Id = reader.ReadIntAsString(0),
                     Title = reader.ReadString(1),
-                    Details = new SerializableDictionary<string>()
+                    Details = new WebDictionary<string>()
                     {
                         { "Year", reader.ReadIntAsString(3) },
                         { "Genres", String.Join(", ", reader.ReadPipeList(4)) },

@@ -45,7 +45,7 @@ namespace MPExtended.Applications.Development.USSTest
 
         private void cmdConnect_Click(object sender, EventArgs e)
         {
-            WebResult res = service.StartMediaPortal();
+            bool res = service.StartMediaPortal();
         }
 
         private void cmdSetPowermode_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace MPExtended.Applications.Development.USSTest
             {
                 try
                 {
-                    WebResult res = service.SetPowerMode((WebPowerMode)cbPowerModes.SelectedItem);
+                    bool res = service.SetPowerMode((WebPowerMode)cbPowerModes.SelectedItem);
                 }
                 catch (Exception)
                 {
@@ -69,7 +69,7 @@ namespace MPExtended.Applications.Development.USSTest
             {
                 try
                 {
-                    WebResult res = service.StartMediaPortal();
+                    bool res = service.StartMediaPortal();
                 }
                 catch (Exception)
                 {
@@ -84,7 +84,7 @@ namespace MPExtended.Applications.Development.USSTest
             {
                 try
                 {
-                    WebResult res = service.CloseMediaPortal();
+                    bool res = service.CloseMediaPortal();
                 }
                 catch (Exception)
                 {
@@ -99,8 +99,8 @@ namespace MPExtended.Applications.Development.USSTest
             {
                 try
                 {
-                    WebResult res = service.IsMediaPortalRunning();
-                    if (res.Result)
+                    bool res = service.IsMediaPortalRunning();
+                    if (res)
                     {
                         MessageBox.Show("MediaPortal is running");
                     }

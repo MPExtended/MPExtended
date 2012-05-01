@@ -44,8 +44,8 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
 
         private void frmFillCache_Load(object sender, EventArgs e)
         {
-            movieCount = MPEServices.MAS.GetMovieCount(null).Count;
-            episodeCount = MPEServices.MAS.GetTVEpisodeCount(null).Count;
+            movieCount = MPEServices.MAS.GetMovieCount(null);
+            episodeCount = MPEServices.MAS.GetTVEpisodeCount(null);
 
             lblMovies.Text = "Movies (0 / " + movieCount + "):";
             prgMovies.Maximum = movieCount;

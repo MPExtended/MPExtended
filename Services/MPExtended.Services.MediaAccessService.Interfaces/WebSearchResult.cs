@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -11,11 +12,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public string Id { get; set; }
         public string Title { get; set; }
         public int Score { get; set; }
-        public SerializableDictionary<string> Details { get; set; }
+        public WebDictionary<string> Details { get; set; }
 
         public WebSearchResult()
         {
-            Details = new SerializableDictionary<string>();
+            Details = new WebDictionary<string>();
         }
     }
 }

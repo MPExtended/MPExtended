@@ -78,7 +78,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />
@@ -89,7 +88,6 @@
     <Compile Include="WebFileInfo.cs" />
     <Compile Include="WebGenre.cs" />
     <Compile Include="WebObject.cs" />
-    <Compile Include="WebItemCount.cs" />
     <Compile Include="WebMediaItem.cs" />
     <Compile Include="WebSearchResult.cs" />
     <Compile Include="SortInterfaces.cs" />
@@ -102,6 +100,12 @@
     <Compile Include="FileSystem\WebDriveBasic.cs" />
     <Compile Include="WebMediaServiceDescription.cs" />
     <Compile Include="WebArtwork.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

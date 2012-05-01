@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
@@ -40,13 +41,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        SerializableDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id);
+        WebDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id);
         #endregion
 
         #region Movies
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMovieCount(int? provider, string genre = null, string actor = null);
+        WebIntResult GetMovieCount(int? provider, string genre = null, string actor = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -82,7 +83,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMovieGenresCount(int? provider);
+        WebIntResult GetMovieGenresCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -98,13 +99,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMovieActorCount(int? provider);
+        WebIntResult GetMovieActorCount(int? provider);
         #endregion
 
         #region Music
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicAlbumCount(int? provider, string genre = null, string category = null);
+        WebIntResult GetMusicAlbumCount(int? provider, string genre = null, string category = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -124,7 +125,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicArtistCount(int? provider);
+        WebIntResult GetMusicArtistCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -154,7 +155,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicTrackCount(int? provider, string genre);
+        WebIntResult GetMusicTrackCount(int? provider, string genre);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -199,7 +200,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetMusicGenresCount(int? provider);
+        WebIntResult GetMusicGenresCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -209,7 +210,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Pictures
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetPictureCount(int? provider);
+        WebIntResult GetPictureCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -247,23 +248,23 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region TVShows
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVEpisodeCount(int? provider);
+        WebIntResult GetTVEpisodeCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVEpisodeCountForTVShow(int? provider, string id);
+        WebIntResult GetTVEpisodeCountForTVShow(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVEpisodeCountForSeason(int? provider, string id);
+        WebIntResult GetTVEpisodeCountForSeason(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVShowCount(int? provider, string genre = null, string actor = null);
+        WebIntResult GetTVShowCount(int? provider, string genre = null, string actor = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVSeasonCountForTVShow(int? provider, string id);
+        WebIntResult GetTVSeasonCountForTVShow(int? provider, string id);
 
 
         [OperationContract]
@@ -370,7 +371,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVShowGenresCount(int? provider);
+        WebIntResult GetTVShowGenresCount(int? provider);
 
 
         [OperationContract]
@@ -383,13 +384,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetTVShowActorCount(int? provider);
+        WebIntResult GetTVShowActorCount(int? provider);
         #endregion
 
         #region Filesystem
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetFileSystemDriveCount(int? provider);
+        WebIntResult GetFileSystemDriveCount(int? provider);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -425,15 +426,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetFileSystemFilesAndFoldersCount(int? provider, string id);
+        WebIntResult GetFileSystemFilesAndFoldersCount(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetFileSystemFilesCount(int? provider, string id);
+        WebIntResult GetFileSystemFilesCount(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemCount GetFileSystemFoldersCount(int? provider, string id);
+        WebIntResult GetFileSystemFoldersCount(int? provider, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -459,7 +460,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset);
+        WebBoolResult IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 
@@ -98,9 +99,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return new List<WebSearchResult>();
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", "file" },
                 { "Path", GetPictureBasic(id).Path.First() },

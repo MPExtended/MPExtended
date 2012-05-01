@@ -22,6 +22,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
@@ -67,7 +68,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                     Id = reader.ReadString(0),
                     Title = name,
                     Score = score,
-                    Details = new SerializableDictionary<string>()
+                    Details = new WebDictionary<string>()
                     {
                         { "ArtistId", reader.ReadString(2) },
                         { "Artist", artist },
@@ -103,7 +104,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                     Id = reader.ReadString(0),
                     Title = name,
                     Score = score,
-                    Details = new SerializableDictionary<string>()
+                    Details = new WebDictionary<string>()
                     {
                         { "Duration", reader.ReadString(2) },
                         { "AlbumId", reader.ReadString(3) },
