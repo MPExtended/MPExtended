@@ -4,8 +4,8 @@
     <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
     @Html.jQuery().Enable()
     @Html.Assets().Render()
-	<link href="@Url.Content("~/Content/chosen/chosen.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Content/chosen/chosen.jquery.js")" type="text/javascript"></script>
+	<link href="@Url.ViewContent("Content/chosen/chosen.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.ViewContent("Content/chosen/chosen.jquery.js")" type="text/javascript"></script>
     @RenderSection("HeadHtml", false)
     <link href="@Url.ViewContent("Site.css")" rel="stylesheet" type="text/css" />
 </head>

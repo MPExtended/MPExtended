@@ -138,6 +138,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
+    <Content Include="Content\jwplayer\jwplayer.js" />
+    <Content Include="Content\jwplayer\license.txt" />
+    <Content Include="Content\jwplayer\player.swf" />
+    <Content Include="Content\jwplayer\swfobject.js" />
+    <Content Include="Skins\aredon\Content\bg.png" />
+    <Content Include="Skins\aredon\Content\chosen\chosen-sprite.png" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.css" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.min.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.proto.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.proto.min.js" />
     <Content Include="Skins\aredon\Content\Images\bg.png" />
     <Content Include="Skins\aredon\Content\Images\left.gif" />
     <Content Include="Skins\aredon\Content\Images\logo.png" />
@@ -397,6 +408,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skins\aredon\Content\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\jwplayer\newtubedark.zip" />
+    <Content Include="Content\jwplayer\slim.zip" />
+    <Content Include="Content\jwplayer\whotube.zip" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
