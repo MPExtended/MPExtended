@@ -53,7 +53,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // calculate full argument string
             string arguments;
-            if (context.Profile.HasVideoStream)
+            bool doResize = !context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true";
+            if (context.Profile.HasVideoStream && doResize)
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
