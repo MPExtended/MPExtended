@@ -86,6 +86,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height));
         }
 
+        public ActionResult SeriesPoster(string show, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Poster, 0, width, height));
+        }
+
+        public ActionResult SeriesBanner(string show, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(() =>
+                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Banner, 0, width, height));
+        }
+
         public ActionResult Details(string episode)
         {
             var fullEpisode = MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);

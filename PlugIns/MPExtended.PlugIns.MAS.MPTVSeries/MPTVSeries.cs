@@ -34,6 +34,13 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
     [ExportMetadata("Id", 6)]
     public partial class MPTVSeries : Database, ITVShowLibrary
     {
+        // The mapping of artwork is a bit confusing with MP-TVSeries:
+        // - For series, WebArtworkType.Banner is mapped to the -langen-graphical directory (via the BannerFileNames database column)
+        // - For series, WebArtworkType.Poster is mapped to the -langen-posters directory (via the PosterFileNames database column)
+        // - For series, WebArtworkType.Backdrop is mapped to the fanart in the Fan Art directory and isn't always available (via the fanart database column)
+        // - For seasons, WebArtworkType.Banner is mapped to the -langen-seasons directory (via the BannerFileNames database column)
+        // - For episodes, WebArtworkType.Banner is mapped to the Episodes directory (via the thumbFilename database column)
+
         private Dictionary<string, string> configuration;
         public bool Supported { get; set; }
 
