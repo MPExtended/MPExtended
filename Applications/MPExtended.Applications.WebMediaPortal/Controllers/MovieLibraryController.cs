@@ -69,8 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Cover, width, height);
         }
     }
 }

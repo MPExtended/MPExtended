@@ -23,6 +23,7 @@ using System.Web.Mvc;
 using System.Net;
 using System.IO;
 using MPExtended.Libraries.Client;
+using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
@@ -42,6 +43,55 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
                 return new FileStreamResult(image, WCFClient.GetHeader<string>("contentType", "image/jpeg"));
             }
+        }
+
+        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight)
+        {
+            IStreamingService service;
+            int? provider = null;
+
+            switch (mediaType)
+            {
+                case WebStreamMediaType.Drive:
+                case WebStreamMediaType.File:
+                case WebStreamMediaType.Folder:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.FileSystemProvider;
+                    break;
+                case WebStreamMediaType.Movie:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.MovieProvider;
+                    break;
+                case WebStreamMediaType.MusicAlbum:
+                case WebStreamMediaType.MusicArtist:
+                case WebStreamMediaType.MusicTrack:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.MusicProvider;
+                    break;
+                case WebStreamMediaType.Picture:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.PicturesProvider;
+                    break;
+                case WebStreamMediaType.TVShow:
+                case WebStreamMediaType.TVSeason:
+                case WebStreamMediaType.TVEpisode:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.TVShowProvider;
+                    break;
+                case WebStreamMediaType.TV:
+                case WebStreamMediaType.Recording:
+                    service = MPEServices.MASStream;
+                    break;
+                default:
+                    throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
+            }
+
+            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight));
+        }
+
+        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType)
+        {
+            return ReturnFromService(mediaType, id, artworkType, 0, 0);
         }
     }
 }

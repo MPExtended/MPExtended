@@ -70,32 +70,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height);
         }
 
         public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height);
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Backdrop, width, height);
         }
 
         public ActionResult SeriesPoster(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Poster, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Poster, width, height);
         }
 
         public ActionResult SeriesBanner(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Banner, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Banner, width, height);
         }
 
         public ActionResult Details(string episode)

@@ -69,8 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() => 
-                MPEServices.TASStream.GetArtworkResized(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0, width, height));
+            return Images.ReturnFromService(WebStreamMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height);
         }
 
         public ActionResult ProgramDetails(int programId)
