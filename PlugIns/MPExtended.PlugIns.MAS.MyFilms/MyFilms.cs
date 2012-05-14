@@ -50,6 +50,12 @@ namespace MPExtended.PlugIns.MAS.MyFilms
             try
             {
                 // load database path
+                if (!Mediaportal.HasValidConfigFile())
+                {
+                    Supported = false;
+                    return;
+                }
+
                 string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
                 if (!File.Exists(configPath))
                 {
@@ -57,6 +63,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     return;
                 }
 
+                // load config file
                 XElement configFile = XElement.Load(configPath);
                 string currentConfigNode = configFile
                     .Elements("section")
