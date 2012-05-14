@@ -96,6 +96,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             List<string> languages = new List<string>();
             if (request.Params["language"] != null)
                 languages.Add(request.Params["language"]);
+            if (!String.IsNullOrEmpty(Settings.ActiveSettings.DefaultLanguage))
+                languages.Add(Settings.ActiveSettings.DefaultLanguage);
             if (request.UserLanguages != null)
                 languages.AddRange(request.UserLanguages);
 
