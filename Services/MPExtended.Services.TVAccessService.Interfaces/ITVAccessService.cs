@@ -84,7 +84,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetScheduleCount();
+        WebIntResult GetScheduleCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -110,7 +110,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region Recordings
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRecordingCount();
+        WebIntResult GetRecordingCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -137,7 +137,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region TV
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetGroupCount();
+        WebIntResult GetGroupCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -154,7 +154,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetChannelCount(int groupId);
+        WebIntResult GetChannelCount(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -188,7 +188,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region Radio specific
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRadioGroupCount();
+        WebIntResult GetRadioGroupCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -205,7 +205,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRadioChannelCount(int groupId);
+        WebIntResult GetRadioChannelCount(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -300,7 +300,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount SearchProgramsCount(string searchTerm);
+        WebIntResult SearchProgramsCount(string searchTerm);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

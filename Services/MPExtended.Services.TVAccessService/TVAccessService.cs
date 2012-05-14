@@ -358,9 +358,9 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public WebCount GetScheduleCount()
+        public WebIntResult GetScheduleCount()
         {
-            return new WebCount() { Count = Schedule.ListAll().Count };
+            return Schedule.ListAll().Count;
         }
 
         public IList<WebScheduleBasic> GetSchedules(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
@@ -445,9 +445,9 @@ namespace MPExtended.Services.TVAccessService
 
         #region Channels
         #region TV specific
-        public WebCount GetGroupCount()
+        public WebIntResult GetGroupCount()
         {
-            return new WebCount() { Count = ChannelGroup.ListAll().Count };
+            return ChannelGroup.ListAll().Count;
         }
 
         public IList<WebChannelGroup> GetGroups(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -465,9 +465,9 @@ namespace MPExtended.Services.TVAccessService
             return ChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public WebCount GetChannelCount(int groupId)
+        public WebIntResult GetChannelCount(int groupId)
         {
-            return new WebCount() { Count = _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count };
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
         }
 
         public IList<WebChannelBasic> GetAllChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -531,9 +531,9 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Radio specific
-        public WebCount GetRadioGroupCount()
+        public WebIntResult GetRadioGroupCount()
         {
-            return new WebCount() { Count = RadioChannelGroup.ListAll().Count };
+            return RadioChannelGroup.ListAll().Count;
         }
 
         public IList<WebChannelGroup> GetRadioGroups(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -551,9 +551,9 @@ namespace MPExtended.Services.TVAccessService
             return RadioChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public WebCount GetRadioChannelCount(int groupId)
+        public WebIntResult GetRadioChannelCount(int groupId)
         {
-            return new WebCount() { Count = _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count };
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count;
         }
 
         public IList<WebChannelBasic> GetAllRadioChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -703,9 +703,9 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Recordings
-        public WebCount GetRecordingCount()
+        public WebIntResult GetRecordingCount()
         {
-            return new WebCount() { Count = Recording.ListAll().Count };
+            return Recording.ListAll().Count;
         }
 
         public IList<WebRecordingBasic> GetRecordings(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
@@ -845,9 +845,9 @@ namespace MPExtended.Services.TVAccessService
             return Channel.Retrieve(channelId).NextProgram.ToWebProgramDetailed();
         }
 
-        public WebCount SearchProgramsCount(string searchTerm)
+        public WebIntResult SearchProgramsCount(string searchTerm)
         {
-            return new WebCount() { Count = _tvBusiness.SearchPrograms(searchTerm).Count };
+            return _tvBusiness.SearchPrograms(searchTerm).Count;
         }
 
         public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)
