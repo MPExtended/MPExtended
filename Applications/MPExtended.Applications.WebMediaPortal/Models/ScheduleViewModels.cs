@@ -74,7 +74,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.TAS.GetAllChannelsBasic(SortField.Name)
+                return MPEServices.TAS.GetAllChannelsDetailed(SortField.Name)
+                        .Where(x => x.VisibleInGuide)
                         .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
             }
         }
