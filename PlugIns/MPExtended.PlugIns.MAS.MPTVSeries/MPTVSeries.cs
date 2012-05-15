@@ -101,9 +101,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     watchedCount[seriesId] = new WatchedCount();
                 }
 
-                var watched = reader.GetInt32(1);
                 var count = reader.GetInt32(2);
-                if (watched == 0)
+                if (!reader.GetBoolean(1))
                 {
                     watchedCount[seriesId].UnwatchedEpisodes = count;
                 }
@@ -148,10 +147,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime)
             }, delegate (T obj) 
             {
-                // cannot rely on information provided by MPTVSeries here because they count different
-                var eps = (LazyQuery<WebTVEpisodeBasic>)(GetAllEpisodes<WebTVEpisodeBasic>().Where(x => x.ShowId == obj.Id)); // and the nice way is... ? 
-                obj.EpisodeCount = watchedCount[obj.Id].WatchedEpisodes + watchedCount[obj.Id].UnwatchedEpisodes;
-                obj.UnwatchedEpisodeCount = watchedCount[obj.Id].UnwatchedEpisodes;
+                // cannot rely on information provided by MPTVSeries here because they count differently, which makes things inconsistent
+                obj.EpisodeCount = watchedCount.ContainsKey(obj.Id) ? watchedCount[obj.Id].WatchedEpisodes + watchedCount[obj.Id].UnwatchedEpisodes : 0;
+                obj.UnwatchedEpisodeCount = watchedCount.ContainsKey(obj.Id) ? watchedCount[obj.Id].UnwatchedEpisodes : 0;
                 return obj;
             });
         }
