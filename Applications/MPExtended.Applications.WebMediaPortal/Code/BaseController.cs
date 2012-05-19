@@ -61,8 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             // log the error
-            Log.Debug("During request {0}", filterContext.HttpContext.Request.RawUrl);
-            Log.Warn("Error happened in controller body", filterContext.Exception);
+            Log.Warn(String.Format("Error happened in controller body during request {0}", filterContext.HttpContext.Request.RawUrl), filterContext.Exception);
 
             // return exception page
             filterContext.Result = new ViewResult
