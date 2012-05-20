@@ -12,6 +12,6 @@ namespace MPExtended.Services.MetaService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBool ReloadConfiguration();
+        void DummyMethod();
     }
 }

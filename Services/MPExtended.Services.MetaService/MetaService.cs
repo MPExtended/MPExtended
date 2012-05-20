@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -85,7 +86,7 @@ namespace MPExtended.Services.MetaService
         #region IMetaService implementation
         private const int API_VERSION = 4;
 
-        public WebBool TestConnection()
+        public WebBoolResult TestConnection()
         {
             return initialized;
         }
@@ -115,17 +116,16 @@ namespace MPExtended.Services.MetaService
             return detector.CreateSetComposer().ComposeUnique().ToList();
         }
 
-        public WebBool HasUI()
+        public WebBoolResult HasUI()
         {
             return detector.HasUI;
         }
         #endregion
 
         #region IProtectedMetaService implementation
-        public WebBool ReloadConfiguration()
+        public void DummyMethod()
         {
-            // TODO
-            return true;
+            return;
         }
         #endregion
     }

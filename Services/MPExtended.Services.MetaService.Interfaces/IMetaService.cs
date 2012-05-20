@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MetaService.Interfaces
 {
@@ -12,7 +13,7 @@ namespace MPExtended.Services.MetaService.Interfaces
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBool TestConnection();
+        WebBoolResult TestConnection();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -28,7 +29,7 @@ namespace MPExtended.Services.MetaService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBool HasUI();
+        WebBoolResult HasUI();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

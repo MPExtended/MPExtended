@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -27,7 +28,7 @@ namespace MPExtended.Services.MetaService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class WCFMetaService : IMetaService, IProtectedMetaService
     {
-        public WebBool TestConnection()
+        public WebBoolResult TestConnection()
         {
             return MetaService.Instance.TestConnection();
         }
@@ -47,7 +48,7 @@ namespace MPExtended.Services.MetaService
             return MetaService.Instance.GetActiveServiceSets();
         }
 
-        public WebBool HasUI()
+        public WebBoolResult HasUI()
         {
             return MetaService.Instance.HasUI();
         }
@@ -57,9 +58,9 @@ namespace MPExtended.Services.MetaService
             return MetaService.Instance.GetVersion();
         }
 
-        public WebBool ReloadConfiguration()
+        public void DummyMethod()
         {
-            return MetaService.Instance.ReloadConfiguration();
+            return;
         }
     }
 }
