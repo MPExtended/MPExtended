@@ -37,6 +37,7 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class ImageMediaSource : MediaSource
     {
+        private static ChannelLogos _logos = null;
         private string path = null;
 
         public string Extension
@@ -90,14 +91,15 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo)
             {
-                ChannelLogos logos = new ChannelLogos();
+                if (_logos == null)
+                    _logos = new ChannelLogos();
 
                 // get display name
                 int idChannel = MediaType == WebStreamMediaType.TV ?
                     Int32.Parse(Id) :
                     MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
                 var channel = MPEServices.TAS.GetChannelBasicById(idChannel);
-                string location = logos.FindLocation(channel.DisplayName);
+                string location = _logos.FindLocation(channel.DisplayName);
                 if(location == null)
                 {
                     Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.DisplayName, idChannel);
