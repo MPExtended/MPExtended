@@ -41,7 +41,7 @@
     <Icon Id="MPExtendedIcon" SourceFile="$(var.SolutionDir)\Libraries\Artwork\MpExtl_Icon_256.ico" />
     <Property Id="ARPPRODUCTICON" Value="MPExtendedIcon" />
 
-    <!-- Require .net 4 -->
+    <!-- Require .NET 4 -->
     <PropertyRef Id="NETFRAMEWORK40FULL"/>
     <Condition Message="MPExtended services requires Microsoft .NET Framework 4.0 Full Runtime. Please install the .NET Framework and run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
@@ -54,10 +54,16 @@
     <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote_0.6.1.mpe1" />
     <Property Id="WifiRemotePackagedVersion" Value="0.6.1.0" />
     <CustomAction Id="WifiRemoteInstaller" BinaryKey="CustomActionLibrary" DllEntry="InstallWifiRemote" Execute="immediate" Return="check" />
+    
+    <!-- Remove config files on uninstall -->
+    <CustomAction Id="RemoveConfigFiles" BinaryKey="CustomActionLibrary" DllEntry="RemoveConfig" Execute="immediate" Return="check" />
+    
+    <!-- Schedule both -->
     <InstallExecuteSequence>
       <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
+      <Custom Action="RemoveConfigFiles" Before="InstallFinalize"><![CDATA[(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")]]></Custom>
     </InstallExecuteSequence>
-    
+
     <!-- Run configurator after installation -->
     <CustomAction Id="LaunchConfigurator" FileKey="ConfiguratorExecutable" ExeCommand="/Open" Impersonate="yes" Return="asyncNoWait" />
     

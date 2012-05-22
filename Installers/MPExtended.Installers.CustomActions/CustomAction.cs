@@ -48,5 +48,45 @@ namespace MPExtended.Installers.CustomActions
             Log.Write("WifiRemote: Leave InstallWifiRemote");
             return ActionResult.Failure;
         }
+
+        [CustomAction]
+        public static ActionResult RemoveConfig(Session session)
+        {
+            Log.Session = session;
+            Log.Write("Entered RemoveConfig");
+
+            try
+            {
+                ConfigFiles.Remove("Services.xml");
+                ConfigFiles.Remove("MediaAccess.xml");
+                ConfigFiles.Remove("Streaming.xml");
+                ConfigFiles.RemoveDirectory("Cache");
+            }
+            catch (Exception ex)
+            {
+                Log.Write("RemoveConfig: Exception during uninstallation: {0}", ex.Message);
+            }
+
+            return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult RemoveWebMediaPortalConfig(Session session)
+        {
+            Log.Session = session;
+            Log.Write("Entered RemoveWebMediaPortalConfig");
+
+            try
+            {
+                ConfigFiles.Remove("WebMediaPortal.xml");
+                ConfigFiles.Remove("WebMediaPortalHosting.xml");
+            }
+            catch (Exception ex)
+            {
+                Log.Write("RemoveWebMediaPortalConfig: Exception during uninstallation: {0}", ex.Message);
+            }
+
+            return ActionResult.Success;
+        }
     }
 }
