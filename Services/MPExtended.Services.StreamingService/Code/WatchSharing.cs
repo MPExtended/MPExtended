@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Social;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -96,31 +97,15 @@ namespace MPExtended.Services.StreamingService.Code
 
         public WatchSharing()
         {
-            switch (Configuration.Streaming.WatchSharing["type"])
-            {
-                case "trakt":
-                    services = new WatchSharingServiceList() { new TraktSharingProvider() };
-                    break;
-                case "follwit":
-                    services = new WatchSharingServiceList() { new FollwitSharingProvider() };
-                    break;
-                case "debug":
-                    services = new WatchSharingServiceList() { new WatchSharingDebug() };
-                    break;
-                case "none": // no reason that's explicitely listed here
-                default:
-                    enabled = false;
-                    return;
-            }
-
-            enabled = true;
-
-            // apply configuration
-            foreach (var service in services)
-            {
-                service.MediaService = MPEServices.MAS;
-                service.Configuration = Configuration.Streaming.WatchSharing;
-            }
+            services = new WatchSharingServiceList();
+            if (Configuration.Streaming.WatchSharing.DebugEnabled)
+                services.Add(new WatchSharingDebug());
+            if (Configuration.Streaming.WatchSharing.FollwitEnabled)
+                services.Add(new FollwitSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.FollwitConfiguration });
+            if (Configuration.Streaming.WatchSharing.TraktEnabled)
+                services.Add(new TraktSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.TraktConfiguration });
+            services.ExecuteForAll(x => x.MediaService = MPEServices.MAS);
+            enabled = services.Any();
         }
 
         public void Dispose()

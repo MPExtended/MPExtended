@@ -10,16 +10,56 @@
 
     <Grid>
         <TextBlock Height="75" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbExplanation" VerticalAlignment="Top" Width="536" TextWrapping="Wrap" Text="{x:Static strings:UI.SocialIntroText}" />
-        <Label Content="{x:Static strings:UI.Site}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,59,0,0" Name="lblPort" VerticalAlignment="Top" Width="82" />
-        <RadioButton Content="{x:Static strings:UI.None}" Height="16" HorizontalAlignment="Left" Margin="100,64,0,0" Name="rbNone" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="none"/>
-        <RadioButton Content="Trakt" Height="16" HorizontalAlignment="Left" Margin="100,86,0,0" Name="rbTrakt" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="trakt" />
-        <RadioButton Content="Follw.it" Height="16" HorizontalAlignment="Left" Margin="100,108,0,0" Name="rbFollwit" VerticalAlignment="Top" Checked="radioButtonChanged" Tag="follwit" />
         
-        <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,138,0,0" Name="label1" VerticalAlignment="Top" Width="82" />
-        <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,172,0,0" Name="label2" VerticalAlignment="Top" Width="82" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="100,140,0,0" Name="txtUsername" VerticalAlignment="Top" Width="200" TextChanged="textChanged"/>
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="100,175,0,0" Name="txtPassword" VerticalAlignment="Top" Width="200" PasswordChanged="textChanged"/>
-        <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="100,209,0,0" Name="btnTest" VerticalAlignment="Top" Width="200" Click="btnTest_Click" />
-        <Label Content="Credentials invalid!" Height="74" HorizontalAlignment="Left" Margin="100,238,0,0" Name="lblTestResult" VerticalAlignment="Top" FontWeight="Bold" Width="448" />
+        <GroupBox Header="Trakt" Height="125" HorizontalAlignment="Stretch" Margin="12,60,12,0" Name="gbTrakt" VerticalAlignment="Top">            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="8*" />
+                </Grid.RowDefinitions>
+                
+                <CheckBox Grid.Column="1" Grid.Row="0" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbTraktEnable" Checked="checkChange" Unchecked="checkChange" Tag="Trakt"/>
+                <Label Grid.Column="1" Grid.Row="1" Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblTraktUsername" Height="28"/>
+                <Label Grid.Column="1" Grid.Row="2" Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblTraktPassword" Height="28" />
+                <TextBox Grid.Column="2" Grid.Row="1" Name="tbTraktUsername" Height="23" TextChanged="textChanged" Tag="Trakt"/>
+                <PasswordBox Grid.Column="2" Grid.Row="2" Name="tbTraktPassword" Height="23" PasswordChanged="textChanged" Tag="Trakt"/>
+                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="200" HorizontalAlignment="Left" Margin="20,0,0,0" Name="btnTraktTest" Click="testClick" Tag="Trakt" />
+                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblTraktResults" Height="28" Margin="17,0,0,0" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Follwit" Height="125" HorizontalAlignment="Stretch" Margin="12,191,12,0" Name="gbFollwit" VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                </Grid.RowDefinitions>
+
+                <CheckBox Grid.Column="1" Grid.Row="0" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbFollwitEnable" Checked="checkChange" Unchecked="checkChange" Tag="Follwit" />
+                <Label Grid.Column="1" Grid.Row="1" Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblFollwitUsername" Height="28"/>
+                <Label Grid.Column="1" Grid.Row="2" Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblFollwitPassword" Height="28"/>
+                <TextBox Grid.Column="2" Grid.Row="1" Name="tbFollwitUsername" Height="23" TextChanged="textChanged" Tag="Follwit"/>
+                <PasswordBox Grid.Column="2" Grid.Row="2" Name="tbFollwitPassword" Height="23" PasswordChanged="textChanged" Tag="Follwit"/>
+                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="200" HorizontalAlignment="Left" Margin="20,0,0,0" Name="btnFollwitTest" Click="testClick" Tag="Follwit" />
+                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblFollwitResults" Height="28" Margin="17,0,0,0" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>

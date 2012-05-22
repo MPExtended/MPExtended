@@ -32,6 +32,7 @@ using System.ComponentModel;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Social;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -44,132 +45,182 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             public string Username { get; set; }
             public string Password { get; set; }
+            public IWatchSharingService Implementation { get; set; }
         }
 
-        private string activeProvider;
-        private BackgroundWorker worker;
+        private class SharingProvider
+        {
+            public bool Enabled { get; set; }
+            public Reference<bool> EnabledSetting { get; set; }
+            public Dictionary<string, string> Configuration { get; set; }
+            public GroupBox GroupBox { get; set; }
+            public CheckBox EnableBox { get; set; }
+            public TextBox UsernameBox { get; set; }
+            public PasswordBox PasswordBox { get; set; }
+            public Label ResultsLabel { get; set; }
+            public Button TestButton { get; set; }
 
-        private bool dirty;
-        private bool canSave;
+            public bool IsDirty { get; set; }
+            public bool Valid { get; set; }
+            public IWatchSharingService Implementation { get; set; }
+            public BackgroundWorker Worker { get; set; }
+        }
+
+        private Dictionary<string, SharingProvider> providers;
 
         public TabSocial()
         {
             InitializeComponent();
-            lblTestResult.Content = "";
-            canSave = true;
 
-            if (Configuration.Streaming.WatchSharing["type"] == "none" || Configuration.Streaming.WatchSharing["type"] == "debug") // debug isn't supported in UI
+            providers = new Dictionary<string, SharingProvider>()
             {
-                rbNone.IsChecked = true;
-            }
-            else
+                { "Trakt", new SharingProvider()
+                    {
+                        Enabled = Configuration.Streaming.WatchSharing.TraktEnabled,
+                        EnabledSetting = new Reference<bool>(() => Configuration.Streaming.WatchSharing.TraktEnabled, 
+                            x => { Configuration.Streaming.WatchSharing.TraktEnabled = x; }),
+                        Configuration = Configuration.Streaming.WatchSharing.TraktConfiguration,
+                        GroupBox = gbTrakt,
+                        EnableBox = cbTraktEnable,
+                        UsernameBox = tbTraktUsername,
+                        PasswordBox = tbTraktPassword,
+                        ResultsLabel = lblTraktResults,
+                        TestButton = btnTraktTest,
+                        Implementation = new TraktSharingProvider()
+                    }
+                },
+                { "Follwit", new SharingProvider()
+                    {
+                        Enabled = Configuration.Streaming.WatchSharing.FollwitEnabled,
+                        EnabledSetting = new Reference<bool>(() => Configuration.Streaming.WatchSharing.FollwitEnabled, 
+                            x => { Configuration.Streaming.WatchSharing.FollwitEnabled = x; }),
+                        Configuration = Configuration.Streaming.WatchSharing.FollwitConfiguration,
+                        GroupBox = gbFollwit,
+                        EnableBox = cbFollwitEnable,
+                        UsernameBox = tbFollwitUsername,
+                        PasswordBox = tbFollwitPassword,
+                        ResultsLabel = lblFollwitResults,
+                        TestButton = btnFollwitTest,
+                        Implementation = new FollwitSharingProvider()
+                    }
+                }
+            };
+
+            // load active settings into form
+            foreach (var kvp in providers)
             {
-                if (Configuration.Streaming.WatchSharing["type"] == "follwit")
-                    rbFollwit.IsChecked = true;
-
-                if (Configuration.Streaming.WatchSharing["type"] == "trakt")
-                    rbTrakt.IsChecked = true;
-
-                txtUsername.Text = Configuration.Streaming.WatchSharing["username"];
-            }
-
-            // make sure to set this after the setting of the radio boxes, to avoid saving when nothing has been changed
-            dirty = false;
-        }
-
-        private void radioButtonChanged(object sender, RoutedEventArgs e)
-        {
-            activeProvider = (string)((e.Source as RadioButton).Tag);
-            InvalidateTestResults();
-            switch (activeProvider)
-            {
-                case "none":
-                    btnTest.IsEnabled = false;
-                    txtUsername.IsEnabled = false;
-                    txtPassword.IsEnabled = false;
-                    break;
-                case "follwit":
-                case "trakt":
-                    btnTest.IsEnabled = true;
-                    txtUsername.IsEnabled = true;
-                    txtPassword.IsEnabled = true;
-                    break;
+                var provider = kvp.Value;
+                provider.ResultsLabel.Content = String.Empty;
+                if (provider.Enabled)
+                {
+                    provider.EnableBox.IsChecked = true;
+                    provider.UsernameBox.Text = provider.Configuration["username"];
+                    provider.PasswordBox.Password = "xxxxxxxx";
+                    provider.TestButton.IsEnabled = true;
+                    provider.IsDirty = false;
+                }
+                else
+                {
+                    provider.EnableBox.IsChecked = false;
+                    provider.UsernameBox.IsEnabled = false;
+                    provider.PasswordBox.IsEnabled = false;
+                    provider.TestButton.IsEnabled = false;
+                }
             }
         }
 
         private void textChanged(object sender, RoutedEventArgs e)
         {
-            InvalidateTestResults();
+            SharingProvider provider = providers[(string)((sender as Control).Tag)];
+            provider.IsDirty = true;
+            provider.Valid = false;
         }
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
+        private void checkChange(object sender, RoutedEventArgs e)
         {
-            lblTestResult.Foreground = Brushes.Black;
-            lblTestResult.Content = Strings.UI.TestingCredentials;
-            btnTest.IsEnabled = false;
-            worker = new BackgroundWorker();
-            worker.DoWork += delegate(object s, DoWorkEventArgs args)
+            SharingProvider provider = providers[(string)((sender as Control).Tag)];
+            provider.Enabled = (sender as CheckBox).IsChecked.GetValueOrDefault(true);
+            if (provider.Enabled)
             {
-                TestCredentialsData data = args.Argument as TestCredentialsData;
-                IWatchSharingService service = GetImplementation();
-                args.Result = service.TestCredentials(data.Username, data.Password);
+                provider.UsernameBox.IsEnabled = true;
+                provider.PasswordBox.IsEnabled = true;
+                provider.TestButton.IsEnabled = true;
+                provider.IsDirty = true;
+            }
+            else
+            {
+                provider.UsernameBox.IsEnabled = false;
+                provider.PasswordBox.IsEnabled = false;
+                provider.TestButton.IsEnabled = false;
+                provider.ResultsLabel.Content = String.Empty;
+                provider.IsDirty = false;
+            }
+        }
+
+
+        private void testClick(object sender, RoutedEventArgs e)
+        {
+            SharingProvider provider = providers[(string)((sender as Control).Tag)];
+            provider.ResultsLabel.Foreground = Brushes.Black;
+            provider.ResultsLabel.Content = Strings.UI.TestingCredentials;
+            provider.TestButton.IsEnabled = false;
+            provider.UsernameBox.IsEnabled = false;
+            provider.PasswordBox.IsEnabled = false;
+            provider.Worker = new BackgroundWorker();
+            provider.Worker.DoWork += delegate(object s, DoWorkEventArgs args)
+            {
+                TestCredentialsData data = (TestCredentialsData)args.Argument;
+                args.Result = data.Implementation.TestCredentials(data.Username, data.Password);
             };
-            worker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
+            provider.Worker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
             {
                 if ((bool)args.Result)
                 {
-                    lblTestResult.Content = Strings.UI.LoginSuccessful;
-                    lblTestResult.Foreground = Brushes.Green;
-                    canSave = true;
+                    provider.Valid = true;
+                    provider.ResultsLabel.Content = Strings.UI.LoginSuccessful;
+                    provider.ResultsLabel.Foreground = Brushes.Green;
                 }
                 else
                 {
-                    lblTestResult.Content = Strings.UI.LoginFailed;
-                    lblTestResult.Foreground = Brushes.Red;
-                    canSave = false;
+                    provider.ResultsLabel.Content = Strings.UI.LoginFailed;
+                    provider.ResultsLabel.Foreground = Brushes.Red;
                 }
-                btnTest.IsEnabled = true;
+                provider.TestButton.IsEnabled = true;
+                provider.UsernameBox.IsEnabled = true;
+                provider.PasswordBox.IsEnabled = true;
             };
-            worker.RunWorkerAsync(new TestCredentialsData()
+            provider.Worker.RunWorkerAsync(new TestCredentialsData()
             {
-                Username = txtUsername.Text,
-                Password = txtPassword.Password
+                Implementation = provider.Implementation,
+                Username = provider.UsernameBox.Text,
+                Password = provider.PasswordBox.Password
             });
-        }
-
-        private IWatchSharingService GetImplementation()
-        {
-            if (activeProvider == "follwit")
-            {
-                return new FollwitSharingProvider();
-            }
-            else if (activeProvider == "trakt")
-            {
-                return new TraktSharingProvider();
-            }
-            return null;
-        }
-
-        private void InvalidateTestResults()
-        {
-            lblTestResult.Content = "";
-            dirty = true;
-            canSave = false;
         }
 
         public void TabClosed()
         {
-            if (canSave && dirty)
-            {
-                Configuration.Streaming.WatchSharing["username"] = txtUsername.Text;
-                Configuration.Streaming.WatchSharing["passwordHash"] = GetImplementation().HashPassword(txtPassword.Password);
-                Configuration.Streaming.WatchSharing["type"] = activeProvider;
-                Configuration.Streaming.Save();
-            }
-            else if (dirty)
+            bool invalid = providers.Any(x => x.Value.IsDirty && !x.Value.Valid);
+            if (invalid)
             {
                 MessageBox.Show(Strings.UI.DiscardingInvalidChangesSocialTab, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
+
+            foreach (var kvp in providers)
+            {
+                var provider = kvp.Value;
+                if (provider.Enabled)
+                {
+                    provider.EnabledSetting.Value = true;
+                    provider.Configuration["username"] = provider.UsernameBox.Text;
+                    provider.Configuration["passwordHash"] = provider.Implementation.HashPassword(provider.PasswordBox.Password);
+                }
+                else
+                {
+                    provider.EnabledSetting.Value = false;
+                }
+            }
+            Configuration.Streaming.Save();
         }
     }
 }
