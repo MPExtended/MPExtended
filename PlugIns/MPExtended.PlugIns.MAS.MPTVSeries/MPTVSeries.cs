@@ -49,6 +49,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         {
             this.configuration = data.GetConfiguration("MP-TVSeries");
             this.DatabasePath = configuration["database"];
+            // Unfortunately, MP-TVSeries is using an ancient SQLite wrapper from MediaPortal. There is some work in progress to get this changed, but it hasn't
+            // been merged yet (and it's doubtful whether it'll land in MP1.3). Until this has been fixed, we need to obtain an exclusive lock on the database
+            // file as long as we need it, to avoid problems with corrupted databases and MP-TVSeries crashes. See issue #180 in our issue tracker for more details.
+            this.NeedsExclusiveLock = true;
             Supported = File.Exists(DatabasePath);
         }
 
