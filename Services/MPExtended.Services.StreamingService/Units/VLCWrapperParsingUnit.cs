@@ -54,6 +54,9 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     ParseOutputStream(InputStream, data, position, false);
                 }
+                catch (ThreadAbortException)
+                {
+                }
                 catch (Exception ex)
                 {
                     Log.Error("VLCLogParsing failed with exception", ex);
@@ -82,7 +85,6 @@ namespace MPExtended.Services.StreamingService.Units
             StreamReader reader = new StreamReader(stdoutStream);
             TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position, 25, 500, info.Duration); //VLCWrapper prints twice a second
 
-            bool aborted = false;
             string line;
             try
             {
@@ -114,7 +116,6 @@ namespace MPExtended.Services.StreamingService.Units
 
                         if (line == "S finished")
                         {
-                            data.Value.Failed = false;
                             data.Value.Finished = true;
                             continue;
                         }
@@ -135,8 +136,9 @@ namespace MPExtended.Services.StreamingService.Units
                     }
                     catch (ThreadAbortException)
                     {
-                        aborted = true;
-                        break;
+                        data.Value.Finished = true;
+                        reader.Close();
+                        return;
                     }
                     catch (Exception e)
                     {
@@ -147,14 +149,15 @@ namespace MPExtended.Services.StreamingService.Units
             catch (ThreadAbortException)
             {
                 // The double try-catch is to make sure that the parsing doesn't stop when it can't process a single line, but that we don't
-                // log too much noise when a ThreadAbortException occurs while in the ReadLine() method. 
-                aborted = true;
+                // log too much noise when a ThreadAbortException occurs while in the ReadLine() method. Funnily enough, this exception is
+                // rethrown when we leave the catch block, so duplicate some code from below... 
+                data.Value.Finished = true;
+                reader.Close();
+                return;
             }
 
-            data.Value.Failed = aborted;
             data.Value.Finished = true;
             reader.Close();
-            return;
         }
     }
 }
