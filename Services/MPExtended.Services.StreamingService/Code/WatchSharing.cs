@@ -44,19 +44,21 @@ namespace MPExtended.Services.StreamingService.Code
         private const int KEEP_ONLINE_ALIVE_CYCLES = 5;
 #endif
 
-        private class WatchSharingTimer : System.Timers.Timer
+        private class WatchSharingTimer : Timer
         {
             public string Identifier { get; set; }
+            public IWatchSharingService Service { get; set; }
             public int Iteration { get; set; }
             public int CanceledWaitIterations { get; set; }
 
-            public WatchSharingTimer(string identifier)
+            public WatchSharingTimer(string identifier, IWatchSharingService service)
                 : base()
             {
                 AutoReset = true;
                 Interval = CYCLE_TIME;
 
                 Identifier = identifier;
+                Service = service;
                 Iteration = 0;
                 CanceledWaitIterations = -1;
             }
@@ -71,11 +73,25 @@ namespace MPExtended.Services.StreamingService.Code
             public int Runtime { get; set; } // in milliseconds
             public bool Canceled { get; set; }
             public bool Stale { get; set; }
-            public WatchSharingTimer BackgroundTimer { get; set; }
+            public List<WatchSharingTimer> BackgroundTimers { get; set; }
+        }
+
+        private class WatchSharingServiceList : List<IWatchSharingService>
+        {
+            public void ExecuteForAll(Action<IWatchSharingService> action)
+            {
+                foreach (IWatchSharingService service in this)
+                {
+                    lock (service)
+                    {
+                        action(service);
+                    }
+                }
+            }
         }
 
         private bool enabled;
-        private IWatchSharingService service;
+        private WatchSharingServiceList services;
         private Dictionary<string, StreamState> streams = new Dictionary<string, StreamState>();
 
         public WatchSharing()
@@ -83,13 +99,13 @@ namespace MPExtended.Services.StreamingService.Code
             switch (Configuration.Streaming.WatchSharing["type"])
             {
                 case "trakt":
-                    service = new TraktSharingProvider();
+                    services = new WatchSharingServiceList() { new TraktSharingProvider() };
                     break;
                 case "follwit":
-                    service = new FollwitSharingProvider();
+                    services = new WatchSharingServiceList() { new FollwitSharingProvider() };
                     break;
                 case "debug":
-                    service = new WatchSharingDebug();
+                    services = new WatchSharingServiceList() { new WatchSharingDebug() };
                     break;
                 case "none": // no reason that's explicitely listed here
                 default:
@@ -98,8 +114,13 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             enabled = true;
-            service.MediaService = MPEServices.MAS;
-            service.Configuration = Configuration.Streaming.WatchSharing;
+
+            // apply configuration
+            foreach (var service in services)
+            {
+                service.MediaService = MPEServices.MAS;
+                service.Configuration = Configuration.Streaming.WatchSharing;
+            }
         }
 
         public void Dispose()
@@ -164,19 +185,24 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     if (state.Context.Source.MediaType == WebMediaType.TVEpisode)
                     {
-                        service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
+                        services.ExecuteForAll(s => s.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor));
                     }
                     else if (state.Context.Source.MediaType == WebMediaType.Movie)
                     {
-                        service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
+                        services.ExecuteForAll(s => s.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor));
                     }
                 });
 
                 // and start the background timer
                 streams[identifier] = state;
-                state.BackgroundTimer = new WatchSharingTimer(identifier);
-                state.BackgroundTimer.Elapsed += TimerElapsed;
-                state.BackgroundTimer.Start();
+                state.BackgroundTimers = new List<WatchSharingTimer>();
+                foreach (IWatchSharingService service in services)
+                {
+                    var thisTimer = new WatchSharingTimer(identifier, service);
+                    thisTimer.Elapsed += TimerElapsed;
+                    thisTimer.Start();
+                    state.BackgroundTimers.Add(thisTimer);
+                }
             }
             else
             {
@@ -192,8 +218,8 @@ namespace MPExtended.Services.StreamingService.Code
             // generate identifier
             string identifier = GetIdentifierFromMediaSource(source);
 
-            // ignore if not registered
-            if (!enabled || !streams.ContainsKey(identifier))
+            // ignore if not registered or already stale
+            if (!enabled || !streams.ContainsKey(identifier) || streams[identifier].Stale)
             {
                 return;
             }
@@ -208,17 +234,23 @@ namespace MPExtended.Services.StreamingService.Code
                     // send the finished event in the background thread
                     Task.Factory.StartNew(delegate ()
                     {
+                        // Stop the timers. Do this before sending the FinishEpisode() events as we could get a race condition with the service otherwise.
+                        foreach (var timer in streams[identifier].BackgroundTimers)
+                        {
+                            timer.Enabled = false;
+                        }
+
+                        // Send the FinishEpisode event
                         if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
-                            service.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
+                            services.ExecuteForAll(s => s.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor));
                         }
                         else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
-                            service.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
+                            services.ExecuteForAll(s => s.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor));
                         }
 
-                        // kill it
-                        streams[identifier].BackgroundTimer.Enabled = false;
+                        // And definitely stop the stream
                         streams.Remove(identifier);
                         Log.Debug("WatchSharing: finished handling {0}", identifier);
                     });
@@ -236,16 +268,13 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 // definitely cancel it
                 Log.Debug("WatchSharing: killing stream {0} because of forced EndStream", identifier);
-                lock (service)
+                if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                 {
-                    if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
-                    {
-                        service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
-                    }
-                    else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
-                    {
-                        service.CancelWatchingMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
-                    }
+                    services.ExecuteForAll(s => s.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor));
+                }
+                else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
+                {
+                    services.ExecuteForAll(s => s.CancelWatchingMovie((WebMovieDetailed)streams[identifier].MediaDescriptor));
                 }
             }
         }
@@ -267,15 +296,15 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         // notify service
                         Log.Debug("WatchSharing: definitely killing stream {0} with cancelwatching event", streams[wst.Identifier].Id);
-                        lock (service)
+                        lock (wst.Service)
                         {
                             if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                             {
-                                service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor);
+                                wst.Service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
                             else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                             {
-                                service.CancelWatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor);
+                                wst.Service.CancelWatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
                         }
 
@@ -296,19 +325,19 @@ namespace MPExtended.Services.StreamingService.Code
                     Log.Trace("WatchSharing: stream canceled");
                     // try again next iteration (++iteration is NOT called this time so that we don't create a gap when the stream crashed)
                 } 
-                else if (++wst.Iteration % service.UpdateInterval == 0)
+                else if (++wst.Iteration % wst.Service.UpdateInterval == 0)
                 {
                     // send position
                     Log.Debug("WatchSharing: syncing status for {0}", streams[wst.Identifier].Id);
-                    lock (service)
+                    lock (wst.Service)
                     {
                         if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
-                            service.WatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
+                            wst.Service.WatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
                         }
                         else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
-                            service.WatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
+                            wst.Service.WatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
                         }
                     }
                 }
