@@ -67,6 +67,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Util\MIME.cs" />
+    <Compile Include="Util\Reference.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
