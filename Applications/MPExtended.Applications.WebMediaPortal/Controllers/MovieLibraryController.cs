@@ -67,9 +67,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Image(string movie, int width = 0, int height = 0)
+        public ActionResult Cover(string movie, int width = 0, int height = 0)
         {
             return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Cover, width, height);
+        }
+
+        public ActionResult Fanart(string movie, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Backdrop, width, height);
         }
     }
 }

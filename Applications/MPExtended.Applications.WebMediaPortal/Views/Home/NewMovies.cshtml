@@ -11,7 +11,7 @@
                     @Html.ActionLink(movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id, width = 150 })" alt="" />
+                    <img class="img" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 150 })" alt="" />
                 </div>
             </div>
         }
