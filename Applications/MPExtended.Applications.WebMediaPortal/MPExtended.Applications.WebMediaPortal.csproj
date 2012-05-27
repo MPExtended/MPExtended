@@ -113,6 +113,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Mvc\PathMapper.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
     <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
@@ -190,7 +191,7 @@
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
     <Content Include="Views\Television\TVGuide.js" />
-    <Content Include="Skins\aredon\Site.css" />
+    <Content Include="Skins\aredon\Content\Site.css" />
     <Content Include="Skins\aredon\Television\TVGuide.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

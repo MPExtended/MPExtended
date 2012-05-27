@@ -40,6 +40,11 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             return CreateScript(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
         }
 
+        public MvcHtmlString AddSkinScript(string path)
+        {
+            return CreateScript(UrlHelperExtensionMethods.GenerateSkinContentUrl(path, htmlHelper.ViewContext.HttpContext));
+        }
+
         public MvcHtmlString AddViewScript(string path)
         {
             return CreateScript(UrlHelperExtensionMethods.GenerateViewContentUrl(path, htmlHelper.ViewContext.HttpContext));
@@ -68,6 +73,11 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         public MvcHtmlString AddStylesheet(string path)
         {
             return CreateStylesheet(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
+        }
+
+        public MvcHtmlString AddSkinStylesheet(string path)
+        {
+            return CreateStylesheet(UrlHelperExtensionMethods.GenerateSkinContentUrl(path, htmlHelper.ViewContext.HttpContext));
         }
 
         public MvcHtmlString AddViewStylesheet(string path)

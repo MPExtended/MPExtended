@@ -27,31 +27,34 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
-        private static string ViewLocalPath(HttpContextBase context, string viewFile)
+        public static string VirtualViewContent(this UrlHelper helper, string viewPath)
         {
-            var relativePath = ViewEngines.Engines.OfType<SkinnableViewEngine>()
-                .Select(sve => sve.BaseDirectory + "/" + viewFile)
-                .FirstOrDefault(path => File.Exists(context.Server.MapPath(path)));
-            if (relativePath == null)
-            {
-                relativePath = "~/Views/" + viewFile;
-            }
-            return relativePath;
+            return PathMapper.GetSkinVirtualViewPath(helper.RequestContext.HttpContext, viewPath);
         }
 
-        public static string ViewLocalPath(this UrlHelper helper, string viewFile)
+        public static string ViewContent(this UrlHelper helper, string viewPath)
         {
-            return ViewLocalPath(helper.RequestContext.HttpContext, viewFile);
+            return helper.Content(PathMapper.GetSkinVirtualViewPath(helper.RequestContext.HttpContext, viewPath));
         }
 
-        public static string ViewContent(this UrlHelper helper, string viewContentPath)
+        public static string GenerateViewContentUrl(string viewPath, HttpContextBase httpContext)
         {
-            return helper.Content(helper.ViewLocalPath(viewContentPath));
+            return UrlHelper.GenerateContentUrl(PathMapper.GetSkinVirtualViewPath(httpContext, viewPath), httpContext);
         }
 
-        public static string GenerateViewContentUrl(string viewContentPath, HttpContextBase httpContext)
+        public static string VirtualSkinContent(this UrlHelper helper, string contentPath)
         {
-            return UrlHelper.GenerateContentUrl(ViewLocalPath(httpContext, viewContentPath), httpContext);
+            return PathMapper.GetSkinVirtualContentPath(helper.RequestContext.HttpContext, contentPath);
+        }
+
+        public static string SkinContent(this UrlHelper helper, string contentPath)
+        {
+            return helper.Content(PathMapper.GetSkinVirtualContentPath(helper.RequestContext.HttpContext, contentPath));
+        }
+
+        public static string GenerateSkinContentUrl(string viewPath, HttpContextBase httpContext)
+        {
+            return UrlHelper.GenerateContentUrl(PathMapper.GetSkinVirtualContentPath(httpContext, viewPath), httpContext);
         }
     }
 }
