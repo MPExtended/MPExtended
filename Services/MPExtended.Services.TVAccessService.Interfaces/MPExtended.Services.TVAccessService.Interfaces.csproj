@@ -75,6 +75,7 @@
     <Compile Include="WebProgramDetailed.cs" />
     <Compile Include="WebRecordingBasic.cs" />
     <Compile Include="WebRtspClient.cs" />
+    <Compile Include="WebScheduledRecording.cs" />
     <Compile Include="WebTVSearchResult.cs" />
     <Compile Include="WebTVServiceDescription.cs" />
     <Compile Include="WebScheduleBasic.cs" />

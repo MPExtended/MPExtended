@@ -441,6 +441,67 @@ namespace MPExtended.Services.TVAccessService
                 return false;
             }
         }
+
+        private WebScheduledRecording GetScheduledRecording(Schedule schedule, DateTime date)
+        {
+            // ignore schedules that don't even match the date we are checking for
+            ScheduleRecordingType type = (ScheduleRecordingType)schedule.ScheduleType;
+            if ((type == ScheduleRecordingType.Weekends && !(date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)) ||
+                (type == ScheduleRecordingType.WorkingDays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)) ||
+                (type == ScheduleRecordingType.Weekly && schedule.StartTime.DayOfWeek != date.DayOfWeek) ||
+                (type == ScheduleRecordingType.Once && schedule.StartTime.Date != date.Date) ||
+                (type == ScheduleRecordingType.WeeklyEveryTimeOnThisChannel && schedule.StartTime.Date != date.Date))
+                return null;
+
+            // retrieve some data
+            var channel = Channel.Retrieve(schedule.IdChannel);
+            WebScheduledRecording recording = new WebScheduledRecording();
+            recording.IdSchedule = schedule.IdSchedule;
+
+            // first check all types that do not require any EPG matching
+            ScheduleRecordingType[] noEpgTypes = { ScheduleRecordingType.Daily, ScheduleRecordingType.Weekends, ScheduleRecordingType.WorkingDays, 
+                                                   ScheduleRecordingType.Weekly, ScheduleRecordingType.Once };
+            if (noEpgTypes.Contains(type))
+            {
+                recording.IdChannel = channel.IdChannel;
+                recording.ChannelName = channel.DisplayName;
+                recording.StartTime = schedule.StartTime;
+                recording.EndTime = schedule.EndTime;
+                var matchingPrograms = _tvBusiness.GetPrograms(channel, schedule.StartTime, schedule.EndTime);
+                recording.IdProgram = matchingPrograms.Any() ? matchingPrograms.First().IdProgram : 0;
+                recording.ProgramName = matchingPrograms.Any() ? matchingPrograms.First().Title : schedule.ProgramName;
+                return recording;
+            }
+
+            // all schedule types which reach this far match a program in the EPG
+            IList<Program> programs =
+                type == ScheduleRecordingType.WeeklyEveryTimeOnThisChannel || type == ScheduleRecordingType.EveryTimeOnThisChannel ?
+                    _tvBusiness.GetPrograms(channel, date.Date, date.Date.Add(TimeSpan.FromDays(1))) :
+                    _tvBusiness.GetPrograms(date.Date, date.Date.Add(TimeSpan.FromDays(1)));
+            var program = programs.FirstOrDefault(x => x.Title == schedule.ProgramName && (x.StartTime > DateTime.Now || date.Date < DateTime.Today));
+            if (program == null)
+                return null;
+
+            // set properties from the program and channel of the program
+            channel = program.ReferencedChannel();
+            recording.IdChannel = channel.IdChannel;
+            recording.ChannelName = channel.DisplayName;
+            recording.StartTime = program.StartTime;
+            recording.EndTime = program.EndTime;
+            recording.IdProgram = program.IdProgram;
+            recording.ProgramName = program.Title;
+            return recording;
+        }
+
+        public IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
+        {
+            return Schedule.ListAll().Select(x => GetScheduledRecording(x, date)).Where(x => x != null).ToList();
+        }
+
+        public IList<WebScheduledRecording> GetScheduledRecordingsForToday(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
+        {
+            return GetScheduledRecordingsForDate(DateTime.Today, sort, order);
+        }
         #endregion
 
         #region Channels

@@ -105,6 +105,14 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult DeleteSchedule(int scheduleId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebScheduledRecording> GetScheduledRecordingsForToday(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc);
         #endregion
 
         #region Recordings
