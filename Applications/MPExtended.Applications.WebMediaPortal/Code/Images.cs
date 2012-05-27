@@ -22,14 +22,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.IO;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     internal static class Images
     {
-        public static ActionResult ReturnFromService(Func<Stream> method)
+        private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
         {
             using (var scope = WCFClient.EnterOperationScope(MPEServices.MASStream))
             {
@@ -38,14 +40,23 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 var returnCode = WCFClient.GetHeader<int>("responseCode");
                 if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
                 {
-                    return new HttpStatusCodeResult(returnCode);
+                    if (defaultFile == null)
+                    {
+                        return new HttpStatusCodeResult(returnCode);
+                    }
+                    else
+                    {
+                        string virtualPath = PathMapper.GetSkinVirtualContentPath(new HttpContextWrapper(HttpContext.Current), defaultFile);
+                        string physicalPath = HttpContext.Current.Server.MapPath(virtualPath);
+                        return new FilePathResult(physicalPath, MIME.GetFromFilename(physicalPath, "application/octet-stream"));
+                    }
                 }
 
                 return new FileStreamResult(image, WCFClient.GetHeader<string>("contentType", "image/jpeg"));
             }
         }
 
-        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight)
+        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
         {
             IStreamingService service;
             int? provider = null;
@@ -86,12 +97,12 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
             }
 
-            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight));
+            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile);
         }
 
-        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType)
+        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, string defaultFile = null)
         {
-            return ReturnFromService(mediaType, id, artworkType, 0, 0);
+            return ReturnFromService(mediaType, id, artworkType, 0, 0, defaultFile);
         }
     }
 }
