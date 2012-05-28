@@ -47,10 +47,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Seasons(string show)
         {
             var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, show);
+            var showdObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, show);
             var seasons = MPEServices.MAS.GetTVSeasonsBasicForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
             return View(new TVShowViewModel()
             {
                 Show = showObj,
+                ShowDetailed = showdObj,
                 Seasons = seasons
             });
         }
