@@ -36,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebMovieBasic> movieList = MPEServices.MAS.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
+            IEnumerable<WebMovieBasic> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
             if (!String.IsNullOrEmpty(genre))
             {
                 movieList = movieList.Where(x => x.Genres.Contains(genre));

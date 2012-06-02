@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebTVShowBasic> series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
+            IEnumerable<WebTVShowBasic> series = MPEServices.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
             if (!String.IsNullOrEmpty(genre))
             {
                 series = series.Where(x => x.Genres.Contains(genre));
@@ -46,8 +46,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Seasons(string show)
         {
-            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, show);
-            var seasons = MPEServices.MAS.GetTVSeasonsBasicForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
+            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, show);
+            var seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
             return View(new TVShowViewModel()
             {
                 Show = showObj,
@@ -57,9 +57,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Episodes(string season)
         {
-            var seasonObj = MPEServices.MAS.GetTVSeasonBasicById(Settings.ActiveSettings.TVShowProvider, season);
-            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
-            var episodes = MPEServices.MAS.GetTVEpisodesBasicForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
+            var seasonObj = MPEServices.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, season);
+            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
+            var episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
             return View(new TVSeasonViewModel()
             {
                 Season = seasonObj,

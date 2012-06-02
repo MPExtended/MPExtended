@@ -25,15 +25,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class TVShowViewModel
     {
-        public WebTVShowBasic Show { get; set; }
-        public IEnumerable<WebTVSeasonBasic> Seasons { get; set; }
+        public WebTVShowDetailed Show { get; set; }
+        public IEnumerable<WebTVSeasonDetailed> Seasons { get; set; }
     }
 
     public class TVSeasonViewModel
     {
-        public WebTVShowBasic Show { get; set; }
-        public WebTVSeasonBasic Season { get; set; }
-        public IEnumerable<WebTVEpisodeBasic> Episodes { get; set; }
+        public WebTVShowDetailed Show { get; set; }
+        public WebTVSeasonDetailed Season { get; set; }
+        public IEnumerable<WebTVEpisodeDetailed> Episodes { get; set; }
     }
 
     public class TVEpisodeViewModel
