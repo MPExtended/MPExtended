@@ -34,19 +34,19 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 switch (type)
                 {
                     case WebStreamMediaType.Movie:
-                        return MPEServices.MAS.GetMovieBasicById(Settings.ActiveSettings.MovieProvider, id).Title;
+                        return MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id).Title;
                     case WebStreamMediaType.MusicAlbum:
                         return MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebStreamMediaType.MusicTrack:
-                        return MPEServices.MAS.GetMusicTrackBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
+                        return MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebStreamMediaType.Recording:
                         return MPEServices.TAS.GetRecordingById(Int32.Parse(id)).Title;
                     case WebStreamMediaType.TV:
-                        return MPEServices.TAS.GetChannelBasicById(Int32.Parse(id)).DisplayName;
+                        return MPEServices.TAS.GetChannelDetailedById(Int32.Parse(id)).DisplayName;
                     case WebStreamMediaType.TVEpisode:
-                        return MPEServices.MAS.GetTVEpisodeBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                        return MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
                     case WebStreamMediaType.TVShow:
-                        return MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                        return MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
                     case WebStreamMediaType.TVSeason:
                     default:
                         return "";

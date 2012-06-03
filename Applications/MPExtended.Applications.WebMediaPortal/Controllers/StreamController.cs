@@ -364,7 +364,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
-            model.Tracks = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            model.Tracks = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 
