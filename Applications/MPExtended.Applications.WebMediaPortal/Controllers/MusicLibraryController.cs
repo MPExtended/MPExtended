@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
-            var artistList = MPEServices.MAS.GetAllMusicArtistsBasic(Settings.ActiveSettings.MusicProvider);
+            var artistList = MPEServices.MAS.GetAllMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
             if (artistList != null)
             {
                 return View(artistList);
@@ -45,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Albums(string artist)
         {
-            var artistObj = MPEServices.MAS.GetMusicArtistBasicById(Settings.ActiveSettings.MusicProvider, artist);
+            var artistObj = MPEServices.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
             var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
             return View(new ArtistViewModel()
             {
@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Album(string album)
         {
             var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
-            var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
+            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
 
             return View(new AlbumViewModel()
             {

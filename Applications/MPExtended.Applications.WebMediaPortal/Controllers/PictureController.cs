@@ -42,8 +42,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         public ActionResult Browse(string category)
-        {          
-            var images = MPEServices.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, category);
+        {
+            var images = MPEServices.MAS.GetPicturesDetailedByCategory(Settings.ActiveSettings.PicturesProvider, category);
             if (images != null)
             {
                 return View(images);

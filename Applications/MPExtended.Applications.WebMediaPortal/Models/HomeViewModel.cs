@@ -38,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Availability = availabilityModel;
         }
 
-        public IEnumerable<WebMovieBasic> GetLastAddedMovies(int count = 4)
+        public IEnumerable<WebMovieDetailed> GetLastAddedMovies(int count = 4)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
             catch (Exception)
             {
-                return new List<WebMovieBasic>();
+                return new List<WebMovieDetailed>();
             }
         }
 
