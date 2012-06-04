@@ -69,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height, "Images/default/logo.png");
         }
 
         public ActionResult ProgramDetails(int programId)

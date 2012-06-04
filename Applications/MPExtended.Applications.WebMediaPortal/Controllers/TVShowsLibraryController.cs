@@ -70,27 +70,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height, "Images/default/tvseason-banner.png");
         }
 
         public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height, "Images/default/tvepisode-banner.png");
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Backdrop, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Backdrop, width, height, "Images/default/tvshow-fanart.png");
         }
 
         public ActionResult SeriesPoster(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Poster, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Poster, width, height, "Images/default/tvshow-poster.png");
         }
 
         public ActionResult SeriesBanner(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Banner, width, height);
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Banner, width, height, "Images/default/tvshow-banner.png");
         }
 
         public ActionResult Details(string episode)
