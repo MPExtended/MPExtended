@@ -71,7 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return ChannelId > 0 ? MPEServices.TAS.GetChannelBasicById(ChannelId).DisplayName : String.Empty;
+                return ChannelId > 0 ? MPEServices.TAS.GetChannelDetailedById(ChannelId).DisplayName : String.Empty;
             }
         }
 

@@ -74,7 +74,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ProgramDetails(int programId)
         {
-            var program = MPEServices.TAS.GetProgramBasicById(programId);
+            var program = MPEServices.TAS.GetProgramDetailedById(programId);
             if (program == null)
             {
                 return HttpNotFound();
