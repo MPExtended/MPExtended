@@ -9,7 +9,7 @@
 body
 {
     font-size: 14px;
-    background: #fff fixed top left url('Content/Images/bg.png');
+    background: #fff fixed top left url('Images/bg.png');
 }
 
 #content
@@ -90,7 +90,7 @@ body
 
 #header #logo
 {
-    background-image: url("Content/Images/logo.png");
+    background-image: url("Images/logo.png");
     height: 50px;
     width: 350px;
     position: absolute;

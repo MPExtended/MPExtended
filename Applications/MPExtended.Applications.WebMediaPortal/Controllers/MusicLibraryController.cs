@@ -68,7 +68,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.MusicAlbum, album, WebArtworkType.Cover);
+            return Images.ReturnFromService(WebStreamMediaType.MusicAlbum, album, WebArtworkType.Cover, "images/default/album.png");
         }
     }
 }

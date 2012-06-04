@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    @Html.Assets().AddSkinStylesheet("Site.css")
     @Html.Assets().Render()
     @RenderSection("HeadHtml", false)
 </head>
 <body>
     <div id="header">
         <a href="@Url.Action("Index", "Home")">
-            <img id='logo' src="@Url.Content("~/Content/Images/logomp-small.png")" />
+            <img id='logo' src="@Url.SkinContent("Images/logomp-small.png")" />
         </a>
         <h1>WebMediaPortal</h1>
 
