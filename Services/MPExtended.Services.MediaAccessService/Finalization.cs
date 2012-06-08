@@ -28,6 +28,10 @@ namespace MPExtended.Services.MediaAccessService
     {
         public static List<T> ForList<T>(IEnumerable<T> list, int? provider, ProviderType providerType) where T : WebObject
         {
+            // do not error out on null result
+            if (list == null)
+                return null;
+
             // special-case LazyQuery here again: execute the query just once instead of a lot of times
             var operList = list.ToList();
 
