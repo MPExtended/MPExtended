@@ -26,12 +26,12 @@ using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public class TVServerStatusViewModel
+    public class StatusViewModel
     {
         public IEnumerable<TVCardViewModel> Cards { get; set; }
         public IEnumerable<WebDiskSpaceInformation> DiskInformation { get; set; }
 
-        public TVServerStatusViewModel(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards, IEnumerable<WebDiskSpaceInformation> recordingDiskInfo)
+        public StatusViewModel(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards, IEnumerable<WebDiskSpaceInformation> recordingDiskInfo)
         {
             DiskInformation = recordingDiskInfo;
 

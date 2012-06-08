@@ -27,16 +27,16 @@ using MPExtended.Libraries.Client;
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [ServiceAuthorize]
-    public class TVServerController : BaseController
+    public class StatusController : BaseController
     {
         //
-        // GET: /TVServer/
+        // GET: /Status/
         public ActionResult Index()
         {
             var recordingDiskInfo = MPEServices.TAS.GetAllRecordingDiskInformation();
             var cards = MPEServices.TAS.GetCards();
             var activeCards = MPEServices.TAS.GetActiveCards();
-            return View(new TVServerStatusViewModel(cards, activeCards, recordingDiskInfo));
+            return View(new StatusViewModel(cards, activeCards, recordingDiskInfo));
         }
 
         public ActionResult Stop(string user)
