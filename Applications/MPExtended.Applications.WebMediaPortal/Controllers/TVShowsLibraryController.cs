@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebTVShowBasic> series = MPEServices.MAS.GetAllTVShowsBasic(Settings.ActiveSettings.TVShowProvider);
+            IEnumerable<WebTVShowDetailed> series = MPEServices.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
             if (!String.IsNullOrEmpty(genre))
             {
                 series = series.Where(x => x.Genres.Contains(genre));
@@ -46,8 +46,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Seasons(string show)
         {
-            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, show);
-            var seasons = MPEServices.MAS.GetTVSeasonsBasicForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
+            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, show);
+            var seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
             return View(new TVShowViewModel()
             {
                 Show = showObj,
@@ -57,9 +57,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Episodes(string season)
         {
-            var seasonObj = MPEServices.MAS.GetTVSeasonBasicById(Settings.ActiveSettings.TVShowProvider, season);
-            var showObj = MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
-            var episodes = MPEServices.MAS.GetTVEpisodesBasicForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
+            var seasonObj = MPEServices.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, season);
+            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
+            var episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
             return View(new TVSeasonViewModel()
             {
                 Season = seasonObj,
@@ -70,32 +70,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVSeason, Settings.ActiveSettings.TVShowProvider, season, WebArtworkType.Banner, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height, "Images/default/tvseason-banner.png");
         }
 
         public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVEpisode, Settings.ActiveSettings.TVShowProvider, episode, WebArtworkType.Banner, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height, "Images/default/tvepisode-banner.png");
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.TVShow, Settings.ActiveSettings.TVShowProvider, show, WebArtworkType.Backdrop, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Backdrop, width, height, "Images/default/tvshow-fanart.png");
+        }
+
+        public ActionResult SeriesPoster(string show, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Poster, width, height, "Images/default/tvshow-poster.png");
+        }
+
+        public ActionResult SeriesBanner(string show, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Banner, width, height, "Images/default/tvshow-banner.png");
         }
 
         public ActionResult Details(string episode)

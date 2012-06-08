@@ -97,6 +97,20 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public static IEnumerable<T> SortScheduledRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduledRecording
+        {
+            switch (sortInput)
+            {
+                case SortField.Channel:
+                    return list.OrderBy(x => x.IdChannel, orderInput);
+                case SortField.StartTime:
+                    return list.OrderBy(x => x.StartTime, orderInput);
+                case SortField.Name:
+                default:
+                    return list.OrderBy(x => x.ProgramName, orderInput);
+            }
+        }
+
         public static IEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebRecordingBasic
         {
             switch (sortInput)

@@ -66,6 +66,8 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Util\MIME.cs" />
+    <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationContracts\MediaAccess.cs" />
@@ -82,7 +84,6 @@
     <Compile Include="Util\CultureDatabase.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Util\WifiRemote.cs" />
-    <Compile Include="WCFClient.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
     <Compile Include="Hosting\BaseAddresses.cs" />
     <Compile Include="Hosting\LogRotation.cs" />

@@ -37,7 +37,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     public class StreamController : BaseController
     {
         // This is the timeout after which streams are automatically killed (in seconds)
-        private const int STREAM_TIMEOUT = 5;
+        private const int STREAM_TIMEOUT_DIRECT = 10;
+        private const int STREAM_TIMEOUT_PROXY = 300;
 		
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
@@ -137,17 +138,30 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 GetStreamControl(type).FinishStream(RunningStreams[continuationId]);
             }
 
-            // Start the stream
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
-                identifier, type, itemId, transcoder, starttime, continuationId);
-            string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
-            if (!WCFClient.CallWithHeader(new WCFHeader<string>("forwardedFor", HttpContext.Request.UserHostAddress), GetStreamControl(type),
-                delegate { return GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT); }))
+            // Check stream mode, generate timeout setting and dump all info we got
+            StreamType streamMode = Settings.ActiveSettings.StreamType;
+            if (streamMode == StreamType.DirectWhenPossible)
             {
-                Log.Error("Streaming: InitStream failed");
-                return new EmptyResult();
+                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
+            }
+            int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
+            Log.Debug("Starting stream type={0}; itemId={1}; transcoder={2}; starttime={3}; continuationId={4}", type, itemId, transcoder, starttime, continuationId);
+            Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s", 
+                HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
+
+            // Start the stream
+            string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
+            using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
+            {
+                WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
+                if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
+                {
+                    Log.Error("Streaming: InitStream failed");
+                    return new EmptyResult();
+                }
             }
 
+            // save stream
             RunningStreams[continuationId] = identifier;
             string url = GetStreamControl(type).StartStream(identifier, transcoder, starttime);
             if (String.IsNullOrEmpty(url))
@@ -155,14 +169,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();
             }
-
-            // Check stream mode
-            StreamType streamMode = Settings.ActiveSettings.StreamType;
-            if (streamMode == StreamType.DirectWhenPossible)
-            {
-                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
-            }
-            Log.Debug("Stream started successfully, is at {0} and we're using stream mode {1}", url, streamMode);
+            Log.Debug("Stream started successfully and is at {0}", url);
 
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
@@ -357,7 +364,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
-            model.Tracks = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            model.Tracks = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 

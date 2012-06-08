@@ -7,7 +7,7 @@
         <ul>
             @foreach (var schedule in Model.GetTodaysSchedules())
             {
-                <li>@schedule.Title - @schedule.StartTime.Value.ToShortTimeString() - @schedule.EndTime.Value.ToShortTimeString()</li>       
+                <li>@schedule.ProgramName - @schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</li>       
             }
         </ul>
     </div>

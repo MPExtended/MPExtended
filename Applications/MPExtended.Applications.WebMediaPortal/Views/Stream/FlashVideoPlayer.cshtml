@@ -45,9 +45,10 @@
         'controlbar': 'bottom',
         'width': '@Model.Size.Width',
         'height': '@Model.Size.Height',
-        'skin': '@Url.Content("~/Content/jwplayer/slim.zip")',
+        'bufferlength': '15', 
+        'skin': '@Url.SkinContent("jwplayer/slim.zip")',
         'modes': [ 
-           { type: "flash", src: "@Url.Content("~/Content/jwplayer/player.swf")" } 
+           { type: "flash", src: "@Url.SkinContent("jwplayer/player.swf")" } 
         ]
     }).onTime(function (callback) {
         var pos = parseFloat(startPos) + callback.position;

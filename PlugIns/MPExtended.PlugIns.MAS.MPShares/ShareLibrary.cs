@@ -24,6 +24,7 @@ using System.Text;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
@@ -117,7 +118,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Share share = GetShare(id);
                 return new DirectoryInfo(path)
                     .GetFiles()
-                    .Where(file => share.Extensions.Contains(file.Extension))
+                    .Where(file => share.Extensions.Any(x => x.Equals(file.Extension, StringComparison.CurrentCultureIgnoreCase)))
                     .Select(file => ConvertFileInfoToFileBasic(file, share));
             }
 
@@ -163,10 +164,10 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebSearchResult>();
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             string path = GetPath(id);
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", File.Exists(path) ? "file" : "folder" },
                 { "Path", path },

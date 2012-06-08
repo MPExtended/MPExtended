@@ -68,7 +68,6 @@ namespace MPExtended.Applications.UacServiceHandler
                     sc.Stop();
                     break;
                 case ServiceCommand.Restart:
-                    sc.Stop();
                     RestartService(sc, 20000);
                     break;
                 default:
@@ -82,8 +81,11 @@ namespace MPExtended.Applications.UacServiceHandler
             int startTime = Environment.TickCount;
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
-            sc.Stop();
-            sc.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+            if (sc.Status == ServiceControllerStatus.Running)
+            {
+                sc.Stop();
+                sc.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+            }
 
             timeout -= TimeSpan.FromTicks(Environment.TickCount - startTime);
             sc.Start();

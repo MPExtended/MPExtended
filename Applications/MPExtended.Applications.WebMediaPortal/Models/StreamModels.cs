@@ -91,14 +91,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class AlbumPlayerViewModel : PlayerViewModel
     {
-        public IEnumerable<WebMusicTrackBasic> Tracks { get; set; }
+        public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
 
         public AlbumPlayerViewModel()
         {
             MediaType = WebStreamMediaType.MusicAlbum;
         }
 
-        public string GetTranscoderForTrack(WebMusicTrackBasic track)
+        public string GetTranscoderForTrack(WebMusicTrackDetailed track)
         {
             if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg")
             {

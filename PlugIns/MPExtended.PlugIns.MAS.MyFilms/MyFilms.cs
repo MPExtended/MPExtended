@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
@@ -49,6 +50,12 @@ namespace MPExtended.PlugIns.MAS.MyFilms
             try
             {
                 // load database path
+                if (!Mediaportal.HasValidConfigFile())
+                {
+                    Supported = false;
+                    return;
+                }
+
                 string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
                 if (!File.Exists(configPath))
                 {
@@ -56,6 +63,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     return;
                 }
 
+                // load config file
                 XElement configFile = XElement.Load(configPath);
                 string currentConfigNode = configFile
                     .Elements("section")
@@ -302,7 +310,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     Id = x.Attribute("Number").Value,
                     Title = x.Attribute("OriginalTitle").Value,
                     Score = (int)Math.Round(40 + (decimal)text.Length / x.Attribute("OriginalTitle").Value.Length * 40),
-                    Details = new SerializableDictionary<string>()
+                    Details = new WebDictionary<string>()
                     {
                         { "Year", x.Attribute("Year").Value },
                         { "Genres", String.Join(", ", x.Attribute("Category").Value.Split(',', '|').Select(g => g.Trim()).Distinct()) }
@@ -335,9 +343,9 @@ namespace MPExtended.PlugIns.MAS.MyFilms
             return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", "my films" },
                 { "Id", id }

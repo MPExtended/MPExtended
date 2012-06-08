@@ -175,7 +175,7 @@ namespace MPExtended.Services.MediaAccessService
             }
             catch (Exception ex)
             {
-                Log.Warn("Tried to do invalid sorting", ex);
+                Log.Warn(String.Format("Tried to do invalid sorting; actual values SortBy={0}, OrderBy={1}", sort, order), ex);
                 throw new Exception("Sorting on this property is not supported for this media type");
             }
         }

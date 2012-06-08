@@ -25,13 +25,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class ArtistViewModel
     {
-        public WebMusicArtistBasic Artist { get; set; }
+        public WebMusicArtistDetailed Artist { get; set; }
         public IEnumerable<WebMusicAlbumBasic> Albums { get; set; }
     }
 
     public class AlbumViewModel
     {
         public WebMusicAlbumBasic Album { get; set; }
-        public IEnumerable<WebMusicTrackBasic> Tracks { get; set; }
+        public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string ReadSettingFromDatabase(string tagName);
+        WebStringResult ReadSettingFromDatabase(string tagName);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -36,7 +36,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id);
+        WebDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -84,7 +84,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetScheduleCount();
+        WebIntResult GetScheduleCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -105,12 +105,20 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult DeleteSchedule(int scheduleId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebScheduledRecording> GetScheduledRecordingsForToday(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc);
         #endregion
 
         #region Recordings
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRecordingCount();
+        WebIntResult GetRecordingCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -137,7 +145,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region TV
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetGroupCount();
+        WebIntResult GetGroupCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -154,7 +162,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetChannelCount(int groupId);
+        WebIntResult GetChannelCount(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -188,7 +196,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region Radio specific
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRadioGroupCount();
+        WebIntResult GetRadioGroupCount();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -205,7 +213,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount GetRadioChannelCount(int groupId);
+        WebIntResult GetRadioChannelCount(int groupId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -257,11 +265,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId);
+        WebStringResult SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId);
+        WebStringResult SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -300,7 +308,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebCount SearchProgramsCount(string searchTerm);
+        WebIntResult SearchProgramsCount(string searchTerm);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

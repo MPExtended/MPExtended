@@ -42,11 +42,7 @@ namespace MPExtended.Services.MediaAccessService
     public class MediaAccessService : ProviderHandler, IMediaAccessService
     {
         #region General
-        private const int MOVIE_API = 3;
-        private const int MUSIC_API = 3;
-        private const int PICTURES_API = 3;
-        private const int TVSHOWS_API = 3;
-        private const int FILESYSTEM_API = 3;
+        private const int API_VERSION = 4;
 
         private ILibrary GetLibrary(int? provider, WebMediaType type)
         {
@@ -77,12 +73,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             return new WebMediaServiceDescription()
             {
-                MovieApiVersion = MOVIE_API,
-                MusicApiVersion = MUSIC_API,
-                PicturesApiVersion = PICTURES_API,
-                TvShowsApiVersion = TVSHOWS_API,
-                FilesystemApiVersion = FILESYSTEM_API,
-
+                ApiVersion = API_VERSION,
                 ServiceVersion = VersionUtil.GetVersionName(),
 
                 AvailableFileSystemLibraries = FileSystemLibraries.GetAllAsBackendProvider(),
@@ -143,7 +134,7 @@ namespace MPExtended.Services.MediaAccessService
             return Search(text).TakeRange(start, end).ToList();
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id)
         {
             return GetLibrary(provider, type).GetExternalMediaInfo(type, id);
         }
@@ -742,7 +733,7 @@ namespace MPExtended.Services.MediaAccessService
             };
         }
 
-        public bool IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
+        public WebBoolResult IsLocalFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)
         {
             WebFileInfo info = GetFileInfo(provider, mediatype, filetype, id, offset);
             return info.Exists && info.IsLocalFile;

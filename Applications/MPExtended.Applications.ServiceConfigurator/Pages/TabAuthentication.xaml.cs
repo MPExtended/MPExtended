@@ -75,6 +75,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             users.Add(u);
             txtUsername.Text = "";
             txtPassword.Password = "";
+
+            // Given that we have an Add button here, the user expects that the account might directly work. So, save the
+            // new account directly. Probably not the nicest way by directly calling the callback, but it works, so whatever. 
+            TabClosed();
         }
 
         private void txtUsername_TextChanged(object sender, TextChangedEventArgs e)

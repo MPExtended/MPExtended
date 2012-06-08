@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -35,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebMovieBasic> movieList = MPEServices.MAS.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
+            IEnumerable<WebMovieDetailed> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
             if (!String.IsNullOrEmpty(genre))
             {
                 movieList = movieList.Where(x => x.Genres.Contains(genre));
@@ -66,14 +67,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return null;
         }
 
-        public ActionResult Image(string movie, int width = 0, int height = 0)
+        public ActionResult Cover(string movie, int width = 0, int height = 0)
         {
-            var image = MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height);
-            if (image != null)
-            {
-                return File(image, "image/jpg");
-            }
-            return null;
+            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Cover, width, height, "Images/default/movie-cover.png");
+        }
+
+        public ActionResult Fanart(string movie, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Backdrop, width, height, "Images/default/movie-fanart.png");
         }
     }
 }

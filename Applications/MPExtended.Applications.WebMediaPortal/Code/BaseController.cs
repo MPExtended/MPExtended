@@ -61,8 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             // log the error
-            Log.Debug("During request {0}", filterContext.HttpContext.Request.RawUrl);
-            Log.Warn("Error happened in controller body", filterContext.Exception);
+            Log.Warn(String.Format("Error happened in controller body during request {0}", filterContext.HttpContext.Request.RawUrl), filterContext.Exception);
 
             // return exception page
             filterContext.Result = new ViewResult
@@ -96,6 +95,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             List<string> languages = new List<string>();
             if (request.Params["language"] != null)
                 languages.Add(request.Params["language"]);
+            if (!String.IsNullOrEmpty(Settings.ActiveSettings.DefaultLanguage))
+                languages.Add(Settings.ActiveSettings.DefaultLanguage);
             if (request.UserLanguages != null)
                 languages.AddRange(request.UserLanguages);
 

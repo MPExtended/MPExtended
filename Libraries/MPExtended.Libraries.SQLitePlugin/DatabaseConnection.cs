@@ -21,12 +21,14 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace MPExtended.Libraries.SQLitePlugin
 {
     public class DatabaseConnection : IDisposable
     {
         private bool shouldClose;
+        private FileStream fileStream;
 
         public SQLiteConnection Connection { get; private set; }
 
@@ -38,10 +40,15 @@ namespace MPExtended.Libraries.SQLitePlugin
             }
         }
 
-        public DatabaseConnection(Database db)
+        public DatabaseConnection(Database db, bool holdExclusiveLock)
         {
             string connectionString = "Data Source=" + db.DatabasePath + ";Read Only=True";
             Connection = new SQLiteConnection(connectionString);
+            if (holdExclusiveLock)
+            {
+                fileStream = File.Open(db.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+
             Connection.Open();
             shouldClose = true;
         }
@@ -66,9 +73,21 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             if (IsOpen && shouldClose)
             {
-                Connection.Close();
-                Connection.Dispose();
-                Connection = null;
+                try
+                {
+                    Connection.Close();
+                    Connection.Dispose();
+                    Connection = null;
+                }
+                finally
+                {
+                    if (fileStream != null)
+                    {
+                        fileStream.Close();
+                        fileStream.Dispose();
+                        fileStream = null;
+                    }
+                }
             }
         }
     }

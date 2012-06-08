@@ -69,13 +69,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId, int width = 0, int height = 0)
         {
-            var logo = MPEServices.TASStream.GetArtworkResized(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0, width, height);
-            return File(logo, "image/png");
+            return Images.ReturnFromService(WebStreamMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height, "Images/default/logo.png");
         }
 
         public ActionResult ProgramDetails(int programId)
         {
-            var program = MPEServices.TAS.GetProgramBasicById(programId);
+            var program = MPEServices.TAS.GetProgramDetailedById(programId);
             if (program == null)
             {
                 return HttpNotFound();

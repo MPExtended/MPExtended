@@ -41,6 +41,17 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
 
             try
             {
+                // remove some old left-overs from 0.4.x 
+                var files = Directory.GetFiles(Installation.GetLogDirectory(), "WebMediaPortalIIS-*.log");
+                if (files.Any())
+                {
+                    Log.Info("Removing {0} old log files (WebMediaPortalIIS-*.log) from WebMediaPortal 0.4.x", files.Count());
+                    foreach (var file in files)
+                    {
+                        File.Delete(file);
+                    }
+                }
+
                 // generate IIS Express config file
                 var generator = new IISConfigGenerator();
                 

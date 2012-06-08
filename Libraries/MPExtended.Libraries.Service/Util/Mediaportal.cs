@@ -36,6 +36,7 @@ namespace MPExtended.Libraries.Service.Util
     public static class Mediaportal
     {
         private static bool? hasValidConfig = null;
+        private static bool? hasMpDirs = null;
 
         public static string GetClientInstallationDirectory()
         {
@@ -52,6 +53,11 @@ namespace MPExtended.Libraries.Service.Util
 
         public static string GetLocation(MediaportalDirectory type)
         {
+            if (hasMpDirs.HasValue && !hasMpDirs.Value)
+            {
+                return null;
+            }
+
             try
             {
                 // read from MediaPortalDirs.xml
@@ -60,6 +66,7 @@ namespace MPExtended.Libraries.Service.Util
                 if (mpDirs == null || !File.Exists(mpDirs))
                 {
                     Log.Debug("Could not find MediaPortalDirs.xml");
+                    hasMpDirs = false;
                     return null;
                 }
 

@@ -18,14 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Text;
 using System.ServiceModel;
-using System.ServiceModel.Web;
-using Gentle.Provider.MySQL;
-using Gentle.Provider.SQLServer;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
@@ -38,7 +34,7 @@ namespace MPExtended.Services.TVAccessService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVAccessService : ITVAccessService
     {
-        private const int API_VERSION = 2;
+        private const int API_VERSION = 4;
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
@@ -94,7 +90,7 @@ namespace MPExtended.Services.TVAccessService
             {
                 HasConnectionToTVServer = RemoteControl.IsConnected,
                 ApiVersion = API_VERSION,
-                ServiceVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion
+                ServiceVersion = VersionUtil.GetVersionName(),
             };
         }
         #endregion
@@ -119,7 +115,7 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public string ReadSettingFromDatabase(string tagName)
+        public WebStringResult ReadSettingFromDatabase(string tagName)
         {
             return _tvBusiness.GetSetting(tagName, "").Value;
         }
@@ -138,28 +134,28 @@ namespace MPExtended.Services.TVAccessService
         /// <param name="type">Type of item</param>
         /// <param name="id">Id of recording</param>
         /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
-        public SerializableDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebTvMediaType? type, string id)
         {
             return GetExternalMediaInfoForMpTvServer(type, id);
         }
 
-        private SerializableDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
+        private WebDictionary<string> GetExternalMediaInfoForMpTvServer(WebTvMediaType? type, string id)
         {
             if (type == WebTvMediaType.Recording)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp recording" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp recording" },
+                    { "Id", id }
+                };
             }
             else if (type == WebTvMediaType.TV)
             {
-                return new SerializableDictionary<string>()
-               {
-                   { "Type", "mp tvchannel" },
-                   { "Id", id }
-               };
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mp tvchannel" },
+                    { "Id", id }
+                };
             }
 
             return null;
@@ -362,9 +358,9 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public WebCount GetScheduleCount()
+        public WebIntResult GetScheduleCount()
         {
-            return new WebCount() { Count = Schedule.ListAll().Count };
+            return Schedule.ListAll().Count;
         }
 
         public IList<WebScheduleBasic> GetSchedules(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
@@ -445,13 +441,74 @@ namespace MPExtended.Services.TVAccessService
                 return false;
             }
         }
+
+        private WebScheduledRecording GetScheduledRecording(Schedule schedule, DateTime date)
+        {
+            // ignore schedules that don't even match the date we are checking for
+            ScheduleRecordingType type = (ScheduleRecordingType)schedule.ScheduleType;
+            if ((type == ScheduleRecordingType.Weekends && !(date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)) ||
+                (type == ScheduleRecordingType.WorkingDays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)) ||
+                (type == ScheduleRecordingType.Weekly && schedule.StartTime.DayOfWeek != date.DayOfWeek) ||
+                (type == ScheduleRecordingType.Once && schedule.StartTime.Date != date.Date) ||
+                (type == ScheduleRecordingType.WeeklyEveryTimeOnThisChannel && schedule.StartTime.Date != date.Date))
+                return null;
+
+            // retrieve some data
+            var channel = Channel.Retrieve(schedule.IdChannel);
+            WebScheduledRecording recording = new WebScheduledRecording();
+            recording.IdSchedule = schedule.IdSchedule;
+
+            // first check all types that do not require any EPG matching
+            ScheduleRecordingType[] noEpgTypes = { ScheduleRecordingType.Daily, ScheduleRecordingType.Weekends, ScheduleRecordingType.WorkingDays, 
+                                                   ScheduleRecordingType.Weekly, ScheduleRecordingType.Once };
+            if (noEpgTypes.Contains(type))
+            {
+                recording.IdChannel = channel.IdChannel;
+                recording.ChannelName = channel.DisplayName;
+                recording.StartTime = schedule.StartTime;
+                recording.EndTime = schedule.EndTime;
+                var matchingPrograms = _tvBusiness.GetPrograms(channel, schedule.StartTime, schedule.EndTime);
+                recording.IdProgram = matchingPrograms.Any() ? matchingPrograms.First().IdProgram : 0;
+                recording.ProgramName = matchingPrograms.Any() ? matchingPrograms.First().Title : schedule.ProgramName;
+                return recording;
+            }
+
+            // all schedule types which reach this far match a program in the EPG
+            IList<Program> programs =
+                type == ScheduleRecordingType.WeeklyEveryTimeOnThisChannel || type == ScheduleRecordingType.EveryTimeOnThisChannel ?
+                    _tvBusiness.GetPrograms(channel, date.Date, date.Date.Add(TimeSpan.FromDays(1))) :
+                    _tvBusiness.GetPrograms(date.Date, date.Date.Add(TimeSpan.FromDays(1)));
+            var program = programs.FirstOrDefault(x => x.Title == schedule.ProgramName && (x.StartTime > DateTime.Now || date.Date < DateTime.Today));
+            if (program == null)
+                return null;
+
+            // set properties from the program and channel of the program
+            channel = program.ReferencedChannel();
+            recording.IdChannel = channel.IdChannel;
+            recording.ChannelName = channel.DisplayName;
+            recording.StartTime = program.StartTime;
+            recording.EndTime = program.EndTime;
+            recording.IdProgram = program.IdProgram;
+            recording.ProgramName = program.Title;
+            return recording;
+        }
+
+        public IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
+        {
+            return Schedule.ListAll().Select(x => GetScheduledRecording(x, date)).Where(x => x != null).ToList();
+        }
+
+        public IList<WebScheduledRecording> GetScheduledRecordingsForToday(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
+        {
+            return GetScheduledRecordingsForDate(DateTime.Today, sort, order);
+        }
         #endregion
 
         #region Channels
         #region TV specific
-        public WebCount GetGroupCount()
+        public WebIntResult GetGroupCount()
         {
-            return new WebCount() { Count = ChannelGroup.ListAll().Count };
+            return ChannelGroup.ListAll().Count;
         }
 
         public IList<WebChannelGroup> GetGroups(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -469,9 +526,9 @@ namespace MPExtended.Services.TVAccessService
             return ChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public WebCount GetChannelCount(int groupId)
+        public WebIntResult GetChannelCount(int groupId)
         {
-            return new WebCount() { Count = _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count };
+            return _tvBusiness.GetTVGuideChannelsForGroup(groupId).Count;
         }
 
         public IList<WebChannelBasic> GetAllChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -535,9 +592,9 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Radio specific
-        public WebCount GetRadioGroupCount()
+        public WebIntResult GetRadioGroupCount()
         {
-            return new WebCount() { Count = RadioChannelGroup.ListAll().Count };
+            return RadioChannelGroup.ListAll().Count;
         }
 
         public IList<WebChannelGroup> GetRadioGroups(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -555,9 +612,9 @@ namespace MPExtended.Services.TVAccessService
             return RadioChannelGroup.Retrieve(groupId).ToWebChannelGroup();
         }
 
-        public WebCount GetRadioChannelCount(int groupId)
+        public WebIntResult GetRadioChannelCount(int groupId)
         {
-            return new WebCount() { Count = _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count };
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId).Count;
         }
 
         public IList<WebChannelBasic> GetAllRadioChannelsBasic(SortField? sort = SortField.User, SortOrder? order = SortOrder.Asc)
@@ -631,12 +688,12 @@ namespace MPExtended.Services.TVAccessService
             return SwitchTVServerToChannel(userName, channelId).ToWebVirtualCard();
         }
 
-        public string SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetStreamingUrl(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).RTSPUrl;
         }
 
-        public string SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
+        public WebStringResult SwitchTVServerToChannelAndGetTimeshiftFilename(string userName, int channelId)
         {
             return SwitchTVServerToChannel(userName, channelId).TimeShiftFileName;
         }
@@ -707,9 +764,9 @@ namespace MPExtended.Services.TVAccessService
         #endregion
 
         #region Recordings
-        public WebCount GetRecordingCount()
+        public WebIntResult GetRecordingCount()
         {
-            return new WebCount() { Count = Recording.ListAll().Count };
+            return Recording.ListAll().Count;
         }
 
         public IList<WebRecordingBasic> GetRecordings(SortField? sort = SortField.Name, SortOrder? order = SortOrder.Asc)
@@ -849,9 +906,9 @@ namespace MPExtended.Services.TVAccessService
             return Channel.Retrieve(channelId).NextProgram.ToWebProgramDetailed();
         }
 
-        public WebCount SearchProgramsCount(string searchTerm)
+        public WebIntResult SearchProgramsCount(string searchTerm)
         {
-            return new WebCount() { Count = _tvBusiness.SearchPrograms(searchTerm).Count };
+            return _tvBusiness.SearchPrograms(searchTerm).Count;
         }
 
         public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm)

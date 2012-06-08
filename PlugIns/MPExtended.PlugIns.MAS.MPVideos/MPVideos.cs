@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
@@ -150,7 +151,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                         Id = reader.ReadIntAsString(0),
                         Title = title,
                         Score = (int)Math.Round(40 + (decimal)text.Length / title.Length * 40),
-                        Details = new SerializableDictionary<string>()
+                        Details = new WebDictionary<string>()
                     {
                         { "Year", reader.ReadIntAsString(2) },
                         { "Genres", genres == "unknown" ? String.Empty : genres }
@@ -172,7 +173,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                         Id = reader.ReadIntAsString(1),
                         Title = reader.ReadString(2),
                         Score = (int)Math.Round(40 + (decimal)text.Length / reader.ReadString(0).Length * 30),
-                        Details = new SerializableDictionary<string>()
+                        Details = new WebDictionary<string>()
                     {
                         { "Year", reader.ReadIntAsString(3) },
                         { "Genres", genres == "unknown" ? String.Empty : genres }
@@ -184,9 +185,9 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             }
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            return new SerializableDictionary<string>()
+            return new WebDictionary<string>()
             {
                 { "Type", "myvideos" },
                 { "Id", id }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
@@ -37,21 +38,21 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout);
+        WebBoolResult InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout);
 
         // startPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string StartStream(string identifier, string profileName, int startPosition);
+        WebStringResult StartStream(string identifier, string profileName, int startPosition);
 
         // startPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        string StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId);
+        WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool FinishStream(string identifier);
+        WebBoolResult FinishStream(string identifier);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -63,11 +64,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool AuthorizeStreaming();
+        WebBoolResult AuthorizeStreaming();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        bool AuthorizeRemoteHostForStreaming(string host);
+        WebBoolResult AuthorizeRemoteHostForStreaming(string host);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

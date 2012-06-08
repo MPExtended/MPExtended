@@ -9,7 +9,7 @@
 body
 {
     font-size: 14px;
-    background: #fff fixed top left url('../../Content/Images/bg.png');
+    background: #fff fixed top left url('Images/bg.png');
 }
 
 #content
@@ -54,7 +54,7 @@ body
 /******************** Header ************************/
 #header_wrap
 {
-    height: 140px; /*background: top left repeat-x url('../header_gradient.png');*/
+    height: 140px;
     font-family: "Segoe UI" , Candara, "Bitstream Vera Sans" , "DejaVu Sans" , "Bitstream Vera Sans" , "Trebuchet MS" , Verdana, "Verdana Ref" , sans serif;
     text-shadow: 3px 3px 3px #000;
 }
@@ -90,7 +90,7 @@ body
 
 #header #logo
 {
-    background-image: url("../../Content/Images/logo.png");
+    background-image: url("Images/logo.png");
     height: 50px;
     width: 350px;
     position: absolute;

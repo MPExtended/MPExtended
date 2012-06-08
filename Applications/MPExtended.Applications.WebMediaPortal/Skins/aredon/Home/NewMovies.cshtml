@@ -12,7 +12,7 @@
                         @Html.ActionLink(movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
                     </div>
                     <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })">
-                        <img class="img" src="@Url.Action("Image", "MovieLibrary", new { movie = movie.Id, width = 222 })" alt="" border="0" />
+                        <img class="img" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 222 })" alt="" border="0" />
                     </a>
                 </div>
             </div>

@@ -91,6 +91,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaInfoFormatter.cs" />
     <Compile Include="Code\MediaName.cs" />
     <Compile Include="Code\ServiceAuthorizeAttribute.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Mvc\PathMapper.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
     <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
@@ -135,15 +137,27 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Content\Images\bg.png" />
+    <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
-    <Content Include="Content\Images\header_gradient.png" />
-    <Content Include="Content\Images\left.gif" />
-    <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\nav_gradient.png" />
-    <Content Include="Content\Images\right.gif" />
-    <Content Include="Content\Images\today_gradient.png" />
-    <Content Include="Content\Images\tvguide_button_bg.png" />
+    <Content Include="Content\Images\default\album.png" />
+    <Content Include="Content\Images\default\logo.png" />
+    <Content Include="Content\Images\default\movie-cover.png" />
+    <Content Include="Content\Images\default\tvepisode-banner.png" />
+    <Content Include="Content\jwplayer\jwplayer.js" />
+    <Content Include="Content\jwplayer\license.txt" />
+    <Content Include="Content\jwplayer\player.swf" />
+    <Content Include="Content\jwplayer\swfobject.js" />
+    <Content Include="Skins\aredon\Content\bg.png" />
+    <Content Include="Skins\aredon\Content\chosen\chosen-sprite.png" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.css" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.min.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.proto.js" />
+    <Content Include="Skins\aredon\Content\chosen\chosen.proto.min.js" />
+    <Content Include="Skins\aredon\Content\Images\bg.png" />
+    <Content Include="Skins\aredon\Content\Images\left.gif" />
+    <Content Include="Skins\aredon\Content\Images\logo.png" />
+    <Content Include="Skins\aredon\Content\Images\right.gif" />
     <Content Include="Skins\aredon\Home\Index.css" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -181,7 +195,7 @@
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
     <Content Include="Views\Television\TVGuide.js" />
-    <Content Include="Skins\aredon\Site.css" />
+    <Content Include="Skins\aredon\Content\Site.css" />
     <Content Include="Skins\aredon\Television\TVGuide.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -397,6 +411,15 @@
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Skins\aredon\Content\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\jwplayer\newtubedark.zip" />
+    <Content Include="Content\jwplayer\slim.zip" />
+    <Content Include="Content\jwplayer\whotube.zip" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

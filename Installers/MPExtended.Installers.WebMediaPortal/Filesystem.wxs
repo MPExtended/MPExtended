@@ -46,9 +46,10 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Client.pdb" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.pdb" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
-                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
                 </Component>
                 
                 <!-- Libraries for WebMP -->

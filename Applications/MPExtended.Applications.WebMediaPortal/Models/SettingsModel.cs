@@ -64,5 +64,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string TASUrl { get; set; }
 
         public string Skin { get; set; }
+        public string DefaultLanguage { get; set; }
     }
 }

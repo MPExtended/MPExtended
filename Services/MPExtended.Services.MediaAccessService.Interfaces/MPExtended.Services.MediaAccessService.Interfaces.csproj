@@ -80,7 +80,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Picture\WebPictureBasic.cs" />
-    <Compile Include="SerializableDictionary.cs" />
     <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="WebFileInfo.cs" />
     <Compile Include="WebGenre.cs" />
     <Compile Include="WebObject.cs" />
-    <Compile Include="WebItemCount.cs" />
     <Compile Include="WebMediaItem.cs" />
     <Compile Include="WebSearchResult.cs" />
     <Compile Include="SortInterfaces.cs" />

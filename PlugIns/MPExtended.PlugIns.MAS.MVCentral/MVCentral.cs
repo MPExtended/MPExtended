@@ -23,6 +23,7 @@ using System.IO;
 using System.Text;
 using System.ComponentModel.Composition;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
@@ -239,9 +240,9 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
-        public SerializableDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
-            var dict = new SerializableDictionary<string>();
+            var dict = new WebDictionary<string>();
             dict.Add("Id", id);
             if (type == WebMediaType.MusicAlbum) dict.Add("Type", "mvcentral album");
             if (type == WebMediaType.MusicArtist) dict.Add("Type", "mvcentral artist");

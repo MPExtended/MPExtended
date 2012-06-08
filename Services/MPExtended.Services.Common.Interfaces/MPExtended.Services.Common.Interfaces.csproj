@@ -52,6 +52,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="WebDictionary.cs" />
     <Compile Include="WebIntResult.cs" />
     <Compile Include="WebStringResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

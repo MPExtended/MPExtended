@@ -49,8 +49,8 @@ namespace MPExtended.Applications.Development.DevTool
         private void CheckService(string rootpath, string service, string[] interfacenames, string classname)
         {
             string interfaceAssemblyName = service + ".Interfaces";
-            Assembly iface = Assembly.LoadFrom(Path.Combine(rootpath, "Services", interfaceAssemblyName, "bin", "Debug", interfaceAssemblyName + ".dll"));
-            Assembly impl = Assembly.LoadFrom(Path.Combine(rootpath, "Services", service, "bin", "Debug", service + ".dll"));
+            Assembly iface = Assembly.LoadFrom(Path.Combine(rootpath, "Services", interfaceAssemblyName, "bin", Installation.GetSourceBuildDirectoryName(), interfaceAssemblyName + ".dll"));
+            Assembly impl = Assembly.LoadFrom(Path.Combine(rootpath, "Services", service, "bin", Installation.GetSourceBuildDirectoryName(), service + ".dll"));
 
             Type[] interfaceTypes = interfacenames.Select(x => iface.GetType(interfaceAssemblyName + "." + x)).ToArray();
             Type implementationType = impl.GetType(service + "." + classname);

@@ -66,14 +66,6 @@ namespace MPExtended.Services.TVAccessService
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal TV Server", "timeshiftbuffer"),
             };
         }
-
-        public static Card ToCard(this WebCard card)
-        {
-            if (card == null)
-                return null;
-
-            return Card.Retrieve(card.IdCard);
-        }
     }
 
     internal static class WebVirtualCardExtensionMethods
@@ -160,7 +152,7 @@ namespace MPExtended.Services.TVAccessService
 
             return new WebChannelDetailed
             {
-                CurrentProgram = ch.CurrentProgram.ToWebProgramDetailed(),
+                CurrentProgram = ch.CurrentProgram != null ? ch.CurrentProgram.ToWebProgramDetailed() : null,
                 DisplayName = ch.DisplayName,
                 EpgHasGaps = ch.EpgHasGaps,
                 ExternalId = ch.ExternalId,
@@ -240,7 +232,6 @@ namespace MPExtended.Services.TVAccessService
             tmp.Add(ch.CurrentProgram.ToWebProgramBasic());
             tmp.Add(ch.NextProgram.ToWebProgramBasic());
             return tmp;
-
         }
 
         public static List<WebProgramDetailed> ToListWebProgramDetailedNowNext(this Channel ch)
@@ -255,14 +246,6 @@ namespace MPExtended.Services.TVAccessService
             tmp.Add(ch.CurrentProgram.ToWebProgramDetailed());
             tmp.Add(ch.NextProgram.ToWebProgramDetailed());
             return tmp;
-        }
-
-        public static Channel ToChannel(this WebChannelBasic ch)
-        {
-            if (ch == null)
-                return null;
-
-            return Channel.Retrieve(ch.Id);
         }
     }
 
@@ -304,22 +287,6 @@ namespace MPExtended.Services.TVAccessService
                 IsRadio = true,
                 IsTv = false
             };
-        }
-
-        public static ChannelGroup ToChannelGroup(this WebChannelGroup group)
-        {
-            if (group == null)
-                return null;
-
-            return ChannelGroup.Retrieve(group.Id);
-        }
-
-        public static RadioChannelGroup ToRadioChannelGroup(this WebChannelGroup group)
-        {
-            if (group == null)
-                return null;
-
-            return RadioChannelGroup.Retrieve(group.Id);
         }
     }
 
@@ -394,14 +361,6 @@ namespace MPExtended.Services.TVAccessService
                 IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
-
-        public static Program ToProgram(this WebProgramBasic p)
-        {
-            if (p == null)
-                return null;
-
-            return Program.Retrieve(p.Id);
-        }
     }
 
     internal static class WebRtspClientExtensionMethods
@@ -462,14 +421,6 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = sch.StartTime != DateTime.MinValue ? sch.StartTime : new DateTime(2000, 1, 1)
             };
         }
-
-        public static Schedule ToSchedule(this WebScheduleBasic sch)
-        {
-            if (sch == null)
-                return null;
-
-            return Schedule.Retrieve(sch.Id);
-        }
     }
 
     internal static class WebRecordingExtensionMethods
@@ -508,14 +459,6 @@ namespace MPExtended.Services.TVAccessService
                 TimesWatched = rec.TimesWatched,
                 Title = rec.Title
             };
-        }
-
-        public static Recording ToRecording(this WebRecordingBasic rec)
-        {
-            if (rec == null)
-                return null;
-
-            return Recording.Retrieve(rec.Id);
         }
     }
 
