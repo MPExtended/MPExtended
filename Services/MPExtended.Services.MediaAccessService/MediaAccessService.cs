@@ -913,9 +913,9 @@ namespace MPExtended.Services.MediaAccessService
             return PlaylistLibraries[provider].CreatePlaylist(playlistName);
         }
 
-        public WebBoolResult DeletePlaylist(int? provider, string id)
+        public WebBoolResult DeletePlaylist(int? provider, string playlistId)
         {
-            return PlaylistLibraries[provider].DeletePlaylist(id);
+            return PlaylistLibraries[provider].DeletePlaylist(playlistId);
         }
         #endregion
     }

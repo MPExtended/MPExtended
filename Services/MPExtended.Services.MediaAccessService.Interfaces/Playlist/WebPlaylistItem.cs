@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
 {
@@ -9,10 +10,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
     {
         public WebPlaylistItem()
         {
-
         }
 
-        public WebPlaylistItem(Music.WebMusicTrackBasic track)
+        public WebPlaylistItem(WebMusicTrackBasic track)
         {
             this.Id = track.Id;
             this.PID = track.PID;
@@ -23,7 +23,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
             this.Path = track.Path;
         }
 
-        public String Title { get; set; }
+        public string Title { get; set; }
         public int Duration { get; set; }
     }
 }

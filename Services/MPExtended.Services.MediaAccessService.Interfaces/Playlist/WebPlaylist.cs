@@ -7,8 +7,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
 {
     public class WebPlaylist : WebMediaItem, ITitleSortable
     {
-        public WebMediaType Type { get { return WebMediaType.Playlist; } }
-        public String Title { get; set; }
+        public string Title { get; set; }
         public int ItemCount { get; set; }
+
+        public override WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Playlist;
+            }
+        }
     }
 }

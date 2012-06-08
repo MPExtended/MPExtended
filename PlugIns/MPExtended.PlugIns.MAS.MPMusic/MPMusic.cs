@@ -23,14 +23,14 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using MPExtended.Libraries.SQLitePlugin;
+using MediaPortal.Playlists;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
-using MediaPortal.Playlists;
 using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
-using MPExtended.Libraries.Service;
 
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
@@ -57,7 +57,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
             string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
-                         "FROM tracks t " + 
+                         "FROM tracks t " +
                          "WHERE %where";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("t", "idTrack", "Id", DataReaders.ReadIntAsString),
@@ -112,10 +112,10 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                             "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
                             "MIN(t.dateAdded) AS date, " +
                             "CASE WHEN i.iYear ISNULL THEN MIN(t.iYear) ELSE i.iYear END AS year, " +
-                            "MAX(i.iRating) AS rating " + 
+                            "MAX(i.iRating) AS rating " +
                          "FROM tracks t " +
                          "LEFT JOIN albuminfo i ON t.strAlbum = i.strAlbum AND t.strArtist LIKE '%' || i.strArtist || '%' " +
-                         "WHERE %where " + 
+                         "WHERE %where " +
                          "GROUP BY t.strAlbum, t.strAlbumArtist ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
@@ -132,7 +132,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("", "rating", "Rating", DataReaders.ReadInt32),
             }, delegate(WebMusicAlbumBasic album)
             {
-                if(album.Artists.Count() > 0) 
+                if (album.Artists.Count() > 0)
                 {
                     int i = 0;
                     string[] filenames = new string[] {
@@ -466,34 +466,18 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         #region Playlists
         public IEnumerable<WebPlaylist> GetPlaylists()
         {
-            String path = GetPlaylistPath();
-            List<WebPlaylist> returnList = new List<WebPlaylist>();
-
-
-            String[] playlists = Directory.GetFiles(path);
-
-            foreach(String p in playlists)
-            {
-                if (PlayListFactory.IsPlayList(p))
-                {
-                    WebPlaylist webPlaylist = GetPlaylist(p);
-                    if (webPlaylist != null)
-                    {
-                        returnList.Add(webPlaylist);
-                    }
-                }
-            }
-
-            return returnList;
+            return Directory.GetFiles(configuration["playlist"])
+                .Where(p => PlayListFactory.IsPlayList(p))
+                .Select(p => GetPlaylist(p))
+                .Where(p => p != null)
+                .ToList();
         }
 
-        private WebPlaylist GetPlaylist(String path)
+        private WebPlaylist GetPlaylist(string path)
         {
             PlayList mpPlaylist = new PlayList();
             IPlayListIO factory = PlayListFactory.CreateIO(path);
-            bool success = factory.Load(mpPlaylist, path);
-
-            if (success)
+            if (factory.Load(mpPlaylist, path))
             {
                 WebPlaylist webPlaylist = new WebPlaylist() { Id = EncodeTo64(Path.GetFileName(path)), Title = mpPlaylist.Name, Path = new List<string>() { path } };
                 webPlaylist.ItemCount = mpPlaylist.Count;
@@ -509,17 +493,15 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         public IEnumerable<WebPlaylistItem> GetPlaylistItems(string playlistId)
         {
             PlayList mpPlaylist = new PlayList();
-            String path = GetPlaylistPath(playlistId);
+            string path = GetPlaylistPath(playlistId);
             IPlayListIO factory = PlayListFactory.CreateIO(path);
-            bool success = factory.Load(mpPlaylist, path);
-
-            if (success)
+            if (factory.Load(mpPlaylist, path))
             {
                 List<WebPlaylistItem> retList = new List<WebPlaylistItem>();
-                foreach(PlayListItem i in mpPlaylist)
+                foreach (PlayListItem i in mpPlaylist)
                 {
                     WebPlaylistItem webItem = new WebPlaylistItem();
-                    WebMusicTrackBasic track = GetMusicTrack(i.FileName);
+                    WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().FirstOrDefault(x => x.Path.Contains(i.FileName));
 
                     webItem.Title = i.Description;
                     webItem.Duration = i.Duration;
@@ -541,17 +523,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 }
                 return retList;
             }
+            else if (new FileInfo(path).Length == 0)
+            {
+                // for newly created playlists, return an empty list, to make sure that a CreatePlaylist call followed by an AddItem works
+                return new List<WebPlaylistItem>();
+            }
             else
             {
-                Log.Warn("Couldn't load playlist " + playlistId);
+                Log.Warn("Couldn't load playlist {0}", playlistId);
                 return null;
             }
-        }
-
-        private WebMusicTrackBasic GetMusicTrack(string fileName)
-        {
-            WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().First(x => x.Path.Contains(fileName));
-            return track;
         }
 
         public bool SavePlaylist(string playlistId, IEnumerable<WebPlaylistItem> playlistItems)
@@ -560,7 +541,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             PlayList mpPlaylist = new PlayList();
             IPlayListIO factory = PlayListFactory.CreateIO(path);
 
-            foreach(WebPlaylistItem i in playlistItems)
+            foreach (WebPlaylistItem i in playlistItems)
             {
                 PlayListItem mpItem = new PlayListItem(i.Title, i.Path[0], i.Duration);
                 mpItem.Type = PlayListItem.PlayListItemType.Audio;
@@ -569,27 +550,22 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             return factory.Save(mpPlaylist, path);
         }
-        private string GetPlaylistPath()
-        {
-            String playlistPath = configuration["playlist"];
 
-            return playlistPath;
-        }
         private string GetPlaylistPath(string playlistId)
         {
-            return Path.Combine(GetPlaylistPath(), DecodeFrom64(playlistId));
+            return Path.Combine(configuration["playlist"], DecodeFrom64(playlistId));
         }
 
         public string CreatePlaylist(string playlistName)
         {
-            String path = GetPlaylistPath();
+            string path = configuration["playlist"];
             try
             {
-                String fileName = playlistName + ".m3u";
+                string fileName = playlistName + ".m3u";
                 File.Create(Path.Combine(path, fileName));
                 return EncodeTo64(fileName);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error("Unable to create playlist " + playlistName, ex);
             }
@@ -597,12 +573,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             return null;
         }
 
-
         public bool DeletePlaylist(string playlistId)
         {
             try
             {
-                String fileName = GetPlaylistPath(playlistId);
+                string fileName = GetPlaylistPath(playlistId);
                 File.Delete(fileName);
                 return true;
             }
@@ -612,5 +587,6 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 return false;
             }
         }
+        #endregion
     }
 }

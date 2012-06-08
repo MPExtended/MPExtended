@@ -469,7 +469,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #endregion
 
         #region Playlist
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPlaylist> GetPlaylists(int? provider);
@@ -508,12 +507,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStringResult CreatePlaylist(int? provider, String playlistName);
+        WebStringResult CreatePlaylist(int? provider, string playlistName);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult DeletePlaylist(int? provider, String id);
-
+        WebBoolResult DeletePlaylist(int? provider, string playlistId);
         #endregion
     }
 }
