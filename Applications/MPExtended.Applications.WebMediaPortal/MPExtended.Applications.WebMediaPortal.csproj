@@ -97,9 +97,9 @@
     <Compile Include="Code\ServiceAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />
-    <Compile Include="Controllers\TVServerController.cs" />
+    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
-    <Compile Include="Models\TVServerStatusViewModels.cs" />
+    <Compile Include="Models\StatusViewModels.cs" />
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
     <Compile Include="Mvc\AssetManager.cs" />
@@ -379,10 +379,10 @@
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\TVServer\Index.cshtml" />
+    <Content Include="Views\Status\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\TVServer\Details.cshtml" />
+    <Content Include="Views\Status\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skins\aredon\Television\TVGuide.cshtml" />
