@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -29,6 +30,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     [ServiceAuthorize]
     public class StatusController : BaseController
     {
+        private static PerformanceCounter cpuCounter = new PerformanceCounter();
+
+        static StatusController()
+        {
+            cpuCounter = new PerformanceCounter();
+            cpuCounter.CategoryName = "Processor";
+            cpuCounter.CounterName = "% Processor Time";
+            cpuCounter.InstanceName = "_Total"; ;
+        }
+
         //
         // GET: /Status/
         public ActionResult Index()
@@ -57,5 +68,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             return View(new TVCardViewModel(card, vcard));
         }
+
+        public JsonResult GetPerformanceCounters()
+        {
+            var returnObject = new
+            {
+                CPU = cpuCounter.NextValue()
+            };
+            return Json(returnObject, JsonRequestBehavior.AllowGet);
+        } 
     }
 }

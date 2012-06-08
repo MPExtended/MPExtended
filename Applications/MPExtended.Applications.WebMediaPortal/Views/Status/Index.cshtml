@@ -1,6 +1,7 @@
 ﻿@model MPExtended.Applications.WebMediaPortal.Models.StatusViewModel
 @{
     ViewBag.Title = UIStrings.TVServerStatus;
+    Html.jQuery().Enable();
 }
 
 <h2>@UIStrings.Cards</h2>
@@ -76,3 +77,25 @@
 <br />
 
 @Html.Action("CurrentSchedules", "Home")
+
+<h2>System status</h2>
+<ul>
+    <li>Current CPU usage: <span id="cpuUsage">0</span>%</li>
+</ul>
+
+<script type="text/javascript">
+$(function () {
+    var updateCounters = function (url) {
+        $.ajax({ // cannot use $.getJSON() here because it doesn't support setting cache to false
+            url: '@Url.Action("GetPerformanceCounters", "Status")',
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                $("#cpuUsage").html(Math.round(result.CPU));
+            }
+        });
+    };
+    setInterval(updateCounters, 5000);
+    updateCounters();
+});
+</script>
