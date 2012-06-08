@@ -34,7 +34,8 @@ namespace MPExtended.Services.MediaAccessService
         Music,
         TVShow,
         Filesystem,
-        Picture
+        Picture,
+        Playlist
     }
 
     public abstract class ProviderHandler
@@ -50,12 +51,15 @@ namespace MPExtended.Services.MediaAccessService
         private Lazy<IMusicLibrary, IDictionary<string, object>>[] MusicLibrariesLoaded { get; set; }
         [ImportMany]
         private Lazy<IFileSystemLibrary, IDictionary<string, object>>[] FileSystemLibrariesLoaded { get; set; }
+        [ImportMany]
+        private Lazy<IPlaylistLibrary, IDictionary<string, object>>[] PlaylistLibrariesLoaded { get; set; }
 
         protected ILibraryList<IMovieLibrary> MovieLibraries { get; set; }
         protected ILibraryList<ITVShowLibrary> TVShowLibraries { get; set; }
         protected ILibraryList<IMusicLibrary> MusicLibraries { get; set; }
         protected ILibraryList<IPictureLibrary> PictureLibraries { get; set; }
         protected ILibraryList<IFileSystemLibrary> FileSystemLibraries { get; set; }
+        protected ILibraryList<IPlaylistLibrary> PlaylistLibraries { get; set; }
 
         internal ProviderHandler()
         {
@@ -71,6 +75,7 @@ namespace MPExtended.Services.MediaAccessService
                 TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(CreateList(TVShowLibrariesLoaded), ProviderType.TVShow);
                 PictureLibraries = new LazyLibraryList<IPictureLibrary>(CreateList(PictureLibrariesLoaded), ProviderType.Picture);
                 FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(CreateList(FileSystemLibrariesLoaded), ProviderType.Filesystem);
+                PlaylistLibraries = new LazyLibraryList<IPlaylistLibrary>(CreateList(PlaylistLibrariesLoaded), ProviderType.Playlist);
             }
             catch (Exception ex)
             {
@@ -172,6 +177,8 @@ namespace MPExtended.Services.MediaAccessService
                     return Instance.PictureLibraries.GetKeyByName(Configuration.Media.DefaultPlugins.Picture);
                 case ProviderType.TVShow:
                     return Instance.TVShowLibraries.GetKeyByName(Configuration.Media.DefaultPlugins.TVShow);
+                case ProviderType.Playlist: // TODO: Maybe we want to set a separate default in the future?
+                    return Instance.PlaylistLibraries.GetKeyByName(Configuration.Media.DefaultPlugins.Music);
                 default:
                     throw new ArgumentException();
             }

@@ -35,9 +35,10 @@ using MPExtended.Libraries.Service;
 namespace MPExtended.PlugIns.MAS.MPMusic
 {
     [Export(typeof(IMusicLibrary))]
+    [Export(typeof(IPlaylistLibrary))]
     [ExportMetadata("Name", "MP MyMusic")]
     [ExportMetadata("Id", 4)]
-    public class MPMusic : Database, IMusicLibrary
+    public class MPMusic : Database, IMusicLibrary, IPlaylistLibrary
     {
         private Dictionary<string, string> configuration;
         public bool Supported { get; set; }
@@ -462,6 +463,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }
         }
 
+        #region Playlists
         public IEnumerable<WebPlaylist> GetPlaylists()
         {
             String path = GetPlaylistPath();
@@ -609,11 +611,6 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 Log.Error("Unable to delete playlist " + playlistId, ex);
                 return false;
             }
-        }
-
-        public bool PlaylistSupported
-        {
-            get { return true; }
         }
     }
 }

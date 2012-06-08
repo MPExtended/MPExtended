@@ -26,9 +26,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id);
     }
 
-    public interface IPlaylist
+    public interface IPlaylistLibrary : ILibrary
     {
-        bool PlaylistSupported { get; }
         IEnumerable<WebPlaylist> GetPlaylists();
         IEnumerable<WebPlaylistItem> GetPlaylistItems(String playlistId);
         bool SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
@@ -36,7 +35,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         bool DeletePlaylist(String playlistId);
     }
 
-    public interface IMusicLibrary : ILibrary, IPlaylist
+    public interface IMusicLibrary : ILibrary
     {
         IEnumerable<WebMusicTrackBasic> GetAllTracks();
         IEnumerable<WebMusicTrackDetailed> GetAllTracksDetailed();
