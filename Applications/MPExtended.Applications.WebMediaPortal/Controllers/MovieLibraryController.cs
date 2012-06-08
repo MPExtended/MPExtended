@@ -54,6 +54,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(new MovieViewModel(fullMovie));
         }
 
+        [HttpGet]
+        public ActionResult MovieInfo(string movie)
+        {
+            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
+            if (fullMovie == null)
+                return HttpNotFound();
+            return Json(new MovieViewModel(fullMovie), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Play(string movie)
         {
             var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
