@@ -35,6 +35,8 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [EnumMember]
         Folder = 9,
         [EnumMember]
-        Drive = 10
+        Drive = 10,
+        [EnumMember]
+        Playlist = 11
     }
 }

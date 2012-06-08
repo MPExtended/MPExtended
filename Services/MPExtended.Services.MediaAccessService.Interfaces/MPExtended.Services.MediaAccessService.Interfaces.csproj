@@ -68,6 +68,8 @@
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Music\WebMusicArtistDetailed.cs" />
+    <Compile Include="Playlist\WebPlaylist.cs" />
+    <Compile Include="Playlist\WebPlaylistItem.cs" />
     <Compile Include="PluginInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />

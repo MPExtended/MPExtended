@@ -10,6 +10,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -23,6 +24,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Stream GetFile(string path);
         IEnumerable<WebSearchResult> Search(string text);
         WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id);
+    }
+
+    public interface IPlaylistLibrary : ILibrary
+    {
+        IEnumerable<WebPlaylist> GetPlaylists();
+        IEnumerable<WebPlaylistItem> GetPlaylistItems(String playlistId);
+        bool SavePlaylist(String playlistId, IEnumerable<WebPlaylistItem> playlistItems);
+        String CreatePlaylist(String playlistName);
+        bool DeletePlaylist(String playlistId);
     }
 
     public interface IMusicLibrary : ILibrary

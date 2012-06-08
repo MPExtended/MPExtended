@@ -63,5 +63,10 @@ namespace MPExtended.Libraries.Service.Util
             Uri uri = new Uri(path);
             return uri.Scheme == "file" ? uri.LocalPath : path;
         }
+
+        public static string GetAbsolutePath(string basePath, string relativePath)
+        {
+            return Path.GetFullPath(Path.Combine(basePath, relativePath));
+        }
     }
 }

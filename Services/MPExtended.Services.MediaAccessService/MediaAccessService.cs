@@ -30,6 +30,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
+using MPExtended.Services.MediaAccessService.Interfaces.Playlist;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -758,7 +759,7 @@ namespace MPExtended.Services.MediaAccessService
                 }
 
                 // try to load it from a network drive
-                if(info.OnNetworkDrive && info.Exists)
+                if (info.OnNetworkDrive && info.Exists)
                 {
                     using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
                     {
@@ -777,6 +778,144 @@ namespace MPExtended.Services.MediaAccessService
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
+        }
+        #endregion
+
+        #region Playlist
+        public IList<Interfaces.Playlist.WebPlaylist> GetPlaylists(int? provider)
+        {
+            return PlaylistLibraries[provider].GetPlaylists().Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<Interfaces.Playlist.WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return PlaylistLibraries[provider].GetPlaylistItems(playlistId).Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<WebPlaylistItem> GetPlaylistItemsByRange(int? provider, string playlistId, int start, int end, SortBy? sort = SortBy.Title, OrderBy? order = OrderBy.Asc)
+        {
+            return GetAllPlaylistItems(provider, playlistId).AsQueryable().TakeRange(start, end).Finalize(provider, ProviderType.Music);
+        }
+
+        public WebIntResult GetPlaylistItemsCount(int? provider, string playlistId)
+        {
+            return PlaylistLibraries[provider].GetPlaylistItems(playlistId).AsQueryable().Count();
+        }
+
+        private IEnumerable<WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId)
+        {
+            return PlaylistLibraries[provider].GetPlaylistItems(playlistId);
+        }
+
+        public WebBoolResult AddPlaylistItem(int? provider, string playlistId, WebMediaType type, string id, int? position)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).Finalize(provider, type);
+
+            if (AddPlaylistItemToPlaylist(provider, id, position, playlist))
+            {
+                return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool AddPlaylistItemToPlaylist(int? provider, string id, int? position, IList<WebPlaylistItem> playlist)
+        {
+            WebMusicTrackBasic track = MusicLibraries[provider].GetTrackBasicById(id);
+            if (position != null)
+            {
+                if (position >= 0 && position < playlist.Count)
+                {
+                    playlist.Insert((int)position, new WebPlaylistItem(track));
+                }
+                else
+                {
+                    Log.Warn("Index out of bound for removing playlist item: " + position);
+                    return false;
+                }
+            }
+            else
+            {
+                playlist.Add(new Interfaces.Playlist.WebPlaylistItem(track));
+            }
+            return true;
+        }
+
+        public WebBoolResult AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).Finalize(provider, type);
+            int pos = position != null ? (int)position : playlist.Count - 1;
+            string[] splitIds = ids.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < splitIds.Length; i++)
+            {
+                AddPlaylistItemToPlaylist(provider, splitIds[i], pos + i, playlist);
+            }
+            return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public WebBoolResult RemovePlaylistItem(int? provider, string playlistId, int position)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
+
+            if (position >= 0 && position < playlist.Count)
+            {
+                playlist.RemoveAt(position);
+            }
+            else
+            {
+                Log.Warn("Index out of bound for removing playlist item: " + position);
+                return false;
+            }
+            return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public WebBoolResult RemovePlaylistItems(int? provider, string playlistId, string positions)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
+            string[] splitIds = positions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string p in splitIds)
+            {
+                int pos = Int32.Parse(p);
+                if (pos >= 0 && pos < playlist.Count)
+                {
+                    playlist.RemoveAt(pos);
+                }
+                else
+                {
+                    Log.Warn("Index out of bound for removing playlist item: " + p);
+                    return new WebBoolResult(false);
+                }
+            }
+            return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public WebBoolResult MovePlaylistItem(int? provider, string playlistId, int oldPosition, int newPosition)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).ToList();
+            if (oldPosition >= 0 && oldPosition < playlist.Count && newPosition >= 0 && newPosition < playlist.Count)
+            {
+                WebPlaylistItem item = playlist[oldPosition];
+                playlist.RemoveAt(oldPosition);
+                playlist.Insert(newPosition, item);
+                return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+            }
+            else
+            {
+                Log.Warn("Indexes out of bound for moving playlist item");
+            }
+            return false;
+        }
+
+        public WebStringResult CreatePlaylist(int? provider, string playlistName)
+        {
+            return PlaylistLibraries[provider].CreatePlaylist(playlistName);
+        }
+
+        public WebBoolResult DeletePlaylist(int? provider, string playlistId)
+        {
+            return PlaylistLibraries[provider].DeletePlaylist(playlistId);
         }
         #endregion
     }
