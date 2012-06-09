@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -46,10 +47,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             {
                 return "~/Skins/" + Skin;
             }
-        }
-
-        public SkinnableViewEngine()
-        {
         }
 
         public SkinnableViewEngine(string skin)
@@ -96,6 +93,14 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 "~/Views/Shared/{0}.cshtml",
                 "~/Views/Shared/{0}.vbhtml",
             };
+        }
+
+        public static string GetCurrentSkinDirectory(HttpContextBase context)
+        {
+            var relativePath = ViewEngines.Engines.OfType<SkinnableViewEngine>()
+                .Select(sve => sve.BaseDirectory)
+                .FirstOrDefault(sp => Directory.Exists(context.Server.MapPath(sp)));
+            return relativePath == null ? "~/Views" : relativePath;
         }
     }
 }

@@ -58,6 +58,9 @@ namespace MPExtended.Applications.WebMediaPortal
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
+            // use our custom controller factory
+            ControllerBuilder.Current.SetControllerFactory(new MEFControllerFactory(new HttpContextWrapper(Context)));
+
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             Log.Info("WebMediaPortal version {0} starting with MAS {1} and TAS {2}",
