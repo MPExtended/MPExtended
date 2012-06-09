@@ -28,7 +28,7 @@ using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal static class Settings
+    public static class Settings
     {
         public static SettingModel ActiveSettings
         {

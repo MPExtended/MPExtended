@@ -23,7 +23,7 @@ using System.Web.Mvc;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    public class SkinnableViewEngine : RazorViewEngine
+    internal class SkinnableViewEngine : RazorViewEngine
     {
         private string _skin;
         public string Skin

@@ -29,7 +29,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal static class Images
+    public static class Images
     {
         private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
         {
