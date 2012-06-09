@@ -163,7 +163,7 @@ namespace MPExtended.Libraries.Service
                     return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 case MPExtendedProduct.WebMediaPortal:
                     DirectoryInfo webmpinfo = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-                    return webmpinfo.Parent.FullName;
+                    return webmpinfo.Parent.Parent.FullName;
                 default:
                     throw new ArgumentException();
             }

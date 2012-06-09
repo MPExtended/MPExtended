@@ -3,9 +3,9 @@
 <head>
     <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
     @Html.jQuery().Enable()
-    @Html.Assets().AddSkinStylesheet("Site.css")
-    @Html.Assets().AddSkinStylesheet("chosen/chosen.css")
-    @Html.Assets().AddSkinScript("chosen/chosen.jquery.js")
+    @Html.Assets().AddContentStylesheet("Site.css")
+    @Html.Assets().AddContentStylesheet("chosen/chosen.css")
+    @Html.Assets().AddContentScript("chosen/chosen.jquery.js")
     @Html.Assets().Render()
     @RenderSection("HeadHtml", false)
 </head>

@@ -29,7 +29,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal static class Images
+    public static class Images
     {
         private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
         {
@@ -46,7 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     }
                     else
                     {
-                        string virtualPath = PathMapper.GetSkinVirtualContentPath(new HttpContextWrapper(HttpContext.Current), defaultFile);
+                        string virtualPath = ContentLocator.Current.LocateContent(defaultFile);
                         string physicalPath = HttpContext.Current.Server.MapPath(virtualPath);
                         return new FilePathResult(physicalPath, MIME.GetFromFilename(physicalPath, "application/octet-stream"));
                     }

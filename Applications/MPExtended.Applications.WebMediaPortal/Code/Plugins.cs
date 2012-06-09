@@ -17,40 +17,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.IO;
 using System.Web;
-using System.Web.Mvc;
-using MPExtended.Applications.WebMediaPortal.Mvc;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal class SkinnableViewEngine : RazorViewEngine
+    internal static class Plugins
     {
-        public SkinnableViewEngine()
+        public static string[] ListPluginDirectories()
         {
-            UpdateActiveSkin();
+            string webmpDirectory =
+                Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                    Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
+                    Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
+            string pluginDirectory = Path.Combine(webmpDirectory, "Plugins");
+            if (!Directory.Exists(pluginDirectory))
+                return new string[] { };
+
+            return Directory.GetDirectories(pluginDirectory);
         }
 
-        public void UpdateActiveSkin()
+        public static string[] ListPlugins()
         {
-            FileExtensions = new string[] { 
-                "cshtml", 
-                "vbhtml" 
-            };
-
-            List<string> files = new List<string>();
-            foreach (var directory in ContentLocator.Current.ViewDirectories)
-            {
-                files.Add(directory + "/{1}/{0}.cshtml");
-                files.Add(directory + "/{1}/{0}.vbhtml");
-                files.Add(directory + "/Shared/{0}.cshtml");
-                files.Add(directory + "/Shared/{0}.vbhtml");
-            }
-
-            MasterLocationFormats = files.ToArray();
-            PartialViewLocationFormats = files.ToArray();
-            ViewLocationFormats = files.ToArray();
+            return ListPluginDirectories()
+                .Select(x => Path.GetFileName(x))
+                .ToArray();
         }
     }
 }

@@ -21,50 +21,49 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal static class Settings
+    public static class Settings
     {
+        private static SettingModel activeSettingModel;
+
         public static SettingModel ActiveSettings
         {
             get
             {
-                return LoadSettings();
+                if (activeSettingModel == null)
+                    LoadSettings();
+                return activeSettingModel;
             }
 
             set
             {
                 SaveSettings(value);
-
-                ViewEngines.Engines.Clear();
-                ViewEngines.Engines.Add(new SkinnableViewEngine(value.Skin));
-                ViewEngines.Engines.Add(new RazorViewEngine());
+                LoadSettings();
             }
         }
 
-        public static SettingModel LoadSettings()
+        public static void LoadSettings()
         {
-            return LoadSettings(true);
+            activeSettingModel = PerformLoadSettings(true);
+            ReloadSkinSettings();
         }
 
-        public static SettingModel LoadSettings(bool retry)
+        private static SettingModel PerformLoadSettings(bool retry)
         {
-            // default values
-            SettingModel settings = new SettingModel();
-            settings.MASUrl = "auto://127.0.0.1:4322";
-            settings.TASUrl = "auto://127.0.0.1:4322";
- 
             try
             {
                 using(XmlReader reader = XmlReader.Create(Configuration.GetPath("WebMediaPortal.xml")))
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(SettingModel));
-                    settings = (SettingModel)serializer.ReadObject(reader);
+                    return (SettingModel)serializer.ReadObject(reader);
                 }
             }
             catch (Exception ex)
@@ -73,16 +72,30 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 {
                     Log.Warn("Exception in LoadSettings (due to old configuration file?), overwriting with default file and retrying", ex);
                     File.Copy(Configuration.GetDefaultPath("WebMediaPortal.xml"), Configuration.GetPath("WebMediaPortal.xml"), true);
-                    return LoadSettings(false);
+                    return PerformLoadSettings(false);
                 }
                 else
                 {
                     Log.Warn("Exception in LoadSettings, bailing out", ex);
-
                 }
             }
 
+            // default values
+            SettingModel settings = new SettingModel();
+            settings.MASUrl = "auto://127.0.0.1:4322";
+            settings.TASUrl = "auto://127.0.0.1:4322";
             return settings;
+        }
+
+        private static void ReloadSkinSettings()
+        {
+            // Setup everything that uses settings from the current skin
+            ContentLocator.Current.ChangeSkin(ActiveSettings.Skin);
+            ControllerBuilder.Current.SetControllerFactory(new MEFControllerFactory(new HttpContextWrapper(HttpContext.Current)));
+            foreach (var engine in ViewEngines.Engines.OfType<SkinnableViewEngine>())
+            {
+                engine.UpdateActiveSkin();
+            }
         }
 
         private static void SaveSettings(SettingModel settings)
