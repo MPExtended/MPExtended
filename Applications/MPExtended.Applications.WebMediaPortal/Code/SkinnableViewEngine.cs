@@ -61,38 +61,26 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 "vbhtml" 
             };
 
-            MasterLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
+            List<string> directories = new List<string>();
+            directories.Add("~/Skins/" + skin);
+            foreach (var plugin in Plugins.ListPlugins())
+            {
+                directories.Add("~/Plugins/" + plugin + "/Views");
+            }
+            directories.Add("~/Views");
 
-            PartialViewLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
+            List<string> files = new List<string>();
+            foreach (var dir in directories)
+            {
+                files.Add(dir + "/{1}/{0}.cshtml");
+                files.Add(dir + "/{1}/{0}.vbhtml");
+                files.Add(dir + "/Shared/{0}.cshtml");
+                files.Add(dir + "/Shared/{0}.vbhtml");
+            }
 
-            ViewLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
+            MasterLocationFormats = files.ToArray();
+            PartialViewLocationFormats = files.ToArray();
+            ViewLocationFormats = files.ToArray();
         }
 
         public static string GetCurrentSkinDirectory(HttpContextBase context)

@@ -42,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         public static string[] ListPlugins()
         {
             return ListPluginDirectories()
-                .Select(x => Path.GetDirectoryName(x))
+                .Select(x => Path.GetFileName(x))
                 .ToArray();
         }
     }
