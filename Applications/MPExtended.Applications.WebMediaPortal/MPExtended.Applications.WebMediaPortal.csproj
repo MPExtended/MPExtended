@@ -92,6 +92,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaInfoFormatter.cs" />
     <Compile Include="Code\MediaName.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
-    <Compile Include="Mvc\PathMapper.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
     <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />

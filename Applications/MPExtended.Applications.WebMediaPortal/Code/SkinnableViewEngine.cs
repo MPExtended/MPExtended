@@ -21,74 +21,36 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     internal class SkinnableViewEngine : RazorViewEngine
     {
-        private string _skin;
-        public string Skin
+        public SkinnableViewEngine()
         {
-            get
-            {
-                return _skin;
-            }
-
-            set
-            {
-                _skin = value;
-                SetSkin(_skin);
-            }
+            UpdateActiveSkin();
         }
 
-        public string BaseDirectory
-        {
-            get
-            {
-                return "~/Skins/" + Skin;
-            }
-        }
-
-        public SkinnableViewEngine(string skin)
-        {
-            this.Skin = skin;
-        }
-
-        protected void SetSkin(string skin)
+        public void UpdateActiveSkin()
         {
             FileExtensions = new string[] { 
                 "cshtml", 
                 "vbhtml" 
             };
 
-            List<string> directories = new List<string>();
-            directories.Add("~/Skins/" + skin);
-            foreach (var plugin in Plugins.ListPlugins())
-            {
-                directories.Add("~/Plugins/" + plugin + "/Views");
-            }
-            directories.Add("~/Views");
-
             List<string> files = new List<string>();
-            foreach (var dir in directories)
+            foreach (var directory in ContentLocator.Current.ViewDirectories)
             {
-                files.Add(dir + "/{1}/{0}.cshtml");
-                files.Add(dir + "/{1}/{0}.vbhtml");
-                files.Add(dir + "/Shared/{0}.cshtml");
-                files.Add(dir + "/Shared/{0}.vbhtml");
+                files.Add(directory + "/{1}/{0}.cshtml");
+                files.Add(directory + "/{1}/{0}.vbhtml");
+                files.Add(directory + "/Shared/{0}.cshtml");
+                files.Add(directory + "/Shared/{0}.vbhtml");
             }
 
             MasterLocationFormats = files.ToArray();
             PartialViewLocationFormats = files.ToArray();
             ViewLocationFormats = files.ToArray();
-        }
-
-        public static string GetCurrentSkinDirectory(HttpContextBase context)
-        {
-            var relativePath = ViewEngines.Engines.OfType<SkinnableViewEngine>()
-                .Select(sve => sve.BaseDirectory)
-                .FirstOrDefault(sp => Directory.Exists(context.Server.MapPath(sp)));
-            return relativePath == null ? "~/Views" : relativePath;
         }
     }
 }

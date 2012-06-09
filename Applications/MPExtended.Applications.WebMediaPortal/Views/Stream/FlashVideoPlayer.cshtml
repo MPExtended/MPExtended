@@ -46,9 +46,9 @@
         'width': '@Model.Size.Width',
         'height': '@Model.Size.Height',
         'bufferlength': '15', 
-        'skin': '@Url.SkinContent("jwplayer/slim.zip")',
+        'skin': '@Url.ContentLink("jwplayer/slim.zip")',
         'modes': [ 
-           { type: "flash", src: "@Url.SkinContent("jwplayer/player.swf")" } 
+           { type: "flash", src: "@Url.ContentLink("jwplayer/player.swf")" } 
         ]
     }).onTime(function (callback) {
         var pos = parseFloat(startPos) + callback.position;

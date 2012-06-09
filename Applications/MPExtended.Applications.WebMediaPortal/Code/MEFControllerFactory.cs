@@ -24,6 +24,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
@@ -44,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             // allow skins to include binaries too (though they shouldn't)
-            string currentSkinDirectory = Path.Combine(context.Server.MapPath(SkinnableViewEngine.GetCurrentSkinDirectory(context)), "bin");
+            string currentSkinDirectory = context.Server.MapPath(String.Format("~/Skins/{0}/bin", Settings.ActiveSettings.Skin));
             if (Directory.Exists(currentSkinDirectory))
                 catalog.Catalogs.Add(new DirectoryCatalog(currentSkinDirectory));
 

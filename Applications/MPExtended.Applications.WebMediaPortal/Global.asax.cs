@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 
@@ -58,18 +59,17 @@ namespace MPExtended.Applications.WebMediaPortal
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            // use our custom controller factory
-            ControllerBuilder.Current.SetControllerFactory(new MEFControllerFactory(new HttpContextWrapper(Context)));
+            // initialize settings skin-override mechanism
+            ContentLocator.Current = new ContentLocator(Context.Server, null);
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new SkinnableViewEngine());
+            Settings.LoadSettings();
 
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             Log.Info("WebMediaPortal version {0} starting with MAS {1} and TAS {2}",
                 VersionUtil.GetFullVersionString(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             MPEServices.LogServiceVersions();
-
-            // set view engine
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new SkinnableViewEngine(Settings.ActiveSettings.Skin));
 
             // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
             Configuration.EnableChangeWatching();

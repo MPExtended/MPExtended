@@ -17,44 +17,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Applications.WebMediaPortal.Code;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
-        public static string VirtualViewContent(this UrlHelper helper, string viewPath)
+        public static string ContentLink(this UrlHelper helper, string contentPath)
         {
-            return PathMapper.GetSkinVirtualViewPath(helper.RequestContext.HttpContext, viewPath);
+            return helper.Content(ContentLocator.Current.LocateContent(contentPath));
         }
 
-        public static string ViewContent(this UrlHelper helper, string viewPath)
+        public static string ViewContentLink(this UrlHelper helper, string viewContentPath)
         {
-            return helper.Content(PathMapper.GetSkinVirtualViewPath(helper.RequestContext.HttpContext, viewPath));
-        }
-
-        public static string GenerateViewContentUrl(string viewPath, HttpContextBase httpContext)
-        {
-            return UrlHelper.GenerateContentUrl(PathMapper.GetSkinVirtualViewPath(httpContext, viewPath), httpContext);
-        }
-
-        public static string VirtualSkinContent(this UrlHelper helper, string contentPath)
-        {
-            return PathMapper.GetSkinVirtualContentPath(helper.RequestContext.HttpContext, contentPath);
-        }
-
-        public static string SkinContent(this UrlHelper helper, string contentPath)
-        {
-            return helper.Content(PathMapper.GetSkinVirtualContentPath(helper.RequestContext.HttpContext, contentPath));
-        }
-
-        public static string GenerateSkinContentUrl(string viewPath, HttpContextBase httpContext)
-        {
-            return UrlHelper.GenerateContentUrl(PathMapper.GetSkinVirtualContentPath(httpContext, viewPath), httpContext);
+            return helper.Content(ContentLocator.Current.LocateView(viewContentPath));
         }
     }
 }

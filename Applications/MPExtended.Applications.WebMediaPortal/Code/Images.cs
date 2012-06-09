@@ -46,7 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     }
                     else
                     {
-                        string virtualPath = PathMapper.GetSkinVirtualContentPath(new HttpContextWrapper(HttpContext.Current), defaultFile);
+                        string virtualPath = ContentLocator.Current.LocateContent(defaultFile);
                         string physicalPath = HttpContext.Current.Server.MapPath(virtualPath);
                         return new FilePathResult(physicalPath, MIME.GetFromFilename(physicalPath, "application/octet-stream"));
                     }
