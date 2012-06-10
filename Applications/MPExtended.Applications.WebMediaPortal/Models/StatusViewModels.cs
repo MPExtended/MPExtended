@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Management;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -30,10 +31,12 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         public IEnumerable<TVCardViewModel> Cards { get; set; }
         public IEnumerable<WebDiskSpaceInformation> DiskInformation { get; set; }
+        public long TotalMemoryMegaBytes { get; set; }
 
         public StatusViewModel(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards, IEnumerable<WebDiskSpaceInformation> recordingDiskInfo)
         {
             DiskInformation = recordingDiskInfo;
+            TotalMemoryMegaBytes = GetTotalMemoryBytes() / 1024 / 1024;
 
             // cards
             Cards = new List<TVCardViewModel>();
@@ -50,6 +53,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     ((List<TVCardViewModel>)Cards).Add(new TVCardViewModel(card));
                 }
             }
+        }
+
+        private static long GetTotalMemoryBytes()
+        {
+            ObjectQuery objectQuery = new ObjectQuery("SELECT TotalPhysicalMemory from Win32_ComputerSystem");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(objectQuery);
+            var enumerator = searcher.Get().GetEnumerator();
+            if (!enumerator.MoveNext()) return 0;
+            return Convert.ToInt64(enumerator.Current["TotalPhysicalMemory"]);
         }
     }
 

@@ -31,13 +31,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     public class StatusController : BaseController
     {
         private static PerformanceCounter cpuCounter = new PerformanceCounter();
+        private static PerformanceCounter memoryCounter = new PerformanceCounter();
 
         static StatusController()
         {
-            cpuCounter = new PerformanceCounter();
             cpuCounter.CategoryName = "Processor";
             cpuCounter.CounterName = "% Processor Time";
-            cpuCounter.InstanceName = "_Total"; ;
+            cpuCounter.InstanceName = "_Total";
+            memoryCounter.CategoryName = "Memory";
+            memoryCounter.CounterName = "Available MBytes";
         }
 
         //
@@ -73,7 +75,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             var returnObject = new
             {
-                CPU = cpuCounter.NextValue()
+                CPU = cpuCounter.NextValue(),
+                Memory = memoryCounter.NextValue()
             };
             return Json(returnObject, JsonRequestBehavior.AllowGet);
         } 

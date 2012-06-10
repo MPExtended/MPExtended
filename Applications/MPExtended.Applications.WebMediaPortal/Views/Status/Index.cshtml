@@ -77,10 +77,12 @@
 <br />
 
 @Html.Action("CurrentSchedules", "Home")
+<br />
 
 <h2>System status</h2>
 <ul>
     <li>Current CPU usage: <span id="cpuUsage">0</span>%</li>
+    <li>Current memory usage: <span id="memoryUsage">0</span>MB / @Model.TotalMemoryMegaBytes MB</li>
 </ul>
 
 <script type="text/javascript">
@@ -92,6 +94,7 @@ $(function () {
             cache: false,
             success: function (result) {
                 $("#cpuUsage").html(Math.round(result.CPU));
+                $("#memoryUsage").html(Math.round(result.Memory));
             }
         });
     };
