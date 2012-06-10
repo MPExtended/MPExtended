@@ -299,7 +299,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.CustomTranscoderData(identifier, action, parameters);
         }
 
-        public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition)
+        public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition, int? idleTimeout)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -308,11 +308,22 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
+            // calculate timeout, which is by default 5 minutes for direct streaming and 5 seconds for transcoded streams
+            var profile = Configuration.Streaming.Transcoders.FirstOrDefault(x => x.Name == profileName);
+            if(profile == null)
+            {
+                Log.Warn("Tried DoStream with non-existing profile {0}", profileName);
+                return Stream.Null;
+            }
+            int timeout = profile.TranscoderImplementationClass == typeof(Transcoders.Direct).FullName ? 5 * 60 : 5;
+            if (idleTimeout.HasValue)
+                timeout = idleTimeout.Value;
+
             // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
             string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
-            Log.Debug("DoStream: using identifier {0}", identifier);
+            Log.Debug("DoStream: using identifier {0} and timeout={1}", identifier, timeout);
 
-            if (!InitStream(type, provider, itemId, clientDescription, identifier, 2))
+            if (!InitStream(type, provider, itemId, clientDescription, identifier, timeout))
             {
                 Log.Info("DoStream: InitStream() failed");
                 FinishStream(identifier);
@@ -326,7 +337,7 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
-            Log.Trace("DoStream: succeeded, returning stream");
+            Log.Debug("DoStream: succeeded, returning stream");
             return RetrieveStream(identifier);
         }
         #endregion
