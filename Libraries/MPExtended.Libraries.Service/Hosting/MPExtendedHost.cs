@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -89,6 +90,9 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Error("Zeroconf publish failed", ex);
                     }
                 });
+
+                // log MP version details
+                Mediaportal.LogVersionDetails();
 
                 // finally finish the startup
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);

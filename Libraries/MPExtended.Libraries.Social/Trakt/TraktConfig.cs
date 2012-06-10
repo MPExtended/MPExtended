@@ -40,7 +40,7 @@ namespace MPExtended.Libraries.Social.Trakt
         { 
             get 
             {
-                return VersionUtil.GetCompleteMediaPortalVersion().ToString();
+                return VersionUtil.GetMediaPortalVersionString();
             } 
         }
 
