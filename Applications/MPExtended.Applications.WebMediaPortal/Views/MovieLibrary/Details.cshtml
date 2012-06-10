@@ -1,9 +1,9 @@
-﻿@model MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieDetailed
+﻿@model MPExtended.Applications.WebMediaPortal.Models.MovieViewModel
 @{
-    ViewBag.Title = Model.Title;
+    ViewBag.Title = Model.Movie.Title;
 }
 
-<h2>@Model.Title</h2>
+<h2>@Model.Movie.Title</h2>
 
 <div class="imageColumn">
     <img src="@Url.Action("Cover", new { movie = @Model.Id, width = 300 })" alt="" />
@@ -11,15 +11,15 @@
 
 <div class="dataColumn">
     <ul>
-        <li>@Model.Year</li>
-        <li>@String.Join(", ", Model.Genres)</li>
-        <li>@UIStrings.Rating: @Model.Rating.ToString("##.0")</li>
-        <li>@ViewBag.Quality</li>
-        <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = Model.Type }, new { })</li>
+        <li>@Model.Movie.Year</li>
+        <li>@String.Join(", ", Model.Movie.Genres)</li>
+        <li>@UIStrings.Rating: @Model.Movie.Rating.ToString("##.0")</li>
+        <li>@Model.Quality</li>
+        <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = Model.Movie.Type }, new { })</li>
         <li>@Html.ActionLink(UIStrings.Play, "Play", new { movie = Model.Id })</li>
     </ul>
 </div>
 
 <div class="textColumn">
-    @Model.Summary
+    @Model.Movie.Summary
 </div>

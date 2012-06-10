@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MPExtended.Services.MediaAccessService.Interfaces.Movie.WebMovieDetailed>
+﻿@model IEnumerable<MPExtended.Applications.WebMediaPortal.Models.MovieViewModel>
 @{
     ViewBag.Title = UIStrings.Movies;
 }
@@ -9,20 +9,19 @@
 {
     <a href="@Url.Action(UIStrings.Details, "MovieLibrary", new { movie = movie.Id })">
         <div class="movie">
-            <img alt="@movie.Title Cover" height="138" width="100" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 100 })" />
+            <img alt="@movie.Movie.Title Cover" height="138" width="100" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 100 })" />
             <div class="movieDetails" style="float: right">
                 <div class="movieControls">
                 <a href="@Url.Action("Play", "MovieLibrary", new { movie = movie.Id })">
                     <img height="16" width="12" src="@Url.ContentLink("Images/btnPlay.png")" />
                 </a>
                 </div>
-                <p style="margin: 2px;">@movie.Genres.FirstOrDefault()</p>
-                <p  style="margin: 2px;">@movie.Runtime min.</p>
-
+                <p style="margin: 2px;">@movie.Movie.Genres.FirstOrDefault()</p>
+                <p style="margin: 2px;">@movie.Movie.Runtime min.</p>
             </div>
             <p style="float: none"></p>
             <p style="float: left;">
-                @movie.Title
+                @movie.Movie.Title
             </p>
         </div>
     </a>

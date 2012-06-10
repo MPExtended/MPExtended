@@ -21,6 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -42,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 movieList = movieList.Where(x => x.Genres.Contains(genre));
             }
 
-            return View(movieList);
+            return View(movieList.Select(x => new MovieViewModel(x)));
         }
 
         public ActionResult Details(string movie)
@@ -50,21 +51,24 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
             if (fullMovie == null)
                 return HttpNotFound();
+            return View(new MovieViewModel(fullMovie));
+        }
 
-            var fileInfo = MPEServices.MAS.GetFileInfo(fullMovie.PID, WebMediaType.Movie, WebFileType.Content, fullMovie.Id, 0);
-            var mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.Movie, fullMovie.PID, fullMovie.Id);
-            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
-            return View(fullMovie);
+        [HttpGet]
+        public ActionResult MovieInfo(string movie)
+        {
+            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
+            if (fullMovie == null)
+                return HttpNotFound();
+            return Json(new MovieViewModel(fullMovie), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Play(string movie)
         {
             var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie != null)
-            {
-                return View(fullMovie);
-            }
-            return null;
+            if (fullMovie == null)
+                return HttpNotFound();
+            return View(new MovieViewModel(fullMovie));
         }
 
         public ActionResult Cover(string movie, int width = 0, int height = 0)

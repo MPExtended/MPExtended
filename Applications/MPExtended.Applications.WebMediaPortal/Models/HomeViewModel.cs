@@ -38,15 +38,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Availability = availabilityModel;
         }
 
-        public IEnumerable<WebMovieDetailed> GetLastAddedMovies(int count = 4)
+        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count = 4)
         {
             try
             {
-                return MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: SortBy.DateAdded, order: OrderBy.Desc);
+                return MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: SortBy.DateAdded, order: OrderBy.Desc)
+                    .Select(movie => new MovieViewModel(movie));
             }
             catch (Exception)
             {
-                return new List<WebMovieDetailed>();
+                return new List<MovieViewModel>();
             }
         }
 
