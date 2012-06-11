@@ -55,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        private static long GetTotalMemoryBytes()
+        internal static long GetTotalMemoryBytes()
         {
             ObjectQuery objectQuery = new ObjectQuery("SELECT TotalPhysicalMemory from Win32_ComputerSystem");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(objectQuery);

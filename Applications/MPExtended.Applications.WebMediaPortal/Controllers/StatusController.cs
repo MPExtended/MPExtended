@@ -32,12 +32,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         private static PerformanceCounter cpuCounter = new PerformanceCounter();
         private static PerformanceCounter memoryCounter = new PerformanceCounter();
+        private static float totalMemory;
 
         static StatusController()
         {
             cpuCounter.CategoryName = "Processor";
             cpuCounter.CounterName = "% Processor Time";
             cpuCounter.InstanceName = "_Total";
+            totalMemory = StatusViewModel.GetTotalMemoryBytes() / 1024 / 1024;
             memoryCounter.CategoryName = "Memory";
             memoryCounter.CounterName = "Available MBytes";
         }
@@ -76,7 +78,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var returnObject = new
             {
                 CPU = cpuCounter.NextValue(),
-                Memory = memoryCounter.NextValue()
+                Memory = totalMemory - memoryCounter.NextValue()
             };
             return Json(returnObject, JsonRequestBehavior.AllowGet);
         } 
