@@ -224,9 +224,17 @@ namespace MPExtended.Services.StreamingService
                 {
                     Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
                     var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
-                    Log.Debug("Timeshifting started!");
-                    _timeshiftings[identifier] = card;
-                    itemId = card.TimeShiftFileName;
+                    if (card == null)
+                    {
+                        Log.Error("Failed to start timeshifting for stream with identifier {0}", identifier);
+                        return false;
+                    }
+                    else
+                    {
+                        Log.Debug("Timeshifting started!");
+                        _timeshiftings[identifier] = card;
+                        itemId = card.TimeShiftFileName;
+                    }
                 }
             }
 
