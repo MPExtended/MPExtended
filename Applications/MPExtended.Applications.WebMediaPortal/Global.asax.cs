@@ -18,10 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Controllers;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
@@ -73,6 +75,35 @@ namespace MPExtended.Applications.WebMediaPortal
 
             // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
             Configuration.EnableChangeWatching();
+        }
+
+        protected void Application_Error()
+        {
+            // get exception and reset response
+            var exception = Server.GetLastError();
+            var httpException = exception as HttpException;
+            Response.Clear();
+            Server.ClearError();
+
+            // generate routing for new request context to the ErrorController
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = "General";
+            routeData.Values["exception"] = exception;
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            // specific output for HTTP errors
+            if (httpException != null)
+            {
+                Response.StatusCode = httpException.GetHttpCode();
+                if (Response.StatusCode == (int)HttpStatusCode.NotFound)
+                    routeData.Values["action"] = "Http404";
+            }
+
+            // start new controller
+            IController errorController = new ErrorController();
+            var rc = new RequestContext(new HttpContextWrapper(Context), routeData);
+            errorController.Execute(rc);
         }
     }
 }

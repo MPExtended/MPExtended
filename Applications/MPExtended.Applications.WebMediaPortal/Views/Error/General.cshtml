@@ -1,0 +1,28 @@
+﻿@model Exception
+@{
+    ViewBag.Title = UIStrings.Error;
+}
+
+<h2>@UIStrings.SorryAnErrorOccurred</h2>
+
+<p>
+@UIStrings.ErrorPageText
+</p>
+
+<ul>
+<li>WebMediaPortal version @ViewBag.FullVersion.</li>
+<li>Request: @ViewBag.Request</li>
+</ul>
+<br />
+
+@{
+    var exception = Model;
+    while (exception != null)
+    {
+        <p>@exception.Message</p>
+        <p>
+            <pre>@exception.StackTrace</pre>
+        </p>
+        exception = exception.InnerException;
+    }
+}

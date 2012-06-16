@@ -413,4 +413,15 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>Page title on error page</comment>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Page not found</value>
+    <comment>Page title on 404 page</comment>
+  </data>
+  <data name="SorryPageNotFound" xml:space="preserve">
+    <value>Sorry, the page you requested doesn't exist. </value>
+  </data>
 </root>

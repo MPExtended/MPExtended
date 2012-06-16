@@ -19,15 +19,15 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Resources;
-using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MPExtended.Libraries.Service;
-using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Strings;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
@@ -53,33 +53,15 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             LoadLanguage(requestContext.HttpContext.Request);
         }
 
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.ExceptionHandled || filterContext.IsChildAction)
-            {
-                return;
-            }
-
-            // log the error
-            Log.Warn(String.Format("Error happened in controller body during request {0}", filterContext.HttpContext.Request.RawUrl), filterContext.Exception);
-
-            // return exception page
-            filterContext.Result = new ViewResult
-            {
-                ViewName = "~/Views/Shared/Error.cshtml",
-                ViewData = new ViewDataDictionary()
-                {
-                    Model = filterContext.Exception
-                },
-            };
-            (filterContext.Result as ViewResult).ViewBag.Request = filterContext.HttpContext.Request.Url;
-            SetViewBagProperties((filterContext.Result as ViewResult).ViewBag);
-            filterContext.ExceptionHandled = true;
-        }
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             SetViewBagProperties(ViewBag);
+        }
+
+        // Maybe this should be done in Web.config instead
+        protected override HttpNotFoundResult HttpNotFound(string statusDescription)
+        {
+            throw new HttpException((int)HttpStatusCode.NotFound, statusDescription);
         }
 
         private void SetViewBagProperties(dynamic bag)
