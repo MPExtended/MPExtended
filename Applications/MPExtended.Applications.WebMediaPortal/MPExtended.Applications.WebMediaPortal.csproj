@@ -128,7 +128,6 @@
     <Compile Include="Controllers\MovieLibraryController.cs" />
     <Compile Include="Controllers\MusicLibraryController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\StreamController.cs" />
     <Compile Include="Controllers\TelevisionController.cs" />
@@ -267,12 +266,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Picture\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Picture\Browse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Television\TVGuide.cshtml" />
