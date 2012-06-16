@@ -51,12 +51,14 @@ namespace MPExtended.Libraries.Service.Logging
 
         public void LogLine(LogLevel level, string text, Exception ex)
         {
-            LogLine(level, text);
+            string levelText = Enum.GetName(typeof(LogLevel), level).ToUpperInvariant();
             foreach (var dest in destinations)
             {
                 if (level >= dest.MinimumLevel)
                 {
+                    dest.Output.WriteLine(String.Format(dest.LogFormat, DateTime.Now, Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, levelText) + text);
                     dest.Output.WriteLine(ex.ToString());
+                    dest.Output.Flush();
                 }
             }
         }
