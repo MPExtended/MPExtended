@@ -1,18 +1,18 @@
-﻿@model MPExtended.Services.MediaAccessService.Interfaces.TVShow.WebTVEpisodeDetailed
+﻿@model MPExtended.Applications.WebMediaPortal.Models.TVEpisodeViewModel
 @{
-    ViewBag.Title = @Model.Title;
+    ViewBag.Title = @Model.Episode.Title;
 }
 
-<h2>@Model.Title</h2>
+<h2>@Model.Episode.Title</h2>
 
 <div class="imageColumn">
-    <img src="@Url.Action("EpisodeImage", new { episode = @Model.Id, width = 300 })" alt="" />
+    <img src="@Url.Action("EpisodeImage", new { episode = @Model.Episode.Id, width = 300 })" alt="" />
 </div>
 <div class="dataColumn">
     <ul>
         <li>@UIStrings.WrittenBy
             <ul>
-                @foreach (string writer in Model.Writers)
+                @foreach (string writer in Model.Episode.Writers)
                 {
                     <li>@writer</li>
                 }
@@ -21,23 +21,23 @@
 
         <li>@UIStrings.GuestStarring
             <ul>
-                @foreach (string guestStar in Model.GuestStars)
+                @foreach (string guestStar in Model.Episode.GuestStars)
                 {
                     <li>@guestStar</li>
                 }
             </ul>        
         </li>
 
-        <li>@String.Format(UIStrings.Aired, Model.FirstAired.ToShortDateString())</li>
+        <li>@String.Format(UIStrings.Aired, Model.Episode.FirstAired.ToShortDateString())</li>
 
         @if(ViewBag.ShowPlay) {
-            <li>@ViewBag.Quality</li>
-            <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = Model.Type }, new { })</li>
-            <li>@Html.ActionLink(UIStrings.Play, "Play", new { episode = Model.Id })</li>
+            <li>@Model.FullQuality</li>
+            <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Episode.Id, type = Model.Episode.Type }, new { })</li>
+            <li>@Html.ActionLink(UIStrings.Play, "Play", new { episode = Model.Episode.Id })</li>
         }
     </ul>
 </div>
 
 <div class="textColumn">
-    @Model.Summary
+    @Model.Episode.Summary
 </div>

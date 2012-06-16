@@ -33,49 +33,22 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     [ServiceAuthorize]
     public class TVShowsLibraryController : BaseController
     {
+        // Series
         public ActionResult Index(string genre = null)
         {
             IEnumerable<WebTVShowDetailed> series = MPEServices.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
             if (!String.IsNullOrEmpty(genre))
-            {
                 series = series.Where(x => x.Genres.Contains(genre));
-            }
 
             return View(series);
         }
 
-        public ActionResult Seasons(string show)
+        public ActionResult ShowInfo(string show)
         {
-            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, show);
-            var seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Settings.ActiveSettings.TVShowProvider, show, SortBy.TVSeasonNumber, OrderBy.Asc);
-            return View(new TVShowViewModel()
-            {
-                Show = showObj,
-                Seasons = seasons
-            });
-        }
-
-        public ActionResult Episodes(string season)
-        {
-            var seasonObj = MPEServices.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, season);
-            var showObj = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, seasonObj.ShowId);
-            var episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Settings.ActiveSettings.TVShowProvider, season, SortBy.TVEpisodeNumber, OrderBy.Asc);
-            return View(new TVSeasonViewModel()
-            {
-                Season = seasonObj,
-                Show = showObj,
-                Episodes = episodes
-            });
-        }
-
-        public ActionResult Image(string season, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height, "Images/default/tvseason-banner.png");
-        }
-
-        public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height, "Images/default/tvepisode-banner.png");
+            var model = new TVShowViewModel(show);
+            if (model.Show == null)
+                return HttpNotFound();
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
@@ -93,32 +66,69 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return Images.ReturnFromService(WebStreamMediaType.TVShow, show, WebArtworkType.Banner, width, height, "Images/default/tvshow-banner.png");
         }
 
-        public ActionResult Details(string episode)
+        // Seasons
+        public ActionResult Seasons(string show)
         {
-            var fullEpisode = MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
-            if (fullEpisode == null)
+            var model = new TVShowViewModel(show);
+            if (model.Show == null)
                 return HttpNotFound();
 
-            var fileInfo = MPEServices.MAS.GetFileInfo(fullEpisode.PID, WebMediaType.TVEpisode, WebFileType.Content, fullEpisode.Id, 0);
-            var mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.TVEpisode, fullEpisode.PID, fullEpisode.Id);
-            ViewBag.ShowPlay = fullEpisode.Path != null;
-            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
-            return View(fullEpisode);
+            return View(model);
+        }
+
+        public ActionResult SeasonInfo(string season)
+        {
+            var model = new TVSeasonViewModel(season);
+            if (model.Season == null)
+                return HttpNotFound();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Image(string season, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.TVSeason, season, WebArtworkType.Banner, width, height, "Images/default/tvseason-banner.png");
+        }
+
+        // Episodes
+        public ActionResult Episodes(string season)
+        {
+            var model = new TVSeasonViewModel(season);
+            if (model.Season == null)
+                return HttpNotFound();
+
+            return View(model);
+        }
+
+        public ActionResult Details(string episode)
+        {
+            var model = new TVEpisodeViewModel(episode);
+            if (model.Episode == null)
+                return HttpNotFound();
+
+            ViewBag.ShowPlay = model.Episode.Path.Count > 0;
+            return View(model);
+        }
+
+        public ActionResult EpisodeInfo(string episode)
+        {
+            var model = new TVEpisodeViewModel(episode);
+            if (model.Episode == null)
+                return HttpNotFound();
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Play(string episode)
         {
-            var fullEpisode = MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episode);
-            if (fullEpisode != null)
-            {
-                return View(new TVEpisodeViewModel()
-                {
-                    Episode = fullEpisode,
-                    Show = MPEServices.MAS.GetTVShowDetailedById(fullEpisode.PID, fullEpisode.ShowId),
-                    Season = MPEServices.MAS.GetTVSeasonDetailedById(fullEpisode.PID, fullEpisode.SeasonId)
-                });
-            }
-            return null;
+            var model = new TVEpisodeViewModel(episode);
+            if (model.Episode == null)
+                return HttpNotFound();
+
+            return View(model);
+        }
+
+        public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebStreamMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height, "Images/default/tvepisode-banner.png");
         }
     }
 }
