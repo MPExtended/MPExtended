@@ -48,27 +48,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Details(string movie)
         {
-            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie == null)
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
                 return HttpNotFound();
-            return View(new MovieViewModel(fullMovie));
+            return View(model);
         }
 
         [HttpGet]
         public ActionResult MovieInfo(string movie)
         {
-            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie == null)
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
                 return HttpNotFound();
-            return Json(new MovieViewModel(fullMovie), JsonRequestBehavior.AllowGet);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Play(string movie)
         {
-            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie == null)
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
                 return HttpNotFound();
-            return View(new MovieViewModel(fullMovie));
+            return View(model);
         }
 
         public ActionResult Cover(string movie, int width = 0, int height = 0)

@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -87,8 +88,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
 
         public MovieViewModel(string id)
-            : this (MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id))
         {
+            try
+            {
+                Movie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id);
+                Id = Movie.Id;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to load movie {0}", id), ex);
+            }
         }
     }
 }
