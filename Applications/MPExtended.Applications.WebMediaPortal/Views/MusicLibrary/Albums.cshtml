@@ -1,9 +1,8 @@
-﻿@Html.Assets().AddViewStylesheet("MusicLibrary/Albums.css")
-
-@model MPExtended.Applications.WebMediaPortal.Models.ArtistViewModel
+﻿@model ArtistViewModel
 @{
 	ViewBag.Title = Model.Artist.Title;
 }
+@Html.Assets().AddViewStylesheet("MusicLibrary/Albums.css")
 
 <h3>@String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title)</h3>
 
