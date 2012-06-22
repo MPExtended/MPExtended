@@ -5,12 +5,13 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, IMusicTrackNumberSortable
+    public class WebMusicTrackBasic : WebMediaItem, ITitleSortable, IYearSortable, IGenreSortable, IRatingSortable, IMusicTrackNumberSortable, IArtwork
     {
         public WebMusicTrackBasic()
         {
             ArtistId = new List<string>();
             Genres = new List<string>();
+            Artwork = new List<WebArtwork>();
         }
 
         public IList<string> Artist { get; set; }
@@ -23,6 +24,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public int Duration { get; set; }
         public float Rating { get; set; }
         public IList<string> Genres { get; set; }
+        public IList<WebArtwork> Artwork { get; set; }
 
         public override WebMediaType Type
         {

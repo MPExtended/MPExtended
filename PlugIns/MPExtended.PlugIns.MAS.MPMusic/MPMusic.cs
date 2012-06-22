@@ -55,6 +55,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
         {
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
+            Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>> artwork = new Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>>();
 
             string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
                          "FROM tracks t " +
@@ -80,6 +81,36 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     WebMusicTrackDetailed det = item as WebMusicTrackDetailed;
                     det.Artists = det.ArtistId.Where(x => artists.ContainsKey(x)).Select(x => artists[x]).ToList();
                 }
+
+                // for now, use album artwork also for songs
+                var tuple = new Tuple<string, string>(item.Artist.Distinct().First(), item.Album);
+                if (!artwork.ContainsKey(tuple))
+                {
+                    artwork[tuple] = new List<WebArtworkDetailed>();
+                    int i = 0;
+                    var files = new string[] {
+                        PathUtil.StripInvalidCharacters(item.Artist.Distinct().First() + "-" + item.Album + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(item.Artist.Distinct().First() + "-" + item.Album + ".jpg", '_')
+                    }
+                        .Select(x => Path.Combine(configuration["cover"], "Albums", x))
+                        .Where(x => File.Exists(x))
+                        .Distinct();
+                    foreach (var path in files)
+                    {
+                        artwork[tuple].Add(new WebArtworkDetailed()
+                        {
+                            Type = WebFileType.Cover,
+                            Offset = i++,
+                            Path = path,
+                            Rating = 1,
+                            Id = path.GetHashCode().ToString(),
+                            Filetype = Path.GetExtension(path).Substring(1)
+                        });
+                    }
+                }
+
+                // why isn't there an IList<T>.AddRange() method?
+                (item.Artwork as List<WebArtwork>).AddRange(artwork[tuple]);
                 return item;
             });
         }
