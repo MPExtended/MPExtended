@@ -74,6 +74,23 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
+        private bool IsUserAuthenticated()
+        {
+            if (PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
+                return true;
+
+            // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
+            // for people to authenticate from scripts etc. 
+            if (Request.Headers["Authorization"] != null && Request.Headers["Authorization"].StartsWith("Basic "))
+            {
+                var content = Request.Headers["Authorization"].Substring(6);
+                var details = Encoding.ASCII.GetString(Convert.FromBase64String(content)).Split(':');
+                return Configuration.Services.Users.Any(x => x.Username == details[0] && x.ValidatePassword(details[1]));
+            }
+
+            return false;
+        }
+
         [ServiceAuthorize]
         public ActionResult Download(WebStreamMediaType type, string item)
         {
@@ -118,9 +135,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
-            if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
+            if (!IsUserAuthenticated())
             {
-                Log.Warn("User {0} (host {1}) requested a stream but hasn't opened a player page - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
+                Log.Warn("User {0} (host {1}) requested a stream but isn't authenticated - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
 
