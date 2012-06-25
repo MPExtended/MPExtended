@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SettingModel xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/MPExtended.Applications.WebMediaPortal.Models">
   <DefaultAudioProfile>MP3</DefaultAudioProfile>
-  <DefaultGroup i:nil="true" />
+  <DefaultGroup>1</DefaultGroup>
+  <DefaultLanguage i:nil="true" />
   <DefaultMediaProfile>Flash LQ</DefaultMediaProfile>
   <DefaultTVProfile>Flash LQ</DefaultTVProfile>
   <EnableDeinterlace>false</EnableDeinterlace>
   <FileSystemProvider i:nil="true" />
   <MASUrl>auto://127.0.0.1:4322</MASUrl>
-  <MovieProvider i:nil="true" />
-  <MusicProvider i:nil="true" />
+  <MovieProvider>3</MovieProvider>
+  <MusicProvider>4</MusicProvider>
   <PicturesProvider i:nil="true" />
-  <Skin>default</Skin>
+  <Skin>aredon</Skin>
   <StreamType>DirectWhenPossible</StreamType>
   <TASUrl>auto://127.0.0.1:4322</TASUrl>
-  <TVShowProvider i:nil="true" />
+  <TVShowProvider>6</TVShowProvider>
 </SettingModel>

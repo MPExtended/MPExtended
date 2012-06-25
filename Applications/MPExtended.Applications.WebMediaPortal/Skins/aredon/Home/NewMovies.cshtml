@@ -9,7 +9,7 @@
             <div class="column">
                 <div class="thumb_wrap">
 				    <div class="thumb_title">
-                        @Html.ActionLink(movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
+                        @Html.ActionLink(movie.Movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
                     </div>
                     <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })">
                         <img class="img" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 222 })" alt="" border="0" />
