@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Schedule/
         public ActionResult Index()
         {
-            var list = MPEServices.TAS.GetSchedules(SortBy.Name, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
+            var list = MPEServices.TAS.GetSchedules(WebSortField.Name, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
             return View(list);
         }
 

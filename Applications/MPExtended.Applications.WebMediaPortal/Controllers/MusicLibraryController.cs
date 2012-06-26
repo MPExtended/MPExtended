@@ -58,7 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Album(string album)
         {
             var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
-            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, WebSortOrder.Asc);
+            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, WebSortField.Title, WebSortOrder.Asc);
 
             return View(new AlbumViewModel()
             {

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace MPExtended.Services.Common.Interfaces
 {
     [DataContract]
-    public enum SortBy
+    public enum WebSortField
     {
         [EnumMember]
         Title = 0,

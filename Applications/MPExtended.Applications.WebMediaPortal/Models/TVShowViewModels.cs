@@ -45,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Show = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, showId);
-                Seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, SortBy.TVSeasonNumber, WebSortOrder.Asc);
+                Seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, WebSortField.TVSeasonNumber, WebSortOrder.Asc);
             }
             catch (Exception ex)
             {
@@ -73,7 +73,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 Season = MPEServices.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, seasonId);
                 Show = MPEServices.MAS.GetTVShowDetailedById(Season.PID, Season.ShowId);
-                Episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, SortBy.TVEpisodeNumber, WebSortOrder.Asc);
+                Episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, WebSortField.TVEpisodeNumber, WebSortOrder.Asc);
             }
             catch (Exception ex)
             {

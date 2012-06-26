@@ -43,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: SortBy.DateAdded, order: WebSortOrder.Desc)
+                return MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
                     .Select(movie => new MovieViewModel(movie));
             }
             catch (Exception)
@@ -56,7 +56,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, SortBy.DateAdded, WebSortOrder.Desc);
+                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -68,7 +68,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, SortBy.TVDateAired, WebSortOrder.Desc);
+                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -80,7 +80,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.TAS.GetRecordingsByRange(0, 4, SortBy.StartTime, WebSortOrder.Desc);
+                return MPEServices.TAS.GetRecordingsByRange(0, 4, WebSortField.StartTime, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -92,7 +92,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.TAS.GetScheduledRecordingsForToday(SortBy.StartTime, WebSortOrder.Desc);
+                return MPEServices.TAS.GetScheduledRecordingsForToday(WebSortField.StartTime, WebSortOrder.Desc);
             }
             catch (Exception)
             {
