@@ -97,7 +97,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [EnumMember]
         Name = 1,
         [EnumMember]
-        Channel = 2,
+        Title = 2,
         [EnumMember]
         StartTime = 3
     }
