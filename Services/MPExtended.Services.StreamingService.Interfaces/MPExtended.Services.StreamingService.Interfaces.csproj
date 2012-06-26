@@ -65,7 +65,6 @@
     <Compile Include="WebArtworkType.cs" />
     <Compile Include="WebItemSupportStatus.cs" />
     <Compile Include="WebMediaInfo.cs" />
-    <Compile Include="WebStreamMediaType.cs" />
     <Compile Include="WebResolution.cs" />
     <Compile Include="WebStreamServiceDescription.cs" />
     <Compile Include="WebStreamingSession.cs" />

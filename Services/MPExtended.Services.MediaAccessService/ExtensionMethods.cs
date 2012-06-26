@@ -24,6 +24,7 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -80,16 +81,16 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // Easy aliases for ordering and sorting
-        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
         {
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+            if (order == WebSortOrder.Asc)
                 return Queryable.OrderBy(source, keySelector);
             return Queryable.OrderByDescending(source, keySelector);
         }
 
-        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
         {
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+            if (order == WebSortOrder.Asc)
                 return Queryable.ThenBy(source, keySelector);
             return Queryable.ThenByDescending(source, keySelector);
         }
@@ -106,26 +107,26 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // Allow easy sorting from MediaAccessService.cs
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, WebSortOrder? orderInput)
         {
-            return SortMediaItemList<T>(list, sortInput, orderInput, SortBy.Title, Interfaces.OrderBy.Asc);
+            return SortMediaItemList<T>(list, sortInput, orderInput, SortBy.Title, WebSortOrder.Asc);
         }
 
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, WebSortOrder? orderInput, SortBy defaultSort)
         {
-            return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, Interfaces.OrderBy.Asc);
+            return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, WebSortOrder.Asc);
         }
 
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort, OrderBy defaultOrder)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, WebSortOrder? orderInput, SortBy defaultSort, WebSortOrder defaultOrder)
         {
             // parse arguments
-            if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
+            if (orderInput != null && orderInput != WebSortOrder.Asc && orderInput != WebSortOrder.Desc)
             {
                 Log.Warn("Invalid OrderBy value {0} given", orderInput);
                 throw new Exception("Invalid OrderBy value specified");
             }
             SortBy sort = sortInput.HasValue ? sortInput.Value : defaultSort;
-            OrderBy order = orderInput.HasValue ? orderInput.Value : defaultOrder;
+            WebSortOrder order = orderInput.HasValue ? orderInput.Value : defaultOrder;
 
             // do the actual sorting
             try

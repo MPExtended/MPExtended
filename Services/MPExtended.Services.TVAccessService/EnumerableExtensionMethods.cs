@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
@@ -34,27 +35,27 @@ namespace MPExtended.Services.TVAccessService
             return source.Skip(start).Take(count);
         }
 
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, SortOrder? order)
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
         {
-            if (order == MPExtended.Services.TVAccessService.Interfaces.SortOrder.Desc)
+            if (order == WebSortOrder.Desc)
                 return Enumerable.OrderByDescending(source, keySelector);
             return Enumerable.OrderBy(source, keySelector);
         }
 
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, SortOrder? order)
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
         {
-            if (order == MPExtended.Services.TVAccessService.Interfaces.SortOrder.Desc)
+            if (order == WebSortOrder.Desc)
                 return Enumerable.ThenByDescending(source, keySelector);
             return Enumerable.ThenBy(source, keySelector);
         }
 
-        public static IEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelBasic
+        public static IEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, SortBy? sortInput, WebSortOrder? orderInput) where T : WebChannelBasic
         {
             switch (sortInput)
             {
-                case SortField.Name:
+                case SortBy.Name:
                     return list.OrderBy(x => x.DisplayName, orderInput);
-                case SortField.User:
+                case SortBy.User:
                 default:
                     // There are two ways to order channels in MediaPortal:
                     // - The SortOrder property of a channel (SortOrder field in channel table)
@@ -63,7 +64,7 @@ namespace MPExtended.Services.TVAccessService
                     // While using the first makes more sense from a programmers POV, the user expects the second one, so let's use that
                     // one here, which means that we don't sort. 
 
-                    if (orderInput.HasValue && orderInput.Value == SortOrder.Desc)
+                    if (orderInput.HasValue && orderInput.Value == WebSortOrder.Desc)
                     {
                         return list.Reverse();
                     }
@@ -71,55 +72,55 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public static IEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebChannelGroup
+        public static IEnumerable<T> SortGroupList<T>(this IEnumerable<T> list, SortBy? sortInput, WebSortOrder? orderInput) where T : WebChannelGroup
         {
             switch (sortInput)
             {
-                case SortField.Name:
+                case SortBy.Name:
                     return list.OrderBy(x => x.GroupName, orderInput);
-                case SortField.User:
+                case SortBy.User:
                 default:
                     return list.OrderBy(x => x.SortOrder, orderInput);
             }
         }
 
-        public static IEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduleBasic
+        public static IEnumerable<T> SortScheduleList<T>(this IEnumerable<T> list, SortBy? sortInput, WebSortOrder? orderInput) where T : WebScheduleBasic
         {
             switch (sortInput)
             {
-                case SortField.Channel:
+                case SortBy.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
-                case SortField.StartTime:
+                case SortBy.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
-                case SortField.Name:
+                case SortBy.Name:
                 default:
                     return list.OrderBy(x => x.ProgramName, orderInput);
             }
         }
 
-        public static IEnumerable<T> SortScheduledRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebScheduledRecording
+        public static IEnumerable<T> SortScheduledRecordingList<T>(this IEnumerable<T> list, SortBy? sortInput, WebSortOrder? orderInput) where T : WebScheduledRecording
         {
             switch (sortInput)
             {
-                case SortField.Channel:
+                case SortBy.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
-                case SortField.StartTime:
+                case SortBy.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
-                case SortField.Name:
+                case SortBy.Name:
                 default:
                     return list.OrderBy(x => x.ProgramName, orderInput);
             }
         }
 
-        public static IEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortField? sortInput, SortOrder? orderInput) where T : WebRecordingBasic
+        public static IEnumerable<T> SortRecordingList<T>(this IEnumerable<T> list, SortBy? sortInput, WebSortOrder? orderInput) where T : WebRecordingBasic
         {
             switch (sortInput)
             {
-                case SortField.Channel:
+                case SortBy.Channel:
                     return list.OrderBy(x => x.IdChannel, orderInput);
-                case SortField.StartTime:
+                case SortBy.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
-                case SortField.Name:
+                case SortBy.Name:
                 default:
                     return list.OrderBy(x => x.Title, orderInput);
             }

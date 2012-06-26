@@ -7,35 +7,6 @@ using System.Text;
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
     [DataContract]
-    public enum WebMediaType
-    {
-        [EnumMember]
-        Movie = 0,
-        [EnumMember]
-        MusicTrack = 1,
-        [EnumMember]
-        Picture = 2,
-        [EnumMember]
-        TVEpisode = 3,
-        [EnumMember]
-        File = 4,
-        [EnumMember]
-        TVShow = 5,
-        [EnumMember]
-        TVSeason = 6,
-        [EnumMember]
-        MusicAlbum = 7,
-        [EnumMember]
-        MusicArtist = 8,
-        [EnumMember]
-        Folder = 9,
-        [EnumMember]
-        Drive = 10,
-        [EnumMember]
-        Playlist = 11
-    }
-
-    [DataContract]
     public enum WebFileType
     {
         [EnumMember]
@@ -50,51 +21,5 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Cover = 4
 
         // 5 is reserved for tv logos in the streaming service
-    }
-
-    [DataContract]
-    public enum OrderBy
-    {
-        [EnumMember]
-        Asc = 0,
-        [EnumMember]
-        Desc = 1,
-        [EnumMember]
-        Custom = 2
-    }
-
-    [DataContract]
-    public enum SortBy
-    {
-        [EnumMember]
-        Title = 0,
-        [EnumMember]
-        DateAdded = 1,
-        [EnumMember]
-        Year = 2,
-        [EnumMember]
-        Genre = 3,
-        [EnumMember]
-        Rating = 4,
-        [EnumMember]
-        Categories = 5,
-        [EnumMember]
-        MusicTrackNumber = 6,
-        [EnumMember]
-        MusicComposer = 7,
-        [EnumMember]
-        TVEpisodeNumber = 8,
-        [EnumMember]
-        TVSeasonNumber = 9,
-        [EnumMember]
-        PictureDateTaken = 10,
-        [EnumMember]
-        TVDateAired = 11,
-        [EnumMember]
-        Type = 12,
-        [EnumMember]
-        Name = 13,
-        [EnumMember]
-        Custom = 14
     }
 }

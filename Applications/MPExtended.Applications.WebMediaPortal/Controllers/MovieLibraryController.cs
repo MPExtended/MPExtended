@@ -27,6 +27,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -37,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebMovieDetailed> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
+            IEnumerable<WebMovieDetailed> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: WebSortOrder.Asc);
             if (!String.IsNullOrEmpty(genre))
             {
                 movieList = movieList.Where(x => x.Genres.Contains(genre));
@@ -73,12 +74,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Cover(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Cover, width, height, "Images/default/movie-cover.png");
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebArtworkType.Cover, width, height, "Images/default/movie-cover.png");
         }
 
         public ActionResult Fanart(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.Movie, movie, WebArtworkType.Backdrop, width, height, "Images/default/movie-fanart.png");
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebArtworkType.Backdrop, width, height, "Images/default/movie-fanart.png");
         }
     }
 }

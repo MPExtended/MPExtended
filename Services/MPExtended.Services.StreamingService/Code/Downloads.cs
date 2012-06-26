@@ -23,6 +23,7 @@ using System.IO;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -42,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private List<DownloadContext> runningDownloads = new List<DownloadContext>();
 
-        public Stream Download(string clientDescription, WebStreamMediaType type, int? provider, string itemId)
+        public Stream Download(string clientDescription, WebMediaType type, int? provider, string itemId)
         {
             // validate source first
             MediaSource source = new MediaSource(type, provider, itemId);

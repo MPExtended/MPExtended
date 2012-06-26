@@ -26,6 +26,7 @@ using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
@@ -56,41 +57,41 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
         }
 
-        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
         {
             IStreamingService service;
             int? provider = null;
 
             switch (mediaType)
             {
-                case WebStreamMediaType.Drive:
-                case WebStreamMediaType.File:
-                case WebStreamMediaType.Folder:
+                case WebMediaType.Drive:
+                case WebMediaType.File:
+                case WebMediaType.Folder:
                     service = MPEServices.MASStream;
                     provider = Settings.ActiveSettings.FileSystemProvider;
                     break;
-                case WebStreamMediaType.Movie:
+                case WebMediaType.Movie:
                     service = MPEServices.MASStream;
                     provider = Settings.ActiveSettings.MovieProvider;
                     break;
-                case WebStreamMediaType.MusicAlbum:
-                case WebStreamMediaType.MusicArtist:
-                case WebStreamMediaType.MusicTrack:
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicArtist:
+                case WebMediaType.MusicTrack:
                     service = MPEServices.MASStream;
                     provider = Settings.ActiveSettings.MusicProvider;
                     break;
-                case WebStreamMediaType.Picture:
+                case WebMediaType.Picture:
                     service = MPEServices.MASStream;
                     provider = Settings.ActiveSettings.PicturesProvider;
                     break;
-                case WebStreamMediaType.TVShow:
-                case WebStreamMediaType.TVSeason:
-                case WebStreamMediaType.TVEpisode:
+                case WebMediaType.TVShow:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVEpisode:
                     service = MPEServices.MASStream;
                     provider = Settings.ActiveSettings.TVShowProvider;
                     break;
-                case WebStreamMediaType.TV:
-                case WebStreamMediaType.Recording:
+                case WebMediaType.TV:
+                case WebMediaType.Recording:
                     service = MPEServices.MASStream;
                     break;
                 default:
@@ -100,7 +101,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile);
         }
 
-        public static ActionResult ReturnFromService(WebStreamMediaType mediaType, string id, WebArtworkType artworkType, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebArtworkType artworkType, string defaultFile = null)
         {
             return ReturnFromService(mediaType, id, artworkType, 0, 0, defaultFile);
         }

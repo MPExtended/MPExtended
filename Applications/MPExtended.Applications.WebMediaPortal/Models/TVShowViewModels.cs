@@ -25,6 +25,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -44,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Show = MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, showId);
-                Seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, SortBy.TVSeasonNumber, OrderBy.Asc);
+                Seasons = MPEServices.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, SortBy.TVSeasonNumber, WebSortOrder.Asc);
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 Season = MPEServices.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, seasonId);
                 Show = MPEServices.MAS.GetTVShowDetailedById(Season.PID, Season.ShowId);
-                Episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, SortBy.TVEpisodeNumber, OrderBy.Asc);
+                Episodes = MPEServices.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, SortBy.TVEpisodeNumber, WebSortOrder.Asc);
             }
             catch (Exception ex)
             {
@@ -107,7 +108,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (mediaInfo == null)
-                    mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.TVEpisode, Episode.PID, Episode.Id);
+                    mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, Episode.PID, Episode.Id);
 
                 return mediaInfo;
             }

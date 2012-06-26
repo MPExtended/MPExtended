@@ -24,6 +24,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -34,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Schedule/
         public ActionResult Index()
         {
-            var list = MPEServices.TAS.GetSchedules(SortField.Name, SortOrder.Asc).Select(x => new ScheduleViewModel(x));
+            var list = MPEServices.TAS.GetSchedules(SortBy.Name, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
             return View(list);
         }
 

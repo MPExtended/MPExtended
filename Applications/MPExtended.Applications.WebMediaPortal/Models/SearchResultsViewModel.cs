@@ -25,6 +25,7 @@ using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {

@@ -24,6 +24,7 @@ using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -129,7 +130,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public IEnumerable<string> GetMPExtendedClients()
         {
             return MPEServices.TASStreamControl.GetStreamingSessions()
-                .Where(x => x.SourceType == WebStreamMediaType.TV && VirtualCard.User.Name == "mpextended-" + x.Identifier)
+                .Where(x => x.SourceType == WebMediaType.TV && VirtualCard.User.Name == "mpextended-" + x.Identifier)
                 .Select(x => x.ClientIPAddress);
         }
 

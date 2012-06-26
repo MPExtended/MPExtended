@@ -26,6 +26,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -59,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (mediaInfo == null)
-                    mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.Movie, Movie.PID, Movie.Id);
+                    mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id);
 
                 return mediaInfo;
             }

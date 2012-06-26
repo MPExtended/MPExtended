@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {

@@ -26,6 +26,7 @@ using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Applications.WebMediaPortal.Strings;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -74,7 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.TAS.GetAllChannelsDetailed(SortField.Name)
+                return MPEServices.TAS.GetAllChannelsDetailed(SortBy.Name)
                         .Where(x => x.VisibleInGuide)
                         .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
             }

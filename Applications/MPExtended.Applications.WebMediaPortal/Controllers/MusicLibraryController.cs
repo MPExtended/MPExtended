@@ -27,6 +27,7 @@ using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -57,7 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Album(string album)
         {
             var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
-            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
+            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, WebSortOrder.Asc);
 
             return View(new AlbumViewModel()
             {
@@ -68,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.MusicAlbum, album, WebArtworkType.Cover, "images/default/album.png");
+            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebArtworkType.Cover, "images/default/album.png");
         }
     }
 }

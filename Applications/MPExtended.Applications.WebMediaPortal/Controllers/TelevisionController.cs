@@ -26,6 +26,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -69,7 +70,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebStreamMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height, "Images/default/logo.png");
+            return Images.ReturnFromService(WebMediaType.TV, channelId.ToString(), WebArtworkType.Logo, width, height, "Images/default/logo.png");
         }
 
         public ActionResult ProgramDetails(int programId)
@@ -109,7 +110,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return HttpNotFound();
 
             var fileInfo = MPEServices.TAS.GetRecordingFileInfo(rec.Id);
-            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebStreamMediaType.Recording, null, rec.Id.ToString());
+            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString());
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
             return View(rec);
         }

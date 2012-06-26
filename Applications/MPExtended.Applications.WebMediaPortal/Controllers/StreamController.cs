@@ -31,6 +31,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -48,25 +49,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        private int? GetProvider(WebStreamMediaType type)
+        private int? GetProvider(WebMediaType type)
         {
             switch (type)
             {
-                case WebStreamMediaType.File:
+                case WebMediaType.File:
                     return Settings.ActiveSettings.FileSystemProvider;
-                case WebStreamMediaType.Movie:
+                case WebMediaType.Movie:
                     return Settings.ActiveSettings.MovieProvider;
-                case WebStreamMediaType.MusicAlbum:
-                case WebStreamMediaType.MusicTrack:
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicTrack:
                     return Settings.ActiveSettings.MusicProvider;
-                case WebStreamMediaType.Picture:
+                case WebMediaType.Picture:
                     return Settings.ActiveSettings.PicturesProvider;
-                case WebStreamMediaType.Recording:
-                case WebStreamMediaType.TV:
+                case WebMediaType.Recording:
+                case WebMediaType.TV:
                     return 0;
-                case WebStreamMediaType.TVEpisode:
-                case WebStreamMediaType.TVSeason:
-                case WebStreamMediaType.TVShow:
+                case WebMediaType.TVEpisode:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVShow:
                     return Settings.ActiveSettings.TVShowProvider;
                 default:
                     // this cannot happen
@@ -92,7 +93,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Download(WebStreamMediaType type, string item)
+        public ActionResult Download(WebMediaType type, string item)
         {
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
@@ -100,7 +101,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
-            string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
+            string rootUrl = type == WebMediaType.TV || type == WebMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
             UriBuilder fullUri = new UriBuilder(rootUrl + "GetMediaItem?" + queryString.ToString());
 
             // Check stream type
@@ -132,7 +133,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime, string continuationId)
+        private ActionResult GenerateStream(WebMediaType type, string itemId, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
             if (!IsUserAuthenticated())
@@ -171,7 +172,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
                 WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
+                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
                 {
                     Log.Error("Streaming: InitStream failed");
                     return new EmptyResult();
@@ -258,27 +259,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Stream wrapper URLs
         public ActionResult TV(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TV, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TV, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult Movie(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Movie, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TVEpisode, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult Recording(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Recording, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.MusicTrack, item, transcoder, starttime, continuationId);
         }
 
         //
@@ -297,9 +298,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return streamControl.GetTranscoderProfileByName(profileName);
         }
 
-        private IWebStreamingService GetStreamControl(WebStreamMediaType type)
+        private IWebStreamingService GetStreamControl(WebMediaType type)
         {
-            if (type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording)
+            if (type == WebMediaType.TV || type == WebMediaType.Recording)
             {
                 return MPEServices.TASStreamControl;
             }
@@ -339,20 +340,20 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Player(WebStreamMediaType type, string itemId)
+        public ActionResult Player(WebMediaType type, string itemId)
         {
             PlayerViewModel model = new PlayerViewModel();
             model.MediaType = type;
             model.MediaId = itemId;
 
             // get profile
-            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
  
             // get size
-            if(type == WebStreamMediaType.TV)
+            if(type == WebMediaType.TV)
             {
                 // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
                 // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
@@ -369,7 +370,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = randomGenerator.Next(10000, 99999);
-            model.URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters);
+            model.URL = Url.Action(Enum.GetName(typeof(WebMediaType), type), parameters);
 
             // generic part
             return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
@@ -386,7 +387,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Playlist(WebStreamMediaType type, string itemId)
+        public ActionResult Playlist(WebMediaType type, string itemId)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -395,7 +396,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // get profile
-            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
@@ -405,7 +406,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = "playlist-" + randomGenerator.Next(10000, 99999);
-            string url = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+            string url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
 
             // create playlist
             StringBuilder m3u = new StringBuilder();

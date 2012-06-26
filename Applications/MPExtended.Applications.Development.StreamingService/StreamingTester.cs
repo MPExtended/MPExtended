@@ -32,6 +32,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.Development.StreamingService
 {
@@ -63,16 +64,16 @@ namespace MPExtended.Applications.Development.StreamingService
         {
             InitializeComponent();
 
-            cbItemType.Items.Add(WebStreamMediaType.File);
-            cbItemType.Items.Add(WebStreamMediaType.Movie);
-            cbItemType.Items.Add(WebStreamMediaType.MusicAlbum);
-            cbItemType.Items.Add(WebStreamMediaType.MusicTrack);
-            cbItemType.Items.Add(WebStreamMediaType.Picture);
-            cbItemType.Items.Add(WebStreamMediaType.Recording);
-            cbItemType.Items.Add(WebStreamMediaType.TV);
-            cbItemType.Items.Add(WebStreamMediaType.TVEpisode);
-            cbItemType.Items.Add(WebStreamMediaType.TVSeason);
-            cbItemType.Items.Add(WebStreamMediaType.TVShow);
+            cbItemType.Items.Add(WebMediaType.File);
+            cbItemType.Items.Add(WebMediaType.Movie);
+            cbItemType.Items.Add(WebMediaType.MusicAlbum);
+            cbItemType.Items.Add(WebMediaType.MusicTrack);
+            cbItemType.Items.Add(WebMediaType.Picture);
+            cbItemType.Items.Add(WebMediaType.Recording);
+            cbItemType.Items.Add(WebMediaType.TV);
+            cbItemType.Items.Add(WebMediaType.TVEpisode);
+            cbItemType.Items.Add(WebMediaType.TVSeason);
+            cbItemType.Items.Add(WebMediaType.TVShow);
         }
 
         private void cmdConnect_Click(object sender, EventArgs e)
@@ -164,9 +165,9 @@ namespace MPExtended.Applications.Development.StreamingService
             WebMovieDetailed movie = mMovies[cbMovies.SelectedIndex];
             mName = movie.Title;
             Log("Init Stream with movie " + movie.Title);
-            bool success = mWebStreamClient.InitStream(WebStreamMediaType.Movie, movieProvider, movie.Id.ToString(), CLIENT_NAME, mIdentifier, null);
+            bool success = mWebStreamClient.InitStream(WebMediaType.Movie, movieProvider, movie.Id.ToString(), CLIENT_NAME, mIdentifier, null);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.Movie, movieProvider, movie.Id.ToString()));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebMediaType.Movie, movieProvider, movie.Id.ToString()));
         }
 
         private void cmdInitChannel_Click(object sender, EventArgs e)
@@ -175,9 +176,9 @@ namespace MPExtended.Applications.Development.StreamingService
             WebChannelBasic channel = mChannels[cbChannels.SelectedIndex];
             mName = channel.DisplayName;
             Log("Init Stream with channel " + channel.DisplayName);
-            bool success = mWebStreamClient.InitStream(WebStreamMediaType.TV, 0, channel.Id.ToString(), CLIENT_NAME, mIdentifier, null);
+            bool success = mWebStreamClient.InitStream(WebMediaType.TV, 0, channel.Id.ToString(), CLIENT_NAME, mIdentifier, null);
             Log("Success = " + success);
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebStreamMediaType.TV, 0, mIdentifier));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebMediaType.TV, 0, mIdentifier));
         }
 
         private void cmdInitIdTypeStreaming_Click(object sender, EventArgs e)
@@ -186,10 +187,10 @@ namespace MPExtended.Applications.Development.StreamingService
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
             mName = txtItemId.Text;
             Log("Init Stream with id " + txtItemId.Text + " (type: " + cbItemType.SelectedItem + ")");
-            bool success = mWebStreamClient.InitStream((WebStreamMediaType)cbItemType.SelectedItem, provider, txtItemId.Text, CLIENT_NAME, mIdentifier, null);
+            bool success = mWebStreamClient.InitStream((WebMediaType)cbItemType.SelectedItem, provider, txtItemId.Text, CLIENT_NAME, mIdentifier, null);
             Log("Success = " + success);
             Thread.Sleep(500); // wait a bit till the stream has populated
-            LoadMediaInfo(mWebStreamClient.GetMediaInfo((WebStreamMediaType)cbItemType.SelectedItem, provider, txtItemId.Text));
+            LoadMediaInfo(mWebStreamClient.GetMediaInfo((WebMediaType)cbItemType.SelectedItem, provider, txtItemId.Text));
         }
 
         private void LoadMediaInfo(WebMediaInfo info)

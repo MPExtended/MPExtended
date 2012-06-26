@@ -31,6 +31,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -68,29 +69,29 @@ namespace MPExtended.Services.StreamingService.Code
             this.path = path;
         }
 
-        public ImageMediaSource(WebStreamMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
+        public ImageMediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
             : base (type, provider, id, filetype, offset)
         {
         }
 
-        protected override bool CheckArguments(WebStreamMediaType mediatype, WebArtworkType filetype)
+        protected override bool CheckArguments(WebMediaType mediatype, WebArtworkType filetype)
         {
-            if ((mediatype == WebStreamMediaType.TV || mediatype == WebStreamMediaType.Recording) && filetype == WebArtworkType.Logo)
+            if ((mediatype == WebMediaType.TV || mediatype == WebMediaType.Recording) && filetype == WebArtworkType.Logo)
                 return true;
             return base.CheckArguments(mediatype, filetype);
         }
 
         protected bool IsCustomized()
         {
-            return path != null || ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo);
+            return path != null || ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebArtworkType.Logo);
         }
 
         public override WebFileInfo GetFileInfo()
         {
-            if ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo)
+            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebArtworkType.Logo)
             {
                 // get display name
-                int idChannel = MediaType == WebStreamMediaType.TV ?
+                int idChannel = MediaType == WebMediaType.TV ?
                     Int32.Parse(Id) :
                     MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
                 string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');

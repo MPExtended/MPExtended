@@ -22,6 +22,7 @@ using System.Web.Mvc;
 using System.Xml;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -64,7 +65,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
         public string URL { get; set; }
-        public WebStreamMediaType MediaType { get; set; }
+        public WebMediaType MediaType { get; set; }
         public string MediaId { get; set; }
 
         public SettingModel Settings
@@ -95,7 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public AlbumPlayerViewModel()
         {
-            MediaType = WebStreamMediaType.MusicAlbum;
+            MediaType = WebMediaType.MusicAlbum;
         }
 
         public string GetTranscoderForTrack(WebMusicTrackDetailed track)

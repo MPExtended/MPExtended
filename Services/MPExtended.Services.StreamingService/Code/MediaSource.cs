@@ -27,6 +27,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -34,7 +35,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         private WebFileInfo fileInfoCache;
 
-        public WebStreamMediaType MediaType { get; private set; }
+        public WebMediaType MediaType { get; private set; }
         public WebArtworkType FileType { get; private set; }
         public string Id { get; private set; } // path to tsbuffer for TV
         public int? Provider { get; private set; } // for MAS
@@ -44,7 +45,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                return MediaType == WebStreamMediaType.TV && FileType == WebArtworkType.Content ? File.Exists(Id) : GetFileInfo().Exists;
+                return MediaType == WebMediaType.TV && FileType == WebArtworkType.Content ? File.Exists(Id) : GetFileInfo().Exists;
             }
         }
 
@@ -52,7 +53,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                if (MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording)
+                if (MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording)
                 {
                     return Exists && MPEServices.IsTASLocal && GetFileInfo().IsLocalFile;
                 }
@@ -67,7 +68,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                return (MediaType == WebStreamMediaType.TV && FileType == WebArtworkType.Content) || !SupportsDirectAccess;
+                return (MediaType == WebMediaType.TV && FileType == WebArtworkType.Content) || !SupportsDirectAccess;
             }
         }
 
@@ -80,7 +81,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public MediaSource(WebStreamMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
+        public MediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
         {
             this.MediaType = type;
             this.Id = id;
@@ -94,36 +95,21 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public MediaSource(WebStreamMediaType type, int? provider, string id, WebArtworkType filetype)
+        public MediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype)
             : this(type, provider, id, filetype, 0)
         {
         }
 
-        public MediaSource(WebStreamMediaType type, int? provider, string id)
+        public MediaSource(WebMediaType type, int? provider, string id)
             : this(type, provider, id, WebArtworkType.Content, 0)
         {
         }
 
-        public MediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
-            : this((WebStreamMediaType)type, provider, id, filetype, offset)
-        {
-        }
-
-        public MediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype)
-            : this((WebStreamMediaType)type, provider, id, filetype, 0)
-        {
-        }
-
-        public MediaSource(WebMediaType type, int? provider, string id)
-            : this((WebStreamMediaType)type, provider, id, WebArtworkType.Content, 0)
-        {
-        }
-
-        protected virtual bool CheckArguments(WebStreamMediaType mediatype, WebArtworkType filetype)
+        protected virtual bool CheckArguments(WebMediaType mediatype, WebArtworkType filetype)
         {
             return !(
-                        (mediatype == WebStreamMediaType.TV && FileType != WebArtworkType.Content) ||
-                        (mediatype == WebStreamMediaType.Recording && FileType != WebArtworkType.Content)
+                        (mediatype == WebMediaType.TV && FileType != WebArtworkType.Content) ||
+                        (mediatype == WebMediaType.Recording && FileType != WebArtworkType.Content)
                     );
         }
 
@@ -134,7 +120,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            if (MediaType == WebStreamMediaType.Recording && FileType == WebArtworkType.Content)
+            if (MediaType == WebMediaType.Recording && FileType == WebArtworkType.Content)
             {
                 WebRecordingFileInfo info = MPEServices.TAS.GetRecordingFileInfo(Int32.Parse(Id));
                 fileInfoCache = new WebFileInfo()
@@ -154,7 +140,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            if (MediaType == WebStreamMediaType.TV && FileType == WebArtworkType.Content)
+            if (MediaType == WebMediaType.TV && FileType == WebArtworkType.Content)
             {
                 fileInfoCache = new WebFileInfo(new FileInfo(Id))
                 {
@@ -167,13 +153,13 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, (WebMediaType)MediaType, (WebFileType)FileType, Id, Offset);
+            fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, MediaType, (WebFileType)FileType, Id, Offset);
             return fileInfoCache;
         }
 
         public string GetPath()
         {
-            return MediaType == WebStreamMediaType.TV && FileType == WebArtworkType.Content ? Id : GetFileInfo().Path;
+            return MediaType == WebMediaType.TV && FileType == WebArtworkType.Content ? Id : GetFileInfo().Path;
         }
 
         public IProcessingUnit GetInputReaderUnit()
@@ -191,7 +177,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Stream Retrieve()
         {
-            if (MediaType == WebStreamMediaType.TV && FileType == WebArtworkType.Content)
+            if (MediaType == WebMediaType.TV && FileType == WebArtworkType.Content)
             {
                 return new TsBuffer(Id);
             }
@@ -202,13 +188,13 @@ namespace MPExtended.Services.StreamingService.Code
                     return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             }
-            else if (MediaType == WebStreamMediaType.Recording)
+            else if (MediaType == WebMediaType.Recording)
             {
                 return MPEServices.TAS.ReadRecordingFile(Int32.Parse(Id));
             }
             else
             {
-                return MPEServices.MAS.RetrieveFile(Provider, (WebMediaType)MediaType, (WebFileType)FileType, Id, Offset);
+                return MPEServices.MAS.RetrieveFile(Provider, MediaType, (WebFileType)FileType, Id, Offset);
             }
         }
 
@@ -223,19 +209,19 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 switch (MediaType)
                 {
-                    case WebStreamMediaType.File:
+                    case WebMediaType.File:
                         return MPEServices.MAS.GetFileSystemFileBasicById(Provider, Id).Title;
-                    case WebStreamMediaType.Movie:
+                    case WebMediaType.Movie:
                         return MPEServices.MAS.GetMovieBasicById(Provider, Id).Title;
-                    case WebStreamMediaType.MusicAlbum:
+                    case WebMediaType.MusicAlbum:
                         return MPEServices.MAS.GetMusicAlbumBasicById(Provider, Id).Title;
-                    case WebStreamMediaType.MusicTrack:
+                    case WebMediaType.MusicTrack:
                         return MPEServices.MAS.GetMusicTrackBasicById(Provider, Id).Title;
-                    case WebStreamMediaType.Picture:
+                    case WebMediaType.Picture:
                         return MPEServices.MAS.GetPictureBasicById(Provider, Id).Title;
-                    case WebStreamMediaType.Recording:
+                    case WebMediaType.Recording:
                         return MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).Title;
-                    case WebStreamMediaType.TV:
+                    case WebMediaType.TV:
                         int channelId;
                         if (!Int32.TryParse(Id, out channelId))
                         {
@@ -249,16 +235,16 @@ namespace MPExtended.Services.StreamingService.Code
                             channelId = cards.First(x => x.TimeShiftFileName == Id).IdChannel;
                         }
                         return MPEServices.TAS.GetChannelBasicById(channelId).DisplayName;
-                    case WebStreamMediaType.TVEpisode:
+                    case WebMediaType.TVEpisode:
                         var ep = MPEServices.MAS.GetTVEpisodeBasicById(Provider, Id);
                         var season = MPEServices.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);
                         var show = MPEServices.MAS.GetTVShowBasicById(Provider, ep.ShowId);
                         return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
-                    case WebStreamMediaType.TVSeason:
+                    case WebMediaType.TVSeason:
                         var season2 = MPEServices.MAS.GetTVSeasonDetailedById(Provider, Id);
                         var show2 = MPEServices.MAS.GetTVShowBasicById(Provider, season2.ShowId);
                         return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
-                    case WebStreamMediaType.TVShow:
+                    case WebMediaType.TVShow:
                         return MPEServices.MAS.GetTVShowBasicById(Provider, Id).Title;
                 }
             }

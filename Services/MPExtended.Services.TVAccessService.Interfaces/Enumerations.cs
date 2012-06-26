@@ -7,16 +7,6 @@ using System.Text;
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
     [DataContract]
-    public enum WebTvMediaType
-    {
-        // should equal to MPExtended.MediaAccessService.Interfaces.WebMediaType, except for TV and Recording values
-        [EnumMember]
-        TV = -2,
-        [EnumMember]
-        Recording = -1
-    }
-
-    [DataContract]
     public enum ChannelState
     {
         [EnumMember]
@@ -78,28 +68,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         TillDate = 2,
         [EnumMember]
         Always = 3
-    }
-
-    [DataContract]
-    public enum SortOrder
-    {
-        [EnumMember]
-        Asc = 0,
-        [EnumMember]
-        Desc = 1
-    }
-
-    [DataContract]
-    public enum SortField
-    {
-        [EnumMember]
-        User = 0,
-        [EnumMember]
-        Name = 1,
-        [EnumMember]
-        Channel = 2,
-        [EnumMember]
-        StartTime = 3
     }
 
     // See TvEngine3/TVLibrary/TvLibrary.Interfaces/CardType.cs

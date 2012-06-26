@@ -25,6 +25,7 @@ using System.Text;
 using System.Windows.Forms;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.Development.FillMediaInfoCache
 {
@@ -82,7 +83,7 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
                         var movies = MPEServices.MAS.GetMoviesBasicByRange(null, i, i + 100);
                         foreach (var movie in movies)
                         {
-                            MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.Movie, movie.PID, movie.Id);
+                            MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {
@@ -113,7 +114,7 @@ outMovies:
                         var episodes = MPEServices.MAS.GetTVEpisodesBasicByRange(null, i, i + 100);
                         foreach (var episode in episodes)
                         {
-                            MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.TVEpisode, episode.PID, episode.Id);
+                            MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {

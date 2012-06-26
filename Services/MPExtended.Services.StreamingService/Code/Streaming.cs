@@ -27,6 +27,7 @@ using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.StreamingService.Transcoders;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -141,7 +142,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.LastActivity = DateTime.Now;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
-            stream.Context.IsTv = source.MediaType == WebStreamMediaType.TV;
+            stream.Context.IsTv = source.MediaType == WebMediaType.TV;
 
             // Some clients such as WebMP proxy the streams before relying it to the client. We should give these clients the option to
             // forward the real IP address, so that we can show that one in the configurator too. However, to avoid abuse, we should show
