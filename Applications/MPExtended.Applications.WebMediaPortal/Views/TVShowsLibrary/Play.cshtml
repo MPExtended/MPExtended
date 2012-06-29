@@ -9,7 +9,7 @@
 
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TVEpisode,
+      type = MPExtended.Services.Common.Interfaces.WebMediaType.TVEpisode,
       itemId = @Model.Episode.Id
   });
 }

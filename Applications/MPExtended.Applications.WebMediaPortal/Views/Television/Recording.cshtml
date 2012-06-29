@@ -1,4 +1,4 @@
-﻿@using MPExtended.Services.StreamingService.Interfaces
+﻿@using MPExtended.Services.Common.Interfaces
 @model MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic
 @{
     ViewBag.Title = Model.Title;
@@ -9,5 +9,5 @@
 <li>@UIStrings.RecordedOn: @Model.StartTime.ToShortDateString()</li>
 <li>@ViewBag.Quality</li>
 <li>@Html.ActionLink(UIStrings.Play, "WatchRecording", new { id = Model.Id })</li>
-<li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = WebStreamMediaType.Recording }, new { })</li>
+<li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = WebMediaType.Recording }, new { })</li>
 </ul>

@@ -31,7 +31,6 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IWebStreamingService");
             this.StreamAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IStreamingService");
             this.Enums = new List<Type>() {
-                this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType"),
                 this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebArtworkType")
             };
         }
@@ -40,7 +39,6 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
         {
             if (methodName.Contains("StreamingSessions")) return 1;
             if (methodName.Contains("TranscoderProfile")) return 1;
-            if (methodName.Contains("WebStreamMediaType")) return 1;
             if (methodName.Contains("StreamSize")) return 3;
             if (methodName.Contains("TranscodingInfo")) return 3;
             if (methodName.Contains("MediaInfo")) return 3;

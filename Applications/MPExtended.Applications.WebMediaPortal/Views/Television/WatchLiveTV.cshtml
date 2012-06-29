@@ -12,7 +12,7 @@
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TV,
+      type = MPExtended.Services.Common.Interfaces.WebMediaType.TV,
       itemId = @Model.Id
   });
 }
