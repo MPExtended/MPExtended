@@ -40,8 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MPExtended.Libraries.VLCManaged">
-      <HintPath>..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCManaged.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCManaged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

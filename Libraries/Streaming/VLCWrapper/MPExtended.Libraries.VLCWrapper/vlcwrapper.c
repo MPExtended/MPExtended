@@ -23,9 +23,9 @@
 // - Create .lib file (http://wiki.videolan.org/GenerateLibFromDll)
 // - Change include and library directories
 //
-// There is some preprocessor magic to make it usable on Linux too.
-// There is probably a bith too much preprocessor magic here anyway,
-// but it works. 
+// There is some preprocessor magic to make it usable on Linux too. It's
+// probably a bit too much, but I like having this working on Linux for
+// testing.
 
 #ifdef __unix__
 #define PLATFORM_LINUX
@@ -34,7 +34,12 @@
 #define PLATFORM_WIN32
 #endif
 
+// To fix compilation of vlc/libvlc.h under MSVC
+#ifdef PLATFORM_WIN32
+#define inline __inline
+#endif
 #include <vlc/libvlc.h>
+
 #include <vlc/libvlc_media.h>
 #include <vlc/libvlc_events.h>
 #include <vlc/libvlc_vlm.h>
@@ -80,23 +85,27 @@ const char *state_name[] = {
 // maybe this var should be locked when writing it
 int global_state = STATE_NULL;
 
-// this is copied from src/text/unicode.c in the vlc source
+// this is copied from src/text/unicode.c in the vlc 1.1 source (don't care about UTF8 on Linux atm)
 char* FromLocale(const char *string) {
+#ifdef PLATFORM_WIN32
 	char *out;
 
-	int len = 1 + MultiByteToWideChar (CP_ACP, 0, string, -1, NULL, 0);
-	wchar_t *wide = malloc (len * sizeof (wchar_t));
+	int len = 1 + MultiByteToWideChar(CP_ACP, 0, string, -1, NULL, 0);
+	wchar_t *wide = malloc(len * sizeof(wchar_t));
 	if (wide == NULL)
 		return NULL;
 
-	MultiByteToWideChar (CP_ACP, 0, string, -1, wide, len);
-	len = 1 + WideCharToMultiByte (CP_UTF8, 0, wide, -1, NULL, 0, NULL, NULL);
+	MultiByteToWideChar(CP_ACP, 0, string, -1, wide, len);
+	len = 1 + WideCharToMultiByte(CP_UTF8, 0, wide, -1, NULL, 0, NULL, NULL);
 	out = malloc (len);
 	if (out != NULL)
-		WideCharToMultiByte (CP_UTF8, 0, wide, -1, out, len, NULL, NULL);
+		WideCharToMultiByte(CP_UTF8, 0, wide, -1, out, len, NULL, NULL);
 
-	free (wide);
+	free(wide);
 	return out;
+#else
+   return string;
+#endif
 }
 
 void event_callback(const libvlc_event_t *event_data, void *data_void) {
@@ -110,18 +119,6 @@ void register_event(libvlc_event_manager_t *eventManager, libvlc_event_type_t ev
    int *data = (int*)malloc(sizeof(int));
    *data = type;
    libvlc_event_attach(eventManager, event_type, event_callback, (void*)data);
-}
-
-void handle_messages(libvlc_log_t *log) {
-   libvlc_log_iterator_t *log_iter = libvlc_log_get_iterator(log);
-   libvlc_log_message_t messageBuffer;
-   while(libvlc_log_iterator_has_next(log_iter)) {
-      libvlc_log_message_t *message = libvlc_log_iterator_next(log_iter, &messageBuffer);
-      const char *header = message->psz_header == NULL ? "[null]" : message->psz_header;
-      fprintf(stderr, ENDLN("%d %s %s %s %s"), message->i_severity, header, message->psz_type, message->psz_name, message->psz_message);
-   }
-   libvlc_log_clear(log);
-   libvlc_log_iterator_free(log_iter);
 }
 
 void millisleep(int millisecs) {
@@ -138,7 +135,6 @@ int main(int argc, char **argv) {
 	char **vlc_argv;
 	int nr;
 	libvlc_instance_t *vlc;
-	libvlc_log_t *log;
 	libvlc_event_manager_t *eventManager;
 
    // init arguments
@@ -168,10 +164,6 @@ int main(int argc, char **argv) {
    // init vlc
    vlc = libvlc_new(nr, vlc_argv);
    libvlc_set_user_agent(vlc, USER_AGENT, HTTP_USER_AGENT);
-   
-   // open log
-   libvlc_set_log_verbosity(vlc, 3);
-   log = libvlc_log_open(vlc);
     
    // register for some events
    eventManager = libvlc_vlm_get_event_manager(vlc);
@@ -190,7 +182,6 @@ int main(int argc, char **argv) {
    
    // let it play till it's ended
    while(global_state == STATE_PLAYING) {
-      handle_messages(log);
       fprintf(stdout, ENDLN("P %d, %.9f"), 
              libvlc_vlm_get_media_instance_time(vlc, MEDIA_NAME, 0),
              libvlc_vlm_get_media_instance_position(vlc, MEDIA_NAME, 0));
