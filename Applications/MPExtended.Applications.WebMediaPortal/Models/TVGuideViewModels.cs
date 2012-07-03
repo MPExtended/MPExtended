@@ -234,6 +234,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public DateTime EndTime { get; set; }
         public bool IsScheduled { get; set; }
         public string ChannelName { get; set; }
+        public int ChannelId { get; set; }
+
+        public bool CanWatchLive
+        {
+            get
+            {
+                return DateTime.Now >= StartTime && DateTime.Now <= EndTime;
+            }
+        }
 
         public ProgramDetailsViewModel(WebProgramDetailed program)
         {
@@ -246,6 +255,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             var channel = MPEServices.TAS.GetChannelDetailedById(program.IdChannel);
             ChannelName = channel.DisplayName;
+            ChannelId = channel.Id;
         }
     }
 }

@@ -862,6 +862,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Watch live.
+        /// </summary>
+        public static string WatchLive {
+            get {
+                return ResourceManager.GetString("WatchLive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome.
         /// </summary>
         public static string Welcome {

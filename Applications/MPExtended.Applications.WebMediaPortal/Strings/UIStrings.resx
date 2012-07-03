@@ -424,4 +424,7 @@
   <data name="SorryPageNotFound" xml:space="preserve">
     <value>Sorry, the page you requested doesn't exist. </value>
   </data>
+  <data name="WatchLive" xml:space="preserve">
+    <value>Watch live</value>
+  </data>
 </root>
