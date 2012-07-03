@@ -96,7 +96,7 @@ namespace MPExtended.Libraries.Service.Hosting
 
                 // finally finish the startup
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
-                Log.Trace("Opening MPExtended ServiceHost");
+                Log.Trace("Opened MPExtended ServiceHost");
                 return true;
             }
             catch (Exception ex)
