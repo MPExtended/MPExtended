@@ -26,29 +26,11 @@ using MPExtended.Services.StreamingService.Units;
 
 namespace MPExtended.Services.StreamingService.Transcoders
 {
-    internal class VLCHTTPLiveStreamer
+    internal class VLCHTTPLiveStreamer : HTTPLiveStreamer
     {
-        private string identifier;
-        private StreamContext context;
-        private string temporaryDirectory;
-
         public VLCHTTPLiveStreamer(string identifier, StreamContext context)
+            : base (identifier, context)
         {
-            this.identifier = identifier;
-            this.context = context;
-
-            this.temporaryDirectory = Path.Combine(Path.GetTempPath(), "MPExtended", "httplivestreaming-" + identifier);
-            if (Directory.Exists(temporaryDirectory))
-            {
-                Directory.Delete(temporaryDirectory, true);
-            }
-            Directory.CreateDirectory(temporaryDirectory);
-        }
-
-        public void AppendPipeline()
-        {
-            string indexFile = Path.Combine(temporaryDirectory, "index.m3u8");
-            context.Pipeline.AddDataUnit(new HTTPLiveStreamUnit(indexFile), 10);
         }
 
         public string GetFullMuxerString()
@@ -61,64 +43,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
              * context.Profile.CodecParameters["httpLiveOptions"] = seglen=10,delsegs=false,numsegs=0
              */
 
-            string indexUrl = WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + identifier + "&action=segment&parameters=######.ts";
-            string liveHttpOptions = context.Profile.CodecParameters["httpLiveOptions"] + ",index=" + Path.Combine(temporaryDirectory, "index.m3u8") + ",index-url=" + indexUrl;
-            string destination = Path.Combine(temporaryDirectory, "######.ts");
-            return ":standard{access=livehttp{" + liveHttpOptions + "},mux=" + context.Profile.CodecParameters["muxer"] + ",dst=" + destination;
-        }
-
-        public string GetStreamURL()
-        {
-            return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + identifier + "&action=playlist&parameters=index.m3u8";
-        }
-
-        public Stream ProvideCustomActionFile(string action, string param)
-        {
-            switch (action)
-            {
-                case "segment":
-                    WCFUtil.SetContentType("video/MP2T");
-                    string segmentPath = Path.Combine(temporaryDirectory, Path.GetFileName(param));
-                    if (!File.Exists(segmentPath))
-                    {
-                        Log.Warn("VLCHTTPLiveStreamer: Client requested non-existing segment file {0}", segmentPath);
-                        return Stream.Null;
-                    }
-                    return new FileStream(segmentPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-
-                case "playlist":
-                    WCFUtil.SetContentType("application/vnd.apple.mpegurl");
-                    string playlistPath = Path.Combine(temporaryDirectory, "index.m3u8");
-                    if(!File.Exists(playlistPath))
-                    {
-                        Log.Warn("VLCHTTPLiveStreamer: Client requested index.m3u8 that doesn't exist for identifier '{0}'", identifier);
-                        return Stream.Null;
-                    }
-
-                    // Having CRLF instead of LF in the playlist is allowed by the spec, but causes problems for VLC, so strip them.
-                    return StripCarriageReturn(playlistPath);
-
-                default:
-                    Log.Warn("VLCHTTPLiveStreamer: Request invalid action '{0}' with param '{1}'", action, param);
-                    return Stream.Null;
-            }
-        }
-
-        private Stream StripCarriageReturn(string path)
-        {
-            // read original file
-            var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            string text;
-            using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                text = reader.ReadToEnd();
-            }
-
-            // remove all carriage returns
-            text = text.Replace("\r", "");
-
-            // return
-            return new MemoryStream(Encoding.UTF8.GetBytes(text));
+            string indexUrl = WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + Identifier + "&action=segment&parameters=######.ts";
+            string liveHttpOptions = Context.Profile.CodecParameters["httpLiveOptions"] + ",index=" + Path.Combine(TemporaryDirectory, "index.m3u8") + ",index-url=" + indexUrl;
+            string destination = Path.Combine(TemporaryDirectory, "######.ts");
+            return ":standard{access=livehttp{" + liveHttpOptions + "},mux=" + Context.Profile.CodecParameters["muxer"] + ",dst=" + destination + "}";
         }
     }
 }

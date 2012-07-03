@@ -367,7 +367,8 @@
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>ts{use-key-frames}</muxer>
-        <httpLiveOptions>seglen=7,delsegs=false,numsegs=15</httpLiveOptions>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveKeepOld>5</httpLiveKeepOld>
       </transcoderConfiguration>
     </transcoder>
     <transcoder>
@@ -388,7 +389,8 @@
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=96,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>ts{use-key-frames}</muxer>
-        <httpLiveOptions>seglen=7,delsegs=false,numsegs=15</httpLiveOptions>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </transcoderConfiguration>
     </transcoder>
   </transcoders>
