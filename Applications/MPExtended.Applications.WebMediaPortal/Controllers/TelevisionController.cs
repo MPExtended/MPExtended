@@ -77,30 +77,24 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             var program = MPEServices.TAS.GetProgramDetailedById(programId);
             if (program == null)
-            {
                 return HttpNotFound();
-            }
             return View(new ProgramDetailsViewModel(program));
         }
 
         public ActionResult WatchLiveTV(int channelId)
         {
             var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
-            if (channel != null)
-            {
-                return View(channel);
-            }
-            return null;
+            if (channel == null)
+                return HttpNotFound();
+            return View(channel);
         }
 
         public ActionResult Recordings()
         {
             var recordings = MPEServices.TAS.GetRecordings();
-            if (recordings != null)
-            {
-                return View(recordings);
-            }
-            return null;
+            if (recordings == null)
+                return HttpNotFound();
+            return View(recordings);
         }
 
         public ActionResult Recording(int id)
