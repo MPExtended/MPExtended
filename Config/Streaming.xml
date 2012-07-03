@@ -96,7 +96,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1024,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=256,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -115,7 +115,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -134,7 +134,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -153,7 +153,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=256,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=64,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -176,7 +176,7 @@
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:rtp{sdp=#ADDRESS#}</muxer>
-        <options>--no-sout-rtp-sap --no-sout-standard-sap --sout-keep --ttl 1</options>
+        <options>--no-sout-rtp-sap --no-sout-standard-sap --sout-ffmpeg-strict=-2 --sout-keep --ttl 1</options>
         <rtspOutput>yes</rtspOutput>
       </transcoderConfiguration>
     </transcoder>
@@ -196,7 +196,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.0\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
       </transcoderConfiguration>
     </transcoder>
@@ -231,7 +231,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=3500,venc=x264{profile=baseline},acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </transcoderConfiguration>
@@ -250,7 +250,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -270,7 +270,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=450,venc=x264{profile=baseline},acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -340,7 +340,7 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapper">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -363,9 +363,9 @@
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming">
         <disableSeeking>no</disableSeeking>
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
-        <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>ts{use-key-frames}</muxer>
         <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
         <httpLiveKeepOld>5</httpLiveKeepOld>
@@ -383,11 +383,11 @@
       <maxOutputHeight>320</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming">
-        <disableSeeking>no</disableSeeking>
+        <disableSeeking>no</disableSeeking>*
         <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
-        <options>--ffmpeg-hw</options>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
-        <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0},acodec=mp4a,ab=96,channels=2,samplerate=48000,audio-sync</encoder>
+        <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>ts{use-key-frames}</muxer>
         <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
