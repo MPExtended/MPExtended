@@ -375,7 +375,7 @@
       <name>HTTP Live Streaming LQ</name>
       <description>HTTP Live Streaming</description>
       <bandwidth>3000</bandwidth>
-      <target>ios</target>
+      <target>android</target>
       <transport>http</transport>
       <mime>video/MP2T</mime> <!-- this is ignored-->
       <videoStream>true</videoStream>

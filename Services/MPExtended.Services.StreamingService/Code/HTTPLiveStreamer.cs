@@ -40,7 +40,7 @@ namespace MPExtended.Services.StreamingService.Code
             Context = context;
 
             // create temporary directory
-            TemporaryDirectory = Path.Combine(Path.GetTempPath(), "MPExtended", "httplivestreaming-" + identifier);
+            TemporaryDirectory = Path.Combine(Path.GetTempPath(), "MPExtended", "httplivestreaming-" + identifier + (new Random().Next(10000, 99999)));
             if (Directory.Exists(TemporaryDirectory))
             {
                 Directory.Delete(TemporaryDirectory, true);

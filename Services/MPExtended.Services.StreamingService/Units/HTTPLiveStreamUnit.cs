@@ -63,7 +63,8 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 Thread.Sleep(5000);
                 var dir = Path.GetDirectoryName(indexFile);
-                Directory.Delete(dir, true);
+                if (Directory.Exists(dir))
+                    Directory.Delete(dir, true);
             });
 
             return true;
