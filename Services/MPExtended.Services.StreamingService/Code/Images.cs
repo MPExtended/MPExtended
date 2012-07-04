@@ -27,11 +27,11 @@ using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
 using MPExtended.Services.TVAccessService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -69,26 +69,26 @@ namespace MPExtended.Services.StreamingService.Code
             this.path = path;
         }
 
-        public ImageMediaSource(WebMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
+        public ImageMediaSource(WebMediaType type, int? provider, string id, WebFileType filetype, int offset)
             : base (type, provider, id, filetype, offset)
         {
         }
 
-        protected override bool CheckArguments(WebMediaType mediatype, WebArtworkType filetype)
+        protected override bool CheckArguments(WebMediaType mediatype, WebFileType filetype)
         {
-            if ((mediatype == WebMediaType.TV || mediatype == WebMediaType.Recording) && filetype == WebArtworkType.Logo)
+            if ((mediatype == WebMediaType.TV || mediatype == WebMediaType.Recording) && filetype == WebFileType.Logo)
                 return true;
             return base.CheckArguments(mediatype, filetype);
         }
 
         protected bool IsCustomized()
         {
-            return path != null || ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebArtworkType.Logo);
+            return path != null || ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo);
         }
 
         public override WebFileInfo GetFileInfo()
         {
-            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebArtworkType.Logo)
+            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo)
             {
                 // get display name
                 int idChannel = MediaType == WebMediaType.TV ?

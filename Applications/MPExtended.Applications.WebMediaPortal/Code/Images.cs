@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
         }
 
-        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebArtworkType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
         {
             IStreamingService service;
             int? provider = null;
@@ -101,7 +101,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile);
         }
 
-        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebArtworkType artworkType, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)
         {
             return ReturnFromService(mediaType, id, artworkType, 0, 0, defaultFile);
         }

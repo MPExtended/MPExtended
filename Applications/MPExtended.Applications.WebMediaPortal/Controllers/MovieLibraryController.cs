@@ -24,10 +24,10 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -74,12 +74,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Cover(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.Movie, movie, WebArtworkType.Cover, width, height, "Images/default/movie-cover.png");
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Cover, width, height, "Images/default/movie-cover.png");
         }
 
         public ActionResult Fanart(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.Movie, movie, WebArtworkType.Backdrop, width, height, "Images/default/movie-fanart.png");
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Backdrop, width, height, "Images/default/movie-fanart.png");
         }
     }
 }

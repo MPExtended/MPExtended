@@ -25,9 +25,9 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -69,7 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebArtworkType.Cover, "images/default/album.png");
+            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, "images/default/album.png");
         }
     }
 }

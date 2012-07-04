@@ -24,6 +24,7 @@ using System.Net;
 using System.Data.SQLite;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.PlugIns.MAS.MPVideos

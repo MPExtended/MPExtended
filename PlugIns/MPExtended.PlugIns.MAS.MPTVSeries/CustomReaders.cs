@@ -22,6 +22,7 @@ using System.Text;
 using System.IO;
 using System.Data.SQLite;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.PlugIns.MAS.MPTVSeries

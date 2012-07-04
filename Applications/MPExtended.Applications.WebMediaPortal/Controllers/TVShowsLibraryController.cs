@@ -24,10 +24,10 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -54,17 +54,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.TVShow, show, WebArtworkType.Backdrop, width, height, "Images/default/tvshow-fanart.png");
+            return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Backdrop, width, height, "Images/default/tvshow-fanart.png");
         }
 
         public ActionResult SeriesPoster(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.TVShow, show, WebArtworkType.Poster, width, height, "Images/default/tvshow-poster.png");
+            return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Poster, width, height, "Images/default/tvshow-poster.png");
         }
 
         public ActionResult SeriesBanner(string show, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.TVShow, show, WebArtworkType.Banner, width, height, "Images/default/tvshow-banner.png");
+            return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Banner, width, height, "Images/default/tvshow-banner.png");
         }
 
         // Seasons
@@ -87,7 +87,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Image(string season, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.TVSeason, season, WebArtworkType.Banner, width, height, "Images/default/tvseason-banner.png");
+            return Images.ReturnFromService(WebMediaType.TVSeason, season, WebFileType.Banner, width, height, "Images/default/tvseason-banner.png");
         }
 
         // Episodes
@@ -129,7 +129,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult EpisodeImage(string episode, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.TVEpisode, episode, WebArtworkType.Banner, width, height, "Images/default/tvepisode-banner.png");
+            return Images.ReturnFromService(WebMediaType.TVEpisode, episode, WebFileType.Banner, width, height, "Images/default/tvepisode-banner.png");
         }
     }
 }

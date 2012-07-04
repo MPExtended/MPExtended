@@ -62,7 +62,6 @@
     <Compile Include="IStreamingService.cs" />
     <Compile Include="IWebStreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebArtworkType.cs" />
     <Compile Include="WebItemSupportStatus.cs" />
     <Compile Include="WebMediaInfo.cs" />
     <Compile Include="WebResolution.cs" />

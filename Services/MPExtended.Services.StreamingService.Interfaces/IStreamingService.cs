@@ -46,10 +46,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetArtwork(WebMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset);
+        Stream GetArtwork(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight);
+        Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight);
     }
 }
