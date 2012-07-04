@@ -32,7 +32,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int TimesWatched { get; set; }
         public string Title { get; set; }
 
-        public override WebMediaType Type
+        public WebMediaType Type
         {
             get
             {
