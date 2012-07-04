@@ -17,33 +17,33 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Text;
 
 namespace MPExtended.Applications.Development.DevTool.DocGen
 {
     internal class MASGenerator : Generator
     {
+        private Assembly commonAssembly;
+
         public MASGenerator(Assembly assembly)
         {
             this.Assembly = assembly;
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.IMediaAccessService");
-            this.Enums = new List<Type>() {
-                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.OrderBy"),
-                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.SortBy"),
-                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.WebMediaType"),
-                this.Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.WebFileType")
-            };
+
+            commonAssembly = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(assembly.Location), "MPExtended.Services.Common.Interfaces.dll"));
         }
 
         protected override int GenerateSortOrder(string methodName)
         {
             if (methodName.Contains("Movie")) return 2;
             if (methodName.Contains("Music")) return 3;
-            if (methodName.Contains("Picture")) return 4;
-            if (methodName.Contains("TV")) return 5;
-            if (methodName.Contains("FileSystem")) return 6;
+            if (methodName.Contains("Playlist")) return 4;
+            if (methodName.Contains("Picture")) return 5;
+            if (methodName.Contains("TV")) return 6;
+            if (methodName.Contains("FileSystem")) return 7;
             return 1; // show unknown at first
         }
 
@@ -54,24 +54,26 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 { 1, "General" },
                 { 2, "Movie" },
                 { 3, "Music" },
-                { 4, "Picture" },
-                { 5, "TVShow" },
-                { 6, "FileSystem" },
+                { 4, "Playlist" },
+                { 5, "Picture" },
+                { 6, "TVShow" },
+                { 7, "FileSystem" },
             };
         }
 
         protected override string MapName(MethodInfo method, string typename)
         {
-            if (typename == "SortBy")
+            if (typename == "WebSortField")
             {
                 Type rettype;
                 IsListType(method.ReturnType, out rettype);
                 var items = rettype.GetInterfaces().Where(x => x.Name.EndsWith("Sortable")).Select(x => x.Name.Substring(1, x.Name.Length - 9)).ToList();
 
-                Type sby = Assembly.GetType("MPExtended.Services.MediaAccessService.Interfaces.SortBy");
+                Type sby = commonAssembly.GetType("MPExtended.Services.Common.Interfaces.WebSortField");
                 var valid = sby.GetEnumValues().Cast<int>().Select(x => new { Value = x, Name = sby.GetEnumName(x) }).Where(x => items.Contains(x.Name));
 
-                return "<a href=\"#SortBy\">SortBy</a>; valid values: " + String.Join(", ", valid.Select(x => x.Name + " = " + x.Value).ToArray());
+                var validTxt = String.Join(", ", valid.Select(x => x.Name + " = " + x.Value).ToArray());
+                return "WebSortField; valid values: " + (validTxt.Length > 0 ? validTxt : "<em>none</em>");
             }
 
             return base.MapName(method, typename);

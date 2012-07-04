@@ -30,21 +30,19 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             this.Assembly = assembly;
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IWebStreamingService");
             this.StreamAPI = this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.IStreamingService");
-            this.Enums = new List<Type>() {
-                this.Assembly.GetType("MPExtended.Services.StreamingService.Interfaces.WebArtworkType")
-            };
         }
 
         protected override int GenerateSortOrder(string methodName)
         {
             if (methodName.Contains("StreamingSessions")) return 1;
-            if (methodName.Contains("TranscoderProfile")) return 1;
+            if (methodName.Contains("Authorize")) return 1;
+            if (methodName.Contains("TranscoderProfile")) return 4;
             if (methodName.Contains("StreamSize")) return 3;
             if (methodName.Contains("TranscodingInfo")) return 3;
             if (methodName.Contains("MediaInfo")) return 3;
-            if (methodName.Contains("CustomTranscoder")) return 5;
-            if (methodName.Contains("Artwork")) return 4;
-            if (methodName.Contains("Image")) return 4;
+            if (methodName.Contains("CustomTranscoder")) return 6;
+            if (methodName.Contains("Artwork")) return 5;
+            if (methodName.Contains("Image")) return 5;
             if (methodName.Contains("Stream")) return 2;
 
             return 1;
@@ -57,8 +55,9 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 { 1, "General" },
                 { 2, "Control" },
                 { 3, "Stream info" },
-                { 4, "Images" },
-                { 5, "Misc" },
+                { 4, "Profiles" },
+                { 5, "Images" },
+                { 6, "Misc" },
             };
         }
     }

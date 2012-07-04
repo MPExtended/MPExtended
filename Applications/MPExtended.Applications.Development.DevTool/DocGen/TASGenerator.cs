@@ -29,12 +29,10 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
         {
             this.Assembly = assembly;
             this.JsonAPI = this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.ITVAccessService");
-            this.Enums = new List<Type>() {
+            this.Enumerations = new List<Type>() {
                 this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.ChannelState"),
                 this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.WebScheduleType"),
                 this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.WebScheduleKeepMethod"),
-                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.SortField"),
-                this.Assembly.GetType("MPExtended.Services.TVAccessService.Interfaces.SortOrder"),
             };
         }
 

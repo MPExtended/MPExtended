@@ -32,13 +32,19 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
         public TextWriter UserStream { get; set; }
         protected Type JsonAPI { get; set; }
         protected Type StreamAPI { get; set; }
-        protected IEnumerable<Type> Enums { get; set; }
+        protected IEnumerable<Type> Enumerations { get; set; }
 
-        protected abstract int GenerateSortOrder(string methodName);
-        protected abstract Dictionary<int, string> GetHeadings();
-
-        protected virtual void CustomGenerate()
+        protected virtual int GenerateSortOrder(string methodName)
         {
+            return 1;
+        }
+
+        protected virtual Dictionary<int, string> GetHeadings()
+        {
+            return new Dictionary<int, string>()
+            {
+                { 1, "General" },
+            };
         }
 
         protected virtual string MapName(MethodInfo method, string typename)
@@ -52,6 +58,7 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 { "Double", "float" },
                 { "Single", "float" },
                 { "Decimal", "float" },
+                { "WebDictionary`1", "WebDictionary" },
             };
             if(namemap.ContainsKey(typename))
                 return namemap[typename];
@@ -65,46 +72,48 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 "<p>This page contains the API documentation for this MPExtended service, as automatically generated on {0} for version {1} (build {2}). " +
                 "Please do not edit, as your changes will be overwritten.</p>",
                 DateTime.Now.ToString("dd MMM yyy HH:mm", System.Globalization.CultureInfo.InvariantCulture),
-                VersionUtil.GetVersion(JsonAPI.Assembly),
-                VersionUtil.GetBuildVersion(JsonAPI.Assembly));
+                VersionUtil.GetVersion(Assembly),
+                VersionUtil.GetBuildVersion(Assembly));
 
             UserStream.WriteLine("Generating documentation for assembly {0}", Assembly.GetName().Name);
-            CustomGenerate();
 
             // get all items 
-            var itemstogen = JsonAPI.GetMethods().Select(x => new DocGenItem()
-            {
-                URLPrefix = "/json",
-                Reflected = x,
-                Name = x.Name,
-                Order = GenerateSortOrder(x.Name)
-            });
-            if(Enums != null)
-                itemstogen = itemstogen.Union(Enums.Select(x => new DocGenItem()
-                    {
-                        URLPrefix = "",
-                        Reflected = x,
-                        Name = x.Name,
-                        Order = GenerateSortOrder(x.Name),
-                    }));
+            IEnumerable<DocGenItem> typesToDocument = new List<DocGenItem>();
+            if (JsonAPI != null)
+                typesToDocument = JsonAPI.GetMethods().Select(x => new DocGenItem()
+                {
+                    URLPrefix = "/json",
+                    Reflected = x,
+                    Name = x.Name,
+                    Order = GenerateSortOrder(x.Name)
+                });
             if(StreamAPI != null)
-                itemstogen = itemstogen.Union(StreamAPI.GetMethods().Select(x => new DocGenItem()
+                typesToDocument = typesToDocument.Union(StreamAPI.GetMethods().Select(x => new DocGenItem()
                 {
                     URLPrefix = "/stream",
                     Reflected = x,
                     Name = x.Name,
                     Order = GenerateSortOrder(x.Name)
                 }));
+            if (Enumerations != null)
+                typesToDocument = typesToDocument.Union(Enumerations.Select(x => new DocGenItem()
+                {
+                    URLPrefix = "",
+                    Reflected = x,
+                    Name = x.Name,
+                    Order = GenerateSortOrder(x.Name),
+                }));
 
-            itemstogen = itemstogen
+            // sort all types
+            typesToDocument = typesToDocument
                 .OrderBy(x => x.Order)
                 .ThenBy(x => x.Name);
-            int lastOrder = -1;
 
-            // navigation
+            // print navigation
+            int lastOrder = -1;
             UserStream.WriteLine("=> Generating documentation header");
             Output.WriteLine("<h3>Navigation</h3>");
-            foreach (var item in itemstogen)
+            foreach (var item in typesToDocument)
             {
                 if (lastOrder != item.Order)
                 {
@@ -116,8 +125,9 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             }
             Output.WriteLine("</ul>");
 
-            // method docs
-            foreach (var item in itemstogen)
+            // generate all documentation
+            lastOrder = -1;
+            foreach (var item in typesToDocument)
             {
                 if (lastOrder != item.Order)
                 {
@@ -160,11 +170,11 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             }
             else if (IsListType(method.ReturnType, out itemType))
             {
-                Output.WriteLine(String.Format("<dt>Returns</dt><dd>List of <strong>{0}</strong><br />", itemType.Name));
+                Output.WriteLine(String.Format("<dt>Returns</dt><dd>List of <strong>{0}</strong><br />", MapName(method, itemType.Name)));
             }
             else
             {
-                Output.WriteLine(String.Format("<dt>Returns</dt><dd><strong>{0}</strong><br />", itemType.Name));
+                Output.WriteLine(String.Format("<dt>Returns</dt><dd><strong>{0}</strong><br />", MapName(method, itemType.Name)));
             }
             if (itemType != null && !IsUndocumentableType(itemType))
             {
@@ -240,13 +250,15 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
         {
             Type elementType;
             string typename = IsListType(type, out elementType) ? "list of " + MapName(method, elementType.Name) : MapName(method, type.Name);
-            return typename == elementType.Name ? "<a href=\"#" + typename + "\">" + typename + "</a>" : typename;
+            return typename == elementType.Name && type.Assembly.GetName().Name != "MPExtended.Services.Common.Interfaces" && !IsUndocumentableType(type)
+                ? "<a href=\"#" + typename + "\">" + typename + "</a>"
+                : typename;
         }
 
         protected bool IsListType(Type type, out Type elementType)
         {
             // i've a feeling .NET already has a method for this
-            bool isList = type.Name != "String" && 
+            bool isList = type.Name != "String" && !type.Name.Contains("WebDictionary") &&
                 (type.GetMethods().Count(x => x.Name == "GetEnumerator") > 0 || 
                     type.GetInterfaces().Count(x => x.Name == "IEnumerable") > 0);
             elementType = null;
@@ -267,7 +279,7 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
 
         protected bool IsUndocumentableType(Type type)
         {
-            if (type == typeof(string) || type == typeof(char) || type == typeof(Stream))
+            if (type == typeof(string) || type == typeof(char) || type == typeof(Stream) || type == typeof(DateTime) || type.Name.Contains("WebDictionary"))
             {
                 return true;
             }
