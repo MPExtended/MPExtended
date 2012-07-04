@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
@@ -30,5 +31,13 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int StopTime { get; set; }
         public int TimesWatched { get; set; }
         public string Title { get; set; }
+
+        public override WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Recording;
+            }
+        }
     }
 }
