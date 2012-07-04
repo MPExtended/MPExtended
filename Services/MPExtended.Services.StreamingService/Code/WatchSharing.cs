@@ -321,7 +321,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private int CalculateWatchPosition(string id)
         {
-            int watchPosition = streams[id].Context.GetPlayerPosition();
+            long watchPosition = streams[id].Context.GetPlayerPosition();
             int progress = (int)Math.Round((watchPosition * 1.0 / streams[id].Runtime) * 100);
             Log.Debug("WatchSharing: watch position {0}ms, runtime {1}ms, progress {2}%", watchPosition, streams[id].Runtime, progress);
             return progress;

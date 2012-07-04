@@ -23,12 +23,12 @@ namespace MPExtended.Services.StreamingService.Interfaces
         /// <summary>
         /// The place where the user started the playback. 
         /// </summary>
-        public int StartPosition { get; set; }
+        public long StartPosition { get; set; }
 
         /// <summary>
         /// The current place of the player.
         /// </summary>
-        public int PlayerPosition { get; set; }
+        public long PlayerPosition { get; set; }
 
         /// <summary>
         /// Percentage of the file the user is at

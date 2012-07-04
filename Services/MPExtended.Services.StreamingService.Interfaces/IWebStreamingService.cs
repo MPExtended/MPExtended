@@ -34,7 +34,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         // playerPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebTranscodingInfo GetTranscodingInfo(string identifier, int? playerPosition);
+        WebTranscodingInfo GetTranscodingInfo(string identifier, long? playerPosition);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -43,12 +43,12 @@ namespace MPExtended.Services.StreamingService.Interfaces
         // startPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStringResult StartStream(string identifier, string profileName, int startPosition);
+        WebStringResult StartStream(string identifier, string profileName, long startPosition);
 
         // startPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId);
+        WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, long startPosition, int audioId, int subtitleId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

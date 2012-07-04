@@ -112,7 +112,7 @@ namespace MPExtended.Services.StreamingService
             return MediaInfoHelper.LoadMediaInfoOrSurrogate(new MediaSource(type, provider, itemId));
         }
 
-        public WebTranscodingInfo GetTranscodingInfo(string identifier, int? playerPosition)
+        public WebTranscodingInfo GetTranscodingInfo(string identifier, long? playerPosition)
         {
             if (playerPosition.HasValue)
             {
@@ -243,14 +243,14 @@ namespace MPExtended.Services.StreamingService
             return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
-        public WebStringResult StartStream(string identifier, string profileName, int startPosition)
+        public WebStringResult StartStream(string identifier, string profileName, long startPosition)
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000);
         }
 
-        public WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, int startPosition, int audioId, int subtitleId)
+        public WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, long startPosition, int audioId, int subtitleId)
         {
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
@@ -307,7 +307,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.CustomTranscoderData(identifier, action, parameters);
         }
 
-        public Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition, int? idleTimeout)
+        public Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, long startPosition, int? idleTimeout)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -351,12 +351,12 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Images
-        public Stream ExtractImage(WebMediaType type, int? provider, string itemId, int position)
+        public Stream ExtractImage(WebMediaType type, int? provider, string itemId, long position)
         {
             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
         }
 
-        public Stream ExtractImageResized(WebMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
+        public Stream ExtractImageResized(WebMediaType type, int? provider, string itemId, long position, int maxWidth, int maxHeight)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;

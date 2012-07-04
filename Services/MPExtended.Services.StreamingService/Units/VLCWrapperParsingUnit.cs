@@ -35,9 +35,9 @@ namespace MPExtended.Services.StreamingService.Units
         private WebMediaInfo info;
         private Thread processThread;
         private bool vlcIsStarted;
-        private int position;
+        private long position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, int position) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, long position) 
         {
             data = save;
             this.info = info;
@@ -80,7 +80,7 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, int startPosition, bool logProgress)
+        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, long startPosition, bool logProgress)
         {
             StreamReader reader = new StreamReader(stdoutStream);
             TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position, 25, 500, info.Duration); //VLCWrapper prints twice a second

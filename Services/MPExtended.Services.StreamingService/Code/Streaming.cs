@@ -157,7 +157,7 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_DEFAULT)
+        public string StartStream(string identifier, TranscoderProfile profile, long position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_DEFAULT)
         {
             // there's a theoretical race condition here between the insert in InitStream() and this, but the client should really, really
             // always have a positive result from InitStream() before continuing, so their bad that the stream failed. 
@@ -355,7 +355,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public void SetPlayerPosition(string identifier, int playerPosition)
+        public void SetPlayerPosition(string identifier, long playerPosition)
         {
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
             {
