@@ -80,7 +80,7 @@ namespace MPExtended.Services.StreamingService
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
         {
-            return GetTranscoderProfiles().Where(x => x.Target == target).ToList();
+            return GetTranscoderProfiles().Where(x => x.Targets.Contains(target)).ToList();
         }
 
         public WebTranscoderProfile GetTranscoderProfileByName(string name)

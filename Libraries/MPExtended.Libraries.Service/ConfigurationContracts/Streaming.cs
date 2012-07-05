@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public string MIME { get; set; }
         public int MaxOutputWidth { get; set; }
         public int MaxOutputHeight { get; set; }
-        public string Target { get; set; }
+        public List<string> Targets { get; set; }
         public int Bandwidth { get; set; }
         public string Transport { get; set; }
         public string TranscoderImplementationClass { get; set; }
@@ -102,7 +102,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 Name = x.Element("name").Value,
                 Description = x.Element("description").Value,
                 Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
-                Target = x.Element("target").Value,
+                Targets = (x.Element("targets") != null ? x.Element("targets").Elements("target") : x.Elements("target")).Select(y => y.Value).ToList(),
                 Transport = x.Element("transport").Value,
                 MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
                 MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
@@ -152,12 +152,18 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                     node.Add(new XElement("name", profile.Name));
                     node.Add(new XElement("description", profile.Description));
                     node.Add(new XElement("bandwidth", profile.Bandwidth));
-                    node.Add(new XElement("target", profile.Target));
                     node.Add(new XElement("transport", profile.Transport));
                     node.Add(new XElement("maxOutputWidth", profile.MaxOutputWidth));
                     node.Add(new XElement("maxOutputHeight", profile.MaxOutputHeight));
                     node.Add(new XElement("mime", profile.MIME));
                     node.Add(new XElement("videoStream", profile.HasVideoStream ? "true" : "false"));
+
+                    XElement targets = new XElement("targets");
+                    foreach (var target in profile.Targets)
+                    {
+                        targets.Add(new XElement("target", target));
+                    }
+                    node.Add(targets);
                     
                     XElement transcoderConfig = new XElement("transcoderConfiguration", new XAttribute("implementation", profile.TranscoderImplementationClass));
                     foreach(KeyValuePair<string, string> item in profile.CodecParameters) 

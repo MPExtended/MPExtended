@@ -326,7 +326,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // get view properties
-            VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
+            VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
 
             // generate view

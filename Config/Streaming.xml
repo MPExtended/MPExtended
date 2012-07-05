@@ -24,7 +24,9 @@
       <name>Android FFmpeg HQ</name>
       <description>Best-quality Android profile based on ffmpeg</description>
       <bandwidth>1400</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <maxOutputWidth>800</maxOutputWidth>
       <maxOutputHeight>600</maxOutputHeight>
@@ -39,7 +41,9 @@
       <name>Android FFmpeg better</name>
       <description>High-quality Android profile based on ffmpeg</description>
       <bandwidth>1300</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <maxOutputWidth>800</maxOutputWidth>
       <maxOutputHeight>600</maxOutputHeight>
@@ -54,7 +58,9 @@
       <name>Android FFmpeg medium</name>
       <description>Medium-quality Android profile based on ffmpeg</description>
       <bandwidth>800</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <maxOutputWidth>600</maxOutputWidth>
       <maxOutputHeight>400</maxOutputHeight>
@@ -69,7 +75,9 @@
       <name>Android FFmpeg LQ</name>
       <description>Low-quality Android profile based on ffmpeg</description>
       <bandwidth>380</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <maxOutputWidth>400</maxOutputWidth>
       <maxOutputHeight>300</maxOutputHeight>
@@ -86,7 +94,9 @@
       <name>Android VLC HQ</name>
       <description>Best-quality Android profile based on VLC</description>
       <bandwidth>1400</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
@@ -105,7 +115,9 @@
       <name>Android VLC better</name>
       <description>High-quality Android profile based on VLC</description>
       <bandwidth>1400</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
@@ -124,7 +136,9 @@
       <name>Android VLC medium</name>
       <description>Medium-quality Android profile based on VLC</description>
       <bandwidth>1400</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
@@ -143,7 +157,9 @@
       <name>Android VLC LQ</name>
       <description>Low-quality Android profile based on VLC</description>
       <bandwidth>1400</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
@@ -164,7 +180,9 @@
       <name>Android VLC RTSP</name>
       <description>Android VLC RTSP profile</description>
       <bandwidth>700</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>rtsp</transport>
       <mime>application/x-rtsp</mime>
       <videoStream>true</videoStream>
@@ -186,7 +204,9 @@
       <name>Remux-only</name>
       <description>Remux-only</description>
       <bandwidth>2000</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime>
       <videoStream>true</videoStream>
@@ -206,7 +226,9 @@
       <name>Direct</name>
       <description>VLC test profile</description>
       <bandwidth>10000</bandwidth>
-      <target>pc-vlc-video</target>
+      <targets>
+        <target>pc-vlc-video</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-unknown</mime>
       <videoStream>true</videoStream>
@@ -221,7 +243,9 @@
       <name>Flash HQ</name>
       <description>Flash HQ</description>
       <bandwidth>3000</bandwidth>
-      <target>pc-flash-video</target>
+      <targets>
+        <target>pc-flash-video</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-flv</mime>
       <videoStream>true</videoStream>
@@ -240,7 +264,9 @@
       <name>Flash LQ</name>
       <description>Flash LQ</description>
       <bandwidth>1000</bandwidth>
-      <target>pc-flash-video</target>
+      <targets>
+        <target>pc-flash-video</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-flv</mime>
       <videoStream>true</videoStream>
@@ -260,7 +286,9 @@
       <name>Flash Ultra LQ</name>
       <description>Flash Ultra LQ</description>
       <bandwidth>1000</bandwidth>
-      <target>pc-flash-video</target>
+      <targets>
+        <target>pc-flash-video</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-flv</mime>
       <videoStream>true</videoStream>
@@ -280,7 +308,9 @@
       <name>Flash Audio</name>
       <description>Flash Audio</description>
       <bandwidth>256</bandwidth>
-      <target>pc-flash-audio</target>
+      <targets>
+        <target>pc-flash-audio</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-flv</mime>
       <videoStream>false</videoStream>
@@ -296,7 +326,9 @@
       <name>MP3</name>
       <description>MP3</description>
       <bandwidth>256</bandwidth>
-      <target>pc-flash-audio</target>
+      <targets>
+        <target>pc-flash-audio</target>
+      </targets>
       <transport>http</transport>
       <mime>audio/mpeg</mime>
       <videoStream>false</videoStream>
@@ -312,7 +344,9 @@
       <name>AAC</name>
       <description>AAC</description>
       <bandwidth>256</bandwidth>
-      <target>pc-flash-audio</target>
+      <targets>
+        <target>pc-flash-audio</target>
+      </targets>
       <transport>http</transport>
       <mime>audio/aac</mime>
       <videoStream>false</videoStream>
@@ -330,7 +364,9 @@
       <name>Flash pseudostreaming test</name>
       <description>Flash pseudostreaming</description>
       <bandwidth>3000</bandwidth>
-      <target>pc-flash-video</target>
+      <targets>
+        <target>pc-flash-video</target>
+      </targets>
       <transport>http</transport>
       <mime>video/x-flv</mime>
       <videoStream>true</videoStream>
@@ -353,7 +389,10 @@
       <name>HTTP Live Streaming HQ</name>
       <description>HTTP Live Streaming</description>
       <bandwidth>3000</bandwidth>
-      <target>ios</target>
+      <targets>
+        <target>android</target>
+        <target>ios</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime> <!-- this is ignored-->
       <videoStream>true</videoStream>
@@ -375,7 +414,10 @@
       <name>HTTP Live Streaming LQ</name>
       <description>HTTP Live Streaming</description>
       <bandwidth>3000</bandwidth>
-      <target>android</target>
+      <targets>
+        <target>android</target>
+        <target>ios</target>
+      </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime> <!-- this is ignored-->
       <videoStream>true</videoStream>
