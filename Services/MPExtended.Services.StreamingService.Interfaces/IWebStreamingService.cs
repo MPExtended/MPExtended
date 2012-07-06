@@ -52,6 +52,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult StopStream(string identifier);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult FinishStream(string identifier);
 
         [OperationContract]

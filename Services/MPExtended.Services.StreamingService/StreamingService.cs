@@ -258,9 +258,16 @@ namespace MPExtended.Services.StreamingService
             return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
         }
 
+        public WebBoolResult StopStream(string identifier)
+        {
+            Log.Debug("Called StopStream with identifier={0}", identifier);
+            _stream.EndStream(identifier);
+            return true;
+        }
+
         public WebBoolResult FinishStream(string identifier)
         {
-            Log.Debug("Called FinishStream with ident={0}", identifier);
+            Log.Debug("Called FinishStream with identifier={0}", identifier);
             _stream.KillStream(identifier);
 
             lock(_timeshiftings)
