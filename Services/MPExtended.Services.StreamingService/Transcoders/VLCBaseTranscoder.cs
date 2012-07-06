@@ -105,7 +105,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             string inURL = "";
             if (Context.Source.NeedsInputReaderUnit)
             {
-                inURL = "stream://#IN#";
+                inURL = @"stream://\#IN#";
             }
             else
             {
