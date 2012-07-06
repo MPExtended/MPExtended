@@ -45,11 +45,11 @@ MVC:
 - Version 3.0.0.0
 
 Streaming\ffmpeg.exe:
-- Copyright (C) 2000-2011 the FFmpeg developers, http://ffmpeg.org/
+- Copyright (C) 2000-2012 the FFmpeg developers, http://ffmpeg.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://ffmpeg.org/, http://git.videolan.org/ffmpeg.git and http://ffmpeg.zeranoe.com/builds/source/ffmpeg/
 - Compiled for Windows by Kyle Schwarz, http://ffmpeg.zeranoe.com/
-- Revision 61b1d85c1f1074d9ce56bb482de99d0f03c7a161, static 32-bit build
+- Revision 8293a21a9c80a0cbb753ab44c829c1efff2083e5, static 32-bit build
 
 Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
