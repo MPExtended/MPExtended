@@ -73,6 +73,14 @@ namespace MPExtended.Applications.Development.DevTool
                 }
 
                 MethodInfo intf = intfMethods.Where(x => x.Name == currentMethod.Name).First();
+
+                // check return type
+                if (intf.ReturnType != currentMethod.ReturnType)
+                {
+                    OutputStream.WriteLine("{0}: Method {1} returns {2} in interface but {3} in implementation", service, currentMethod.Name, intf.ReturnType, currentMethod.ReturnType);
+                }
+
+                // check parameters
                 ParameterInfo[] intfParameters = intf.GetParameters();
                 ParameterInfo[] implParameters = currentMethod.GetParameters();
 
@@ -87,6 +95,11 @@ namespace MPExtended.Applications.Development.DevTool
                     if (intfParameters[i].Name != implParameters[i].Name)
                     {
                         OutputStream.WriteLine("{0}({1}): Parameter {2} has different names ({3} vs {4})", service, currentMethod.Name, i, intfParameters[i].Name, implParameters[i].Name);
+                    }
+
+                    if (intfParameters[i].ParameterType != implParameters[i].ParameterType)
+                    {
+                        OutputStream.WriteLine("{0}({1}): Parameter {2} has differnet types ({3} vs {4})", service, currentMethod.Name, i, intfParameters[i].ParameterType, implParameters[i].ParameterType);
                     }
                 }
             }
