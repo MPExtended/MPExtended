@@ -40,6 +40,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // This is the timeout after which streams are automatically killed (in seconds)
         private const int STREAM_TIMEOUT_DIRECT = 10;
         private const int STREAM_TIMEOUT_PROXY = 300;
+
+        // This is the read timeout from the proxy input stream
+        private const int STREAM_PROXY_READ_TIMEOUT = 10;
 		
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
@@ -217,7 +220,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             int read;
 
             // do request
-            Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
+            Log.Debug("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
             WebRequest request = WebRequest.Create(sourceUrl);
             request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
             WebResponse response = request.GetResponse();
@@ -240,6 +243,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
             }
 
+            // set reasonable timeouts on the sourceStream
+            sourceStream.ReadTimeout = STREAM_PROXY_READ_TIMEOUT * 1000;
+
             // stream to output
             try
             {
@@ -249,9 +255,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     HttpContext.Response.OutputStream.Flush(); // TODO: is this needed?
                 }
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
-                Log.Warn(String.Format("HttpException while proxying stream {0}", sourceUrl), ex);
+                Log.Warn(String.Format("Exception while proxying stream {0}", sourceUrl), ex);
             }
         }
 
