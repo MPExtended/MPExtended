@@ -9,7 +9,7 @@
     @Html.Raw(UIStrings.InstallFlashPlayerToUseThisPlayer)
 </div>
 
-<div id="my-slider" class="dragdealer">
+<div id="seekbar" class="dragdealer" style="width: @(Model.Size.Width)px;">
     <div class="red-bar handle">
     </div>
 </div>
@@ -27,7 +27,7 @@
 <script type='text/javascript'>
     var startPos = 0;
     var videoLength = 0;
-    var slider = new Dragdealer('my-slider',
+    var slider = new Dragdealer('seekbar',
     {
         steps: 100,
         snap: false,
