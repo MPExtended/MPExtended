@@ -46,6 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 		
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
+        private static Dictionary<string, string> HttpLiveUrls = new Dictionary<string, string>();
         
         // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
         private static Random randomGenerator = new Random();
@@ -158,6 +159,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            // Delegate to HLS streaming if needed
+            WebTranscoderProfile profile = GetStreamControl(type).GetTranscoderProfileByName(transcoder);
+            StreamTarget target = StreamTarget.GetVideoTargets().First(x => profile.Targets.Contains(x.Name));
+            if (target.Player == VideoPlayer.HLS)
+            {
+                return GenerateHttpLiveStream(type, itemId, profile, starttime, continuationId);
+            }
 
             // Generate random identifier, and continuationId if needed
             string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
@@ -218,6 +226,60 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 Log.Error("FinishStream failed");
             }
+            return new EmptyResult();
+        }
+
+        private ActionResult GenerateHttpLiveStream(WebMediaType type, string itemId, WebTranscoderProfile profile, int starttime, string continuationId)
+        {
+            // Get identifier and continuationId
+            continuationId = continuationId ?? "hls-" + randomGenerator.Next(10000, 99999).ToString();
+            bool alreadyRunning = RunningStreams.ContainsKey(continuationId);
+            string identifier = alreadyRunning ? RunningStreams[continuationId] : "webmediaportal-" + randomGenerator.Next(10000, 99999);
+
+            // Check stream mode, generate timeout setting and dump all info we got
+            StreamType streamMode = GetStreamMode();
+            int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
+
+            // We only need to start the stream if this is the first request for this file
+            string url;
+            if (!alreadyRunning)
+            {
+                Log.Debug("Starting HLS stream type={0}; itemId={1}; profile={2}; starttime={3}; continuationId={4}; identifier={5}",
+                    type, itemId, profile.Name, starttime, continuationId, identifier);
+                Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s",
+                    HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
+
+                // Start the stream
+                string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
+                using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
+                {
+                    WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
+                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
+                    {
+                        Log.Error("InitStream for HLS failed");
+                        return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    }
+                }
+
+                // Get stream URL
+                url = GetStreamControl(type).StartStream(identifier, profile.Name, starttime);
+                if (String.IsNullOrEmpty(url))
+                {
+                    Log.Error("StartStream for HLS failed");
+                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+                Log.Debug("Started HLS stream successfully at {0}", url);
+                RunningStreams[continuationId] = identifier;
+                HttpLiveUrls[identifier] = url;
+            }
+            else
+            {
+                url = HttpLiveUrls[identifier];
+            }
+
+            // Return the actual file contents
+            GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
+            ProxyStream(url);
             return new EmptyResult();
         }
 

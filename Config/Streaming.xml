@@ -398,6 +398,7 @@
       <targets>
         <target>android</target>
         <target>ios</target>
+        <target>mobile-hls-video</target>
       </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime> <!-- this is ignored-->
@@ -423,6 +424,7 @@
       <targets>
         <target>android</target>
         <target>ios</target>
+        <target>mobile-hls-video</target>
       </targets>
       <transport>http</transport>
       <mime>video/MP2T</mime> <!-- this is ignored-->

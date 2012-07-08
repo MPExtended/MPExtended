@@ -51,7 +51,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             return new List<StreamTarget>() {
                 new StreamTarget(VideoPlayer.VLC, true, "pc-vlc-video"),
-                new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video")
+                new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video"),
+                new StreamTarget(VideoPlayer.HLS, true, "mobile-hls-video"),
             };
         }
 
@@ -121,6 +122,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         FlashVideo,
         FlashAudio,
-        VLC
+        VLC,
+        HLS
     }
 }

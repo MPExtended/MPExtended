@@ -482,6 +482,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
+    <Content Include="Views\Stream\HLSPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
