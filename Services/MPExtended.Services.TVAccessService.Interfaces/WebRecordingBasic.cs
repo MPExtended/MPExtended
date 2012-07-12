@@ -31,6 +31,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int StopTime { get; set; }
         public int TimesWatched { get; set; }
         public string Title { get; set; }
+        public string ChannelName { get; set; }
 
         public WebMediaType Type
         {

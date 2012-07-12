@@ -457,7 +457,8 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = rec.StartTime != DateTime.MinValue ? rec.StartTime : new DateTime(2000, 1, 1),
                 StopTime = rec.StopTime,
                 TimesWatched = rec.TimesWatched,
-                Title = rec.Title
+                Title = rec.Title,
+                ChannelName = Channel.Retrieve(rec.IdChannel).DisplayName
             };
         }
     }
