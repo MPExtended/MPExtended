@@ -90,6 +90,11 @@ namespace MPExtended.Services.MediaAccessService
             };
         }
 
+        public WebBoolResult TestConnectionToTVService()
+        {
+            return true;
+        }
+
         public WebMediaItem GetMediaItem(int? provider, WebMediaType type, string id)
         {
             switch (type)
