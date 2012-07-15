@@ -19,7 +19,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int IdChannel { get; set; }
         public int Id { get; set; }
         public int IdSchedule { get; set; }
-        public int IdServer { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
         public bool IsRecording { get; set; }
