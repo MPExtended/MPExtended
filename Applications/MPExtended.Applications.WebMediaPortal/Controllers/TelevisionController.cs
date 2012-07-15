@@ -54,7 +54,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 startTime = new DateTime(passedDate.Year, passedDate.Month, passedDate.Day, startTime.Hour, startTime.Minute, startTime.Second);
             }
 
-            var lastHour = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, 0, 0, DateTimeKind.Local);
+            var lastHour = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, startTime.Minute >= 30 ? 30 : 0, 0, DateTimeKind.Local);
             var endOfGuide = lastHour.AddHours(4);
 
             var groups = MPEServices.TAS.GetGroups();
