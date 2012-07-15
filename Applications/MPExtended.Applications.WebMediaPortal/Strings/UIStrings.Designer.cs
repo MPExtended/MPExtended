@@ -907,7 +907,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0} - Season {1} Episode {2} - {3}&lt;/strong&gt;.
+        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0} - Season {1} Episode {2} - {3}&lt;/strong&gt;..
         /// </summary>
         public static string YouAreWatchingEpisode {
             get {
@@ -916,7 +916,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are watching to &lt;strong&gt;{0}&lt;/strong&gt;.
+        ///   Looks up a localized string similar to You are watching to &lt;strong&gt;{0}&lt;/strong&gt;..
         /// </summary>
         public static string YouAreWatchingMovie {
             get {
@@ -925,7 +925,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0}&lt;/strong&gt;on &lt;strong&gt;{1}&lt;/strong&gt;.
+        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0}&lt;/strong&gt; on &lt;strong&gt;{1}&lt;/strong&gt;..
         /// </summary>
         public static string YouAreWatchingProgram {
             get {
@@ -934,7 +934,7 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0}&lt;/strong&gt;.
+        ///   Looks up a localized string similar to You are watching &lt;strong&gt;{0}&lt;/strong&gt;..
         /// </summary>
         public static string YouAreWatchingRecording {
             get {
