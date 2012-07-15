@@ -6,7 +6,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-    public class WebPictureBasic : WebMediaItem, ITitleSortable, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
+    public class WebPictureBasic : WebMediaItem, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
     {
         public WebPictureBasic()
         {
@@ -15,7 +15,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
         }
 
         public IList<WebCategory> Categories { get; set; }
-        public string Title { get; set; }
         public DateTime DateTaken { get; set; }
 
         public override WebMediaType Type

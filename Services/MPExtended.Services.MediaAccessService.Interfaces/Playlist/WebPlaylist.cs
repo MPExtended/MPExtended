@@ -6,9 +6,8 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
 {
-    public class WebPlaylist : WebMediaItem, ITitleSortable
+    public class WebPlaylist : WebMediaItem
     {
-        public string Title { get; set; }
         public int ItemCount { get; set; }
 
         public override WebMediaType Type

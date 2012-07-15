@@ -6,7 +6,7 @@ using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
 {
-    public class WebPlaylistItem : WebMediaItem, ITitleSortable
+    public class WebPlaylistItem : WebMediaItem
     {
         public WebPlaylistItem()
         {
@@ -23,7 +23,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Playlist
             this.Path = track.Path;
         }
 
-        public string Title { get; set; }
         public int Duration { get; set; }
     }
 }
