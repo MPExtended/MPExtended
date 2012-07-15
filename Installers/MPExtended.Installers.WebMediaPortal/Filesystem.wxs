@@ -36,13 +36,6 @@
             <!-- Web root -->
             <Directory Id="Dir_WWW" Name="www">
               <!-- This directory is filled by WWW.wxs -->
-
-              <!-- Create empty plugins directory -->
-              <Directory Id="Dir_WWW_Plugins" Name="Plugins">
-                <Component Id="Component_WWW_Plugins" Guid="4614250e-def3-43c3-ad59-da5c63b3e6cb">
-                  <CreateFolder />
-                </Component>
-              </Directory>
               
               <Directory Id="BinDirectory" Name="bin">
                 <!-- Binaries for WebMP -->
