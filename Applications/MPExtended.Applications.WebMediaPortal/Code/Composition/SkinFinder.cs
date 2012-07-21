@@ -17,33 +17,28 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Web;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 {
-    internal static class Plugins
+    internal class SkinFinder : ExtensionFinder
     {
-        public static string[] ListPluginDirectories()
+        public SkinFinder()
+            : base()
         {
-            string webmpDirectory =
-                Installation.GetFileLayoutType() == FileLayoutType.Source ?
-                    Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
-                    Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
-            string pluginDirectory = Path.Combine(webmpDirectory, "Plugins");
-            if (!Directory.Exists(pluginDirectory))
-                return new string[] { };
-
-            return Directory.GetDirectories(pluginDirectory);
         }
 
-        public static string[] ListPlugins()
+        public SkinFinder(string rootDirectory)
+            : base(rootDirectory)
         {
-            return ListPluginDirectories()
-                .Select(x => Path.GetFileName(x))
-                .ToArray();
+        }
+
+        protected override string GetExtensionDirectoryName()
+        {
+            return "Skins";
         }
     }
 }

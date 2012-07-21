@@ -24,6 +24,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Service;
@@ -90,8 +91,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         private static void ReloadSkinSettings()
         {
             // Setup everything that uses settings from the current skin
+            Log.Debug("Active skin: {0}", ActiveSettings.Skin);
             ContentLocator.Current.ChangeSkin(ActiveSettings.Skin);
-            ControllerBuilder.Current.SetControllerFactory(new MEFControllerFactory(new HttpContextWrapper(HttpContext.Current)));
+            ControllerBuilder.Current.SetControllerFactory(new ControllerFactory());
             foreach (var engine in ViewEngines.Engines.OfType<SkinnableViewEngine>())
             {
                 engine.UpdateActiveSkin();

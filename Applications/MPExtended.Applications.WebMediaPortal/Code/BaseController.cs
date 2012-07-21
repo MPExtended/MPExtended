@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     // Requiring a session state results in the execution of requests being serialized, which is awful for the performance of certain
     // pages, especially those with a lot of images. 
     [SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         private static AvailabilityModel availabilityModel = new AvailabilityModel();
 

@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -33,35 +34,25 @@ namespace MPExtended.Applications.WebMediaPortal
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class WebMediaPortalApplication : HttpApplication
     {
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        public static string GetInstallationDirectory()
         {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
-
+            // this should match with the path specified in the IIS Express config (see IISExpressHost.cs)
+            return Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
+                Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
         }
 
         protected void Application_Start()
         {
-            Log.Setup("WebMediaPortal.log", false);
-
+            // standard ASP.NET MVC setup
             AreaRegistration.RegisterAllAreas();
+            GlobalFilters.Filters.Add(new HandleErrorAttribute());
+            RouteTable.Routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            RouteTable.Routes.MapRoute("Default", "{controller}/{action}/{id}", new { controller = "Home", action = "Index", id = UrlParameter.Optional });
 
-            RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
-
-            // initialize settings skin-override mechanism
+            // initialize settings and the skin-override mechanism
             ContentLocator.Current = new ContentLocator(Context.Server, null);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new SkinnableViewEngine());
@@ -69,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal
 
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
-            Log.Info("WebMediaPortal version {0} starting with MAS {1} and TAS {2}",
+            Log.Info("WebMediaPortal version {0} started with MAS {1} and TAS {2}",
                 VersionUtil.GetFullVersionString(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             MPEServices.LogServiceVersions();
 

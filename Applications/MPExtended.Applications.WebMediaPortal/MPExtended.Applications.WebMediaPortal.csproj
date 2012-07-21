@@ -94,13 +94,17 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Code\BaseController.cs" />
+    <Compile Include="Code\Composition\ApplicationInitializer.cs" />
+    <Compile Include="Code\Composition\Composer.cs" />
+    <Compile Include="Code\Composition\ControllerFactory.cs" />
+    <Compile Include="Code\Composition\SkinFinder.cs" />
+    <Compile Include="Code\Composition\ExtensionFinder.cs" />
+    <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaInfoFormatter.cs" />
     <Compile Include="Code\MediaName.cs" />
-    <Compile Include="Code\MEFControllerFactory.cs" />
-    <Compile Include="Code\Plugins.cs" />
     <Compile Include="Code\ServiceAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Code\ServiceMembershipProvider.cs" />

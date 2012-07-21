@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Code.Composition;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
@@ -63,7 +64,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             if (currentSkin != null && Directory.Exists(serverUtility.MapPath(String.Format("~/Skins/{0}/Content", currentSkin))))
                 ContentDirectories.Add(String.Format("~/Skins/{0}/Content", currentSkin));
 
-            foreach (var plugin in Plugins.ListPlugins())
+            var pluginFinder = new PluginFinder();
+            foreach (var plugin in pluginFinder.GetNames())
             {
                 if (Directory.Exists(serverUtility.MapPath(String.Format("~/Plugins/{0}/Views", plugin))))
                     ViewDirectories.Add(String.Format("~/Plugins/{0}/Views", plugin));

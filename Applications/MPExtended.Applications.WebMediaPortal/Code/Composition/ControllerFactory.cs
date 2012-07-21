@@ -17,43 +17,32 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MPExtended.Applications.WebMediaPortal.Mvc;
-using MPExtended.Libraries.Service;
+using MPExtended.Applications.WebMediaPortal.Strings;
 
-namespace MPExtended.Applications.WebMediaPortal.Code
+namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 {
-    internal class MEFControllerFactory : DefaultControllerFactory
+    internal class ControllerFactory : DefaultControllerFactory
     {
         private Dictionary<string, Type> controllerMap = new Dictionary<string, Type>();
 
-        public MEFControllerFactory(HttpContextBase context)
+        public ControllerFactory()
         {
-            AggregateCatalog catalog = new AggregateCatalog();
-
-            // load everything from the bin directory for plugins
-            foreach (var dir in Plugins.ListPluginDirectories())
+            // Map all stock controllers
+            var controllerInterfaceType = typeof(IController);
+            var stockControllers = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(type => !type.IsAbstract && controllerInterfaceType.IsAssignableFrom(type));
+            foreach (var controller in stockControllers)
             {
-                if (Directory.Exists(Path.Combine(dir, "bin")))
-                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(dir, "bin")));
+                controllerMap[controller.Name] = controller;
             }
 
-            // allow skins to include binaries too (though they shouldn't)
-            string currentSkinDirectory = context.Server.MapPath(String.Format("~/Skins/{0}/bin", Settings.ActiveSettings.Skin));
-            if (Directory.Exists(currentSkinDirectory))
-                catalog.Catalogs.Add(new DirectoryCatalog(currentSkinDirectory));
-
-            // do the composition
-            CompositionContainer container = new CompositionContainer(catalog);
-            var controllers = container.GetExports<IController, IDictionary<string, object>>();
-
-            // and build up a proper map of controller names
+            // Map all controllers that came from extensions
+            var controllers = Composer.Instance.GetActiveControllers();
             foreach (var export in controllers)
             {
                 string fullControllerName = export.Metadata.ContainsKey("controllerName") ?
@@ -71,7 +60,12 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 return base.GetControllerInstance(requestContext, controllerMap[fullControllerName]);
             }
 
-            return base.CreateController(requestContext, controllerName);
+            // Do not call the base class here, because that one searches *all* loaded assemblies for controllers. This
+            // results in the controllers from disabled skins being activated, which is something we've been trying hard
+            // to avoid. Disadvantage is that we need to map the stock controllers by ourselves now, but that isn't very 
+            // complicated. 
+
+            throw new HttpException(404, "No controller could be found for this request.");
         }
     }
 }
