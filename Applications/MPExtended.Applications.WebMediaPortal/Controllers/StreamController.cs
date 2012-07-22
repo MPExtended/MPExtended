@@ -31,13 +31,15 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     public class StreamController : BaseController
     {
         // This is the timeout after which streams are automatically killed (in seconds)
-        private const int STREAM_TIMEOUT = 5;
+        private const int STREAM_TIMEOUT_DIRECT = 10;
+        private const int STREAM_TIMEOUT_PROXY = 300;
 		
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
@@ -47,25 +49,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        private int? GetProvider(WebStreamMediaType type)
+        private int? GetProvider(WebMediaType type)
         {
             switch (type)
             {
-                case WebStreamMediaType.File:
+                case WebMediaType.File:
                     return Settings.ActiveSettings.FileSystemProvider;
-                case WebStreamMediaType.Movie:
+                case WebMediaType.Movie:
                     return Settings.ActiveSettings.MovieProvider;
-                case WebStreamMediaType.MusicAlbum:
-                case WebStreamMediaType.MusicTrack:
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicTrack:
                     return Settings.ActiveSettings.MusicProvider;
-                case WebStreamMediaType.Picture:
+                case WebMediaType.Picture:
                     return Settings.ActiveSettings.PicturesProvider;
-                case WebStreamMediaType.Recording:
-                case WebStreamMediaType.TV:
+                case WebMediaType.Recording:
+                case WebMediaType.TV:
                     return 0;
-                case WebStreamMediaType.TVEpisode:
-                case WebStreamMediaType.TVSeason:
-                case WebStreamMediaType.TVShow:
+                case WebMediaType.TVEpisode:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVShow:
                     return Settings.ActiveSettings.TVShowProvider;
                 default:
                     // this cannot happen
@@ -73,8 +75,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
+        private bool IsUserAuthenticated()
+        {
+            if (PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
+                return true;
+
+            // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
+            // for people to authenticate from scripts etc. 
+            if (Request.Headers["Authorization"] != null && Request.Headers["Authorization"].StartsWith("Basic "))
+            {
+                var content = Request.Headers["Authorization"].Substring(6);
+                var details = Encoding.ASCII.GetString(Convert.FromBase64String(content)).Split(':');
+                return Configuration.Services.Users.Any(x => x.Username == details[0] && x.ValidatePassword(details[1]));
+            }
+
+            return false;
+        }
+
         [ServiceAuthorize]
-        public ActionResult Download(WebStreamMediaType type, string item)
+        public ActionResult Download(WebMediaType type, string item)
         {
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
@@ -82,7 +101,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
-            string rootUrl = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
+            string rootUrl = type == WebMediaType.TV || type == WebMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
             UriBuilder fullUri = new UriBuilder(rootUrl + "GetMediaItem?" + queryString.ToString());
 
             // Check stream type
@@ -114,12 +133,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebStreamMediaType type, string itemId, string transcoder, int starttime, string continuationId)
+        private ActionResult GenerateStream(WebMediaType type, string itemId, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
-            if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
+            if (!IsUserAuthenticated())
             {
-                Log.Warn("User {0} (host {1}) requested a stream but hasn't opened a player page - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
+                Log.Warn("User {0} (host {1}) requested a stream but isn't authenticated - denying access to stream", HttpContext.User.Identity.Name, Request.UserHostAddress);
                 return new HttpUnauthorizedResult();
             }
 
@@ -137,20 +156,30 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 GetStreamControl(type).FinishStream(RunningStreams[continuationId]);
             }
 
+            // Check stream mode, generate timeout setting and dump all info we got
+            StreamType streamMode = Settings.ActiveSettings.StreamType;
+            if (streamMode == StreamType.DirectWhenPossible)
+            {
+                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
+            }
+            int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
+            Log.Debug("Starting stream type={0}; itemId={1}; transcoder={2}; starttime={3}; continuationId={4}", type, itemId, transcoder, starttime, continuationId);
+            Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s", 
+                HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
+
             // Start the stream
-            Log.Debug("Starting a stream with identifier {0} for type={1}; itemId={2}; transcoder={3}; starttime={4}; continuationId={5}", 
-                identifier, type, itemId, transcoder, starttime, continuationId);
             string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
             using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
                 WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                if (!GetStreamControl(type).InitStream((WebStreamMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT))
+                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
                 {
                     Log.Error("Streaming: InitStream failed");
                     return new EmptyResult();
                 }
             }
 
+            // save stream
             RunningStreams[continuationId] = identifier;
             string url = GetStreamControl(type).StartStream(identifier, transcoder, starttime);
             if (String.IsNullOrEmpty(url))
@@ -158,14 +187,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Error("Streaming: StartStream failed");
                 return new EmptyResult();
             }
-
-            // Check stream mode
-            StreamType streamMode = Settings.ActiveSettings.StreamType;
-            if (streamMode == StreamType.DirectWhenPossible)
-            {
-                streamMode = NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied;
-            }
-            Log.Debug("Stream started successfully, is at {0} and we're using stream mode {1}", url, streamMode);
+            Log.Debug("Stream started successfully and is at {0}", url);
 
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
@@ -237,27 +259,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Stream wrapper URLs
         public ActionResult TV(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TV, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TV, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult Movie(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Movie, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Movie, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.TVEpisode, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TVEpisode, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult Recording(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.Recording, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Recording, item, transcoder, starttime, continuationId);
         }
 
         public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, string continuationId = null)
         {
-            return GenerateStream(WebStreamMediaType.MusicTrack, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.MusicTrack, item, transcoder, starttime, continuationId);
         }
 
         //
@@ -276,9 +298,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return streamControl.GetTranscoderProfileByName(profileName);
         }
 
-        private IWebStreamingService GetStreamControl(WebStreamMediaType type)
+        private IWebStreamingService GetStreamControl(WebMediaType type)
         {
-            if (type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording)
+            if (type == WebMediaType.TV || type == WebMediaType.Recording)
             {
                 return MPEServices.TASStreamControl;
             }
@@ -318,20 +340,20 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Player(WebStreamMediaType type, string itemId)
+        public ActionResult Player(WebMediaType type, string itemId)
         {
             PlayerViewModel model = new PlayerViewModel();
             model.MediaType = type;
             model.MediaId = itemId;
 
             // get profile
-            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
  
             // get size
-            if(type == WebStreamMediaType.TV)
+            if(type == WebMediaType.TV)
             {
                 // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
                 // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
@@ -348,7 +370,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = randomGenerator.Next(10000, 99999);
-            model.URL = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), parameters);
+            model.URL = Url.Action(Enum.GetName(typeof(WebMediaType), type), parameters);
 
             // generic part
             return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
@@ -360,12 +382,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
-            model.Tracks = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            model.Tracks = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
         }
 
         [ServiceAuthorize]
-        public ActionResult Playlist(WebStreamMediaType type, string itemId)
+        public ActionResult Playlist(WebMediaType type, string itemId)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -374,7 +396,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // get profile
-            var defaultProfile = type == WebStreamMediaType.TV || type == WebStreamMediaType.Recording ?
+            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
@@ -384,7 +406,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             parameters["item"] = itemId;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = "playlist-" + randomGenerator.Next(10000, 99999);
-            string url = Url.Action(Enum.GetName(typeof(WebStreamMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+            string url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
 
             // create playlist
             StringBuilder m3u = new StringBuilder();

@@ -17,6 +17,7 @@
       <ComponentRef Id="Component_General_Libraries"/>
       <ComponentRef Id="Component_General_MetaService"/>
       <ComponentRef Id="Component_General_Registry"/>
+      <ComponentRef Id="Component_General_Interface"/>
       <ComponentRef Id="Component_General_Config"/>
       <ComponentRef Id="Component_General_Logs"/>
     </ComponentGroup>

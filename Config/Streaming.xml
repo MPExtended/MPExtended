@@ -189,8 +189,8 @@
       <transport>http</transport>
       <mime>video/x-unknown</mime>
       <videoStream>true</videoStream>
-      <maxOutputWidth>1024</maxOutputWidth>
-      <maxOutputHeight>600</maxOutputHeight>
+      <maxOutputWidth>0</maxOutputWidth>
+      <maxOutputHeight>0</maxOutputHeight>
 
       <transcoderConfiguration implementation="MPExtended.Services.StreamingService.Transcoders.Direct" />
     </transcoder>

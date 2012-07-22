@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>@(ViewBag.Title != null ? ViewBag.Title + " - " : "")WebMediaPortal</title>
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    @Html.Assets().AddContentStylesheet("Site.css")
     @Html.Assets().Render()
     @RenderSection("HeadHtml", false)
 </head>
 <body>
     <div id="header">
         <a href="@Url.Action("Index", "Home")">
-            <img id='logo' src="@Url.Content("~/Content/Images/logomp-small.png")" />
+            <img id='logo' src="@Url.ContentLink("Images/logo.png")" />
         </a>
         <h1>WebMediaPortal</h1>
 
@@ -39,7 +39,7 @@
                     <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
                     <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
                     <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
-                    <li>@Html.ActionLink(UIStrings.Status, "Index", "TVServer")</li>
+                    <li>@Html.ActionLink(UIStrings.Status, "Index", "Status")</li>
                 }
                 
                 <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>

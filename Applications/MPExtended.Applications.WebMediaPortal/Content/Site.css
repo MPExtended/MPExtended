@@ -32,9 +32,8 @@ body
 
 #header #logo
 {
-    background-image: url("Images/logomp-small.png"); 
-    height: 64px;
-    width: 64px;
+    height: 60px;
+    width: 60px;
     float: left;
 }
 

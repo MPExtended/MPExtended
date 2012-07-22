@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -27,16 +28,30 @@ using MPExtended.Libraries.Client;
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
     [ServiceAuthorize]
-    public class TVServerController : BaseController
+    public class StatusController : BaseController
     {
+        private static PerformanceCounter cpuCounter = new PerformanceCounter();
+        private static PerformanceCounter memoryCounter = new PerformanceCounter();
+        private static float totalMemory;
+
+        static StatusController()
+        {
+            cpuCounter.CategoryName = "Processor";
+            cpuCounter.CounterName = "% Processor Time";
+            cpuCounter.InstanceName = "_Total";
+            totalMemory = StatusViewModel.GetTotalMemoryBytes() / 1024 / 1024;
+            memoryCounter.CategoryName = "Memory";
+            memoryCounter.CounterName = "Available MBytes";
+        }
+
         //
-        // GET: /TVServer/
+        // GET: /Status/
         public ActionResult Index()
         {
             var recordingDiskInfo = MPEServices.TAS.GetAllRecordingDiskInformation();
             var cards = MPEServices.TAS.GetCards();
             var activeCards = MPEServices.TAS.GetActiveCards();
-            return View(new TVServerStatusViewModel(cards, activeCards, recordingDiskInfo));
+            return View(new StatusViewModel(cards, activeCards, recordingDiskInfo));
         }
 
         public ActionResult Stop(string user)
@@ -57,5 +72,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             return View(new TVCardViewModel(card, vcard));
         }
+
+        public JsonResult GetPerformanceCounters()
+        {
+            var returnObject = new
+            {
+                CPU = cpuCounter.NextValue(),
+                Memory = totalMemory - memoryCounter.NextValue()
+            };
+            return Json(returnObject, JsonRequestBehavior.AllowGet);
+        } 
     }
 }

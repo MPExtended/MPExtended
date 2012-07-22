@@ -22,6 +22,8 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.ConfigurationContracts;
 
 namespace MPExtended.Libraries.Service
@@ -123,8 +125,24 @@ namespace MPExtended.Libraries.Service
 
         internal static string PerformFolderSubstitution(string input)
         {
-            string cappdata = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            input = input.Replace("%ProgramData%", cappdata);
+            // program data
+            input = input.Replace("%ProgramData%", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+
+            // mp settings
+            input = Regex.Replace(input, @"%mp-([^-]+)-([^-]+)%", delegate(Match match)
+            {
+                var section = Mediaportal.ReadSectionFromConfigFile(match.Groups[1].Value);
+                if (!section.ContainsKey(match.Groups[2].Value))
+                {
+                    Log.Info("Replacing unknown Mediaportal path substitution %mp-{0}-{1}% with empty string", match.Groups[1].Value, match.Groups[2].Value);
+                    return String.Empty;
+                }
+                else
+                {
+                    return section[match.Groups[2].Value];
+                }
+            });
+
             return input;
         }
 

@@ -138,7 +138,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             GroupName = channelGroup.GroupName;
 
             DateTime loadGuideEnd = guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
-            Channels = MPEServices.TAS.GetChannelsBasic(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
+            Channels = MPEServices.TAS.GetChannelsDetailed(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
         }
     }
 
@@ -148,14 +148,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public string DisplayName { get; private set; }
         public IEnumerable<TVGuideProgramViewModel> Programs { get; private set; }
 
-        private IEnumerable<WebProgramBasic> programList;
+        private IEnumerable<WebProgramDetailed> programList;
 
-        public TVGuideChannelViewModel(WebChannelBasic channel, DateTime guideStart, DateTime guideEnd)
+        public TVGuideChannelViewModel(WebChannelDetailed channel, DateTime guideStart, DateTime guideEnd)
         {
             Id = channel.Id;
             DisplayName = channel.DisplayName;
 
-            programList = MPEServices.TAS.GetProgramsBasicForChannel(Id, guideStart, guideEnd);
+            programList = MPEServices.TAS.GetProgramsDetailedForChannel(Id, guideStart, guideEnd);
             Programs = programList.Select(x => new TVGuideProgramViewModel(x, guideStart, guideEnd));
         }
     }
@@ -176,11 +176,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        private WebProgramBasic program;
+        private WebProgramDetailed program;
         private DateTime guideStart;
         private DateTime guideEnd;
 
-        public TVGuideProgramViewModel(WebProgramBasic program, DateTime guideStart, DateTime guideEnd)
+        public TVGuideProgramViewModel(WebProgramDetailed program, DateTime guideStart, DateTime guideEnd)
         {
             Id = program.Id;
             Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
@@ -234,8 +234,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public DateTime EndTime { get; set; }
         public bool IsScheduled { get; set; }
         public string ChannelName { get; set; }
+        public int ChannelId { get; set; }
 
-        public ProgramDetailsViewModel(WebProgramBasic program)
+        public bool CanWatchLive
+        {
+            get
+            {
+                return DateTime.Now >= StartTime && DateTime.Now <= EndTime;
+            }
+        }
+
+        public ProgramDetailsViewModel(WebProgramDetailed program)
         {
             Id = program.Id;
             Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
@@ -244,8 +253,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EndTime = program.EndTime;
             IsScheduled = program.IsScheduled;
 
-            var channel = MPEServices.TAS.GetChannelBasicById(program.IdChannel);
+            var channel = MPEServices.TAS.GetChannelDetailedById(program.IdChannel);
             ChannelName = channel.DisplayName;
+            ChannelId = channel.Id;
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Code\ImageCache.cs" />
     <Compile Include="Code\Initialization.cs" />
     <Compile Include="Code\Downloads.cs" />
     <Compile Include="Code\ExtensionMethods.cs" />

@@ -27,7 +27,7 @@ using MPExtended.Libraries.Service.Internal;
 namespace MPExtended.Libraries.Service
 {
     /// <summary>
-    /// Utility to parse version information from MPExtended and MediaPortal
+    /// Utility to parse our own version information.
     /// 
     /// We differentiate between 4 different versions for MPExtended:
     /// - The API version, defined by AssemblyVersion in GlobalVersion.cs. This is retrieved with GetVersion() and changes only
@@ -38,7 +38,7 @@ namespace MPExtended.Libraries.Service
     /// - The build version, defined by AssemblyFileVersion in GlobalVersion.cs. This is retrieved with GetBuildVersion() and
     ///   changes with each release. As opposed to AssemblyInformationalVersion, this number always increments and has a meaning.
     ///   It is the number that is used for checking for updates. 
-    /// - The git build version, defined by AssemblyGitVersion in GitVersion.cs, only on this assembly. This is retrieved with
+    /// - The git commit version, defined by AssemblyGitVersion in GitVersion.cs, only on this assembly. This is retrieved with
     ///   GetGitVersion() and changes with each build. 
     /// A full version string for logs can be retrieved with GetFullVersionString(). 
     /// </summary>
@@ -46,10 +46,11 @@ namespace MPExtended.Libraries.Service
     {
         public enum MediaPortalVersion 
         {
-            Unknown = 1,
-            MP1_1 = 2,
-            MP1_2 = 3,
-            MP1_3_Alpha = 4,
+            NotAvailable = 1,
+            Unknown = 2,
+            MP1_1 = 3,
+            MP1_2 = 4,
+            MP1_3 = 5,
         }
 
         public static Version GetVersion()
@@ -112,32 +113,46 @@ namespace MPExtended.Libraries.Service
 
         public static MediaPortalVersion GetMediaPortalVersion()
         {
-            Version v = GetCompleteMediaPortalVersion();
-            if (v.Major == 1 && v.Minor == 1)
+            Version v = GetMediaPortalBuildVersion();
+            if (v == null)
             {
-                return MediaPortalVersion.MP1_1;
+                return MediaPortalVersion.NotAvailable;
             }
-            else if (v.Major == 1 && v.Minor == 2)
+            else if ((v.Major == 1 && v.Minor == 3) || (v.Major == 1 && v.Minor == 2 && v.Build >= 100)) // MP1.3 Alpha used 1.2.100.0 as version number
+            {
+                return MediaPortalVersion.MP1_3;
+            }
+            else if (v.Major == 1 && v.Minor == 2) // Not sure about the alpha versions, but those are so ancient...
             {
                 return MediaPortalVersion.MP1_2;
             }
-            else if (v.Major == 1 && v.Minor == 3)
+            else if (v.Major == 1 && v.Minor == 1) // We don't even support this anymore, but whatever... 
             {
-                return MediaPortalVersion.MP1_3_Alpha;
+                return MediaPortalVersion.MP1_1;
             }
 
             return MediaPortalVersion.Unknown;
         }
 
-        public static Version GetCompleteMediaPortalVersion()
+        public static string GetMediaPortalVersionString()
         {
-            FileVersionInfo info = FileVersionInfo.GetVersionInfo(GetMediaPortalAssemblyPath());
-            return new Version(info.FileVersion);
+            // Until MediaPortal provides an informational version name somewhere, try to map them ourselves
+            Version v = GetMediaPortalBuildVersion();
+            if (v == null)
+                return "(not installed)";
+
+            // List all exceptions (pre-releases) from the normal versioning scheme here
+            if (v.Major == 1 && v.Minor == 2 && v.Build == 100)
+                return "1.3.0 Alpha";
+
+            // Normal versioning scheme
+            return String.Format("{0}.{1}.{2}", v.Major, v.Minor, v.Build);
         }
 
         public static Version GetMediaPortalBuildVersion()
         {
-            return AssemblyName.GetAssemblyName(GetMediaPortalAssemblyPath()).Version;
+            var assemblyPath = GetMediaPortalAssemblyPath();
+            return assemblyPath != null ? AssemblyName.GetAssemblyName(assemblyPath).Version : null;
         }
 
         private static string GetMediaPortalAssemblyPath()

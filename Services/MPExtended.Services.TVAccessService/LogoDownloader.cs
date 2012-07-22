@@ -32,6 +32,7 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.TVAccessService
 {
@@ -140,7 +141,7 @@ namespace MPExtended.Services.TVAccessService
                 {
                     try
                     {
-                        Stream logoStream = serviceSet.MASStream.GetImage(WebStreamMediaType.TV, null, ch.Id.ToString());
+                        Stream logoStream = serviceSet.MASStream.GetImage(WebMediaType.TV, null, ch.Id.ToString());
                         Log.Trace("Downloaded logo for channel {0} (length {1})", ch.DisplayName, logoStream.Length);
                         if (logoStream.Length > 0)
                         {

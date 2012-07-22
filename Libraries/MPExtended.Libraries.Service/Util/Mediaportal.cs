@@ -37,6 +37,7 @@ namespace MPExtended.Libraries.Service.Util
     public static class Mediaportal
     {
         private static bool? hasValidConfig = null;
+        private static bool? hasMpDirs = null;
 
         public static string GetClientInstallationDirectory()
         {
@@ -53,6 +54,11 @@ namespace MPExtended.Libraries.Service.Util
 
         public static string GetLocation(MediaportalDirectory type)
         {
+            if (hasMpDirs.HasValue && !hasMpDirs.Value)
+            {
+                return null;
+            }
+
             try
             {
                 // read from MediaPortalDirs.xml
@@ -61,6 +67,7 @@ namespace MPExtended.Libraries.Service.Util
                 if (mpDirs == null || !File.Exists(mpDirs))
                 {
                     Log.Debug("Could not find MediaPortalDirs.xml");
+                    hasMpDirs = false;
                     return null;
                 }
 
@@ -94,7 +101,7 @@ namespace MPExtended.Libraries.Service.Util
         {
             try
             {
-                if (!File.Exists(GetConfigFilePath()))
+                if (!HasValidConfigFile())
                 {
                     return new Dictionary<string, string>();
                 }
@@ -157,6 +164,30 @@ namespace MPExtended.Libraries.Service.Util
             {
                 Log.Warn("Error trying to detect valid MediaPortal configuration file", ex);
                 return false;
+            }
+        }
+
+        public static void LogVersionDetails()
+        {
+            try
+            {
+                var version = VersionUtil.GetMediaPortalVersion();
+                if (version == VersionUtil.MediaPortalVersion.NotAvailable)
+                {
+                    Log.Info("No MediaPortal installed");
+                }
+                else if (version >= VersionUtil.MediaPortalVersion.MP1_2)
+                {
+                    Log.Debug("Found supported MediaPortal installation ({0}, build {1})", version, VersionUtil.GetMediaPortalBuildVersion());
+                }
+                else
+                {
+                    Log.Warn("Installed MediaPortal version is not supported! ({0}, build {1})", version, VersionUtil.GetMediaPortalBuildVersion());
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to detect MediaPortal version", ex);
             }
         }
     }

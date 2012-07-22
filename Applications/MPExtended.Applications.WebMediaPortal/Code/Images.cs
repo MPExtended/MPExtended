@@ -22,13 +22,17 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.IO;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    internal static class Images
+    public static class Images
     {
-        public static ActionResult ReturnFromService(Func<Stream> method)
+        private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
         {
             using (var scope = WCFClient.EnterOperationScope(MPEServices.MASStream))
             {
@@ -37,11 +41,69 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 var returnCode = WCFClient.GetHeader<int>("responseCode");
                 if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
                 {
-                    return new HttpStatusCodeResult(returnCode);
+                    if (defaultFile == null)
+                    {
+                        return new HttpStatusCodeResult(returnCode);
+                    }
+                    else
+                    {
+                        string virtualPath = ContentLocator.Current.LocateContent(defaultFile);
+                        string physicalPath = HttpContext.Current.Server.MapPath(virtualPath);
+                        return new FilePathResult(physicalPath, MIME.GetFromFilename(physicalPath, "application/octet-stream"));
+                    }
                 }
 
                 return new FileStreamResult(image, WCFClient.GetHeader<string>("contentType", "image/jpeg"));
             }
+        }
+
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
+        {
+            IStreamingService service;
+            int? provider = null;
+
+            switch (mediaType)
+            {
+                case WebMediaType.Drive:
+                case WebMediaType.File:
+                case WebMediaType.Folder:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.FileSystemProvider;
+                    break;
+                case WebMediaType.Movie:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.MovieProvider;
+                    break;
+                case WebMediaType.MusicAlbum:
+                case WebMediaType.MusicArtist:
+                case WebMediaType.MusicTrack:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.MusicProvider;
+                    break;
+                case WebMediaType.Picture:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.PicturesProvider;
+                    break;
+                case WebMediaType.TVShow:
+                case WebMediaType.TVSeason:
+                case WebMediaType.TVEpisode:
+                    service = MPEServices.MASStream;
+                    provider = Settings.ActiveSettings.TVShowProvider;
+                    break;
+                case WebMediaType.TV:
+                case WebMediaType.Recording:
+                    service = MPEServices.MASStream;
+                    break;
+                default:
+                    throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
+            }
+
+            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile);
+        }
+
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)
+        {
+            return ReturnFromService(mediaType, id, artworkType, 0, 0, defaultFile);
         }
     }
 }

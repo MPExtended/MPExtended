@@ -1,23 +1,29 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.ProgramDetailsViewModel
+﻿@model ProgramDetailsViewModel
 @{
     ViewBag.Title = Model.Title;
 }
-
 <h2>@Model.Title</h2>
 <p>
     @Html.Raw(String.Format(UIStrings.ProgramChannelDetails, Model.StartTime, Model.EndTime, Model.ChannelName))
     <br />
-    @{if (@Model.IsScheduled)
-      {
-          @Html.ActionLink(UIStrings.CancelSchedule, "DeleteSchedule", "Schedule", new { programId = @Model.Id }, new { })
-      }
-      else
-      {
-          @Html.ActionLink(UIStrings.CreateSchedule, "AddSchedule", "Schedule", new { programId = @Model.Id }, new { })
-      }
+
+    @* Schedule link *@
+    @if (@Model.IsScheduled)
+    {
+        @Html.ActionLink(UIStrings.CancelSchedule, "DeleteSchedule", "Schedule", new { programId = @Model.Id }, new { })
+    }
+    else
+    {
+        @Html.ActionLink(UIStrings.CreateSchedule, "AddSchedule", "Schedule", new { programId = @Model.Id }, new { })
+    }
+
+    @* Watch live link *@
+    @if (Model.CanWatchLive)
+    {
+        @: -
+        @Html.ActionLink(UIStrings.WatchLive, "WatchLiveTV", new { channelId = Model.ChannelId })
     }
 </p>
 <p>
     @Model.Description
 </p>
-

@@ -5,14 +5,14 @@
 }
 
 <h2>@UIStrings.LiveTV</h2>
-@Html.Raw(String.Format(UIStrings.YouAreWatchingProgram, ProgramTitle, Model.DisplayName));
+@Html.Raw(String.Format(UIStrings.YouAreWatchingProgram, ProgramTitle, Model.DisplayName))
 <br />
 <br />
 
 <div>
 @{Html.RenderAction("Player", "Stream", new
   {
-      type = MPExtended.Services.StreamingService.Interfaces.WebStreamMediaType.TV,
+      type = MPExtended.Services.Common.Interfaces.WebMediaType.TV,
       itemId = @Model.Id
   });
 }

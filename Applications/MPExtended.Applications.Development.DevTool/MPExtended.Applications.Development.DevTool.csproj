@@ -47,6 +47,8 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="DocGen\CommonGenerator.cs" />
+    <Compile Include="DocGen\USSGenerator.cs" />
     <Compile Include="DocGen\DocGenItem.cs" />
     <Compile Include="DocGen\Generator.cs" />
     <Compile Include="DocGen\MASGenerator.cs" />

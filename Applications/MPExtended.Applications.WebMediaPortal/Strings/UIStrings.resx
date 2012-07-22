@@ -170,7 +170,7 @@
     <value>Welcome</value>
   </data>
   <data name="YouAreWatchingMovie" xml:space="preserve">
-    <value>You are watching to &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>You are watching to &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourArtists" xml:space="preserve">
     <value>Your artists</value>
@@ -212,7 +212,7 @@
     <value>Watching {0}</value>
   </data>
   <data name="YouAreWatchingEpisode" xml:space="preserve">
-    <value>You are watching &lt;strong&gt;{0} - Season {1} Episode {2} - {3}&lt;/strong&gt;</value>
+    <value>You are watching &lt;strong&gt;{0} - Season {1} Episode {2} - {3}&lt;/strong&gt;.</value>
   </data>
   <data name="ErrorPageText" xml:space="preserve">
     <value>Please include the information below when you report this error.</value>
@@ -284,10 +284,10 @@
     <value>Watching {0}</value>
   </data>
   <data name="YouAreWatchingProgram" xml:space="preserve">
-    <value>You are watching &lt;strong&gt;{0}&lt;/strong&gt;on &lt;strong&gt;{1}&lt;/strong&gt;</value>
+    <value>You are watching &lt;strong&gt;{0}&lt;/strong&gt; on &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
   <data name="YouAreWatchingRecording" xml:space="preserve">
-    <value>You are watching &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>You are watching &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourRecordings" xml:space="preserve">
     <value>Your recordings</value>
@@ -412,5 +412,19 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>Page title on error page</comment>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Page not found</value>
+    <comment>Page title on 404 page</comment>
+  </data>
+  <data name="SorryPageNotFound" xml:space="preserve">
+    <value>Sorry, the page you requested doesn't exist. </value>
+  </data>
+  <data name="WatchLive" xml:space="preserve">
+    <value>Watch live</value>
   </data>
 </root>

@@ -22,32 +22,33 @@ using System.Web;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class MediaName
     {
-        public static string GetMediaName(WebStreamMediaType type, string id)
+        public static string GetMediaName(WebMediaType type, string id)
         {
             try
             {
                 switch (type)
                 {
-                    case WebStreamMediaType.Movie:
-                        return MPEServices.MAS.GetMovieBasicById(Settings.ActiveSettings.MovieProvider, id).Title;
-                    case WebStreamMediaType.MusicAlbum:
+                    case WebMediaType.Movie:
+                        return MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id).Title;
+                    case WebMediaType.MusicAlbum:
                         return MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
-                    case WebStreamMediaType.MusicTrack:
-                        return MPEServices.MAS.GetMusicTrackBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
-                    case WebStreamMediaType.Recording:
+                    case WebMediaType.MusicTrack:
+                        return MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id).Title;
+                    case WebMediaType.Recording:
                         return MPEServices.TAS.GetRecordingById(Int32.Parse(id)).Title;
-                    case WebStreamMediaType.TV:
-                        return MPEServices.TAS.GetChannelBasicById(Int32.Parse(id)).DisplayName;
-                    case WebStreamMediaType.TVEpisode:
-                        return MPEServices.MAS.GetTVEpisodeBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
-                    case WebStreamMediaType.TVShow:
-                        return MPEServices.MAS.GetTVShowBasicById(Settings.ActiveSettings.TVShowProvider, id).Title;
-                    case WebStreamMediaType.TVSeason:
+                    case WebMediaType.TV:
+                        return MPEServices.TAS.GetChannelDetailedById(Int32.Parse(id)).DisplayName;
+                    case WebMediaType.TVEpisode:
+                        return MPEServices.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                    case WebMediaType.TVShow:
+                        return MPEServices.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                    case WebMediaType.TVSeason:
                     default:
                         return "";
                 }

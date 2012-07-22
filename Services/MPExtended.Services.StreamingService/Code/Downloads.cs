@@ -23,6 +23,7 @@ using System.IO;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -42,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private List<DownloadContext> runningDownloads = new List<DownloadContext>();
 
-        public Stream Download(string clientDescription, WebStreamMediaType type, int? provider, string itemId)
+        public Stream Download(string clientDescription, WebMediaType type, int? provider, string itemId)
         {
             // validate source first
             MediaSource source = new MediaSource(type, provider, itemId);
@@ -70,10 +71,10 @@ namespace MPExtended.Services.StreamingService.Code
             WCFUtil.SetContentLength(source.GetFileInfo().Size);
 
             // FIXME: there has to be a better way to do this
-            object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(source.GetFileInfo().Name), "Content Type");
+            string mime = MIME.GetFromFilename(source.GetFileInfo().Name);
             if (mime != null)
             {
-                WCFUtil.SetContentType(mime.ToString());
+                WCFUtil.SetContentType(mime);
             }
 
             // finally, save the context and return

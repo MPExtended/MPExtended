@@ -29,6 +29,7 @@ using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -113,7 +114,7 @@ namespace MPExtended.Services.StreamingService.Code
         public void StartStream(StreamContext context, Reference<WebTranscodingInfo> infoRef)
         {
             // ignore when not needed
-            if (!enabled || (context.Source.MediaType != WebStreamMediaType.Movie && context.Source.MediaType != WebStreamMediaType.TVEpisode))
+            if (!enabled || (context.Source.MediaType != WebMediaType.Movie && context.Source.MediaType != WebMediaType.TVEpisode))
             {
                 return;
             }
@@ -141,12 +142,12 @@ namespace MPExtended.Services.StreamingService.Code
 
                 // get mediadescriptor and rough runtime
                 Log.Debug("WatchSharing: synchronizing start watching event to service");
-                if (context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                if (context.Source.MediaType == WebMediaType.TVEpisode)
                 {
                     state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(context.Source.Provider, context.Source.Id);
                     state.Runtime = MPEServices.MAS.GetTVShowDetailedById(context.Source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime * 60000;
                 }
-                else if (context.Source.MediaType == WebStreamMediaType.Movie)
+                else if (context.Source.MediaType == WebMediaType.Movie)
                 {
                     state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(context.Source.Provider, context.Source.Id);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime * 60000;
@@ -161,11 +162,11 @@ namespace MPExtended.Services.StreamingService.Code
                 // send start watching event
                 Task.Factory.StartNew(delegate()
                 {
-                    if (state.Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                    if (state.Context.Source.MediaType == WebMediaType.TVEpisode)
                     {
                         service.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor);
                     }
-                    else if (state.Context.Source.MediaType == WebStreamMediaType.Movie)
+                    else if (state.Context.Source.MediaType == WebMediaType.Movie)
                     {
                         service.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor);
                     }
@@ -207,11 +208,11 @@ namespace MPExtended.Services.StreamingService.Code
                     // send the finished event in the background thread
                     Task.Factory.StartNew(delegate ()
                     {
-                        if (streams[identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                        if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
                             service.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
                         }
-                        else if (streams[identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
+                        else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
                             service.FinishMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
                         }
@@ -237,11 +238,11 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Debug("WatchSharing: killing stream {0} because of forced EndStream", identifier);
                 lock (service)
                 {
-                    if (streams[identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                    if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                     {
                         service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor);
                     }
-                    else if (streams[identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
+                    else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
                     {
                         service.CancelWatchingMovie((WebMovieDetailed)streams[identifier].MediaDescriptor);
                     }
@@ -268,11 +269,11 @@ namespace MPExtended.Services.StreamingService.Code
                         Log.Debug("WatchSharing: definitely killing stream {0} with cancelwatching event", streams[wst.Identifier].Id);
                         lock (service)
                         {
-                            if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                            if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                             {
                                 service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
-                            else if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
+                            else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                             {
                                 service.CancelWatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor);
                             }
@@ -301,11 +302,11 @@ namespace MPExtended.Services.StreamingService.Code
                     Log.Debug("WatchSharing: syncing status for {0}", streams[wst.Identifier].Id);
                     lock (service)
                     {
-                        if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.TVEpisode)
+                        if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
                             service.WatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
                         }
-                        else if (streams[wst.Identifier].Context.Source.MediaType == WebStreamMediaType.Movie)
+                        else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
                             service.WatchingMovie((WebMovieDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
                         }
@@ -328,7 +329,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private string GetIdentifierFromMediaSource(MediaSource source)
         {
-            return Enum.GetName(typeof(WebStreamMediaType), source.MediaType) + "_" + source.Id;
+            return Enum.GetName(typeof(WebMediaType), source.MediaType) + "_" + source.Id;
         }
     }
 }

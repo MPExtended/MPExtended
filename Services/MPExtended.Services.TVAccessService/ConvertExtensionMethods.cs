@@ -51,7 +51,6 @@ namespace MPExtended.Services.TVAccessService
                 Enabled = card.Enabled,
                 GrabEPG = card.GrabEPG,
                 IdCard = card.IdCard,
-                IdServer = card.IdServer,
                 IsChanged = card.IsChanged,
                 LastEpgGrab = card.LastEpgGrab != DateTime.MinValue ? card.LastEpgGrab : new DateTime(2000, 1, 1),
                 Name = card.Name,
@@ -65,14 +64,6 @@ namespace MPExtended.Services.TVAccessService
                 TimeShiftFolder = card.TimeShiftFolder != String.Empty ? card.TimeShiftFolder :
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal TV Server", "timeshiftbuffer"),
             };
-        }
-
-        public static Card ToCard(this WebCard card)
-        {
-            if (card == null)
-                return null;
-
-            return Card.Retrieve(card.IdCard);
         }
     }
 
@@ -160,7 +151,7 @@ namespace MPExtended.Services.TVAccessService
 
             return new WebChannelDetailed
             {
-                CurrentProgram = ch.CurrentProgram.ToWebProgramDetailed(),
+                CurrentProgram = ch.CurrentProgram != null ? ch.CurrentProgram.ToWebProgramDetailed() : null,
                 DisplayName = ch.DisplayName,
                 EpgHasGaps = ch.EpgHasGaps,
                 ExternalId = ch.ExternalId,
@@ -240,7 +231,6 @@ namespace MPExtended.Services.TVAccessService
             tmp.Add(ch.CurrentProgram.ToWebProgramBasic());
             tmp.Add(ch.NextProgram.ToWebProgramBasic());
             return tmp;
-
         }
 
         public static List<WebProgramDetailed> ToListWebProgramDetailedNowNext(this Channel ch)
@@ -255,14 +245,6 @@ namespace MPExtended.Services.TVAccessService
             tmp.Add(ch.CurrentProgram.ToWebProgramDetailed());
             tmp.Add(ch.NextProgram.ToWebProgramDetailed());
             return tmp;
-        }
-
-        public static Channel ToChannel(this WebChannelBasic ch)
-        {
-            if (ch == null)
-                return null;
-
-            return Channel.Retrieve(ch.Id);
         }
     }
 
@@ -304,22 +286,6 @@ namespace MPExtended.Services.TVAccessService
                 IsRadio = true,
                 IsTv = false
             };
-        }
-
-        public static ChannelGroup ToChannelGroup(this WebChannelGroup group)
-        {
-            if (group == null)
-                return null;
-
-            return ChannelGroup.Retrieve(group.Id);
-        }
-
-        public static RadioChannelGroup ToRadioChannelGroup(this WebChannelGroup group)
-        {
-            if (group == null)
-                return null;
-
-            return RadioChannelGroup.Retrieve(group.Id);
         }
     }
 
@@ -394,14 +360,6 @@ namespace MPExtended.Services.TVAccessService
                 IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
-
-        public static Program ToProgram(this WebProgramBasic p)
-        {
-            if (p == null)
-                return null;
-
-            return Program.Retrieve(p.Id);
-        }
     }
 
     internal static class WebRtspClientExtensionMethods
@@ -462,14 +420,6 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = sch.StartTime != DateTime.MinValue ? sch.StartTime : new DateTime(2000, 1, 1)
             };
         }
-
-        public static Schedule ToSchedule(this WebScheduleBasic sch)
-        {
-            if (sch == null)
-                return null;
-
-            return Schedule.Retrieve(sch.Id);
-        }
     }
 
     internal static class WebRecordingExtensionMethods
@@ -495,7 +445,6 @@ namespace MPExtended.Services.TVAccessService
                 IdChannel = rec.IdChannel,
                 Id = rec.IdRecording,
                 IdSchedule = rec.Idschedule,
-                IdServer = rec.IdServer,
                 IsChanged = rec.IsChanged,
                 IsManual = rec.IsManual,
                 IsRecording = rec.IsRecording,
@@ -506,16 +455,9 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = rec.StartTime != DateTime.MinValue ? rec.StartTime : new DateTime(2000, 1, 1),
                 StopTime = rec.StopTime,
                 TimesWatched = rec.TimesWatched,
-                Title = rec.Title
+                Title = rec.Title,
+                ChannelName = Channel.Retrieve(rec.IdChannel).DisplayName
             };
-        }
-
-        public static Recording ToRecording(this WebRecordingBasic rec)
-        {
-            if (rec == null)
-                return null;
-
-            return Recording.Retrieve(rec.Id);
         }
     }
 

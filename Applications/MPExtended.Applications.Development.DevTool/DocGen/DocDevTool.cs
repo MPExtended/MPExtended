@@ -38,9 +38,11 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             string outputDir = InputStream.ReadLine().Trim();
 
             var generators = new List<Tuple<string, Type, string>>() {
-                new Tuple<string, Type, string>("MediaAccessService", typeof(MASGenerator), "api-doc-mas.txt"),
-                new Tuple<string, Type, string>("TVAccessService", typeof(TASGenerator), "api-doc-tas.txt"),
-                new Tuple<string, Type, string>("StreamingService", typeof(WSSGenerator), "api-doc-wss.txt"),
+                new Tuple<string, Type, string>("Common", typeof(CommonGenerator), "api-doc-common.html"),
+                new Tuple<string, Type, string>("MediaAccessService", typeof(MASGenerator), "api-doc-mas.html"),
+                new Tuple<string, Type, string>("TVAccessService", typeof(TASGenerator), "api-doc-tas.html"),
+                new Tuple<string, Type, string>("StreamingService", typeof(WSSGenerator), "api-doc-wss.html"),
+                new Tuple<string, Type, string>("UserSessionService", typeof(USSGenerator), "api-doc-uss.html")
             };
 
             // generate docs

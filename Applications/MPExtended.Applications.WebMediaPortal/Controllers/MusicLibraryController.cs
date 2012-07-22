@@ -25,6 +25,7 @@ using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -35,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
-            var artistList = MPEServices.MAS.GetAllMusicArtistsBasic(Settings.ActiveSettings.MusicProvider);
+            var artistList = MPEServices.MAS.GetAllMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
             if (artistList != null)
             {
                 return View(artistList);
@@ -45,7 +46,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Albums(string artist)
         {
-            var artistObj = MPEServices.MAS.GetMusicArtistBasicById(Settings.ActiveSettings.MusicProvider, artist);
+            var artistObj = MPEServices.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
             var albumList = MPEServices.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
             return View(new ArtistViewModel()
             {
@@ -57,7 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Album(string album)
         {
             var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
-            var trackList = MPEServices.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, album, SortBy.Title, OrderBy.Asc);
+            var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, WebSortField.Title, WebSortOrder.Asc);
 
             return View(new AlbumViewModel()
             {
@@ -68,8 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.MusicAlbum, Settings.ActiveSettings.MusicProvider, album, WebArtworkType.Cover, 0, width, height));
+            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, "images/default/album.png");
         }
     }
 }

@@ -17,11 +17,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Controllers;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 
@@ -30,46 +34,67 @@ namespace MPExtended.Applications.WebMediaPortal
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class WebMediaPortalApplication : HttpApplication
     {
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        public static string GetInstallationDirectory()
         {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
-
+            // this should match with the path specified in the IIS Express config (see IISExpressHost.cs)
+            return Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
+                Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
         }
 
         protected void Application_Start()
         {
-            Log.Setup("WebMediaPortal.log", false);
-
+            // standard ASP.NET MVC setup
             AreaRegistration.RegisterAllAreas();
+            GlobalFilters.Filters.Add(new HandleErrorAttribute());
+            RouteTable.Routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            RouteTable.Routes.MapRoute("Default", "{controller}/{action}/{id}", new { controller = "Home", action = "Index", id = UrlParameter.Optional });
 
-            RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
+            // initialize settings and the skin-override mechanism
+            ContentLocator.Current = new ContentLocator(Context.Server, null);
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new SkinnableViewEngine());
+            Settings.LoadSettings();
 
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
-            Log.Info("WebMediaPortal version {0} starting with MAS {1} and TAS {2}",
+            Log.Info("WebMediaPortal version {0} started with MAS {1} and TAS {2}",
                 VersionUtil.GetFullVersionString(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             MPEServices.LogServiceVersions();
 
-            // set view engine
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new SkinnableViewEngine(Settings.ActiveSettings.Skin));
-
             // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
             Configuration.EnableChangeWatching();
+        }
+
+        protected void Application_Error()
+        {
+            // get exception and reset response
+            var exception = Server.GetLastError();
+            var httpException = exception as HttpException;
+            Response.Clear();
+            Server.ClearError();
+
+            // generate routing for new request context to the ErrorController
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = "General";
+            routeData.Values["exception"] = exception;
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            // specific output for HTTP errors
+            if (httpException != null)
+            {
+                Response.StatusCode = httpException.GetHttpCode();
+                if (Response.StatusCode == (int)HttpStatusCode.NotFound)
+                    routeData.Values["action"] = "Http404";
+            }
+
+            // start new controller
+            IController errorController = new ErrorController();
+            var rc = new RequestContext(new HttpContextWrapper(Context), routeData);
+            errorController.Execute(rc);
         }
     }
 }

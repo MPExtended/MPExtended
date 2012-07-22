@@ -1,16 +1,29 @@
-﻿#TVGuide .headerrow
+﻿#TVGuideNavigation select
+{
+    width: 250px;
+    margin-right: 10px;
+}
+
+#TVGuideNavigation input
+{
+    width: 75px;
+}
+
+#TVGuide .headerrow
 {
     padding: 2px 5px;
     height: 25px;
     margin: 0px -15px;
     position: relative;
 }
+
 #TVGuide .headerspacer
 {
     width: 198px;
     float: left;
     text-align: right;
 }
+
 #TVGuide .headertime
 {
     font-family: 'Ubuntu' , sans-serif;
@@ -20,6 +33,7 @@
     width: 87px;
     height: 100%;
 }
+
 button.earlier
 {
     margin-right: 10px;
@@ -149,6 +163,7 @@ div.later_wrap
     float: left;
     height: 100%;
 }
+
 #TVGuide .program
 {
     height: 40px; /* 50px height of .row minus margins (4px total), padding (4px total) and borders (2px total) */
@@ -168,6 +183,7 @@ div.later_wrap
     color: #cee8f4;
     overflow: hidden;
 }
+
 #TVGuide .program a
 {
     font-size: 12px;
@@ -175,6 +191,7 @@ div.later_wrap
     text-shadow: #01425e 0 1px 0;
     font-weight: bold;
 }
+
 #TVGuide .program.current
 {
     background: #d1ee7a;
@@ -186,18 +203,29 @@ div.later_wrap
     background: linear-gradient(top, #d1ee7a 0%, #b1dd2c 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1ee7a', endColorstr='#b1dd2c', GradientType=0 );
 }
+
 #TVGuide .program.current a
 {
     color: #4b6400;
     text-shadow: #f0f9d3 0 1px 0;
     font-weight: bold;
 }
-#TVGuideNavigation select
+
+#TVGuide .program.scheduled
 {
-    width: 250px;
-    margin-right: 10px;
+    background: #c94040;
+    background: -moz-linear-gradient(top, #c94040 0%, #b13232 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #c94040), color-stop(100%, #b13232));
+    background: -webkit-linear-gradient(top, #c94040 0%, #b13232 100%);
+    background: -o-linear-gradient(top, #c94040 0%, #b13232 100%);
+    background: -ms-linear-gradient(top, #c94040 0%, #b13232 100%);
+    background: linear-gradient(top, #c94040 0%, #b13232 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c94040', endColorstr='#b13232', GradientType=0 );
 }
-#TVGuideNavigation input
+
+#TVGuide .program.scheduled a
 {
-    width: 75px;
+    color: #f1d0d0;
+    text-shadow: #7b2222 0 1px 0;
+    font-weight: bold;
 }

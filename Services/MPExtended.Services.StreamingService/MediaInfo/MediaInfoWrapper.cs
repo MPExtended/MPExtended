@@ -27,6 +27,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.MediaInfo
 {
@@ -44,7 +45,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         public static WebMediaInfo GetMediaInfo(MediaSource source)
         {
             // we can't use our persistent cache for TV unfortunately, but we do cache them in memory for 60 seconds
-            if (source.MediaType == WebStreamMediaType.TV)
+            if (source.MediaType == WebMediaType.TV)
             {
                 if (tvCache.ContainsKey(source.Id) && DateTime.Now - tvCache[source.Id].Item1 > TimeSpan.FromSeconds(60))
                 {

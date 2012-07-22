@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
@@ -10,7 +11,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string Profile { get; set; }
         public string Identifier { get; set; }
 
-        public WebStreamMediaType SourceType { get; set; }
+        public WebMediaType SourceType { get; set; }
         public string SourceId { get; set; }
         public string DisplayName { get; set; }
 

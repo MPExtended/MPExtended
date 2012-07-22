@@ -113,9 +113,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // create parameters
-            string sout = "#transcode{" + encoderOptions + 
-                ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height + "," + subtitleTranscoder + "}" +
-                muxerOptions;
+            string sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
+            if (!context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true")
+                sout += ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height;
+            sout += "}" + muxerOptions;
 
             // return
             return new VLCParameters()

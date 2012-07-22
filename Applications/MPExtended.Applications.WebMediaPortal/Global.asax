@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="MPExtended.Applications.WebMediaPortal.MvcApplication" Language="C#" %>
+﻿<%@ Application CodeBehind="Global.asax.cs" Inherits="MPExtended.Applications.WebMediaPortal.WebMediaPortalApplication" Language="C#" %>

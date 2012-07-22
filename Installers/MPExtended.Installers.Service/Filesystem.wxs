@@ -42,6 +42,9 @@
             </Component>
             
             <!-- Interfaces -->
+            <Component Id="Component_General_Interface" Guid="393dd13f-aeaf-4363-9924-2b64a5f3bc55">
+              <File Source="$(var.MPExtended.Services.Common.Interfaces.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
+            </Component>
             <Component Id="Component_MAS_Interface" Guid="eb4bc4da-62e5-4978-9e58-89cbbcd6dc4d">
               <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
             </Component>
@@ -83,6 +86,8 @@
                 <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.dll" />
+                <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.pdb" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
                 <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.pdb" />
               </Component>

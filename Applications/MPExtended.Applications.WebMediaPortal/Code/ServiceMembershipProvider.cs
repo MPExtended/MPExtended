@@ -30,7 +30,7 @@ using MPExtended.Libraries.Service.ConfigurationContracts;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    public class ServiceMembershipProvider : MembershipProvider
+    internal class ServiceMembershipProvider : MembershipProvider
     {
         private NameValueCollection config;
 

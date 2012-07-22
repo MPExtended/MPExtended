@@ -21,8 +21,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -36,41 +38,48 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebMovieBasic> movieList = MPEServices.MAS.GetAllMoviesBasic(Settings.ActiveSettings.MovieProvider, sort: SortBy.Title, order: OrderBy.Asc);
+            IEnumerable<WebMovieDetailed> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: WebSortField.Title, order: WebSortOrder.Asc);
             if (!String.IsNullOrEmpty(genre))
             {
                 movieList = movieList.Where(x => x.Genres.Contains(genre));
             }
 
-            return View(movieList);
+            return View(movieList.Select(x => new MovieViewModel(x)));
         }
 
         public ActionResult Details(string movie)
         {
-            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie == null)
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
                 return HttpNotFound();
+            return View(model);
+        }
 
-            var fileInfo = MPEServices.MAS.GetFileInfo(fullMovie.PID, WebMediaType.Movie, WebFileType.Content, fullMovie.Id, 0);
-            var mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebStreamMediaType.Movie, fullMovie.PID, fullMovie.Id);
-            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
-            return View(fullMovie);
+        [HttpGet]
+        public ActionResult MovieInfo(string movie)
+        {
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
+                return HttpNotFound();
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Play(string movie)
         {
-            var fullMovie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, movie);
-            if (fullMovie != null)
-            {
-                return View(fullMovie);
-            }
-            return null;
+            var model = new MovieViewModel(movie);
+            if (model.Movie == null)
+                return HttpNotFound();
+            return View(model);
         }
 
-        public ActionResult Image(string movie, int width = 0, int height = 0)
+        public ActionResult Cover(string movie, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() =>
-                MPEServices.MASStream.GetArtworkResized(WebStreamMediaType.Movie, Settings.ActiveSettings.MovieProvider, movie, WebArtworkType.Cover, 0, width, height));
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Cover, width, height, "Images/default/movie-cover.png");
+        }
+
+        public ActionResult Fanart(string movie, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Backdrop, width, height, "Images/default/movie-fanart.png");
         }
     }
 }

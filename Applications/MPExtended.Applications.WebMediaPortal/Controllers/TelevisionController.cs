@@ -26,6 +26,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -69,38 +70,31 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ChannelLogo(int channelId, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(() => 
-                MPEServices.TASStream.GetArtworkResized(WebStreamMediaType.TV, null, channelId.ToString(), WebArtworkType.Logo, 0, width, height));
+            return Images.ReturnFromService(WebMediaType.TV, channelId.ToString(), WebFileType.Logo, width, height, "Images/default/logo.png");
         }
 
         public ActionResult ProgramDetails(int programId)
         {
-            var program = MPEServices.TAS.GetProgramBasicById(programId);
+            var program = MPEServices.TAS.GetProgramDetailedById(programId);
             if (program == null)
-            {
                 return HttpNotFound();
-            }
             return View(new ProgramDetailsViewModel(program));
         }
 
         public ActionResult WatchLiveTV(int channelId)
         {
             var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
-            if (channel != null)
-            {
-                return View(channel);
-            }
-            return null;
+            if (channel == null)
+                return HttpNotFound();
+            return View(channel);
         }
 
         public ActionResult Recordings()
         {
             var recordings = MPEServices.TAS.GetRecordings();
-            if (recordings != null)
-            {
-                return View(recordings);
-            }
-            return null;
+            if (recordings == null)
+                return HttpNotFound();
+            return View(recordings);
         }
 
         public ActionResult Recording(int id)
@@ -110,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return HttpNotFound();
 
             var fileInfo = MPEServices.TAS.GetRecordingFileInfo(rec.Id);
-            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebStreamMediaType.Recording, null, rec.Id.ToString());
+            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString());
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
             return View(rec);
         }

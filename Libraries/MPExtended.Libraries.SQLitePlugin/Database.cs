@@ -27,17 +27,16 @@ namespace MPExtended.Libraries.SQLitePlugin
     {
         private DatabaseConnection currentConnection;
 
-        public string DatabasePath
-        {
-            get;
-            protected set;
-        }
+        public string DatabasePath { get; protected set; }
+        public bool NeedsExclusiveLock { get; protected set; }
 
         protected Database()
         {
+            NeedsExclusiveLock = false;
         }
 
         protected Database(string databasePath)
+            : this()
         {
             DatabasePath = databasePath;
         }
@@ -46,7 +45,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             if (currentConnection == null || !currentConnection.IsOpen)
             {
-                currentConnection = new DatabaseConnection(this);
+                currentConnection = new DatabaseConnection(this, NeedsExclusiveLock);
                 return currentConnection;
             }
             else

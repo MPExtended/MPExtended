@@ -17,41 +17,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Applications.WebMediaPortal.Code;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
-        private static string ViewLocalPath(HttpContextBase context, string viewFile)
+        public static string ContentLink(this UrlHelper helper, string contentPath)
         {
-            var relativePath = ViewEngines.Engines.OfType<SkinnableViewEngine>()
-                .Select(sve => sve.BaseDirectory + "/" + viewFile)
-                .FirstOrDefault(path => File.Exists(context.Server.MapPath(path)));
-            if (relativePath == null)
-            {
-                relativePath = "~/Views/" + viewFile;
-            }
-            return relativePath;
+            return helper.Content(ContentLocator.Current.LocateContent(contentPath));
         }
 
-        public static string ViewLocalPath(this UrlHelper helper, string viewFile)
+        public static string ViewContentLink(this UrlHelper helper, string viewContentPath)
         {
-            return ViewLocalPath(helper.RequestContext.HttpContext, viewFile);
-        }
-
-        public static string ViewContent(this UrlHelper helper, string viewContentPath)
-        {
-            return helper.Content(helper.ViewLocalPath(viewContentPath));
-        }
-
-        public static string GenerateViewContentUrl(string viewContentPath, HttpContextBase httpContext)
-        {
-            return UrlHelper.GenerateContentUrl(ViewLocalPath(httpContext, viewContentPath), httpContext);
+            return helper.Content(ContentLocator.Current.LocateView(viewContentPath));
         }
     }
 }

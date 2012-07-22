@@ -17,85 +17,40 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
-    public class SkinnableViewEngine : RazorViewEngine
+    internal class SkinnableViewEngine : RazorViewEngine
     {
-        private string _skin;
-        public string Skin
-        {
-            get
-            {
-                return _skin;
-            }
-
-            set
-            {
-                _skin = value;
-                SetSkin(_skin);
-            }
-        }
-
-        public string BaseDirectory
-        {
-            get
-            {
-                return "~/Skins/" + Skin;
-            }
-        }
-
         public SkinnableViewEngine()
         {
+            UpdateActiveSkin();
         }
 
-        public SkinnableViewEngine(string skin)
-        {
-            this.Skin = skin;
-        }
-
-        protected void SetSkin(string skin)
+        public void UpdateActiveSkin()
         {
             FileExtensions = new string[] { 
                 "cshtml", 
                 "vbhtml" 
             };
 
-            MasterLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
+            List<string> files = new List<string>();
+            foreach (var directory in ContentLocator.Current.ViewDirectories)
+            {
+                files.Add(directory + "/{1}/{0}.cshtml");
+                files.Add(directory + "/{1}/{0}.vbhtml");
+                files.Add(directory + "/Shared/{0}.cshtml");
+                files.Add(directory + "/Shared/{0}.vbhtml");
+            }
 
-            PartialViewLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
-
-            ViewLocationFormats = new string[] {
-                "~/Skins/" + skin + "/{1}/{0}.cshtml",
-                "~/Skins/" + skin + "/{1}/{0}.vbhtml",
-                "~/Skins/" + skin + "/Shared/{0}.cshtml",
-                "~/Skins/" + skin + "/Shared/{0}.vbhtml",
-                "~/Views/{1}/{0}.cshtml",
-                "~/Views/{1}/{0}.vbhtml",
-                "~/Views/Shared/{0}.cshtml",
-                "~/Views/Shared/{0}.vbhtml",
-            };
+            MasterLocationFormats = files.ToArray();
+            PartialViewLocationFormats = files.ToArray();
+            ViewLocationFormats = files.ToArray();
         }
     }
 }

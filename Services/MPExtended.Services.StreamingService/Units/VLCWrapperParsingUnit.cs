@@ -54,6 +54,9 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     ParseOutputStream(InputStream, data, position, false);
                 }
+                catch (ThreadAbortException)
+                {
+                }
                 catch (Exception ex)
                 {
                     Log.Error("VLCLogParsing failed with exception", ex);
@@ -82,70 +85,79 @@ namespace MPExtended.Services.StreamingService.Units
             StreamReader reader = new StreamReader(stdoutStream);
             TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position, 25, 500, info.Duration); //VLCWrapper prints twice a second
 
-            bool aborted = false;
             string line;
-            while ((line = reader.ReadLine()) != null)
+            try
             {
-                try
+                while ((line = reader.ReadLine()) != null)
                 {
-                    Log.Trace("VLCWrapperParsing: read line {0}", line);
-
-                    // just for debugging of the wrapper tool
-                    if(line.StartsWith("A") || line.StartsWith("I") || line == "S started" || line == "S null")
-                        continue;
-
-                    // propagate start event to Start() method
-                    if (line == "S playing")
+                    try
                     {
-                        vlcIsStarted = true;
-                        continue;
+                        Log.Trace("VLCWrapperParsing: read line {0}", line);
+
+                        // just for debugging of the wrapper tool
+                        if (line.StartsWith("A") || line.StartsWith("I") || line == "S started" || line == "S null")
+                            continue;
+
+                        // propagate start event to Start() method
+                        if (line == "S playing")
+                        {
+                            vlcIsStarted = true;
+                            continue;
+                        }
+
+                        // events
+                        if (line == "S error")
+                        {
+                            vlcIsStarted = true;
+                            data.Value.Finished = true;
+                            data.Value.Failed = true;
+                            break;
+                        }
+
+                        if (line == "S finished")
+                        {
+                            data.Value.Finished = true;
+                            continue;
+                        }
+
+                        // the actual progress parsing
+                        if (line.StartsWith("P"))
+                        {
+                            // the format is 'P [time in microseconds] [percentage of file]'. Sadly we can't use the way more detailed time in microseconds
+                            // because the VLC guys decided it would be a good idea to convert it to a 32-bit integer before returning it, as opposed to
+                            // returning libvlc_time_t or a int64_t. And since it's in microseconds it gets big very fast, so it's absolutely useless.
+                            double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
+                            calculator.NewPercentage(percentage);
+                            calculator.SaveStats(data);
+                            continue;
+                        }
+
+                        Log.Warn("VLCWrapperParsing: encountered unknown line {0}", line);
                     }
-
-                    // events
-                    if (line == "S error")
+                    catch (ThreadAbortException)
                     {
-                        vlcIsStarted = true;
                         data.Value.Finished = true;
-                        data.Value.Failed = true;
-                        break;
+                        reader.Close();
+                        return;
                     }
-
-                    if (line == "S finished")
+                    catch (Exception e)
                     {
-                        data.Value.Failed = false;
-                        data.Value.Finished = true;
-                        continue;
+                        Log.Error("Failure during parsing of VLC output", e);
                     }
-
-                    // the actual progress parsing
-                    if(line.StartsWith("P")) 
-                    {
-                        // the format is 'P [time in microseconds] [percentage of file]'. Sadly we can't use the way more detailed time in microseconds
-                        // because the VLC guys decided it would be a good idea to convert it to a 32-bit integer before returning it, as opposed to
-                        // returning libvlc_time_t or a int64_t. And since it's in microseconds it gets big very fast, so it's absolutely useless.
-                        double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
-                        calculator.NewPercentage(percentage);
-                        calculator.SaveStats(data);
-                        continue;
-                    }
-
-                    Log.Warn("VLCWrapperParsing: encountered unknown line {0}", line);
-                }
-                catch (ThreadAbortException)
-                {
-                    aborted = true;
-                    break;
-                }
-                catch (Exception e)
-                {
-                    Log.Error("Failure during parsing of VLC output", e);
                 }
             }
+            catch (ThreadAbortException)
+            {
+                // The double try-catch is to make sure that the parsing doesn't stop when it can't process a single line, but that we don't
+                // log too much noise when a ThreadAbortException occurs while in the ReadLine() method. Funnily enough, this exception is
+                // rethrown when we leave the catch block, so duplicate some code from below... 
+                data.Value.Finished = true;
+                reader.Close();
+                return;
+            }
 
-            data.Value.Failed = aborted;
             data.Value.Finished = true;
             reader.Close();
-            return;
         }
     }
 }

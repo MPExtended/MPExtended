@@ -94,9 +94,9 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Info methods
-        public WebMediaInfo GetMediaInfo(WebStreamMediaType type, int? provider, string itemId)
+        public WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId)
         {
-            if (type == WebStreamMediaType.TV)
+            if (type == WebMediaType.TV)
             {
                 try
                 {
@@ -128,9 +128,9 @@ namespace MPExtended.Services.StreamingService
                 .ToList();
         }
 
-        public WebResolution GetStreamSize(WebStreamMediaType type, int? provider, string itemId, string profile)
+        public WebResolution GetStreamSize(WebMediaType type, int? provider, string itemId, string profile)
         {
-            if (type == WebStreamMediaType.TV)
+            if (type == WebMediaType.TV)
             {
                 try
                 {
@@ -169,7 +169,7 @@ namespace MPExtended.Services.StreamingService
             return true;
         }
 
-        public WebItemSupportStatus GetItemSupportStatus(WebStreamMediaType type, int? provider, string itemId)
+        public WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId)
         {
             // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId);
@@ -214,19 +214,27 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Streaming
-        public WebBoolResult InitStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
+        public WebBoolResult InitStream(WebMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
         {
             AuthorizeStreaming();
-            if (type == WebStreamMediaType.TV)
+            if (type == WebMediaType.TV)
             {
                 int channelId = Int32.Parse(itemId);
                 lock (_timeshiftings)
                 {
                     Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
                     var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
-                    Log.Debug("Timeshifting started!");
-                    _timeshiftings[identifier] = card;
-                    itemId = card.TimeShiftFileName;
+                    if (card == null)
+                    {
+                        Log.Error("Failed to start timeshifting for stream with identifier {0}", identifier);
+                        return false;
+                    }
+                    else
+                    {
+                        Log.Debug("Timeshifting started!");
+                        _timeshiftings[identifier] = card;
+                        itemId = card.TimeShiftFileName;
+                    }
                 }
             }
 
@@ -273,7 +281,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(string clientDescription, WebStreamMediaType type, int? provider, string itemId)
+        public Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -299,7 +307,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.CustomTranscoderData(identifier, action, parameters);
         }
 
-        public Stream DoStream(WebStreamMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition)
+        public Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition, int? idleTimeout)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -308,11 +316,22 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
+            // calculate timeout, which is by default 5 minutes for direct streaming and 5 seconds for transcoded streams
+            var profile = Configuration.Streaming.Transcoders.FirstOrDefault(x => x.Name == profileName);
+            if(profile == null)
+            {
+                Log.Warn("Tried DoStream with non-existing profile {0}", profileName);
+                return Stream.Null;
+            }
+            int timeout = profile.TranscoderImplementationClass == typeof(Transcoders.Direct).FullName ? 5 * 60 : 5;
+            if (idleTimeout.HasValue)
+                timeout = idleTimeout.Value;
+
             // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
             string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
-            Log.Debug("DoStream: using identifier {0}", identifier);
+            Log.Debug("DoStream: using identifier {0} and timeout={1}", identifier, timeout);
 
-            if (!InitStream(type, provider, itemId, clientDescription, identifier, 2))
+            if (!InitStream(type, provider, itemId, clientDescription, identifier, timeout))
             {
                 Log.Info("DoStream: InitStream() failed");
                 FinishStream(identifier);
@@ -326,42 +345,42 @@ namespace MPExtended.Services.StreamingService
                 return Stream.Null;
             }
 
-            Log.Trace("DoStream: succeeded, returning stream");
+            Log.Debug("DoStream: succeeded, returning stream");
             return RetrieveStream(identifier);
         }
         #endregion
 
         #region Images
-        public Stream ExtractImage(WebStreamMediaType type, int? provider, string itemId, int position)
+        public Stream ExtractImage(WebMediaType type, int? provider, string itemId, int position)
         {
             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, null, null);
         }
 
-        public Stream ExtractImageResized(WebStreamMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
+        public Stream ExtractImageResized(WebMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
             return Images.ExtractImage(new MediaSource(type, provider, itemId), position, calcMaxWidth, calcMaxHeight);
         }
 
-        public Stream GetImage(WebStreamMediaType type, int? provider, string id)
+        public Stream GetImage(WebMediaType type, int? provider, string id)
         {
-            return Images.GetImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0));
+            return Images.GetImage(new ImageMediaSource(type, provider, id, WebFileType.Content, 0));
         }
 
-        public Stream GetImageResized(WebStreamMediaType type, int? provider, string id, int maxWidth, int maxHeight)
+        public Stream GetImageResized(WebMediaType type, int? provider, string id, int maxWidth, int maxHeight)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
-            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebArtworkType.Content, 0), calcMaxWidth, calcMaxHeight);
+            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebFileType.Content, 0), calcMaxWidth, calcMaxHeight);
         }
 
-        public Stream GetArtwork(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset)
+        public Stream GetArtwork(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset)
         {
             return Images.GetImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset));
         }
 
-        public Stream GetArtworkResized(WebStreamMediaType mediatype, int? provider, string id, WebArtworkType artworktype, int offset, int maxWidth, int maxHeight)
+        public Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;

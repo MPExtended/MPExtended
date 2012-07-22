@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -73,9 +74,12 @@ namespace MPExtended.Libraries.Service.Hosting
                     service.InitClass.InvokeMember(service.InitMethod, flags, null, null, null);
                 }
 
-				// finish
+                // log MP version details
+                Mediaportal.LogVersionDetails();
+
+                // finish
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
-				Log.Debug("Opened MPExtended ServiceHost");
+                Log.Trace("Opened MPExtended ServiceHost");
                 return true;
             }
             catch (Exception ex)

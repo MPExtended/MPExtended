@@ -24,6 +24,7 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -80,16 +81,16 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // Easy aliases for ordering and sorting
-        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
         {
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+            if (order == WebSortOrder.Asc)
                 return Queryable.OrderBy(source, keySelector);
             return Queryable.OrderByDescending(source, keySelector);
         }
 
-        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, OrderBy order)
+        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
         {
-            if (order == MPExtended.Services.MediaAccessService.Interfaces.OrderBy.Asc)
+            if (order == WebSortOrder.Asc)
                 return Queryable.ThenBy(source, keySelector);
             return Queryable.ThenByDescending(source, keySelector);
         }
@@ -106,26 +107,26 @@ namespace MPExtended.Services.MediaAccessService
         }
 
         // Allow easy sorting from MediaAccessService.cs
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, WebSortField? sortInput, WebSortOrder? orderInput)
         {
-            return SortMediaItemList<T>(list, sortInput, orderInput, SortBy.Title, Interfaces.OrderBy.Asc);
+            return SortMediaItemList<T>(list, sortInput, orderInput, WebSortField.Title, WebSortOrder.Asc);
         }
 
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, WebSortField? sortInput, WebSortOrder? orderInput, WebSortField defaultSort)
         {
-            return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, Interfaces.OrderBy.Asc);
+            return SortMediaItemList<T>(list, sortInput, orderInput, defaultSort, WebSortOrder.Asc);
         }
 
-        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, SortBy? sortInput, OrderBy? orderInput, SortBy defaultSort, OrderBy defaultOrder)
+        public static IOrderedQueryable<T> SortMediaItemList<T>(this IQueryable<T> list, WebSortField? sortInput, WebSortOrder? orderInput, WebSortField defaultSort, WebSortOrder defaultOrder)
         {
             // parse arguments
-            if (orderInput != null && orderInput != Interfaces.OrderBy.Asc && orderInput != Interfaces.OrderBy.Desc)
+            if (orderInput != null && orderInput != WebSortOrder.Asc && orderInput != WebSortOrder.Desc)
             {
                 Log.Warn("Invalid OrderBy value {0} given", orderInput);
                 throw new Exception("Invalid OrderBy value specified");
             }
-            SortBy sort = sortInput.HasValue ? sortInput.Value : defaultSort;
-            OrderBy order = orderInput.HasValue ? orderInput.Value : defaultOrder;
+            WebSortField sort = sortInput.HasValue ? sortInput.Value : defaultSort;
+            WebSortOrder order = orderInput.HasValue ? orderInput.Value : defaultOrder;
 
             // do the actual sorting
             try
@@ -133,39 +134,39 @@ namespace MPExtended.Services.MediaAccessService
                 switch (sort)
                 {
                     // generic
-                    case SortBy.Title:
+                    case WebSortField.Title:
                         return list.OrderBy(x => ((ITitleSortable)x).Title, order);
-                    case SortBy.DateAdded:
+                    case WebSortField.DateAdded:
                         return list.OrderBy(x => ((IDateAddedSortable)x).DateAdded, order);
-                    case SortBy.Year:
+                    case WebSortField.Year:
                         return list.OrderBy(x => ((IYearSortable)x).Year, order);
-                    case SortBy.Genre:
+                    case WebSortField.Genre:
                         return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
-                    case SortBy.Rating:
+                    case WebSortField.Rating:
                         return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
-                    case SortBy.Categories:
+                    case WebSortField.Categories:
                         return list.OrderBy(x => ((ICategorySortable)x).Categories.First().Title, order);
-                    case SortBy.Type:
+                    case WebSortField.Type:
                         return list.OrderBy(x => ((ITypeSortable)x).Type, order);
-                    case SortBy.Name:
+                    case WebSortField.Name:
                         return list.OrderBy(x => ((INameSortable)x).Name, order);
 
                     // music
-                    case SortBy.MusicTrackNumber:
+                    case WebSortField.MusicTrackNumber:
                         return list.OrderBy(x => ((IMusicTrackNumberSortable)x).TrackNumber, order);
-                    case SortBy.MusicComposer:
+                    case WebSortField.MusicComposer:
                         return list.OrderBy(x => ((IMusicComposerSortable)x).Composer.First(), order);
 
                     // tv
-                    case SortBy.TVEpisodeNumber:
+                    case WebSortField.TVEpisodeNumber:
                         return list.OrderBy(x => ((ITVEpisodeNumberSortable)x).SeasonNumber, order).ThenBy(x => ((ITVEpisodeNumberSortable)x).EpisodeNumber, order);
-                    case SortBy.TVSeasonNumber:
+                    case WebSortField.TVSeasonNumber:
                         return list.OrderBy(x => ((ITVSeasonNumberSortable)x).SeasonNumber, order);
-                    case SortBy.TVDateAired:
+                    case WebSortField.TVDateAired:
                         return list.OrderBy(x => ((ITVDateAiredSortable)x).FirstAired, order);
 
                     // picture
-                    case SortBy.PictureDateTaken:
+                    case WebSortField.PictureDateTaken:
                         return list.OrderBy(x => ((IPictureDateTakenSortable)x).DateTaken, order);
 
                     default:
@@ -175,7 +176,7 @@ namespace MPExtended.Services.MediaAccessService
             }
             catch (Exception ex)
             {
-                Log.Warn("Tried to do invalid sorting", ex);
+                Log.Warn(String.Format("Tried to do invalid sorting; actual values SortBy={0}, OrderBy={1}", sort, order), ex);
                 throw new Exception("Sorting on this property is not supported for this media type");
             }
         }

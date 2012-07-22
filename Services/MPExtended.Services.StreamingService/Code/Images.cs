@@ -28,6 +28,7 @@ using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;
@@ -70,32 +71,32 @@ namespace MPExtended.Services.StreamingService.Code
             this.path = path;
         }
 
-        public ImageMediaSource(WebStreamMediaType type, int? provider, string id, WebArtworkType filetype, int offset)
+        public ImageMediaSource(WebMediaType type, int? provider, string id, WebFileType filetype, int offset)
             : base (type, provider, id, filetype, offset)
         {
         }
 
-        protected override bool CheckArguments(WebStreamMediaType mediatype, WebArtworkType filetype)
+        protected override bool CheckArguments(WebMediaType mediatype, WebFileType filetype)
         {
-            if ((mediatype == WebStreamMediaType.TV || mediatype == WebStreamMediaType.Recording) && filetype == WebArtworkType.Logo)
+            if ((mediatype == WebMediaType.TV || mediatype == WebMediaType.Recording) && filetype == WebFileType.Logo)
                 return true;
             return base.CheckArguments(mediatype, filetype);
         }
 
         protected bool IsCustomized()
         {
-            return path != null || ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo);
+            return path != null || ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo);
         }
 
         public override WebFileInfo GetFileInfo()
         {
-            if ((MediaType == WebStreamMediaType.TV || MediaType == WebStreamMediaType.Recording) && FileType == WebArtworkType.Logo)
+            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo)
             {
                 if (_logos == null)
                     _logos = new ChannelLogos();
 
                 // get display name
-                int idChannel = MediaType == WebStreamMediaType.TV ?
+                int idChannel = MediaType == WebMediaType.TV ?
                     Int32.Parse(Id) :
                     MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
                 var channel = MPEServices.TAS.GetChannelBasicById(idChannel);
@@ -116,6 +117,8 @@ namespace MPExtended.Services.StreamingService.Code
 
     internal static class Images
     {
+        private static ImageCache cache = new ImageCache();
+
         public static Stream ExtractImage(MediaSource source, int startPosition, int? maxWidth, int? maxHeight)
         {
             if (!source.Exists)
@@ -148,17 +151,12 @@ namespace MPExtended.Services.StreamingService.Code
             }
             
             // get temporary filename
-            string tempDir = Path.Combine(Installation.GetCacheDirectory(), "imagecache");
-            if (!Directory.Exists(tempDir))
-            {
-                Directory.CreateDirectory(tempDir);
-            }
             string filename = String.Format("extract_{0}_{1}_{2}_{3}.jpg", source.GetUniqueIdentifier(), startPosition, 
                 maxWidth == null ? "null" : maxWidth.ToString(), maxHeight == null ? "null" : maxHeight.ToString());
-            string tempFile = Path.Combine(tempDir, filename);
+            string tempFile = cache.GetPath(filename);
 
             // maybe it exists in cache, return that then
-            if (File.Exists(tempFile))
+            if (cache.Contains(filename))
             {
                 return StreamImage(new ImageMediaSource(tempFile));
             }
@@ -199,13 +197,10 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // create cache path
-            string tmpDir = Path.Combine(Installation.GetCacheDirectory(), "imagecache");
-            if (!Directory.Exists(tmpDir))
-                Directory.CreateDirectory(tmpDir);
-            string cachedPath = Path.Combine(tmpDir, String.Format("resize_{0}_{1}_{2}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight));
+            string filename = String.Format("resize_{0}_{1}_{2}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight);
 
             // check for existence on disk
-            if (!File.Exists(cachedPath))
+            if (!cache.Contains(filename))
             {
                 Image orig;
                 using (var impersonator = src.GetImpersonator())
@@ -213,14 +208,14 @@ namespace MPExtended.Services.StreamingService.Code
                     orig = Image.FromStream(src.Retrieve());
                 }
 
-                if (!ResizeImage(orig, cachedPath, maxWidth, maxHeight))
+                if (!ResizeImage(orig, cache.GetPath(filename), maxWidth, maxHeight))
                 {
                     WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                     return Stream.Null;
                 }
             }
 
-            return StreamImage(new ImageMediaSource(cachedPath));
+            return StreamImage(new ImageMediaSource(cache.GetPath(filename)));
         }
 
         public static Stream GetImage(ImageMediaSource source)

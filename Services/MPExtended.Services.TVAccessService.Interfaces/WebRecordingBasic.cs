@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
@@ -18,7 +19,6 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int IdChannel { get; set; }
         public int Id { get; set; }
         public int IdSchedule { get; set; }
-        public int IdServer { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
         public bool IsRecording { get; set; }
@@ -30,5 +30,14 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int StopTime { get; set; }
         public int TimesWatched { get; set; }
         public string Title { get; set; }
+        public string ChannelName { get; set; }
+
+        public WebMediaType Type
+        {
+            get
+            {
+                return WebMediaType.Recording;
+            }
+        }
     }
 }

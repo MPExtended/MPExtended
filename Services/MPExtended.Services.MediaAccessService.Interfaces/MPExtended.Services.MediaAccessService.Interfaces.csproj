@@ -68,6 +68,8 @@
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Music\WebMusicArtistDetailed.cs" />
+    <Compile Include="Playlist\WebPlaylist.cs" />
+    <Compile Include="Playlist\WebPlaylistItem.cs" />
     <Compile Include="PluginInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="WebCategory.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Enumerations.cs" />
     <Compile Include="WebExternalId.cs" />
     <Compile Include="WebFileInfo.cs" />
     <Compile Include="WebGenre.cs" />

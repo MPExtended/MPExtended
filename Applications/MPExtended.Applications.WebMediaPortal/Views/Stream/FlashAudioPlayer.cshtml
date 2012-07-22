@@ -1,4 +1,4 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.AlbumPlayerViewModel
+﻿@model AlbumPlayerViewModel
 
 @Html.Assets().AddScript("~/Content/jwplayer/jwplayer.js")
 
@@ -8,14 +8,14 @@
 
 <script type='text/javascript'>
     jwplayer('mediaspace').setup({
-        'flashplayer': '@Url.Content("~/Content/jwplayer/player.swf")',
+        'flashplayer': '@Url.ContentLink("jwplayer/player.swf")',
         'controlbar': 'bottom',
         'width': '770',
         'height': '320',
         'playlist.position': 'right',
         'playlist.size': '320',
         'autostart': 'false',
-        'skin': '@Url.Content("~/Content/jwplayer/whotube.zip")',
+        'skin': '@Url.ContentLink("jwplayer/whotube.zip")',
         'plugins': '',
 		'stretching': 'uniform',
 		'repeat': 'list',

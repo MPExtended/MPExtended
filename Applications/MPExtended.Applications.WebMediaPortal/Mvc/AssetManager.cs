@@ -18,8 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
@@ -40,9 +40,14 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             return CreateScript(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
         }
 
+        public MvcHtmlString AddContentScript(string path)
+        {
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext));
+        }
+
         public MvcHtmlString AddViewScript(string path)
         {
-            return CreateScript(UrlHelperExtensionMethods.GenerateViewContentUrl(path, htmlHelper.ViewContext.HttpContext));
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext));
         }
 
         private MvcHtmlString CreateScript(string resolvedPath)
@@ -55,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
                 tags.Add(resolvedPath, builder.ToString(TagRenderMode.Normal));
             }
 
-            // return an empty string so that we can just use @Html.Assets().AddScript()
+            // return an empty string so that we can use @Html.Assets().AddScript()
             return MvcHtmlString.Create(String.Empty);
         }
 
@@ -70,9 +75,14 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             return CreateStylesheet(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
         }
 
+        public MvcHtmlString AddContentStylesheet(string path)
+        {
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext));
+        }
+
         public MvcHtmlString AddViewStylesheet(string path)
         {
-            return CreateStylesheet(UrlHelperExtensionMethods.GenerateViewContentUrl(path, htmlHelper.ViewContext.HttpContext));
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext));
         }
 
         private MvcHtmlString CreateStylesheet(string resolvedPath)
