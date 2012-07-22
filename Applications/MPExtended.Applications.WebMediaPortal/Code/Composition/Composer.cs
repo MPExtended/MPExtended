@@ -24,6 +24,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using MoreLinq;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.Composition
@@ -87,6 +88,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 
             return controllers
                 .Select(x => x.Value.GetType().Assembly)
+                .DistinctBy(x => x.Location.ToLower())
                 .ToList();
         }
 
