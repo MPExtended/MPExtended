@@ -310,7 +310,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        internal ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile)
+        internal ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, bool album)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -327,7 +327,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // get view properties
             VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
-            string viewName = Enum.GetName(typeof(VideoPlayer), player) + "Player";
+            string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
 
             // generate view
             model.Transcoders = profiles;
@@ -347,8 +347,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             model.MediaId = itemId;
 
             // get profile
-            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
-                Settings.ActiveSettings.DefaultTVProfile :
+            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ? Settings.ActiveSettings.DefaultTVProfile :
+                type == WebMediaType.MusicTrack ? Settings.ActiveSettings.DefaultAudioProfile : 
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
  
@@ -359,8 +359,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
                 // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
                 model.Size = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
-            } 
-            else 
+            }
+            else if (!StreamTarget.GetAllTargets().First(t => t.Name == profile.Target).HasVideo)
+            {
+                model.Size = new WebResolution() { Width = 600, Height = 100 };
+            }
+            else
             {
                 model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
             }
@@ -373,7 +377,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             model.URL = Url.Action(Enum.GetName(typeof(WebMediaType), type), parameters);
 
             // generic part
-            return CreatePlayer(GetStreamControl(type), model, StreamTarget.GetVideoTargets(), profile);
+            var targets = type == WebMediaType.MusicTrack ? StreamTarget.GetAllTargets() : StreamTarget.GetVideoTargets();
+            return CreatePlayer(GetStreamControl(type), model, targets, profile, false);
         }
 
         [ServiceAuthorize]
@@ -383,7 +388,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             model.MediaId = albumId;
             WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
             model.Tracks = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
-            return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile);
+            return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
         }
 
         [ServiceAuthorize]

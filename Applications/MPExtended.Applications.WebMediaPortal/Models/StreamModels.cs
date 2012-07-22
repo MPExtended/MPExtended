@@ -54,6 +54,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video")
             };
         }
+
+        public static List<StreamTarget> GetAllTargets()
+        {
+            return GetAudioTargets().Concat(GetVideoTargets()).ToList();
+        }
     }
 
     public class PlayerViewModel
