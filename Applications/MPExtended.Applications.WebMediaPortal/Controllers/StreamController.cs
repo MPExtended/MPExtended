@@ -114,7 +114,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (fullUri.Host == "localhost" || fullUri.Host == "127.0.0.1")
             {
-                fullUri.Host = NetworkInformation.GetIPAddresses().First();
+                fullUri.Host = NetworkInformation.GetIPAddress();
             }
 
             // Do the actual streaming
