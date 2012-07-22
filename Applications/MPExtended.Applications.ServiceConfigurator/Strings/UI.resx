@@ -479,4 +479,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
     <value>please download Bonjour. </value>
   </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
 </root>

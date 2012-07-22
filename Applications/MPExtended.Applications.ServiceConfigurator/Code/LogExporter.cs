@@ -51,7 +51,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 // strip watch sharing username and password from Streaming.xml
                 var streamingPart = zipFile.CreatePart(new Uri("/Streaming.xml", UriKind.Relative), "", CompressionOption.Maximum);
                 XElement streaming = XElement.Load(Path.Combine(Installation.GetConfigurationDirectory(), "Streaming.xml"));
-                streaming.Element("watchsharing").Element("passwordHash").Value = PasswordSubstitute;
+                streaming.Element("watchsharing").Element("trakt").Element("passwordHash").Value = PasswordSubstitute;
+                streaming.Element("watchsharing").Element("follwit").Element("passwordHash").Value = PasswordSubstitute;
                 streaming.Save(streamingPart.GetStream());
 
                 // strip username & passwords from Services.xml file

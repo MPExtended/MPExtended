@@ -107,7 +107,6 @@
     <Compile Include="Units\VLCManagedEncoder.cs" />
     <Compile Include="Units\VLCWrapperParsingUnit.cs" />
     <Compile Include="Code\NamedPipe.cs" />
-    <Compile Include="Code\Reference.cs" />
     <Compile Include="Code\Resolution.cs" />
     <Compile Include="Code\StreamCopy.cs" />
     <Compile Include="Code\TsBuffer.cs" />
