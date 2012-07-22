@@ -32,6 +32,7 @@
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
                 <RegistryValue Type="string" Name="ServiceInstallLocation" Value="[MPEXTENDEDDIRECTORY]Service" />
               </RegistryKey>
+              <RemoveRegistryKey Root="HKLM" Key="Software\MPExtended" Action="removeOnUninstall" />
             </Component>
             
             <!-- Interfaces -->
