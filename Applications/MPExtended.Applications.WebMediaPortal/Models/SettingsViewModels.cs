@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
@@ -97,22 +98,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                IEnumerable<SelectListItem> items = new List<SelectListItem>()
-                {
-                    new SelectListItem() { Text = FormStrings.DefaultSkinName, Value = "default" }
-                };
-
-                string path = HttpContext.Current.Server.MapPath("~/Skins");
-                if (Directory.Exists(path))
-                {
-                    items = items.Union(Directory.GetDirectories(path).Select(x => new SelectListItem()
-                    {
-                        Text = Path.GetFileName(x),
-                        Value = Path.GetFileName(x)
-                    }));
-
-                }
-
+                var items = Composer.Instance.GetInstalledSkins()
+                    .Select(x => new SelectListItem() { Text = x, Value = x })
+                    .ToList();
+                items.Add(new SelectListItem() { Text = FormStrings.DefaultSkinName, Value = "default" });
                 return items;
             }
         }

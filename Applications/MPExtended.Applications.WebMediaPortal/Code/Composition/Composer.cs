@@ -45,21 +45,26 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
         private string rootDirectory;
         private bool compositionDone = false;
         private IEnumerable<Lazy<IController, IDictionary<string, object>>> controllers;
-        private PluginFinder pluginFinder;
-        private SkinFinder skinFinder;
+        private List<string> installedSkins;
+        private List<string> installedPlugins;
 
         public Composer()
         {
             rootDirectory = WebMediaPortalApplication.GetInstallationDirectory();
-            skinFinder = new SkinFinder();
-            pluginFinder = new PluginFinder();
         }
 
         public void Compose()
         {
             AggregateCatalog catalog = new AggregateCatalog();
+
+            var pluginFinder = new PluginFinder();
             RegisterExtensions(pluginFinder, catalog, "plugins");
+            installedPlugins = pluginFinder.GetNames().ToList();
+
+            var skinFinder = new SkinFinder();
             RegisterExtensions(skinFinder, catalog, "skins");
+            installedSkins = skinFinder.GetNames().ToList();
+
             var container = new CompositionContainer(catalog);
             controllers = container.GetExports<IController, IDictionary<string, object>>();
             compositionDone = true;
@@ -119,6 +124,16 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                         : true;
                 })
                 .ToList();
+        }
+
+        public IEnumerable<string> GetInstalledSkins()
+        {
+            return installedSkins;
+        }
+
+        public IEnumerable<string> GetInstalledPlugins()
+        {
+            return installedPlugins;
         }
     }
 }
