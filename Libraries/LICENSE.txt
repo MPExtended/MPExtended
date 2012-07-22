@@ -26,6 +26,12 @@ Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
 
+Misc\MoreLinq.dll:
+- Copyright (C) 2008 - 2011 Jonathan Skeet, http://code.google.com/p/morelinq/
+- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
+- Source code available from http://code.google.com/p/morelinq/
+- Version 1.0-beta
+
 Misc\zxing.dll:
 - Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
