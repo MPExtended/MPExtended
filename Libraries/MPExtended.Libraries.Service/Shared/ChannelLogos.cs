@@ -79,7 +79,7 @@ namespace MPExtended.Libraries.Service.Shared
 
         private string GetCacheDirectory()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "TVLogoCache");
+            return Path.Combine(Installation.GetCacheDirectory(), "TVLogoCache");
         }
     }
 }
