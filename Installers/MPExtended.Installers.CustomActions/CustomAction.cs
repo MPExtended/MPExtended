@@ -50,17 +50,21 @@ namespace MPExtended.Installers.CustomActions
         }
 
         [CustomAction]
-        public static ActionResult RemoveConfig(Session session)
+        public static ActionResult RemoveData(Session session)
         {
             Log.Session = session;
             Log.Write("Entered RemoveConfig");
 
             try
             {
-                ConfigFiles.Remove("Services.xml");
-                ConfigFiles.Remove("MediaAccess.xml");
-                ConfigFiles.Remove("Streaming.xml");
-                ConfigFiles.RemoveDirectory("Cache");
+                DataFiles.Remove("Services.xml");
+                DataFiles.Remove("MediaAccess.xml");
+                DataFiles.Remove("Streaming.xml");
+                DataFiles.RemoveDirectory("Cache");
+                DataFiles.Remove(@"Logs/Service.log");
+                DataFiles.Remove(@"Logs/ServiceConfigurator.log");
+                DataFiles.RemoveDirectoryIfEmpty("Logs");
+                DataFiles.RemoveDirectoryIfEmpty();
             }
             catch (Exception ex)
             {
@@ -71,15 +75,20 @@ namespace MPExtended.Installers.CustomActions
         }
 
         [CustomAction]
-        public static ActionResult RemoveWebMediaPortalConfig(Session session)
+        public static ActionResult RemoveWebMediaPortalData(Session session)
         {
             Log.Session = session;
             Log.Write("Entered RemoveWebMediaPortalConfig");
 
             try
             {
-                ConfigFiles.Remove("WebMediaPortal.xml");
-                ConfigFiles.Remove("WebMediaPortalHosting.xml");
+                DataFiles.Remove("WebMediaPortal.xml");
+                DataFiles.Remove("WebMediaPortalHosting.xml");
+                DataFiles.Remove(@"Logs/WebMediaPortal.log");
+                DataFiles.Remove(@"Logs/WebMediaPortalHosting.log");
+                DataFiles.Remove(@"Logs/WebMediaPortalIIS.log");
+                DataFiles.RemoveDirectoryIfEmpty("Logs");
+                DataFiles.RemoveDirectoryIfEmpty();
             }
             catch (Exception ex)
             {

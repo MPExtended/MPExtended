@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <!--
     Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
     
@@ -27,7 +28,7 @@
               <File Source="$(var.SolutionDir)\Libraries\Misc\MoreLinq.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
-            
+
             <!-- General registry (installation path) -->
             <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
@@ -35,7 +36,7 @@
               </RegistryKey>
               <RemoveRegistryKey Root="HKLM" Key="Software\MPExtended" Action="removeOnUninstall" />
             </Component>
-            
+
             <!-- Interfaces -->
             <Component Id="Component_General_Interface" Guid="393dd13f-aeaf-4363-9924-2b64a5f3bc55">
               <File Source="$(var.MPExtended.Services.Common.Interfaces.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
@@ -191,7 +192,7 @@
           </Directory>
         </Directory>
       </Directory>
-      
+
       <!-- Start menu -->
       <Directory Id="ProgramMenuFolder">
         <Component Id="Component_Configurator_StartMenu" Guid="369aaf32-18db-4562-bc51-7557f0544ebf">
@@ -207,14 +208,14 @@
                          Value="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" Type="string" KeyPath="yes" />
         </Component>
       </Directory>
-      
+
       <!-- Desktop -->
       <Directory Id="DesktopFolder">
         <Component Id="Component_Configurator_Desktop" Guid="956ece35-9156-440a-8e8a-213a1f729d2f">
           <Condition><![CDATA[INSTALLCONFIGURATORDESKTOP]]></Condition>
           <Shortcut Id="DesktopShortcut" Name="!(loc.ConfiguratorShortcutName)" Description="!(loc.ConfiguratorShortcutDescription)"
                     Target="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" WorkingDirectory="MPEXTENDEDDIRECTORY" Icon="MPExtendedIcon" />
-          <RegistryValue Root="HKCU" Key="Software\MPExtended" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />          
+          <RegistryValue Root="HKCU" Key="Software\MPExtended" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
         </Component>
       </Directory>
     </Directory>
