@@ -68,6 +68,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
+    <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
