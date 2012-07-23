@@ -65,7 +65,7 @@ namespace MPExtended.Services.TVAccessService
 
                 // connect to tv server via TVE API
                 RemoteControl.Clear();
-                RemoteControl.HostName = TvDatabase.Server.ListAll().First(server => server.IsMaster).HostName;
+                RemoteControl.HostName = "127.0.0.1"; // Why do we have to even bother with this setting?
 
                 _tvControl = RemoteControl.Instance;
             }
