@@ -1,12 +1,37 @@
-﻿#TVGuideNavigation select
+﻿#TVGuideNavigation 
 {
+    position: relative;
+    height: 28px;
+}
+
+#TVGuideNavigation input,
+#TVGuideNavigation select,
+#TVGuideNavigation img.ui-datepicker-trigger,
+#TVGuideNavigation div#group_chzn
+{
+    position: absolute;
+    bottom: 0;
+}
+
+#TVGuideNavigation select
+{
+    left: 0;
+    bottom: 0;
     width: 250px;
     margin-right: 10px;
 }
 
 #TVGuideNavigation input
 {
+    left: 260px;
+    bottom: -5px;
     width: 75px;
+}
+
+#TVGuideNavigation img.ui-datepicker-trigger
+{
+    left: 356px;
+    bottom: 3px;
 }
 
 #TVGuide .headerrow
