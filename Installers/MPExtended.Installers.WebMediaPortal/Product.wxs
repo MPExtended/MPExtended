@@ -50,7 +50,7 @@
     <!-- Include custom action library -->
     <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
 
-    <!-- Remove config files on uninstall -->
+    <!-- Remove data files on uninstall -->
     <CustomAction Id="RemoveDataFiles" BinaryKey="CustomActionLibrary" DllEntry="RemoveWebMediaPortalData" Execute="immediate" Return="check" />
     <InstallExecuteSequence>
       <Custom Action="RemoveDataFiles" Before="InstallFinalize"><![CDATA[(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")]]></Custom>
