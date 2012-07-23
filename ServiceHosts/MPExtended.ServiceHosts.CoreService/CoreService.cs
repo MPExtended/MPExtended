@@ -41,6 +41,7 @@ namespace MPExtended.ServiceHosts.CoreService
 
         protected override void OnStart(string[] args)
         {
+            LogRotation.Rotate();
             Log.Setup("Service.log", false);
             host = new MPExtendedHost();
             host.Open();

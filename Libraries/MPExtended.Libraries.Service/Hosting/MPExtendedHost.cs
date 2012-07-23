@@ -47,11 +47,6 @@ namespace MPExtended.Libraries.Service.Hosting
             try
             {
                 ServiceState.RegisterStartupCondition(STARTUP_CONDITION);
-
-                // rotate log files before we write to them, if possible
-                LogRotation rotation = new LogRotation();
-                rotation.Rotate();
-
                 Log.Debug("Opening MPExtended ServiceHost version {0}", VersionUtil.GetFullVersionString());
 
                 // always log uncaught exceptions that cause the program to exit

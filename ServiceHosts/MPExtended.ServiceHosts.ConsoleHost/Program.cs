@@ -28,6 +28,7 @@ namespace MPExtended.ServiceHosts.ConsoleHost
     {
         static void Main(string[] args)
         {
+            LogRotation.Rotate();
             Log.Setup("ConsoleHost.log", true);
 
             var host = new MPExtendedHost();

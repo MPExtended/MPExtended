@@ -22,6 +22,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Compilation;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 {
@@ -30,6 +31,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
         public static void Initialize()
         {
             // This method is called by the ASP.NET infrastructure using a PreApplicationStartMethodAttribute.
+            LogRotation.Rotate();
             Log.Setup("WebMediaPortal.log", false);
             Log.Debug("WebMediaPortal starting!");
             InitializeExtensions();
