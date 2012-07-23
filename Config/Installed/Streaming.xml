@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <appconfig>
   <watchsharing>
-    <type>none</type> <!-- one of debug, none, follwit and trakt -->
-    <username></username>
-    <passwordHash></passwordHash>
+    <debug enabled="false" />
+    <trakt enabled="false">
+      <username></username>
+      <passwordHash></passwordHash>
+    </trakt>
+    <follwit enabled="false">
+      <username></username>
+      <passwordHash></passwordHash>
+    </follwit>
   </watchsharing>
   
   <ffmpeg>
