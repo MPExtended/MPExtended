@@ -145,7 +145,6 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AvailabilityModel.cs" />
     <Compile Include="Models\ScheduleViewModels.cs" />
-    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\SettingsViewModels.cs" />
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />

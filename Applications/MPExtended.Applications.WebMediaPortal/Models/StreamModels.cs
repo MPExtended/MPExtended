@@ -73,14 +73,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public WebMediaType MediaType { get; set; }
         public string MediaId { get; set; }
 
-        public SettingModel Settings
-        {
-            get
-            {
-                return Code.Settings.ActiveSettings;
-            }
-        }
-
         public IEnumerable<SelectListItem> TranscoderSelectList
         {
             get

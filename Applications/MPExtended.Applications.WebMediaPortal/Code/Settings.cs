@@ -28,67 +28,21 @@ using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Service;
+using Config = MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Settings
     {
-        private static SettingModel activeSettingModel;
-
-        public static SettingModel ActiveSettings
+        public static Config.WebMediaPortal ActiveSettings
         {
             get
             {
-                if (activeSettingModel == null)
-                    LoadSettings();
-                return activeSettingModel;
-            }
-
-            set
-            {
-                SaveSettings(value);
-                LoadSettings();
+                return Configuration.WebMediaPortal;
             }
         }
 
-        public static void LoadSettings()
-        {
-            activeSettingModel = PerformLoadSettings(true);
-            ReloadSkinSettings();
-        }
-
-        private static SettingModel PerformLoadSettings(bool retry)
-        {
-            try
-            {
-                using(XmlReader reader = XmlReader.Create(Configuration.GetPath("WebMediaPortal.xml")))
-                {
-                    DataContractSerializer serializer = new DataContractSerializer(typeof(SettingModel));
-                    return (SettingModel)serializer.ReadObject(reader);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (retry)
-                {
-                    Log.Warn("Exception in LoadSettings (due to old configuration file?), overwriting with default file and retrying", ex);
-                    File.Copy(Configuration.GetDefaultPath("WebMediaPortal.xml"), Configuration.GetPath("WebMediaPortal.xml"), true);
-                    return PerformLoadSettings(false);
-                }
-                else
-                {
-                    Log.Warn("Exception in LoadSettings, bailing out", ex);
-                }
-            }
-
-            // default values
-            SettingModel settings = new SettingModel();
-            settings.MASUrl = "auto://127.0.0.1:4322";
-            settings.TASUrl = "auto://127.0.0.1:4322";
-            return settings;
-        }
-
-        private static void ReloadSkinSettings()
+        public static void ApplySkinSettings()
         {
             // Setup everything that uses settings from the current skin
             Log.Debug("Active skin: {0}", ActiveSettings.Skin);
@@ -97,19 +51,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             foreach (var engine in ViewEngines.Engines.OfType<SkinnableViewEngine>())
             {
                 engine.UpdateActiveSkin();
-            }
-        }
-
-        private static void SaveSettings(SettingModel settings)
-        {
-            XmlWriterSettings writerSettings = new XmlWriterSettings();
-            writerSettings.CloseOutput = true;
-            writerSettings.Indent = true;
-            writerSettings.OmitXmlDeclaration = false;
-            using (XmlWriter writer = XmlWriter.Create(Configuration.GetPath("WebMediaPortal.xml"), writerSettings))
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(SettingModel));
-                serializer.WriteObject(writer, settings);
             }
         }
     }

@@ -53,10 +53,10 @@ namespace MPExtended.Applications.WebMediaPortal
             RouteTable.Routes.MapRoute("Default", "{controller}/{action}/{id}", new { controller = "Home", action = "Index", id = UrlParameter.Optional });
 
             // initialize settings and the skin-override mechanism
-            ContentLocator.Current = new ContentLocator(Context.Server, null);
+            ContentLocator.Current = new ContentLocator(Context.Server);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new SkinnableViewEngine());
-            Settings.LoadSettings();
+            Settings.ApplySkinSettings();
 
             // set connection settings
             MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);

@@ -27,10 +27,24 @@ using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Interfaces;
+using Config = MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
+    public enum StreamTypeWithDescription
+    {
+        [LocalizedDescription(typeof(FormStrings), "DirectStreamingProfileDescription")]
+        Direct,
+
+        [LocalizedDescription(typeof(FormStrings), "DirectWhenPossibleDescription")]
+        DirectWhenPossible,
+
+        [LocalizedDescription(typeof(FormStrings), "ProxiedStreamingProfileDescription")]
+        Proxied,
+    }
+
     public class SettingsViewModel
     {
         public List<SelectListItem> MediaProfiles
@@ -151,7 +165,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int? MusicProvider { get; set; }
 
         [LocalizedDisplayName(typeof(FormStrings), "StreamType")]
-        public StreamType StreamType { get; set; }
+        public StreamTypeWithDescription StreamType { get; set; }
 
         [LocalizedDisplayName(typeof(FormStrings), "VLCPlayerEnableDeinterlacing")]
         public bool EnableDeinterlace { get; set; }
@@ -168,10 +182,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
         }
 
-        public SettingsViewModel(SettingModel model)
+        public SettingsViewModel(Config.WebMediaPortal model)
         {
 		    Skin = model.Skin;
-            StreamType = model.StreamType;
+            StreamType = (StreamTypeWithDescription)model.StreamType;
             EnableDeinterlace = model.EnableDeinterlace;
             EnableAlbumPlayer = model.EnableAlbumPlayer;
             SelectedGroup = model.DefaultGroup;
@@ -188,21 +202,21 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public SettingModel ToSettingModel(SettingModel changeModel)
+        public void SaveToConfiguration()
         {
-            changeModel.StreamType = StreamType;
-            changeModel.EnableDeinterlace = EnableDeinterlace;
-            changeModel.EnableAlbumPlayer = EnableAlbumPlayer;
-            changeModel.DefaultGroup = SelectedGroup;
-            changeModel.DefaultMediaProfile = SelectedMediaProfile;
-            changeModel.DefaultAudioProfile = SelectedAudioProfile;
-            changeModel.DefaultTVProfile = SelectedTVProfile;
+            Configuration.WebMediaPortal.StreamType = (Config.StreamType)StreamType;
+            Configuration.WebMediaPortal.EnableDeinterlace = EnableDeinterlace;
+            Configuration.WebMediaPortal.EnableAlbumPlayer = EnableAlbumPlayer;
+            Configuration.WebMediaPortal.DefaultGroup = SelectedGroup;
+            Configuration.WebMediaPortal.DefaultMediaProfile = SelectedMediaProfile;
+            Configuration.WebMediaPortal.DefaultAudioProfile = SelectedAudioProfile;
+            Configuration.WebMediaPortal.DefaultTVProfile = SelectedTVProfile;
 
-            changeModel.TVShowProvider = TVShowProvider;
-            changeModel.MusicProvider = MusicProvider;
-            changeModel.MovieProvider = MovieProvider;
-            changeModel.Skin = Skin;
-            return changeModel;
+            Configuration.WebMediaPortal.TVShowProvider = TVShowProvider;
+            Configuration.WebMediaPortal.MusicProvider = MusicProvider;
+            Configuration.WebMediaPortal.MovieProvider = MovieProvider;
+            Configuration.WebMediaPortal.Skin = Skin;
+            Configuration.Save();
         }
 
         private List<SelectListItem> GetProfiles(IWebStreamingService service, IEnumerable<StreamTarget> targets)
@@ -252,17 +266,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
         }
 
-        public ServiceSettingsViewModel(SettingModel model)
+        public ServiceSettingsViewModel(Config.WebMediaPortal model)
         {
-            MASUrl = model.MASUrl;
             TASUrl = model.TASUrl;
+            MASUrl = model.MASUrl;
         }
 
-        public SettingModel ToSettingModel(SettingModel changeModel)
+        public void SaveToConfiguration()
         {
-            changeModel.MASUrl = MASUrl;
-            changeModel.TASUrl = TASUrl;
-            return changeModel;
+            Configuration.WebMediaPortal.TASUrl = TASUrl;
+            Configuration.WebMediaPortal.MASUrl = MASUrl;
+            Configuration.Save();
         }
     }
 }

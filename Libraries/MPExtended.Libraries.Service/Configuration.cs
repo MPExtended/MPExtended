@@ -36,6 +36,7 @@ namespace MPExtended.Libraries.Service
         private static ConfigurationSerializer<MediaAccess> mediaConfig = null;
         private static ConfigurationSerializer<Streaming> streamConfig = null;
         private static ConfigurationSerializer<WebMediaPortalHosting> webmpHostingConfig = null;
+        private static ConfigurationSerializer<WebMediaPortal> webmpConfig = null;
 
         public static Services Services
         {
@@ -81,7 +82,18 @@ namespace MPExtended.Libraries.Service
             }
         }
 
-        public bool Save()
+        public static WebMediaPortal WebMediaPortal
+        {
+            get
+            {
+                if (webmpConfig == null)
+                    webmpConfig = new ConfigurationSerializer<WebMediaPortal>("WebMediaPortal.xml");
+
+                return webmpConfig.Get();
+            }
+        }
+
+        public static bool Save()
         {
             // I use only one ampersand here on purpose, we don't want short-circuit here as all config files should be saved. 
             return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save();
