@@ -96,7 +96,7 @@ namespace MPExtended.Libraries.Service
         public static bool Save()
         {
             // I use only one ampersand here on purpose, we don't want short-circuit here as all config files should be saved. 
-            return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save();
+            return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
         }
 
         internal static string GetPath(string filename)

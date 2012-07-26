@@ -18,20 +18,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Xml.Linq;
 
 namespace MPExtended.Libraries.Service.Config
 {
+    [DataContract(Name = "WebMediaPortalHosting", Namespace = "http://mpextended.github.com/schema/config/1/WebMediaPortalHosting")]
     public class WebMediaPortalHosting
     {
         public WebMediaPortalHosting()
         {
         }
 
+        [DataMember]
         public int Port { get; set; }
 
+        [DataMember]
         public bool EnableTLS { get; set; }
+        [DataMember]
         public int PortTLS { get; set; }
     }
 }

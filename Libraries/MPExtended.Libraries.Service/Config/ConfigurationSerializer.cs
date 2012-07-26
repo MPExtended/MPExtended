@@ -68,12 +68,16 @@ namespace MPExtended.Libraries.Service.Config
             }
         }
 
+        private DataContractSerializer CreateSerializer()
+        {
+            return new DataContractSerializer(typeof(TModel));
+        }
+
         private TModel UnsafeParse(string path)
         {
             using (XmlReader reader = XmlReader.Create(path))
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(TModel));
-                return (TModel)serializer.ReadObject(reader);
+                return (TModel)CreateSerializer().ReadObject(reader);
             }
         }
 
@@ -128,10 +132,9 @@ namespace MPExtended.Libraries.Service.Config
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
                 writerSettings.OmitXmlDeclaration = false;
-                using (XmlWriter writer = XmlWriter.Create(Filename, writerSettings))
+                using (XmlWriter writer = XmlWriter.Create(Configuration.GetPath(Filename), writerSettings))
                 {
-                    DataContractSerializer serializer = new DataContractSerializer(typeof(TModel));
-                    serializer.WriteObject(writer, model);
+                    CreateSerializer().WriteObject(writer, model);
                 }
                 return true;
             }
@@ -144,6 +147,9 @@ namespace MPExtended.Libraries.Service.Config
 
         public bool Save()
         {
+            // If the settings haven't been loaded, they can't have been changed, so don't do anything.
+            if (_instance == null)
+                return true;
             return Save(_instance);
         }
     }

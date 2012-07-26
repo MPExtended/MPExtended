@@ -17,73 +17,99 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Xml.Linq;
 
 namespace MPExtended.Libraries.Service.Config
 {
+    [DataContract(Name = "TranscoderProfile", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class TranscoderProfile
     {
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+        [DataMember]
+        public bool HasVideoStream { get; set; }
+        [DataMember]
+        public string MIME { get; set; }
+        [DataMember]
+        public int MaxOutputWidth { get; set; }
+        [DataMember]
+        public int MaxOutputHeight { get; set; }
+        [DataMember]
+        public string Target { get; set; }
+        [DataMember]
+        public int Bandwidth { get; set; }
+        [DataMember]
+        public string Transport { get; set; }
+        [DataMember]
+        public string TranscoderImplementationClass { get; set; }
+        [DataMember]
+        public ConfigDictionary CodecParameters { get; set; }
+
         public TranscoderProfile()
         {
+            CodecParameters = new ConfigDictionary();
         }
-
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool HasVideoStream { get; set; }
-        public string MIME { get; set; }
-        public int MaxOutputWidth { get; set; }
-        public int MaxOutputHeight { get; set; }
-        public string Target { get; set; }
-        public int Bandwidth { get; set; }
-        public string Transport { get; set; }
-        public string TranscoderImplementationClass { get; set; }
-        public IDictionary<string, string> CodecParameters { get; set; }
     }
 
+    [DataContract(Name = "WatchSharingConfiguration", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class WatchSharingConfiguration
     {
+        [DataMember]
+        public bool DebugEnabled { get; set; }
+        [DataMember]
+        public bool TraktEnabled { get; set; }
+        [DataMember]
+        public ConfigDictionary TraktConfiguration { get; set; }
+        [DataMember]
+        public bool FollwitEnabled { get; set; }
+        [DataMember]
+        public ConfigDictionary FollwitConfiguration { get; set; }
+
         public WatchSharingConfiguration()
         {
             DebugEnabled = false;
             TraktEnabled = false;
-            TraktConfiguration = new Dictionary<string, string>();
+            TraktConfiguration = new ConfigDictionary();
             FollwitEnabled = false;
-            FollwitConfiguration = new Dictionary<string, string>();
+            FollwitConfiguration = new ConfigDictionary();
         }
-
-        public bool DebugEnabled { get; set; }
-        public bool TraktEnabled { get; set; }
-        public Dictionary<string, string> TraktConfiguration { get; set; }
-        public bool FollwitEnabled { get; set; }
-        public Dictionary<string, string> FollwitConfiguration { get; set; }
     }
 
+    [DataContract(Name = "Streaming", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class Streaming
     {
         public const string STREAM_NONE = "none";
         public const string STREAM_DEFAULT = "default";
         public const string STREAM_EXTERNAL = "external";
 
+        [DataMember]
+        public string DefaultAudioStream { get; set; }
+        [DataMember]
+        public string DefaultSubtitleStream { get; set; }
+
+        [DataMember]
+        public string TVLogoDirectory { get; set; }
+
+        [DataMember]
+        public string FFMpegPath { get; set; }
+        [DataMember]
+        public string FFMpegAPI { get; set; }
+
+        [DataMember]
+        public WatchSharingConfiguration WatchSharing { get; set; }
+
+        [DataMember]
+        public List<TranscoderProfile> Transcoders { get; set; }
+
         public Streaming()
         {
             WatchSharing = new WatchSharingConfiguration();
             Transcoders = new List<TranscoderProfile>();
         }
-
-        public string DefaultAudioStream { get; set; }
-        public string DefaultSubtitleStream { get; set; }
-
-        public string TVLogoDirectory { get; set; }
-
-        public string FFMpegPath { get; set; }
-        public string FFMpegAPI { get; set; }
-
-        public WatchSharingConfiguration WatchSharing { get; set; }
-
-        public List<TranscoderProfile> Transcoders { get; set; }
 
         public TranscoderProfile GetTranscoderProfileByName(string name) 
         {

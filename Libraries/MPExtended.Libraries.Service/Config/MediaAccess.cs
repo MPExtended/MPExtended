@@ -17,27 +17,37 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Xml.Linq;
 
 namespace MPExtended.Libraries.Service.Config
 {
+    [DataContract(Name = "ConfigType", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public enum ConfigType 
     { 
-        File, 
-        Folder, 
-        Text, 
-        Number, 
+        [EnumMember]
+        File,
+        [EnumMember]
+        Folder,
+        [EnumMember]
+        Text,
+        [EnumMember]
+        Number,
+        [EnumMember]
         Boolean 
     }
 
+    [DataContract(Name = "PluginConfigItem", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class PluginConfigItem
     {
+        [DataMember]
         public string Value { get; set; }
+        [DataMember]
         public string Name { get; set; }
+        [DataMember]
         public string DisplayName { get; set; }
+        [DataMember]
         public ConfigType Type { get; set; }
 
         public PluginConfigItem()
@@ -53,30 +63,40 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
+    [DataContract(Name = "DefaultPlugins", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class DefaultPlugins
     {
+        [DataMember]
+        public string TVShow { get; set; }
+        [DataMember]
+        public string Movie { get; set; }
+        [DataMember]
+        public string Music { get; set; }
+        [DataMember]
+        public string Picture { get; set; }
+        [DataMember]
+        public string Filesystem { get; set; }
+
         public DefaultPlugins()
         {
         }
-
-        public string TVShow { get; set; }
-        public string Movie { get; set; }
-        public string Music { get; set; }
-        public string Picture { get; set; }
-        public string Filesystem { get; set; }
     }
 
+    [DataContract(Name = "MediaAccess", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class MediaAccess
     {
+        [DataMember]
+        public DefaultPlugins DefaultPlugins { get; set; }
+        [DataMember]
+        public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
+        [DataMember]
+        public List<string> DisabledPlugins { get; set; }
+
         public MediaAccess()
         {
             DefaultPlugins = new DefaultPlugins();
             DisabledPlugins = new List<string>();
             PluginConfiguration = new Dictionary<string, List<PluginConfigItem>>();
         }
-
-        public DefaultPlugins DefaultPlugins { get; set; }
-        public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
-        public List<string> DisabledPlugins { get; set; }
     }
 }
