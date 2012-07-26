@@ -30,16 +30,27 @@ namespace MPExtended.Libraries.Service.Config
         public string Filename { get; private set; }
 
         private TModel _instance;
+        private object _instanceLock;
 
         public ConfigurationSerializer(string filename)
         {
             this.Filename = filename;
+            this._instanceLock = new object();
         }
 
         public TModel Get()
         {
             if (_instance == null)
-                _instance = Load();
+            {
+                lock (_instanceLock)
+                {
+                    // This extra check is needed because there is a (theoretical?) race condition, where two threads evaluate the if(_instance == null) at
+                    // the same time. The second thread which enters the lock statement doesn't have to load the settings again, as it's already been done by
+                    // the first thread between the check and entering the lock statement.
+                    if (_instance == null)
+                        _instance = Load();
+                }
+            }
 
             return _instance;
         }

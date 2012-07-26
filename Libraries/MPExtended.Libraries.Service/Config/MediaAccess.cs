@@ -70,6 +70,9 @@ namespace MPExtended.Libraries.Service.Config
     {
         public MediaAccess()
         {
+            DefaultPlugins = new DefaultPlugins();
+            DisabledPlugins = new List<string>();
+            PluginConfiguration = new Dictionary<string, List<PluginConfigItem>>();
         }
 
         public DefaultPlugins DefaultPlugins { get; set; }

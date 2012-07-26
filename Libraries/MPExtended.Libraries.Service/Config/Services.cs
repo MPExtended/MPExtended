@@ -84,6 +84,11 @@ namespace MPExtended.Libraries.Service.Config
     {
         public Services()
         {
+            Port = 4322;
+            MASConnection = "auto://127.0.0.1:4322";
+            TASConnection = "auto://127.0.0.1:4322";
+            Users = new List<User>();
+            NetworkImpersonation = new NetworkImpersonation();
         }
 
         public bool AuthenticationEnabled { get; set; }

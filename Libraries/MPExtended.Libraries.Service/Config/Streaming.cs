@@ -47,6 +47,11 @@ namespace MPExtended.Libraries.Service.Config
     {
         public WatchSharingConfiguration()
         {
+            DebugEnabled = false;
+            TraktEnabled = false;
+            TraktConfiguration = new Dictionary<string, string>();
+            FollwitEnabled = false;
+            FollwitConfiguration = new Dictionary<string, string>();
         }
 
         public bool DebugEnabled { get; set; }
@@ -64,6 +69,8 @@ namespace MPExtended.Libraries.Service.Config
 
         public Streaming()
         {
+            WatchSharing = new WatchSharingConfiguration();
+            Transcoders = new List<TranscoderProfile>();
         }
 
         public string DefaultAudioStream { get; set; }
