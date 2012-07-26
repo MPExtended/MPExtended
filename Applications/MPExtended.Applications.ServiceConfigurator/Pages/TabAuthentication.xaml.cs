@@ -24,7 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -53,7 +53,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.Users = users.ToList();
             Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
 
-            Configuration.Services.Save();
+            Configuration.Save();
         }
 
         private void miDelete_Click(object sender, RoutedEventArgs e)

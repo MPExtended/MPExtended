@@ -55,7 +55,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.WebMediaPortalHosting.Port = Int32.Parse(txtPort.Text);
             Configuration.WebMediaPortalHosting.EnableTLS = cbHTTPS.IsChecked.GetValueOrDefault(false);
             Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);
-            Configuration.WebMediaPortalHosting.Save();
+            Configuration.Save();
 
             // restart
             if (UacServiceHelper.IsAdmin())

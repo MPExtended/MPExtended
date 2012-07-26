@@ -21,7 +21,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Libraries.Service.Util
 {

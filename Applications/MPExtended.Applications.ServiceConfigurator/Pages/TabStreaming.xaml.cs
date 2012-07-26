@@ -71,7 +71,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             Configuration.Streaming.DefaultAudioStream = (string)cbAudio.SelectedValue;
             Configuration.Streaming.DefaultSubtitleStream = (string)cbSubtitle.SelectedValue;
-            Configuration.Streaming.Save();
+            Configuration.Save();
         }
     }
 }

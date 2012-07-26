@@ -22,7 +22,7 @@ using System.Text;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service.Util;
 
-namespace MPExtended.Libraries.Service.ConfigurationContracts
+namespace MPExtended.Libraries.Service.Config
 {
     public class User
     {
@@ -30,6 +30,10 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
         public string Username { get; set; }
         public string EncryptedPassword { get; set; }
+
+        public User()
+        {
+        }
 
         public bool ValidatePassword(string password)
         {
@@ -56,6 +60,10 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public string EncryptedPassword { get; set; }
         public bool ReadInStreamingService { get; set; }
 
+        public NetworkImpersonation()
+        {
+        }
+
         public string GetPassword()
         {
             return EncryptedPassword == String.Empty ? String.Empty : Encryption.Decrypt(PASSWORD_KEY, EncryptedPassword);
@@ -74,6 +82,10 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
     public class Services
     {
+        public Services()
+        {
+        }
+
         public bool AuthenticationEnabled { get; set; }
 
         public bool BonjourEnabled { get; set; }
@@ -88,74 +100,6 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public List<User> Users { get; set; }
 
         public NetworkImpersonation NetworkImpersonation { get; set; }
-
-        public Services(string path, string defaultPath)
-        {
-            XElement file = XElement.Load(path);
-
-            AuthenticationEnabled = file.Element("users").Attribute("authenticationEnabled").Value == "true";
-
-            BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
-            BonjourName = file.Element("bonjour").Element("pcname").Value;
-
-            Port = Int32.Parse(file.Element("port").Value);
-            EnableIPv6 = file.Element("enableIPv6").Value == "true";
-
-            MASConnection = file.Element("connections").Element("mas").Value;
-            TASConnection = file.Element("connections").Element("tas").Value;
-
-            NetworkImpersonation = new NetworkImpersonation()
-            {
-                Domain = file.Element("networkImpersonation").Element("domain").Value,
-                Username = file.Element("networkImpersonation").Element("username").Value,
-                EncryptedPassword = file.Element("networkImpersonation").Element("password").Value,
-                ReadInStreamingService = file.Element("networkImpersonation").Element("readInStreamingService").Value == "true"
-            };
-
-            Users = file.Element("users").Elements("user").Select(x => new User()
-            {
-                Username = x.Element("username").Value,
-                EncryptedPassword = x.Element("password").Value
-            }).ToList();
-        }
-
-        public bool Save() 
-        {
-            try
-            {
-                XElement file = XElement.Load(Configuration.GetPath("Services.xml"));
-
-                file.Element("users").Attribute("authenticationEnabled").Value = AuthenticationEnabled ? "true" : "false";
-
-                file.Element("bonjour").Element("enabled").Value = BonjourEnabled ? "true" : "false";
-                file.Element("bonjour").Element("pcname").Value = BonjourName;
-
-                file.Element("port").Value = Port.ToString();
-                file.Element("enableIPv6").Value = EnableIPv6 ? "true" : "false";
-
-                file.Element("connections").Element("mas").Value = MASConnection;
-                file.Element("connections").Element("tas").Value = TASConnection;
-
-                file.Element("networkImpersonation").Element("domain").Value = NetworkImpersonation.Domain;
-                file.Element("networkImpersonation").Element("username").Value = NetworkImpersonation.Username;
-                file.Element("networkImpersonation").Element("password").Value = NetworkImpersonation.EncryptedPassword;
-                file.Element("networkImpersonation").Element("readInStreamingService").Value = NetworkImpersonation.ReadInStreamingService ? "true" : "false";
-
-                file.Element("users").Elements().Remove();
-                foreach(User u in Users) {
-                    var userElement = new XElement("user", new XElement("username", u.Username), new XElement("password", u.EncryptedPassword));
-                    file.Element("users").Add(userElement);
-                }
-
-                file.Save(Configuration.GetPath("Services.xml"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to write Services.xml", ex);
-                return false;
-            }
-        }
 
         public string GetServiceName()
         {

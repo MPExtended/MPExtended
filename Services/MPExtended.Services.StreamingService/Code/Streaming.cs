@@ -23,7 +23,7 @@ using System.ServiceModel.Web;
 using System.Timers;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.StreamingService.MediaInfo;

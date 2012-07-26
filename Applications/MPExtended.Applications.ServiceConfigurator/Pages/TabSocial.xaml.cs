@@ -220,7 +220,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     provider.EnabledSetting.Value = false;
                 }
             }
-            Configuration.Streaming.Save();
+            Configuration.Save();
         }
     }
 }

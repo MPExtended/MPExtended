@@ -29,7 +29,7 @@ using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {

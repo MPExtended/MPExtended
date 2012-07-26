@@ -23,7 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -222,7 +222,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
 
                 Configuration.Media.PluginConfiguration[mPlugin] = newConfig;
-                Configuration.Media.Save();
+                Configuration.Save();
             }
             catch (Exception ex)
             {

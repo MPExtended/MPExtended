@@ -24,7 +24,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service.Util;
-using MPExtended.Libraries.Service.ConfigurationContracts;
+using MPExtended.Libraries.Service.Config;
 
 namespace MPExtended.Libraries.Service
 {
@@ -32,19 +32,19 @@ namespace MPExtended.Libraries.Service
     {
         private static FileSystemWatcher watcher;
 
-        private static ConfigurationContracts.Services serviceConfig = null;
-        private static MediaAccess mediaConfig = null;
-        private static Streaming streamConfig = null;
-        private static WebMediaPortalHosting webmpHostingConfig = null;
+        private static ConfigurationSerializer<Services> serviceConfig = null;
+        private static ConfigurationSerializer<MediaAccess> mediaConfig = null;
+        private static ConfigurationSerializer<Streaming> streamConfig = null;
+        private static ConfigurationSerializer<WebMediaPortalHosting> webmpHostingConfig = null;
 
-        public static ConfigurationContracts.Services Services
+        public static Services Services
         {
             get
             {
                 if (serviceConfig == null)
-                    serviceConfig = new ConfigurationContracts.Services(GetPath("Services.xml"), GetDefaultPath("Services.xml"));
+                    serviceConfig = new ConfigurationSerializer<Services>("Services.xml");
 
-                return serviceConfig;
+                return serviceConfig.Get();
             }
         }
 
@@ -53,9 +53,9 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (mediaConfig == null)
-                    mediaConfig = new MediaAccess(GetPath("MediaAccess.xml"), GetDefaultPath("MediaAccess.xml"));
+                    mediaConfig = new ConfigurationSerializer<MediaAccess>("MediaAccess.xml");
 
-                return mediaConfig;
+                return mediaConfig.Get();
             }
         }
 
@@ -64,9 +64,9 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (streamConfig == null)
-                    streamConfig = new Streaming(GetPath("Streaming.xml"), GetDefaultPath("Streaming.xml"));
+                    streamConfig = new ConfigurationSerializer<Streaming>("Streaming.xml");
 
-                return streamConfig;
+                return streamConfig.Get();
             }
         }
 
@@ -75,13 +75,19 @@ namespace MPExtended.Libraries.Service
             get
             {
                 if (webmpHostingConfig == null)
-                    webmpHostingConfig = new WebMediaPortalHosting(GetPath("WebMediaPortalHosting.xml"), GetDefaultPath("WebMediaPortalHosting.xml"));
+                    webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting>("WebMediaPortalHosting.xml");
 
-                return webmpHostingConfig;
+                return webmpHostingConfig.Get();
             }
         }
 
-        public static string GetPath(string filename)
+        public bool Save()
+        {
+            // I use only one ampersand here on purpose, we don't want short-circuit here as all config files should be saved. 
+            return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save();
+        }
+
+        internal static string GetPath(string filename)
         {
             string path = Path.Combine(Installation.GetConfigurationDirectory(), filename);
 
@@ -109,7 +115,7 @@ namespace MPExtended.Libraries.Service
             return path;
         }
 
-        public static string GetDefaultPath(string filename)
+        internal static string GetDefaultPath(string filename)
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {

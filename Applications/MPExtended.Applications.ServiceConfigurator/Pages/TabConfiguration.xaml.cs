@@ -87,7 +87,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
 
-            Configuration.Services.Save();
+            Configuration.Save();
         }
 
         private string GetServiceName()

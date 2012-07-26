@@ -67,6 +67,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
@@ -74,10 +75,10 @@
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="ConfigurationContracts\MediaAccess.cs" />
-    <Compile Include="ConfigurationContracts\Services.cs" />
-    <Compile Include="ConfigurationContracts\Streaming.cs" />
-    <Compile Include="ConfigurationContracts\WebMediaPortalHosting.cs" />
+    <Compile Include="Config\MediaAccess.cs" />
+    <Compile Include="Config\Services.cs" />
+    <Compile Include="Config\Streaming.cs" />
+    <Compile Include="Config\WebMediaPortalHosting.cs" />
     <Compile Include="Logging\ConsoleDestination.cs" />
     <Compile Include="Logging\FileDestination.cs" />
     <Compile Include="Logging\LogDestination.cs" />
