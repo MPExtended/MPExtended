@@ -132,12 +132,6 @@ namespace MPExtended.Services.MediaAccessService
                         continue;
                     }
 
-                    if (Configuration.Media.DisabledPlugins.Contains((string)item.Metadata["Name"]))
-                    {
-                        Log.Debug("Skipping plugin {0} because it is disabled", (string)item.Metadata["Name"]);
-                        continue;
-                    }
-
                     dict[(int)item.Metadata["Id"]] = item;
                 }
                 catch (Exception ex)

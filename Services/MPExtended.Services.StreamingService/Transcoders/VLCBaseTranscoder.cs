@@ -47,9 +47,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
             var encmuxparam = GetEncoderMuxerParameters(context);
             return GenerateVLCParameters(
                 context,
-                context.Profile.CodecParameters.ContainsKey("options") ? context.Profile.CodecParameters["options"] : "",
-                context.Profile.CodecParameters.ContainsKey("tsOptions") ? context.Profile.CodecParameters["tsOptions"] : "",
-                context.Profile.CodecParameters.ContainsKey("disableSeeking") && context.Profile.CodecParameters["disableSeeking"] == "yes",
+                context.Profile.TranscoderParameters.ContainsKey("options") ? context.Profile.TranscoderParameters["options"] : "",
+                context.Profile.TranscoderParameters.ContainsKey("tsOptions") ? context.Profile.TranscoderParameters["tsOptions"] : "",
+                context.Profile.TranscoderParameters.ContainsKey("disableSeeking") && context.Profile.TranscoderParameters["disableSeeking"] == "yes",
                 encmuxparam.Item1,
                 encmuxparam.Item2
             );
@@ -114,7 +114,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // create parameters
             string sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
-            if (!context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true")
+            if (!context.Profile.TranscoderParameters.ContainsKey("noResize") || context.Profile.TranscoderParameters["noResize"] != "true")
                 sout += ",width=" + context.OutputSize.Width + ",height=" + context.OutputSize.Height;
             sout += "}" + muxerOptions;
 
@@ -130,8 +130,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
         protected virtual Tuple<string, string> GetEncoderMuxerParameters(StreamContext context)
         {
             return new Tuple<string, string>(
-                context.Profile.CodecParameters["encoder"],
-                context.Profile.CodecParameters["muxer"]
+                context.Profile.TranscoderParameters["encoder"],
+                context.Profile.TranscoderParameters["muxer"]
             );
         }
 

@@ -32,19 +32,16 @@ namespace MPExtended.Libraries.Service
     {
         private static FileSystemWatcher watcher;
 
-        private static ConfigurationSerializer<Services> serviceConfig = null;
-        private static ConfigurationSerializer<MediaAccess> mediaConfig = null;
-        private static ConfigurationSerializer<Streaming> streamConfig = null;
-        private static ConfigurationSerializer<WebMediaPortalHosting> webmpHostingConfig = null;
-        private static ConfigurationSerializer<WebMediaPortal> webmpConfig = null;
+        private static ConfigurationSerializer<Services> serviceConfig = new ConfigurationSerializer<Services>("Services.xml");
+        private static ConfigurationSerializer<MediaAccess> mediaConfig = new ConfigurationSerializer<MediaAccess>("MediaAccess.xml");
+        private static ConfigurationSerializer<Streaming> streamConfig = new ConfigurationSerializer<Streaming>("Streaming.xml");
+        private static ConfigurationSerializer<WebMediaPortalHosting> webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting>("WebMediaPortalHosting.xml");
+        private static ConfigurationSerializer<WebMediaPortal> webmpConfig = new ConfigurationSerializer<WebMediaPortal>("WebMediaPortal.xml");
 
         public static Services Services
         {
             get
             {
-                if (serviceConfig == null)
-                    serviceConfig = new ConfigurationSerializer<Services>("Services.xml");
-
                 return serviceConfig.Get();
             }
         }
@@ -53,9 +50,6 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                if (mediaConfig == null)
-                    mediaConfig = new ConfigurationSerializer<MediaAccess>("MediaAccess.xml");
-
                 return mediaConfig.Get();
             }
         }
@@ -64,9 +58,6 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                if (streamConfig == null)
-                    streamConfig = new ConfigurationSerializer<Streaming>("Streaming.xml");
-
                 return streamConfig.Get();
             }
         }
@@ -75,9 +66,6 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                if (webmpHostingConfig == null)
-                    webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting>("WebMediaPortalHosting.xml");
-
                 return webmpHostingConfig.Get();
             }
         }
@@ -86,9 +74,6 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                if (webmpConfig == null)
-                    webmpConfig = new ConfigurationSerializer<WebMediaPortal>("WebMediaPortal.xml");
-
                 return webmpConfig.Get();
             }
         }

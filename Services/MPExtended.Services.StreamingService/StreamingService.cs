@@ -323,7 +323,7 @@ namespace MPExtended.Services.StreamingService
                 Log.Warn("Tried DoStream with non-existing profile {0}", profileName);
                 return Stream.Null;
             }
-            int timeout = profile.TranscoderImplementationClass == typeof(Transcoders.Direct).FullName ? 5 * 60 : 5;
+            int timeout = profile.Transcoder == typeof(Transcoders.Direct).FullName ? 5 * 60 : 5;
             if (idleTimeout.HasValue)
                 timeout = idleTimeout.Value;
 

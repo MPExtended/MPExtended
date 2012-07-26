@@ -88,15 +88,12 @@ namespace MPExtended.Libraries.Service.Config
         [DataMember]
         public DefaultPlugins DefaultPlugins { get; set; }
         [DataMember]
-        public Dictionary<string, List<PluginConfigItem>> PluginConfiguration { get; set; }
-        [DataMember]
-        public List<string> DisabledPlugins { get; set; }
+        public PluginConfigDictionary PluginConfiguration { get; set; }
 
         public MediaAccess()
         {
             DefaultPlugins = new DefaultPlugins();
-            DisabledPlugins = new List<string>();
-            PluginConfiguration = new Dictionary<string, List<PluginConfigItem>>();
+            PluginConfiguration = new PluginConfigDictionary();
         }
     }
 }

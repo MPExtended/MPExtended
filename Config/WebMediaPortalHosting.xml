@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<hosting>
-  <port>8080</port>
-  <tls enable="no">44300</tls>
-</hosting>
+<WebMediaPortalHosting xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/1/WebMediaPortalHosting">
+  <EnableTLS>false</EnableTLS>
+  <Port>4322</Port>
+  <PortTLS>44300</PortTLS>
+</WebMediaPortalHosting>

@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\ConfigDictionary.cs" />
+    <Compile Include="Config\PluginConfigDictionary.cs" />
     <Compile Include="Config\WebMediaPortal.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
     <Compile Include="Util\EqualityComparer.cs" />

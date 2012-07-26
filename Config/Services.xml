@@ -1,31 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<serviceconfig>
-  <users authenticationEnabled="true">
-    <user>
-      <username>admin</username>
-      <password>VF4iJh8Ccd//JDuWSygi/A==</password>
-    </user>
-  </users>
+<Services xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/Services/1">
+  <AuthenticationEnabled>true</AuthenticationEnabled>
+  <Users>
+    <User>
+      <Username>admin</Username>
+      <EncryptedPassword>VF4iJh8Ccd//JDuWSygi/A==</EncryptedPassword>
+    </User>
+  </Users>
 
-  <!-- Use this to use a different user for accessing network shares -->
-  <networkImpersonation>
-    <domain></domain>
-    <username></username>
-    <password></password><!-- This is encrypted, so set it only through the configurator -->
-    <readInStreamingService>true</readInStreamingService>
-  </networkImpersonation>
+  <NetworkImpersonation>
+    <Domain i:nil="true" />
+    <EncryptedPassword i:nil="true" />
+    <ReadInStreamingService>true</ReadInStreamingService>
+    <Username i:nil="true" />
+  </NetworkImpersonation>
+  
+  <BonjourEnabled>true</BonjourEnabled>
+  <BonjourName i:nil="true" />
 
-  <bonjour>
-    <enabled>true</enabled>
-    <pcname /><!-- Automatically detected when empty -->
-  </bonjour>
+  <Port>4322</Port>
+  <EnableIPv6>false</EnableIPv6>
 
-  <port>4322</port>
-  <enableIPv6>false</enableIPv6>
-
-  <!-- If you've have multiseat setup you can specify different hosts for the other host here. This is picked up by WSS (but it doesn't work) and by WebMP. -->
-  <connections>
-    <mas>auto://127.0.0.1:4322</mas>
-    <tas>auto://127.0.0.1:4322</tas>
-  </connections>
-</serviceconfig>
+  <MASConnection>auto://127.0.0.1:4322</MASConnection>
+  <TASConnection>auto://127.0.0.1:4322</TASConnection>
+</Services>

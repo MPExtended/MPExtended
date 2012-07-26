@@ -32,9 +32,9 @@ namespace MPExtended.Services.MediaAccessService
     {
         public Dictionary<string, string> GetConfiguration(string pluginname)
         {
-            if (MPExtended.Libraries.Service.Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
+            if (Configuration.Media.PluginConfiguration.ContainsKey(pluginname))
             {
-                return MPExtended.Libraries.Service.Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
+                return Configuration.Media.PluginConfiguration[pluginname].ToDictionary(x => x.Name, x => x.Value);
             }
 
             return new Dictionary<string, string>();

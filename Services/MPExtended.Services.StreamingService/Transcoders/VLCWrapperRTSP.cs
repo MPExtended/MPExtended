@@ -39,8 +39,8 @@ namespace MPExtended.Services.StreamingService.Transcoders
         protected override Tuple<string, string> GetEncoderMuxerParameters(StreamContext context)
         {
             return new Tuple<string, string>(
-                context.Profile.CodecParameters["encoder"],
-                context.Profile.CodecParameters["muxer"].Replace("#ADDRESS#", String.Format(address, ""))
+                context.Profile.TranscoderParameters["encoder"],
+                context.Profile.TranscoderParameters["muxer"].Replace("#ADDRESS#", String.Format(address, ""))
             );
         }
 

@@ -1,50 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<appconfig>
-  <defaultPlugins>
-    <tvshow>MP-TVSeries</tvshow>
-    <movie>Moving Pictures</movie>
-    <music>MP MyMusic</music>
-    <picture>FS Pictures</picture>
-    <filesystem>MP Shares</filesystem>
-  </defaultPlugins>
-
-  <disabledPlugins>
-    <!-- 
-    
-    You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash 
-    it's safe to disable it here. You can also use this to prevent services from showing up in the provider list on 
-    clients.
-    
-      <disabled>MP MyVideo</disabled>
-    
-    -->
-  </disabledPlugins>
-
-  <pluginConfiguration>
-    <plugin name="MP-TVSeries">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
-      <banner type="folder" displayname="Banner Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
-      <fanart type="folder" displayname="Fanart Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
-    </plugin>
-    <plugin name="MP MyVideo">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
-    </plugin>
-    <plugin name="Moving Pictures">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
-    </plugin>
-    <plugin name="MP MyMusic">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
-      <cover type="folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
-      <playlist type="folder" displayname="Playlists Location">%mp-music-playlists%</playlist>
-    </plugin>
-    <plugin name="FS Pictures">
-      <root type="folder" displayname="Root Folder"></root>
-    </plugin>
-    <plugin name="MP MyVideo">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
-    </plugin>
-    <plugin name="mvCentral">
-      <database type="file" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
-    </plugin>
-  </pluginConfiguration>
-</appconfig>
+<MediaAccess xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/MediaAccess/1">
+  <DefaultPlugins>
+    <Filesystem>MP Shares</Filesystem>
+    <Movie>Moving Pictures</Movie>
+    <Music>MP MyMusic</Music>
+    <Picture>FS Pictures</Picture>
+    <TVShow>MP-TVSeries</TVShow>
+  </DefaultPlugins>
+  
+  <PluginConfiguration>
+    <Plugin name="MP-TVSeries">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\TVSeriesDatabase4.db3</database>
+      <banner type="Folder" displayname="Banner Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\MPTVSeriesBanners</banner>
+      <fanart type="Folder" displayname="Fanart Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Fan Art</fanart>
+    </Plugin>
+    <Plugin name="MP MyVideo">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+    </Plugin>
+    <Plugin name="Moving Pictures">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
+    </Plugin>
+    <Plugin name="MP MyMusic">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\MusicDatabaseV12.db3</database>
+      <cover type="Folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\thumbs\Music</cover>
+      <playlist type="Folder" displayname="Playlists Location">%mp-music-playlists%</playlist>
+    </Plugin>
+    <Plugin name="FS Pictures">
+      <root type="Folder" displayname="Root Folder"></root>
+    </Plugin>
+    <Plugin name="MP MyVideo">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+    </Plugin>
+    <Plugin name="mvCentral">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
+    </Plugin>
+  </PluginConfiguration>
+</MediaAccess>

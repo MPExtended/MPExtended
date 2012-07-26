@@ -54,14 +54,14 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // calculate full argument string
             string arguments;
-            bool doResize = !context.Profile.CodecParameters.ContainsKey("noResize") || context.Profile.CodecParameters["noResize"] != "true";
+            bool doResize = !context.Profile.TranscoderParameters.ContainsKey("noResize") || context.Profile.TranscoderParameters["noResize"] != "true";
             if (context.Profile.HasVideoStream && doResize)
             {
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
                     context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
                     context.OutputSize, context.OutputSize.Width, context.OutputSize.Height,
-                    mappings, context.Profile.CodecParameters["codecParameters"]
+                    mappings, context.Profile.TranscoderParameters["codecParameters"]
                 );
             }
             else
@@ -69,7 +69,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 arguments = String.Format(
                     "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
                     context.StartPosition != 0 ? "-ss " + (context.StartPosition / 1000) : "",
-                    mappings, context.Profile.CodecParameters["codecParameters"]
+                    mappings, context.Profile.TranscoderParameters["codecParameters"]
                 );
             }
 

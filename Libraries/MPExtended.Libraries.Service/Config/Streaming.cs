@@ -45,13 +45,13 @@ namespace MPExtended.Libraries.Service.Config
         [DataMember]
         public string Transport { get; set; }
         [DataMember]
-        public string TranscoderImplementationClass { get; set; }
+        public string Transcoder { get; set; }
         [DataMember]
-        public ConfigDictionary CodecParameters { get; set; }
+        public ConfigDictionary TranscoderParameters { get; set; }
 
         public TranscoderProfile()
         {
-            CodecParameters = new ConfigDictionary();
+            TranscoderParameters = new ConfigDictionary();
         }
     }
 
@@ -86,6 +86,8 @@ namespace MPExtended.Libraries.Service.Config
         public const string STREAM_DEFAULT = "default";
         public const string STREAM_EXTERNAL = "external";
 
+        private string _ffmpegPath;
+
         [DataMember]
         public string DefaultAudioStream { get; set; }
         [DataMember]
@@ -95,15 +97,23 @@ namespace MPExtended.Libraries.Service.Config
         public string TVLogoDirectory { get; set; }
 
         [DataMember]
-        public string FFMpegPath { get; set; }
-        [DataMember]
-        public string FFMpegAPI { get; set; }
-
-        [DataMember]
         public WatchSharingConfiguration WatchSharing { get; set; }
 
         [DataMember]
         public List<TranscoderProfile> Transcoders { get; set; }
+
+        [DataMember]
+        public string FFMpegPath
+        {
+            get
+            {
+                return _ffmpegPath;
+            }
+            set
+            {
+                _ffmpegPath = Configuration.PerformFolderSubstitution(value);
+            }
+        }
 
         public Streaming()
         {
