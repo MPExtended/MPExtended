@@ -46,6 +46,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MPExtended.Libraries.Service.Config.XmlSerializers">
+      <HintPath>..\MPExtended.Libraries.Service.Config\bin\$(ConfigurationName)\MPExtended.Libraries.Service.Config.XmlSerializers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -68,20 +71,15 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Config\ConfigurationSerializer.cs" />
-    <Compile Include="Config\ConfigDictionary.cs" />
-    <Compile Include="Config\PluginConfigDictionary.cs" />
-    <Compile Include="Config\WebMediaPortal.cs" />
+    <Compile Include="Config\TransformationCallbacks.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
+    <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Config\MediaAccess.cs" />
-    <Compile Include="Config\Services.cs" />
-    <Compile Include="Config\Streaming.cs" />
-    <Compile Include="Config\WebMediaPortalHosting.cs" />
     <Compile Include="Logging\ConsoleDestination.cs" />
     <Compile Include="Logging\FileDestination.cs" />
     <Compile Include="Logging\LogDestination.cs" />
@@ -104,7 +102,6 @@
     <Compile Include="Util\NetworkShareImpersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />
-    <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\IPAddressExtensions.cs" />
     <Compile Include="Util\Mediaportal.cs" />
     <Compile Include="Util\NetworkInformation.cs" />
@@ -116,13 +113,22 @@
     <Compile Include="WCFUtil.cs" />
     <Compile Include="WCF\WebBehavior.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Hosting\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
+      <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
+      <Name>MPExtended.Libraries.Service.Config</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(SolutionDir)Libraries\Tools\write-git-version.bat" "$(ProjectDir)" "$(ProjectDir)Properties\GitVersion.cs"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

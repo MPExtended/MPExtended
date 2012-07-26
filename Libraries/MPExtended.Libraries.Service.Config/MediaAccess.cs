@@ -17,37 +17,25 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [DataContract(Name = "ConfigType", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public enum ConfigType 
     { 
-        [EnumMember]
         File,
-        [EnumMember]
         Folder,
-        [EnumMember]
         Text,
-        [EnumMember]
         Number,
-        [EnumMember]
         Boolean 
     }
 
-    [DataContract(Name = "PluginConfigItem", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class PluginConfigItem
     {
-        [DataMember]
         public string Value { get; set; }
-        [DataMember]
         public string Name { get; set; }
-        [DataMember]
         public string DisplayName { get; set; }
-        [DataMember]
         public ConfigType Type { get; set; }
 
         public PluginConfigItem()
@@ -63,18 +51,13 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [DataContract(Name = "DefaultPlugins", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class DefaultPlugins
     {
-        [DataMember]
         public string TVShow { get; set; }
-        [DataMember]
         public string Movie { get; set; }
-        [DataMember]
         public string Music { get; set; }
-        [DataMember]
         public string Picture { get; set; }
-        [DataMember]
         public string Filesystem { get; set; }
 
         public DefaultPlugins()
@@ -82,12 +65,10 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [DataContract(Name = "MediaAccess", Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
     public class MediaAccess
     {
-        [DataMember]
         public DefaultPlugins DefaultPlugins { get; set; }
-        [DataMember]
         public PluginConfigDictionary PluginConfiguration { get; set; }
 
         public MediaAccess()

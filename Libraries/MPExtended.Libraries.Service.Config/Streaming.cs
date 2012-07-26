@@ -18,35 +18,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [DataContract(Name = "TranscoderProfile", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class TranscoderProfile
     {
-        [DataMember]
         public string Name { get; set; }
-        [DataMember]
         public string Description { get; set; }
-        [DataMember]
         public bool HasVideoStream { get; set; }
-        [DataMember]
         public string MIME { get; set; }
-        [DataMember]
         public int MaxOutputWidth { get; set; }
-        [DataMember]
         public int MaxOutputHeight { get; set; }
-        [DataMember]
         public string Target { get; set; }
-        [DataMember]
         public int Bandwidth { get; set; }
-        [DataMember]
         public string Transport { get; set; }
-        [DataMember]
         public string Transcoder { get; set; }
-        [DataMember]
         public ConfigDictionary TranscoderParameters { get; set; }
 
         public TranscoderProfile()
@@ -55,18 +43,13 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [DataContract(Name = "WatchSharingConfiguration", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class WatchSharingConfiguration
     {
-        [DataMember]
         public bool DebugEnabled { get; set; }
-        [DataMember]
         public bool TraktEnabled { get; set; }
-        [DataMember]
         public ConfigDictionary TraktConfiguration { get; set; }
-        [DataMember]
         public bool FollwitEnabled { get; set; }
-        [DataMember]
         public ConfigDictionary FollwitConfiguration { get; set; }
 
         public WatchSharingConfiguration()
@@ -79,30 +62,23 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [DataContract(Name = "Streaming", Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
     public class Streaming
     {
         public const string STREAM_NONE = "none";
         public const string STREAM_DEFAULT = "default";
         public const string STREAM_EXTERNAL = "external";
 
+        [XmlIgnore]
         private string _ffmpegPath;
-
-        [DataMember]
-        public string DefaultAudioStream { get; set; }
-        [DataMember]
+        
+        public string DefaultAudioStream { get; set; }       
         public string DefaultSubtitleStream { get; set; }
-
-        [DataMember]
+        
         public string TVLogoDirectory { get; set; }
-
-        [DataMember]
         public WatchSharingConfiguration WatchSharing { get; set; }
-
-        [DataMember]
         public List<TranscoderProfile> Transcoders { get; set; }
-
-        [DataMember]
+        
         public string FFMpegPath
         {
             get
@@ -111,7 +87,7 @@ namespace MPExtended.Libraries.Service.Config
             }
             set
             {
-                _ffmpegPath = Configuration.PerformFolderSubstitution(value);
+                _ffmpegPath = Transformations.FolderNames(value);
             }
         }
 
@@ -126,7 +102,7 @@ namespace MPExtended.Libraries.Service.Config
             var list = Transcoders.Where(x => x.Name == name);
             if(list.Count() == 0) 
             {
-                Log.Error("Tried to load invalid transcoder profile {0}", name);
+                //Log.Error("Tried to load invalid transcoder profile {0}", name);
                 return null;
             }
 

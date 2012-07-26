@@ -25,6 +25,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Config;
+using Microsoft.Xml.Serialization.GeneratedAssembly;
 
 namespace MPExtended.Libraries.Service
 {
@@ -32,11 +33,21 @@ namespace MPExtended.Libraries.Service
     {
         private static FileSystemWatcher watcher;
 
-        private static ConfigurationSerializer<Services> serviceConfig = new ConfigurationSerializer<Services>("Services.xml");
-        private static ConfigurationSerializer<MediaAccess> mediaConfig = new ConfigurationSerializer<MediaAccess>("MediaAccess.xml");
-        private static ConfigurationSerializer<Streaming> streamConfig = new ConfigurationSerializer<Streaming>("Streaming.xml");
-        private static ConfigurationSerializer<WebMediaPortalHosting> webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting>("WebMediaPortalHosting.xml");
-        private static ConfigurationSerializer<WebMediaPortal> webmpConfig = new ConfigurationSerializer<WebMediaPortal>("WebMediaPortal.xml");
+        private static ConfigurationSerializer<Services, ServicesSerializer> serviceConfig = 
+            new ConfigurationSerializer<Services, ServicesSerializer>("Services.xml");
+        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer> mediaConfig = 
+            new ConfigurationSerializer<MediaAccess, MediaAccessSerializer>("MediaAccess.xml");
+        private static ConfigurationSerializer<Streaming, StreamingSerializer> streamConfig = 
+            new ConfigurationSerializer<Streaming, StreamingSerializer>("Streaming.xml");
+        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer> webmpHostingConfig = 
+            new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer>("WebMediaPortalHosting.xml");
+        private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig = 
+            new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
+
+        static Configuration()
+        {
+            TransformationCallbacks.Install();
+        }
 
         public static Services Services
         {
@@ -123,29 +134,6 @@ namespace MPExtended.Libraries.Service
             {
                 return GetPath(filename);
             }
-        }
-
-        internal static string PerformFolderSubstitution(string input)
-        {
-            // program data
-            input = input.Replace("%ProgramData%", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-
-            // mp settings
-            input = Regex.Replace(input, @"%mp-([^-]+)-([^-]+)%", delegate(Match match)
-            {
-                var section = Mediaportal.ReadSectionFromConfigFile(match.Groups[1].Value);
-                if (!section.ContainsKey(match.Groups[2].Value))
-                {
-                    Log.Info("Replacing unknown Mediaportal path substitution %mp-{0}-{1}% with empty string", match.Groups[1].Value, match.Groups[2].Value);
-                    return String.Empty;
-                }
-                else
-                {
-                    return section[match.Groups[2].Value];
-                }
-            });
-
-            return input;
         }
 
         public static void EnableChangeWatching()

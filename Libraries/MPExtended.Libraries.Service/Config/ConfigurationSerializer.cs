@@ -17,15 +17,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel> where TModel : new()
+    internal class ConfigurationSerializer<TModel, TSerializer> where TModel : new()
+                                                                where TSerializer : XmlSerializer
     {
         public string Filename { get; private set; }
 
@@ -62,26 +63,22 @@ namespace MPExtended.Libraries.Service.Config
             {
                 return UnsafeParse(path);
             }
-            catch (SerializationException ex)
+            catch (Exception ex)
             {
                 return HandleMalformedFile(ex, path);
             }
         }
 
-        private DataContractSerializer CreateSerializer()
-        {
-            return new DataContractSerializer(typeof(TModel));
-        }
-
         private TModel UnsafeParse(string path)
         {
-            using (XmlReader reader = XmlReader.Create(path))
+            using (var stream = File.OpenRead(path))
             {
-                return (TModel)CreateSerializer().ReadObject(reader);
+                var deserializer = Activator.CreateInstance<TSerializer>();
+                return (TModel)deserializer.Deserialize(stream);
             }
         }
 
-        private TModel HandleMalformedFile(SerializationException problem, string configPath)
+        private TModel HandleMalformedFile(Exception problem, string configPath)
         {
             try
             {
@@ -127,14 +124,15 @@ namespace MPExtended.Libraries.Service.Config
         public bool Save(TModel model)
         {
             try
-            {
+            {   
                 XmlWriterSettings writerSettings = new XmlWriterSettings();
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
                 writerSettings.OmitXmlDeclaration = false;
                 using (XmlWriter writer = XmlWriter.Create(Configuration.GetPath(Filename), writerSettings))
                 {
-                    CreateSerializer().WriteObject(writer, model);
+                    var serializer = Activator.CreateInstance<TSerializer>();
+                    serializer.Serialize(writer, model);
                 }
                 return true;
             }

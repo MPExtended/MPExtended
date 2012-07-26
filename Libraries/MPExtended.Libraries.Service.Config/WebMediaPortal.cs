@@ -17,62 +17,40 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [DataContract(Name = "StreamType", Namespace = "http://mpextended.github.com/schema/config/1/WebMediaPortal")]
     public enum StreamType
     {
-        [EnumMember]
         Direct,
-        [EnumMember]
         DirectWhenPossible,
-        [EnumMember]
         Proxied,
     }
 
-    [DataContract(Name = "WebMediaPortal", Namespace = "http://mpextended.github.com/schema/config/1/WebMediaPortal")]
+    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortal/1")]
     public class WebMediaPortal
     {
-        [DataMember]
         public StreamType StreamType { get; set; }
-
-        [DataMember]
+        
         public int? DefaultGroup { get; set; }
-
-        [DataMember]
+        
         public string DefaultMediaProfile { get; set; }
-        [DataMember]
         public string DefaultTVProfile { get; set; }
-        [DataMember]
         public bool EnableDeinterlace { get; set; }
-        [DataMember]
         public string DefaultAudioProfile { get; set; }
-        [DataMember]
         public bool EnableAlbumPlayer { get; set; }
-
-        [DataMember]
+        
         public int? TVShowProvider { get; set; }
-        [DataMember]
         public int? MovieProvider { get; set; }
-        [DataMember]
         public int? MusicProvider { get; set; }
-        [DataMember]
         public int? PicturesProvider { get; set; }
-        [DataMember]
         public int? FileSystemProvider { get; set; }
-
-        [DataMember]
+        
         public string MASUrl { get; set; }
-        [DataMember]
         public string TASUrl { get; set; }
-
-        [DataMember]
+        
         public string Skin { get; set; }
-        [DataMember]
         public string DefaultLanguage { get; set; }
 
         public WebMediaPortal()

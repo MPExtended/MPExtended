@@ -17,21 +17,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using MPExtended.Libraries.Service.Util;
+using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [DataContract(Name = "User", Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
     public class User
     {
-        private const string PASSWORD_KEY = "MPExtended Password Key"; // And here all our security goes out of the window: the key is on the internet.
-
-        [DataMember]
         public string Username { get; set; }
-        [DataMember]
         public string EncryptedPassword { get; set; }
 
         public User()
@@ -45,27 +38,21 @@ namespace MPExtended.Libraries.Service.Config
 
         public string GetPassword()
         {
-            return Encryption.Decrypt(PASSWORD_KEY, EncryptedPassword);
+            return Transformations.Decrypt(EncryptedPassword);
         }
 
         public void SetPasswordFromPlaintext(string password)
         {
-            EncryptedPassword = Encryption.Encrypt(PASSWORD_KEY, password);
+            EncryptedPassword = Transformations.Encrypt(password);
         }
     }
 
-    [DataContract(Name = "NetworkImpersonation", Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    [XmlType(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class NetworkImpersonation
     {
-        private const string PASSWORD_KEY = "MPExtended Impersonation Password"; // And here all our security goes out of the window: the key is on the internet.
-
-        [DataMember]
         public string Domain { get; set; }
-        [DataMember]
         public string Username { get; set; }
-        [DataMember]
         public string EncryptedPassword { get; set; }
-        [DataMember]
         public bool ReadInStreamingService { get; set; }
 
         public NetworkImpersonation()
@@ -75,12 +62,12 @@ namespace MPExtended.Libraries.Service.Config
 
         public string GetPassword()
         {
-            return EncryptedPassword == String.Empty ? String.Empty : Encryption.Decrypt(PASSWORD_KEY, EncryptedPassword);
+            return EncryptedPassword == String.Empty ? String.Empty : Transformations.Decrypt(EncryptedPassword);
         }
 
         public void SetPasswordFromPlaintext(string password)
         {
-            EncryptedPassword = password == String.Empty ? String.Empty : Encryption.Encrypt(PASSWORD_KEY, password);
+            EncryptedPassword = password == String.Empty ? String.Empty : Transformations.Encrypt(password);
         }
 
         public bool IsEnabled()
@@ -89,31 +76,23 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [DataContract(Name = "Services", Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    [XmlRoot(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class Services
     {
-        [DataMember]
         public bool AuthenticationEnabled { get; set; }
 
-        [DataMember]
         public bool BonjourEnabled { get; set; }
-        [DataMember]
         public string BonjourName { get; set; }
 
-        [DataMember]
+
         public int Port { get; set; }
-        [DataMember]
         public bool EnableIPv6 { get; set; }
 
-        [DataMember]
         public string MASConnection { get; set; }
-        [DataMember]
         public string TASConnection { get; set; }
 
-        [DataMember]
         public List<User> Users { get; set; }
 
-        [DataMember]
         public NetworkImpersonation NetworkImpersonation { get; set; }
 
         public Services()

@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -36,13 +34,13 @@ namespace MPExtended.Libraries.Service.Config
         public void ReadXml(XmlReader reader)
         {
             XElement document = XElement.Load(reader.ReadSubtree(), LoadOptions.None);
-            foreach (XElement plugin in document.Element("PluginConfiguration").Elements("Plugin"))
+            foreach (XElement plugin in document.Elements(XName.Get("Plugin", document.Name.NamespaceName)))
             {
                 this[plugin.Attribute("name").Value] = new List<PluginConfigItem>();
                 foreach (var configItem in plugin.Elements())
                 {
                     ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), configItem.Attribute("type").Value, true);
-                    string value = type == ConfigType.File || type == ConfigType.Folder ? Configuration.PerformFolderSubstitution(configItem.Value) : configItem.Value;
+                    string value = type == ConfigType.File || type == ConfigType.Folder ? Transformations.FolderNames(configItem.Value) : configItem.Value;
                     this[plugin.Attribute("name").Value].Add(new PluginConfigItem()
                     {
                         DisplayName = configItem.Attribute("displayname").Value,
@@ -60,7 +58,7 @@ namespace MPExtended.Libraries.Service.Config
             foreach (var x in plugin.Elements())
             {
                 ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
-                string value = type == ConfigType.File || type == ConfigType.Folder ? Configuration.PerformFolderSubstitution(x.Value) : x.Value;
+                string value = type == ConfigType.File || type == ConfigType.Folder ? Transformations.FolderNames(x.Value) : x.Value;
                 list.Add(new PluginConfigItem()
                 {
                     DisplayName = x.Attribute("displayname").Value,

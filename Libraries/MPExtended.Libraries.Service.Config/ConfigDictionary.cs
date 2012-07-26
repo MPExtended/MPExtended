@@ -35,19 +35,25 @@ namespace MPExtended.Libraries.Service.Config
         public void ReadXml(XmlReader reader)
         {
             XmlReader stReader = reader.ReadSubtree();
-            stReader.Read(); // skip the parent element
+            stReader.Read(); // read the start of the element
             string lastName = null;
             while (stReader.Read())
             {
                 if (stReader.NodeType == XmlNodeType.Element)
                 {
                     lastName = stReader.Name;
+                    this[lastName] = String.Empty; // for nodes without a value, use an empty string as value
                 }
                 else if (stReader.NodeType == XmlNodeType.Text)
                 {
                     this[lastName] = stReader.Value;
                 }
             }
+
+            if (reader.IsEmptyElement) // for empty nodes, we still need to read the content, as the subtree reader is empty
+                reader.Read();
+
+            reader.ReadEndElement(); // read the end of the element
         }
 
         public void WriteXml(XmlWriter writer)
