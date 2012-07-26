@@ -20,11 +20,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.IO;
 using System.Xml;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel>
+    internal class ConfigurationSerializer<TModel> where TModel : new()
     {
         public string Filename { get; private set; }
 
@@ -35,16 +36,6 @@ namespace MPExtended.Libraries.Service.Config
             this.Filename = filename;
         }
 
-        public TModel Load()
-        {
-            string path = Configuration.GetPath(Filename);
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(TModel));
-                return (TModel)serializer.ReadObject(reader);
-            }
-        }
-
         public TModel Get()
         {
             if (_instance == null)
@@ -53,7 +44,72 @@ namespace MPExtended.Libraries.Service.Config
             return _instance;
         }
 
-        public bool Save()
+        private TModel Load()
+        {
+            string path = Configuration.GetPath(Filename);
+            try
+            {
+                return UnsafeParse(path);
+            }
+            catch (SerializationException ex)
+            {
+                return HandleMalformedFile(ex, path);
+            }
+        }
+
+        private TModel UnsafeParse(string path)
+        {
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(TModel));
+                return (TModel)serializer.ReadObject(reader);
+            }
+        }
+
+        private TModel HandleMalformedFile(SerializationException problem, string configPath)
+        {
+            try
+            {
+                // TODO: check whether upgrading the config file is possible
+                bool canUpgrade = false;
+
+                // create backup
+                try
+                {
+                    string backupPath = Path.Combine(Installation.GetConfigurationDirectory(), "ConfigBackup", Filename);
+                    if (!Directory.Exists(Path.GetDirectoryName(backupPath)))
+                        Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
+                    File.Copy(configPath, backupPath, true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(String.Format("Failed to backup config file {0}", Filename), ex);
+                }
+
+                if (canUpgrade)
+                {
+                    Log.Info("Failed to deserialize {0}, upgrading config file now", Filename);
+                    // TODO: actually get a model of the upgraded config file in the line below
+                    TModel model = new TModel();
+                    Save(model);
+                    return model;
+                }
+                else
+                {
+                    Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
+                    File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
+                    return UnsafeParse(configPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Whatever... you probably fucked up badly with development versions to let this happen, so sort out the mess yourself.
+                Log.Error(String.Format("Giving up on malformed configuration file {0}; sort out the mess yourself", Filename), ex);
+                return new TModel();
+            }
+        }
+
+        public bool Save(TModel model)
         {
             try
             {
@@ -64,7 +120,7 @@ namespace MPExtended.Libraries.Service.Config
                 using (XmlWriter writer = XmlWriter.Create(Filename, writerSettings))
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(TModel));
-                    serializer.WriteObject(writer, _instance);
+                    serializer.WriteObject(writer, model);
                 }
                 return true;
             }
@@ -73,6 +129,11 @@ namespace MPExtended.Libraries.Service.Config
                 Log.Error(String.Format("Failed to save settings to file {0}", Filename), ex);
                 return false;
             }
+        }
+
+        public bool Save()
+        {
+            return Save(_instance);
         }
     }
 }

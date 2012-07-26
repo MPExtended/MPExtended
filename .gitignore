@@ -10,6 +10,7 @@ _ReSharper*
 *.vssscc
 [Dd]ebug
 [Rr]elease
+Config/ConfigBackup
 Libraries/Streaming/vlc*/plugins/*.dat
 Libraries/MPExtended.Libraries.Service/Properties/GitVersion.cs
 Installers/MPExtended.Installers.WebMediaPortal/WWW.wxs
