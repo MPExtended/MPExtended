@@ -56,8 +56,11 @@ namespace MPExtended.Libraries.Service.Logging
             {
                 if (level >= dest.MinimumLevel)
                 {
-                    dest.Output.WriteLine(String.Format(dest.LogFormat, DateTime.Now, Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, levelText) + text);
-                    dest.Output.WriteLine(ex.ToString().Replace(" --->", "\r\n --->"));
+                    StringBuilder output = new StringBuilder();
+                    output.Append(String.Format(dest.LogFormat, DateTime.Now, Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, levelText));
+                    output.AppendLine(text);
+                    output.Append(ex.ToString().Replace(" --->", "\r\n --->"));
+                    dest.Output.WriteLine(output);
                     dest.Output.Flush();
                 }
             }
