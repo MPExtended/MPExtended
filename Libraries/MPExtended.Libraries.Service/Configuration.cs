@@ -148,10 +148,11 @@ namespace MPExtended.Libraries.Service
             watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
             {
                 string fileName = Path.GetFileName(e.FullPath);
-                if (fileName == "Services.xml") serviceConfig = null;
-                if (fileName == "MediaAccess.xml") mediaConfig = null;
-                if (fileName == "Streaming.xml") streamConfig = null;
-                if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig = null;
+                if (fileName == "Services.xml") serviceConfig.Reload();
+                if (fileName == "MediaAccess.xml") mediaConfig.Reload();
+                if (fileName == "Streaming.xml") streamConfig.Reload();
+                if (fileName == "WebMediaPortal.xml") webmpConfig.Reload();
+                if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig.Reload();
             });
 
             // start watching

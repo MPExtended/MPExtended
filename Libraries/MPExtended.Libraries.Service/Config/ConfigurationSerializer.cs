@@ -20,12 +20,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel, TSerializer> where TModel : new()
+    internal class ConfigurationSerializer<TModel, TSerializer> where TModel : class, new()
                                                                 where TSerializer : XmlSerializer
     {
         public string Filename { get; private set; }
@@ -46,11 +47,11 @@ namespace MPExtended.Libraries.Service.Config
                 lock (_instanceLock)
                 {
                     // This extra check is needed because there is a (theoretical?) race condition, where two threads evaluate the if(_instance == null) at
-                    // the same time. The second thread which enters the lock statement doesn't have to load the settings again, as it's already been done by
-                    // the first thread between the check and entering the lock statement.
+                    // the same time. The second thread which gets the lock doesn't have to load the settings again, as it's already been done by the first
+                    // thread between the check and getting the lock.
                     if (_instance == null)
                         _instance = Load();
-                }
+                }                
             }
 
             return _instance;
@@ -146,9 +147,23 @@ namespace MPExtended.Libraries.Service.Config
         public bool Save()
         {
             // If the settings haven't been loaded, they can't have been changed, so don't do anything.
-            if (_instance == null)
-                return true;
-            return Save(_instance);
+            lock (_instanceLock)
+            {
+                if (_instance == null)
+                    return true;
+                return Save(_instance);
+            }
+        }
+
+        public void Reload()
+        {
+            // If the lock isn't available, that means that the configuration file is already being loaded and we are probably
+            // triggered because we wrote to it ourself (either for a Save() call or overwriting it with the default settings).
+            if (Monitor.TryEnter(_instanceLock))
+            {
+                _instance = Load();
+                Monitor.Exit(_instanceLock);
+            }
         }
     }
 }
