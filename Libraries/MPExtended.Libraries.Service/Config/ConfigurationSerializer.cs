@@ -42,7 +42,17 @@ namespace MPExtended.Libraries.Service.Config
             this._instanceLock = new object();
         }
 
+        public void LoadIfExists()
+        {
+            CreateInstance(true);
+        }
+
         public TModel Get()
+        {
+            return CreateInstance(false);
+        }
+
+        private TModel CreateInstance(bool soft)
         {
             if (_instance == null)
             {
@@ -52,16 +62,18 @@ namespace MPExtended.Libraries.Service.Config
                     // the same time. The second thread which gets the lock doesn't have to load the settings again, as it's already been done by the first
                     // thread between the check and getting the lock.
                     if (_instance == null)
-                        _instance = Load();
+                        _instance = ReadFromDisk(soft);
                 }
             }
 
             return _instance;
         }
 
-        private TModel Load()
+        private TModel ReadFromDisk(bool soft)
         {
             string path = Configuration.GetPath(Filename);
+            if (!File.Exists(path) && soft)
+                return null;
             try
             {
                 return UnsafeParse(path);
@@ -155,7 +167,7 @@ namespace MPExtended.Libraries.Service.Config
             // triggered because we wrote to it ourself (either for a Save() call or overwriting it with the default settings).
             if (Monitor.TryEnter(_instanceLock))
             {
-                _instance = Load();
+                _instance = ReadFromDisk(false);
                 Monitor.Exit(_instanceLock);
             }
         }

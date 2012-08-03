@@ -90,9 +90,18 @@ namespace MPExtended.Libraries.Service
             }
         }
 
+        public static void Load()
+        {
+            serviceConfig.LoadIfExists();
+            mediaConfig.LoadIfExists();
+            streamConfig.LoadIfExists();
+            webmpConfig.LoadIfExists();
+            webmpHostingConfig.LoadIfExists();
+        }
+
         public static bool Save()
         {
-            // I use only one ampersand here on purpose, we don't want short-circuit here as all config files should be saved. 
+            // I use only one ampersand here on purpose: we don't want short-circuit as all config files should be saved. 
             return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
         }
 
@@ -100,7 +109,7 @@ namespace MPExtended.Libraries.Service
         {
             string path = Path.Combine(Installation.GetConfigurationDirectory(), filename);
 
-            if (!File.Exists(path))
+            if (!File.Exists(path) && Installation.IsProductInstalled(GetProductForFile(filename)))
             {
                 if (Installation.GetFileLayoutType() == FileLayoutType.Source)
                 {
@@ -128,13 +137,17 @@ namespace MPExtended.Libraries.Service
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {
-                MPExtendedProduct product = filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
-                return Path.Combine(Installation.GetInstallDirectory(product), "DefaultConfig", filename);
+                return Path.Combine(Installation.GetInstallDirectory(GetProductForFile(filename)), "DefaultConfig", filename);
             }
             else
             {
                 return GetPath(filename);
             }
+        }
+
+        private static MPExtendedProduct GetProductForFile(string filename)
+        {
+            return filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
         }
 
         public static void EnableChangeWatching()

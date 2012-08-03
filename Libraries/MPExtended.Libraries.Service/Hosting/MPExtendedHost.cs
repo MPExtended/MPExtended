@@ -60,6 +60,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 };
 
                 // start watching the configuration files for changes
+                Configuration.Load();
                 Configuration.EnableChangeWatching();
 
                 // start the WCF services
