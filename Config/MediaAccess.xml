@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<MediaAccess xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/MediaAccess/1">
+<MediaAccess xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/MediaAccess/1">
   <DefaultPlugins>
-    <Filesystem>MP Shares</Filesystem>
+    <TVShow>MP-TVSeries</TVShow>
     <Movie>Moving Pictures</Movie>
     <Music>MP MyMusic</Music>
     <Picture>FS Pictures</Picture>
-    <TVShow>MP-TVSeries</TVShow>
+    <Filesystem>MP Shares</Filesystem>
   </DefaultPlugins>
   
   <PluginConfiguration>
@@ -27,9 +27,6 @@
     </Plugin>
     <Plugin name="FS Pictures">
       <root type="Folder" displayname="Root Folder"></root>
-    </Plugin>
-    <Plugin name="MP MyVideo">
-      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
     </Plugin>
     <Plugin name="mvCentral">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>

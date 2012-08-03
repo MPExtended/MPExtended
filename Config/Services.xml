@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Services xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/Services/1">
+<Services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/Services/1">
   <AuthenticationEnabled>true</AuthenticationEnabled>
   <Users>
     <User>
@@ -9,18 +9,18 @@
   </Users>
 
   <NetworkImpersonation>
-    <Domain i:nil="true" />
-    <EncryptedPassword i:nil="true" />
+    <Domain />
+    <Username />
+    <EncryptedPassword />
     <ReadInStreamingService>true</ReadInStreamingService>
-    <Username i:nil="true" />
   </NetworkImpersonation>
   
   <BonjourEnabled>true</BonjourEnabled>
-  <BonjourName i:nil="true" />
-
+  <BonjourName />
+  
   <Port>4322</Port>
   <EnableIPv6>false</EnableIPv6>
-
+  
   <MASConnection>auto://127.0.0.1:4322</MASConnection>
   <TASConnection>auto://127.0.0.1:4322</TASConnection>
 </Services>

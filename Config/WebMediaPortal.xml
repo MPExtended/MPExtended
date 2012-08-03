@@ -1,19 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WebMediaPortal xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mpextended.github.com/schema/config/1/WebMediaPortal">
-  <DefaultAudioProfile>MP3</DefaultAudioProfile>
-  <DefaultGroup i:nil="true" />
-  <DefaultLanguage i:nil="true" />
-  <DefaultMediaProfile>Flash LQ</DefaultMediaProfile>
-  <DefaultTVProfile>Flash lQ</DefaultTVProfile>
-  <EnableAlbumPlayer>true</EnableAlbumPlayer>
-  <EnableDeinterlace>false</EnableDeinterlace>
-  <FileSystemProvider i:nil="true" />
-  <MASUrl>auto://127.0.0.1:4322/</MASUrl>
-  <MovieProvider i:nil="true" />
-  <MusicProvider i:nil="true" />
-  <PicturesProvider i:nil="true" />
-  <Skin>default</Skin>
+<WebMediaPortal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/WebMediaPortal/1">
   <StreamType>DirectWhenPossible</StreamType>
+  
+  <DefaultGroup xsi:nil="true" />
+
+  <DefaultMediaProfile xsi:nil="true" />
+  <DefaultTVProfile xsi:nil="true" />
+  <EnableDeinterlace>false</EnableDeinterlace>
+  <DefaultAudioProfile xsi:nil="true" />
+  <EnableAlbumPlayer>false</EnableAlbumPlayer>
+  
+  <TVShowProvider xsi:nil="true" />
+  <MovieProvider xsi:nil="true" />
+  <MusicProvider xsi:nil="true" />
+  <PicturesProvider xsi:nil="true" />
+  <FileSystemProvider xsi:nil="true" />
+  
+  <MASUrl>auto://127.0.0.1:4322/</MASUrl>
   <TASUrl>auto://127.0.0.1:4322/</TASUrl>
-  <TVShowProvider i:nil="true" />
+  
+  <Skin>default</Skin>
+  <DefaultLanguage xsi:nil="true" />
 </WebMediaPortal>
