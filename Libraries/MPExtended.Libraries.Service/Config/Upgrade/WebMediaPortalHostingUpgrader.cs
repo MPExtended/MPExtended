@@ -17,23 +17,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
 
-namespace MPExtended.Libraries.Service.Config
+namespace MPExtended.Libraries.Service.Config.Upgrade
 {
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortalHosting/1")]
-    public class WebMediaPortalHosting
+    internal class WebMediaPortalHostingUpgrader : AttemptConfigUpgrader<WebMediaPortalHosting>
     {
-        public WebMediaPortalHosting()
+        protected override WebMediaPortalHosting DoUpgrade()
         {
-            Port = 8080;
-            EnableTLS = false;
-            PortTLS = 44300;
+            var file = XElement.Load(OldPath);
+            var model = new WebMediaPortalHosting();
+
+            model.Port = Int32.Parse(file.Element("port").Value);
+
+            return model;
         }
-                
-        public int Port { get; set; }
-        
-        public bool EnableTLS { get; set; }
-        public int PortTLS { get; set; }
     }
 }

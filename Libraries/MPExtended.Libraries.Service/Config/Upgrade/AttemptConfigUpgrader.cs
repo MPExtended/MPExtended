@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,23 +17,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Text;
 
-namespace MPExtended.Libraries.Service.Config
+namespace MPExtended.Libraries.Service.Config.Upgrade
 {
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortalHosting/1")]
-    public class WebMediaPortalHosting
+    internal abstract class AttemptConfigUpgrader<TModel> : ConfigUpgrader<TModel>
     {
-        public WebMediaPortalHosting()
+        private TModel _model;
+
+        public override bool CanUpgrade()
         {
-            Port = 8080;
-            EnableTLS = false;
-            PortTLS = 44300;
+            try
+            {
+                _model = DoUpgrade();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
-                
-        public int Port { get; set; }
-        
-        public bool EnableTLS { get; set; }
-        public int PortTLS { get; set; }
+
+        public override TModel PerformUpgrade()
+        {
+            return _model;
+        }
+
+        protected abstract TModel DoUpgrade();
     }
 }

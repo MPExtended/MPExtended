@@ -25,6 +25,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Config.Upgrade;
 using Microsoft.Xml.Serialization.GeneratedAssembly;
 
 namespace MPExtended.Libraries.Service
@@ -33,14 +34,14 @@ namespace MPExtended.Libraries.Service
     {
         private static FileSystemWatcher watcher;
 
-        private static ConfigurationSerializer<Services, ServicesSerializer> serviceConfig = 
-            new ConfigurationSerializer<Services, ServicesSerializer>("Services.xml");
-        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer> mediaConfig = 
-            new ConfigurationSerializer<MediaAccess, MediaAccessSerializer>("MediaAccess.xml");
-        private static ConfigurationSerializer<Streaming, StreamingSerializer> streamConfig = 
-            new ConfigurationSerializer<Streaming, StreamingSerializer>("Streaming.xml");
-        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer> webmpHostingConfig = 
-            new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer>("WebMediaPortalHosting.xml");
+        private static ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader> serviceConfig =
+            new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>("Services.xml");
+        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader> mediaConfig = 
+            new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>("MediaAccess.xml");
+        private static ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader> streamConfig = 
+            new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>("Streaming.xml");
+        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader> webmpHostingConfig = 
+            new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>("WebMediaPortalHosting.xml");
         private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig = 
             new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
 

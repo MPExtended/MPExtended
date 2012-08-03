@@ -23,11 +23,13 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
+using MPExtended.Libraries.Service.Config.Upgrade;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel, TSerializer> where TModel : class, new()
-                                                                where TSerializer : XmlSerializer
+    internal class ConfigurationSerializer<TModel, TSerializer>
+        where TModel : class, new()
+        where TSerializer : XmlSerializer
     {
         public string Filename { get; private set; }
 
@@ -51,7 +53,7 @@ namespace MPExtended.Libraries.Service.Config
                     // thread between the check and getting the lock.
                     if (_instance == null)
                         _instance = Load();
-                }                
+                }
             }
 
             return _instance;
@@ -70,7 +72,7 @@ namespace MPExtended.Libraries.Service.Config
             }
         }
 
-        private TModel UnsafeParse(string path)
+        protected TModel UnsafeParse(string path)
         {
             using (var stream = File.OpenRead(path))
             {
@@ -79,13 +81,10 @@ namespace MPExtended.Libraries.Service.Config
             }
         }
 
-        private TModel HandleMalformedFile(Exception problem, string configPath)
+        protected virtual TModel HandleMalformedFile(Exception problem, string configPath)
         {
             try
             {
-                // TODO: check whether upgrading the config file is possible
-                bool canUpgrade = false;
-
                 // create backup
                 try
                 {
@@ -99,20 +98,8 @@ namespace MPExtended.Libraries.Service.Config
                     Log.Error(String.Format("Failed to backup config file {0}", Filename), ex);
                 }
 
-                if (canUpgrade)
-                {
-                    Log.Info("Failed to deserialize {0}, upgrading config file now", Filename);
-                    // TODO: actually get a model of the upgraded config file in the line below
-                    TModel model = new TModel();
-                    Save(model);
-                    return model;
-                }
-                else
-                {
-                    Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
-                    File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
-                    return UnsafeParse(configPath);
-                }
+                // cleanup the malformed file
+                return CleanupMalformedFile(problem, configPath);
             }
             catch (Exception ex)
             {
@@ -122,10 +109,17 @@ namespace MPExtended.Libraries.Service.Config
             }
         }
 
+        protected virtual TModel CleanupMalformedFile(Exception problem, string configPath)
+        {
+            Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
+            File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
+            return UnsafeParse(configPath);
+        }
+
         public bool Save(TModel model)
         {
             try
-            {   
+            {
                 XmlWriterSettings writerSettings = new XmlWriterSettings();
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
@@ -163,6 +157,38 @@ namespace MPExtended.Libraries.Service.Config
             {
                 _instance = Load();
                 Monitor.Exit(_instanceLock);
+            }
+        }
+    }
+
+    internal class ConfigurationSerializer<TModel, TSerializer, TUpgrader> : ConfigurationSerializer<TModel, TSerializer>
+        where TModel : class, new()
+        where TSerializer : XmlSerializer
+        where TUpgrader : ConfigUpgrader<TModel>, new()
+    {
+        public ConfigurationSerializer(string filename)
+            : base (filename)
+        {
+        }
+
+        protected override TModel CleanupMalformedFile(Exception problem, string configPath)
+        {
+            var upgrader = new TUpgrader();
+            upgrader.OldPath = configPath;
+            upgrader.DefaultPath = Configuration.GetDefaultPath(Filename);
+
+            if (upgrader.CanUpgrade())
+            {
+                Log.Info("Failed to deserialize {0}, upgrading config file now", Filename);
+                TModel model = upgrader.PerformUpgrade();
+                Save(model);
+                return model;
+            }
+            else
+            {
+                Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
+                File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
+                return UnsafeParse(configPath);
             }
         }
     }
