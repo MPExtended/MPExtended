@@ -211,6 +211,10 @@
       <Project>{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}</Project>
       <Name>MPExtended.Libraries.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
+      <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
+      <Name>MPExtended.Libraries.Service.Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>

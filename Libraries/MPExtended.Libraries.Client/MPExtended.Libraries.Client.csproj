@@ -67,6 +67,10 @@
       <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
       <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
+      <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
+      <Name>MPExtended.Libraries.Service.Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>

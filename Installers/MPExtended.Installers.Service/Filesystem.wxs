@@ -21,6 +21,9 @@
           <Directory Id="InstallDirectory" Name="Service">
             <!-- General -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.pdb" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.XmlSerializers.dll" />
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.dll" />
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
