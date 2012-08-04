@@ -38,25 +38,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files (x86)\VideoLAN\VLC\sdk\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\vlc-2.0.2\sdk\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files %28x86%29\VideoLAN\VLC;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\vlc-2.0.2\sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\VideoLAN\VLC\sdk\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\vlc-2.0.2\sdk\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\Program Files %28x86%29\VideoLAN\VLC;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\vlc-2.0.2\sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\Program Files (x86)\VideoLAN\VLC\libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>false</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,12 +72,12 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>C:\Program Files (x86)\VideoLAN\VLC\libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>false</OptimizeReferences>
+      <AdditionalDependencies>libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="vlcwrapper.c" />
+    <ClCompile Include="vlcwrapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,9 +36,9 @@ namespace MPExtended.Services.StreamingService.Units
         private WebMediaInfo info;
         private Thread processThread;
         private bool vlcIsStarted;
-        private int position;
+        private long position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, int position) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, long position) 
         {
             data = save;
             this.info = info;
@@ -81,7 +81,7 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, int startPosition, bool logProgress)
+        private void ParseOutputStream(Stream stdoutStream, Reference<WebTranscodingInfo> data, long startPosition, bool logProgress)
         {
             StreamReader reader = new StreamReader(stdoutStream);
             TranscodingInfoCalculator calculator = new TranscodingInfoCalculator(position, 25, 500, info.Duration); //VLCWrapper prints twice a second
@@ -124,13 +124,13 @@ namespace MPExtended.Services.StreamingService.Units
                         // the actual progress parsing
                         if (line.StartsWith("P"))
                         {
-                            // the format is 'P [time in microseconds] [percentage of file]'. Sadly we can't use the way more detailed time in microseconds
-                            // because the VLC guys decided it would be a good idea to convert it to a 32-bit integer before returning it, as opposed to
-                            // returning libvlc_time_t or a int64_t. And since it's in microseconds it gets big very fast, so it's absolutely useless.
-                            double percentage = Double.Parse(line.Substring(line.IndexOf(",") + 2), CultureInfo.InvariantCulture);
-                            calculator.NewPercentage(percentage);
-                            calculator.SaveStats(data);
-                            continue;
+							// Starting with VLCWrapper 0.2, the output format has changed. It is 'P [time in milliseconds]' now, which is quite easy for
+							// us to handle. With VLC 2 it also returns the time as a 64-bit integer, so we don't have overflow anymore either, but that risk
+							// is with milliseconds quite small anyhow: it requires 596 hours of video.
+							long milliseconds = Int64.Parse(line.Substring(2));
+							calculator.NewTime((int)milliseconds);
+							calculator.SaveStats(data);
+							continue;
                         }
 
                         Log.Warn("VLCWrapperParsing: encountered unknown line {0}", line);

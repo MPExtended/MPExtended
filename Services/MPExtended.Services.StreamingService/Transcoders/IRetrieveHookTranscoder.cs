@@ -26,6 +26,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal interface IRetrieveHookTranscoder
     {
-        void RetrieveStreamCalled(StreamContext context);
+        void RetrieveStreamCalled();
     }
 }
