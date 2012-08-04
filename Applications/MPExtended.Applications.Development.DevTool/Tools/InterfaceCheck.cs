@@ -28,7 +28,6 @@ namespace MPExtended.Applications.Development.DevTool
     internal class InterfaceCheck : IDevTool
     {
         public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
         public string Name { get { return "InterfaceCheck"; } }
 
         public void Run()

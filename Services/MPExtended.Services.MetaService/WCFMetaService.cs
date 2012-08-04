@@ -58,9 +58,9 @@ namespace MPExtended.Services.MetaService
             return MetaService.Instance.GetVersion();
         }
 
-        public void DummyMethod()
+        public DateTime GetLastClientActivity()
         {
-            return;
+            return MetaService.Instance.GetLastClientActivity();
         }
     }
 }

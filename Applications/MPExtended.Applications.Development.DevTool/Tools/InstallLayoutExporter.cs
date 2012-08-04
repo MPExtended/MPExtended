@@ -24,23 +24,31 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.Development.DevTool
+namespace MPExtended.Applications.Development.DevTool.Tools
 {
-    class InstallLayoutExporter : IDevTool
+    class InstallLayoutExporter : IQuestioningDevTool, IDevTool
     {
         private const string WIX_NS = "http://schemas.microsoft.com/wix/2006/wi";
 
-        public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
         public string Name { get { return "Installed filelayout exporter"; } }
+        public TextWriter OutputStream { get; set; }
+        public Dictionary<string, string> Answers { get; set; }
+
+        public IEnumerable<Question> Questions
+        {
+            get
+            {
+                return new List<Question>() {
+                    new Question("outputDirectory", "Enter output directory: "),
+                    new Question("onlyMPExtended", "Only MPExtended code (ignore bundled libraries)? [y/n] ")
+                };
+            }
+        }
 
         public void Run()
         {
-            OutputStream.Write("Enter output directory: ");
-            string outputDirectory = InputStream.ReadLine();
-
-            OutputStream.Write("Only MPExtended code (ignore bundled libraries)? [y/n] ");
-            bool onlyMPExtended = InputStream.ReadLine() == "y";
+            string outputDirectory = Answers["outputDirectory"];
+            bool onlyMPExtended = Answers["onlyMPExtended"] == "y";
 
             string filesystemWxs = Path.Combine(Installation.GetSourceRootDirectory(), "Installers", "MPExtended.Installers.Service", "Filesystem.wxs");
             XElement root = XElement.Load(filesystemWxs);
@@ -57,7 +65,7 @@ namespace MPExtended.Applications.Development.DevTool
 
             foreach (var component in node.Elements(XName.Get("Component", WIX_NS)))
             {
-                foreach(var file in component.Elements(XName.Get("File", WIX_NS)))
+                foreach (var file in component.Elements(XName.Get("File", WIX_NS)))
                 {
                     string source = ToFullPath(file.Attribute("Source").Value);
                     if (!onlyMPExtended || Path.GetFileName(source).Contains("MPExtended"))

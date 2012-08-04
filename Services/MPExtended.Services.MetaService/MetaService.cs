@@ -123,9 +123,9 @@ namespace MPExtended.Services.MetaService
         #endregion
 
         #region IProtectedMetaService implementation
-        public void DummyMethod()
+        public DateTime GetLastClientActivity()
         {
-            return;
+            return MPExtended.Libraries.Service.WCF.ActivityTracer.LastMessageReceived;
         }
         #endregion
     }

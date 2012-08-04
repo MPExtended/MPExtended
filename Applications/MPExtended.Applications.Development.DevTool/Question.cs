@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,15 +19,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace MPExtended.Applications.Development.DevTool
 {
-    internal interface IDevTool
+    internal class Question
     {
-        TextWriter OutputStream { get; set; }
-        string Name { get; }
+        public string Name { get; set; }
+        public string Text { get; set; }
 
-        void Run();
+        public Question(string name, string question)
+        {
+            Name = name;
+            Text = question;
+        }
     }
 }

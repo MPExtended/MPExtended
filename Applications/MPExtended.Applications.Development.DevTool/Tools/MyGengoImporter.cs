@@ -23,18 +23,27 @@ using System.Text;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.Development.DevTool
+namespace MPExtended.Applications.Development.DevTool.Tools
 {
-    internal class MyGengoImporter : IDevTool
+    internal class MyGengoImporter : IDevTool, IQuestioningDevTool
     {
-        public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
         public string Name { get { return "MyGengo resx importer"; } }
+        public TextWriter OutputStream { get; set; }
+        public Dictionary<string, string> Answers { get; set; }
+
+        public IEnumerable<Question> Questions
+        {
+            get
+            {
+                return new List<Question>() {
+                    new Question("sourceDir", "Enter directory to read source tree from: ")
+                };
+            }
+        }
 
         public void Run()
         {
-            OutputStream.Write("Enter directory to read source tree from: ");
-            string sourceDir = InputStream.ReadLine();
+            string sourceDir = Answers["sourceDir"];
 
             // load all files
             foreach (var directory in Directory.GetDirectories(sourceDir))
