@@ -60,6 +60,8 @@ namespace MPExtended.Services.TVAccessService
             // load list of channel logos that we don't have yet
             logos = new ChannelLogos();
             TVAccessService tas = new TVAccessService(); // FIXME
+            if (!tas.TestConnectionToTVService())
+                return;
             channelLogosRequired = tas.GetAllChannelsBasic()
                 .Where(ch => logos.FindLocation(ch.DisplayName) == null)
                 .ToList();
