@@ -53,6 +53,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +68,12 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="MpConnection\Messages\MessageAuthenticationResponse.cs" />
+    <Compile Include="MpConnection\Messages\MessageDialogResult.cs" />
+    <Compile Include="MpConnection\Messages\MessageShowDialog.cs" />
+    <Compile Include="MpConnection\Messages\MessageWelcome.cs" />
+    <Compile Include="Sockets\AsyncSocket.cs" />
+    <Compile Include="Sockets\Data.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
@@ -107,8 +115,11 @@
     <Compile Include="WCF\WcfUsernameValidator.cs" />
     <Compile Include="WCFUtil.cs" />
     <Compile Include="WCF\WebBehavior.cs" />
+    <Compile Include="MpConnection\Messages\BaseMessage.cs" />
+    <Compile Include="MpConnection\Messages\MessageCommand.cs" />
+    <Compile Include="MpConnection\Messages\MessageIdentify.cs" />
+    <Compile Include="MpConnection\WifiRemoteClient.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Hosting\App.config" />
   </ItemGroup>

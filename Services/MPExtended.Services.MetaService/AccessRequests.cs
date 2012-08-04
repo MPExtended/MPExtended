@@ -26,6 +26,8 @@ using MPExtended.Libraries.Service.ConfigurationContracts;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
+using MPExtended.Libraries.Service.MpConnection;
+using System.Threading;
 
 namespace MPExtended.Services.MetaService
 {
@@ -52,8 +54,18 @@ namespace MPExtended.Services.MetaService
             // ask the user
             askUserTasks[token] = Task.Factory.StartNew(delegate()
             {
-                // TODO: maybe go through WifiRemote when MP is open
-                bool result = RequestAccessThroughPrivateUSS(clientName, ip);
+                bool result = false;
+                // TODO: maybe 
+                if (Mediaportal.IsMediaPortalRunning() && WifiRemote.IsInstalled)
+                {
+                    //go through WifiRemote when MP is open and WifiRemote is installed
+                    result = RequestAccessThroughWifiRemote(clientName, ip);
+                }
+                else
+                {
+                    //if we can't use WifiRemote, try to get the users response via USS (the configuration tool)
+                    result = RequestAccessThroughPrivateUSS(clientName, ip);
+                }
                 Log.Debug("Got user response to access request with token {0}: {1}", token, result);
 
                 // set the necessary flags
@@ -84,6 +96,35 @@ namespace MPExtended.Services.MetaService
 
             // return the token to the client
             return request;
+        }
+
+        private bool RequestAccessThroughWifiRemote(string clientName, string ip)
+        {
+            User auth = WifiRemote.GetAuthentication();
+            WifiRemoteClient client = new WifiRemoteClient(auth, "localhost", WifiRemote.Port);
+
+            client.Connect();
+            bool loggedIn = false;
+            bool result = false;
+            while (!client.ConnectionFailed)
+            {
+                if (!loggedIn && client.LoggedIn)
+                {
+                    client.SendRequestAccessDialog(clientName, ip);
+                    loggedIn = true;
+                }
+
+                if (client.LatestDialogResult != null)
+                {
+                    //User accepted or denied the request
+                    result = client.LatestDialogResult.YesNoResult;
+                    break;
+                }
+                Thread.Sleep(200);
+            }
+
+            client.Disconnect();
+            return true;
         }
 
         public WebAccessRequestResponse GetAccessRequestStatus(string token)
