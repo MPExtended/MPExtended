@@ -51,22 +51,21 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             // defaults
             StartupArguments.RunAsTrayApp = true;
-            StartupArguments.OpenOnStart = false;
+            StartupArguments.OpenOnStart = true;
 
             // parse command line arguments
             foreach (string arg in e.Args)
             {
                 switch (arg)
                 {
-                    case "/Tray":
+                    case "/OnlyTray":
+                    case "/OnBoot":
                         StartupArguments.RunAsTrayApp = true;
+                        StartupArguments.OpenOnStart = false;
                         break;
                     case "/NoTray":
                     case "/OnlyConfigurator":
                         StartupArguments.RunAsTrayApp = false;
-                        StartupArguments.OpenOnStart = true;
-                        break;
-                    case "/Open":
                         StartupArguments.OpenOnStart = true;
                         break;
                     default:
