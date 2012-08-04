@@ -25,29 +25,34 @@ using System.Security.Cryptography;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.Development.DevTool
+namespace MPExtended.Applications.Development.DevTool.Tools
 {
-    internal class WixFSGenerator : IDevTool
+    internal class WixFSGenerator : IDevTool, IQuestioningDevTool
     {
         // these config lines are specific to WebMP and Streaming
         private static string[] forbiddenFiles = new string[] { "MediaInfo.dll", "start.bat" };
         private static string[] forbiddenExtensions = new string[] { ".cs", ".csproj", ".user", ".dat" };
         private static string[] forbiddenDirectories = new string[] { "bin", "obj", "Debug", "Release", "VLCWrapper", "stream" };
 
-        public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
         public string Name { get { return "Wix FS Generator"; } }
+        public TextWriter OutputStream { get; set; }
+        public Dictionary<string, string> Answers { get; set; }
+
+        public IEnumerable<Question> Questions
+        {
+            get
+            {
+                return new List<Question>() {
+                    new Question("inputDirectory", "Enter directory to include: " + Installation.GetSourceRootDirectory() + @"\"),
+                    new Question("outputFile", "Enter output file: "),
+                    new Question("prefix", "Enter prefix of the directory and component: ")
+                };
+            }
+        }
 
         public void Run()
         {
-            // get meta info
-            OutputStream.Write("Enter directory to include: " + Installation.GetSourceRootDirectory() + @"\");
-            string inputDir = InputStream.ReadLine();
-            OutputStream.Write("Enter output file: ");
-            string outputFile = InputStream.ReadLine();
-            OutputStream.Write("Enter prefix of the directory and component: ");
-            string name = InputStream.ReadLine();
-            RunFromInput(inputDir, outputFile, name);
+            RunFromInput(Answers["inputDirectory"], Answers["outputFile"], Answers["prefix"]);
         }
 
         public void RunFromInput(string inputDir, string outputFile, string name)

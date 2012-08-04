@@ -26,7 +26,7 @@ namespace MPExtended.Applications.Development.DevTool
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // init
             if (Installation.GetFileLayoutType() != FileLayoutType.Source)
@@ -35,24 +35,67 @@ namespace MPExtended.Applications.Development.DevTool
                 Environment.Exit(1);
             }
 
+
+
             // command line operating modes
-            if (args.Length == 3 && args[0] == "/WebMPInstallerRebuild")
+            if (args.Length >= 2 && args[0] == "/noquestions")
             {
-                var gen = new WixFSGenerator();
-                gen.OutputStream = (TextWriter)Console.Out;
-                gen.RunFromInput(args[1], args[2], "WWW");
-                Environment.Exit(0);
+                OperateNonInteractive(args);
+            }
+            else
+            {
+                OperateInteractive();
+            }
+        }
+
+        private static IDevTool[] ListTools()
+        {
+            return new IDevTool[] {
+                new Tools.InterfaceCheck(),
+                new DocGen.DocDevTool(),
+                new Tools.WixFSGenerator(),
+                new Tools.MyGengoImporter(),
+                new Tools.InstallLayoutExporter()
+            };
+        }
+
+        private static void OperateNonInteractive(string[] args)
+        {
+            foreach (var tool in ListTools())
+            {
+                if (tool.GetType().Name == args[1])
+                {
+                    if (tool is IQuestioningDevTool)
+                    {
+                        int arg = 2;
+                        (tool as IDevTool).OutputStream = Console.Out;
+                        (tool as IQuestioningDevTool).Answers = new Dictionary<string, string>();
+                        foreach (var question in (tool as IQuestioningDevTool).Questions)
+                        {
+                            (tool as IQuestioningDevTool).Answers[question.Name] = args[arg++];
+                        }
+                    }
+
+                    tool.Run();
+                    return;
+                }
             }
 
-            // CLI
-            string line = "help";
+            Console.WriteLine("Couldn't find tool {0}", args[1]);
+        }
+
+        private static void OperateInteractive()
+        {
+            // list our tools
             var tools = new IDevTool[] {
-                new InterfaceCheck(),
+                new Tools.InterfaceCheck(),
                 new DocGen.DocDevTool(),
-                new WixFSGenerator(),
-                new MyGengoImporter(),
-                new InstallLayoutExporter()
+                new Tools.WixFSGenerator(),
+                new Tools.MyGengoImporter(),
+                new Tools.InstallLayoutExporter()
             };
+
+            string line = "help";
             do
             {
                 switch (line)
@@ -79,7 +122,15 @@ namespace MPExtended.Applications.Development.DevTool
                         {
                             IDevTool tool = tools.ElementAt(Int32.Parse(line));
                             tool.OutputStream = (TextWriter)Console.Out;
-                            tool.InputStream = (TextReader)Console.In;
+                            if (tool is IQuestioningDevTool)
+                            {
+                                (tool as IQuestioningDevTool).Answers = new Dictionary<string, string>();
+                                foreach (var question in (tool as IQuestioningDevTool).Questions)
+                                {
+                                    Console.Write(question.Text);
+                                    (tool as IQuestioningDevTool).Answers[question.Name] = Console.ReadLine();
+                                }
+                            }
                             tool.Run();
                         }
                         catch (ArgumentOutOfRangeException)
