@@ -55,6 +55,10 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
                 }
+                catch (ThreadAbortException)
+                {
+                    // ThreadAbortException is already handled in ParseOutputStream, but rethrown when the method is left. Don't be noisy. 
+                }
                 catch (Exception ex)
                 {
                     Log.Error("FFMpegLogParsing brutally came to an end", ex);
@@ -125,7 +129,9 @@ namespace MPExtended.Services.StreamingService.Units
                 catch (ThreadAbortException)
                 {
                     saveData.Value.Failed = true;
-                    break;
+                    saveData.Value.Finished = true;
+                    reader.Close();
+                    return;
                 }
                 catch (Exception e)
                 {
