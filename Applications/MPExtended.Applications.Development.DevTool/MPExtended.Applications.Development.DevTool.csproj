@@ -58,6 +58,7 @@
     <Compile Include="Question.cs" />
     <Compile Include="Tools\InstallLayoutExporter.cs" />
     <Compile Include="Tools\InterfaceCheck.cs" />
+    <Compile Include="Tools\MonolithicPowerscheduler.cs" />
     <Compile Include="Tools\MyGengoImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

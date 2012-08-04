@@ -55,7 +55,8 @@ namespace MPExtended.Applications.Development.DevTool
                 new DocGen.DocDevTool(),
                 new Tools.WixFSGenerator(),
                 new Tools.MyGengoImporter(),
-                new Tools.InstallLayoutExporter()
+                new Tools.InstallLayoutExporter(),
+                new Tools.MonolithicPowerscheduler()
             };
         }
 
@@ -87,13 +88,7 @@ namespace MPExtended.Applications.Development.DevTool
         private static void OperateInteractive()
         {
             // list our tools
-            var tools = new IDevTool[] {
-                new Tools.InterfaceCheck(),
-                new DocGen.DocDevTool(),
-                new Tools.WixFSGenerator(),
-                new Tools.MyGengoImporter(),
-                new Tools.InstallLayoutExporter()
-            };
+            var tools = ListTools();
 
             string line = "help";
             do

@@ -64,7 +64,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)Libraries\Tools\DevTool.exe" /WebMPInstallerRebuild "Applications\MPExtended.Applications.WebMediaPortal" "$(ProjectDir)WWW.wxs"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)Libraries\Tools\DevTool.exe" /noquestions WixFSGenerator "Applications\MPExtended.Applications.WebMediaPortal" "$(ProjectDir)WWW.wxs" "WWW"</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
