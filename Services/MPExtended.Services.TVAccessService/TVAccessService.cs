@@ -52,14 +52,18 @@ namespace MPExtended.Services.TVAccessService
         {
             try
             {
-                // read Gentle configuration from CommonAppData
+                // Use the same Gentle.config as the TVEngine
                 string gentleConfigFile = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                     "Team MediaPortal", "MediaPortal TV Server", "Gentle.config"
                 );
 
+                // but be quiet when it doesn't exists, as not everyone has the TV Engine installed
                 if (!File.Exists(gentleConfigFile))
-                    throw new FileNotFoundException("The Gentle configuration file couldn't be found. This occurs when TV Server is not installed.", gentleConfigFile);
+                {
+                    Log.Info("Cannot find Gentle.config file, assuming TVEngine isn't installed...");
+                    return;
+                }
 
                 Gentle.Common.Configurator.AddFileHandler(gentleConfigFile);
 
