@@ -366,7 +366,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
                 model.Size = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
             }
-            else if (!StreamTarget.GetAllTargets().First(t => t.Name == profile.Target).HasVideo)
+            else if (!StreamTarget.GetAllTargets().First(t => profile.Targets.Contains(t.Name)).HasVideo)
             {
                 model.Size = new WebResolution() { Width = 600, Height = 100 };
             }
