@@ -61,6 +61,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to give the application &apos;{0}&apos; (with IP address {1}) full access to the services?.
+        /// </summary>
+        public static string AccessRequest {
+            get {
+                return ResourceManager.GetString("AccessRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action needs administrative rights..
         /// </summary>
         public static string ActionNeedsAdmin {

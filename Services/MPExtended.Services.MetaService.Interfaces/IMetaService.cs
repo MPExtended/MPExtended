@@ -34,5 +34,17 @@ namespace MPExtended.Services.MetaService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebServiceVersion GetVersion();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebAccessRequestResponse CreateAccessRequest(string clientName);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebAccessRequestResponse GetAccessRequestStatus(string token);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout);
     }
 }

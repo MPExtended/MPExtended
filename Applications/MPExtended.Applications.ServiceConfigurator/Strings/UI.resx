@@ -482,4 +482,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="Enable" xml:space="preserve">
     <value>Enable</value>
   </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Do you want to give the application '{0}' (with IP address {1}) full access to the services?</value>
+  </data>
 </root>

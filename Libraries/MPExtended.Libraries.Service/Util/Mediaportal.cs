@@ -22,6 +22,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace MPExtended.Libraries.Service.Util
 {
@@ -167,6 +168,7 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
+
         public static void LogVersionDetails()
         {
             try
@@ -189,6 +191,29 @@ namespace MPExtended.Libraries.Service.Util
             {
                 Log.Warn("Failed to detect MediaPortal version", ex);
             }
+        }
+
+        /// <summary>
+        /// Return the MediaPortal path
+        /// </summary>
+        /// <returns>MediaPortal path</returns>
+        public static string GetMediaPortalPath()
+        {
+            string mpdir = Mediaportal.GetClientInstallationDirectory();
+            if (mpdir == null)
+            {
+                mpdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal");
+            }
+            return Path.Combine(mpdir, "MediaPortal.exe");
+        }
+
+        /// <summary>
+        /// Check if MediaPortal is running
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsMediaPortalRunning()
+        {
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GetMediaPortalPath())).Length > 0;
         }
     }
 }

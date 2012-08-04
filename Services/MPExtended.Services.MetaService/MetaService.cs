@@ -46,6 +46,7 @@ namespace MPExtended.Services.MetaService
         private IEnumerable<IServicePublisher> publishers;
         private IServiceDetector detector;
         private bool initialized;
+        private AccessRequests accessRequests;
 
         public MetaService()
         {
@@ -72,6 +73,8 @@ namespace MPExtended.Services.MetaService
                 }
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
             });
+
+            accessRequests = new AccessRequests();
         }
 
         ~MetaService()
@@ -119,6 +122,21 @@ namespace MPExtended.Services.MetaService
         public WebBoolResult HasUI()
         {
             return detector.HasUI;
+        }
+
+        public WebAccessRequestResponse CreateAccessRequest(string clientName)
+        {
+            return accessRequests.CreateAccessRequest(clientName);
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatus(string token)
+        {
+            return accessRequests.GetAccessRequestStatus(token);
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout)
+        {
+            return accessRequests.GetAccessRequestStatusBlocking(token, timeout);
         }
         #endregion
 

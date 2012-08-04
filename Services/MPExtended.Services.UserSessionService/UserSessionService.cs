@@ -64,12 +64,7 @@ namespace MPExtended.Services.UserSessionService
 
         public UserSessionService()
         {
-            var mpdir = Mediaportal.GetClientInstallationDirectory();
-            if (mpdir == null)
-            {
-                mpdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal");
-            }
-            MPPath = Path.Combine(mpdir, "MediaPortal.exe");
+            MPPath = Mediaportal.GetMediaPortalPath();
         }
 
         public WebBoolResult TestConnection()
@@ -89,7 +84,7 @@ namespace MPExtended.Services.UserSessionService
 
         public WebBoolResult IsMediaPortalRunning()
         {
-            return new WebBoolResult(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(MPPath)).Length > 0);
+            return new WebBoolResult(Mediaportal.IsMediaPortalRunning());
         }
 
         public WebBoolResult StartMediaPortal()

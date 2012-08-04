@@ -54,6 +54,8 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,6 +73,12 @@
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
+    <Compile Include="MpConnection\Messages\MessageAuthenticationResponse.cs" />
+    <Compile Include="MpConnection\Messages\MessageDialogResult.cs" />
+    <Compile Include="MpConnection\Messages\MessageShowDialog.cs" />
+    <Compile Include="MpConnection\Messages\MessageWelcome.cs" />
+    <Compile Include="Sockets\AsyncSocket.cs" />
+    <Compile Include="Sockets\Data.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
@@ -87,6 +95,7 @@
     <Compile Include="Hosting\ServiceState.cs" />
     <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />
+    <Compile Include="Util\RandomGenerator.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Util\WifiRemote.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
@@ -112,8 +121,11 @@
     <Compile Include="WCF\WcfUsernameValidator.cs" />
     <Compile Include="WCFUtil.cs" />
     <Compile Include="WCF\WebBehavior.cs" />
+    <Compile Include="MpConnection\Messages\BaseMessage.cs" />
+    <Compile Include="MpConnection\Messages\MessageCommand.cs" />
+    <Compile Include="MpConnection\Messages\MessageIdentify.cs" />
+    <Compile Include="MpConnection\WifiRemoteClient.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Hosting\App.config" />
   </ItemGroup>
