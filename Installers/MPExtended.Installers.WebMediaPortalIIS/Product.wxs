@@ -49,10 +49,10 @@
     <!-- Include custom action library -->
     <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
 
-    <!-- Remove config files on uninstall -->
-    <CustomAction Id="RemoveConfigFiles" BinaryKey="CustomActionLibrary" DllEntry="RemoveWebMediaPortalConfig" Execute="immediate" Return="check" />
+    <!-- Remove data files on uninstall -->
+    <CustomAction Id="RemoveDataFiles" BinaryKey="CustomActionLibrary" DllEntry="RemoveWebMediaPortalData" Execute="immediate" Return="check" />
     <InstallExecuteSequence>
-      <Custom Action="RemoveConfigFiles" Before="InstallFinalize"><![CDATA[(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")]]></Custom>
+      <Custom Action="RemoveDataFiles" Before="InstallFinalize"><![CDATA[(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")]]></Custom>
     </InstallExecuteSequence>
 
     <!-- User interface -->

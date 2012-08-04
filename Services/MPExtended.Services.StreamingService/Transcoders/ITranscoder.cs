@@ -27,9 +27,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
     internal interface ITranscoder
     {
         string Identifier { get; set; }
+        StreamContext Context { get; set; }
 
-        // position is in seconds
-        void BuildPipeline(StreamContext context);
+        void BuildPipeline();
         string GetStreamURL();
     }
 }

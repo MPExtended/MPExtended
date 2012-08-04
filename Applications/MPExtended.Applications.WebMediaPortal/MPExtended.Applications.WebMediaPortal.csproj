@@ -49,6 +49,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\Libraries\Misc\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Management" />
@@ -248,7 +251,7 @@
     <Content Include="Views\MusicLibrary\Albums.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MusicLibrary\Album.cshtml" />
+    <Content Include="Views\MusicLibrary\AlbumPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\MovieLibrary\Index.cshtml" />
@@ -379,7 +382,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
+    <Content Include="Views\Stream\FlashAudioAlbumPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Status\Index.cshtml" />
@@ -430,6 +433,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Error\Http404.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Track.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\MusicLibrary\Album.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

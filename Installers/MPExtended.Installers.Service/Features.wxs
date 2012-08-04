@@ -79,37 +79,37 @@
 
   <Fragment>
     <!-- Reference components -->
-    <Feature Id="Feature_All" Display="expand" Level="1" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
+    <Feature Id="Feature_All" Display="expand" Level="1" Absent="disallow" ConfigurableDirectory="MPEXTENDEDDIRECTORY"
              Title="MPExtended services"
              Description="MPExtended webservices for MediaPortal">
       <ComponentGroupRef Id="Component_General" />
       <ComponentRef Id="Component_Service" />
 
-      <Feature Id="Feature_Client"  Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Client"  Level="10" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
                Title="!(loc.FeatureClient)"
                Description="!(loc.FeatureClientDescription)">
         <ComponentGroupRef Id="Component_MAS"/>
       </Feature>
 
-      <Feature Id="Feature_WifiRemote" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_WifiRemote" Level="10" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
                Title="!(loc.FeatureWifiRemote)"
                Description="!(loc.FeatureWifiRemoteDescription)">
       </Feature>
 
-      <Feature Id="Feature_Server" Level="10" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Server" Level="10" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
                Title="!(loc.FeatureServer)"
                Description="!(loc.FeatureServerDescription)">
         <ComponentGroupRef Id="Component_TAS"/>
       </Feature>
 
-      <Feature Id="Feature_Configurator" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Configurator" Level="3" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
                Title="!(loc.FeatureConfigurator)"
                Description="!(loc.FeatureConfiguratorDescription)">
         <ComponentGroupRef Id="Component_USS"/>
         <ComponentGroupRef Id="Component_Configurator"/>
       </Feature>
 
-      <Feature Id="Feature_Streaming" Level="3" Absent="allow" InstallDefault="local" AllowAdvertise="no"
+      <Feature Id="Feature_Streaming" Level="3" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
                Title="!(loc.FeatureStreaming)"
                Description="!(loc.FeatureStreamingDescription)">
         <ComponentGroupRef Id="Component_Streaming"/>

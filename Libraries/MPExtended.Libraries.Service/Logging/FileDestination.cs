@@ -38,7 +38,7 @@ namespace MPExtended.Libraries.Service.Logging
             MinimumLevel = level;
 
             Stream file = File.Open(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
-            Output = new StreamWriter(file, Encoding.UTF8, 4096);
+            Output = TextWriter.Synchronized(new StreamWriter(file, Encoding.UTF8, 4096));
         }
 
         public void Dispose()

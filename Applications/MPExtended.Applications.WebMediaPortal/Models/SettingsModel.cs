@@ -49,10 +49,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int? DefaultGroup { get; set; }
 
         public string DefaultMediaProfile { get; set; }
-        public string DefaultAudioProfile { get; set; }
         public string DefaultTVProfile { get; set; }
-
         public bool EnableDeinterlace { get; set; }
+        public string DefaultAudioProfile { get; set; }
+        public bool EnableAlbumPlayer { get; set; }
 
         public int? TVShowProvider { get; set; }
         public int? MovieProvider { get; set; }

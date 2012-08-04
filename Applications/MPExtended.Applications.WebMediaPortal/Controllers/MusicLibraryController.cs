@@ -37,11 +37,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Index()
         {
             var artistList = MPEServices.MAS.GetAllMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
-            if (artistList != null)
-            {
-                return View(artistList);
-            }
-            return null;
+            if (artistList == null)
+                return new HttpNotFoundResult();
+            return View(artistList);
         }
 
         public ActionResult Albums(string artist)
@@ -58,18 +56,36 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult Album(string album)
         {
             var albumObj = MPEServices.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
+            if (albumObj == null)
+                return new HttpNotFoundResult();
             var trackList = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, WebSortField.Title, WebSortOrder.Asc);
-
-            return View(new AlbumViewModel()
+            var model = new AlbumViewModel()
             {
                 Album = albumObj,
                 Tracks = trackList
-            });
+            };
+
+            if (Settings.ActiveSettings.EnableAlbumPlayer)
+            {
+                return View("AlbumPlayer", model);
+            }
+            else
+            {
+                return View("Album", model);
+            }
         }
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
             return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, "images/default/album.png");
+        }
+
+        public ActionResult Track(string track)
+        {
+            var trackObj = MPEServices.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
+            if (trackObj == null)
+                return new HttpNotFoundResult();
+            return View(trackObj);
         }
     }
 }

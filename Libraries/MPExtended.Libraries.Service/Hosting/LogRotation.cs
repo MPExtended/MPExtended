@@ -24,9 +24,9 @@ using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    internal class LogRotation
+    public static class LogRotation
     {
-        public void Rotate()
+        public static void Rotate()
         {
             string directory = Installation.GetLogDirectory();
             var files = Directory.GetFiles(directory).Where(x => Path.GetExtension(x) == ".log");

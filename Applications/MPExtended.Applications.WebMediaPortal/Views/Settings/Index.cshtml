@@ -84,6 +84,17 @@
                 </td>
             </tr>
             <tr>
+                <td>
+                    @Html.LabelFor(x => x.EnableAlbumPlayer)
+                </td>
+                <td>
+                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "true") Yes
+                    &nbsp;&nbsp;&nbsp;&nbsp; 
+                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "false") No
+                    @Html.ValidationMessageFor(x => x.EnableAlbumPlayer)
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>

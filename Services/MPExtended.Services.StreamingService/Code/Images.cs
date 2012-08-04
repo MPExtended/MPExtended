@@ -119,7 +119,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         private static ImageCache cache = new ImageCache();
 
-        public static Stream ExtractImage(MediaSource source, int startPosition, int? maxWidth, int? maxHeight)
+        public static Stream ExtractImage(MediaSource source, long startPosition, int? maxWidth, int? maxHeight)
         {
             if (!source.Exists)
             {

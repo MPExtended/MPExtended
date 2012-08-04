@@ -26,6 +26,12 @@ Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
 
+Misc\MoreLinq.dll:
+- Copyright (C) 2008 - 2011 Jonathan Skeet, http://code.google.com/p/morelinq/
+- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
+- Source code available from http://code.google.com/p/morelinq/
+- Version 1.0-beta
+
 Misc\zxing.dll:
 - Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -45,11 +51,11 @@ MVC:
 - Version 3.0.0.0
 
 Streaming\ffmpeg.exe:
-- Copyright (C) 2000-2011 the FFmpeg developers, http://ffmpeg.org/
+- Copyright (C) 2000-2012 the FFmpeg developers, http://ffmpeg.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://ffmpeg.org/, http://git.videolan.org/ffmpeg.git and http://ffmpeg.zeranoe.com/builds/source/ffmpeg/
 - Compiled for Windows by Kyle Schwarz, http://ffmpeg.zeranoe.com/
-- Revision 61b1d85c1f1074d9ce56bb482de99d0f03c7a161, static 32-bit build
+- Revision 8293a21a9c80a0cbb753ab44c829c1efff2083e5, static 32-bit build
 
 Streaming\MediaInfo.dll:
 - Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
@@ -57,18 +63,11 @@ Streaming\MediaInfo.dll:
 - Source code available from http://mediainfo.sourceforge.net/
 - Version 0.7.56, 32-bit build
 
-Streaming\segmenter:
-- Copyright (C) 2009 Chase Douglas, http://code.google.com/p/httpsegmenter/
-- Licensed under General Public License, version 2, available on http://www.gnu.org/licenses/gpl-2.0.html
-- Source code available from http://code.google.com/p/httpsegmenter/
-- Version r15, shared 32-bit build
-- Contains ffmpeg libraries, see above
-
-Streaming\vlc-1.1.11:
+Streaming\vlc-2.0.2:
 - Copyright (C) 1996-2011 the VideoLAN team, http://videolan.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://www.videolan.org/
-- Version 1.1.11, 32-bit, stripped from non-used components for size
+- Version 2.0.2, 32-bit, stripped from non-used components for size
 
 TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/

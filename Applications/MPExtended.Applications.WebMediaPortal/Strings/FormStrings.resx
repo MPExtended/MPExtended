@@ -142,6 +142,9 @@
   <data name="DirectWhenPossibleDescription" xml:space="preserve">
     <value>Direct when possible, otherwise proxied</value>
   </data>
+  <data name="EnableAlbumPlayer" xml:space="preserve">
+    <value>Enable the album player for music?</value>
+  </data>
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Please specify a valid MAS URL</value>
   </data>

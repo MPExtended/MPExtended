@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Client;
@@ -36,7 +37,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.MASStreamControl, "pc-vlc-video", "pc-flash-video");
+                return GetProfiles(MPEServices.MASStreamControl, StreamTarget.GetVideoTargets());
             }
         }
 
@@ -44,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.MASStreamControl, "pc-vlc-audio", "pc-flash-audio");
+                return GetProfiles(MPEServices.MASStreamControl, StreamTarget.GetAllTargets());
             }
         }
 
@@ -52,7 +53,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.TASStreamControl, "pc-vlc-video", "pc-flash-video");
+                return GetProfiles(MPEServices.TASStreamControl, StreamTarget.GetVideoTargets());
             }
         }
 
@@ -97,22 +98,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                IEnumerable<SelectListItem> items = new List<SelectListItem>()
-                {
-                    new SelectListItem() { Text = FormStrings.DefaultSkinName, Value = "default" }
-                };
-
-                string path = HttpContext.Current.Server.MapPath("~/Skins");
-                if (Directory.Exists(path))
-                {
-                    items = items.Union(Directory.GetDirectories(path).Select(x => new SelectListItem()
-                    {
-                        Text = Path.GetFileName(x),
-                        Value = Path.GetFileName(x)
-                    }));
-
-                }
-
+                var items = Composer.Instance.GetInstalledSkins()
+                    .Select(x => new SelectListItem() { Text = x, Value = x })
+                    .ToList();
+                items.Add(new SelectListItem() { Text = FormStrings.DefaultSkinName, Value = "default" });
                 return items;
             }
         }
@@ -167,6 +156,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [LocalizedDisplayName(typeof(FormStrings), "VLCPlayerEnableDeinterlacing")]
         public bool EnableDeinterlace { get; set; }
 
+        [LocalizedDisplayName(typeof(FormStrings), "EnableAlbumPlayer")]
+        public bool EnableAlbumPlayer { get; set; }
+
         [LocalizedDisplayName(typeof(FormStrings), "Skin")]
         [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidSkin")]
         [ListChoice("Skins", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidSkin")]
@@ -181,6 +173,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 		    Skin = model.Skin;
             StreamType = model.StreamType;
             EnableDeinterlace = model.EnableDeinterlace;
+            EnableAlbumPlayer = model.EnableAlbumPlayer;
             SelectedGroup = model.DefaultGroup;
             SelectedMediaProfile = model.DefaultMediaProfile;
             SelectedAudioProfile = model.DefaultAudioProfile;
@@ -199,6 +192,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             changeModel.StreamType = StreamType;
             changeModel.EnableDeinterlace = EnableDeinterlace;
+            changeModel.EnableAlbumPlayer = EnableAlbumPlayer;
             changeModel.DefaultGroup = SelectedGroup;
             changeModel.DefaultMediaProfile = SelectedMediaProfile;
             changeModel.DefaultAudioProfile = SelectedAudioProfile;
@@ -211,17 +205,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             return changeModel;
         }
 
-        private List<SelectListItem> GetProfiles(IWebStreamingService service, params string[] targets)
+        private List<SelectListItem> GetProfiles(IWebStreamingService service, IEnumerable<StreamTarget> targets)
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            foreach (string target in targets)
+            foreach (StreamTarget target in targets)
             {
-                foreach(var profile in service.GetTranscoderProfilesForTarget(target))
+                foreach(var profile in service.GetTranscoderProfilesForTarget(target.Name))
                 {
                     items.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
                 }
             }
-            return items;
+            return items.OrderBy(x => x.Value).ToList();
         }
 
         private int GetCurrentProvider(int? setting, int defaultValue)

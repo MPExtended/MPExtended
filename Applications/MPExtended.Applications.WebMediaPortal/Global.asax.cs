@@ -70,31 +70,42 @@ namespace MPExtended.Applications.WebMediaPortal
 
         protected void Application_Error()
         {
-            // get exception and reset response
-            var exception = Server.GetLastError();
-            var httpException = exception as HttpException;
-            Response.Clear();
-            Server.ClearError();
-
-            // generate routing for new request context to the ErrorController
-            var routeData = new RouteData();
-            routeData.Values["controller"] = "Error";
-            routeData.Values["action"] = "General";
-            routeData.Values["exception"] = exception;
-            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            // specific output for HTTP errors
-            if (httpException != null)
+            Exception exception = null;
+            try
             {
-                Response.StatusCode = httpException.GetHttpCode();
-                if (Response.StatusCode == (int)HttpStatusCode.NotFound)
-                    routeData.Values["action"] = "Http404";
-            }
+                // get exception and reset response
+                exception = Server.GetLastError();
+                var httpException = exception as HttpException;
+                Response.Clear();
+                Server.ClearError();
 
-            // start new controller
-            IController errorController = new ErrorController();
-            var rc = new RequestContext(new HttpContextWrapper(Context), routeData);
-            errorController.Execute(rc);
+                // generate routing for new request context to the ErrorController
+                var routeData = new RouteData();
+                routeData.Values["controller"] = "Error";
+                routeData.Values["action"] = "General";
+                routeData.Values["exception"] = exception;
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                // specific output for HTTP errors
+                if (httpException != null)
+                {
+                    Response.StatusCode = httpException.GetHttpCode();
+                    if (Response.StatusCode == (int)HttpStatusCode.NotFound)
+                        routeData.Values["action"] = "Http404";
+                }
+
+                // start new controller
+                IController errorController = new ErrorController();
+                var rc = new RequestContext(new HttpContextWrapper(Context), routeData);
+                errorController.Execute(rc);
+            }
+            catch (Exception secondException)
+            {
+                Log.Fatal("Error occured during error handling... I don't like this.");
+                if (exception != null)
+                    Log.Error("Original error was:", exception);
+                Log.Error("Second exception is:", secondException);
+            }
         }
     }
 }

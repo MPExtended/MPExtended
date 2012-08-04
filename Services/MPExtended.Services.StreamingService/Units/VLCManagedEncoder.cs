@@ -23,6 +23,7 @@ using System.Text;
 using System.Timers;
 using MPExtended.Libraries.VLCManaged;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 

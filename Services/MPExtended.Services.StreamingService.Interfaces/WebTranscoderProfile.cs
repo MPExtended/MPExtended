@@ -14,7 +14,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string MIME { get; set; }
         public int MaxOutputWidth { get; set; }
         public int MaxOutputHeight { get; set; }
-        public string Target { get; set; }
+        public IList<string> Targets { get; set; }
         public int Bandwidth { get; set; }
         public string Transport { get; set; }
     }

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Compilation;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 {
@@ -30,6 +31,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
         public static void Initialize()
         {
             // This method is called by the ASP.NET infrastructure using a PreApplicationStartMethodAttribute.
+            LogRotation.Rotate();
             Log.Setup("WebMediaPortal.log", false);
             Log.Debug("WebMediaPortal starting!");
             InitializeExtensions();
@@ -45,9 +47,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 
             Composer.Instance.Compose();
             var assemblies = Composer.Instance.GetAllAssemblies();
-            foreach (var assembly in Composer.Instance.GetAllAssemblies())
+            foreach (var assembly in assemblies)
             {
                 var directory = Path.GetDirectoryName(assembly.Location);
+                Log.Debug("Loading assembly {0} into Razor BuildManager", assembly.Location);
                 if (!directoriesAdded.Contains(directory))
                 {
 // This method is obsolete, but the suggested alternative method (AppDomainSetup.PrivateBinPath) only works for setting up new

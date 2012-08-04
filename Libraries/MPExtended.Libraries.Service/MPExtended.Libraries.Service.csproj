@@ -53,6 +53,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,7 +67,10 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Internal\TVEDependencyInstaller.cs" />
+    <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
+    <Compile Include="Util\Reference.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />

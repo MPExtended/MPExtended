@@ -25,6 +25,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 {
     internal interface ICustomActionTranscoder : ITranscoder
     {
-        Stream DoAction(string action, string parameters);
+        Stream CustomActionData(string action, string parameters);
     }
 }

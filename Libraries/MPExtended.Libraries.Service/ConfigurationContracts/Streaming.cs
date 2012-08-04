@@ -32,11 +32,20 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public string MIME { get; set; }
         public int MaxOutputWidth { get; set; }
         public int MaxOutputHeight { get; set; }
-        public string Target { get; set; }
+        public List<string> Targets { get; set; }
         public int Bandwidth { get; set; }
         public string Transport { get; set; }
         public string TranscoderImplementationClass { get; set; }
         public IDictionary<string, string> CodecParameters { get; set; }
+    }
+
+    public class WatchSharingConfiguration
+    {
+        public bool DebugEnabled { get; set; }
+        public bool TraktEnabled { get; set; }
+        public Dictionary<string, string> TraktConfiguration { get; set; }
+        public bool FollwitEnabled { get; set; }
+        public Dictionary<string, string> FollwitConfiguration { get; set; }
     }
 
     public class Streaming
@@ -53,7 +62,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         public string FFMpegPath { get; set; }
         public string FFMpegAPI { get; set; }
 
-        public Dictionary<string, string> WatchSharing { get; set; }
+        public WatchSharingConfiguration WatchSharing { get; set; }
 
         public List<TranscoderProfile> Transcoders { get; set; }
 
@@ -69,11 +78,18 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
             FFMpegPath = file.Element("ffmpeg").Element("path").Value;
             FFMpegAPI = file.Element("ffmpeg").Element("api").Value;
 
-            WatchSharing = file.Element("watchsharing").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value);
-
-            Transcoders = GetProfilesFromNode(file.Element("transcoders")).ToList();
+            // Watchsharing
+            WatchSharing = new WatchSharingConfiguration()
+            {
+                DebugEnabled = file.Element("watchsharing").Element("debug").Attribute("enabled").Value == "true",
+                TraktEnabled = file.Element("watchsharing").Element("trakt").Attribute("enabled").Value == "true",
+                TraktConfiguration = file.Element("watchsharing").Element("trakt").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value),
+                FollwitEnabled = file.Element("watchsharing").Element("follwit").Attribute("enabled").Value == "true",
+                FollwitConfiguration = file.Element("watchsharing").Element("follwit").Elements().ToDictionary(x => x.Name.LocalName, x => x.Value),
+            };
 
             // Update transcoder configuration with the ones from the default file if that one has changed
+            Transcoders = GetProfilesFromNode(file.Element("transcoders")).ToList();
             if (File.GetLastWriteTime(defaultPath) > File.GetLastWriteTime(path))
             {
                 var defaultTranscoders = GetProfilesFromNode(XElement.Load(defaultPath).Element("transcoders"));
@@ -102,7 +118,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 Name = x.Element("name").Value,
                 Description = x.Element("description").Value,
                 Bandwidth = Int32.Parse(x.Element("bandwidth").Value),
-                Target = x.Element("target").Value,
+                Targets = (x.Element("targets") != null ? x.Element("targets").Elements("target") : x.Elements("target")).Select(y => y.Value).ToList(),
                 Transport = x.Element("transport").Value,
                 MaxOutputHeight = x.Element("maxOutputHeight") != null ? Int32.Parse(x.Element("maxOutputHeight").Value) : 0,
                 MaxOutputWidth = x.Element("maxOutputWidth") != null ? Int32.Parse(x.Element("maxOutputWidth").Value) : 0,
@@ -139,10 +155,20 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 file.Element("ffmpeg").Element("path").Value = FFMpegPath;
                 file.Element("ffmpeg").Element("api").Value = FFMpegAPI;
 
-                file.Element("watchsharing").Elements().Remove();
-                foreach (KeyValuePair<string, string> kvp in WatchSharing)
+                file.Element("watchsharing").Element("debug").Attribute("enabled").Value = WatchSharing.DebugEnabled ? "true" : "false";
+
+                file.Element("watchsharing").Element("trakt").Attribute("enabled").Value = WatchSharing.TraktEnabled ? "true" : "false";
+                file.Element("watchsharing").Element("trakt").Elements().Remove();
+                foreach (var kvp in WatchSharing.TraktConfiguration)
                 {
-                    file.Element("watchsharing").Add(new XElement(kvp.Key, kvp.Value));
+                    file.Element("watchsharing").Element("trakt").Add(new XElement(kvp.Key, kvp.Value));
+                }
+
+                file.Element("watchsharing").Element("follwit").Attribute("enabled").Value = WatchSharing.FollwitEnabled ? "true" : "false";
+                file.Element("watchsharing").Element("follwit").Elements().Remove();   
+                foreach(var kvp in WatchSharing.FollwitConfiguration)
+                {
+                    file.Element("watchsharing").Element("follwit").Add(new XElement(kvp.Key, kvp.Value));
                 }
 
                 file.Element("transcoders").Elements("transcoder").Remove();
@@ -152,12 +178,18 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                     node.Add(new XElement("name", profile.Name));
                     node.Add(new XElement("description", profile.Description));
                     node.Add(new XElement("bandwidth", profile.Bandwidth));
-                    node.Add(new XElement("target", profile.Target));
                     node.Add(new XElement("transport", profile.Transport));
                     node.Add(new XElement("maxOutputWidth", profile.MaxOutputWidth));
                     node.Add(new XElement("maxOutputHeight", profile.MaxOutputHeight));
                     node.Add(new XElement("mime", profile.MIME));
                     node.Add(new XElement("videoStream", profile.HasVideoStream ? "true" : "false"));
+
+                    XElement targets = new XElement("targets");
+                    foreach (var target in profile.Targets)
+                    {
+                        targets.Add(new XElement("target", target));
+                    }
+                    node.Add(targets);
                     
                     XElement transcoderConfig = new XElement("transcoderConfiguration", new XAttribute("implementation", profile.TranscoderImplementationClass));
                     foreach(KeyValuePair<string, string> item in profile.CodecParameters) 

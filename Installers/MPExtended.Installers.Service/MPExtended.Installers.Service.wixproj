@@ -33,7 +33,6 @@
     <Compile Include="Product.wxs" />
     <Compile Include="UI_Control.wxs" />
     <Compile Include="UI_ExitDialog.wxs" />
-    <Compile Include="UI_SetupType.wxs" />
     <Compile Include="StreamBinaries.wxs" />
     <Compile Include="Features.wxs" />
     <Compile Include="UI_Configurator.wxs" />

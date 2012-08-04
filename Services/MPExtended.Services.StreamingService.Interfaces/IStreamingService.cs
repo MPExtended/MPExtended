@@ -22,15 +22,15 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, int startPosition, int? idleTimeout);
+        Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, long startPosition, int? idleTimeout);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImage(WebMediaType type, int? provider, string itemId, int position);
+        Stream ExtractImage(WebMediaType type, int? provider, string itemId, long position);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream ExtractImageResized(WebMediaType type, int? provider, string itemId, int position, int maxWidth, int maxHeight);
+        Stream ExtractImageResized(WebMediaType type, int? provider, string itemId, long position, int maxWidth, int maxHeight);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

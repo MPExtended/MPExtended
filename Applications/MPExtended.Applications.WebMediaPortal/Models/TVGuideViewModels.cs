@@ -70,8 +70,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public DateTime GuideStart { get; private set; }
         public DateTime GuideEnd { get; private set; }
         public bool HasDateSplit { get; private set; }
-        public int FirstDayHours { get; private set; }
-        public int SecondDayHours { get; private set; }
+        public double FirstDayHours { get; private set; }
+        public double SecondDayHours { get; private set; }
 
         public int GroupId { get; private set; }
         public string GroupName { get; private set; }
@@ -121,16 +121,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             GuideStart = guideStart;
             GuideEnd = guideEnd;
-            HasDateSplit = GuideStart.Date != GuideEnd.Date;
+            HasDateSplit = GuideStart.Date != GuideEnd.Date && !(GuideEnd.Hour == 0 && GuideEnd.Minute == 0);
             if (!HasDateSplit)
             {
-                FirstDayHours = (GuideEnd - GuideStart).Hours;
+                FirstDayHours = (GuideEnd - GuideStart).Hours + ((double)(GuideEnd - GuideStart).Minutes / 60);
                 SecondDayHours = 0;
             }
             else
             {
-                FirstDayHours = 24 - GuideStart.Hour;
-                SecondDayHours = GuideEnd.Hour;
+                FirstDayHours = (24 - GuideStart.Hour) - ((double)GuideStart.Minute / 60);
+                SecondDayHours = GuideEnd.Hour + ((double)GuideEnd.Minute / 60);
             }
 
 

@@ -38,17 +38,7 @@ namespace MPExtended.Libraries.Service.Hosting
 
             // HTTP binding: pick the first non-local address to make sure there is also an valid IP in the SOAP messages.
             // We're restricted to just one IP by the WCF hosting, can't do anything about that. Shipping IIS is a bit too much. 
-            IEnumerable<string> nonLocalAddresses = NetworkInformation.GetIPAddresses().Where(x => x != "127.0.0.1" && x != "localhost");
-            string addr;
-            if (nonLocalAddresses.Count() > 0)
-            {
-                addr = nonLocalAddresses.First();
-            }
-            else
-            {
-                addr = "127.0.0.1";
-            }
-            ret.Add(new Uri(String.Format("http://{0}:{1}/MPExtended/{2}/", addr, Configuration.Services.Port, serviceName)));
+            ret.Add(new Uri(String.Format("http://{0}:{1}/MPExtended/{2}/", NetworkInformation.GetIPAddress(), Configuration.Services.Port, serviceName)));
 
             // local net.pipe binding
             ret.Add(new Uri(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", serviceName)));

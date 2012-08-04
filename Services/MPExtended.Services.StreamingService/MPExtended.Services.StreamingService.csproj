@@ -40,8 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MPExtended.Libraries.VLCManaged">
-      <HintPath>..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCManaged.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCManaged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -76,6 +75,8 @@
     <Compile Include="Code\MediaInfoHelper.cs" />
     <Compile Include="MediaInfo\IMediaInfoCache.cs" />
     <Compile Include="MediaInfo\XmlCache.cs" />
+    <Compile Include="Code\HTTPLiveStreamer.cs" />
+    <Compile Include="Transcoders\Generic.cs" />
     <Compile Include="Transcoders\IRetrieveHookTranscoder.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="MediaInfo\MediaInfoWrapper.cs" />
@@ -83,23 +84,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transcoders\Direct.cs" />
     <Compile Include="Transcoders\FFMpeg.cs" />
-    <Compile Include="Transcoders\FFMpegHTTPLive.cs" />
-    <Compile Include="Transcoders\HTTPLiveTranscoderWrapper.cs" />
     <Compile Include="Transcoders\ICustomActionTranscoder.cs" />
     <Compile Include="Transcoders\ITranscoder.cs" />
     <Compile Include="Transcoders\VLC.cs" />
     <Compile Include="Transcoders\VLCBaseTranscoder.cs" />
+    <Compile Include="Transcoders\VLCHTTPLiveStreamer.cs" />
     <Compile Include="Transcoders\VLCManaged.cs" />
     <Compile Include="Transcoders\VLCWrapper.cs" />
-    <Compile Include="Transcoders\VLCWrapperHTTPLive.cs" />
-    <Compile Include="Transcoders\VLCWrapperPseudoStreaming.cs" />
-    <Compile Include="Transcoders\VLCWrapperRTSP.cs" />
+    <Compile Include="Transcoders\VLCWrapperHTTPLiveStreaming.cs" />
     <Compile Include="Units\FLVMetadataInjector.cs" />
+    <Compile Include="Units\HTTPLiveStreamUnit.cs" />
     <Compile Include="Units\ImpersonationInputUnit.cs" />
     <Compile Include="Units\InjectStreamUnit.cs" />
     <Compile Include="Units\EncoderUnit.cs" />
     <Compile Include="Units\FFMpegLogParsingUnit.cs" />
-    <Compile Include="Units\HTTPLiveStreamingUnit.cs" />
     <Compile Include="Units\IBlockingProcessingUnit.cs" />
     <Compile Include="Units\ILogProcessingUnit.cs" />
     <Compile Include="Units\InputUnit.cs" />
@@ -107,7 +105,6 @@
     <Compile Include="Units\VLCManagedEncoder.cs" />
     <Compile Include="Units\VLCWrapperParsingUnit.cs" />
     <Compile Include="Code\NamedPipe.cs" />
-    <Compile Include="Code\Reference.cs" />
     <Compile Include="Code\Resolution.cs" />
     <Compile Include="Code\StreamCopy.cs" />
     <Compile Include="Code\TsBuffer.cs" />

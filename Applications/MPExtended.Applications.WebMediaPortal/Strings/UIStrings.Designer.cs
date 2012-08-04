@@ -430,6 +430,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Listening to {0}.
+        /// </summary>
+        public static string ListeningTrack {
+            get {
+                return ResourceManager.GetString("ListeningTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Live TV.
         /// </summary>
         public static string LiveTV {
@@ -903,6 +912,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are listening to &lt;strong&gt;{0}&lt;/strong&gt; by &lt;strong&gt;{1}&lt;/strong&gt;..
+        /// </summary>
+        public static string YouAreListening {
+            get {
+                return ResourceManager.GetString("YouAreListening", resourceCulture);
             }
         }
         

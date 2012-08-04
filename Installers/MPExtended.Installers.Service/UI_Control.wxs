@@ -24,6 +24,8 @@
       <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
       <Property Id="WixUI_Mode" Value="FeatureTree" />
 
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
       <DialogRef Id="ErrorDlg" />
       <DialogRef Id="FatalError" />
       <DialogRef Id="FilesInUse" />
@@ -33,39 +35,45 @@
       <DialogRef Id="ResumeDlg" />
       <DialogRef Id="UserExit" />
 
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomSetupTypeDlg">NOT Installed AND NOT PATCH</Publish>
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+      <!-- See http://legalizeadulthood.wordpress.com/2009/10/22/branching-wizard-sequences-with-wix/ -->
+      <Publish Dialog="WelcomeDlg" Control="Next" Property="WelcomeDlg_NextDlg" Order="1">1</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Property="WelcomeDlg_NextDlg" Value="VerifyReadyDlg" Order="2">Installed AND PATCH</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Property="WelcomeDlg_NextDlg" Value="InstallDirDlg" Order="3">NOT Installed AND NOT PATCH</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Property="WelcomeDlg_NextDlg" Value="VerifyReadyDlg" Order="4">WIX_UPGRADE_DETECTED</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="[WelcomeDlg_NextDlg]" Order="5">WelcomeDlg_NextDlg</Publish>
+
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="1">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="2"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConfiguratorDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
 
       <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
 
-      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
-
-      <Publish Dialog="CustomSetupTypeDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="ClientButton" Event="NewDialog" Value="ConfiguratorDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="TVButton" Event="NewDialog" Value="ConfiguratorDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="SingleseatButton" Event="NewDialog" Value="ConfiguratorDlg">1</Publish>
-      <Publish Dialog="CustomSetupTypeDlg" Control="CustomButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
-
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">WixUI_InstallMode = "Change"</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="CustomSetupTypeDlg" Order="2">WixUI_InstallMode = "InstallCustom"</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="ConfiguratorDlg"><![CDATA[&Feature_Configurator=3]]></Publish>
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg"><![CDATA[&Feature_Configurator<>3]]></Publish>
-
-      <Publish Dialog="ConfiguratorDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">InstallType = "Custom"</Publish>
-      <Publish Dialog="ConfiguratorDlg" Control="Back" Event="NewDialog" Value="CustomSetupTypeDlg" Order="2">InstallType = "TV" OR InstallType = "Singleseat" OR InstallType = "Client"</Publish>
+      
+      <Publish Dialog="ConfiguratorDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
+      <Publish Dialog="ConfiguratorDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg" Order="2">NOT Installed</Publish>
       <Publish Dialog="ConfiguratorDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="3">1</Publish>
 
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConfiguratorDlg" Order="1"><![CDATA[DoInstall AND &Feature_Configurator=3]]></Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="2"><![CDATA[DoInstall AND &Feature_Configurator<>3]]></Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="4">WixUI_InstallMode = "Change"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="5">WixUI_InstallMode = "Repair" OR WixUI_InstallMode = "Remove"</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="3">WixUI_InstallMode = "Update"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Property="VerifyReadyDlg_Back" Order="1">1</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Property="VerifyReadyDlg_Back" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Property="VerifyReadyDlg_Back" Value="MaintenanceTypeDlg" Order="3">Installed AND NOT PATCH</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Property="VerifyReadyDlg_Back" Value="ConfiguratorDlg" Order="4">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Property="VerifyReadyDlg_Back" Value="WelcomeDlg" Order="5">WIX_UPGRADE_DETECTED</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="[VerifyReadyDlg_Back]" Order="6">VerifyReadyDlg_Back</Publish>
       
       <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="LaunchConfigurator" Order="1"><![CDATA[WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed AND &Feature_Configurator=3]]></Publish>
       <Publish Dialog="CustomExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="2">1</Publish>
+
+      <Property Id="ARPNOMODIFY" Value="1" />
     </UI>
 	</Fragment>
 </Wix>
