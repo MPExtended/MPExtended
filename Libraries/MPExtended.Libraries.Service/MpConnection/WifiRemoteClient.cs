@@ -6,6 +6,9 @@ using MPExtended.Libraries.Service.ConfigurationContracts;
 using Deusty.Net;
 using MPExtended.Libraries.Service.MpConnection.Messages;
 using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Windows.Forms;
 
 namespace MPExtended.Libraries.Service.MpConnection
 {
@@ -82,8 +85,9 @@ namespace MPExtended.Libraries.Service.MpConnection
             socket.DidClose += new AsyncSocket.SocketDidClose(socket_DidClose);
             socket.DidRead += new AsyncSocket.SocketDidRead(socket_DidRead);
             socket.DidWrite += new AsyncSocket.SocketDidWrite(socket_DidWrite);
-
-            if (!socket.Connect(Address,(ushort) Port))
+            socket.SynchronizingObject = new Form();
+            socket.AllowMultithreadedCallbacks = true;
+            if (!socket.Connect(Address, 8017))
             {
                 Log.Warn("WifiRemote: Could not connect to server, AsyncSocket connect failed");
                 ConnectionFailed = true;
@@ -115,11 +119,13 @@ namespace MPExtended.Libraries.Service.MpConnection
             try
             {
                 msg = Encoding.UTF8.GetString(data);
-                BaseMessage test = System.Web.Helpers.Json.Decode(msg, typeof(BaseMessage));
-                if (test != null)
+                // Get json object
+                JObject message = JObject.Parse(msg);
+                string type = (string)message["Type"];
+                if (type != null)
                 {
                     // {"Type":"welcome","Server_Version":4,"AuthMethod":0}
-                    switch (test.Type)
+                    switch (type)
                     {
                         case "welcome":
                             HandleWelcomeMessage(msg);
@@ -202,7 +208,7 @@ namespace MPExtended.Libraries.Service.MpConnection
                 message.AutologinKey = autologinKey;
             }
 
-            String msgString = System.Web.Helpers.Json.Encode(message);
+            String msgString = JsonConvert.SerializeObject(message);
             SendCommand(msgString, client);
         }
 
@@ -231,8 +237,7 @@ namespace MPExtended.Libraries.Service.MpConnection
 
         private void HandleDialogResult(string msg)
         {
-            MessageDialogResult dialogResult = System.Web.Helpers.Json.Decode(msg, typeof(MessageDialogResult));
-
+            MessageDialogResult dialogResult = (MessageDialogResult)JsonConvert.DeserializeObject(msg, typeof(MessageDialogResult));
             if (dialogResult.DialogId == currentDialogId)
             {
                 LatestDialogResult = dialogResult;
@@ -241,7 +246,7 @@ namespace MPExtended.Libraries.Service.MpConnection
 
         private void HandleWelcomeMessage(string msg)
         {
-            MessageWelcome welcomeMsg = System.Web.Helpers.Json.Decode(msg, typeof(MessageWelcome));
+            MessageWelcome welcomeMsg = (MessageWelcome)JsonConvert.DeserializeObject(msg, typeof(MessageWelcome));
 
             // We have some autologin going, ignore welcome message
             if (autologinKey != null) return;
@@ -270,8 +275,8 @@ namespace MPExtended.Libraries.Service.MpConnection
 
         private void handleAuthenticationResponse(string msg)
         {
-            MessageAuthenticationResponse authResponse = System.Web.Helpers.Json.Decode(msg, typeof(MessageWelcome));
-
+            MessageAuthenticationResponse authResponse = (MessageAuthenticationResponse)JsonConvert.DeserializeObject(msg, typeof(MessageAuthenticationResponse));
+   
             LoggedIn = authResponse.Success;
             autologinKey = authResponse.AutologinKey;
 
@@ -289,6 +294,8 @@ namespace MPExtended.Libraries.Service.MpConnection
             msg.DialogType = "yesno";
             msg.Title = title;
             msg.Text = text;
+
+            SendCommand(msg, socket);
         }
 
         public void SendRequestAccessDialog(string clientName, string ip)
