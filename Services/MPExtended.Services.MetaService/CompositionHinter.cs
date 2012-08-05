@@ -85,9 +85,18 @@ namespace MPExtended.Services.MetaService
             }
             string hostname = tvSection["hostname"];
 
-            // Return as IP addresses
-            var address = Dns.GetHostAddresses(hostname).First();
-            return new IPEndPoint(address, Configuration.DEFAULT_PORT);
+            try
+            {
+                // Return as IP addresses
+                var address = Dns.GetHostAddresses(hostname).First();
+                return new IPEndPoint(address, Configuration.DEFAULT_PORT);
+            }
+            catch (SocketException ex)
+            {
+                Log.Warn("No connection to tv server at " + hostname);
+                Log.Debug("Couldn't connect to tv server", ex);
+                return null;
+            }
         }
 
         private void RemovedService(object sender, ServiceEventArgs e)
