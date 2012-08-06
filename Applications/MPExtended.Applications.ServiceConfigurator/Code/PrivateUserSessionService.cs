@@ -24,6 +24,7 @@ using System.Windows;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 using MPExtended.Applications.ServiceConfigurator.Pages;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -37,7 +38,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             return true;
         }
 
-        public WebStringResult RequestAccess(string clientName, string ipAddress, List<string> users)
+        public WebBoolResult RequestAccess(string clientName, string ipAddress, List<string> users)
         {
             string msg = String.Format(Strings.UI.AccessRequest, clientName, ipAddress);
             //MessageBoxResult result = MessageBox.Show(msg, "MPExtended",  MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
@@ -45,9 +46,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             diag = new SelectUserDialog("MpExtended", msg, users);
             diag.Width = 360;
             diag.Height = 220;
-            bool? result = diag.ShowDialog();
+            diag.Show();
 
-            return (result != null && result == true ? diag.SelectedUser : null);
+            return true;
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatus()
+        {
+            WebAccessRequestResponse response = new WebAccessRequestResponse();
+            if (diag != null)
+            {
+                response.UserHasResponded = diag.UserHasResponded;
+                response.Username = diag.SelectedUser;
+                response.IsAllowed = diag.SelectedUser != null;
+            }
+
+            return response;
         }
 
         public WebBoolResult CancelAccessRequest()
@@ -55,8 +69,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             if (diag != null)
             {
                 diag.Close();
+                diag = null;
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }

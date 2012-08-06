@@ -20,10 +20,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     public partial class SelectUserDialog : Window
     {
         public String SelectedUser { get; set; }
+        public bool UserHasResponded { get; set; }
 
         public SelectUserDialog()
         {
             InitializeComponent();
+            this.UserHasResponded = false;
         }
 
         public SelectUserDialog(string title, string text, List<string> users): this()
@@ -44,14 +46,22 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void buttonGrantAccess_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
+            this.UserHasResponded = true;
             Close();
         }
 
         private void buttonDenyAccess_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
+            this.SelectedUser = null;
+            this.UserHasResponded = true;
             Close();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            this.UserHasResponded = true;
+        }
+
+       
     }
 }

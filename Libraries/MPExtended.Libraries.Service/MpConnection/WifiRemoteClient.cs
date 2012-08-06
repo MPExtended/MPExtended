@@ -314,6 +314,7 @@ namespace MPExtended.Libraries.Service.MpConnection
             msg.DialogType = "select";
             msg.Title = title;
             msg.Text = text;
+            msg.Options = listOptions;
 
             SendCommand(msg, socket);
         }

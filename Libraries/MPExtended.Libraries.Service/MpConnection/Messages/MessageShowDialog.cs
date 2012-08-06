@@ -16,6 +16,6 @@ namespace MPExtended.Libraries.Service.MpConnection.Messages
         public String DialogId { get; set; }
         public String Title { get; set; }
         public String Text { get; set; }
-
+        public List<string> Options { get; set; }
     }
 }

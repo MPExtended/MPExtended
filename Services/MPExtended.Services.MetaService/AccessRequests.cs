@@ -36,6 +36,7 @@ namespace MPExtended.Services.MetaService
         private Dictionary<string, WebAccessRequestResponse> requests = new Dictionary<string, WebAccessRequestResponse>();
         private Dictionary<string, Task<bool>> askUserTasks = new Dictionary<string, Task<bool>>();
         private Dictionary<string, CancellationTokenSource> cancelTokens = new Dictionary<string, CancellationTokenSource>();
+
         public WebAccessRequestResponse CreateAccessRequest(string clientName)
         {
             // generate the request
@@ -62,12 +63,12 @@ namespace MPExtended.Services.MetaService
                 if (Mediaportal.IsMediaPortalRunning() && WifiRemote.IsInstalled)
                 {
                     //go through WifiRemote when MP is open and WifiRemote is installed
-                    result = RequestAccessThroughWifiRemote(clientName, ip);
+                    result = RequestAccessThroughWifiRemote(clientName, ip, cancelToken);
                 }
                 else
                 {
                     //if we can't use WifiRemote, try to get the users response via USS (the configuration tool)
-                    result = RequestAccessThroughPrivateUSS(clientName, ip);
+                    result = RequestAccessThroughPrivateUSS(clientName, ip, cancelToken);
                 }
                 Log.Debug("Got user response to access request with token {0}: {1}", token, result);
 
@@ -99,44 +100,40 @@ namespace MPExtended.Services.MetaService
             return request;
         }
 
-        private String RequestAccessThroughWifiRemote(string clientName, string ip)
+        private String RequestAccessThroughWifiRemote(string clientName, string ip, CancellationTokenSource cancelToken)
         {
 
             User auth = WifiRemote.GetAuthentication();
             WifiRemoteClient client = new WifiRemoteClient(auth, "localhost", WifiRemote.Port);
             string result = null;
-            try
+
+            client.Connect();
+            bool loggedIn = false;
+
+            while (!client.ConnectionFailed && !cancelToken.IsCancellationRequested)
             {
-                client.Connect();
-                bool loggedIn = false;
-
-                while (!client.ConnectionFailed)
+                if (!loggedIn && client.LoggedIn)
                 {
-                    if (!loggedIn && client.LoggedIn)
-                    {
-                        client.SendRequestAccessDialog(clientName, ip, User.GetStringArray(Configuration.Services.Users));
-                        loggedIn = true;
-                    }
-
-                    if (client.LatestDialogResult != null)
-                    {
-                        //User accepted or denied the request
-                        result = client.LatestDialogResult.SelectedOption;
-                        break;
-                    }
-                    Thread.Sleep(200);
+                    client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                    loggedIn = true;
                 }
 
-                client.Disconnect();
-            }
-            catch (AggregateException)
-            {
-                if (client != null)
+                if (client.LatestDialogResult != null)
                 {
-                    client.CancelRequestAccessDialog();
-                    client.Disconnect();
+                    //User accepted or denied the request
+                    result = client.LatestDialogResult.SelectedOption;
+                    break;
                 }
+                Thread.Sleep(500);
             }
+
+            if (cancelToken.IsCancellationRequested)
+            {
+                client.CancelRequestAccessDialog();
+            }
+
+            client.Disconnect();
+
             return result;
         }
 
@@ -151,7 +148,7 @@ namespace MPExtended.Services.MetaService
             return requests[token];
         }
 
-        private String RequestAccessThroughPrivateUSS(string client, string ip)
+        private String RequestAccessThroughPrivateUSS(string client, string ip, CancellationTokenSource cancelToken)
         {
             IPrivateUserSessionService channel = null;
             try
@@ -171,11 +168,30 @@ namespace MPExtended.Services.MetaService
                 );
 
                 // request access
-                String result = channel.RequestAccess(client, ip, User.GetStringArray(Configuration.Services.Users));
+                bool result = channel.RequestAccess(client, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                String selectedUser = null;
 
+                if (result)
+                {
+                    while (!cancelToken.IsCancellationRequested)
+                    {
+                        WebAccessRequestResponse response = channel.GetAccessRequestStatus();
+                        if (response.UserHasResponded)
+                        {
+                            selectedUser = response.IsAllowed ? response.Username : null;
+                            break;
+                        }
+                        Thread.Sleep(500);
+                    }
+                }
+
+                if (cancelToken.IsCancellationRequested)
+                {
+                    channel.CancelAccessRequest();
+                }
                 // close channel
                 (channel as ICommunicationObject).Close();
-                return result;
+                return selectedUser;
             }
             catch (Exception ex)
             {
@@ -186,11 +202,12 @@ namespace MPExtended.Services.MetaService
 
         public bool CancelAccessRequest(string token)
         {
-            //TODO: find a way to cancel the requests
-            //requests.Remove(token);
-            //askUserTasks.Remove(token);
-            //cancelTokens.Remove(token);
+            if (cancelTokens.ContainsKey(token))
+            {
+                cancelTokens[token].Cancel();
 
+                return true;
+            }
             return false;
         }
     }

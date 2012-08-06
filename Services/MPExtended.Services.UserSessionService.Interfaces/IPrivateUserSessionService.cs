@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using MPExtended.Services.Common.Interfaces;
+using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {
@@ -14,8 +15,10 @@ namespace MPExtended.Services.UserSessionService.Interfaces
         WebBoolResult OpenConfigurator();
 
         [OperationContract]
-        WebStringResult RequestAccess(string clientName, string ipAddress, List<String> user);
+        WebBoolResult RequestAccess(string clientName, string ipAddress, List<String> user);
 
+        [OperationContract]
+        WebAccessRequestResponse GetAccessRequestStatus();
 
         [OperationContract]
         WebBoolResult CancelAccessRequest();
