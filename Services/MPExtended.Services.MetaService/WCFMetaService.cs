@@ -77,5 +77,10 @@ namespace MPExtended.Services.MetaService
         {
             return MetaService.Instance.GetLastClientActivity();
         }
+
+        public WebBoolResult CancelAccessRequest(string token)
+        {
+            return MetaService.Instance.CancelAccessRequest(token);
+        }
     }
 }

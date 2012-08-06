@@ -85,6 +85,9 @@
       <Link>Code\WindowsServiceHandler.cs</Link>
     </Compile>
     <Compile Include="Code\Zeroconf.cs" />
+    <Compile Include="Pages\SelectUserDialog.xaml.cs">
+      <DependentUpon>SelectUserDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TabActivity.xaml.cs">
       <DependentUpon>TabActivity.xaml</DependentUpon>
     </Compile>
@@ -121,6 +124,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\SelectUserDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TabActivity.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

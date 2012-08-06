@@ -138,6 +138,11 @@ namespace MPExtended.Services.MetaService
         {
             return accessRequests.GetAccessRequestStatusBlocking(token, timeout);
         }
+
+        public WebBoolResult CancelAccessRequest(string token)
+        {
+            return accessRequests.CancelAccessRequest(token);
+        }
         #endregion
 
         #region IProtectedMetaService implementation

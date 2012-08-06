@@ -35,7 +35,7 @@ namespace MPExtended.Services.MetaService
     {
         private Dictionary<string, WebAccessRequestResponse> requests = new Dictionary<string, WebAccessRequestResponse>();
         private Dictionary<string, Task<bool>> askUserTasks = new Dictionary<string, Task<bool>>();
-
+        private Dictionary<string, CancellationTokenSource> cancelTokens = new Dictionary<string, CancellationTokenSource>();
         public WebAccessRequestResponse CreateAccessRequest(string clientName)
         {
             // generate the request
@@ -51,10 +51,13 @@ namespace MPExtended.Services.MetaService
             requests[token] = request;
             Log.Info("Received access request from {0} (claims to be client {1}), gave it token {2}", ip, clientName, token);
 
+            CancellationTokenSource cancelToken = new CancellationTokenSource();
+            cancelTokens[token] = cancelToken;
+
             // ask the user
             askUserTasks[token] = Task.Factory.StartNew(delegate()
             {
-                bool result = false;
+                String result = null;
                 // TODO: maybe 
                 if (Mediaportal.IsMediaPortalRunning() && WifiRemote.IsInstalled)
                 {
@@ -71,60 +74,70 @@ namespace MPExtended.Services.MetaService
                 // set the necessary flags
                 lock (requests[token])
                 {
-                    requests[token].IsAllowed = result;
+                    requests[token].IsAllowed = result != null;
                     requests[token].UserHasResponded = true;
-                    if (result)
+                    if (result != null)
                     {
-                        string baseUsername = "autoconfiguration-" + clientName;
-                        string username = baseUsername;
-                        int i = 0;
-                        while (Configuration.Services.Users.Any(x => x.Username == username))
-                        {
-                            username = baseUsername + "-" + i++;
-                        }
+                        User user = Configuration.Services.Users.Where(x => x.Username.Equals(result)).First();
 
-                        string password = RandomGenerator.GetRandomString(20);
-                        Configuration.Services.Users.Add(new User(username, password));
-                        Configuration.Services.Save();
-                        requests[token].Username = username;
-                        requests[token].Password = password;
-                        Log.Info("Created account {0} in response to access request {1}", username, token);
+                        if (user != null)
+                        {
+                            Log.Info("Sending account {0} in response to access request {1}", user.Username, token);
+                            requests[token].Username = user.Username;
+                            requests[token].Password = user.GetPassword();
+                        }
+                        else
+                        {
+                            Log.Warn("No user available for username {0}", result);
+                        }
                     }
                 }
                 return true;
-            });
+            }, cancelToken.Token);
 
             // return the token to the client
             return request;
         }
 
-        private bool RequestAccessThroughWifiRemote(string clientName, string ip)
+        private String RequestAccessThroughWifiRemote(string clientName, string ip)
         {
+
             User auth = WifiRemote.GetAuthentication();
             WifiRemoteClient client = new WifiRemoteClient(auth, "localhost", WifiRemote.Port);
-
-            client.Connect();
-            bool loggedIn = false;
-            bool result = false;
-            while (!client.ConnectionFailed)
+            string result = null;
+            try
             {
-                if (!loggedIn && client.LoggedIn)
+                client.Connect();
+                bool loggedIn = false;
+
+                while (!client.ConnectionFailed)
                 {
-                    client.SendRequestAccessDialog(clientName, ip);
-                    loggedIn = true;
+                    if (!loggedIn && client.LoggedIn)
+                    {
+                        client.SendRequestAccessDialog(clientName, ip, User.GetStringArray(Configuration.Services.Users));
+                        loggedIn = true;
+                    }
+
+                    if (client.LatestDialogResult != null)
+                    {
+                        //User accepted or denied the request
+                        result = client.LatestDialogResult.SelectedOption;
+                        break;
+                    }
+                    Thread.Sleep(200);
                 }
 
-                if (client.LatestDialogResult != null)
-                {
-                    //User accepted or denied the request
-                    result = client.LatestDialogResult.YesNoResult;
-                    break;
-                }
-                Thread.Sleep(200);
+                client.Disconnect();
             }
-
-            client.Disconnect();
-            return true;
+            catch (AggregateException)
+            {
+                if (client != null)
+                {
+                    client.CancelRequestAccessDialog();
+                    client.Disconnect();
+                }
+            }
+            return result;
         }
 
         public WebAccessRequestResponse GetAccessRequestStatus(string token)
@@ -138,8 +151,9 @@ namespace MPExtended.Services.MetaService
             return requests[token];
         }
 
-        private bool RequestAccessThroughPrivateUSS(string client, string ip)
+        private String RequestAccessThroughPrivateUSS(string client, string ip)
         {
+            IPrivateUserSessionService channel = null;
             try
             {
                 // create channel
@@ -151,13 +165,13 @@ namespace MPExtended.Services.MetaService
                 };
                 binding.ReliableSession.Enabled = true;
                 binding.ReliableSession.Ordered = true;
-                IPrivateUserSessionService channel = ChannelFactory<IPrivateUserSessionService>.CreateChannel(
+                channel = ChannelFactory<IPrivateUserSessionService>.CreateChannel(
                     binding,
                     new EndpointAddress("net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate")
                 );
 
                 // request access
-                bool result = channel.RequestAccess(client, ip);
+                String result = channel.RequestAccess(client, ip, User.GetStringArray(Configuration.Services.Users));
 
                 // close channel
                 (channel as ICommunicationObject).Close();
@@ -166,8 +180,18 @@ namespace MPExtended.Services.MetaService
             catch (Exception ex)
             {
                 Log.Error(String.Format("Failed to request access for client {0} at {1} through USS", client, ip), ex);
-                return false;
+                return null;
             }
+        }
+
+        public bool CancelAccessRequest(string token)
+        {
+            //TODO: find a way to cancel the requests
+            //requests.Remove(token);
+            //askUserTasks.Remove(token);
+            //cancelTokens.Remove(token);
+
+            return false;
         }
     }
 }

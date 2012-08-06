@@ -55,6 +55,21 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
         {
             EncryptedPassword = Encryption.Encrypt(PASSWORD_KEY, password);
         }
+
+        public static List<String> GetStringArray(List<User> users)
+        {
+            List<string> returnList = new List<string>();
+
+            if (users != null)
+            {
+                foreach (User u in users)
+                {
+                    returnList.Add(u.Username);
+                }
+            }
+
+            return returnList;
+        }
     }
 
     public class NetworkImpersonation

@@ -8,6 +8,11 @@ namespace MPExtended.Libraries.Service.MpConnection.Messages
     public class MessageDialogResult: BaseMessage
     {
         /// <summary>
+        /// Result of Select-Dialog
+        /// </summary>
+        public String SelectedOption {get; set;}
+
+        /// <summary>
         /// Result of Yes/No dialog
         /// </summary>
         public bool YesNoResult { get; set; }

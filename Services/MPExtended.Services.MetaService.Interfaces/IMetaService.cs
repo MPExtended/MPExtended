@@ -46,5 +46,9 @@ namespace MPExtended.Services.MetaService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult CancelAccessRequest(string token);
     }
 }

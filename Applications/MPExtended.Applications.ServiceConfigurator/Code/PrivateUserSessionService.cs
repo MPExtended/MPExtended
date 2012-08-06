@@ -23,23 +23,40 @@ using System.Text;
 using System.Windows;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
+using MPExtended.Applications.ServiceConfigurator.Pages;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     internal class PrivateUserSessionService : IPrivateUserSessionService
     {
+        SelectUserDialog diag = null;
         public WebBoolResult OpenConfigurator()
         {
             Application.Current.MainWindow.Show();
             return true;
         }
 
-        public WebBoolResult RequestAccess(string clientName, string ipAddress)
+        public WebStringResult RequestAccess(string clientName, string ipAddress, List<string> users)
         {
             string msg = String.Format(Strings.UI.AccessRequest, clientName, ipAddress);
-            MessageBoxResult result = MessageBox.Show(msg, "MPExtended",  MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-            return result == MessageBoxResult.Yes;
+            //MessageBoxResult result = MessageBox.Show(msg, "MPExtended",  MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            diag = new SelectUserDialog("MpExtended", msg, users);
+            diag.Width = 360;
+            diag.Height = 220;
+            bool? result = diag.ShowDialog();
+
+            return (result != null && result == true ? diag.SelectedUser : null);
+        }
+
+        public WebBoolResult CancelAccessRequest()
+        {
+            if (diag != null)
+            {
+                diag.Close();
+            }
+            return true;
         }
     }
 }

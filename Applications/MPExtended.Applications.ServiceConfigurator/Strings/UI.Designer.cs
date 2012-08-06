@@ -70,6 +70,33 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deny.
+        /// </summary>
+        public static string AccessRequestDenyAccess {
+            get {
+                return ResourceManager.GetString("AccessRequestDenyAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grant Access.
+        /// </summary>
+        public static string AccessRequestGrantAccess {
+            get {
+                return ResourceManager.GetString("AccessRequestGrantAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select User.
+        /// </summary>
+        public static string AccessRequestSelectUser {
+            get {
+                return ResourceManager.GetString("AccessRequestSelectUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action needs administrative rights..
         /// </summary>
         public static string ActionNeedsAdmin {

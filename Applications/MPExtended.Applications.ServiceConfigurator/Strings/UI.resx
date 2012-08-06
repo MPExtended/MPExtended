@@ -485,4 +485,13 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="AccessRequest" xml:space="preserve">
     <value>Do you want to give the application '{0}' (with IP address {1}) full access to the services?</value>
   </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Deny</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Grant Access</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Select User</value>
+  </data>
 </root>

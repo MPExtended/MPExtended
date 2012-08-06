@@ -298,14 +298,33 @@ namespace MPExtended.Libraries.Service.MpConnection
             SendCommand(msg, socket);
         }
 
-        public void SendRequestAccessDialog(string clientName, string ip)
+        public void SendRequestAccessDialog(string clientName, string ip, List<String> users)
         {
             //TODO: use translated strings for the dialog
-            //Strings
             //string msg = String.Format(UI.AccessRequest, clientName, ip);
-            SendShowYesNoDialogRequest("GimmeGimme", "All ya base belong to us");
+
+            SendShowSelectDialogRequest("GimmeGimme", "All ya base belong to us", users);
+        }
+
+        private void SendShowSelectDialogRequest(string title, string text, List<string> listOptions)
+        {
+            MessageShowDialog msg = new MessageShowDialog();
+            msg.DialogId = new Random(10000).Next().ToString();
+            currentDialogId = msg.DialogId;
+            msg.DialogType = "select";
+            msg.Title = title;
+            msg.Text = text;
+
+            SendCommand(msg, socket);
+        }
+
+        public void CancelRequestAccessDialog()
+        {
+            //TODO: Cancel dialog in MediaPortal
         }
 
         #endregion
+
+
     }
 }
