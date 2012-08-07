@@ -91,10 +91,9 @@ namespace MPExtended.Services.MetaService
                 var address = Dns.GetHostAddresses(hostname).First();
                 return new IPEndPoint(address, Configuration.DEFAULT_PORT);
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
-                Log.Warn("No connection to tv server at " + hostname);
-                Log.Debug("Couldn't connect to tv server", ex);
+                Log.Info("Failed to resolve hostname {0} configured as default TV Server", hostname);
                 return null;
             }
         }

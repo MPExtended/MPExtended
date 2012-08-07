@@ -8,7 +8,6 @@ using MPExtended.Libraries.Service.MpConnection.Messages;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Windows.Forms;
 
 namespace MPExtended.Libraries.Service.MpConnection
 {
@@ -90,7 +89,6 @@ namespace MPExtended.Libraries.Service.MpConnection
             socket.DidClose += new AsyncSocket.SocketDidClose(socket_DidClose);
             socket.DidRead += new AsyncSocket.SocketDidRead(socket_DidRead);
             socket.DidWrite += new AsyncSocket.SocketDidWrite(socket_DidWrite);
-            socket.SynchronizingObject = new Form();
             socket.AllowMultithreadedCallbacks = true;
             if (!socket.Connect(Address, 8017))
             {

@@ -31,45 +31,44 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     internal class PrivateUserSessionService : IPrivateUserSessionService
     {
-        SelectUserDialog diag = null;
+        private Dictionary<string, SelectUserDialog> accessRequestDialogs = new Dictionary<string, SelectUserDialog>();
+
         public WebBoolResult OpenConfigurator()
         {
             Application.Current.MainWindow.Show();
             return true;
         }
 
-        public WebBoolResult RequestAccess(string clientName, string ipAddress, List<string> users)
+        public WebBoolResult RequestAccess(string token, string clientName, string ipAddress, List<string> users)
         {
             string msg = String.Format(Strings.UI.AccessRequest, clientName, ipAddress);
-            //MessageBoxResult result = MessageBox.Show(msg, "MPExtended",  MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-
-            diag = new SelectUserDialog("MpExtended", msg, users);
-            diag.Width = 360;
-            diag.Height = 220;
-            diag.Show();
+            accessRequestDialogs[token] = new SelectUserDialog("MPExtended", msg, users);
+            accessRequestDialogs[token].Width = 360;
+            accessRequestDialogs[token].Height = 220;
+            accessRequestDialogs[token].Show();
 
             return true;
         }
 
-        public WebAccessRequestResponse GetAccessRequestStatus()
+        public WebAccessRequestResponse GetAccessRequestStatus(string token)
         {
             WebAccessRequestResponse response = new WebAccessRequestResponse();
-            if (diag != null)
+            if (accessRequestDialogs[token] != null)
             {
-                response.UserHasResponded = diag.UserHasResponded;
-                response.Username = diag.SelectedUser;
-                response.IsAllowed = diag.SelectedUser != null;
+                response.UserHasResponded = accessRequestDialogs[token].UserHasResponded;
+                response.Username = accessRequestDialogs[token].SelectedUser;
+                response.IsAllowed = accessRequestDialogs[token].SelectedUser != null;
             }
 
             return response;
         }
 
-        public WebBoolResult CancelAccessRequest()
+        public WebBoolResult CancelAccessRequest(string token)
         {
-            if (diag != null)
+            if (accessRequestDialogs.ContainsKey(token))
             {
-                diag.Close();
-                diag = null;
+                accessRequestDialogs[token].Close();
+                accessRequestDialogs.Remove(token);
                 return true;
             }
             return false;

@@ -15,12 +15,12 @@ namespace MPExtended.Services.UserSessionService.Interfaces
         WebBoolResult OpenConfigurator();
 
         [OperationContract]
-        WebBoolResult RequestAccess(string clientName, string ipAddress, List<String> user);
+        WebBoolResult RequestAccess(string token, string clientName, string ipAddress, List<String> user);
 
         [OperationContract]
-        WebAccessRequestResponse GetAccessRequestStatus();
+        WebAccessRequestResponse GetAccessRequestStatus(string token);
 
         [OperationContract]
-        WebBoolResult CancelAccessRequest();
+        WebBoolResult CancelAccessRequest(string token);
     }
 }

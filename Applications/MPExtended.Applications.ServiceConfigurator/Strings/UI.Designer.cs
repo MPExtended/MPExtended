@@ -79,7 +79,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grant Access.
+        ///   Looks up a localized string similar to Grant access.
         /// </summary>
         public static string AccessRequestGrantAccess {
             get {
@@ -88,7 +88,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select User.
+        ///   Looks up a localized string similar to Select user.
         /// </summary>
         public static string AccessRequestSelectUser {
             get {

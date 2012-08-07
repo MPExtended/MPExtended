@@ -59,7 +59,6 @@ namespace MPExtended.Services.MetaService
             askUserTasks[token] = Task.Factory.StartNew(delegate()
             {
                 String result = null;
-                // TODO: maybe 
                 if (Mediaportal.IsMediaPortalRunning() && WifiRemote.IsInstalled)
                 {
                     //go through WifiRemote when MP is open and WifiRemote is installed
@@ -68,7 +67,7 @@ namespace MPExtended.Services.MetaService
                 else
                 {
                     //if we can't use WifiRemote, try to get the users response via USS (the configuration tool)
-                    result = RequestAccessThroughPrivateUSS(clientName, ip, cancelToken);
+                    result = RequestAccessThroughPrivateUSS(token, clientName, ip, cancelToken);
                 }
                 Log.Debug("Got user response to access request with token {0}: {1}", token, result);
 
@@ -94,7 +93,7 @@ namespace MPExtended.Services.MetaService
                     }
                 }
                 return true;
-            }, cancelToken.Token);
+            }, cancelToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
             // return the token to the client
             return request;
@@ -102,7 +101,6 @@ namespace MPExtended.Services.MetaService
 
         private String RequestAccessThroughWifiRemote(string clientName, string ip, CancellationTokenSource cancelToken)
         {
-
             User auth = WifiRemote.GetAuthentication();
             WifiRemoteClient client = new WifiRemoteClient(auth, "localhost", WifiRemote.Port);
             string result = null;
@@ -133,7 +131,6 @@ namespace MPExtended.Services.MetaService
             }
 
             client.Disconnect();
-
             return result;
         }
 
@@ -145,7 +142,7 @@ namespace MPExtended.Services.MetaService
             }
             else
             {
-                Log.Warn("No access request for token " + token);
+                Log.Warn("No access request for token {0}", token);
                 return null;
             }
         }
@@ -159,12 +156,12 @@ namespace MPExtended.Services.MetaService
             }
             else
             {
-                Log.Warn("No access request for token " + token);
+                Log.Warn("No access request for token {0}", token);
                 return null;
             }
         }
 
-        private String RequestAccessThroughPrivateUSS(string client, string ip, CancellationTokenSource cancelToken)
+        private String RequestAccessThroughPrivateUSS(string token, string client, string ip, CancellationTokenSource cancelToken)
         {
             IPrivateUserSessionService channel = null;
             try
@@ -184,14 +181,14 @@ namespace MPExtended.Services.MetaService
                 );
 
                 // request access
-                bool result = channel.RequestAccess(client, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                bool result = channel.RequestAccess(token, client, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
                 String selectedUser = null;
 
                 if (result)
                 {
                     while (!cancelToken.IsCancellationRequested)
                     {
-                        WebAccessRequestResponse response = channel.GetAccessRequestStatus();
+                        WebAccessRequestResponse response = channel.GetAccessRequestStatus(token);
                         if (response.UserHasResponded)
                         {
                             selectedUser = response.IsAllowed ? response.Username : null;
@@ -203,7 +200,7 @@ namespace MPExtended.Services.MetaService
 
                 if (cancelToken.IsCancellationRequested)
                 {
-                    channel.CancelAccessRequest();
+                    channel.CancelAccessRequest(token);
                 }
                 // close channel
                 (channel as ICommunicationObject).Close();
@@ -218,8 +215,7 @@ namespace MPExtended.Services.MetaService
 
         public bool CancelAccessRequest(string token)
         {
-
-            Log.Info("Cancelling access request with token " + token);
+            Log.Info("Cancelling access request with token {0}", token);
             if (cancelTokens.ContainsKey(token))
             {
                 cancelTokens[token].Cancel();
@@ -228,7 +224,7 @@ namespace MPExtended.Services.MetaService
             }
             else
             {
-                Log.Warn("No access request for token " + token);
+                Log.Warn("No access request for token {0}", token);
             }
             return false;
         }
@@ -241,7 +237,7 @@ namespace MPExtended.Services.MetaService
         /// <param name="token"></param>
         public bool FinishAccessRequest(string token)
         {
-            Log.Debug("Removing access request data for token " + token);
+            Log.Debug("Removing access request data for token {0}", token);
 
             if (requests.ContainsKey(token))
             {
@@ -249,7 +245,7 @@ namespace MPExtended.Services.MetaService
             }
             else
             {
-                Log.Warn("No access request for token " + token);
+                Log.Warn("No access request for token {0}", token);
                 return false;
             }
 

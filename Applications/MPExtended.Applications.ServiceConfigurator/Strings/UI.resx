@@ -489,9 +489,9 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
     <value>Deny</value>
   </data>
   <data name="AccessRequestGrantAccess" xml:space="preserve">
-    <value>Grant Access</value>
+    <value>Grant access</value>
   </data>
   <data name="AccessRequestSelectUser" xml:space="preserve">
-    <value>Select User</value>
+    <value>Select user</value>
   </data>
 </root>
