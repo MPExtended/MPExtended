@@ -91,11 +91,6 @@
     <Compile Include="Pages\TabActivity.xaml.cs">
       <DependentUpon>TabActivity.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Strings\UI.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UI.resx</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -269,12 +264,6 @@
     <Resource Include="..\..\Libraries\Artwork\TrayIcon.ico">
       <Link>Artwork\TrayIcon.ico</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Strings\UI.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UI.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\Libraries\Artwork\MpExtl_Icon_256.ico">

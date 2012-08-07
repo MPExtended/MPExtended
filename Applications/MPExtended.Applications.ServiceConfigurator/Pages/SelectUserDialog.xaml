@@ -3,8 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
-      mc:Ignorable="d" Title="SelectUserDialog" Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Width="360" Height="220" Closed="Window_Closed">
+      xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
+      mc:Ignorable="d" Title="SelectUserDialog" Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" 
+      MinWidth="360" MinHeight="220" Width="360" Height="220" 
+      Closed="Window_Closed">
 
     <Grid Height="179">
         <ComboBox Height="27" Margin="112,94,13,0" Name="comboBoxUsers" VerticalAlignment="Top" SelectionChanged="comboBoxUsers_SelectionChanged" FontSize="16" />

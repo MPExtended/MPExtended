@@ -21,10 +21,11 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Windows;
-using MPExtended.Services.Common.Interfaces;
-using MPExtended.Services.UserSessionService.Interfaces;
 using MPExtended.Applications.ServiceConfigurator.Pages;
+using MPExtended.Libraries.Service.Strings;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
+using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -41,11 +42,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
         public WebBoolResult RequestAccess(string token, string clientName, string ipAddress, List<string> users)
         {
-            string msg = String.Format(Strings.UI.AccessRequest, clientName, ipAddress);
+            string msg = String.Format(UI.AccessRequest, clientName, ipAddress);
             accessRequestDialogs[token] = new SelectUserDialog("MPExtended", msg, users);
             accessRequestDialogs[token].Width = 360;
             accessRequestDialogs[token].Height = 220;
             accessRequestDialogs[token].Show();
+            accessRequestDialogs[token].Focus();
 
             return true;
         }

@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
@@ -44,7 +45,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void hbUpdates_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            tbVersion.Text = String.Format("{0} ({1})", VersionUtil.GetVersionName(), Strings.UI.CheckingForUpdates);
+            tbVersion.Text = String.Format("{0} ({1})", VersionUtil.GetVersionName(), UI.CheckingForUpdates);
             e.Handled = true;
 
             versionChecker = new BackgroundWorker();
@@ -53,15 +54,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 string text;
                 if (!UpdateChecker.IsWorking())
                 {
-                    text = Strings.UI.FailedToRetrieveUpdateInformation;
+                    text = UI.FailedToRetrieveUpdateInformation;
                 }
                 else if (UpdateChecker.IsUpdateAvailable())
                 {
-                    text = String.Format(Strings.UI.UpdateAvailable, UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
+                    text = String.Format(UI.UpdateAvailable, UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
                 }
                 else
                 {
-                    text = Strings.UI.NoUpdateAvailable;
+                    text = UI.NoUpdateAvailable;
                 }
 
                 args.Result = String.Format("{0} ({1})", VersionUtil.GetVersionName(), text);

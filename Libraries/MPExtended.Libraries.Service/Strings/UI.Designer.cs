@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MPExtended.Applications.ServiceConfigurator.Strings {
+namespace MPExtended.Libraries.Service.Strings {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MPExtended.Applications.ServiceConfigurator.Strings.UI", typeof(UI).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MPExtended.Libraries.Service.Strings.UI", typeof(UI).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to give the application &apos;{0}&apos; (with IP address {1}) full access to the services?.
+        ///   Looks up a localized string similar to Do you want to give the application &apos;{0}&apos; (with IP address {1}) full access to the MPExtended services?.
         /// </summary>
         public static string AccessRequest {
             get {
@@ -88,11 +88,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select user.
+        ///   Looks up a localized string similar to Select user:.
         /// </summary>
         public static string AccessRequestSelectUser {
             get {
                 return ResourceManager.GetString("AccessRequestSelectUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you wish to allow &apos;{0}&apos; access? (If so, assign a user in the next step).
+        /// </summary>
+        public static string AccessRequestWifiRemote {
+            get {
+                return ResourceManager.GetString("AccessRequestWifiRemote", resourceCulture);
             }
         }
         
@@ -183,6 +192,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Strings {
         public static string Browse {
             get {
                 return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TEST.
+        /// </summary>
+        public static string BUILDTEST {
+            get {
+                return ResourceManager.GetString("BUILDTEST", resourceCulture);
             }
         }
         

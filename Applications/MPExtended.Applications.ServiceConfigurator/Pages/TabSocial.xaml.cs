@@ -32,6 +32,7 @@ using System.ComponentModel;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Social;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -162,7 +163,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             SharingProvider provider = providers[(string)((sender as Control).Tag)];
             provider.ResultsLabel.Foreground = Brushes.Black;
-            provider.ResultsLabel.Content = Strings.UI.TestingCredentials;
+            provider.ResultsLabel.Content = UI.TestingCredentials;
             provider.TestButton.IsEnabled = false;
             provider.UsernameBox.IsEnabled = false;
             provider.PasswordBox.IsEnabled = false;
@@ -177,12 +178,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 if ((bool)args.Result)
                 {
                     provider.Valid = true;
-                    provider.ResultsLabel.Content = Strings.UI.LoginSuccessful;
+                    provider.ResultsLabel.Content = UI.LoginSuccessful;
                     provider.ResultsLabel.Foreground = Brushes.Green;
                 }
                 else
                 {
-                    provider.ResultsLabel.Content = Strings.UI.LoginFailed;
+                    provider.ResultsLabel.Content = UI.LoginFailed;
                     provider.ResultsLabel.Foreground = Brushes.Red;
                 }
                 provider.TestButton.IsEnabled = true;
@@ -202,7 +203,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             bool invalid = providers.Any(x => x.Value.IsDirty && !x.Value.Valid);
             if (invalid)
             {
-                MessageBox.Show(Strings.UI.DiscardingInvalidChangesSocialTab, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(UI.DiscardingInvalidChangesSocialTab, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 

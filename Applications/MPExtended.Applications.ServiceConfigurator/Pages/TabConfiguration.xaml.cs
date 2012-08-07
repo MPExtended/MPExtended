@@ -27,6 +27,7 @@ using System.Windows.Navigation;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -54,16 +55,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             bw.RunWorkerCompleted += delegate (object source, RunWorkerCompletedEventArgs args)
             {
                 tbAutodetection.Inlines.Clear();
-                tbAutodetection.Inlines.Add(Strings.UI.AutodetectionText);
+                tbAutodetection.Inlines.Add(UI.AutodetectionText);
 
                 if (!(bool)args.Result)
                 {
                     tbAutodetection.Inlines.Add(new LineBreak());
-                    tbAutodetection.Inlines.Add(Strings.UI.BonjourNotInstalled);
+                    tbAutodetection.Inlines.Add(UI.BonjourNotInstalled);
                     Hyperlink link = new Hyperlink();
                     link.NavigateUri = new Uri("http://support.apple.com/kb/DL999");
                     link.RequestNavigate += CommonEventHandlers.NavigateHyperlink;
-                    link.Inlines.Add(Strings.UI.BonjourNotInstalledDownload);
+                    link.Inlines.Add(UI.BonjourNotInstalledDownload);
                     tbAutodetection.Inlines.Add(link);
 
                     cbBonjourEnabled.IsChecked = false;
@@ -112,11 +113,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
             {
-                MessageBox.Show(Strings.UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show(Strings.UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -304,7 +304,7 @@ namespace MPExtended.Libraries.Service.MpConnection
         public void SendShowYesNoDialogRequest(String title, String text)
         {
             MessageShowDialog msg = new MessageShowDialog();
-            msg.DialogId = new Random(10000).Next().ToString();
+            msg.DialogId = new Random().Next(0, 10000).ToString();
             currentDialogId = msg.DialogId;
             msg.DialogType = "yesno";
             msg.Title = title;
@@ -315,16 +315,14 @@ namespace MPExtended.Libraries.Service.MpConnection
 
         public void SendRequestAccessDialog(string clientName, string ip, List<String> users)
         {
-            //TODO: use translated strings for the dialog
-            //string msg = String.Format(UI.AccessRequest, clientName, ip);
-
-            SendShowSelectDialogRequest("GimmeGimme", "All ya base belong to us", users);
+            string msg = String.Format(Strings.UI.AccessRequestWifiRemote, clientName, ip);
+            SendShowSelectDialogRequest("MPExtended", msg, users);
         }
 
         private void SendShowSelectDialogRequest(string title, string text, List<string> listOptions)
         {
             MessageShowDialog msg = new MessageShowDialog();
-            msg.DialogId = new Random(10000).Next().ToString();
+            msg.DialogId = new Random().Next(0, 10000).ToString();
             currentDialogId = msg.DialogId;
             msg.DialogType = "yesnoselect";
             msg.Title = title;

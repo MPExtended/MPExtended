@@ -77,6 +77,11 @@
     <Compile Include="MpConnection\Messages\MessageDialogAction.cs" />
     <Compile Include="MpConnection\Messages\MessageDialog.cs" />
     <Compile Include="MpConnection\Messages\MpDialog.cs" />
+    <Compile Include="Strings\UI.Designer.cs">
+      <DependentUpon>UI.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
@@ -133,6 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Hosting\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings\UI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
