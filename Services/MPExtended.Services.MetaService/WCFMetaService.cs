@@ -82,5 +82,10 @@ namespace MPExtended.Services.MetaService
         {
             return MetaService.Instance.CancelAccessRequest(token);
         }
+
+        public WebBoolResult FinishAccessRequest(string token)
+        {
+            return MetaService.Instance.FinishAccessRequest(token);
+        }
     }
 }

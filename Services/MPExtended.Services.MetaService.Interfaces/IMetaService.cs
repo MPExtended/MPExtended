@@ -50,5 +50,9 @@ namespace MPExtended.Services.MetaService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult CancelAccessRequest(string token);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult FinishAccessRequest(string token);
     }
 }

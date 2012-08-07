@@ -143,6 +143,11 @@ namespace MPExtended.Services.MetaService
         {
             return accessRequests.CancelAccessRequest(token);
         }
+
+        public WebBoolResult FinishAccessRequest(string token)
+        {
+            return accessRequests.FinishAccessRequest(token);
+        }
         #endregion
 
         #region IProtectedMetaService implementation

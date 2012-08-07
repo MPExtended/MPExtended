@@ -110,12 +110,17 @@ namespace MPExtended.Services.MetaService
             client.Connect();
             bool loggedIn = false;
 
-            while (!client.ConnectionFailed && !cancelToken.IsCancellationRequested)
+            while (!client.ConnectionFailed)
             {
                 if (!loggedIn && client.LoggedIn)
                 {
                     client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
                     loggedIn = true;
+                }
+
+                if (cancelToken.IsCancellationRequested)
+                {
+                    client.CancelRequestAccessDialog();
                 }
 
                 if (client.LatestDialogResult != null)
@@ -127,11 +132,6 @@ namespace MPExtended.Services.MetaService
                 Thread.Sleep(500);
             }
 
-            if (cancelToken.IsCancellationRequested)
-            {
-                client.CancelRequestAccessDialog();
-            }
-
             client.Disconnect();
 
             return result;
@@ -139,13 +139,29 @@ namespace MPExtended.Services.MetaService
 
         public WebAccessRequestResponse GetAccessRequestStatus(string token)
         {
-            return requests[token];
+            if (requests.ContainsKey(token))
+            {
+                return requests[token];
+            }
+            else
+            {
+                Log.Warn("No access request for token " + token);
+                return null;
+            }
         }
 
         public WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout)
         {
-            askUserTasks[token].Wait(TimeSpan.FromSeconds(timeout));
-            return requests[token];
+            if (requests.ContainsKey(token))
+            {
+                askUserTasks[token].Wait(TimeSpan.FromSeconds(timeout));
+                return requests[token];
+            }
+            else
+            {
+                Log.Warn("No access request for token " + token);
+                return null;
+            }
         }
 
         private String RequestAccessThroughPrivateUSS(string client, string ip, CancellationTokenSource cancelToken)
@@ -202,13 +218,52 @@ namespace MPExtended.Services.MetaService
 
         public bool CancelAccessRequest(string token)
         {
+
+            Log.Info("Cancelling access request with token " + token);
             if (cancelTokens.ContainsKey(token))
             {
                 cancelTokens[token].Cancel();
 
                 return true;
             }
+            else
+            {
+                Log.Warn("No access request for token " + token);
+            }
             return false;
+        }
+
+        /// <summary>
+        /// Cleans up the current access request (remove references,...)
+        /// 
+        /// Should be called by clients after they have handled the request (read the result or cancelled the request)
+        /// </summary>
+        /// <param name="token"></param>
+        public bool FinishAccessRequest(string token)
+        {
+            Log.Debug("Removing access request data for token " + token);
+
+            if (requests.ContainsKey(token))
+            {
+                requests.Remove(token);
+            }
+            else
+            {
+                Log.Warn("No access request for token " + token);
+                return false;
+            }
+
+            if (cancelTokens.ContainsKey(token))
+            {
+                cancelTokens.Remove(token);
+            }
+
+            if (askUserTasks.ContainsKey(token))
+            {
+                askUserTasks.Remove(token);
+            }
+
+            return true;
         }
     }
 }

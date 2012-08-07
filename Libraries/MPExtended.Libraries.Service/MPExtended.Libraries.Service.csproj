@@ -73,6 +73,9 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
+    <Compile Include="MpConnection\Messages\MessageDialogAction.cs" />
+    <Compile Include="MpConnection\Messages\MessageDialog.cs" />
+    <Compile Include="MpConnection\Messages\MpDialog.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />

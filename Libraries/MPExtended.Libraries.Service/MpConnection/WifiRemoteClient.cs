@@ -52,7 +52,12 @@ namespace MPExtended.Libraries.Service.MpConnection
         /// <summary>
         /// The result of the dialog we sent to MediaPortal
         /// </summary>
-        public MessageDialogResult LatestDialogResult;
+        public MessageDialogResult LatestDialogResult { get; set; }
+
+        /// <summary>
+        /// The latest dialog message we received from MP
+        /// </summary>
+        public MessageDialog CurrentDialog { get; set; }
 
         public WifiRemoteClient(User authentication, String address, int port)
         {
@@ -139,6 +144,9 @@ namespace MPExtended.Libraries.Service.MpConnection
                         case "dialogResult":
                             HandleDialogResult(msg);
                             break;
+                        case "dialog":
+                            HandleDialogMessage(msg);
+                            break;
                     }
                 }
             }
@@ -150,6 +158,7 @@ namespace MPExtended.Libraries.Service.MpConnection
             // Continue listening
             sender.Read(AsyncSocket.CRLFData, -1, 0);
         }
+
 
         void socket_DidClose(AsyncSocket sender)
         {
@@ -244,6 +253,14 @@ namespace MPExtended.Libraries.Service.MpConnection
             }
         }
 
+        private void HandleDialogMessage(string msg)
+        {
+            MessageDialog dialogResult = (MessageDialog)JsonConvert.DeserializeObject(msg, typeof(MessageDialog));
+
+            CurrentDialog = dialogResult;
+        }
+
+
         private void HandleWelcomeMessage(string msg)
         {
             MessageWelcome welcomeMsg = (MessageWelcome)JsonConvert.DeserializeObject(msg, typeof(MessageWelcome));
@@ -311,7 +328,7 @@ namespace MPExtended.Libraries.Service.MpConnection
             MessageShowDialog msg = new MessageShowDialog();
             msg.DialogId = new Random(10000).Next().ToString();
             currentDialogId = msg.DialogId;
-            msg.DialogType = "select";
+            msg.DialogType = "yesnoselect";
             msg.Title = title;
             msg.Text = text;
             msg.Options = listOptions;
@@ -321,7 +338,16 @@ namespace MPExtended.Libraries.Service.MpConnection
 
         public void CancelRequestAccessDialog()
         {
-            //TODO: Cancel dialog in MediaPortal
+            if (CurrentDialog != null && CurrentDialog.DialogShown)
+            {
+                MpDialog diag = CurrentDialog.Dialog;
+                if (diag.AvailableActions.Contains("cancel"))
+                {
+                    MessageDialogAction action = new MessageDialogAction() { ActionType = "cancel", DialogId = diag.DialogId, DialogType = diag.DialogType };
+
+                    SendCommand(action, socket);
+                }
+            }
         }
 
         #endregion
