@@ -74,8 +74,18 @@ namespace MPExtended.Libraries.Service.Hosting
             try
             {
                 Log.Debug("Loading service {0}", srv.WCFType.Name);
-                System.Threading.Thread.Sleep(2500);
-                var host = new ServiceHost(srv.WCFType, BaseAddresses.GetForService(srv.Service));
+
+                ServiceHost host;
+                if (typeof(ISingletonService).IsAssignableFrom(srv.WCFType)) // .NET Reflection's way of writing srv.WCFType is ISingletonService
+                {
+                    object instance = Activator.CreateInstance(srv.WCFType);
+                    (instance as ISingletonService).SetAsInstance();
+                    host = new ServiceHost(instance, BaseAddresses.GetForService(srv.Service));
+                }
+                else
+                {
+                    host = new ServiceHost(srv.WCFType, BaseAddresses.GetForService(srv.Service));
+                }
 
                 // configure security if needed
                 if (Configuration.Services.AuthenticationEnabled)

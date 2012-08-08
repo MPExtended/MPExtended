@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -32,14 +33,21 @@ using TvDatabase;
 namespace MPExtended.Services.TVAccessService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class TVAccessService : ITVAccessService
+    public class TVAccessService : ITVAccessService, ISingletonService
     {
         private const int API_VERSION = 4;
+
+        #region Service
+        public static ITVAccessService Instance { get; private set; }
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
 
-        #region Service
+        public void SetAsInstance()
+        {
+            Instance = this;
+        }
+
         public TVAccessService()
         {
             _tvBusiness = new TvBusinessLayer();
