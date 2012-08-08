@@ -19,18 +19,12 @@ namespace MPExtended.Libraries.Service.MpConnection.Messages
 
         public String Application
         {
-            get { return "MpExtended Client"; }
+            get { return "MPExtended Client"; }
         }
 
         public String Version 
         {
-            get { return "0.5"; }
-        }
-
-        public String AutologinKey
-        {
-            get;
-            set;
+            get { return VersionUtil.GetVersionName(); }
         }
 
         public Authenticate Authenticate

@@ -33,6 +33,8 @@ namespace MPExtended.Services.MetaService
 {
     internal class AccessRequests
     {
+        private const string ERROR = "<error>";
+
         private Dictionary<string, WebAccessRequestResponse> requests = new Dictionary<string, WebAccessRequestResponse>();
         private Dictionary<string, Task<bool>> askUserTasks = new Dictionary<string, Task<bool>>();
         private Dictionary<string, CancellationTokenSource> cancelTokens = new Dictionary<string, CancellationTokenSource>();
@@ -61,35 +63,36 @@ namespace MPExtended.Services.MetaService
                 String result = null;
                 if (Mediaportal.IsMediaPortalRunning() && WifiRemote.IsInstalled)
                 {
-                    //go through WifiRemote when MP is open and WifiRemote is installed
+                    Log.Debug("Requesting user response through WifiRemote");
                     result = RequestAccessThroughWifiRemote(clientName, ip, cancelToken);
                 }
                 else
                 {
-                    //if we can't use WifiRemote, try to get the users response via USS (the configuration tool)
+                    Log.Debug("Requesting user response through USS");
                     result = RequestAccessThroughPrivateUSS(token, clientName, ip, cancelToken);
                 }
-                Log.Debug("Got user response to access request with token {0}: {1}", token, result);
+                Log.Debug("Finish asking user about access request with token {0}: {1}", token, result);
 
                 // set the necessary flags
                 lock (requests[token])
                 {
-                    requests[token].IsAllowed = result != null;
+                    var matchingUsers = Configuration.Services.Users.Where(x => x.Username == result);
+                    requests[token].ErrorDuringProcessing = result == ERROR || !matchingUsers.Any();
+                    requests[token].IsAllowed = !requests[token].ErrorDuringProcessing && result != null;
                     requests[token].UserHasResponded = true;
-                    if (result != null)
+                    if (matchingUsers.Any())
                     {
-                        User user = Configuration.Services.Users.Where(x => x.Username.Equals(result)).First();
-
-                        if (user != null)
-                        {
-                            Log.Info("Sending account {0} in response to access request {1}", user.Username, token);
-                            requests[token].Username = user.Username;
-                            requests[token].Password = user.GetPassword();
-                        }
-                        else
-                        {
-                            Log.Warn("No user available for username {0}", result);
-                        }
+                        Log.Info("Sending account {0} in response to access request {1}", matchingUsers.First().Username, token);
+                        requests[token].Username = matchingUsers.First().Username;
+                        requests[token].Password = matchingUsers.First().GetPassword();
+                    }
+                    else if (result == ERROR)
+                    {
+                        Log.Error("Failure during access request for token {0}", token);
+                    } 
+                    else if (result != null)
+                    {
+                        Log.Warn("Didn't find a user named '{0}' - something strange is going on!", result);
                     }
                 }
                 return true;
@@ -102,63 +105,42 @@ namespace MPExtended.Services.MetaService
         private String RequestAccessThroughWifiRemote(string clientName, string ip, CancellationTokenSource cancelToken)
         {
             User auth = WifiRemote.GetAuthentication();
-            WifiRemoteClient client = new WifiRemoteClient(auth, "localhost", WifiRemote.Port);
-            string result = null;
-
+            var client = new AccessRequestingClient(auth, "localhost", WifiRemote.Port);
             client.Connect();
-            bool loggedIn = false;
 
+            bool sentDialog = false;
             while (!client.ConnectionFailed)
             {
-                if (!loggedIn && client.LoggedIn)
+                if (client.AuthenticationFailed)
                 {
-                    client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
-                    loggedIn = true;
+                    Log.Error("Failed to authorize with WifiRemote");
+                    client.Disconnect();
+                    return ERROR;
                 }
 
-                if (cancelToken.IsCancellationRequested)
+                if (!sentDialog && client.Authenticated)
+                {
+                    client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                    sentDialog = true;
+                }
+
+                if (cancelToken.IsCancellationRequested && sentDialog)
                 {
                     client.CancelRequestAccessDialog();
                 }
 
                 if (client.LatestDialogResult != null)
                 {
-                    //User accepted or denied the request
-                    result = client.LatestDialogResult.SelectedOption;
-                    break;
+                    // User accepted or denied the request
+                    client.Disconnect();
+                    return client.LatestDialogResult.SelectedOption;
                 }
+
                 Thread.Sleep(500);
             }
 
             client.Disconnect();
-            return result;
-        }
-
-        public WebAccessRequestResponse GetAccessRequestStatus(string token)
-        {
-            if (requests.ContainsKey(token))
-            {
-                return requests[token];
-            }
-            else
-            {
-                Log.Warn("No access request for token {0}", token);
-                return null;
-            }
-        }
-
-        public WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout)
-        {
-            if (requests.ContainsKey(token))
-            {
-                askUserTasks[token].Wait(TimeSpan.FromSeconds(timeout));
-                return requests[token];
-            }
-            else
-            {
-                Log.Warn("No access request for token {0}", token);
-                return null;
-            }
+            return null;
         }
 
         private String RequestAccessThroughPrivateUSS(string token, string client, string ip, CancellationTokenSource cancelToken)
@@ -202,6 +184,7 @@ namespace MPExtended.Services.MetaService
                 {
                     channel.CancelAccessRequest(token);
                 }
+
                 // close channel
                 (channel as ICommunicationObject).Close();
                 return selectedUser;
@@ -209,6 +192,33 @@ namespace MPExtended.Services.MetaService
             catch (Exception ex)
             {
                 Log.Error(String.Format("Failed to request access for client {0} at {1} through USS", client, ip), ex);
+                return ERROR;
+            }
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatus(string token)
+        {
+            if (requests.ContainsKey(token))
+            {
+                return requests[token];
+            }
+            else
+            {
+                Log.Warn("No access request for token {0}", token);
+                return null;
+            }
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatusBlocking(string token, int timeout)
+        {
+            if (requests.ContainsKey(token))
+            {
+                askUserTasks[token].Wait(TimeSpan.FromSeconds(timeout));
+                return requests[token];
+            }
+            else
+            {
+                Log.Warn("No access request for token {0}", token);
                 return null;
             }
         }

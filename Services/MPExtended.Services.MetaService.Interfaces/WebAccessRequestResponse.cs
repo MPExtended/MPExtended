@@ -11,6 +11,7 @@ namespace MPExtended.Services.MetaService.Interfaces
         public string ClientName { get; set; }
 
         public bool UserHasResponded { get; set; }
+        public bool ErrorDuringProcessing { get; set; }
         public bool IsAllowed { get; set; }
 
         public string Username { get; set; }

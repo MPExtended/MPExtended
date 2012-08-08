@@ -16,11 +16,5 @@ namespace MPExtended.Libraries.Service.MpConnection.Messages
         /// Error messsage in case authentification failed
         /// </summary>
         public String ErrorMessage { get; set; }
-        
-        /// <summary>
-        /// Key used to autologin
-        /// </summary>
-        public String AutologinKey { get; set; }
-
     }
 }
