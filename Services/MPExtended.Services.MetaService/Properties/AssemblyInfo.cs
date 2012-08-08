@@ -21,6 +21,4 @@ using System.Runtime.InteropServices;
 // The hosting information
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.MetaService,
-    WCFType = typeof(MPExtended.Services.MetaService.WCFMetaService),
-    InitClass = typeof(MPExtended.Services.MetaService.MetaService),
-    InitMethod = "Setup")]
+    WCFType = typeof(MPExtended.Services.MetaService.MetaService))]

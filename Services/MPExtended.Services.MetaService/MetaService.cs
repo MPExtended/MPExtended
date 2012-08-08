@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,20 +29,13 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
 {
-    public class MetaService : IMetaService, IProtectedMetaService
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
+    public class MetaService : IMetaService, IProtectedMetaService, ISingletonService
     {
         #region Initialization
         private const string STARTUP_CONDITION = "MetaService";
 
         public static MetaService Instance { get; private set; }
-
-        public static void Setup()
-        {
-            if (Instance == null)
-            {
-                Instance = new MetaService();
-            }
-        }
 
         private IEnumerable<IServicePublisher> publishers;
         private IServiceDetector detector;
@@ -83,6 +77,11 @@ namespace MPExtended.Services.MetaService
             {
                 publisher.Unpublish();
             }
+        }
+
+        public void SetAsInstance()
+        {
+            Instance = this;
         }
         #endregion
 

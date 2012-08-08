@@ -48,7 +48,6 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="AccessRequests.cs" />
-    <Compile Include="BackgroundThread.cs" />
     <Compile Include="CompositionHinter.cs" />
     <Compile Include="CachingServiceDetector.cs" />
     <Compile Include="BaseServiceDetector.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="MetaService.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="AdhocServiceDetector.cs" />
-    <Compile Include="WCFMetaService.cs" />
     <Compile Include="ZeroconfDiscoverer.cs" />
     <Compile Include="ZeroconfPublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />
