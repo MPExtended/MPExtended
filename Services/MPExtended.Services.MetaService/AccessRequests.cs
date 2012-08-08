@@ -34,6 +34,7 @@ namespace MPExtended.Services.MetaService
     internal class AccessRequests
     {
         private const string ERROR = "<error>";
+        private const int REQUIRED_WIFIREMOTE = 12;
 
         private Dictionary<string, WebAccessRequestResponse> requests = new Dictionary<string, WebAccessRequestResponse>();
         private Dictionary<string, Task<bool>> askUserTasks = new Dictionary<string, Task<bool>>();
@@ -114,19 +115,26 @@ namespace MPExtended.Services.MetaService
                 if (client.AuthenticationFailed)
                 {
                     Log.Error("Failed to authorize with WifiRemote");
-                    client.Disconnect();
-                    return ERROR;
+                    break;
+                }
+
+                if (client.Authenticated && client.ServerVersion < REQUIRED_WIFIREMOTE)
+                {
+                    Log.Error("Connected to WifiRemote API {0}, but API {1} is required. Please update your WifiRemote.", client.ServerVersion, REQUIRED_WIFIREMOTE);
+                    break;
+                }
+
+                if (cancelToken.IsCancellationRequested)
+                {
+                    if (sentDialog)
+                        client.CancelRequestAccessDialog();
+                    break;
                 }
 
                 if (!sentDialog && client.Authenticated)
                 {
                     client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
                     sentDialog = true;
-                }
-
-                if (cancelToken.IsCancellationRequested && sentDialog)
-                {
-                    client.CancelRequestAccessDialog();
                 }
 
                 if (client.LatestDialogResult != null)
@@ -140,7 +148,7 @@ namespace MPExtended.Services.MetaService
             }
 
             client.Disconnect();
-            return null;
+            return ERROR;
         }
 
         private String RequestAccessThroughPrivateUSS(string token, string client, string ip, CancellationTokenSource cancelToken)

@@ -51,6 +51,7 @@ namespace MPExtended.Libraries.Service.MpConnection
         public bool ConnectionFailed { get; private set; }
         public bool Authenticated { get; private set; }
         public bool AuthenticationFailed { get; private set; }
+        public int ServerVersion { get; private set; }
 
         /// <summary>
         /// The result of the dialog we sent to MediaPortal
@@ -251,6 +252,7 @@ namespace MPExtended.Libraries.Service.MpConnection
         private void HandleWelcomeMessage(string msg)
         {
             MessageWelcome welcomeMsg = (MessageWelcome)JsonConvert.DeserializeObject(msg, typeof(MessageWelcome));
+            ServerVersion = welcomeMsg.Server_Version;
 
             // We have some autologin going, ignore welcome message
             if (autologinKey != null) return;
