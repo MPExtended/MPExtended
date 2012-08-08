@@ -29,8 +29,11 @@ namespace MPExtended.Services.MetaService
 {
     internal class ZeroconfDiscoverer : INetworkDiscoverer
     {
+// Yeah, I know it isn't used, but this is here for the future.
+#pragma warning disable 67
         public event EventHandler<ServiceEventArgs> ServiceFound;
         public event EventHandler<ServiceEventArgs> ServiceDisappeared;
+#pragma warning restore 67
 
         internal const int TIMEOUT = 10;
         internal const string DOMAIN = "";

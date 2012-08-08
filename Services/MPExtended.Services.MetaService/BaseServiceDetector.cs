@@ -42,7 +42,7 @@ namespace MPExtended.Services.MetaService
         public ServiceSetComposer CreateSetComposer()
         {
             ServiceSetComposer composer = new ServiceSetComposer(hinter);
-            composer.OurAddress = NetworkInformation.GetIPAddresses().First() + ":" + Configuration.Services.Port;
+            composer.OurAddress = NetworkInformation.GetIPAddress() + ":" + Configuration.Services.Port;
 
             composer.HasActiveMAS = HasActiveMAS;
             composer.HasActiveTAS = HasActiveTAS;
