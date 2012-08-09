@@ -398,7 +398,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Playlist(WebMediaType type, string itemId)
+        public ActionResult Playlist(WebMediaType type, string itemId, string transcoder = null)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -410,7 +410,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
-            var profile = GetProfile(GetStreamControl(type), defaultProfile);
+            var profile = GetProfile(GetStreamControl(type), transcoder ?? defaultProfile);
 
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();
