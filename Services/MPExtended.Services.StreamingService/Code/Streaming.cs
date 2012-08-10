@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.ServiceModel.Web;
 using System.Timers;
 using MPExtended.Libraries.Service;
@@ -51,6 +52,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             public int Timeout { get; set; } // in seconds!
             public DateTime LastActivity { get; set; }
+            public bool UseActivityForTimeout { get; set; }
 
             public ITranscoder Transcoder { get; set; }
             public ReadTrackingStreamWrapper OutputStream { get; set; }
@@ -73,7 +75,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             ServiceState.Stopping += delegate()
             {
-                foreach(var identifier in Streams.Select(x => x.Value.Identifier).ToList())
+                foreach (var identifier in Streams.Select(x => x.Value.Identifier).ToList())
                 {
                     Log.Warn("Killing stream {0} because of service stop", identifier);
                     KillStream(identifier);
@@ -103,8 +105,11 @@ namespace MPExtended.Services.StreamingService.Code
             try
             {
                 var toDelete = Streams
-                    .Where(x => x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))
-                    .Where(x => x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
+                    .Where(x =>
+                        (x.Value.UseActivityForTimeout ||
+                                (x.Value.OutputStream != null && x.Value.OutputStream.TimeSinceLastRead > (x.Value.Timeout * 1000))) &&
+                        (x.Value.LastActivity.Add(TimeSpan.FromSeconds(x.Value.Timeout)) < DateTime.Now)
+                    )
                     .Select(x => x.Value.Identifier)
                     .ToList();
 
@@ -114,8 +119,15 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         foreach (string key in toDelete)
                         {
-                            Log.Info("Stream {0} has been idle for {1} milliseconds with last activity at {2}, so cancel it", 
-                                key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                            if (Streams[key].UseActivityForTimeout)
+                            {
+                                Log.Info("Stream {0} had last service activity at {1}, so cancel it", key, Streams[key].LastActivity);
+                            }
+                            else
+                            {
+                                Log.Info("Stream {0} had last read {1} milliseconds ago and last service activity at {2}, so cancel it", 
+                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                            }
                             service.FinishStream(key);
                         }
                     }
@@ -141,6 +153,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.StartTime = DateTime.Now;
             stream.Timeout = timeout;
             stream.LastActivity = DateTime.Now;
+            stream.UseActivityForTimeout = false;
             stream.Context = new StreamContext();
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebMediaType.TV;
@@ -176,7 +189,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             try
             {
-                lock (Streams[identifier]) 
+                lock (Streams[identifier])
                 {
                     Log.Debug("StartStream with identifier {0} for file {1}", identifier, Streams[identifier].Context.Source.GetDebugName());
 
@@ -184,12 +197,13 @@ namespace MPExtended.Services.StreamingService.Code
                     ActiveStream stream = Streams[identifier];
                     stream.Context.StartPosition = position;
                     stream.Context.Profile = profile;
+                    stream.UseActivityForTimeout = profile.Transport == "httplive";
                     stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
                     stream.Context.OutputSize = CalculateSize(stream.Context);
                     Log.Debug("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     sharing.StartStream(stream.Context, infoRef);
-                
+
                     // get transcoder
                     stream.Transcoder = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.TranscoderImplementationClass));
                     stream.Transcoder.Identifier = identifier;
@@ -251,6 +265,7 @@ namespace MPExtended.Services.StreamingService.Code
                     }
 
                     Log.Info("Started stream with identifier " + identifier);
+                    Streams[identifier].LastActivity = DateTime.Now;
                     return stream.Transcoder.GetStreamURL();
                 }
             }
@@ -266,22 +281,23 @@ namespace MPExtended.Services.StreamingService.Code
             if (!Streams.ContainsKey(identifier))
             {
                 Log.Warn("Client called RetrieveStream() for non-existing identifier", identifier);
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
                 return Stream.Null;
             }
 
             lock (Streams[identifier])
             {
                 WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
-                if(Streams[identifier].OutputStream == null)
+                if (Streams[identifier].OutputStream == null)
                 {
                     Log.Warn("Encountered null stream in RetrieveStream for identifier {0}", identifier);
-                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                    WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
                     return Stream.Null;
                 }
 
                 WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
 
+                Streams[identifier].LastActivity = DateTime.Now;
                 if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)
                 {
                     (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled();
@@ -293,11 +309,19 @@ namespace MPExtended.Services.StreamingService.Code
 
         public Stream CustomTranscoderData(string identifier, string action, string parameters)
         {
+            if (!Streams.ContainsKey(identifier))
+            {
+                Log.Warn("Client called CustomTranscoderData() for non-existing identifier", identifier);
+                WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
+                return Stream.Null;
+            }
+
             lock (Streams[identifier])
             {
                 if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
                     return Stream.Null;
 
+                Streams[identifier].LastActivity = DateTime.Now;
                 return ((ICustomActionTranscoder)Streams[identifier].Transcoder).CustomActionData(action, parameters);
             }
         }
@@ -365,7 +389,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public WebTranscodingInfo GetEncodingInfo(string identifier) 
+        public WebTranscodingInfo GetEncodingInfo(string identifier)
         {
             Streams[identifier].LastActivity = DateTime.Now;
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)

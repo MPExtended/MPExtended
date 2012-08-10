@@ -40,6 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // This is the timeout after which streams are automatically killed (in seconds)
         private const int STREAM_TIMEOUT_DIRECT = 10;
         private const int STREAM_TIMEOUT_PROXY = 300;
+        private const int STREAM_TIMEOUT_HTTPLIVE = 60;
 
         // This is the read timeout from the proxy input stream
         private const int STREAM_PROXY_READ_TIMEOUT = 10;
@@ -290,24 +291,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string identifier = ActuallyStartHttpLiveStream(type, itemId, profile, 0, continuationId);
             if (identifier != null)
             {
-                return Json(new { Success = true, URL = HttpLiveUrls[identifier] }, JsonRequestBehavior.AllowGet);
+                string url = GetStreamMode() == StreamType.Direct ? HttpLiveUrls[identifier] :
+                    Url.Action(Enum.GetName(typeof(WebMediaType), type), new RouteValueDictionary() { 
+                        { "item", itemId },
+                        { "transcoder", transcoder },
+                        { "continuationId", continuationId }
+                    });
+                return Json(new { Success = true, URL = url }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 return Json(new { Succes = false }, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        [HttpGet]
-        public ActionResult StopHttpLiveStream(string continuationId)
-        {
-            Log.Debug("Finishing HTTP Live Stream for continuationId {0}", continuationId);
-            //if (!GetStreamControl(type).FinishStream(identifier))
-            {
-                Log.Error("FinishStream failed");
-            }
-            RunningStreams.Remove(continuationId);
-            return Json(new { Success = true });
         }
 
         private ActionResult GenerateHttpLiveStream(WebMediaType type, string itemId, WebTranscoderProfile profile, int starttime, string continuationId)
@@ -318,8 +313,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // Return the actual file contents
             GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
-            ProxyStream(HttpLiveUrls[identifier]);
-            return new EmptyResult();
+            if (GetStreamMode() == StreamType.Direct)
+            {
+                Log.Debug("HLS: Using Direct streaming mode and redirecting to playlist at {0}", HttpLiveUrls[identifier]);
+                return Redirect(HttpLiveUrls[identifier]);
+            }
+            else
+            {
+                ProxyHttpLiveIndex(HttpLiveUrls[identifier]);
+                return new EmptyResult();
+            }
         }
 
         private string ActuallyStartHttpLiveStream(WebMediaType type, string itemId, WebTranscoderProfile profile, int starttime, string continuationId)
@@ -328,10 +331,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             continuationId = continuationId ?? "hls-" + randomGenerator.Next(10000, 99999).ToString();
             bool alreadyRunning = RunningStreams.ContainsKey(continuationId);
             string identifier = alreadyRunning ? RunningStreams[continuationId] : "webmediaportal-" + randomGenerator.Next(10000, 99999);
-
-            // Check stream mode, generate timeout setting and dump all info we got
-            StreamType streamMode = GetStreamMode();
-            int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
+            Log.Debug("Requested HLS file for continuationId={0}; running={1}; identifier={2}", continuationId, alreadyRunning, identifier);
 
             // We only need to start the stream if this is the first request for this file
             string url;
@@ -339,15 +339,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 Log.Debug("Starting HLS stream type={0}; itemId={1}; profile={2}; starttime={3}; continuationId={4}; identifier={5}",
                     type, itemId, profile.Name, starttime, continuationId, identifier);
-                Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s",
-                    HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
+                Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and timeout {3}s",
+                    HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, STREAM_TIMEOUT_HTTPLIVE);
 
                 // Start the stream
                 string clientDescription = String.Format("WebMediaPortal (user {0})", HttpContext.User.Identity.Name);
                 using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
                 {
                     WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
+                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
                     {
                         Log.Error("InitStream for HLS failed");
                         return null; 
@@ -367,6 +367,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             return identifier;
+        }
+
+        private ActionResult ProxyHttpLiveIndex(string source)
+        {
+            Log.Debug("HLS: Using Proxied streaming mode with playlist at {0}", source);
+            Log.Warn("+++++++ WARNING: THIS IS NOT IMPLEMENTED YET +++++++");
+            ProxyStream(source);
+            return new EmptyResult();
         }
 
         //
