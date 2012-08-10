@@ -146,12 +146,12 @@ namespace MPExtended.PlugIns.MAS.MPShares
             string path = GetPath(id);
             if (!File.Exists(path))
                 return null;
-            return ConvertFileInfoToFileBasic(new FileInfo(path));
+            return ConvertFileInfoToFileBasic(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
         }
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)

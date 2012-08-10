@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -183,7 +184,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)

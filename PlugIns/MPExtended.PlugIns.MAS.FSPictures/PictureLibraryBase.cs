@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Picture;
@@ -86,7 +87,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)
@@ -116,7 +117,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 List<T> output = new List<T>();
                 foreach (string strFile in Directory.GetFiles(strDir))
                 {
-                    var file = new FileInfo(strFile);
+                    var file = new FileInfo(PathUtil.StripFileProtocolPrefix(strFile));
                     if (Extensions.Contains(file.Extension.ToLowerInvariant()))
                     {
                         output.Add(creator.Invoke(file.FullName));
