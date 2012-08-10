@@ -67,6 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public IEnumerable<string> Transcoders { get; set; }
         public string Transcoder { get; set; }
         public WebTranscoderProfile TranscoderProfile { get; set; }
+        public string ContinuationId { get; set; }
         public VideoPlayer Player { get; set; }
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }

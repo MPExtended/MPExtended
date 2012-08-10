@@ -433,4 +433,7 @@
   <data name="YouAreListening" xml:space="preserve">
     <value>You are listening to &lt;strong&gt;{0}&lt;/strong&gt; by &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Starting the stream failed. Please refer to the server logs for more details.</value>
+  </data>
 </root>

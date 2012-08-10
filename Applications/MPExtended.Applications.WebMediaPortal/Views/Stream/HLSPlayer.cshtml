@@ -1,5 +1,18 @@
 ﻿@model PlayerViewModel
+           
+@Html.jQuery().Enable()
+@Html.Assets().AddViewScript("Stream/HLSPlayer.js")
+@Html.Assets().AddViewStylesheet("Stream/HLSPlayer.css")
 
-<video width="@Model.Size.Width" height="@Model.Size.Height">
-    <source type="application/vnd.apple.mpegurl" src="@Model.URL" />
-</video>
+<div id="hlsplayer" style="width: @(Model.Size.Width)px; height: @(Model.Size.Height)px;"
+                    data-url="@Url.Action("StartHttpLiveStream", "Stream", new { type = Model.MediaType, 
+                                                                                 itemId = Model.MediaId, 
+                                                                                 transcoder = Model.TranscoderProfile.Name, 
+                                                                                 continuationId = Model.ContinuationId })">
+    <div id="loader">
+        <img src="@Url.ContentLink("Images/ajax-loader.gif")" />
+    </div>
+</div>
+<div id="error">
+    @UIStrings.FailedToStartStream
+</div>
