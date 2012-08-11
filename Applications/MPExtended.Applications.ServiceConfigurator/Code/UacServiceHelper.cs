@@ -24,6 +24,7 @@ using System.Text;
 using System.Security.Principal;
 using System.Windows;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -74,7 +75,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 if (Process.Start(info) == null)
                 {
                     // The user didn't accept the UAC prompt.
-                    MessageBox.Show(Strings.UI.ActionNeedsAdmin, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show(UI.ActionNeedsAdmin, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     return false;
                 }
             }

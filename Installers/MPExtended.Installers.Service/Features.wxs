@@ -15,6 +15,7 @@
     <!-- General stuff -->
     <ComponentGroup Id="Component_General">
       <ComponentRef Id="Component_General_Libraries"/>
+      <ComponentRef Id="Component_General_MetaService"/>
       <ComponentRef Id="Component_General_Registry"/>
       <ComponentRef Id="Component_General_Interface"/>
       <ComponentRef Id="Component_General_Config"/>

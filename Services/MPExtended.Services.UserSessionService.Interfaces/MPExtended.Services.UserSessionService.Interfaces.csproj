@@ -65,6 +65,10 @@
       <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
       <Name>MPExtended.Services.Common.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

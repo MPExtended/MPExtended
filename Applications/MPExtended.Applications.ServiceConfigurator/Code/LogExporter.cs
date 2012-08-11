@@ -24,6 +24,7 @@ using System.Text;
 using System.Windows;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -69,11 +70,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.DefaultExt = ".zip";
-            dlg.Filter = Strings.UI.LogAndConfigurationArchive + "|*.zip";
+            dlg.Filter = UI.LogAndConfigurationArchive + "|*.zip";
             if (dlg.ShowDialog() == true)
             {
                 Export(dlg.FileName);
-                MessageBox.Show(String.Format(Strings.UI.ExportedLogsAndConfig, dlg.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format(UI.ExportedLogsAndConfig, dlg.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

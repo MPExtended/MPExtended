@@ -26,6 +26,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -37,6 +38,7 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class ImageMediaSource : MediaSource
     {
+        private static ChannelLogos _logos = null;
         private string path = null;
 
         public string Extension
@@ -90,31 +92,23 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo)
             {
+                if (_logos == null)
+                    _logos = new ChannelLogos();
+
                 // get display name
                 int idChannel = MediaType == WebMediaType.TV ?
                     Int32.Parse(Id) :
                     MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
-                string channelFileName = PathUtil.StripInvalidCharacters(MPEServices.TAS.GetChannelBasicById(idChannel).DisplayName, '_');
-
-                // find directory
-                string tvLogoDir = Configuration.Streaming.TVLogoDirectory;
-                if (!Directory.Exists(tvLogoDir))
+                var channel = MPEServices.TAS.GetChannelBasicById(idChannel);
+                string location = _logos.FindLocation(channel.DisplayName);
+                if(location == null)
                 {
-                    Log.Warn("TV logo directory {0} does not exists", tvLogoDir);
-                    return new WebFileInfo() { Exists = false };
-                }
-
-                // find image
-                DirectoryInfo dirinfo = new DirectoryInfo(tvLogoDir);
-                var matched = dirinfo.GetFiles().Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == channelFileName.ToLowerInvariant());
-                if (matched.Count() == 0)
-                {
-                    Log.Debug("Did not find tv logo {0}", channelFileName);
+                    Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.DisplayName, idChannel);
                     return new WebFileInfo() { Exists = false };
                 }
 
                 // great, return it
-                return new WebFileInfo(matched.First().FullName);
+                return new WebFileInfo(location);
             }
 
             return path != null ? new WebFileInfo(path) : base.GetFileInfo();

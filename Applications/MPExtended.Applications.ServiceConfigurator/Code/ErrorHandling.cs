@@ -19,8 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Libraries.Service;
 using System.Windows;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -29,7 +30,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         public static void ShowError(Exception ex)
         {
             Log.Warn("Unexpected error happened", ex);
-            string message = Strings.UI.UnexpectedError + "\n\n" + ex.Message;
+            string message = UI.UnexpectedError + "\n\n" + ex.Message;
             MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

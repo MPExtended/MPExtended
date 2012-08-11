@@ -22,6 +22,5 @@ using System.Runtime.InteropServices;
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.StreamingService,
     WCFType = typeof(MPExtended.Services.StreamingService.StreamingService),
-    ZeroconfType = "_mpextended-wss._tcp.",
     InitClass = typeof(MPExtended.Services.StreamingService.Code.Initialization),
     InitMethod = "Initialize")]

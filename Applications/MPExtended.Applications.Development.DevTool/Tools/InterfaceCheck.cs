@@ -23,12 +23,11 @@ using System.Reflection;
 using System.IO;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.Development.DevTool
+namespace MPExtended.Applications.Development.DevTool.Tools
 {
     internal class InterfaceCheck : IDevTool
     {
         public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
         public string Name { get { return "InterfaceCheck"; } }
 
         public void Run()

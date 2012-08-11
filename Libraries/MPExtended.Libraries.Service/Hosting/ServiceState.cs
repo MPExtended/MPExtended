@@ -50,6 +50,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 {
                     Task.Factory.StartNew(delegate()
                     {
+                        Log.Debug("Triggering ServiceState.Started event");
                         if (Started != null)
                         {
                             Started();
@@ -61,6 +62,7 @@ namespace MPExtended.Libraries.Service.Hosting
 
         internal static void TriggerStoppingEvent()
         {
+            Log.Trace("Triggering ServiceState.Stopping event");
             if (Stopping != null)
             {
                 try
