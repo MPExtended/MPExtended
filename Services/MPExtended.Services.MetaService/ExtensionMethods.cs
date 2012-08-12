@@ -40,6 +40,8 @@ namespace MPExtended.Services.MetaService
                     return WebService.UserSessionService;
                 case MPExtendedService.MetaService:
                     return WebService.MetaService;
+                case MPExtendedService.WifiRemote:
+                    return WebService.WifiRemote;
                 default:
                     throw new ArgumentException();
             }

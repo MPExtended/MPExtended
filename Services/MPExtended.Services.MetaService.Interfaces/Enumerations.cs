@@ -18,6 +18,8 @@ namespace MPExtended.Services.MetaService.Interfaces
         [EnumMember]
         UserSessionService = 4,
         [EnumMember]
-        MetaService = 5
+        MetaService = 5,
+        [EnumMember]
+        WifiRemote = 6
     }
 }
