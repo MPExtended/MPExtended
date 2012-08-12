@@ -20,9 +20,9 @@
     <pcname /><!-- Automatically detected when empty -->
   </bonjour>
 
-  <useraccess>
+  <accessrequest>
     <enabled>true</enabled>
-  </useraccess>
+  </accessrequest>
 
   <port>4322</port>
   <enableIPv6>false</enableIPv6>

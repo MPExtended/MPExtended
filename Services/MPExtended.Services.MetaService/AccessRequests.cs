@@ -55,9 +55,9 @@ namespace MPExtended.Services.MetaService
 
             if (!Configuration.Services.AccessRequestEnabled)
             {
-                Log.Info("User access request from " + clientName + " denied because UAR is disabled on this system (check configuration)");
+                Log.Info("User access request from " + clientName + " denied because user access requests are disabled on this system (check configuration)");
                 request.UserHasResponded = true;
-                token = null;
+                request.Token = null;
                 return request;
             }
 
