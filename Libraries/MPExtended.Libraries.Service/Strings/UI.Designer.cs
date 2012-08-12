@@ -79,6 +79,15 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable access requests of clients.
+        /// </summary>
+        public static string AccessRequestEnable {
+            get {
+                return ResourceManager.GetString("AccessRequestEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grant access.
         /// </summary>
         public static string AccessRequestGrantAccess {

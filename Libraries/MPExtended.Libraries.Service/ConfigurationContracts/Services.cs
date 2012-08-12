@@ -88,6 +88,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
         public bool BonjourEnabled { get; set; }
         public string BonjourName { get; set; }
+        public bool AccessRequestEnabled { get; set; }
 
         public int Port { get; set; }
         public bool EnableIPv6 { get; set; }
@@ -107,6 +108,7 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
             BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
             BonjourName = file.Element("bonjour").Element("pcname").Value;
+            AccessRequestEnabled = file.Element("accessrequest").Element("enabled").Value == "true";
 
             Port = Int32.Parse(file.Element("port").Value);
             EnableIPv6 = file.Element("enableIPv6").Value == "true";
@@ -139,6 +141,8 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
                 file.Element("bonjour").Element("enabled").Value = BonjourEnabled ? "true" : "false";
                 file.Element("bonjour").Element("pcname").Value = BonjourName;
+
+                file.Element("accessrequest").Element("enabled").Value = AccessRequestEnabled ? "true" : "false";
 
                 file.Element("port").Value = Port.ToString();
                 file.Element("enableIPv6").Value = EnableIPv6 ? "true" : "false";

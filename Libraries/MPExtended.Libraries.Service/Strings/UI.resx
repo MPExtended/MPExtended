@@ -500,4 +500,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="AccessRequestWifiRemote" xml:space="preserve">
     <value>Do you wish to allow '{0}' access? (If so, assign a user in the next step)</value>
   </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Enable access requests of clients</value>
+  </data>
 </root>

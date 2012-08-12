@@ -52,6 +52,15 @@ namespace MPExtended.Services.MetaService
                 UserHasResponded = false,
                 Token = token
             };
+
+            if (!Configuration.Services.AccessRequestEnabled)
+            {
+                Log.Info("User access request from " + clientName + " denied because UAR is disabled on this system (check configuration)");
+                request.UserHasResponded = true;
+                token = null;
+                return request;
+            }
+
             requests[token] = request;
             Log.Info("Received access request from {0} (claims to be client {1}), gave it token {2}", ip, clientName, token);
 
@@ -74,26 +83,28 @@ namespace MPExtended.Services.MetaService
                 }
                 Log.Debug("Finish asking user about access request with token {0}: {1}", token, result);
 
-                // set the necessary flags
-                lock (requests[token])
-                {
-                    var matchingUsers = Configuration.Services.Users.Where(x => x.Username == result);
-                    requests[token].ErrorDuringProcessing = result == ERROR || !matchingUsers.Any();
-                    requests[token].IsAllowed = !requests[token].ErrorDuringProcessing && result != null;
-                    requests[token].UserHasResponded = true;
-                    if (matchingUsers.Any())
-                    {
-                        Log.Info("Sending account {0} in response to access request {1}", matchingUsers.First().Username, token);
-                        requests[token].Username = matchingUsers.First().Username;
-                        requests[token].Password = matchingUsers.First().GetPassword();
-                    }
-                    else if (result == ERROR)
-                    {
-                        Log.Error("Failure during access request for token {0}", token);
-                    } 
-                    else if (result != null)
-                    {
-                        Log.Warn("Didn't find a user named '{0}' - something strange is going on!", result);
+                if (requests.ContainsKey(token))
+                {//make sure that the request is still active (not cancelled)
+                    lock (requests[token])
+                    {// set the necessary flags
+                        var matchingUsers = Configuration.Services.Users.Where(x => x.Username == result);
+                        requests[token].ErrorDuringProcessing = result == ERROR || !matchingUsers.Any();
+                        requests[token].IsAllowed = !requests[token].ErrorDuringProcessing && result != null;
+                        requests[token].UserHasResponded = true;
+                        if (matchingUsers.Any())
+                        {
+                            Log.Info("Sending account {0} in response to access request {1}", matchingUsers.First().Username, token);
+                            requests[token].Username = matchingUsers.First().Username;
+                            requests[token].Password = matchingUsers.First().GetPassword();
+                        }
+                        else if (result == ERROR)
+                        {
+                            Log.Error("Failure during access request for token {0}", token);
+                        }
+                        else if (result != null)
+                        {
+                            Log.Warn("Didn't find a user named '{0}' - something strange is going on!", result);
+                        }
                     }
                 }
                 return true;

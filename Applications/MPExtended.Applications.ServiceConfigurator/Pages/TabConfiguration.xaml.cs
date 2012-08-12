@@ -46,6 +46,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
 
+            cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
+
             // check if bonjour is enabled
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
@@ -87,6 +89,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
+            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
 
             Configuration.Services.Save();
         }
