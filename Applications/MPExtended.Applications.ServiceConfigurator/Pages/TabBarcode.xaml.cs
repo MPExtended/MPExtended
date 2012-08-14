@@ -123,6 +123,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
                 desc.Name = Configuration.Services.GetServiceName();
+                desc.NetbiosName = System.Environment.MachineName;
 
                 desc.Services = new List<ServiceDescription>();
                 User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;
