@@ -42,6 +42,7 @@ namespace MPExtended.Services.MetaService
 
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
+                additionalData["netbios-name"] = System.Environment.MachineName;
 
                 NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], Configuration.Services.GetServiceName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
