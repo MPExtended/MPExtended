@@ -66,7 +66,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
             {
-                args.Result = IPAddressUtils.GetExternalAddress();
+                args.Result = IPAddressUtils.GetExternalIp();
             };
             bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
             {

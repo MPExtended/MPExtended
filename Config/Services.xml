@@ -25,8 +25,8 @@
   </accessrequest>
 
   <externaladdress>
-    <autodetect>false</autodetect>
-    <custom>bagga.dyndns.com</custom>
+    <autodetect>true</autodetect>
+    <custom></custom>
   </externaladdress>
 
   <port>4322</port>

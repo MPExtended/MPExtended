@@ -31,6 +31,12 @@ namespace MPExtended.Services.MetaService
     {
         private List<NetService> publishedServices = new List<NetService>();
         private const string SET_SERVICE_TYPE = "_mpextended-set._tcp.";
+        private IServiceDetector serviceDetector;
+
+        internal ZeroconfPublisher()
+        {
+            Configuration.Reloaded += new Configuration.ConfigurationReloadedEventHandler(Configuration_Reloaded);
+        }
 
         public bool Publish(IServiceDetector detector)
         {
@@ -80,8 +86,26 @@ namespace MPExtended.Services.MetaService
             return true;
         }
 
+
+        /// <summary>
+        /// The configuration has changed -> update the service properties if one of the published values
+        /// has changed
+        /// </summary>
+        void Configuration_Reloaded()
+        {
+           foreach(NetService s in publishedServices)
+           {
+               s.Stop();
+           }
+
+           publishedServices.Clear();
+
+           PublishAsync(serviceDetector);
+        }
+
         public void PublishAsync(IServiceDetector detector)
         {
+            serviceDetector = detector;
             Task.Factory.StartNew(() => Publish(detector));
         }
 
