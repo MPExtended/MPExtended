@@ -48,6 +48,11 @@ namespace MPExtended.Libraries.Client
         {
         }
 
+        public ServiceAddressSet(string mas, string tas)
+            : this(mas, mas, tas, tas, null)
+        {
+        }
+
         public ServiceAddressSet(WebServiceSet set)
             : this (set.MAS, set.MASStream, set.TAS, set.TASStream, set.UI)
         {

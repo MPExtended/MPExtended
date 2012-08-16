@@ -48,6 +48,8 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="ConnectionFactoryStatic.cs" />
     <Compile Include="Zeroconf.cs" />
     <Compile Include="MPEServices.cs" />
     <Compile Include="MPEServicesHolder.cs" />
