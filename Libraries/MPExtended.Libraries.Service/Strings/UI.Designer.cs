@@ -205,15 +205,6 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TEST.
-        /// </summary>
-        public static string BUILDTEST {
-            get {
-                return ResourceManager.GetString("BUILDTEST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to check for updates.
         /// </summary>
         public static string CheckForUpdates {
@@ -421,7 +412,7 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to External Address.
+        ///   Looks up a localized string similar to External address.
         /// </summary>
         public static string ExternalIpLabel {
             get {

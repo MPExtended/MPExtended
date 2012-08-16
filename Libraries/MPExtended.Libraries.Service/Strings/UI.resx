@@ -494,9 +494,6 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="AccessRequestSelectUser" xml:space="preserve">
     <value>Select user:</value>
   </data>
-  <data name="BUILDTEST" xml:space="preserve">
-    <value>TEST</value>
-  </data>
   <data name="AccessRequestWifiRemote" xml:space="preserve">
     <value>Do you wish to allow '{0}' access? (If so, assign a user in the next step)</value>
   </data>
@@ -510,6 +507,6 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
     <value>Automatically detect external IP</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
-    <value>External Address</value>
+    <value>External address</value>
   </data>
 </root>
