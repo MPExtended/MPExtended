@@ -38,8 +38,8 @@ namespace MPExtended.Libraries.Service.Util
         /// <returns>External ip of pc</returns>
         public static String GetExternalIpAddress(bool forceUpdate)
         {
-            if (!forceUpdate && DateTime.Now.Subtract(CacheLastUpdated).TotalMinutes > 5 
-                && CachedExternalIp != null)
+            if (!forceUpdate && CachedExternalIp != null
+                && DateTime.Now.Subtract(CacheLastUpdated).TotalMinutes < 5)
             {
                 return CachedExternalIp;
             }
