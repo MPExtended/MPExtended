@@ -104,7 +104,7 @@ namespace MPExtended.Services.StreamingService.Code
                 services.Add(new FollwitSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.FollwitConfiguration });
             if (Configuration.Streaming.WatchSharing.TraktEnabled)
                 services.Add(new TraktSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.TraktConfiguration });
-            services.ExecuteForAll(x => x.MediaService = MPEServices.MAS);
+            services.ExecuteForAll(x => x.MediaService = Connections.MAS);
             enabled = services.Any();
         }
 
@@ -150,12 +150,12 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Debug("WatchSharing: synchronizing start watching event to service");
                 if (context.Source.MediaType == WebMediaType.TVEpisode)
                 {
-                    state.MediaDescriptor = MPEServices.MAS.GetTVEpisodeDetailedById(context.Source.Provider, context.Source.Id);
-                    state.Runtime = MPEServices.MAS.GetTVShowDetailedById(context.Source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime * 60000;
+                    state.MediaDescriptor = Connections.MAS.GetTVEpisodeDetailedById(context.Source.Provider, context.Source.Id);
+                    state.Runtime = Connections.MAS.GetTVShowDetailedById(context.Source.Provider, ((WebTVEpisodeDetailed)state.MediaDescriptor).ShowId).Runtime * 60000;
                 }
                 else if (context.Source.MediaType == WebMediaType.Movie)
                 {
-                    state.MediaDescriptor = MPEServices.MAS.GetMovieDetailedById(context.Source.Provider, context.Source.Id);
+                    state.MediaDescriptor = Connections.MAS.GetMovieDetailedById(context.Source.Provider, context.Source.Id);
                     state.Runtime = ((WebMovieDetailed)state.MediaDescriptor).Runtime * 60000;
                 }
 

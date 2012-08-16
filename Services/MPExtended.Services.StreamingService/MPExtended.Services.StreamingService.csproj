@@ -73,6 +73,7 @@
     <Compile Include="Code\WatchSharing.cs" />
     <Compile Include="Code\WatchSharingDebug.cs" />
     <Compile Include="Code\MediaInfoHelper.cs" />
+    <Compile Include="Connections.cs" />
     <Compile Include="MediaInfo\IMediaInfoCache.cs" />
     <Compile Include="MediaInfo\XmlCache.cs" />
     <Compile Include="Code\HTTPLiveStreamer.cs" />

@@ -61,10 +61,10 @@ namespace MPExtended.Services.StreamingService
         public WebStreamServiceDescription GetServiceDescription()
         {
             AuthorizeStreaming();
-            bool hasTv = MPEServices.HasTASConnection; // takes a while so don't execute it twice
+            bool hasTv = Connections.Current.HasTASConnection; // takes a while so don't execute it twice
             return new WebStreamServiceDescription()
             {
-                SupportsMedia = MPEServices.HasMASConnection,
+                SupportsMedia = Connections.Current.HasMASConnection,
                 SupportsRecordings = hasTv,
                 SupportsTV = hasTv,
                 ServiceVersion = VersionUtil.GetVersionName(),
@@ -223,7 +223,7 @@ namespace MPExtended.Services.StreamingService
                 lock (_timeshiftings)
                 {
                     Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
-                    var card = MPEServices.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
+                    var card = Connections.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
                     if (card == null)
                     {
                         Log.Error("Failed to start timeshifting for stream with identifier {0}", identifier);
@@ -275,7 +275,7 @@ namespace MPExtended.Services.StreamingService
                 if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
                 {
                     Log.Info("Cancel timeshifting with identifier {0}",  identifier);
-                    MPEServices.TAS.CancelCurrentTimeShifting("mpextended-" + identifier);
+                    Connections.TAS.CancelCurrentTimeShifting("mpextended-" + identifier);
                     _timeshiftings.Remove(identifier);
                 }
             }
