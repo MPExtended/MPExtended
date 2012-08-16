@@ -42,10 +42,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     {
         private DispatcherTimer mSessionWatcher;
         private ObservableCollection<WpfStreamingSession> mStreamingSessions = new ObservableCollection<WpfStreamingSession>();
+        private IServiceSet _services;
 
         public TabActivity()
         {
-            // session watcher (started in Page_Initialized, which is called via InitializeComponent)
+            // initialize service connection
+            _services = new ServiceAddressSet("127.0.0.1", null).Connect();
+
+            // session watcher
             mSessionWatcher = new DispatcherTimer();
             mSessionWatcher.Interval = TimeSpan.FromSeconds(2);
             mSessionWatcher.Tick += activeSessionWatcher_Tick;
@@ -69,7 +73,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                List<WebStreamingSession> tmp = MPEServices.MASStreamControl.GetStreamingSessions();
+                List<WebStreamingSession> tmp = _services.MASStreamControl.GetStreamingSessions();
 
                 if (tmp != null)
                 {
@@ -88,7 +92,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             WpfStreamingSession session = (WpfStreamingSession)lvActiveStreams.SelectedItem;
             if (session != null)
             {
-                bool success = MPEServices.MASStreamControl.FinishStream(session.Identifier);
+                bool success = _services.MASStreamControl.FinishStream(session.Identifier);
             }
         }
     }
