@@ -20,7 +20,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
+using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.WCF;
 using MPExtended.Services.UserSessionService;
 using MPExtended.Services.UserSessionService.Interfaces;
 
@@ -50,7 +52,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             {
                 if (type == ConnectionMode.RemoteConnection)
                 {
-                    return CreateChannel<IUserSessionService>(ref ussConnection, "net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation");
+                    return CreateChannel<IUserSessionService>(ref ussConnection, 9750, "MPExtended/UserSessionServiceImplementation");
                 }
                 else if (type == ConnectionMode.SelfHosting)
                 {
@@ -69,7 +71,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             {
                 if (type == ConnectionMode.RemoteConnection)
                 {
-                    return CreateChannel<IPrivateUserSessionService>(ref privateConnection, "net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate");
+                    return CreateChannel<IPrivateUserSessionService>(ref privateConnection, 9751, "MPExtended/UserSessionServicePrivate");
                 }
                 else if (type == ConnectionMode.SelfHosting)
                 {
@@ -132,7 +134,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
         }
 
-        private static T CreateChannel<T>(ref T original, string address)
+        private static T CreateChannel<T>(ref T original, int port, string path)
         {
             // if channel is working, just return it
             if (original != null && ((ICommunicationObject)original).State != CommunicationState.Faulted)
@@ -142,32 +144,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
             // try to close a faulted channel
             if (original != null)
-            {
-                try
-                {
-                    ((ICommunicationObject)original).Close(TimeSpan.FromMilliseconds(500));
-                }
-                catch (Exception)
-                {
-                    // oops.
-                }
-            }
-
-            // recreate channel
-            NetTcpBinding binding = new NetTcpBinding()
-            {
-                MaxReceivedMessageSize = 100000000,
-                ReceiveTimeout = new TimeSpan(0, 0, 5),
-                SendTimeout = new TimeSpan(0, 0, 5),
-            };
-            binding.ReliableSession.Enabled = true;
-            binding.ReliableSession.Ordered = true;
-
-            original = ChannelFactory<T>.CreateChannel(
-                binding,
-                new EndpointAddress(address)
-            );
-
+                ConnectionFactory.DisposeConnection(original);
+            original = new ClientFactory<T>().CreateLocalTcpConnection(port, path);
             return original;
         }
     }

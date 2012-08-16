@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.Client
             try
             {
                 if (connection != null && connection is ICommunicationObject)
-                    (connection as ICommunicationObject).Close();
+                    (connection as ICommunicationObject).Close(TimeSpan.FromMilliseconds(350));
             }
             catch (Exception)
             {

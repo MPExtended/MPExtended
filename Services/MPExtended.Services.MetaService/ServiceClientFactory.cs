@@ -22,6 +22,7 @@ using System.Net;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.WCF;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -45,11 +46,9 @@ namespace MPExtended.Services.MetaService
         {
             try
             {
-                IMetaService channel = CreateConnection<IMetaService>(String.Format("http://{0}:4322/MPExtended/MetaService", ip));
+                var channel = new ClientFactory<IMetaService>().CreateConnection(String.Format("{0}:{1}", ip, port), "MPExtended/MetaService");
                 if (!channel.TestConnection())
-                {
                     return null;
-                }
 
                 return channel;
             }
@@ -61,45 +60,17 @@ namespace MPExtended.Services.MetaService
 
         public static IMediaAccessService CreateLocalMAS()
         {
-            return CreateConnection<IMediaAccessService>(String.Format("net.pipe://127.0.0.1/MPExtended/MediaAccessService"));
+            return new ClientFactory<IMediaAccessService>().CreateConnection("127.0.0.1", "MPExtended/MediaAccessService");
         }
 
         public static ITVAccessService CreateLocalTAS()
         {
-            return CreateConnection<ITVAccessService>(String.Format("net.pipe://127.0.0.1/MPExtended/TVAccessService"));
+            return new ClientFactory<ITVAccessService>().CreateConnection("127.0.0.1", "MPExtended/TVAccessService");
         }
 
         public static IWebStreamingService CreateLocalWSS()
         {
-            return CreateConnection<IWebStreamingService>(String.Format("net.pipe://127.0.0.1/MPExtended/StreamingService"));
-        }
-
-        private static T CreateConnection<T>(string url)
-        {
-            Uri uri = new Uri(url);
-            ChannelFactory<T> factory;
-            if (uri.Scheme == "net.pipe")
-            {
-                factory = new ChannelFactory<T>(
-                    new NetNamedPipeBinding() { MaxReceivedMessageSize = 100000000 },
-                    new EndpointAddress(url)
-                );
-            }
-            else if (uri.Scheme == "http")
-            {
-                factory = new ChannelFactory<T>(
-                    new BasicHttpBinding() { MaxReceivedMessageSize = 100000000 },
-                    new EndpointAddress(url)
-                );
-            }
-            else
-            {
-                Log.Warn("Tried to create connection to unsupported scheme {0}", url);
-                return default(T);
-            }
-
-            T channel = factory.CreateChannel();
-            return channel;
+            return new ClientFactory<IWebStreamingService>().CreateConnection("127.0.0.1", "MPExtended/StreamingService");
         }
     }
 }

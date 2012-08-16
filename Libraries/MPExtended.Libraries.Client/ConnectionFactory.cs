@@ -50,7 +50,7 @@ namespace MPExtended.Libraries.Client
 
         protected virtual bool UsePipeBinding(string address)
         {
-            return address == "127.0.0.1" || address == "localhost";
+            return address == "127.0.0.1" || address == "localhost" || address.StartsWith("127.0.0.1:") || address.StartsWith("localhost:");
         }
 
         protected virtual ChannelFactory<TService> CreateLocalChannelFactory(string address, string path)
