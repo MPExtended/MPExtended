@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MPExtended.Libraries.Client;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -43,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                return Connections.Current.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
                     .Select(movie => new MovieViewModel(movie));
             }
             catch (Exception)
@@ -56,7 +55,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc);
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -68,7 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc);
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -80,7 +79,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.TAS.GetRecordingsByRange(0, 4, WebSortField.StartTime, WebSortOrder.Desc);
+                return Connections.Current.TAS.GetRecordingsByRange(0, 4, WebSortField.StartTime, WebSortOrder.Desc);
             }
             catch (Exception)
             {
@@ -92,7 +91,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return MPEServices.TAS.GetScheduledRecordingsForToday(WebSortField.StartTime, WebSortOrder.Desc);
+                return Connections.Current.TAS.GetScheduledRecordingsForToday(WebSortField.StartTime, WebSortOrder.Desc);
             }
             catch (Exception)
             {

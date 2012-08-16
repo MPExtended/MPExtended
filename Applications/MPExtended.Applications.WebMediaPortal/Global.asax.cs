@@ -26,7 +26,6 @@ using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Controllers;
 using MPExtended.Applications.WebMediaPortal.Mvc;
-using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal
@@ -59,10 +58,10 @@ namespace MPExtended.Applications.WebMediaPortal
             Settings.LoadSettings();
 
             // set connection settings
-            MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
+            Connections.SetUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
             Log.Info("WebMediaPortal version {0} started with MAS {1} and TAS {2}",
                 VersionUtil.GetFullVersionString(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
-            MPEServices.LogServiceVersions();
+            Connections.LogServiceVersions();
 
             // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
             Configuration.EnableChangeWatching();

@@ -21,7 +21,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -49,7 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (fileInfo == null)
-                    fileInfo = MPEServices.MAS.GetFileInfo(Movie.PID, WebMediaType.Movie, WebFileType.Content, Movie.Id, 0);
+                    fileInfo = Connections.Current.MAS.GetFileInfo(Movie.PID, WebMediaType.Movie, WebFileType.Content, Movie.Id, 0);
 
                 return fileInfo;
             }
@@ -60,7 +59,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (mediaInfo == null)
-                    mediaInfo = MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id);
+                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id);
 
                 return mediaInfo;
             }
@@ -92,7 +91,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                Movie = MPEServices.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id);
+                Movie = Connections.Current.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id);
                 Id = Movie.Id;
             }
             catch (Exception ex)

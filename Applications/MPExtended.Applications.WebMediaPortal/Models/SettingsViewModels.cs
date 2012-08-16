@@ -23,10 +23,10 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
@@ -37,7 +37,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.MASStreamControl, StreamTarget.GetVideoTargets());
+                return GetProfiles(Connections.Current.MASStreamControl, StreamTarget.GetVideoTargets());
             }
         }
 
@@ -45,7 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.MASStreamControl, StreamTarget.GetAllTargets());
+                return GetProfiles(Connections.Current.MASStreamControl, StreamTarget.GetAllTargets());
             }
         }
 
@@ -53,7 +53,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return GetProfiles(MPEServices.TASStreamControl, StreamTarget.GetVideoTargets());
+                return GetProfiles(Connections.Current.TASStreamControl, StreamTarget.GetVideoTargets());
             }
         }
 
@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.TAS.GetGroups()
+                return Connections.Current.TAS.GetGroups()
                     .Select(x => new SelectListItem() { Text = x.GroupName, Value = x.Id.ToString() })
                     .ToList();
             }
@@ -71,7 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.MAS.GetServiceDescription().AvailableTvShowLibraries
+                return Connections.Current.MAS.GetServiceDescription().AvailableTvShowLibraries
                     .Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() });
             }
         }
@@ -80,7 +80,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.MAS.GetServiceDescription().AvailableMovieLibraries
+                return Connections.Current.MAS.GetServiceDescription().AvailableMovieLibraries
                     .Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() });
             }
         }
@@ -89,7 +89,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.MAS.GetServiceDescription().AvailableMusicLibraries
+                return Connections.Current.MAS.GetServiceDescription().AvailableMusicLibraries
                     .Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() });
             }
         }
@@ -110,7 +110,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.HasMASConnection;
+                return Connections.Current.HasMASConnection;
             }
         }
 
@@ -118,7 +118,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.HasTASConnection;
+                return Connections.Current.HasTASConnection;
             }
         }
 
@@ -181,7 +181,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             if (ShowMASConfiguration)
             {
-                var serviceDesc = MPEServices.MAS.GetServiceDescription();
+                var serviceDesc = Connections.Current.MAS.GetServiceDescription();
                 MovieProvider = GetCurrentProvider(model.MovieProvider, serviceDesc.DefaultMovieLibrary);
                 MusicProvider = GetCurrentProvider(model.MusicProvider, serviceDesc.DefaultMusicLibrary);
                 TVShowProvider = GetCurrentProvider(model.TVShowProvider, serviceDesc.DefaultTvShowLibrary);
@@ -233,36 +233,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 return global;
             }
-        }
-    }
-
-    public class ServiceSettingsViewModel
-    {
-        [LocalizedDisplayName(typeof(FormStrings), "ClientService")]
-        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidClientService")]
-        [CustomValidation(typeof(Validators), "ValidateMASUrl", ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FailedToConnectToClient")]
-        public string MASUrl { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "ServerService")]
-        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidServerService")]
-        [CustomValidation(typeof(Validators), "ValidateTASUrl", ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FailedToConnectToServer")]
-        public string TASUrl { get; set; }
-
-        public ServiceSettingsViewModel()
-        {
-        }
-
-        public ServiceSettingsViewModel(SettingModel model)
-        {
-            MASUrl = model.MASUrl;
-            TASUrl = model.TASUrl;
-        }
-
-        public SettingModel ToSettingModel(SettingModel changeModel)
-        {
-            changeModel.MASUrl = MASUrl;
-            changeModel.TASUrl = TASUrl;
-            return changeModel;
         }
     }
 }

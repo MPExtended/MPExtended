@@ -23,7 +23,6 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
@@ -37,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Series
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebTVShowDetailed> series = MPEServices.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
+            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
             if (!String.IsNullOrEmpty(genre))
                 series = series.Where(x => x.Genres.Contains(genre));
 
