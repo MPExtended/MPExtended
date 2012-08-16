@@ -85,6 +85,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Util\EqualityComparer.cs" />
+    <Compile Include="Util\IPAddressUtils.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="MpConnection\Messages\MessageAuthenticationResponse.cs" />
