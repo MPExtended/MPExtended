@@ -63,7 +63,8 @@ namespace MPExtended.Services.MetaService
                 Thread.Sleep(5000);
                 foreach (var publisher in publishers)
                 {
-                    publisher.PublishAsync(detector);
+                    publisher.Detector = detector;
+                    publisher.PublishAsync();
                 }
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
             });

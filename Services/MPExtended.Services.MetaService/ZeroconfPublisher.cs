@@ -31,14 +31,21 @@ namespace MPExtended.Services.MetaService
     {
         private List<NetService> publishedServices = new List<NetService>();
         private const string SET_SERVICE_TYPE = "_mpextended-set._tcp.";
-        private IServiceDetector serviceDetector;
 
-        internal ZeroconfPublisher()
+        public IServiceDetector Detector { get; set; }
+
+        public ZeroconfPublisher()
         {
-            Configuration.Reloaded += new Configuration.ConfigurationReloadedEventHandler(Configuration_Reloaded);
+            Configuration.Reloaded += delegate()
+            {
+                // The configuration has changed: update the service properties (currently do it always, maybe check if
+                // some value actually changed in the future).
+                Unpublish();
+                Publish();
+            };
         }
 
-        public bool Publish(IServiceDetector detector)
+        public bool Publish()
         {
             // old style services
             foreach (var srv in Installation.GetInstalledServices())
@@ -61,7 +68,7 @@ namespace MPExtended.Services.MetaService
             }
     
             // new style service sets
-            foreach (WebServiceSet set in detector.CreateSetComposer().ComposeUnique())
+            foreach (WebServiceSet set in Detector.CreateSetComposer().ComposeUnique())
             {
                 Log.Debug("Publishing service set {0}", set);
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
@@ -86,32 +93,21 @@ namespace MPExtended.Services.MetaService
             return true;
         }
 
-
-        /// <summary>
-        /// The configuration has changed -> update the service properties if one of the published values
-        /// has changed
-        /// </summary>
-        void Configuration_Reloaded()
+        public void PublishAsync()
         {
-           foreach(NetService s in publishedServices)
-           {
-               s.Stop();
-           }
-
-           publishedServices.Clear();
-
-           PublishAsync(serviceDetector);
-        }
-
-        public void PublishAsync(IServiceDetector detector)
-        {
-            serviceDetector = detector;
-            Task.Factory.StartNew(() => Publish(detector));
+            Task.Factory.StartNew(() => Publish());
         }
 
         public void Unpublish()
         {
-            // bonjour cleans up automatically
+            lock (publishedServices)
+            {
+                foreach (NetService s in publishedServices)
+                {
+                    s.Stop();
+                }
+                publishedServices.Clear();
+            }
         }
 
         private void FailedToPublishService(NetService service, DNSServiceException error)

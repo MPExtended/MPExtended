@@ -24,8 +24,10 @@ namespace MPExtended.Services.MetaService
 {
     internal interface IServicePublisher
     {
-        bool Publish(IServiceDetector detector);
-        void PublishAsync(IServiceDetector detector);
+        IServiceDetector Detector { get; set; }
+
+        bool Publish();
+        void PublishAsync();
         void Unpublish();
     }
 }
