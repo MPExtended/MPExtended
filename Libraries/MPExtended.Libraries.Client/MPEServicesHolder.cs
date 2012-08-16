@@ -23,7 +23,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;

@@ -55,7 +55,7 @@ namespace MPExtended.Services.MetaService
 
             if (!Configuration.Services.AccessRequestEnabled)
             {
-                Log.Info("User access request from " + clientName + " denied because user access requests are disabled on this system (check configuration)");
+                Log.Info("User access request from {0} (claims to be client {1}) denied because user access requests are disabled on this system (check configuration)", ip, clientName);
                 request.UserHasResponded = true;
                 request.Token = null;
                 return request;
@@ -83,10 +83,12 @@ namespace MPExtended.Services.MetaService
                 }
                 Log.Debug("Finish asking user about access request with token {0}: {1}", token, result);
 
+                // make sure that the request is still active (not cancelled)
                 if (requests.ContainsKey(token))
-                {//make sure that the request is still active (not cancelled)
+                {
                     lock (requests[token])
-                    {// set the necessary flags
+                    {
+                        // set the necessary flags
                         var matchingUsers = Configuration.Services.Users.Where(x => x.Username == result);
                         requests[token].ErrorDuringProcessing = result == ERROR || !matchingUsers.Any();
                         requests[token].IsAllowed = !requests[token].ErrorDuringProcessing && result != null;

@@ -22,7 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeroconfService;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.MetaService
@@ -56,7 +56,7 @@ namespace MPExtended.Services.MetaService
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["hwAddr"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["netbios-name"] = System.Environment.MachineName;
-                additionalData["external-ip"] = IPAddressUtils.GetExternalAddress();
+                additionalData["external-ip"] = ExternalAddress.GetAddress();
 
                 NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], Configuration.Services.GetServiceName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
@@ -74,7 +74,7 @@ namespace MPExtended.Services.MetaService
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["mac"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["netbios-name"] = System.Environment.MachineName;
-                additionalData["external-ip"] = IPAddressUtils.GetExternalAddress();
+                additionalData["external-ip"] = ExternalAddress.GetAddress();
                 additionalData["mas"] = set.MAS != null ? set.MAS : String.Empty;
                 additionalData["masstream"] = set.MASStream != null ? set.MASStream : String.Empty;
                 additionalData["tas"] = set.TAS != null ? set.TAS : String.Empty;

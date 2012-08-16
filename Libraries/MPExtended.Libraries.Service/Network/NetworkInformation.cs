@@ -23,7 +23,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Network
 {
     public static class NetworkInformation
     {

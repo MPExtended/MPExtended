@@ -97,7 +97,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Util\EqualityComparer.cs" />
-    <Compile Include="Util\IPAddressUtils.cs" />
+    <Compile Include="Network\ExternalAddress.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="MpConnection\Messages\MessageAuthenticationResponse.cs" />
@@ -131,9 +131,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\ActivityServiceBehavior.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />
-    <Compile Include="Util\IPAddressExtensions.cs" />
+    <Compile Include="Util\Encryption.cs" />
+    <Compile Include="Network\IPAddressExtensions.cs" />
     <Compile Include="Util\Mediaportal.cs" />
-    <Compile Include="Util\NetworkInformation.cs" />
+    <Compile Include="Network\NetworkInformation.cs" />
     <Compile Include="Util\PathUtil.cs" />
     <Compile Include="Util\RegistryReader.cs" />
     <Compile Include="Util\UpdateChecker.cs" />

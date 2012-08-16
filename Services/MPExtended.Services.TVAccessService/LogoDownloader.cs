@@ -28,7 +28,7 @@ using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Shared;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;

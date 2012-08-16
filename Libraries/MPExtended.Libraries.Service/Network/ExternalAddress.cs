@@ -1,18 +1,36 @@
-﻿using System;
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Net;
+using System.Text;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Network
 {
-    public class IPAddressUtils
+    public class ExternalAddress
     {
-        private const String WHATS_MY_IP_URL = "http://automation.whatismyip.com/n09230945.asp";
-        private const String APP_ENGINE_URL = "http://agentgatech.appspot.com/";
-        private const String DYNDNS_URL = "http://checkip.dyndns.com/";
+        private const int CACHE_LIFETIME = 300; // in seconds
+        private const string WHATS_MY_IP_URL = "http://automation.whatismyip.com/n09230945.asp";
+        private const string APP_ENGINE_URL = "http://agentgatech.appspot.com/";
+        private const string DYNDNS_URL = "http://checkip.dyndns.com/";
 
-        private static String CachedExternalIp;
+        private static IPAddress CachedIP;
         private static DateTime CacheLastUpdated;
 
         /// <summary>
@@ -21,9 +39,9 @@ namespace MPExtended.Libraries.Service.Util
         /// provided (e.g. dyndns address)
         /// </summary>
         /// <returns>External address of this server</returns>
-        public static string GetExternalAddress()
+        public static string GetAddress()
         {
-            return GetExternalAddress(false);
+            return GetAddress(false);
         }
 
         /// <summary>
@@ -33,7 +51,7 @@ namespace MPExtended.Libraries.Service.Util
         /// </summary>
         /// <param name="forceUpdate">If true, cache is ignored</param>
         /// <returns>External address of this server</returns>
-        public static string GetExternalAddress(bool forceUpdate)
+        public static string GetAddress(bool forceUpdate)
         {
             if (!Configuration.Services.ExternalAddress.Autodetect)
             {
@@ -41,67 +59,66 @@ namespace MPExtended.Libraries.Service.Util
             }
             else
             {
-                return GetExternalIp(forceUpdate);
+                return GetIP(forceUpdate).ToString();
             }
         }
 
         /// <summary>
         /// Retrieve the external ip of this pc from one of n external websites
         /// 
-        /// Currently available and processed int this order:
+        /// Currently available and processed in this order:
         /// 1) whatismyip.com (url for automated access)
         /// 2) dyndns.com (checkip.dyndns.com)
         /// 3) agentgatech.appspot.com (google app engine)
         /// </summary>
         /// <returns>External ip of pc</returns>
-        public static string GetExternalIp()
+        public static IPAddress GetIP()
         {
-            return GetExternalIp(false);
+            return GetIP(false);
         }
 
         /// <summary>
         /// Retrieve the external ip of this pc from one of n external websites
         /// 
-        /// Currently available and processed int this order:
+        /// Currently available and processed in this order:
         /// 1) whatismyip.com (url for automated access)
         /// 2) dyndns.com (checkip.dyndns.com)
         /// 3) agentgatech.appspot.com (google app engine)
         /// </summary>
         /// <param name="forceUpdate">If true, cache is ignored</param>
         /// <returns>External ip of pc</returns>
-        public static String GetExternalIp(bool forceUpdate)
+        public static IPAddress GetIP(bool forceUpdate)
         {
-            if (!forceUpdate && CachedExternalIp != null
-                && DateTime.Now.Subtract(CacheLastUpdated).TotalMinutes < 5)
+            if (!forceUpdate && CachedIP != null
+                && (DateTime.Now - CacheLastUpdated).TotalSeconds < CACHE_LIFETIME)
             {
-                return CachedExternalIp;
+                return CachedIP;
             }
 
             WebClient client = new WebClient();
-            client.Headers.Add("user-agent",
-                   "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            // FIXME: Why are we doing this?
+            client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
 
-            String ip = GetExternalIpAddressWhatsMyIp(client);
-            if (ip == null)
-            {
-                ip = GetExternalIpAddressDynDNS(client);
-            }
-
-            if (ip == null)
-            {
-                ip = GetExternalIpAddressAppEngine(client);
-            }
+            string ip = RetrieveFromWhatsMyIp(client) ??
+                        RetrieveFromDynDNS(client) ??
+                        RetrieveFromAppEngine(client);
 
             if (ip != null)
             {
-                CachedExternalIp = ip;
                 CacheLastUpdated = DateTime.Now;
+                if (!IPAddress.TryParse(ip, out CachedIP))
+                {
+                    Log.Warn("Failed to parse retrieved external address '{0}'", ip);
+                    return null;
+                }
+                
+                return CachedIP;
             }
             else
             {
-                Log.Warn("Couldn't retrieve external ip from any of the external websites");
+                Log.Warn("Couldn't retrieve external IP from any of the external websites. Is a firewall blocking outgoing traffic?");
+                return null;
             }
-            return ip;
         }
 
         /// <summary>
@@ -109,16 +126,16 @@ namespace MPExtended.Libraries.Service.Util
         /// </summary>
         /// <param name="client">WebClient</param>
         /// <returns>IP of server</returns>
-        private static string GetExternalIpAddressAppEngine(WebClient client)
+        private static string RetrieveFromAppEngine(WebClient client)
         {
             try
             {
-                Log.Info("Getting external ip from http://agentgatech.appspot.com/");
+                Log.Info("Getting external ip from {0}", APP_ENGINE_URL);
                 return client.DownloadString(APP_ENGINE_URL);
             }
             catch (Exception ex)
             {
-                Log.Warn("Error retrieving external ip from http://agentgatech.appspot.com/", ex);
+                Log.Warn("Error retrieving external IP address", ex);
             }
             return null;
         }
@@ -128,16 +145,16 @@ namespace MPExtended.Libraries.Service.Util
         /// </summary>
         /// <param name="client">WebClient</param>
         /// <returns>IP of server</returns>
-        private static string GetExternalIpAddressWhatsMyIp(WebClient client)
+        private static string RetrieveFromWhatsMyIp(WebClient client)
         {
             try
             {
-                Log.Info("Getting external ip from whatismyip.com");
+                Log.Info("Getting external ip from {0}", WHATS_MY_IP_URL);
                 return client.DownloadString(WHATS_MY_IP_URL);
             }
             catch (Exception ex)
             {
-                Log.Warn("Error retrieving external ip from whatismyip.com", ex);
+                Log.Warn("Error retrieving external IP address", ex);
             }
             return null;
         }
@@ -147,14 +164,14 @@ namespace MPExtended.Libraries.Service.Util
         /// </summary>
         /// <param name="client">WebClient</param>
         /// <returns>IP of server</returns>
-        private static string GetExternalIpAddressDynDNS(WebClient client)
+        private static string RetrieveFromDynDNS(WebClient client)
         {
             try
             {
-                Log.Info("Getting external ip from dyndns.com");
+                Log.Info("Getting external ip from {0}", DYNDNS_URL);
                 String result = client.DownloadString(DYNDNS_URL);
 
-                //Search for the ip in the html
+                // Search for the ip in the html
                 int first = result.IndexOf(":") + 1;
                 int last = result.LastIndexOf("</body>");
                 result = result.Substring(first, last - first);
@@ -163,7 +180,7 @@ namespace MPExtended.Libraries.Service.Util
             }
             catch (Exception ex)
             {
-                Log.Warn("Error retrieving external ip from whatismyip.com", ex);
+                Log.Warn("Error retrieving external IP address", ex);
             }
             return null;
         }

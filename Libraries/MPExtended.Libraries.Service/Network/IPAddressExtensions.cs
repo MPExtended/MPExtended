@@ -21,7 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Net;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Network
 {
     internal static class IPAddressExtensions
     {

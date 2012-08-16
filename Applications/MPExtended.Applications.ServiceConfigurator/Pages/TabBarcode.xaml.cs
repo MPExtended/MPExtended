@@ -31,6 +31,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -124,7 +125,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
                 desc.Name = Configuration.Services.GetServiceName();
                 desc.NetbiosName = System.Environment.MachineName;
-                desc.ExternalIp = IPAddressUtils.GetExternalAddress();
+                desc.ExternalIp = ExternalAddress.GetAddress();
 
                 desc.Services = new List<ServiceDescription>();
                 User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;

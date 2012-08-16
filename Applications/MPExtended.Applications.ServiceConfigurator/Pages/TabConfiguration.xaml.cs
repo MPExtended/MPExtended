@@ -29,6 +29,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -66,7 +67,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
             {
-                args.Result = IPAddressUtils.GetExternalIp();
+                args.Result = ExternalAddress.GetIP().ToString();
             };
             bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
             {

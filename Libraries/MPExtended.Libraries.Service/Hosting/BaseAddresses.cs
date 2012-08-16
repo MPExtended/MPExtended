@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Network;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
