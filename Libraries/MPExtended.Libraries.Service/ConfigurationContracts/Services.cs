@@ -84,6 +84,8 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
 
     public class Services
     {
+        public bool DetectExternalAddress { get; set; }
+        public string CustomExternalIp { get; set; }
         public bool AuthenticationEnabled { get; set; }
 
         public bool BonjourEnabled { get; set; }
@@ -109,6 +111,8 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
             BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
             BonjourName = file.Element("bonjour").Element("pcname").Value;
             AccessRequestEnabled = file.Element("accessrequest").Element("enabled").Value == "true";
+            DetectExternalAddress = file.Element("externaladdress").Element("autodetect").Value == "true";
+            CustomExternalIp = file.Element("externaladdress").Element("custom").Value;
 
             Port = Int32.Parse(file.Element("port").Value);
             EnableIPv6 = file.Element("enableIPv6").Value == "true";
@@ -143,6 +147,9 @@ namespace MPExtended.Libraries.Service.ConfigurationContracts
                 file.Element("bonjour").Element("pcname").Value = BonjourName;
 
                 file.Element("accessrequest").Element("enabled").Value = AccessRequestEnabled ? "true" : "false";
+
+                file.Element("externaladdress").Element("autodetect").Value = DetectExternalAddress ? "true" : "false";
+                file.Element("externaladdress").Element("custom").Value = CustomExternalIp;
 
                 file.Element("port").Value = Port.ToString();
                 file.Element("enableIPv6").Value = EnableIPv6 ? "true" : "false";

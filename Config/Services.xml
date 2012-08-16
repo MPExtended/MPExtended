@@ -24,6 +24,11 @@
     <enabled>true</enabled>
   </accessrequest>
 
+  <externaladdress>
+    <autodetect>false</autodetect>
+    <custom>bagga.dyndns.com</custom>
+  </externaladdress>
+
   <port>4322</port>
   <enableIPv6>false</enableIPv6>
 

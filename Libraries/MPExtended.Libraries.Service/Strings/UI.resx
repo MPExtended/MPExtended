@@ -503,4 +503,13 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="AccessRequestEnable" xml:space="preserve">
     <value>Enable access requests of clients</value>
   </data>
+  <data name="ExternalIpCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Automatically detect external IP</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>External Address</value>
+  </data>
 </root>

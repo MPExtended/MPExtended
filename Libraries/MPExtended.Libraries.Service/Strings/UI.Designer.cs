@@ -403,6 +403,33 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string ExternalIpCustom {
+            get {
+                return ResourceManager.GetString("ExternalIpCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically detect external IP.
+        /// </summary>
+        public static string ExternalIpDefault {
+            get {
+                return ResourceManager.GetString("ExternalIpDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to External Address.
+        /// </summary>
+        public static string ExternalIpLabel {
+            get {
+                return ResourceManager.GetString("ExternalIpLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to failed to retrieve update information.
         /// </summary>
         public static string FailedToRetrieveUpdateInformation {

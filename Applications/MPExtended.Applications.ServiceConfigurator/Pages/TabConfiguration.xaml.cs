@@ -28,6 +28,7 @@ using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Strings;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -45,16 +46,45 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtServiceName.Text = GetServiceName();
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
+            cbAutoDetectExternalIp.IsChecked = Configuration.Services.DetectExternalAddress;
+            if (Configuration.Services.DetectExternalAddress)
+            {
+                GetExternalIp();
+            }
+            else
+            {
+                txtCustomExternalAddress.Text = Configuration.Services.CustomExternalIp;
+            }
 
             cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
 
+            CheckBonjour();
+        }
+
+        private void GetExternalIp()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += delegate(object source, DoWorkEventArgs args)
+            {
+                args.Result = IPAddressUtils.GetExternalAddress();
+            };
+            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
+            {
+                txtCustomExternalAddress.Text = (string)args.Result;
+            };
+
+            bw.RunWorkerAsync();
+        }
+
+        private void CheckBonjour()
+        {
             // check if bonjour is enabled
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
             {
                 args.Result = Zeroconf.CheckBonjourInstallation();
             };
-            bw.RunWorkerCompleted += delegate (object source, RunWorkerCompletedEventArgs args)
+            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
             {
                 tbAutodetection.Inlines.Clear();
                 tbAutodetection.Inlines.Add(UI.AutodetectionText);
@@ -90,6 +120,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
             Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
+            Configuration.Services.DetectExternalAddress = cbAutoDetectExternalIp.IsChecked.Value;
+
+            if (!cbAutoDetectExternalIp.IsChecked.Value)
+            {
+                Configuration.Services.CustomExternalIp = txtCustomExternalAddress.Text;
+            }
 
             Configuration.Services.Save();
         }
@@ -127,6 +163,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
+        }
+
+        private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = false;
+            GetExternalIp();
+        }
+
+        private void cbAutoDetectExternalIp_Unchecked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = true;
         }
     }
 }
