@@ -31,6 +31,10 @@ namespace MPExtended.Libraries.Service
     public class Configuration
     {
         public const int DEFAULT_PORT = 4322;
+
+        public delegate void ConfigurationReloadedEventHandler();
+        public static event ConfigurationReloadedEventHandler Reloaded;
+
         private static FileSystemWatcher watcher;
 
         private static ConfigurationContracts.Services serviceConfig = null;
@@ -162,6 +166,11 @@ namespace MPExtended.Libraries.Service
                 if (fileName == "MediaAccess.xml") mediaConfig = null;
                 if (fileName == "Streaming.xml") streamConfig = null;
                 if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig = null;
+
+                if (Reloaded != null)
+                {
+                    Reloaded();
+                }
             });
 
             // start watching
