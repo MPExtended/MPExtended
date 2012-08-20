@@ -21,7 +21,10 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Windows;
+using MPExtended.Applications.ServiceConfigurator.Pages;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Services.Common.Interfaces;
+using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
@@ -29,10 +32,48 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     internal class PrivateUserSessionService : IPrivateUserSessionService
     {
+        private Dictionary<string, SelectUserDialog> accessRequestDialogs = new Dictionary<string, SelectUserDialog>();
+
         public WebBoolResult OpenConfigurator()
         {
             Application.Current.MainWindow.Show();
-            return new WebBoolResult(true);
+            return true;
+        }
+
+        public WebBoolResult RequestAccess(string token, string clientName, string ipAddress, List<string> users)
+        {
+            string msg = String.Format(UI.AccessRequest, clientName, ipAddress);
+            accessRequestDialogs[token] = new SelectUserDialog("MPExtended", msg, users);
+            accessRequestDialogs[token].Width = 360;
+            accessRequestDialogs[token].Height = 220;
+            accessRequestDialogs[token].Show();
+            accessRequestDialogs[token].Focus();
+
+            return true;
+        }
+
+        public WebAccessRequestResponse GetAccessRequestStatus(string token)
+        {
+            WebAccessRequestResponse response = new WebAccessRequestResponse();
+            if (accessRequestDialogs[token] != null)
+            {
+                response.UserHasResponded = accessRequestDialogs[token].UserHasResponded;
+                response.Username = accessRequestDialogs[token].SelectedUser;
+                response.IsAllowed = accessRequestDialogs[token].SelectedUser != null;
+            }
+
+            return response;
+        }
+
+        public WebBoolResult CancelAccessRequest(string token)
+        {
+            if (accessRequestDialogs.ContainsKey(token))
+            {
+                accessRequestDialogs[token].Close();
+                accessRequestDialogs.Remove(token);
+                return true;
+            }
+            return false;
         }
     }
 }

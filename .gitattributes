@@ -1,0 +1,7 @@
+# More about this later
+
+
+Applications/MPExtended.Applications.WebMediaPortal/Content/Themes/base/*.css                   binary
+Applications/MPExtended.Applications.WebMediaPortal/Content/Themes/base/minified/*.css          binary
+Applications/MPExtended.Applications.WebMediaPortal/Scripts/jquery-*.js                         binary
+Applications/MPExtended.Applications.WebMediaPortal/Scripts/Microsoft*.js                       binary

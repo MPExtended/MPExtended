@@ -21,15 +21,16 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Strings;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -99,11 +100,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             SaveFileDialog diag = new SaveFileDialog();
             diag.Filter = "JPEG Image|*.jpg";
-            diag.Title = Strings.UI.SaveBarcodeAsImageFile;
+            diag.Title = UI.SaveBarcodeAsImageFile;
             if (diag.ShowDialog() == true)
             {
                 ((BitmapSource)imgQRCode.Source).ToWinFormsBitmap().Save(diag.FileName);
-                MessageBox.Show(String.Format(Strings.UI.SavedBarcodeTo, diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format(UI.SavedBarcodeTo, diag.FileName), "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -122,6 +123,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 desc.HardwareAddresses = String.Join(";", NetworkInformation.GetMACAddresses());
                 desc.Addresses = String.Join(";", NetworkInformation.GetIPAddresses());
                 desc.Name = Configuration.Services.GetServiceName();
+                desc.NetbiosName = System.Environment.MachineName;
+                desc.ExternalIp = IPAddressUtils.GetExternalAddress();
 
                 desc.Services = new List<ServiceDescription>();
                 User wifiRemoteAuth = WifiRemote.IsInstalled ? WifiRemote.GetAuthentication() : null;

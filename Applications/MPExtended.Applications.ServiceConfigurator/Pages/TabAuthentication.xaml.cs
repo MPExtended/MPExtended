@@ -25,6 +25,7 @@ using System.Windows.Controls;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -66,7 +67,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (String.IsNullOrEmpty(txtUsername.Text) || String.IsNullOrEmpty(txtPassword.Password))
             {
-                MessageBox.Show(Strings.UI.UserMustHaveNameAndPassword, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(UI.UserMustHaveNameAndPassword, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

@@ -91,6 +91,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="LogoDownloader.cs" />
     <Compile Include="CacheLifetimeToken.cs" />
     <Compile Include="DiskSpaceInformation.cs" />
     <Compile Include="EnumerableExtensionMethods.cs" />
@@ -105,9 +106,21 @@
       <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
       <Name>MPExtended.Libraries.Service.Config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
+      <Project>{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}</Project>
+      <Name>MPExtended.Libraries.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
+      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
+      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
       <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>

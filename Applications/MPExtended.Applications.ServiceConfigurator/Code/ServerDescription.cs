@@ -48,6 +48,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         [DataMember]
         public string Name { get; set; }
         [DataMember]
+        public string NetbiosName { get; set; }
+        [DataMember]
+        public string ExternalIp { get; set; }
+        [DataMember]
         public List<ServiceDescription> Services { get; set; }
     }
 }

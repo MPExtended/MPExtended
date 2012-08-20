@@ -41,6 +41,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // This is the timeout after which streams are automatically killed (in seconds)
         private const int STREAM_TIMEOUT_DIRECT = 10;
         private const int STREAM_TIMEOUT_PROXY = 300;
+
+        // This is the read timeout from the proxy input stream
+        private const int STREAM_PROXY_READ_TIMEOUT = 10;
 		
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
@@ -218,7 +221,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             int read;
 
             // do request
-            Log.Trace("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
+            Log.Debug("Proxying stream from {0} with buffer size {1}", sourceUrl, buffer.Length);
             WebRequest request = WebRequest.Create(sourceUrl);
             request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
             WebResponse response = request.GetResponse();
@@ -241,6 +244,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
             }
 
+            // set reasonable timeouts on the sourceStream
+            sourceStream.ReadTimeout = STREAM_PROXY_READ_TIMEOUT * 1000;
+
             // stream to output
             try
             {
@@ -250,9 +256,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     HttpContext.Response.OutputStream.Flush(); // TODO: is this needed?
                 }
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
-                Log.Warn(String.Format("HttpException while proxying stream {0}", sourceUrl), ex);
+                Log.Warn(String.Format("Exception while proxying stream {0}", sourceUrl), ex);
             }
         }
 
@@ -327,7 +333,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // get view properties
-            VideoPlayer player = targets.First(x => x.Name == profile.Target).Player;
+            VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
 
             // generate view
@@ -361,7 +367,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
                 model.Size = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
             }
-            else if (!StreamTarget.GetAllTargets().First(t => t.Name == profile.Target).HasVideo)
+            else if (!StreamTarget.GetAllTargets().First(t => profile.Targets.Contains(t.Name)).HasVideo)
             {
                 model.Size = new WebResolution() { Width = 600, Height = 100 };
             }
@@ -393,7 +399,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Playlist(WebMediaType type, string itemId)
+        public ActionResult Playlist(WebMediaType type, string itemId, string transcoder = null)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -405,7 +411,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
                 Settings.ActiveSettings.DefaultTVProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
-            var profile = GetProfile(GetStreamControl(type), defaultProfile);
+            var profile = GetProfile(GetStreamControl(type), transcoder ?? defaultProfile);
 
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();

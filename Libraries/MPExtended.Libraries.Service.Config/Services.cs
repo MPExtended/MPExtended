@@ -76,14 +76,22 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    public class ExternalAddressConfiguration
+    {
+        public bool Autodetect { get; set; }
+        public string Custom { get; set; }
+    }
+
     [XmlRoot(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class Services
     {
         public bool AuthenticationEnabled { get; set; }
+        public bool AccessRequestEnabled { get; set; }
 
         public bool BonjourEnabled { get; set; }
         public string BonjourName { get; set; }
-
+        public ExternalAddressConfiguration ExternalAddress { get; set; }
 
         public int Port { get; set; }
         public bool EnableIPv6 { get; set; }
@@ -101,6 +109,7 @@ namespace MPExtended.Libraries.Service.Config
             MASConnection = "auto://127.0.0.1:4322";
             TASConnection = "auto://127.0.0.1:4322";
             Users = new List<User>();
+            ExternalAddress = new ExternalAddressConfiguration();
             NetworkImpersonation = new NetworkImpersonation();
         }
 

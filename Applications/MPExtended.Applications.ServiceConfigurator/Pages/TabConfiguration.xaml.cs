@@ -27,6 +27,8 @@ using System.Windows.Navigation;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
+using MPExtended.Libraries.Service.Strings;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -44,26 +46,57 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtServiceName.Text = GetServiceName();
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
+            cbAutoDetectExternalIp.IsChecked = Configuration.Services.ExternalAddress.Autodetect;
+            if (Configuration.Services.ExternalAddress.Autodetect)
+            {
+                GetExternalIp();
+            }
+            else
+            {
+                txtCustomExternalAddress.Text = Configuration.Services.ExternalAddress.Custom;
+            }
 
+            cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
+
+            CheckBonjour();
+        }
+
+        private void GetExternalIp()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += delegate(object source, DoWorkEventArgs args)
+            {
+                args.Result = IPAddressUtils.GetExternalIp();
+            };
+            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
+            {
+                txtCustomExternalAddress.Text = (string)args.Result;
+            };
+
+            bw.RunWorkerAsync();
+        }
+
+        private void CheckBonjour()
+        {
             // check if bonjour is enabled
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
             {
                 args.Result = Zeroconf.CheckBonjourInstallation();
             };
-            bw.RunWorkerCompleted += delegate (object source, RunWorkerCompletedEventArgs args)
+            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
             {
                 tbAutodetection.Inlines.Clear();
-                tbAutodetection.Inlines.Add(Strings.UI.AutodetectionText);
+                tbAutodetection.Inlines.Add(UI.AutodetectionText);
 
                 if (!(bool)args.Result)
                 {
                     tbAutodetection.Inlines.Add(new LineBreak());
-                    tbAutodetection.Inlines.Add(Strings.UI.BonjourNotInstalled);
+                    tbAutodetection.Inlines.Add(UI.BonjourNotInstalled);
                     Hyperlink link = new Hyperlink();
                     link.NavigateUri = new Uri("http://support.apple.com/kb/DL999");
                     link.RequestNavigate += CommonEventHandlers.NavigateHyperlink;
-                    link.Inlines.Add(Strings.UI.BonjourNotInstalledDownload);
+                    link.Inlines.Add(UI.BonjourNotInstalledDownload);
                     tbAutodetection.Inlines.Add(link);
 
                     cbBonjourEnabled.IsChecked = false;
@@ -86,6 +119,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
             Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
+            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
+            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
+
+            if (!cbAutoDetectExternalIp.IsChecked.Value)
+            {
+                Configuration.Services.ExternalAddress.Custom = txtCustomExternalAddress.Text;
+            }
 
             Configuration.Save();
         }
@@ -112,17 +152,28 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
             {
-                MessageBox.Show(Strings.UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show(Strings.UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
+        }
+
+        private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = false;
+            GetExternalIp();
+        }
+
+        private void cbAutoDetectExternalIp_Unchecked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = true;
         }
     }
 }

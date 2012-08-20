@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
@@ -94,7 +95,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             string path = DecodeFrom64(id);
             if (!File.Exists(path))
                 return null;
-            return ConvertFileInfoToFileBasic(new FileInfo(path));
+            return ConvertFileInfoToFileBasic(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
         }
 
         public IEnumerable<WebSearchResult> Search(string text)
@@ -104,7 +105,7 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)

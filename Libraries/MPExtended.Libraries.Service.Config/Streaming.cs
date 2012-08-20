@@ -31,7 +31,9 @@ namespace MPExtended.Libraries.Service.Config
         public string MIME { get; set; }
         public int MaxOutputWidth { get; set; }
         public int MaxOutputHeight { get; set; }
-        public string Target { get; set; }
+
+        [XmlArrayItem(ElementName="Target")]
+        public List<string> Targets { get; set; }
         public int Bandwidth { get; set; }
         public string Transport { get; set; }
         public string Transcoder { get; set; }

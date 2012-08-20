@@ -43,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private List<DownloadContext> runningDownloads = new List<DownloadContext>();
 
-        public Stream Download(string clientDescription, WebMediaType type, int? provider, string itemId)
+        public Stream Download(string clientDescription, WebMediaType type, int? provider, string itemId, long? position)
         {
             // validate source first
             MediaSource source = new MediaSource(type, provider, itemId);
@@ -58,7 +58,7 @@ namespace MPExtended.Services.StreamingService.Code
                 ClientDescription = clientDescription, 
                 Source = source,
                 StartTime = DateTime.Now,
-                Stream = new ReadTrackingStreamWrapper(source.Retrieve()),
+                Stream = new ReadTrackingStreamWrapper(source.Retrieve(), position),
                 MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(source) // for playerposition view
             };
 

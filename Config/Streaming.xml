@@ -28,7 +28,9 @@
       <Name>Android FFmpeg HQ</Name>
       <Description>Best-quality Android profile based on ffmpeg</Description>
       <Bandwidth>1400</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>600</MaxOutputHeight>
@@ -44,7 +46,9 @@
       <Name>Android FFmpeg better</Name>
       <Description>High-quality Android profile based on ffmpeg</Description>
       <Bandwidth>1300</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>600</MaxOutputHeight>
@@ -60,7 +64,9 @@
       <Name>Android FFmpeg medium</Name>
       <Description>Medium-quality Android profile based on ffmpeg</Description>
       <Bandwidth>800</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MaxOutputWidth>600</MaxOutputWidth>
       <MaxOutputHeight>400</MaxOutputHeight>
@@ -76,7 +82,9 @@
       <Name>Android FFmpeg LQ</Name>
       <Description>Low-quality Android profile based on ffmpeg</Description>
       <Bandwidth>380</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MaxOutputWidth>400</MaxOutputWidth>
       <MaxOutputHeight>300</MaxOutputHeight>
@@ -94,7 +102,9 @@
       <Name>Android VLC HQ</Name>
       <Description>Best-quality Android profile based on VLC</Description>
       <Bandwidth>1400</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -104,7 +114,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=1024,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=256,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -114,7 +124,9 @@
       <Name>Android VLC better</Name>
       <Description>High-quality Android profile based on VLC</Description>
       <Bandwidth>1400</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -124,7 +136,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -134,7 +146,9 @@
       <Name>Android VLC medium</Name>
       <Description>Medium-quality Android profile based on VLC</Description>
       <Bandwidth>1400</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -144,7 +158,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -154,7 +168,9 @@
       <Name>Android VLC LQ</Name>
       <Description>Low-quality Android profile based on VLC</Description>
       <Bandwidth>1400</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -164,7 +180,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=256,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=64,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -176,17 +192,19 @@
       <Name>Android VLC RTSP</Name>
       <Description>Android VLC RTSP profile</Description>
       <Bandwidth>700</Bandwidth>
-      <Target>android</Target>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
       <Transport>rtsp</Transport>
       <MIME>application/x-rtsp</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>600</MaxOutputHeight>
 
-      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperRTSP</Transcoder>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,no-cabac,trellis=0,keyint=50},aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:rtp{sdp=#ADDRESS#}</muxer>
         <options>--no-sout-rtp-sap --no-sout-standard-sap --sout-keep --ttl 1</options>
@@ -198,7 +216,9 @@
       <Name>Direct</Name>
       <Description>VLC test profile</Description>
       <Bandwidth>10000</Bandwidth>
-      <Target>pc-vlc-video</Target>
+      <Targets>
+        <Target>pc-vlc-video</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-unknown</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -214,7 +234,9 @@
       <Name>Flash HQ</Name>
       <Description>Flash HQ</Description>
       <Bandwidth>3000</Bandwidth>
-      <Target>pc-flash-video</Target>
+      <Targets>
+        <Target>pc-flash-video</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-flv</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -224,7 +246,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <encoder>vcodec=h264,vb=3500,venc=x264{profile=baseline},acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -234,7 +256,9 @@
       <Name>Flash LQ</Name>
       <Description>Flash LQ</Description>
       <Bandwidth>1000</Bandwidth>
-      <Target>pc-flash-video</Target>
+      <Targets>
+        <Target>pc-flash-video</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-flv</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -244,7 +268,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -255,7 +279,9 @@
       <Name>Flash Ultra LQ</Name>
       <Description>Flash Ultra LQ</Description>
       <Bandwidth>1000</Bandwidth>
-      <Target>pc-flash-video</Target>
+      <Targets>
+        <Target>pc-flash-video</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-flv</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -265,7 +291,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=450,venc=x264{profile=baseline},acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
@@ -276,7 +302,9 @@
       <Name>Flash Audio</Name>
       <Description>Flash Audio</Description>
       <Bandwidth>256</Bandwidth>
-      <Target>pc-flash-audio</Target>
+      <Targets>
+        <Target>pc-flash-audio</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-flv</MIME>
       <HasVideoStream>false</HasVideoStream>
@@ -284,7 +312,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=none,acodec=mp4a,ab=256,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </TranscoderParameters>
@@ -293,7 +321,9 @@
       <Name>MP3</Name>
       <Description>MP3</Description>
       <Bandwidth>256</Bandwidth>
-      <Target>pc-flash-audio</Target>
+      <Targets>
+        <Target>pc-flash-audio</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>audio/mpeg</MIME>
       <HasVideoStream>false</HasVideoStream>
@@ -301,7 +331,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=none,acodec=mp3,ab=256,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>
@@ -310,7 +340,9 @@
       <Name>AAC</Name>
       <Description>AAC</Description>
       <Bandwidth>256</Bandwidth>
-      <Target>pc-flash-audio</Target>
+      <Targets>
+        <Target>pc-flash-audio</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>audio/aac</MIME>
       <HasVideoStream>false</HasVideoStream>
@@ -318,7 +350,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=none,acodec=mp4a,ab=256,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>
@@ -329,7 +361,9 @@
       <Name>Flash pseudostreaming test</Name>
       <Description>Flash pseudostreaming</Description>
       <Bandwidth>3000</Bandwidth>
-      <Target>pc-flash-video</Target>
+      <Targets>
+        <Target>pc-flash-video</Target>
+      </Targets>
       <Transport>http</Transport>
       <MIME>video/x-flv</MIME>
       <HasVideoStream>true</HasVideoStream>
@@ -339,7 +373,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperPseudoStreaming</Transcoder>
       <TranscoderParameters>
         <disableSeeking>no</disableSeeking>
-        <path>..\..\..\..\Libraries\Streaming\vlc-1.1.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=900,venc=x264{profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>

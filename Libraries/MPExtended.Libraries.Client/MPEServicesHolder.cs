@@ -304,7 +304,7 @@ namespace MPExtended.Libraries.Client
             // create channel factory
             ChannelFactory<T> factory = null;
             bool isLocal = addr.IsLoopback || NetworkInformation.GetIPAddresses().Contains(addr.Host);
-            if (isLocal && addr.Port == 4322)
+            if (isLocal && addr.Port == ServiceDiscoverer.DEFAULT_PORT)
             {
                 NetNamedPipeBinding binding = new NetNamedPipeBinding()
                 {

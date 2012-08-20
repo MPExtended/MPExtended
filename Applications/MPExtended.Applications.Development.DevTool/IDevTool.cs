@@ -23,10 +23,9 @@ using System.IO;
 
 namespace MPExtended.Applications.Development.DevTool
 {
-    interface IDevTool
+    internal interface IDevTool
     {
         TextWriter OutputStream { get; set; }
-        TextReader InputStream { get; set; }
         string Name { get; }
 
         void Run();

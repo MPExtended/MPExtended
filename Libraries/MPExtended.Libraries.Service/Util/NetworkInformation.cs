@@ -163,5 +163,11 @@ namespace MPExtended.Libraries.Service.Util
         {
             return GetNetworkInterfaces(Configuration.Services.EnableIPv6);
         }
+
+        public static bool IsValid(IPAddress address, bool enableIPv6)
+        {
+            return address.AddressFamily == AddressFamily.InterNetwork ||
+                (address.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6);
+        }
     }
 }

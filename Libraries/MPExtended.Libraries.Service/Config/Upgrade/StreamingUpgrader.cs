@@ -74,7 +74,7 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
                     Name = node.Element("name").Value,
                     Description = node.Element("description").Value,
                     Bandwidth = Int32.Parse(node.Element("bandwidth").Value),
-                    Target = node.Element("target").Value,
+                    Targets = new List<string>() { node.Element("target").Value },
                     Transport = node.Element("transport").Value,
                     MaxOutputHeight = node.Element("maxOutputHeight") != null ? Int32.Parse(node.Element("maxOutputHeight").Value) : 0,
                     MaxOutputWidth = node.Element("maxOutputWidth") != null ? Int32.Parse(node.Element("maxOutputWidth").Value) : 0,

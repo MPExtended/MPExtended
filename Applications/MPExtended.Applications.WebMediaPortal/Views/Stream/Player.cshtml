@@ -7,7 +7,7 @@
 }
 
 <br />
-@Html.ActionLink(UIStrings.DownloadPlaylist, "Playlist", new { type = Model.MediaType, itemId = Model.MediaId })
+@Html.ActionLink(UIStrings.DownloadPlaylist, "Playlist", new { type = Model.MediaType, itemId = Model.MediaId, transcoder = Model.Transcoder })
 
 <br />
 <br />

@@ -21,5 +21,4 @@ using System.Runtime.InteropServices;
 // The hosting information
 [assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
     Service = MPExtended.Libraries.Service.MPExtendedService.UserSessionService,
-    WCFType = typeof(MPExtended.Services.UserSessionService.UserSessionProxyService),
-    ZeroconfType = "_mpextended-uss._tcp.")]
+    WCFType = typeof(MPExtended.Services.UserSessionService.UserSessionProxyService))]

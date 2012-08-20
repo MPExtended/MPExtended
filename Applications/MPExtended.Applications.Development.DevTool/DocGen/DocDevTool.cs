@@ -25,17 +25,26 @@ using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.Development.DevTool.DocGen
 {
-    internal class DocDevTool : IDevTool
+    internal class DocDevTool : IDevTool, IQuestioningDevTool
     {
+        public string Name { get { return "Documentation generator"; } }
         public TextWriter OutputStream { get; set; }
-        public TextReader InputStream { get; set; }
-        public string Name { get { return "DocGen"; } }
+        public Dictionary<string, string> Answers { get; set; }
+
+        public IEnumerable<Question> Questions
+        {
+            get
+            {
+                return new List<Question>() {
+                    new Question("outputDirectory", "Enter output directory: "),
+                };
+            }
+        }
 
         public void Run()
         {
             string rootpath = Installation.GetSourceRootDirectory();
-            OutputStream.Write("Enter output directory: ");
-            string outputDir = InputStream.ReadLine().Trim();
+            string outputDir = Answers["outputDirectory"];
 
             var generators = new List<Tuple<string, Type, string>>() {
                 new Tuple<string, Type, string>("Common", typeof(CommonGenerator), "api-doc-common.html"),

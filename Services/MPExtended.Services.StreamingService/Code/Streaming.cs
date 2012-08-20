@@ -158,7 +158,7 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public string StartStream(string identifier, TranscoderProfile profile, int position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_DEFAULT)
+        public string StartStream(string identifier, TranscoderProfile profile, long position = 0, int audioId = STREAM_DEFAULT, int subtitleId = STREAM_DEFAULT)
         {
             // there's a theoretical race condition here between the insert in InitStream() and this, but the client should really, really
             // always have a positive result from InitStream() before continuing, so their bad that the stream failed. 
@@ -193,6 +193,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // get transcoder
                     stream.Transcoder = (ITranscoder)Activator.CreateInstance(Type.GetType(profile.Transcoder));
                     stream.Transcoder.Identifier = identifier;
+                    stream.Transcoder.Context = stream.Context;
 
                     // get audio and subtitle id
                     if (stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
@@ -237,7 +238,7 @@ namespace MPExtended.Services.StreamingService.Code
                     // build the pipeline
                     stream.Context.Pipeline = new Pipeline();
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
-                    stream.Transcoder.BuildPipeline(stream.Context);
+                    stream.Transcoder.BuildPipeline();
 
                     // start the processes and retrieve output stream
                     stream.Context.Pipeline.Assemble();
@@ -283,7 +284,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)
                 {
-                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled(Streams[identifier].Context);
+                    (Streams[identifier].Transcoder as IRetrieveHookTranscoder).RetrieveStreamCalled();
                 }
 
                 return Streams[identifier].OutputStream;
@@ -297,7 +298,7 @@ namespace MPExtended.Services.StreamingService.Code
                 if (!(Streams[identifier].Transcoder is ICustomActionTranscoder))
                     return Stream.Null;
 
-                return ((ICustomActionTranscoder)Streams[identifier].Transcoder).DoAction(action, parameters);
+                return ((ICustomActionTranscoder)Streams[identifier].Transcoder).CustomActionData(action, parameters);
             }
         }
 
@@ -355,7 +356,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
-        public void SetPlayerPosition(string identifier, int playerPosition)
+        public void SetPlayerPosition(string identifier, long playerPosition)
         {
             if (Streams.ContainsKey(identifier) && Streams[identifier] != null)
             {

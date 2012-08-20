@@ -19,7 +19,7 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="Service">
-            <!-- General -->
+            <!-- General libraries -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.dll" />
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.pdb" />
@@ -29,9 +29,17 @@
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\MoreLinq.dll" />
+              <File Source="$(var.SolutionDir)\Libraries\Misc\Newtonsoft.Json.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
-
+            
+            <!-- MetaService -->
+            <Component Id="Component_General_MetaService" Guid="fcd3c49f-3653-471b-a8aa-4f98dddfa64f">
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.dll" />
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.pdb" />
+            </Component>
+            
             <!-- General registry (installation path) -->
             <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
               <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
@@ -136,6 +144,7 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.pdb" />
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Deusty.Net.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
             </Component>
@@ -208,7 +217,7 @@
         <Component Id="Component_Configurator_Autostart" Guid="e10e2230-c5f9-4c10-b7c7-5d881c953715">
           <Condition><![CDATA[INSTALLCONFIGURATORAUTOSTART]]></Condition>
           <RegistryValue Id="Autostart" Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="!(loc.ConfiguratorAutorunName)"
-                         Value="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe" Type="string" KeyPath="yes" />
+                         Value="[MPEXTENDEDDIRECTORY]Service\MPExtended.Applications.ServiceConfigurator.exe /OnBoot" Type="string" KeyPath="yes" />
         </Component>
       </Directory>
 

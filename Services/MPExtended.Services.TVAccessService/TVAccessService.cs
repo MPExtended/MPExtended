@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -32,14 +33,21 @@ using TvDatabase;
 namespace MPExtended.Services.TVAccessService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class TVAccessService : ITVAccessService
+    public class TVAccessService : ITVAccessService, ISingletonService
     {
         private const int API_VERSION = 4;
+
+        #region Service
+        public static ITVAccessService Instance { get; private set; }
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
 
-        #region Service
+        public void SetAsInstance()
+        {
+            Instance = this;
+        }
+
         public TVAccessService()
         {
             _tvBusiness = new TvBusinessLayer();
@@ -52,14 +60,18 @@ namespace MPExtended.Services.TVAccessService
         {
             try
             {
-                // read Gentle configuration from CommonAppData
+                // Use the same Gentle.config as the TVEngine
                 string gentleConfigFile = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                     "Team MediaPortal", "MediaPortal TV Server", "Gentle.config"
                 );
 
+                // but be quiet when it doesn't exists, as not everyone has the TV Engine installed
                 if (!File.Exists(gentleConfigFile))
-                    throw new FileNotFoundException("The Gentle configuration file couldn't be found. This occurs when TV Server is not installed.", gentleConfigFile);
+                {
+                    Log.Info("Cannot find Gentle.config file, assuming TVEngine isn't installed...");
+                    return;
+                }
 
                 Gentle.Common.Configurator.AddFileHandler(gentleConfigFile);
 

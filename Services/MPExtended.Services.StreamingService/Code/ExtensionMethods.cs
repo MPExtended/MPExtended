@@ -52,7 +52,7 @@ namespace MPExtended.Services.StreamingService.Code
                 MaxOutputWidth = profile.MaxOutputWidth,
                 MIME = profile.MIME,
                 Name = profile.Name,
-                Target = profile.Target,
+                Targets = profile.Targets,
                 Transport = profile.Transport
             };
         }

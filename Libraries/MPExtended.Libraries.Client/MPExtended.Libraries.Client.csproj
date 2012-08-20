@@ -38,6 +38,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ZeroconfService">
+      <HintPath>..\Misc\ZeroconfService.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -45,9 +48,17 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Zeroconf.cs" />
     <Compile Include="MPEServices.cs" />
     <Compile Include="MPEServicesHolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IServiceDiscoverer.cs" />
+    <Compile Include="IServiceAddressSet.cs" />
+    <Compile Include="IServiceSet.cs" />
+    <Compile Include="ServiceAddressSet.cs" />
+    <Compile Include="ServiceDiscoverer.cs" />
+    <Compile Include="ServiceException.cs" />
+    <Compile Include="ServiceSet.cs" />
     <Compile Include="WCFClient.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +69,10 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
@@ -70,6 +85,10 @@
     <ProjectReference Include="..\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
       <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
       <Name>MPExtended.Libraries.Service.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
+      <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
+      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>

@@ -416,7 +416,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public WebFileInfo GetFileInfo(string path)
         {
-            return new WebFileInfo(path);
+            return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
         }
 
         public Stream GetFile(string path)

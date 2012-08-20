@@ -30,6 +30,7 @@ using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -51,14 +52,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             // set valid items
             cbAudio.DataContext = new Dictionary<string, string>() { 
-                { "first", Strings.UI.SubtitlesFirstStream } 
+                { "first", UI.SubtitlesFirstStream } 
             }.Concat(languages);
 
             cbSubtitle.DataContext = new Dictionary<string, string>()
             {
-                { "none", Strings.UI.SubtitlesDisabled },
-                { "first", Strings.UI.SubtitlesFirstStream },
-                { "external", Strings.UI.SubtitlesExternal }
+                { "none", UI.SubtitlesDisabled },
+                { "first", UI.SubtitlesFirstStream },
+                { "external", UI.SubtitlesExternal }
             }.Concat(languages);
 
             // set default item

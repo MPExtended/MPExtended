@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages"
-      xmlns:strings="clr-namespace:MPExtended.Applications.ServiceConfigurator.Strings"
+      xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="560"
 	Title="TabPluginConfig">

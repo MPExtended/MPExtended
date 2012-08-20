@@ -32,6 +32,7 @@ using System.Windows.Shapes;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Applications.UacServiceHandler;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -92,7 +93,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             int port;
             if (!Int32.TryParse(txtHTTPSPort.Text, out port) || port < 44300 || port > 44399)
             {
-                MessageBox.Show(Strings.UI.HTTPSInvalidPort, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(UI.HTTPSInvalidPort, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

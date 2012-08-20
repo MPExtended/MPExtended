@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -31,9 +32,25 @@ namespace MPExtended.Services.StreamingService.Code
         private Stopwatch readTimer;
         private long readBytes;
 
-        public ReadTrackingStreamWrapper(Stream toWrap)
+        public ReadTrackingStreamWrapper(Stream toWrap): this(toWrap, 0)
+        {
+        
+        }
+
+        public ReadTrackingStreamWrapper(Stream toWrap, long? startPos)
         {
             wrappedStream = toWrap;
+            if (startPos != null && startPos > 0)
+            {
+                if (wrappedStream.CanSeek)
+                {
+                    wrappedStream.Seek((long)startPos, SeekOrigin.Begin);
+                }
+                else
+                {
+                    Log.Warn("Cannot seek on stream, failed to set start pos to " + startPos);
+                }
+            }
             readBytes = 0;
             readTimer = new Stopwatch();
             readTimer.Start();

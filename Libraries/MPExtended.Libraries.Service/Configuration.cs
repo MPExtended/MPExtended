@@ -32,6 +32,11 @@ namespace MPExtended.Libraries.Service
 {
     public class Configuration
     {
+        public const int DEFAULT_PORT = 4322;
+
+        public delegate void ConfigurationReloadedEventHandler();
+        public static event ConfigurationReloadedEventHandler Reloaded;
+
         private static FileSystemWatcher watcher;
 
         private static ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader> serviceConfig =
@@ -167,6 +172,11 @@ namespace MPExtended.Libraries.Service
                 if (fileName == "Streaming.xml") streamConfig.Reload();
                 if (fileName == "WebMediaPortal.xml") webmpConfig.Reload();
                 if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig.Reload();
+
+                if (Reloaded != null)
+                {
+                    Reloaded();
+                }
             });
 
             // start watching

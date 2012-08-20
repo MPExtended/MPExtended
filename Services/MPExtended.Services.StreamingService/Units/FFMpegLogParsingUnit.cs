@@ -36,9 +36,9 @@ namespace MPExtended.Services.StreamingService.Units
         public bool LogProgress { get; set; }
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
-        private int startPosition;
+        private long startPosition;
 
-        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, int startPosition) 
+        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, long startPosition) 
         {
             data = save;
             this.startPosition = startPosition;
@@ -54,6 +54,10 @@ namespace MPExtended.Services.StreamingService.Units
                 try
                 {
                     ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
+                }
+                catch (ThreadAbortException)
+                {
+                    // ThreadAbortException is already handled in ParseOutputStream, but rethrown when the method is left. Don't be noisy. 
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +80,7 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, int startPosition, bool logMessages, bool logProgress)
+        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, long startPosition, bool logMessages, bool logProgress)
         {
             StreamReader reader = new StreamReader(outputStream);
 
@@ -125,7 +129,9 @@ namespace MPExtended.Services.StreamingService.Units
                 catch (ThreadAbortException)
                 {
                     saveData.Value.Failed = true;
-                    break;
+                    saveData.Value.Finished = true;
+                    reader.Close();
+                    return;
                 }
                 catch (Exception e)
                 {

@@ -31,12 +31,12 @@ namespace MPExtended.Services.StreamingService.Code
 
         public int SamplingRate { get; set; } // milliseconds between samples
         public int FPS { get; set; }
-        public int StartPosition { get; set; }
+        public long StartPosition { get; set; }
 
-        private int transcodingPositionInFile;
-        private int fpsCalculatorCounter;
-        private int lastCountPosition;
-        private int calculatedFPS;
+        private long transcodingPositionInFile;
+        private long fpsCalculatorCounter;
+        private long lastCountPosition;
+        private long calculatedFPS;
 
         private long duration;
         private bool loggedUnknownDuration = false;
@@ -44,14 +44,14 @@ namespace MPExtended.Services.StreamingService.Code
 
         /// <param name="startPosition">Start position in milliseconds</param>
         /// <param name="fps">The number of frames that are encoded per second</param>
-        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate)
+        public TranscodingInfoCalculator(long startPosition, int fps, int samplingRate)
         {
             this.StartPosition = startPosition;
             this.FPS = fps;
             this.SamplingRate = samplingRate;
         }
 
-        public TranscodingInfoCalculator(int startPosition, int fps, int samplingRate, long duration)
+        public TranscodingInfoCalculator(long startPosition, int fps, int samplingRate, long duration)
             : this(startPosition, fps, samplingRate)
         {
             this.duration = duration;

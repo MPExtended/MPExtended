@@ -24,6 +24,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Applications.ServiceConfigurator.Code;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
@@ -106,7 +107,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             Button btnSelectFolder = new Button();
             btnSelectFolder.Click += new RoutedEventHandler(btnSelectFolder_Click);
-            btnSelectFolder.Content = Strings.UI.Browse;
+            btnSelectFolder.Content = UI.Browse;
             btnSelectFolder.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFolder.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFolder.Margin = new Thickness(0, rowHeight, 10, 0);
@@ -159,7 +160,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             Button btnSelectFile = new Button();
             btnSelectFile.Click += new RoutedEventHandler(btnSelectFile_Click);
-            btnSelectFile.Content = Strings.UI.Select;
+            btnSelectFile.Content = UI.Select;
             btnSelectFile.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFile.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFile.Margin = new Thickness(0, rowHeight, 10, 0);

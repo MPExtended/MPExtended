@@ -69,6 +69,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ZeroconfService">
+      <HintPath>..\..\Libraries\Misc\ZeroconfService.dll</HintPath>
+    </Reference>
     <Reference Include="zxing">
       <HintPath>..\..\Libraries\Misc\zxing.dll</HintPath>
     </Reference>
@@ -81,13 +84,12 @@
     <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
       <Link>Code\WindowsServiceHandler.cs</Link>
     </Compile>
+    <Compile Include="Code\Zeroconf.cs" />
+    <Compile Include="Pages\SelectUserDialog.xaml.cs">
+      <DependentUpon>SelectUserDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TabActivity.xaml.cs">
       <DependentUpon>TabActivity.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Strings\UI.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UI.resx</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +119,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\SelectUserDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TabActivity.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -208,7 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
-      <Project>{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}</Project>
+      <Project>{06C11DAB-29F1-4292-ACAD-0B6D1F30DDF3}</Project>
       <Name>MPExtended.Libraries.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
@@ -230,6 +236,10 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
       <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
       <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
+      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
+      <Name>MPExtended.Services.MetaService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
@@ -258,12 +268,6 @@
     <Resource Include="..\..\Libraries\Artwork\TrayIcon.ico">
       <Link>Artwork\TrayIcon.ico</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Strings\UI.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UI.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\Libraries\Artwork\MpExtl_Icon_256.ico">

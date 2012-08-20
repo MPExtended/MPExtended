@@ -33,13 +33,11 @@ namespace MPExtended.Libraries.Service.Hosting
         private const string STARTUP_CONDITION = "MPExtendedHost";
 
         private WCFHost wcf;
-        private Zeroconf zeroconf;
 
         public MPExtendedHost()
         {
             Thread.CurrentThread.Name = "HostThread";
             wcf = new WCFHost();
-            zeroconf = new Zeroconf();
         }
 
         public bool Open()
@@ -58,7 +56,6 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Fatal("Terminating because of previous exception");
                     }
                 };
-
                 // start watching the configuration files for changes
                 Configuration.Load();
                 Configuration.EnableChangeWatching();
@@ -66,35 +63,21 @@ namespace MPExtended.Libraries.Service.Hosting
                 // start the WCF services
                 wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
 
-                // start the background threads
+                // init all services
                 var services = Installation.GetAvailableServices().Where(x => x.InitClass != null && x.InitMethod != null);
                 foreach (var service in services)
                 {
-                    string name = service.Service.ToString() + "Background";
                     BindingFlags flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod;
                     service.InitClass.InvokeMember(service.InitMethod, flags, null, null, null);
                 }
-
-                // ensure a service dependency on the TVEngine is set
+				
+				// ensure a service dependency on the TVEngine is set
                 Task.Factory.StartNew(TVEDependencyInstaller.EnsureDependencyIsInstalled);
-
-                // do the zeroconf publish
-                Task.Factory.StartNew(delegate()
-                {
-                    try
-                    {
-                        zeroconf.PublishServices(Installation.GetInstalledServices());
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error("Zeroconf publish failed", ex);
-                    }
-                });
 
                 // log MP version details
                 Mediaportal.LogVersionDetails();
 
-                // finally finish the startup
+                // finish
                 ServiceState.StartupConditionCompleted(STARTUP_CONDITION);
                 Log.Trace("Opened MPExtended ServiceHost");
                 return true;

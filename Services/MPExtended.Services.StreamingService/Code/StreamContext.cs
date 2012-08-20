@@ -37,8 +37,8 @@ namespace MPExtended.Services.StreamingService.Code
         public Resolution OutputSize { get; set; }
         public TranscoderProfile Profile { get; set; }
 
-        public int StartPosition { get; set; }
-        public int SyncedPlayerPosition { get; set; }
+        public long StartPosition { get; set; }
+        public long SyncedPlayerPosition { get; set; }
         public DateTime LastPlayerPositionSync { get; set; }
 
         public Pipeline Pipeline { get; set; }
@@ -52,11 +52,11 @@ namespace MPExtended.Services.StreamingService.Code
         /// Get the approximate player position of the client. This value comes from the client, transcoder and clock.
         /// </summary>
         /// <returns>Client player position in milliseconds</returns>
-        public int GetPlayerPosition()
+        public long GetPlayerPosition()
         {
             if (LastPlayerPositionSync > DateTime.Now.Subtract(TimeSpan.FromMilliseconds(CLIENT_SYNC_VALID_DURATION)))
             {
-                return SyncedPlayerPosition + (int)(DateTime.Now - LastPlayerPositionSync).TotalMilliseconds;
+                return SyncedPlayerPosition + (long)(DateTime.Now - LastPlayerPositionSync).TotalMilliseconds;
             }
             else if (TranscodingInfo != null)
             {
