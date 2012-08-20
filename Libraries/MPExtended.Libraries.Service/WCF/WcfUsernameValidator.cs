@@ -32,10 +32,10 @@ namespace MPExtended.Libraries.Service.WCF
     {
         public override void Validate(string userName, string password)
         {
-            if (!Configuration.Services.AuthenticationEnabled)
+            if (!Configuration.Authentication.Enabled)
                 return;
 
-            if(!Configuration.Services.Users.Any(x => x.Username == userName && x.ValidatePassword(password)))
+            if(!Configuration.Authentication.Users.Any(x => x.Username == userName && x.ValidatePassword(password)))
             {
                 Log.Info("Access denied for request with username {0}", userName);
 

@@ -21,32 +21,6 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
-    public class User
-    {
-        public string Username { get; set; }
-        public string EncryptedPassword { get; set; }
-
-        public User()
-        {
-        }
-
-        public bool ValidatePassword(string password)
-        {
-            return GetPassword() == password;
-        }
-
-        public string GetPassword()
-        {
-            return Transformations.Decrypt(EncryptedPassword);
-        }
-
-        public void SetPasswordFromPlaintext(string password)
-        {
-            EncryptedPassword = Transformations.Encrypt(password);
-        }
-    }
-
     [XmlType(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class NetworkImpersonation
     {
@@ -86,7 +60,6 @@ namespace MPExtended.Libraries.Service.Config
     [XmlRoot(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class Services
     {
-        public bool AuthenticationEnabled { get; set; }
         public bool AccessRequestEnabled { get; set; }
 
         public bool BonjourEnabled { get; set; }
@@ -99,14 +72,11 @@ namespace MPExtended.Libraries.Service.Config
         public string MASConnection { get; set; }
         public string TASConnection { get; set; }
 
-        public List<User> Users { get; set; }
-
         public NetworkImpersonation NetworkImpersonation { get; set; }
 
         public Services()
         {
             Port = 4322;
-            Users = new List<User>();
             ExternalAddress = new ExternalAddressConfiguration();
             NetworkImpersonation = new NetworkImpersonation();
         }

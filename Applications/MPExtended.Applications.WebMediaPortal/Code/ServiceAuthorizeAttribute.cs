@@ -28,7 +28,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     {
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            if (Configuration.Services.AuthenticationEnabled)
+            if (Configuration.Authentication.Enabled)
             {
                 return base.AuthorizeCore(httpContext);
             }

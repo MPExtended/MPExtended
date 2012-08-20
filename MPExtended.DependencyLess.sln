@@ -97,6 +97,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D67F-77EE-408D-A6B1-FBCADBFA8732}"
 	ProjectSection(SolutionItems) = preProject
+		Config\Authentication.xml = Config\Authentication.xml
 		Config\MediaAccess.xml = Config\MediaAccess.xml
 		Config\Services.xml = Config\Services.xml
 		Config\Streaming.xml = Config\Streaming.xml

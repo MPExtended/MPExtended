@@ -110,7 +110,7 @@ namespace MPExtended.Services.TVAccessService
                     if(!DownloadChannelLogos(logos, set.Connect()))
                     {
                         Log.Debug("Failed to download them without authorization, trying all our local accounts");
-                        foreach (var user in Configuration.Services.Users)
+                        foreach (var user in Configuration.Authentication.Users)
                         {
                             if (DownloadChannelLogos(logos, set.Connect(user.Username, user.GetPassword())))
                             {

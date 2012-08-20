@@ -80,6 +80,7 @@
     <Compile Include="Config\TransformationCallbacks.cs" />
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\ConfigUpgrader.cs" />
+    <Compile Include="Config\Upgrade\AuthenticationUpgrader.cs" />
     <Compile Include="Config\Upgrade\WebMediaPortalHostingUpgrader.cs" />
     <Compile Include="Config\Upgrade\MediaAccessUpgrader.cs" />
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />

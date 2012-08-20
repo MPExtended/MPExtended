@@ -177,7 +177,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         private MembershipUserCollection FindUsersByCondition(Func<User, bool> condition, int pageIndex, int pageSize, out int totalRecords)
         {
             MembershipUserCollection ret = new MembershipUserCollection();
-            List<MembershipUser> valid = Configuration.Services.Users.Where(condition).Select(u => GetMembershipUser(u, false)).ToList();
+            List<MembershipUser> valid = Configuration.Authentication.Users.Where(condition).Select(u => GetMembershipUser(u, false)).ToList();
             totalRecords = valid.Count;
             valid.Skip(pageIndex * pageSize).Take(pageSize).ToList().ForEach(u => ret.Add(u));
             return ret;
@@ -206,7 +206,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         {
             try
             {
-                User u = Configuration.Services.Users.Where(condition).First();
+                User u = Configuration.Authentication.Users.Where(condition).First();
                 return GetMembershipUser(u, userIsOnline);
             }
             catch (Exception)
@@ -222,7 +222,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public override bool ValidateUser(string username, string password)
         {
-            var list = Configuration.Services.Users.Where(u => u.Username == username);
+            var list = Configuration.Authentication.Users.Where(u => u.Username == username);
             return list.Count() > 0 && list.First().ValidatePassword(password);
         }
         #endregion

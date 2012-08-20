@@ -171,6 +171,7 @@
               <!-- General config -->
               <Component Id="Component_General_Config" Guid="10b3c51a-e27c-436a-986d-8222ae9a8fed">
                 <File Source="$(var.SolutionDir)\Config\Services.xml" />
+                <File Source="$(var.SolutionDir)\Config\Authentication.xml" />
               </Component>
 
               <!-- MAS config -->

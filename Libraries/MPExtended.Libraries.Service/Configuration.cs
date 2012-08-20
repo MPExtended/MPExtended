@@ -49,6 +49,8 @@ namespace MPExtended.Libraries.Service
             new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>("WebMediaPortalHosting.xml");
         private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig = 
             new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
+        private static ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader> authenticationConfig =
+            new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>("Authentication.xml", "Services.xml");
 
         static Configuration()
         {
@@ -95,8 +97,17 @@ namespace MPExtended.Libraries.Service
             }
         }
 
+        public static Authentication Authentication
+        {
+            get
+            {
+                return authenticationConfig.Get();
+            }
+        }
+
         public static void Load()
         {
+            authenticationConfig.LoadIfExists();
             serviceConfig.LoadIfExists();
             mediaConfig.LoadIfExists();
             streamConfig.LoadIfExists();
@@ -107,7 +118,7 @@ namespace MPExtended.Libraries.Service
         public static bool Save()
         {
             // I use only one ampersand here on purpose: we don't want short-circuit as all config files should be saved. 
-            return serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
+            return authenticationConfig.Save() & serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
         }
 
         internal static string GetPath(string filename)
@@ -167,6 +178,7 @@ namespace MPExtended.Libraries.Service
             watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
             {
                 string fileName = Path.GetFileName(e.FullPath);
+                if (fileName == "Users.xml") authenticationConfig.Reload();
                 if (fileName == "Services.xml") serviceConfig.Reload();
                 if (fileName == "MediaAccess.xml") mediaConfig.Reload();
                 if (fileName == "Streaming.xml") streamConfig.Reload();

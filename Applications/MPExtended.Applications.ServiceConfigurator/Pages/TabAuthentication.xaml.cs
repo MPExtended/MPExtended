@@ -39,20 +39,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         public TabAuthentication()
         {
             InitializeComponent();
-            foreach (User u in Configuration.Services.Users)
+            foreach (User u in Configuration.Authentication.Users)
             {
                 users.Add(u);
             }
 
             lvUsers.DataContext = users;
 
-            cbEnable.IsChecked = Configuration.Services.AuthenticationEnabled;
+            cbEnable.IsChecked = Configuration.Authentication.Enabled;
         }
 
         public void TabClosed()
         {
-            Configuration.Services.Users = users.ToList();
-            Configuration.Services.AuthenticationEnabled = cbEnable.IsChecked.GetValueOrDefault(true);
+            Configuration.Authentication.Users = users.ToList();
+            Configuration.Authentication.Enabled = cbEnable.IsChecked.GetValueOrDefault(true);
 
             Configuration.Save();
         }

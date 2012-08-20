@@ -93,7 +93,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 var content = Request.Headers["Authorization"].Substring(6);
                 var details = Encoding.ASCII.GetString(Convert.FromBase64String(content)).Split(':');
-                return Configuration.Services.Users.Any(x => x.Username == details[0] && x.ValidatePassword(details[1]));
+                return Configuration.Authentication.Users.Any(x => x.Username == details[0] && x.ValidatePassword(details[1]));
             }
 
             return false;

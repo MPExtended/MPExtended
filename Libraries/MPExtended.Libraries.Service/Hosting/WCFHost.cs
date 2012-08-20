@@ -88,7 +88,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 }
 
                 // configure security if needed
-                if (Configuration.Services.AuthenticationEnabled)
+                if (Configuration.Authentication.Enabled)
                 {
                     foreach (var endpoint in host.Description.Endpoints)
                     {

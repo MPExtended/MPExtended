@@ -23,26 +23,20 @@ using System.Xml.Linq;
 
 namespace MPExtended.Libraries.Service.Config.Upgrade
 {
-    internal class ServicesUpgrader : AttemptConfigUpgrader<Services>
+    internal class AuthenticationUpgrader : AttemptConfigUpgrader<Authentication>
     {
-        protected override Services DoUpgrade()
+        protected override Authentication DoUpgrade()
         {
             var file = XElement.Load(OldPath);
-            var model = new Services();
+            var model = new Authentication();
 
-            model.BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
-            model.BonjourName = file.Element("bonjour").Element("pcname").Value;
+            model.Enabled = file.Element("users").Attribute("authenticationEnabled").Value == "true";
 
-            model.Port = Int32.Parse(file.Element("port").Value);
-            model.EnableIPv6 = file.Element("enableIPv6").Value == "true";
-
-            model.NetworkImpersonation = new NetworkImpersonation()
+            model.Users = file.Element("users").Elements("user").Select(x => new User()
             {
-                Domain = file.Element("networkImpersonation").Element("domain").Value,
-                Username = file.Element("networkImpersonation").Element("username").Value,
-                EncryptedPassword = file.Element("networkImpersonation").Element("password").Value,
-                ReadInStreamingService = file.Element("networkImpersonation").Element("readInStreamingService").Value == "true"
-            };
+                Username = x.Element("username").Value,
+                EncryptedPassword = x.Element("password").Value
+            }).ToList();
 
             return model;
         }

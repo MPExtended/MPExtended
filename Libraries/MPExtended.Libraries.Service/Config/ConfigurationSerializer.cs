@@ -178,15 +178,23 @@ namespace MPExtended.Libraries.Service.Config
         where TSerializer : XmlSerializer
         where TUpgrader : ConfigUpgrader<TModel>, new()
     {
-        public ConfigurationSerializer(string filename)
+        private string upgradeFilename;
+
+        public ConfigurationSerializer(string filename, string upgradeFilename)
             : base (filename)
+        {
+            this.upgradeFilename = upgradeFilename;
+        }
+
+        public ConfigurationSerializer(string filename)
+            : this(filename, null)
         {
         }
 
         protected override TModel CleanupMalformedFile(Exception problem, string configPath)
         {
             var upgrader = new TUpgrader();
-            upgrader.OldPath = configPath;
+            upgrader.OldPath = upgradeFilename == null ? configPath : Configuration.GetPath(upgradeFilename);
             upgrader.DefaultPath = Configuration.GetDefaultPath(Filename);
 
             if (upgrader.CanUpgrade())

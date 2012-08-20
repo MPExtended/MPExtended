@@ -50,7 +50,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             InitializeComponent();
 
-            Users = Configuration.Services.Users.ToDictionary(x => x.Username, x => x);
+            Users = Configuration.Authentication.Users.ToDictionary(x => x.Username, x => x);
             cbUser.DataContext = Users;
             cbUser.DisplayMemberPath = "Key";
             cbUser.SelectedValuePath = "Value";

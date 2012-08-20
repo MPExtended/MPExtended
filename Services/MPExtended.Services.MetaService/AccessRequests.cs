@@ -90,7 +90,7 @@ namespace MPExtended.Services.MetaService
                     lock (requests[token])
                     {
                         // set the necessary flags
-                        var matchingUsers = Configuration.Services.Users.Where(x => x.Username == result);
+                        var matchingUsers = Configuration.Authentication.Users.Where(x => x.Username == result);
                         requests[token].ErrorDuringProcessing = result == ERROR || !matchingUsers.Any();
                         requests[token].IsAllowed = !requests[token].ErrorDuringProcessing && result != null;
                         requests[token].UserHasResponded = true;
@@ -147,7 +147,7 @@ namespace MPExtended.Services.MetaService
 
                 if (!sentDialog && client.Authenticated)
                 {
-                    client.SendRequestAccessDialog(clientName, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                    client.SendRequestAccessDialog(clientName, ip, Configuration.Authentication.Users.Select(x => x.Username).ToList());
                     sentDialog = true;
                 }
 
@@ -174,7 +174,7 @@ namespace MPExtended.Services.MetaService
                 channel = factory.CreateLocalTcpConnection(9751, "MPExtended/UserSessionServicePrivate");
 
                 // request access
-                bool result = channel.RequestAccess(token, client, ip, Configuration.Services.Users.Select(x => x.Username).ToList());
+                bool result = channel.RequestAccess(token, client, ip, Configuration.Authentication.Users.Select(x => x.Username).ToList());
                 String selectedUser = null;
 
                 if (result)

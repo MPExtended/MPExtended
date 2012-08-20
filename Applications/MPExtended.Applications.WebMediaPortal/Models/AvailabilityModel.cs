@@ -42,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public void Reload()
         {
-            Authentication = Configuration.Services.AuthenticationEnabled;
+            Authentication = Configuration.Authentication.Enabled;
 
             TAS = Connections.Current.HasTASConnection;
             MAS = Connections.Current.HasMASConnection;
