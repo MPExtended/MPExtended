@@ -14,7 +14,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
     {
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId, long? startPos = 0);
+        Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId, long? startPosition);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]

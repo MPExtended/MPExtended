@@ -58,9 +58,22 @@ namespace MPExtended.Services.StreamingService.Code
                 ClientDescription = clientDescription, 
                 Source = source,
                 StartTime = DateTime.Now,
-                Stream = new ReadTrackingStreamWrapper(source.Retrieve(), position),
+                Stream = new ReadTrackingStreamWrapper(source.Retrieve()),
                 MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(source) // for playerposition view
             };
+
+            // seek to start position if wanted/needed
+            if (position != null && position > 0)
+            {
+                if (context.Stream.CanSeek)
+                {
+                    context.Stream.Seek(position.Value, SeekOrigin.Begin);
+                }
+                else
+                {
+                    Log.Warn("Download: Cannot seek on stream, failed to set start position to {0}", position);
+                }
+            }
 
             // see comment in Streaming.cs:151
             string realIp = WCFUtil.GetHeaderValue("forwardedFor", "X-Forwarded-For");

@@ -32,25 +32,9 @@ namespace MPExtended.Services.StreamingService.Code
         private Stopwatch readTimer;
         private long readBytes;
 
-        public ReadTrackingStreamWrapper(Stream toWrap): this(toWrap, 0)
-        {
-        
-        }
-
-        public ReadTrackingStreamWrapper(Stream toWrap, long? startPos)
+        public ReadTrackingStreamWrapper(Stream toWrap)
         {
             wrappedStream = toWrap;
-            if (startPos != null && startPos > 0)
-            {
-                if (wrappedStream.CanSeek)
-                {
-                    wrappedStream.Seek((long)startPos, SeekOrigin.Begin);
-                }
-                else
-                {
-                    Log.Warn("Cannot seek on stream, failed to set start pos to " + startPos);
-                }
-            }
             readBytes = 0;
             readTimer = new Stopwatch();
             readTimer.Start();
