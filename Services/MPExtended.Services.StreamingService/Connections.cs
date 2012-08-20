@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -75,7 +76,7 @@ namespace MPExtended.Services.StreamingService
         {
             if (_serviceSet == null)
             {
-                var addr = new ServiceAddressSet(Configuration.Services.MASConnection, Configuration.Services.TASConnection);
+                var addr = new ServiceAddressSet("127.0.0.1", "127.0.0.1");
                 _serviceSet = addr.Connect();
             }
 

@@ -27,7 +27,4 @@
   
   <Port>4322</Port>
   <EnableIPv6>false</EnableIPv6>
-  
-  <MASConnection>auto://127.0.0.1:4322</MASConnection>
-  <TASConnection>auto://127.0.0.1:4322</TASConnection>
 </Services>

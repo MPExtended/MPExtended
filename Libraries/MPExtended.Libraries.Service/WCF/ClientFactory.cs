@@ -23,6 +23,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.WCF
@@ -39,7 +40,7 @@ namespace MPExtended.Libraries.Service.WCF
         {
             NetTcpBinding binding = new NetTcpBinding()
             {
-                MaxReceivedMessageSize = Int64.MaxValue,
+                MaxReceivedMessageSize = Int32.MaxValue,
                 ReceiveTimeout = new TimeSpan(1, 0, 0),
                 SendTimeout = new TimeSpan(1, 0, 0),
             };

@@ -57,7 +57,7 @@ namespace MPExtended.Libraries.Client
         {
             var binding = new NetNamedPipeBinding()
             {
-                MaxReceivedMessageSize = Int64.MaxValue
+                MaxReceivedMessageSize = Int32.MaxValue
             };
 
             if (CreateStreamBindings)
@@ -65,7 +65,7 @@ namespace MPExtended.Libraries.Client
             binding.ReaderQuotas.MaxArrayLength = Int32.MaxValue;
             binding.ReaderQuotas.MaxStringContentLength = Int32.MaxValue;
 
-            var endpointAddress = new EndpointAddress(String.Format("net.pipe://127.0.0.1/{0}", address, path));
+            var endpointAddress = new EndpointAddress(String.Format("net.pipe://127.0.0.1/{0}", path));
             return new ChannelFactory<TService>(binding, endpointAddress);
         }
 
@@ -73,7 +73,7 @@ namespace MPExtended.Libraries.Client
         {
             var binding = new BasicHttpBinding()
             {
-                MaxReceivedMessageSize = Int64.MaxValue
+                MaxReceivedMessageSize = Int32.MaxValue
             };
 
             if (CreateStreamBindings)

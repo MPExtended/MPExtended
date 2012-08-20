@@ -38,9 +38,6 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             model.Port = Int32.Parse(file.Element("port").Value);
             model.EnableIPv6 = file.Element("enableIPv6").Value == "true";
 
-            model.MASConnection = file.Element("connections").Element("mas").Value;
-            model.TASConnection = file.Element("connections").Element("tas").Value;
-
             model.NetworkImpersonation = new NetworkImpersonation()
             {
                 Domain = file.Element("networkImpersonation").Element("domain").Value,

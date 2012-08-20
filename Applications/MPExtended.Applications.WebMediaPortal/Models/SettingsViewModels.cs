@@ -27,6 +27,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Interfaces;
 using Config = MPExtended.Libraries.Service.Config;
 

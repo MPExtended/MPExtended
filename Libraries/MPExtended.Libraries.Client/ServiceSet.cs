@@ -234,7 +234,7 @@ namespace MPExtended.Libraries.Client
                 CreateStreamBindings = streamConnection
             };
 
-            return factory.CreateConnection(address, String.Format("/MPExtended/{0}", service));
+            return factory.CreateConnection(address, String.Format("MPExtended/{0}", service));
         }
 
         private void CloseConnection(ICommunicationObject channel)

@@ -106,8 +106,6 @@ namespace MPExtended.Libraries.Service.Config
         public Services()
         {
             Port = 4322;
-            MASConnection = "auto://127.0.0.1:4322";
-            TASConnection = "auto://127.0.0.1:4322";
             Users = new List<User>();
             ExternalAddress = new ExternalAddressConfiguration();
             NetworkImpersonation = new NetworkImpersonation();

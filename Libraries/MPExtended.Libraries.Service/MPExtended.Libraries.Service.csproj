@@ -85,7 +85,6 @@
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
-    <Compile Include="Util\Encryption.cs" />
     <Compile Include="Hosting\ISingletonService.cs" />
     <Compile Include="MpConnection\AccessRequestingClient.cs" />
     <Compile Include="MpConnection\Messages\MessageDialogAction.cs" />
@@ -96,6 +95,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Network\ExternalAddress.cs" />
     <Compile Include="Util\MIME.cs" />
@@ -132,7 +132,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\ActivityServiceBehavior.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />
-    <Compile Include="Util\Encryption.cs" />
     <Compile Include="Network\IPAddressExtensions.cs" />
     <Compile Include="Util\Mediaportal.cs" />
     <Compile Include="Network\NetworkInformation.cs" />
