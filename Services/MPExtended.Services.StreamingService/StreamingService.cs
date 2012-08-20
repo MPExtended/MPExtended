@@ -288,7 +288,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.RetrieveStream(identifier);
         }
 
-        public Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId)
+        public Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId, long? startPos = 0)
         {
             if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
             {
@@ -299,7 +299,7 @@ namespace MPExtended.Services.StreamingService
 
             try
             {
-                return _downloads.Download(clientDescription, type, provider, itemId);
+                return _downloads.Download(clientDescription, type, provider, itemId, startPos);
             }
             catch (Exception ex)
             {
