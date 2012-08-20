@@ -37,11 +37,11 @@ namespace MPExtended.Libraries.Service.Config
         public int Bandwidth { get; set; }
         public string Transport { get; set; }
         public string Transcoder { get; set; }
-        public ConfigDictionary TranscoderParameters { get; set; }
+        public TranscoderConfigDictionary TranscoderParameters { get; set; }
 
         public TranscoderProfile()
         {
-            TranscoderParameters = new ConfigDictionary();
+            TranscoderParameters = new TranscoderConfigDictionary();
         }
     }
 
@@ -104,7 +104,6 @@ namespace MPExtended.Libraries.Service.Config
             var list = Transcoders.Where(x => x.Name == name);
             if(list.Count() == 0) 
             {
-                //Log.Error("Tried to load invalid transcoder profile {0}", name);
                 return null;
             }
 

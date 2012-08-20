@@ -41,12 +41,12 @@ namespace MPExtended.Libraries.Service.Config
             {
                 if (stReader.NodeType == XmlNodeType.Element)
                 {
-                    lastName = stReader.Name;
+                    lastName = ReadKey(stReader);
                     this[lastName] = String.Empty; // for nodes without a value, use an empty string as value
                 }
                 else if (stReader.NodeType == XmlNodeType.Text)
                 {
-                    this[lastName] = stReader.Value;
+                    this[lastName] = ReadValue(stReader);
                 }
             }
 
@@ -54,6 +54,16 @@ namespace MPExtended.Libraries.Service.Config
                 reader.Read();
 
             reader.ReadEndElement(); // read the end of the element
+        }
+
+        protected virtual string ReadValue(XmlReader reader)
+        {
+            return reader.Value;
+        }
+
+        protected virtual string ReadKey(XmlReader reader)
+        {
+            return reader.Name;
         }
 
         public void WriteXml(XmlWriter writer)

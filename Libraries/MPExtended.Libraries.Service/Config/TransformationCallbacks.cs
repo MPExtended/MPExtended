@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -39,6 +40,12 @@ namespace MPExtended.Libraries.Service.Config
         {
             // program data
             input = input.Replace("%ProgramData%", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+
+            // streaming directory
+            string streamingDirectory = Installation.GetFileLayoutType() == FileLayoutType.Source ?
+                Path.Combine(Installation.GetSourceRootDirectory(), "Libraries", "Streaming") :
+                Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Streaming");
+            input = input.Replace("%mpextended-streaming%", streamingDirectory);
 
             // mp settings
             input = Regex.Replace(input, @"%mp-([^-]+)-([^-]+)%", delegate(Match match)
