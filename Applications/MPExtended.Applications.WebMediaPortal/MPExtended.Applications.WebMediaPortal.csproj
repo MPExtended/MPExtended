@@ -204,6 +204,8 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Views\Stream\HLSPlayer.css" />
+    <Content Include="Views\Stream\HLSPlayer.js" />
     <Content Include="Skins\aredon\Content\bg.png" />
     <Content Include="Skins\aredon\Content\chosen\chosen-sprite.png" />
     <Content Include="Skins\aredon\Content\chosen\chosen.css" />
@@ -485,6 +487,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioPlayer.cshtml" />
+    <Content Include="Views\Stream\HLSPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -380,5 +380,61 @@
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
       </TranscoderParameters>
     </TranscoderProfile>
+    
+    <!-- HTTP Live Streaming tests -->
+    <TranscoderProfile>
+      <Name>HTTP Live Streaming HQ</Name>
+      <Description>HTTP Live Streaming</Description>
+      <Bandwidth>3000</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>960</MaxOutputWidth>
+      <MaxOutputHeight>640</MaxOutputHeight>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <disableSeeking>no</disableSeeking>
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveKeepOld>5</httpLiveKeepOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>HTTP Live Streaming LQ</Name>
+      <Description>HTTP Live Streaming</Description>
+      <Bandwidth>3000</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>480</MaxOutputWidth>
+      <MaxOutputHeight>320</MaxOutputHeight>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <disableSeeking>no</disableSeeking>*
+        <path>..\..\..\..\Libraries\Streaming\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline},acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
   </Transcoders>
 </Streaming>

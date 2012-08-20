@@ -51,7 +51,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             return new List<StreamTarget>() {
                 new StreamTarget(VideoPlayer.VLC, true, "pc-vlc-video"),
-                new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video")
+                new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video"),
+                new StreamTarget(VideoPlayer.HLS, true, "mobile-hls-video"),
             };
         }
 
@@ -66,6 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public IEnumerable<string> Transcoders { get; set; }
         public string Transcoder { get; set; }
         public WebTranscoderProfile TranscoderProfile { get; set; }
+        public string ContinuationId { get; set; }
         public VideoPlayer Player { get; set; }
         public string PlayerViewName { get; set; }
         public WebResolution Size { get; set; }
@@ -113,6 +115,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         FlashVideo,
         FlashAudio,
-        VLC
+        VLC,
+        HLS
     }
 }

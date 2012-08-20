@@ -1,0 +1,17 @@
+﻿div#hlsplayer div#loader 
+{
+    width: 100%; 
+    height: 100%;
+    text-align: center;
+}
+
+div#hlsplayer div#loader img 
+{
+    margin-top: 50px;
+}
+
+div#error
+{
+    display: none;
+    color: red;
+}

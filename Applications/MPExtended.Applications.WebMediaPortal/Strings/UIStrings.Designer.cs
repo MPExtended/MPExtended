@@ -367,6 +367,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Starting the stream failed. Please refer to the server logs for more details..
+        /// </summary>
+        public static string FailedToStartStream {
+            get {
+                return ResourceManager.GetString("FailedToStartStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Guest starring:.
         /// </summary>
         public static string GuestStarring {
