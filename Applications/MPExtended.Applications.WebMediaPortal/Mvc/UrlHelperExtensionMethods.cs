@@ -17,9 +17,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
@@ -27,12 +29,28 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
     {
         public static string ContentLink(this UrlHelper helper, string contentPath)
         {
-            return helper.Content(ContentLocator.Current.LocateContent(contentPath));
+            try
+            {
+                return helper.Content(ContentLocator.Current.LocateContent(contentPath));
+            }
+            catch (FileNotFoundException e)
+            {
+                Log.Warn(String.Format("Failed to create URL for ContentLink('{0}')", contentPath), e);
+                return String.Empty;
+            }
         }
 
         public static string ViewContentLink(this UrlHelper helper, string viewContentPath)
         {
-            return helper.Content(ContentLocator.Current.LocateView(viewContentPath));
+            try
+            {
+                return helper.Content(ContentLocator.Current.LocateView(viewContentPath));
+            }
+            catch (FileNotFoundException e)
+            {
+                Log.Warn(String.Format("Failed to create URL for ViewContentLink('{0}')", viewContentPath), e);
+                return String.Empty;
+            }
         }
     }
 }
