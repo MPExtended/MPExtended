@@ -31,6 +31,8 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
 {
     public partial class frmFillCache : Form
     {
+        private IServiceSet _services;
+
         private BackgroundWorker bwMovies;
         private BackgroundWorker bwEpisodes;
         private bool isRunning = false;
@@ -45,8 +47,10 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
 
         private void frmFillCache_Load(object sender, EventArgs e)
         {
-            movieCount = MPEServices.MAS.GetMovieCount(null);
-            episodeCount = MPEServices.MAS.GetTVEpisodeCount(null);
+            _services = new ServiceAddressSet("127.0.0.1", "127.0.0.1").Connect();
+
+            movieCount = _services.MAS.GetMovieCount(null);
+            episodeCount = _services.MAS.GetTVEpisodeCount(null);
 
             lblMovies.Text = "Movies (0 / " + movieCount + "):";
             prgMovies.Maximum = movieCount;
@@ -80,10 +84,10 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
                     BackgroundWorker worker = (BackgroundWorker)bwSender;
                     for (int i = 0; i < movieCount; i += 100)
                     {
-                        var movies = MPEServices.MAS.GetMoviesBasicByRange(null, i, i + 100);
+                        var movies = _services.MAS.GetMoviesBasicByRange(null, i, i + 100);
                         foreach (var movie in movies)
                         {
-                            MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id);
+                            _services.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {
@@ -111,10 +115,10 @@ outMovies:
                     BackgroundWorker worker = (BackgroundWorker)bwSender;
                     for (int i = 0; i < episodeCount; i += 100)
                     {
-                        var episodes = MPEServices.MAS.GetTVEpisodesBasicByRange(null, i, i + 100);
+                        var episodes = _services.MAS.GetTVEpisodesBasicByRange(null, i, i + 100);
                         foreach (var episode in episodes)
                         {
-                            MPEServices.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id);
+                            _services.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {

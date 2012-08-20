@@ -32,10 +32,6 @@ namespace MPExtended.Libraries.Client
 {
     internal class ServiceSet : IServiceSet
     {
-        private const int MAX_ITEMS_IN_OBJECT_GRAPH = Int32.MaxValue;
-        private const int MAX_STRING_CONTENT_LENGTH = Int32.MaxValue;
-        private const int MAX_ARRAY_LENGTH = Int32.MaxValue;
-
         private IServiceAddressSet addressSet;
         private string username;
         private string password;
@@ -67,6 +63,14 @@ namespace MPExtended.Libraries.Client
             CloseConnection(TASConnection as ICommunicationObject);
             CloseConnection(WSSForTAS as ICommunicationObject);
             CloseConnection(StreamForTAS as ICommunicationObject);
+        }
+
+        public IServiceAddressSet Addresses
+        {
+            get
+            {
+                return addressSet;
+            }
         }
 
         public IMediaAccessService MAS
@@ -104,7 +108,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (WSSForMAS == null || ((ICommunicationObject)WSSForMAS).State == CommunicationState.Faulted)
                 {
-                    WSSForMAS = CreateConnection<IWebStreamingService>(addressSet.MASStream, "StreamingService", username, password);
+                    WSSForMAS = CreateConnection<IWebStreamingService>(addressSet.MASStream, "StreamingService/soap", username, password);
                 }
 
                 return WSSForMAS;
@@ -117,7 +121,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (StreamForMAS == null || ((ICommunicationObject)StreamForMAS).State == CommunicationState.Faulted)
                 {
-                    StreamForMAS = CreateConnection<IStreamingService>(addressSet.MASStream, "StreamingService", username, password);
+                    StreamForMAS = CreateConnection<IStreamingService>(addressSet.MASStream, "StreamingService/soapstream", username, password, true);
                 }
 
                 return StreamForMAS;
@@ -174,7 +178,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (WSSForTAS == null || ((ICommunicationObject)WSSForTAS).State == CommunicationState.Faulted)
                 {
-                    WSSForTAS = CreateConnection<IWebStreamingService>(addressSet.TASStream, "StreamingService", username, password);
+                    WSSForTAS = CreateConnection<IWebStreamingService>(addressSet.TASStream, "StreamingService/soap", username, password);
                 }
 
                 return WSSForTAS;
@@ -187,7 +191,7 @@ namespace MPExtended.Libraries.Client
             {
                 if (StreamForTAS == null || ((ICommunicationObject)StreamForTAS).State == CommunicationState.Faulted)
                 {
-                    StreamForTAS = CreateConnection<IStreamingService>(addressSet.TASStream, "StreamingService", username, password);
+                    StreamForTAS = CreateConnection<IStreamingService>(addressSet.TASStream, "StreamingService/soapstream", username, password, true);
                 }
 
                 return StreamForTAS;
@@ -210,85 +214,32 @@ namespace MPExtended.Libraries.Client
             }
         }
 
-        private T CreateConnection<T>(string address, string service, string username, string password)
+        private T CreateConnection<T>(string address, string service)
         {
-            Uri uri = new Uri("mpext://" + address + "/");
-            IPAddress addr = Dns.GetHostAddresses(uri.Host).First();
-            IPEndPoint endpoint = new IPEndPoint(addr, uri.Port);
-
-            return CreateConnection<T>(endpoint, service, username, password);
+            return CreateConnection<T>(address, service, null, null, false);
         }
 
-        private T CreateConnection<T>(IPEndPoint address, string service, string username, string password)
+        private T CreateConnection<T>(string address, string service, string username, string password)
         {
-            // create channel factory
-            ChannelFactory<T> factory = null;
-            if ((address.ToString() == "localhost" || address.ToString() == "127.0.0.1") && address.Port == ServiceDiscoverer.DEFAULT_PORT)
+            return CreateConnection<T>(address, service, username, password, false);
+        }
+
+        private T CreateConnection<T>(string address, string service, string username, string password, bool streamConnection)
+        {
+            ConnectionFactory<T> factory = new ConnectionFactory<T>()
             {
-                NetNamedPipeBinding binding = new NetNamedPipeBinding()
-                {
-                    MaxReceivedMessageSize = 100000000
-                };
-                binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
-                binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
+                Username = username,
+                Password = password,
+                UsePipeForLocalhost = true,
+                CreateStreamBindings = streamConnection
+            };
 
-                factory = new ChannelFactory<T>(
-                    binding,
-                    new EndpointAddress(String.Format("net.pipe://127.0.0.1/MPExtended/{0}", service))
-                );
-            }
-            else
-            {
-                BasicHttpBinding binding = new BasicHttpBinding()
-                {
-                    MaxReceivedMessageSize = 100000000
-                };
-                binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
-                binding.ReaderQuotas.MaxStringContentLength = MAX_STRING_CONTENT_LENGTH;
-
-                if (username != null && password != null)
-                {
-                    binding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
-                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
-                }
-
-                factory = new ChannelFactory<T>(
-                    binding,
-                    new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/{2}", address.Address, address.Port, service))
-                );
-
-                if (username != null && password != null)
-                {
-                    factory.Credentials.UserName.UserName = username;
-                    factory.Credentials.UserName.Password = password;
-                }
-            }
-
-            // set MaxItemsInObjectGraph parameter for all operations
-            foreach(OperationDescription operation in factory.Endpoint.Contract.Operations)
-            {
-                operation.Behaviors.Find<DataContractSerializerOperationBehavior>().MaxItemsInObjectGraph = MAX_ITEMS_IN_OBJECT_GRAPH;
-            }
-
-            // return
-            return factory.CreateChannel();
+            return factory.CreateConnection(address, String.Format("/MPExtended/{0}", service));
         }
 
         private void CloseConnection(ICommunicationObject channel)
         {
-            if (channel == null)
-                return;
-
-            if (channel.State == CommunicationState.Opening || channel.State == CommunicationState.Opened || channel.State == CommunicationState.Created)
-            {
-                try
-                {
-                    channel.Close();
-                }
-                catch (Exception)
-                {
-                }
-            }
+            ConnectionFactory.DisposeConnection(channel);
         }
     }
 }

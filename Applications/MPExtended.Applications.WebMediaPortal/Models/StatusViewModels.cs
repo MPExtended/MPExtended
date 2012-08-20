@@ -20,8 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Management;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Strings;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -84,7 +84,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return ChannelId > 0 ? MPEServices.TAS.GetChannelDetailedById(ChannelId).DisplayName : String.Empty;
+                return ChannelId > 0 ? Connections.Current.TAS.GetChannelDetailedById(ChannelId).DisplayName : String.Empty;
             }
         }
 
@@ -122,14 +122,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 return new List<string>();
 
             Uri uri = new Uri(VirtualCard.RTSPUrl);
-            return MPEServices.TAS.GetStreamingClients()
+            return Connections.Current.TAS.GetStreamingClients()
                 .Where(client => client.StreamName == uri.LocalPath.Substring(1))
                 .Select(client => client.IpAdress);
         }
 
         public IEnumerable<string> GetMPExtendedClients()
         {
-            return MPEServices.TASStreamControl.GetStreamingSessions()
+            return Connections.Current.TASStreamControl.GetStreamingSessions()
                 .Where(x => x.SourceType == WebMediaType.TV && VirtualCard.User.Name == "mpextended-" + x.Identifier)
                 .Select(x => x.ClientIPAddress);
         }

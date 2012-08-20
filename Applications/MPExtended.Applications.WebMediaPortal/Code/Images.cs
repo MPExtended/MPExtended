@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.IO;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service.Util;
@@ -34,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     {
         private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
         {
-            using (var scope = WCFClient.EnterOperationScope(MPEServices.MASStream))
+            using (var scope = WCFClient.EnterOperationScope(Connections.Current.MASStream))
             {
                 var image = method.Invoke();
 
@@ -67,32 +68,32 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 case WebMediaType.Drive:
                 case WebMediaType.File:
                 case WebMediaType.Folder:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.FileSystemProvider;
                     break;
                 case WebMediaType.Movie:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.MovieProvider;
                     break;
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicArtist:
                 case WebMediaType.MusicTrack:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.MusicProvider;
                     break;
                 case WebMediaType.Picture:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.PicturesProvider;
                     break;
                 case WebMediaType.TVShow:
                 case WebMediaType.TVSeason:
                 case WebMediaType.TVEpisode:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.TVShowProvider;
                     break;
                 case WebMediaType.TV:
                 case WebMediaType.Recording:
-                    service = MPEServices.MASStream;
+                    service = Connections.Current.MASStream;
                     break;
                 default:
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);

@@ -22,7 +22,6 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -44,12 +43,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             IEnumerable<SearchResultsViewModel> list = new List<SearchResultsViewModel>();
             if (ServiceAvailability.MAS)
             {
-                list = list.Concat(MPEServices.MAS.Search(text).Select(x => new SearchResultsViewModel(x, CreateLink(x))));
+                list = list.Concat(Connections.Current.MAS.Search(text).Select(x => new SearchResultsViewModel(x, CreateLink(x))));
             }
 
             if (ServiceAvailability.TAS)
             {
-                list = list.Concat(MPEServices.TAS.Search(text).Select(x => new SearchResultsViewModel(x, CreateLink(x))));
+                list = list.Concat(Connections.Current.TAS.Search(text).Select(x => new SearchResultsViewModel(x, CreateLink(x))));
             }
 
             list = list.Where(x => x.URL != null).OrderByDescending(x => x.Score);

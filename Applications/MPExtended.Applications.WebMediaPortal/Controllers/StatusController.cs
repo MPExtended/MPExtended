@@ -23,7 +23,6 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Client;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -48,25 +47,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Status/
         public ActionResult Index()
         {
-            var recordingDiskInfo = MPEServices.TAS.GetAllRecordingDiskInformation();
-            var cards = MPEServices.TAS.GetCards();
-            var activeCards = MPEServices.TAS.GetActiveCards();
+            var recordingDiskInfo = Connections.Current.TAS.GetAllRecordingDiskInformation();
+            var cards = Connections.Current.TAS.GetCards();
+            var activeCards = Connections.Current.TAS.GetActiveCards();
             return View(new StatusViewModel(cards, activeCards, recordingDiskInfo));
         }
 
         public ActionResult Stop(string user)
         {
-            MPEServices.TAS.CancelCurrentTimeShifting(user);
+            Connections.Current.TAS.CancelCurrentTimeShifting(user);
             return RedirectToAction("Index");
         }
 
         public ActionResult Details(string user)
         {
-            var vcard = MPEServices.TAS.GetActiveCards().Where(vc => vc.User.Name == user).FirstOrDefault();
+            var vcard = Connections.Current.TAS.GetActiveCards().Where(vc => vc.User.Name == user).FirstOrDefault();
             if (vcard == null)
                 return HttpNotFound();
 
-            var card = MPEServices.TAS.GetCards().Where(c => c.IdCard == vcard.Id).FirstOrDefault();
+            var card = Connections.Current.TAS.GetCards().Where(c => c.IdCard == vcard.Id).FirstOrDefault();
             if (card == null)
                 return HttpNotFound();
 

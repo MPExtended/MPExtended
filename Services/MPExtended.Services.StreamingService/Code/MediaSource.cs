@@ -55,11 +55,11 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 if (MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording)
                 {
-                    return Exists && MPEServices.IsTASLocal && GetFileInfo().IsLocalFile;
+                    return Exists && Connections.IsTASLocal && GetFileInfo().IsLocalFile;
                 }
                 else
                 {
-                    return Exists && MPEServices.IsMASLocal && GetFileInfo().IsLocalFile;
+                    return Exists && Connections.IsMASLocal && GetFileInfo().IsLocalFile;
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             if (MediaType == WebMediaType.Recording && FileType == WebFileType.Content)
             {
-                WebRecordingFileInfo info = MPEServices.TAS.GetRecordingFileInfo(Int32.Parse(Id));
+                WebRecordingFileInfo info = Connections.TAS.GetRecordingFileInfo(Int32.Parse(Id));
                 fileInfoCache = new WebFileInfo()
                 {
                     Exists = info.Exists,
@@ -153,7 +153,7 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            fileInfoCache = MPEServices.MAS.GetFileInfo(Provider, MediaType, FileType, Id, Offset);
+            fileInfoCache = Connections.MAS.GetFileInfo(Provider, MediaType, FileType, Id, Offset);
             return fileInfoCache;
         }
 
@@ -190,11 +190,11 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else if (MediaType == WebMediaType.Recording)
             {
-                return MPEServices.TAS.ReadRecordingFile(Int32.Parse(Id));
+                return Connections.TAS.ReadRecordingFile(Int32.Parse(Id));
             }
             else
             {
-                return MPEServices.MAS.RetrieveFile(Provider, MediaType, FileType, Id, Offset);
+                return Connections.MAS.RetrieveFile(Provider, MediaType, FileType, Id, Offset);
             }
         }
 
@@ -210,22 +210,22 @@ namespace MPExtended.Services.StreamingService.Code
                 switch (MediaType)
                 {
                     case WebMediaType.File:
-                        return MPEServices.MAS.GetFileSystemFileBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetFileSystemFileBasicById(Provider, Id).Title;
                     case WebMediaType.Movie:
-                        return MPEServices.MAS.GetMovieBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetMovieBasicById(Provider, Id).Title;
                     case WebMediaType.MusicAlbum:
-                        return MPEServices.MAS.GetMusicAlbumBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetMusicAlbumBasicById(Provider, Id).Title;
                     case WebMediaType.MusicTrack:
-                        return MPEServices.MAS.GetMusicTrackBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetMusicTrackBasicById(Provider, Id).Title;
                     case WebMediaType.Picture:
-                        return MPEServices.MAS.GetPictureBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetPictureBasicById(Provider, Id).Title;
                     case WebMediaType.Recording:
-                        return MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).Title;
+                        return Connections.TAS.GetRecordingById(Int32.Parse(Id)).Title;
                     case WebMediaType.TV:
                         int channelId;
                         if (!Int32.TryParse(Id, out channelId))
                         {
-                            var cards = MPEServices.TAS.GetActiveCards().ToList();
+                            var cards = Connections.TAS.GetActiveCards().ToList();
                             if (!cards.Any(x => x.TimeShiftFileName == Id))
                             {
                                 Log.Info("Cannot find card for timeshift buffer {0} (but did find {1}), what's happening?!", 
@@ -234,18 +234,18 @@ namespace MPExtended.Services.StreamingService.Code
                             }
                             channelId = cards.First(x => x.TimeShiftFileName == Id).IdChannel;
                         }
-                        return MPEServices.TAS.GetChannelBasicById(channelId).DisplayName;
+                        return Connections.TAS.GetChannelBasicById(channelId).DisplayName;
                     case WebMediaType.TVEpisode:
-                        var ep = MPEServices.MAS.GetTVEpisodeBasicById(Provider, Id);
-                        var season = MPEServices.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);
-                        var show = MPEServices.MAS.GetTVShowBasicById(Provider, ep.ShowId);
+                        var ep = Connections.MAS.GetTVEpisodeBasicById(Provider, Id);
+                        var season = Connections.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);
+                        var show = Connections.MAS.GetTVShowBasicById(Provider, ep.ShowId);
                         return String.Format("{0} ({1} {2}x{3})", ep.Title, show.Title, season.SeasonNumber, ep.EpisodeNumber);
                     case WebMediaType.TVSeason:
-                        var season2 = MPEServices.MAS.GetTVSeasonDetailedById(Provider, Id);
-                        var show2 = MPEServices.MAS.GetTVShowBasicById(Provider, season2.ShowId);
+                        var season2 = Connections.MAS.GetTVSeasonDetailedById(Provider, Id);
+                        var show2 = Connections.MAS.GetTVShowBasicById(Provider, season2.ShowId);
                         return String.Format("{0} season {1}", show2.Title, season2.SeasonNumber);
                     case WebMediaType.TVShow:
-                        return MPEServices.MAS.GetTVShowBasicById(Provider, Id).Title;
+                        return Connections.MAS.GetTVShowBasicById(Provider, Id).Title;
                 }
             }
             catch (Exception ex)

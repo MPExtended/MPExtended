@@ -21,12 +21,11 @@ using System.Linq;
 using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Applications.WebMediaPortal.Code;
-using MPExtended.Libraries.Client;
+using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -57,11 +56,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var lastHour = new DateTime(startTime.Year, startTime.Month, startTime.Day, startTime.Hour, startTime.Minute >= 30 ? 30 : 0, 0, DateTimeKind.Local);
             var endOfGuide = lastHour.AddHours(4);
 
-            var groups = MPEServices.TAS.GetGroups();
-            var activeGroup = MPEServices.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup.GetValueOrDefault(groups.First().Id));
+            var groups = Connections.Current.TAS.GetGroups();
+            var activeGroup = Connections.Current.TAS.GetGroupById(group != null ? group.Value : Settings.ActiveSettings.DefaultGroup.GetValueOrDefault(groups.First().Id));
             if (activeGroup == null)
             {
-                activeGroup = MPEServices.TAS.GetGroupById(groups.First().Id);
+                activeGroup = Connections.Current.TAS.GetGroupById(groups.First().Id);
             }
 
             var model = new TVGuideViewModel(groups, activeGroup, lastHour, endOfGuide);
@@ -75,7 +74,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult ProgramDetails(int programId)
         {
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
+            var program = Connections.Current.TAS.GetProgramDetailedById(programId);
             if (program == null)
                 return HttpNotFound();
             return View(new ProgramDetailsViewModel(program));
@@ -83,7 +82,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult WatchLiveTV(int channelId)
         {
-            var channel = MPEServices.TAS.GetChannelDetailedById(channelId);
+            var channel = Connections.Current.TAS.GetChannelDetailedById(channelId);
             if (channel == null)
                 return HttpNotFound();
             return View(channel);
@@ -91,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Recordings()
         {
-            var recordings = MPEServices.TAS.GetRecordings();
+            var recordings = Connections.Current.TAS.GetRecordings();
             if (recordings == null)
                 return HttpNotFound();
             return View(recordings);
@@ -99,19 +98,19 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult Recording(int id)
         {
-            var rec = MPEServices.TAS.GetRecordingById(id);
+            var rec = Connections.Current.TAS.GetRecordingById(id);
             if (rec == null)
                 return HttpNotFound();
 
-            var fileInfo = MPEServices.TAS.GetRecordingFileInfo(rec.Id);
-            var mediaInfo = MPEServices.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString());
+            var fileInfo = Connections.Current.TAS.GetRecordingFileInfo(rec.Id);
+            var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString());
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
             return View(rec);
         }
 
         public ActionResult WatchRecording(int id)
         {
-            var rec = MPEServices.TAS.GetRecordingById(id);
+            var rec = Connections.Current.TAS.GetRecordingById(id);
             return View(rec);
         }
     }

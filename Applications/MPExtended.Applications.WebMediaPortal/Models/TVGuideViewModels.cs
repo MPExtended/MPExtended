@@ -20,8 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Strings;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
@@ -138,7 +138,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             GroupName = channelGroup.GroupName;
 
             DateTime loadGuideEnd = guideEnd.Subtract(TimeSpan.FromSeconds(1)); // do not load programs that start at the end of the guid
-            Channels = MPEServices.TAS.GetChannelsDetailed(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
+            Channels = Connections.Current.TAS.GetChannelsDetailed(channelGroup.Id).Select(x => new TVGuideChannelViewModel(x, guideStart, loadGuideEnd));
         }
     }
 
@@ -155,7 +155,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Id = channel.Id;
             DisplayName = channel.DisplayName;
 
-            programList = MPEServices.TAS.GetProgramsDetailedForChannel(Id, guideStart, guideEnd);
+            programList = Connections.Current.TAS.GetProgramsDetailedForChannel(Id, guideStart, guideEnd);
             Programs = programList.Select(x => new TVGuideProgramViewModel(x, guideStart, guideEnd));
         }
     }
@@ -253,7 +253,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EndTime = program.EndTime;
             IsScheduled = program.IsScheduled;
 
-            var channel = MPEServices.TAS.GetChannelDetailedById(program.IdChannel);
+            var channel = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel);
             ChannelName = channel.DisplayName;
             ChannelId = channel.Id;
         }

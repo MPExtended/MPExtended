@@ -103,6 +103,7 @@
     <Compile Include="Code\Composition\SkinFinder.cs" />
     <Compile Include="Code\Composition\ExtensionFinder.cs" />
     <Compile Include="Code\Composition\PluginFinder.cs" />
+    <Compile Include="Code\Connections.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
-    <Compile Include="Mvc\Validators.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieLibraryController.cs" />
@@ -354,7 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Index.cshtml" />
-    <Content Include="Views\Settings\Services.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">

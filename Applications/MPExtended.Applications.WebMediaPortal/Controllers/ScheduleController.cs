@@ -22,7 +22,6 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
 
@@ -35,21 +34,21 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Schedule/
         public ActionResult Index()
         {
-            var list = MPEServices.TAS.GetSchedules(WebSortField.Name, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
+            var list = Connections.Current.TAS.GetSchedules(WebSortField.Name, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
             return View(list);
         }
 
         public ActionResult DeleteSchedule(int programId)
         {
-            var program = MPEServices.TAS.GetProgramDetailedById(programId);
-            int id = MPEServices.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
-            MPEServices.TAS.DeleteSchedule(id);
+            var program = Connections.Current.TAS.GetProgramDetailedById(programId);
+            int id = Connections.Current.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
+            Connections.Current.TAS.DeleteSchedule(id);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }
 
         public ActionResult DeleteScheduleById(int id)
         {
-            MPEServices.TAS.DeleteSchedule(id);
+            Connections.Current.TAS.DeleteSchedule(id);
             return RedirectToAction("Index");
         }
 
@@ -57,7 +56,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             if (programId != null && programId != 0)
             {
-                var program = MPEServices.TAS.GetProgramDetailedById(programId.Value);
+                var program = Connections.Current.TAS.GetProgramDetailedById(programId.Value);
                 if (program == null)
                 {
                     return HttpNotFound();
@@ -72,7 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult EditSchedule(int id)
         {
-            var schedule = MPEServices.TAS.GetScheduleById(id);
+            var schedule = Connections.Current.TAS.GetScheduleById(id);
             return View(new ScheduleViewModel(schedule));
         }
 
@@ -88,11 +87,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // delete old schedule if this is an edit
             if (model.Id != 0)
             {
-                MPEServices.TAS.DeleteSchedule(model.Id);
+                Connections.Current.TAS.DeleteSchedule(model.Id);
             }
 
             // add schedule
-            MPEServices.TAS.AddSchedule(model.Channel, model.Title, model.StartTime.Value, model.EndTime.Value, model.ScheduleType);
+            Connections.Current.TAS.AddSchedule(model.Channel, model.Title, model.StartTime.Value, model.EndTime.Value, model.ScheduleType);
 
             // redirect
             if (model.ProgramId != 0)

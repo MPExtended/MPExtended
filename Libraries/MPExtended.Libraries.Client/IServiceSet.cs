@@ -28,6 +28,8 @@ namespace MPExtended.Libraries.Client
 {
     public interface IServiceSet
     {
+        IServiceAddressSet Addresses { get; }
+
         IMediaAccessService MAS { get; }
         IStreamingService MASStream { get; }
         IWebStreamingService MASStreamControl { get; }

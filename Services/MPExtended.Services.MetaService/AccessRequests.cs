@@ -20,14 +20,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.MpConnection;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.WCF;
 using MPExtended.Services.MetaService.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
-using MPExtended.Libraries.Service.MpConnection;
-using System.Threading;
 
 namespace MPExtended.Services.MetaService
 {
@@ -169,19 +170,8 @@ namespace MPExtended.Services.MetaService
             IPrivateUserSessionService channel = null;
             try
             {
-                // create channel
-                NetTcpBinding binding = new NetTcpBinding()
-                {
-                    MaxReceivedMessageSize = 100000000,
-                    ReceiveTimeout = new TimeSpan(1, 0, 0),
-                    SendTimeout = new TimeSpan(1, 0, 0),
-                };
-                binding.ReliableSession.Enabled = true;
-                binding.ReliableSession.Ordered = true;
-                channel = ChannelFactory<IPrivateUserSessionService>.CreateChannel(
-                    binding,
-                    new EndpointAddress("net.tcp://localhost:9751/MPExtended/UserSessionServicePrivate")
-                );
+                var factory = new ClientFactory<IPrivateUserSessionService>();
+                channel = factory.CreateLocalTcpConnection(9751, "MPExtended/UserSessionServicePrivate");
 
                 // request access
                 bool result = channel.RequestAccess(token, client, ip, Configuration.Services.Users.Select(x => x.Username).ToList());

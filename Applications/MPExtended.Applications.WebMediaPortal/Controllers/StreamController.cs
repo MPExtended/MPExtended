@@ -107,7 +107,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected IWebStreamingService GetStreamControl(WebMediaType type)
         {
-            return type == WebMediaType.TV || type == WebMediaType.Recording ? MPEServices.TASStreamControl : MPEServices.MASStreamControl;
+            return type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.TASStreamControl : Connections.Current.MASStreamControl;
         }
 
         protected StreamType GetStreamMode()
@@ -128,8 +128,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
-            string rootUrl = type == WebMediaType.TV || type == WebMediaType.Recording ? MPEServices.HttpTASStreamRoot : MPEServices.HttpMASStreamRoot;
-            UriBuilder fullUri = new UriBuilder(rootUrl + "GetMediaItem?" + queryString.ToString());
+            string address = type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.Addresses.TAS : Connections.Current.Addresses.MAS;
+            string fullUrl = String.Format("http://{0}/MPExtended/StreamingService/stream/GetMediaItem?{1}", address, queryString.ToString());
+            UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (fullUri.Host == "localhost" || fullUri.Host == "127.0.0.1")
@@ -485,9 +486,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
-            WebTranscoderProfile profile = GetProfile(MPEServices.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
-            model.Tracks = MPEServices.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
-            return CreatePlayer(MPEServices.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
+            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
+            model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
         }
 
         [ServiceAuthorize]

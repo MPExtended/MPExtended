@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MPExtended.Libraries.Client;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
@@ -44,10 +44,10 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             Authentication = Configuration.Services.AuthenticationEnabled;
 
-            TAS = MPEServices.HasTASConnection;
-            MAS = MPEServices.HasMASConnection;
+            TAS = Connections.Current.HasTASConnection;
+            MAS = Connections.Current.HasMASConnection;
 
-            var msd = MPEServices.HasMASConnection ? MPEServices.MAS.GetServiceDescription() : null;
+            var msd = Connections.Current.HasMASConnection ? Connections.Current.MAS.GetServiceDescription() : null;
             Movies = MAS && msd.DefaultMovieLibrary != 0;
             TVShows = MAS && msd.DefaultTvShowLibrary != 0;
             Music = MAS && msd.DefaultMusicLibrary != 0;

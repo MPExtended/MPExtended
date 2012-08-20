@@ -22,8 +22,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Mvc;
-using MPExtended.Libraries.Client;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Services.Common.Interfaces;
@@ -75,7 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MPEServices.TAS.GetAllChannelsDetailed(WebSortField.Name)
+                return Connections.Current.TAS.GetAllChannelsDetailed(WebSortField.Name)
                         .Where(x => x.VisibleInGuide)
                         .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
             }
@@ -124,7 +124,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             ProgramId = program.Id;
 
-            ChannelName = MPEServices.TAS.GetChannelDetailedById(program.IdChannel).DisplayName;
+            ChannelName = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel).DisplayName;
         }
 
         public ScheduleViewModel(WebScheduleBasic schedule)
@@ -142,7 +142,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 case WebScheduleType.Weekly:
                 case WebScheduleType.WeeklyEveryTimeOnThisChannel:
                 case WebScheduleType.WorkingDays:
-                    ChannelName = MPEServices.TAS.GetChannelDetailedById(schedule.IdChannel).DisplayName;
+                    ChannelName = Connections.Current.TAS.GetChannelDetailedById(schedule.IdChannel).DisplayName;
                     break;
                 case WebScheduleType.EveryTimeOnEveryChannel:
                     ChannelName = "";

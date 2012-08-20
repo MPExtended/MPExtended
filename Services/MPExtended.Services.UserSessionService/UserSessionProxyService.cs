@@ -22,6 +22,7 @@ using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.WCF;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.UserSessionService.Interfaces;
 
@@ -55,21 +56,7 @@ namespace MPExtended.Services.UserSessionService
                 }
 
                 if (recreateChannel)
-                {
-                    NetTcpBinding binding = new NetTcpBinding()
-                    {
-                        MaxReceivedMessageSize = 100000000,
-                        ReceiveTimeout = new TimeSpan(0, 0, 10),
-                        SendTimeout = new TimeSpan(0, 0, 10),
-                    };
-                    binding.ReliableSession.Enabled = true;
-                    binding.ReliableSession.Ordered = true;
-
-                    proxyChannel = ChannelFactory<IUserSessionService>.CreateChannel(
-                        binding,
-                        new EndpointAddress("net.tcp://localhost:9750/MPExtended/UserSessionServiceImplementation")
-                    );
-                }
+                    proxyChannel = new ClientFactory<IUserSessionService>().CreateLocalTcpConnection(9750, "MPExtended/UserSessionServiceImplementation");
 
                 return proxyChannel;
             }

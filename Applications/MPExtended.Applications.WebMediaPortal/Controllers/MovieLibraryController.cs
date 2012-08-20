@@ -22,7 +22,6 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -38,7 +37,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebMovieDetailed> movieList = MPEServices.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: WebSortField.Title, order: WebSortOrder.Asc);
+            IEnumerable<WebMovieDetailed> movieList = Connections.Current.MAS.GetAllMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: WebSortField.Title, order: WebSortOrder.Asc);
             if (!String.IsNullOrEmpty(genre))
             {
                 movieList = movieList.Where(x => x.Genres.Contains(genre));

@@ -60,6 +60,10 @@
     <Compile Include="WindowsController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
+      <Project>{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}</Project>
+      <Name>MPExtended.Libraries.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>

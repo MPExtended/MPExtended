@@ -21,7 +21,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Client;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
@@ -52,26 +51,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             model.SaveToConfiguration();
             return RedirectToAction("Index");
-        }
-
-        public ActionResult Services()
-        {
-            return View(new ServiceSettingsViewModel(Settings.ActiveSettings));
-        }
-
-        [HttpPost]
-        public ActionResult Services(ServiceSettingsViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(new ServiceSettingsViewModel(Settings.ActiveSettings));
-            }
-
-            model.SaveToConfiguration();
-            Log.Info("Updating connection URLs to MAS {0} and TAS {1}", Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
-            MPEServices.SetConnectionUrls(Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
-            MPEServices.LogServiceVersions();
-            return RedirectToAction("Services");
         }
     }
 }

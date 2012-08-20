@@ -98,8 +98,8 @@ namespace MPExtended.Services.StreamingService.Code
                 // get display name
                 int idChannel = MediaType == WebMediaType.TV ?
                     Int32.Parse(Id) :
-                    MPEServices.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
-                var channel = MPEServices.TAS.GetChannelBasicById(idChannel);
+                    Connections.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
+                var channel = Connections.TAS.GetChannelBasicById(idChannel);
                 string location = _logos.FindLocation(channel.DisplayName);
                 if(location == null)
                 {
