@@ -35,8 +35,6 @@ namespace MPExtended.Applications.Development.DevTool
                 Environment.Exit(1);
             }
 
-
-
             // command line operating modes
             if (args.Length >= 2 && args[0] == "/noquestions")
             {
