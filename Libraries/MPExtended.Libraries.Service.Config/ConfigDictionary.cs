@@ -50,10 +50,8 @@ namespace MPExtended.Libraries.Service.Config
                 }
             }
 
-            if (reader.IsEmptyElement) // for empty nodes, we still need to read the content, as the subtree reader is empty
-                reader.Read();
-
-            reader.ReadEndElement(); // read the end of the element
+            // read closing tag
+            reader.Read();
         }
 
         protected virtual string ReadValue(XmlReader reader)
