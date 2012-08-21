@@ -144,7 +144,7 @@ namespace MPExtended.Libraries.Service.Config
             return UnsafeParse(configPath);
         }
 
-        public bool Save(TModel model)
+        public bool Save(TModel model, string path)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace MPExtended.Libraries.Service.Config
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
                 writerSettings.OmitXmlDeclaration = false;
-                string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+                
                 using (XmlWriter writer = XmlWriter.Create(path, writerSettings))
                 {
                     var serializer = Activator.CreateInstance<TSerializer>();
@@ -165,6 +165,11 @@ namespace MPExtended.Libraries.Service.Config
                 Log.Error(String.Format("Failed to save settings to file {0}", Filename), ex);
                 return false;
             }
+        }
+
+        public bool Save(TModel model)
+        {
+            return Save(model, Path.Combine(Installation.Properties.ConfigurationDirectory, Filename));
         }
 
         public bool Save()
