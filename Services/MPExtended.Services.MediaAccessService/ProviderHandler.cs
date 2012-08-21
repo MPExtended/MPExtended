@@ -103,7 +103,7 @@ namespace MPExtended.Services.MediaAccessService
                 }
                 else
                 {
-                    string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Extensions"));
+                    string extensionDirectory = Path.GetFullPath(Path.Combine(Installation.GetInstallDirectory(), "Extensions"));
                     catalog.Catalogs.Add(new DirectoryCatalog(extensionDirectory));
                 }
 

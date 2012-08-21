@@ -40,7 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal
             // this should match with the path specified in the IIS Express config (see IISExpressHost.cs)
             return Installation.GetFileLayoutType() == FileLayoutType.Source ?
                 Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.WebMediaPortal") :
-                Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.WebMediaPortal), "www");
+                Path.Combine(Installation.GetInstallDirectory(), "www");
         }
 
         protected void Application_Start()

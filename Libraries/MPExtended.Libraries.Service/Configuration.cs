@@ -121,51 +121,6 @@ namespace MPExtended.Libraries.Service
             return authenticationConfig.Save() & serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
         }
 
-        internal static string GetPath(string filename)
-        {
-            string path = Path.Combine(Installation.GetConfigurationDirectory(), filename);
-
-            if (!File.Exists(path) && Installation.IsProductInstalled(GetProductForFile(filename)))
-            {
-                if (Installation.GetFileLayoutType() == FileLayoutType.Source)
-                {
-                    // When running from source they should exists
-                    throw new FileNotFoundException("Couldn't find config - what did you do?!?!");
-                }
-                else
-                {
-                    // copy from default location
-                    File.Copy(GetDefaultPath(filename), path);
-
-                    // allow everyone to write to the config
-                    var acl = File.GetAccessControl(path);
-                    SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                    FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
-                    acl.AddAccessRule(rule);
-                    File.SetAccessControl(path, acl);
-                }
-            }
-
-            return path;
-        }
-
-        internal static string GetDefaultPath(string filename)
-        {
-            if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
-            {
-                return Path.Combine(Installation.GetInstallDirectory(GetProductForFile(filename)), "DefaultConfig", filename);
-            }
-            else
-            {
-                return GetPath(filename);
-            }
-        }
-
-        private static MPExtendedProduct GetProductForFile(string filename)
-        {
-            return filename.StartsWith("WebMediaPortal") ? MPExtendedProduct.WebMediaPortal : MPExtendedProduct.Service;
-        }
-
         public static void EnableChangeWatching()
         {
             if (watcher != null)
@@ -173,7 +128,7 @@ namespace MPExtended.Libraries.Service
                 return;
             }
 
-            watcher = new FileSystemWatcher(Installation.GetConfigurationDirectory(), "*.xml");
+            watcher = new FileSystemWatcher(Installation.Properties.ConfigurationDirectory, "*.xml");
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
             {

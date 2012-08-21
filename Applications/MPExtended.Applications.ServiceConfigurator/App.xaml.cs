@@ -37,8 +37,9 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            // setup logging
+            // setup
             Log.Setup("ServiceConfigurator.log", false);
+            Installation.Load(MPExtendedProduct.Service);
 
             // make sure to start only once
             if (!mutex.WaitOne(TimeSpan.Zero, true))
@@ -77,7 +78,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {
                 // change to installation directory
-                Environment.CurrentDirectory = Installation.GetInstallDirectory(MPExtendedProduct.Service);
+                Environment.CurrentDirectory = Installation.GetInstallDirectory();
             }
 
             // set startup form

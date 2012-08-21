@@ -41,6 +41,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
         {
             LogRotation.Rotate();
             Log.Setup("WebMediaPortalHosting.log", false);
+            Installation.Load(MPExtendedProduct.WebMediaPortal);
             host = new IISExpressHost();
             Action start = host.Start;
             start.BeginInvoke(delegate(IAsyncResult param)

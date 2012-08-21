@@ -34,6 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
             LogRotation.Rotate();
             Log.Setup("WebMediaPortal.log", false);
             Log.Debug("WebMediaPortal starting!");
+            Installation.Load(MPExtendedProduct.WebMediaPortal);
             InitializeExtensions();
         }
 

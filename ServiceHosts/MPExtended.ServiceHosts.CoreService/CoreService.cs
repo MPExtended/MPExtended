@@ -43,6 +43,7 @@ namespace MPExtended.ServiceHosts.CoreService
         {
             LogRotation.Rotate();
             Log.Setup("Service.log", false);
+            Installation.Load(MPExtendedProduct.Service);
             host = new MPExtendedHost();
             host.Open();
         }
