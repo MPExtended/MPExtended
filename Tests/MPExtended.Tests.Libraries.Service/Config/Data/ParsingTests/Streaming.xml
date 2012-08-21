@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Streaming xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/Streaming/1">
+  <WatchSharing>
+    <DebugEnabled>true</DebugEnabled>
+    
+    <FollwitEnabled>false</FollwitEnabled>
+    <FollwitConfiguration>
+      <username />
+      <passwordHash></passwordHash>
+    </FollwitConfiguration>
+
+    <TraktEnabled>true</TraktEnabled>
+    <TraktConfiguration>
+      <username>user</username>
+      <passwordHash>abcd</passwordHash>
+    </TraktConfiguration>
+  </WatchSharing>
+
+  <FFMpegPath>%mpextended-streaming%\ffmpeg.exe</FFMpegPath>
+  
+  <Transcoders>
+    <!-- Some comment -->
+    <TranscoderProfile>
+      <Name>TEST P1</Name>
+      <Description>DESC</Description>
+      <Bandwidth>1400</Bandwidth>
+      <Targets>
+        <Target>target1</Target>
+        <Target>target2</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MaxOutputWidth>800</MaxOutputWidth>
+      <MaxOutputHeight>600</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters />
+    </TranscoderProfile>
+    
+    <TranscoderProfile>
+      <Name>TEST P2</Name>
+      <Description>Description</Description>
+      <Bandwidth>1300</Bandwidth>
+      <Targets />
+      <Transport>http</Transport>
+      <MaxOutputWidth>800</MaxOutputWidth>
+      <MaxOutputHeight>600</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>false</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>CODECPARAMETERS</codecParameters>
+        <otherKey>VALUE</otherKey>
+      </TranscoderParameters>
+    </TranscoderProfile>
+  </Transcoders>
+</Streaming>

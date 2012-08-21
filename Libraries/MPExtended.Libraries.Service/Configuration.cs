@@ -39,22 +39,17 @@ namespace MPExtended.Libraries.Service
 
         private static FileSystemWatcher watcher;
 
-        private static ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader> serviceConfig =
-            new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>("Services.xml");
-        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader> mediaConfig = 
-            new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>("MediaAccess.xml");
-        private static ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader> streamConfig = 
-            new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>("Streaming.xml");
-        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader> webmpHostingConfig = 
-            new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>("WebMediaPortalHosting.xml");
-        private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig = 
-            new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
-        private static ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader> authenticationConfig =
-            new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>("Authentication.xml", "Services.xml");
+        private static ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader> serviceConfig;
+        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader> mediaConfig;
+        private static ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader> streamConfig;
+        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader> webmpHostingConfig;
+        private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig;
+        private static ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader> authenticationConfig;
 
         static Configuration()
         {
             TransformationCallbacks.Install();
+            Reset();
         }
 
         public static Services Services
@@ -103,6 +98,16 @@ namespace MPExtended.Libraries.Service
             {
                 return authenticationConfig.Get();
             }
+        }
+
+        public static void Reset()
+        {
+            serviceConfig = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>("Services.xml");
+            mediaConfig = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>("MediaAccess.xml");
+            streamConfig = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>("Streaming.xml");
+            webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>("WebMediaPortalHosting.xml");
+            webmpConfig = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
+            authenticationConfig = new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>("Authentication.xml", "Services.xml");
         }
 
         public static void Load()
