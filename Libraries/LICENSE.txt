@@ -80,6 +80,12 @@ Streaming\vlc-2.0.2:
 - Source code available from http://www.videolan.org/
 - Version 2.0.2, 32-bit, stripped from non-used components for size
 
+Tests\*:
+- Copyright (C) 2007-2012 Microsoft Corporation, http://xunit.codeplex.com/
+- Licensed under Microsoft Public License (Ms-PL), available on http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
+- Source code available from http://xunit.codeplex.com/
+- Version 1.9.1, stripped from non-used components for size reduction
+
 TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/
 - Licensed under General Public License, version 2 or later, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html

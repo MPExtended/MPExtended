@@ -17,3 +17,4 @@ Installers/MPExtended.Installers.WebMediaPortal/WWW.wxs
 Installers/MPExtended.Installers.WebMediaPortalIIS/WWW.wxs
 Packages/*
 !Packages/repositories.config
+Tests/output
