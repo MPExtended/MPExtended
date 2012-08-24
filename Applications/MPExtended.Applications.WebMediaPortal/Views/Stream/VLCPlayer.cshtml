@@ -27,7 +27,7 @@
         vlc.playlist.add("@Html.Raw(@Model.URL)");
         vlc.playlist.play();
 
-        @if(Model.Settings.EnableDeinterlace)
+        @if(@MPExtended.Applications.WebMediaPortal.Code.Settings.ActiveSettings.EnableDeinterlace)
         {
             @Html.Raw("enableDeinterlace('linear');")
         }
