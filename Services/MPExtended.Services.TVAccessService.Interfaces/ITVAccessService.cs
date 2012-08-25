@@ -88,11 +88,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduleBasic> GetSchedules(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduleBasic> GetSchedules(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -108,11 +108,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
         #endregion
 
         #region Recordings
@@ -122,11 +122,11 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebRecordingBasic> GetRecordings(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebRecordingBasic> GetRecordings(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

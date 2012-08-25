@@ -53,7 +53,7 @@ namespace MPExtended.Services.TVAccessService
         {
             switch (sortInput)
             {
-                case WebSortField.Name:
+                case WebSortField.Title:
                     return list.OrderBy(x => x.DisplayName, orderInput);
                 case WebSortField.User:
                 default:
@@ -76,7 +76,7 @@ namespace MPExtended.Services.TVAccessService
         {
             switch (sortInput)
             {
-                case WebSortField.Name:
+                case WebSortField.Title:
                     return list.OrderBy(x => x.GroupName, orderInput);
                 case WebSortField.User:
                 default:
@@ -92,7 +92,7 @@ namespace MPExtended.Services.TVAccessService
                     return list.OrderBy(x => x.IdChannel, orderInput);
                 case WebSortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
-                case WebSortField.Name:
+                case WebSortField.Title:
                 default:
                     return list.OrderBy(x => x.ProgramName, orderInput);
             }
@@ -106,7 +106,7 @@ namespace MPExtended.Services.TVAccessService
                     return list.OrderBy(x => x.IdChannel, orderInput);
                 case WebSortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
-                case WebSortField.Name:
+                case WebSortField.Title:
                 default:
                     return list.OrderBy(x => x.ProgramName, orderInput);
             }

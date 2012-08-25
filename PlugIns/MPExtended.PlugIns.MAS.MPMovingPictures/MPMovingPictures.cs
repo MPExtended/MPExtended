@@ -96,7 +96,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Name = x }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
         }
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()

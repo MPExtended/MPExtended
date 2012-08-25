@@ -375,12 +375,12 @@ namespace MPExtended.Services.TVAccessService
             return Schedule.ListAll().Count;
         }
 
-        public IList<WebScheduleBasic> GetSchedules(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebScheduleBasic> GetSchedules(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return Schedule.ListAll().Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).ToList();
         }
 
-        public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return Schedule.ListAll().Select(s => s.ToWebSchedule()).SortScheduleList(sort, order).TakeRange(start, end).ToList();
         }
@@ -505,12 +505,12 @@ namespace MPExtended.Services.TVAccessService
             return recording;
         }
 
-        public IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return Schedule.ListAll().Select(x => GetScheduledRecording(x, date)).Where(x => x != null).ToList();
         }
 
-        public IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return GetScheduledRecordingsForDate(DateTime.Today, sort, order);
         }
@@ -781,12 +781,12 @@ namespace MPExtended.Services.TVAccessService
             return Recording.ListAll().Count;
         }
 
-        public IList<WebRecordingBasic> GetRecordings(WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebRecordingBasic> GetRecordings(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).ToList();
         }
 
-        public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, WebSortField? sort = WebSortField.Name, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return Recording.ListAll().Select(rec => rec.ToWebRecording()).SortRecordingList(sort, order).TakeRange(start, end).ToList();
         }

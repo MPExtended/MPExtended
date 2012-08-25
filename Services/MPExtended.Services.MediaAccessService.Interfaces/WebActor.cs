@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebActor : WebObject, INameSortable
+    public class WebActor : WebObject, ITitleSortable
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         public WebActor()
         {
@@ -15,28 +15,28 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         public WebActor(string name)
         {
-            Name = name;
+            Title = name;
         }
 
         public override string ToString()
         {
-            return Name;
+            return Title;
         }
 
         public override bool Equals(object obj)
         {
             WebActor r = obj is string ? new WebActor((string)obj) : obj as WebActor;
-            return (object)r != null && this.Name == r.Name;
+            return (object)r != null && this.Title == r.Title;
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return Title.GetHashCode();
         }
 
         public static bool operator ==(WebActor a, WebActor b)
         {
-            return Object.ReferenceEquals(a, b) || (((object)a) != null && ((object)b) != null && a.Name == b.Name);
+            return Object.ReferenceEquals(a, b) || (((object)a) != null && ((object)b) != null && a.Title == b.Title);
         }
 
         public static bool operator !=(WebActor a, WebActor b)
@@ -51,7 +51,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         public static implicit operator string(WebActor value)
         {
-            return value.Name;
+            return value.Title;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         public static List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Name = x }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
         }
 
         public static string FixNameReader(SQLiteDataReader reader, int index)

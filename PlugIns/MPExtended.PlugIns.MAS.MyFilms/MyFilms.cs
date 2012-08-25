@@ -233,7 +233,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
 
             movie.Actors = item.Attribute("Actors").Value
                 .Split(',', '|')
-                .Select(x => new WebActor() { Name = stripActorName.Replace(x, "$1").Trim() })
+                .Select(x => new WebActor() { Title = stripActorName.Replace(x, "$1").Trim() })
                 .ToList();
 
             /* I've seen two (there are probably more...) ways the IMDB ID is saved:

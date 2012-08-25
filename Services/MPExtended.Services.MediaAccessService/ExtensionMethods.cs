@@ -70,7 +70,15 @@ namespace MPExtended.Services.MediaAccessService
         public static IQueryable<T> FilterActor<T>(this IQueryable<T> list, string actor) where T : IActors
         {
             if (actor != null)
-                return list.Where(x => ((IActors)x).Actors.Contains(new WebActor() { Name = actor }));
+                return list.Where(x => ((IActors)x).Actors.Contains(new WebActor() { Title = actor }));
+
+            return list;
+        }
+
+        public static IQueryable<T> FilterStartsWith<T>(this IQueryable<T> list, string startsWith) where T : ITitleSortable
+        {
+            if (startsWith != null)
+                return list.Where(x => x.Title.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase));
 
             return list;
         }
@@ -78,6 +86,11 @@ namespace MPExtended.Services.MediaAccessService
         public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor) where T : IGenreSortable, IActors
         {
             return FilterGenre(FilterActor(list, actor), genre);
+        }
+
+        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor, string startsWith) where T : IGenreSortable, IActors, ITitleSortable
+        {
+            return FilterStartsWith(FilterGenre(FilterActor(list, actor), genre), startsWith);
         }
 
         // Easy aliases for ordering and sorting
@@ -148,8 +161,6 @@ namespace MPExtended.Services.MediaAccessService
                         return list.OrderBy(x => ((ICategorySortable)x).Categories.First().Title, order);
                     case WebSortField.Type:
                         return list.OrderBy(x => ((ITypeSortable)x).Type, order);
-                    case WebSortField.Name:
-                        return list.OrderBy(x => ((INameSortable)x).Name, order);
 
                     // music
                     case WebSortField.MusicTrackNumber:
