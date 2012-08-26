@@ -23,14 +23,17 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml.Linq;
+using Microsoft.Win32;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Strings;
+using ServicesConfig = MPExtended.Libraries.Service.Config.Services;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal class LogExporter
     {
-        private const string PasswordSubstitute = "Removed by ServiceConfigurator export";
+        private const string PASSWORD_SUBSTITUTE = "Removed by ServiceConfigurator export";
 
         public static void Export(string savePath)
         {
@@ -45,30 +48,36 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                     File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(logPart.GetStream());
                 }
 
+                // copy Authentication.xml without the passwords
+                var authPart = zipFile.CreatePart(new Uri("/Authentication.xml", UriKind.Relative), "", CompressionOption.Maximum);
+                var authSerializer = (IConfigurationSerializer<Authentication>)Configuration.GetSerializer(ConfigurationFile.Authentication);
+                foreach (var user in authSerializer.Get().Users)
+                    user.EncryptedPassword = PASSWORD_SUBSTITUTE;
+                authSerializer.Save(authSerializer.Get(), authPart.GetStream());
+
                 // copy MediaAccess.xml
                 var masPart = zipFile.CreatePart(new Uri("/MediaAccess.xml", UriKind.Relative), "", CompressionOption.Maximum);
-                File.OpenRead(Path.Combine(Installation.GetConfigurationDirectory(), "MediaAccess.xml")).CopyTo(masPart.GetStream());
+                var masSerializer = (IConfigurationSerializer<MediaAccess>)Configuration.GetSerializer(ConfigurationFile.MediaAccess);
+                masSerializer.Save(masSerializer.Get(), masPart.GetStream());
 
-                // strip watch sharing username and password from Streaming.xml
-                var streamingPart = zipFile.CreatePart(new Uri("/Streaming.xml", UriKind.Relative), "", CompressionOption.Maximum);
-                XElement streaming = XElement.Load(Path.Combine(Installation.GetConfigurationDirectory(), "Streaming.xml"));
-                streaming.Element("watchsharing").Element("trakt").Element("passwordHash").Value = PasswordSubstitute;
-                streaming.Element("watchsharing").Element("follwit").Element("passwordHash").Value = PasswordSubstitute;
-                streaming.Save(streamingPart.GetStream());
-
-                // strip username & passwords from Services.xml file
+                // copy Services.xml without network password
                 var servicePart = zipFile.CreatePart(new Uri("/Services.xml", UriKind.Relative), "", CompressionOption.Maximum);
-                XElement services = XElement.Load(Path.Combine(Installation.GetConfigurationDirectory(), "Services.xml"));
-                services.Element("users").Elements("user").Remove();
-                services.Element("users").Value = PasswordSubstitute;
-                services.Element("networkImpersonation").Element("password").Value = PasswordSubstitute;
-                services.Save(servicePart.GetStream());
+                var serviceSerializer = (IConfigurationSerializer<ServicesConfig>)Configuration.GetSerializer(ConfigurationFile.Services);
+                serviceSerializer.Get().NetworkImpersonation.EncryptedPassword = PASSWORD_SUBSTITUTE;
+                serviceSerializer.Save(serviceSerializer.Get(), servicePart.GetStream());
+
+                // copy Streaming.xml without watch sharing password
+                var streamingPart = zipFile.CreatePart(new Uri("/Streaming.xml", UriKind.Relative), "", CompressionOption.Maximum);
+                var streamingSerializer = (IConfigurationSerializer<Streaming>)Configuration.GetSerializer(ConfigurationFile.Streaming);
+                streamingSerializer.Get().WatchSharing.FollwitConfiguration["passwordHash"] = PASSWORD_SUBSTITUTE;
+                streamingSerializer.Get().WatchSharing.TraktConfiguration["passwordHash"] = PASSWORD_SUBSTITUTE;
+                streamingSerializer.Save(streamingSerializer.Get(), streamingPart.GetStream());
             }
         }
 
         public static void ExportWithFileChooser()
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            SaveFileDialog dlg = new SaveFileDialog();
             dlg.DefaultExt = ".zip";
             dlg.Filter = UI.LogAndConfigurationArchive + "|*.zip";
             if (dlg.ShowDialog() == true)

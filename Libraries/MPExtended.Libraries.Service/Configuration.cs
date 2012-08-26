@@ -30,6 +30,16 @@ using Microsoft.Xml.Serialization.GeneratedAssembly;
 
 namespace MPExtended.Libraries.Service
 {
+    public enum ConfigurationFile
+    {
+        Services = 1,
+        MediaAccess = 2,
+        Streaming = 3,
+        Authentication = 4,
+        WebMediaPortal = 5,
+        WebMediaPortalHosting = 6
+    }
+
     public class Configuration
     {
         public const int DEFAULT_PORT = 4322;
@@ -38,25 +48,27 @@ namespace MPExtended.Libraries.Service
         public static event ConfigurationReloadedEventHandler Reloaded;
 
         private static FileSystemWatcher watcher;
-
-        private static ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader> serviceConfig;
-        private static ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader> mediaConfig;
-        private static ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader> streamConfig;
-        private static ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader> webmpHostingConfig;
-        private static ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer> webmpConfig;
-        private static ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader> authenticationConfig;
+        private static ConfigurationList config;
 
         static Configuration()
         {
             TransformationCallbacks.Install();
-            Reset();
+            config = new ConfigurationList();
+        }
+
+        public static Authentication Authentication
+        {
+            get
+            {
+                return config.Get<Authentication>(ConfigurationFile.Authentication).Get();
+            }
         }
 
         public static Services Services
         {
             get
             {
-                return serviceConfig.Get();
+                return config.Get<Services>(ConfigurationFile.Services).Get();
             }
         }
 
@@ -64,7 +76,7 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                return mediaConfig.Get();
+                return config.Get<MediaAccess>(ConfigurationFile.MediaAccess).Get();
             }
         }
 
@@ -72,7 +84,7 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                return streamConfig.Get();
+                return config.Get<Streaming>(ConfigurationFile.Streaming).Get();
             }
         }
 
@@ -80,7 +92,7 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                return webmpHostingConfig.Get();
+                return config.Get<WebMediaPortalHosting>(ConfigurationFile.WebMediaPortalHosting).Get();
             }
         }
 
@@ -88,42 +100,28 @@ namespace MPExtended.Libraries.Service
         {
             get
             {
-                return webmpConfig.Get();
-            }
-        }
-
-        public static Authentication Authentication
-        {
-            get
-            {
-                return authenticationConfig.Get();
+                return config.Get<WebMediaPortal>(ConfigurationFile.WebMediaPortal).Get();
             }
         }
 
         public static void Reset()
         {
-            serviceConfig = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>("Services.xml");
-            mediaConfig = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>("MediaAccess.xml");
-            streamConfig = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>("Streaming.xml");
-            webmpHostingConfig = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>("WebMediaPortalHosting.xml");
-            webmpConfig = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>("WebMediaPortal.xml");
-            authenticationConfig = new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>("Authentication.xml", "Services.xml");
+            config = new ConfigurationList();
         }
 
         public static void Load()
         {
-            authenticationConfig.LoadIfExists();
-            serviceConfig.LoadIfExists();
-            mediaConfig.LoadIfExists();
-            streamConfig.LoadIfExists();
-            webmpConfig.LoadIfExists();
-            webmpHostingConfig.LoadIfExists();
+            config.ForEach(c => c.LoadIfExists());
         }
 
         public static bool Save()
         {
-            // I use only one ampersand here on purpose: we don't want short-circuit as all config files should be saved. 
-            return authenticationConfig.Save() & serviceConfig.Save() & mediaConfig.Save() & streamConfig.Save() & webmpHostingConfig.Save() & webmpConfig.Save();
+            return config.ForEach(c => c.Save()).All(c => c.Value);
+        }
+
+        public static IConfigurationSerializer GetSerializer(ConfigurationFile file)
+        {
+            return config[file];
         }
 
         public static void EnableChangeWatching()
@@ -137,17 +135,12 @@ namespace MPExtended.Libraries.Service
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
             {
-                string fileName = Path.GetFileName(e.FullPath);
-                if (fileName == "Users.xml") authenticationConfig.Reload();
-                if (fileName == "Services.xml") serviceConfig.Reload();
-                if (fileName == "MediaAccess.xml") mediaConfig.Reload();
-                if (fileName == "Streaming.xml") streamConfig.Reload();
-                if (fileName == "WebMediaPortal.xml") webmpConfig.Reload();
-                if (fileName == "WebMediaPortalHosting.xml") webmpHostingConfig.Reload();
-
-                if (Reloaded != null)
+                var serializer = config.Select(s => s.Value).FirstOrDefault(s => s.Filename == Path.GetFileName(e.FullPath));
+                if (serializer != null)
                 {
-                    Reloaded();
+                    serializer.Reload();
+                    if (Reloaded != null)
+                        Reloaded();
                 }
             });
 
