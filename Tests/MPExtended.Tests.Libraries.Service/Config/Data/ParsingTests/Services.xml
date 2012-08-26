@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/Services/1">
+  <AccessRequestEnabled>true</AccessRequestEnabled>
+
+  <NetworkImpersonation>
+    <Domain>DOMAIN</Domain>
+    <Username>USERNAME</Username>
+    <EncryptedPassword>VF4iJh8Ccd//JDuWSygi/A==</EncryptedPassword>
+    <ReadInStreamingService>true</ReadInStreamingService>
+  </NetworkImpersonation>
+  
+  <BonjourEnabled>true</BonjourEnabled>
+  <BonjourName>BONJOUR</BonjourName>
+
+  <ExternalAddress>
+    <Autodetect>true</Autodetect>
+    <Custom />
+  </ExternalAddress>
+  
+  <Port>4322</Port>
+  <EnableIPv6>false</EnableIPv6>
+</Services>

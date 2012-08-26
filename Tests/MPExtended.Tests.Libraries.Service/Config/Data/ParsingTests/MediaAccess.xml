@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MediaAccess xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/MediaAccess/1">
+  <DefaultPlugins>
+    <Filesystem>MP Shares</Filesystem>
+  </DefaultPlugins>
+  
+  <PluginConfiguration>
+    <Plugin name="TestPlugin">
+      <path type="File" displayname="Location">%ProgramData%\path</path>
+      <number type="Number" displayname="Some value">5</number>
+    </Plugin>
+    <Plugin name="Another" />
+    <Plugin name="Last">
+      <root type="Folder" displayname="Folder">C:\Windows</root>
+    </Plugin>
+  </PluginConfiguration>
+</MediaAccess>

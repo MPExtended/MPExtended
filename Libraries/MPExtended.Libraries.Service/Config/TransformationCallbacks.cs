@@ -44,7 +44,7 @@ namespace MPExtended.Libraries.Service.Config
             // streaming directory
             string streamingDirectory = Installation.GetFileLayoutType() == FileLayoutType.Source ?
                 Path.Combine(Installation.GetSourceRootDirectory(), "Libraries", "Streaming") :
-                Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Streaming");
+                Path.Combine(Installation.GetInstallDirectory(), "Streaming");
             input = input.Replace("%mpextended-streaming%", streamingDirectory);
 
             // mp settings

@@ -65,7 +65,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 }
                 else
                 {
-                    info.FileName = Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Applications.UacServiceHandler.exe");
+                    info.FileName = Path.Combine(Installation.GetInstallDirectory(), "MPExtended.Applications.UacServiceHandler.exe");
                 }
 
                 info.UseShellExecute = true;

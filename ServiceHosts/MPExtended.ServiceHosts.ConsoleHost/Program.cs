@@ -30,6 +30,7 @@ namespace MPExtended.ServiceHosts.ConsoleHost
         {
             LogRotation.Rotate();
             Log.Setup("ConsoleHost.log", true);
+            Installation.Load(MPExtendedProduct.Service);
 
             var host = new MPExtendedHost();
             host.Open();

@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MPExtended.Libraries.Service")]
+[assembly: AssemblyTitle("MPExtended.Tests.Libraries.Service")]
 [assembly: AssemblyDescription("")]
+[assembly: AssemblyProduct("MPExtended Tests")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyProduct("MPExtended")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -16,7 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f495ed4b-d31d-4edb-8d7d-36634c38e3ae")]
-
-// Unit testing
-[assembly: InternalsVisibleTo("MPExtended.Tests.Libraries.Service")]
+[assembly: Guid("76722d57-7b34-4b43-935a-c6ece6b52fe3")]
