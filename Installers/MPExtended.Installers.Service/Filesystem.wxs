@@ -231,6 +231,17 @@
           <RegistryValue Root="HKCU" Key="Software\MPExtended" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
         </Component>
       </Directory>
+      
+      <!-- PowerScheduler plugin -->
+      <Directory Id="MPTVEINSTALLDIRECTORY">
+        <Directory Id="TVEPlugins" Name="Plugins">
+          <Component Id="Component_Powerscheduler_Binaries" Guid="fdc12c2e-fc3a-4a5f-bc8d-0996ff8a81b4">
+            <Condition><![CDATA[HAS_TVE]]></Condition>
+            <File Source="$(var.MPExtended.Applications.PowerSchedulerPlugin.TargetDir)\MPExtended.PowerScheduler.dll" />
+            <File Source="$(var.MPExtended.Applications.PowerSchedulerPlugin.TargetDir)\MPExtended.PowerScheduler.pdb" />
+          </Component>
+        </Directory>
+      </Directory>
     </Directory>
   </Fragment>
 </Wix>
