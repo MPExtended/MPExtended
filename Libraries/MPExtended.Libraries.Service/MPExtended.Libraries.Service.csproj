@@ -76,6 +76,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\TransformationCallbacks.cs" />
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />

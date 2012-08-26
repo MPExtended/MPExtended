@@ -29,7 +29,23 @@ using MPExtended.Libraries.Service.Config.Upgrade;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel, TSerializer>
+    public interface IConfigurationSerializer
+    {
+        string Filename { get; }
+
+        void LoadIfExists();
+        void Reload();
+        bool Save();
+    }
+
+    public interface IConfigurationSerializer<TModel> where TModel : class, new()
+    {
+        TModel Get();
+        bool Save(TModel model);
+        bool Save(TModel model, Stream destination);
+    }
+
+    internal class ConfigurationSerializer<TModel, TSerializer> : IConfigurationSerializer, IConfigurationSerializer<TModel>
         where TModel : class, new()
         where TSerializer : XmlSerializer
     {
@@ -144,7 +160,7 @@ namespace MPExtended.Libraries.Service.Config
             return UnsafeParse(configPath);
         }
 
-        public bool Save(TModel model, string path)
+        public bool Save(TModel model, Stream destination)
         {
             try
             {
@@ -152,8 +168,8 @@ namespace MPExtended.Libraries.Service.Config
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
                 writerSettings.OmitXmlDeclaration = false;
-                
-                using (XmlWriter writer = XmlWriter.Create(path, writerSettings))
+
+                using (XmlWriter writer = XmlWriter.Create(destination, writerSettings))
                 {
                     var serializer = Activator.CreateInstance<TSerializer>();
                     serializer.Serialize(writer, model);
@@ -162,14 +178,18 @@ namespace MPExtended.Libraries.Service.Config
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to save settings to file {0}", Filename), ex);
+                Log.Error(String.Format("Failed to save settings for {0}", Filename), ex);
                 return false;
             }
         }
 
         public bool Save(TModel model)
         {
-            return Save(model, Path.Combine(Installation.Properties.ConfigurationDirectory, Filename));
+            string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.None))
+            {
+                return Save(model, stream);
+            }
         }
 
         public bool Save()
@@ -179,6 +199,7 @@ namespace MPExtended.Libraries.Service.Config
                 // If the settings haven't been loaded, they can't have been changed, so don't do anything.
                 if (_instance == null)
                     return true;
+
                 return Save(_instance);
             }
         }
