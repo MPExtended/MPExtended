@@ -232,7 +232,7 @@ namespace MPExtended.Services.StreamingService.Code
                                     Id, String.Join(", ", cards.Select(x => x.TimeShiftFileName)));
                                 return String.Empty;
                             }
-                            channelId = cards.First(x => x.TimeShiftFileName == Id).IdChannel;
+                            channelId = cards.First(x => x.TimeShiftFileName == Id).ChannelId;
                         }
                         return Connections.TAS.GetChannelBasicById(channelId).Title;
                     case WebMediaType.TVEpisode:

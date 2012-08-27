@@ -120,15 +120,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
 
         public ScheduleViewModel(WebProgramDetailed program)
-            : this (program.StartTime, program.EndTime, program.Title, program.IdChannel)
+            : this (program.StartTime, program.EndTime, program.Title, program.ChannelId)
         {
             ProgramId = program.Id;
 
-            ChannelName = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel).Title;
+            ChannelName = Connections.Current.TAS.GetChannelDetailedById(program.ChannelId).Title;
         }
 
         public ScheduleViewModel(WebScheduleBasic schedule)
-            : this (schedule.StartTime, schedule.EndTime, schedule.Title, schedule.IdChannel)
+            : this (schedule.StartTime, schedule.EndTime, schedule.Title, schedule.ChannelId)
         {
             Id = schedule.Id;
             ScheduleType = schedule.ScheduleType;
@@ -142,7 +142,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 case WebScheduleType.Weekly:
                 case WebScheduleType.WeeklyEveryTimeOnThisChannel:
                 case WebScheduleType.WorkingDays:
-                    ChannelName = Connections.Current.TAS.GetChannelDetailedById(schedule.IdChannel).Title;
+                    ChannelName = Connections.Current.TAS.GetChannelDetailedById(schedule.ChannelId).Title;
                     break;
                 case WebScheduleType.EveryTimeOnEveryChannel:
                     ChannelName = "";

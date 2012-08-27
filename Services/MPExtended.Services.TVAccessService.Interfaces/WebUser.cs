@@ -9,7 +9,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     {
         public int CardId { get; set; }
         public DateTime HeartBeat { get; set; }
-        public int IdChannel { get; set; }
+        public int ChannelId { get; set; }
         public bool IsAdmin { get; set; }
         public string Name { get; set; }
         public int SubChannel { get; set; }

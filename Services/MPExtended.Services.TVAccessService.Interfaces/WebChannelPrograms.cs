@@ -7,7 +7,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 {
     public class WebChannelPrograms<TProgram> where TProgram : WebProgramBasic
     {
-        public int IdChannel { get; set; }
+        public int ChannelId { get; set; }
         public IList<TProgram> Programs { get; set; }
     }
 }

@@ -468,19 +468,19 @@ namespace MPExtended.Services.TVAccessService
             // retrieve some data
             var channel = Channel.Retrieve(schedule.IdChannel);
             WebScheduledRecording recording = new WebScheduledRecording();
-            recording.IdSchedule = schedule.IdSchedule;
+            recording.ScheduleId = schedule.IdSchedule;
 
             // first check all types that do not require any EPG matching
             ScheduleRecordingType[] noEpgTypes = { ScheduleRecordingType.Daily, ScheduleRecordingType.Weekends, ScheduleRecordingType.WorkingDays, 
                                                    ScheduleRecordingType.Weekly, ScheduleRecordingType.Once };
             if (noEpgTypes.Contains(type))
             {
-                recording.IdChannel = channel.IdChannel;
+                recording.ChannelId = channel.IdChannel;
                 recording.ChannelName = channel.DisplayName;
                 recording.StartTime = schedule.StartTime;
                 recording.EndTime = schedule.EndTime;
                 var matchingPrograms = _tvBusiness.GetPrograms(channel, schedule.StartTime, schedule.EndTime);
-                recording.IdProgram = matchingPrograms.Any() ? matchingPrograms.First().IdProgram : 0;
+                recording.ProgramId = matchingPrograms.Any() ? matchingPrograms.First().IdProgram : 0;
                 recording.Title = matchingPrograms.Any() ? matchingPrograms.First().Title : schedule.ProgramName;
                 return recording;
             }
@@ -496,11 +496,11 @@ namespace MPExtended.Services.TVAccessService
 
             // set properties from the program and channel of the program
             channel = program.ReferencedChannel();
-            recording.IdChannel = channel.IdChannel;
+            recording.ChannelId = channel.IdChannel;
             recording.ChannelName = channel.DisplayName;
             recording.StartTime = program.StartTime;
             recording.EndTime = program.EndTime;
-            recording.IdProgram = program.IdProgram;
+            recording.ProgramId = program.IdProgram;
             recording.Title = program.Title;
             return recording;
         }
@@ -887,7 +887,7 @@ namespace MPExtended.Services.TVAccessService
                 return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
                     .Select(ch => new WebChannelPrograms<WebProgramBasic>()
                     {
-                        IdChannel = ch.IdChannel,
+                        ChannelId = ch.IdChannel,
                         Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramBasic()).ToList()
                     })
                     .ToList();
@@ -901,7 +901,7 @@ namespace MPExtended.Services.TVAccessService
                 return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
                     .Select(ch => new WebChannelPrograms<WebProgramDetailed>()
                     {
-                        IdChannel = ch.IdChannel,
+                        ChannelId = ch.IdChannel,
                         Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).ToList()
                     })
                     .ToList();

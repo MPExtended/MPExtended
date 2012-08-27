@@ -13,7 +13,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string DevicePath { get; set; }
         public bool Enabled { get; set; }
         public bool GrabEPG { get; set; }
-        public int IdCard { get; set; }
+        public int CardId { get; set; }
         public bool IsChanged { get; set; }
         public DateTime LastEpgGrab { get; set; }
         public string Name { get; set; }

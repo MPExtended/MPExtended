@@ -16,9 +16,9 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string EpisodePart { get; set; }
         public string FileName { get; set; }
         public string Genre { get; set; }
-        public int IdChannel { get; set; }
+        public int ChannelId { get; set; }
         public int Id { get; set; }
-        public int IdSchedule { get; set; }
+        public int ScheduleId { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }
         public bool IsRecording { get; set; }

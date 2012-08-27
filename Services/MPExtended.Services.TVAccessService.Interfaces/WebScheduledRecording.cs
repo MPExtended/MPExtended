@@ -11,8 +11,8 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public DateTime EndTime { get; set; }
         public string Title { get; set; }
         public string ChannelName { get; set; }
-        public int IdChannel { get; set; }
-        public int IdSchedule { get; set; }
-        public int IdProgram { get; set; }
+        public int ChannelId { get; set; }
+        public int ScheduleId { get; set; }
+        public int ProgramId { get; set; }
     }
 }

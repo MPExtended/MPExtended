@@ -41,7 +41,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         public ActionResult DeleteSchedule(int programId)
         {
             var program = Connections.Current.TAS.GetProgramDetailedById(programId);
-            int id = Connections.Current.TAS.GetSchedules().Where(p => p.IdChannel == program.IdChannel && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
+            int id = Connections.Current.TAS.GetSchedules().Where(p => p.ChannelId == program.ChannelId && p.StartTime == program.StartTime && p.EndTime == program.EndTime).First().Id;
             Connections.Current.TAS.DeleteSchedule(id);
             return RedirectToAction("ProgramDetails", "Television", new { programId = programId });
         }

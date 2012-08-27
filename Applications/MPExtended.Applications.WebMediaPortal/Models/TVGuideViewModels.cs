@@ -216,7 +216,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             if (IsCurrent)
             {
-                return helper.Action("WatchLiveTV", "Television", new { channelId = program.IdChannel });
+                return helper.Action("WatchLiveTV", "Television", new { channelId = program.ChannelId });
             }
             else
             {
@@ -253,7 +253,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EndTime = program.EndTime;
             IsScheduled = program.IsScheduled;
 
-            var channel = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel);
+            var channel = Connections.Current.TAS.GetChannelDetailedById(program.ChannelId);
             ChannelName = channel.Title;
             ChannelId = channel.Id;
         }

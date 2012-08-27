@@ -42,9 +42,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             // cards
             Cards = new List<TVCardViewModel>();
 
-            foreach (var card in cards.OrderBy(c => c.IdCard))
+            foreach (var card in cards.OrderBy(c => c.CardId))
             {
-                var match = activeCards.Where(vc => vc.Id == card.IdCard);
+                var match = activeCards.Where(vc => vc.Id == card.CardId);
                 if (match.Any())
                 {
                     ((List<TVCardViewModel>)Cards).AddRange(match.Select(vc => new TVCardViewModel(card, vc)));
@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public TVCardViewModel(WebCard card)
         {
-            CardId = card.IdCard;
+            CardId = card.CardId;
             Name = card.Name;
 
             IsActive = false;
@@ -109,7 +109,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             GrabbingEPG = activeCard.IsGrabbingEpg;
             Scrambled = activeCard.IsScrambled;
             Username = activeCard.User.Name;
-            ChannelId = activeCard.IdChannel;
+            ChannelId = activeCard.ChannelId;
 
             if (activeCard.IsTimeShifting) State = FormStrings.StateTimeshifting;
             if (activeCard.IsRecording) State = FormStrings.StateRecording;

@@ -12,8 +12,8 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string Directory { get; set; }
         public bool DoesUseEpisodeManagement { get; set; }
         public DateTime EndTime { get; set; }
-        public int IdChannel { get; set; }
-        public int IdParentSchedule { get; set; }
+        public int ChannelId { get; set; }
+        public int ParentScheduleId { get; set; }
         public int Id { get; set; }
         public bool IsChanged { get; set; }
         public bool IsManual { get; set; }

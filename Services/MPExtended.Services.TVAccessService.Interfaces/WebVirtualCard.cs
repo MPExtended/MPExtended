@@ -15,7 +15,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public bool GrabTeletext { get; set; }
         public bool HasTeletext { get; set; }
         public int Id { get; set; }
-        public int IdChannel { get; set; }
+        public int ChannelId { get; set; }
         public bool IsGrabbingEpg { get; set; }
         public bool IsRecording { get; set; }
         public bool IsScanning { get; set; }
