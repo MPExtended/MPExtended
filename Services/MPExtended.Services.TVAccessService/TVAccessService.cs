@@ -481,7 +481,7 @@ namespace MPExtended.Services.TVAccessService
                 recording.EndTime = schedule.EndTime;
                 var matchingPrograms = _tvBusiness.GetPrograms(channel, schedule.StartTime, schedule.EndTime);
                 recording.IdProgram = matchingPrograms.Any() ? matchingPrograms.First().IdProgram : 0;
-                recording.ProgramName = matchingPrograms.Any() ? matchingPrograms.First().Title : schedule.ProgramName;
+                recording.Title = matchingPrograms.Any() ? matchingPrograms.First().Title : schedule.ProgramName;
                 return recording;
             }
 
@@ -501,7 +501,7 @@ namespace MPExtended.Services.TVAccessService
             recording.StartTime = program.StartTime;
             recording.EndTime = program.EndTime;
             recording.IdProgram = program.IdProgram;
-            recording.ProgramName = program.Title;
+            recording.Title = program.Title;
             return recording;
         }
 

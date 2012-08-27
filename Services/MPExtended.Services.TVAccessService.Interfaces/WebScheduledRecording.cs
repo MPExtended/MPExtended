@@ -9,7 +9,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string ProgramName { get; set; }
+        public string Title { get; set; }
         public string ChannelName { get; set; }
         public int IdChannel { get; set; }
         public int IdSchedule { get; set; }

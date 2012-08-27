@@ -153,7 +153,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public TVGuideChannelViewModel(WebChannelDetailed channel, DateTime guideStart, DateTime guideEnd)
         {
             Id = channel.Id;
-            DisplayName = channel.DisplayName;
+            DisplayName = channel.Title;
 
             programList = Connections.Current.TAS.GetProgramsDetailedForChannel(Id, guideStart, guideEnd);
             Programs = programList.Select(x => new TVGuideProgramViewModel(x, guideStart, guideEnd));
@@ -254,7 +254,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             IsScheduled = program.IsScheduled;
 
             var channel = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel);
-            ChannelName = channel.DisplayName;
+            ChannelName = channel.Title;
             ChannelId = channel.Id;
         }
     }

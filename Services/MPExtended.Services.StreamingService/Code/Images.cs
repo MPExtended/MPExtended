@@ -100,10 +100,10 @@ namespace MPExtended.Services.StreamingService.Code
                     Int32.Parse(Id) :
                     Connections.TAS.GetRecordingById(Int32.Parse(Id)).IdChannel;
                 var channel = Connections.TAS.GetChannelBasicById(idChannel);
-                string location = _logos.FindLocation(channel.DisplayName);
+                string location = _logos.FindLocation(channel.Title);
                 if(location == null)
                 {
-                    Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.DisplayName, idChannel);
+                    Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.Title, idChannel);
                     return new WebFileInfo() { Exists = false };
                 }
 

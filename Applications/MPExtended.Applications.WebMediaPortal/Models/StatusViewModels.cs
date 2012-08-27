@@ -84,7 +84,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return ChannelId > 0 ? Connections.Current.TAS.GetChannelDetailedById(ChannelId).DisplayName : String.Empty;
+                return ChannelId > 0 ? Connections.Current.TAS.GetChannelDetailedById(ChannelId).Title : String.Empty;
             }
         }
 

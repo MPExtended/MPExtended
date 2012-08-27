@@ -23,7 +23,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public int PostRecordInterval { get; set; }
         public int PreRecordInterval { get; set; }
         public int Priority { get; set; }
-        public string ProgramName { get; set; }
+        public string Title { get; set; }
         public int Quality { get; set; }
         public int QualityType { get; set; }
         public int RecommendedCard { get; set; }

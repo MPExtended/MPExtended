@@ -152,7 +152,7 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelDetailed
             {
                 CurrentProgram = ch.CurrentProgram != null ? ch.CurrentProgram.ToWebProgramDetailed() : null,
-                DisplayName = ch.DisplayName,
+                Title = ch.DisplayName,
                 EpgHasGaps = ch.EpgHasGaps,
                 ExternalId = ch.ExternalId,
                 FreeToAir = GetFreeToAirInformation(ch),
@@ -211,7 +211,7 @@ namespace MPExtended.Services.TVAccessService
 
             return new WebChannelBasic
             {
-                DisplayName = ch.DisplayName,
+                Title = ch.DisplayName,
                 Id = ch.IdChannel,
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,
@@ -411,7 +411,7 @@ namespace MPExtended.Services.TVAccessService
                 PostRecordInterval = sch.PostRecordInterval,
                 PreRecordInterval = sch.PreRecordInterval,
                 Priority = sch.Priority,
-                ProgramName = sch.ProgramName,
+                Title = sch.ProgramName,
                 Quality = sch.Quality,
                 QualityType = (int)sch.QualityType,
                 RecommendedCard = sch.RecommendedCard,

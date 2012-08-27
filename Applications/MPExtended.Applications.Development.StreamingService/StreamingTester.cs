@@ -131,7 +131,7 @@ namespace MPExtended.Applications.Development.StreamingService
                     WebChannelBasic[] channels = mTvClient.GetChannelsBasic(group.Id).ToArray();
                     foreach (WebChannelBasic ch in channels)
                     {
-                        cbChannels.Items.Add(ch.DisplayName);
+                        cbChannels.Items.Add(ch.Title);
                         mChannels.Add(ch);
                     }
                 }
@@ -174,8 +174,8 @@ namespace MPExtended.Applications.Development.StreamingService
         {
             mIdentifier = "Test_" + new Random().Next(0, 1000000).ToString();
             WebChannelBasic channel = mChannels[cbChannels.SelectedIndex];
-            mName = channel.DisplayName;
-            Log("Init Stream with channel " + channel.DisplayName);
+            mName = channel.Title;
+            Log("Init Stream with channel " + channel.Title);
             bool success = mWebStreamClient.InitStream(WebMediaType.TV, 0, channel.Id.ToString(), CLIENT_NAME, mIdentifier, null);
             Log("Success = " + success);
             LoadMediaInfo(mWebStreamClient.GetMediaInfo(WebMediaType.TV, 0, mIdentifier));

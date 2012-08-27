@@ -234,7 +234,7 @@ namespace MPExtended.Services.StreamingService.Code
                             }
                             channelId = cards.First(x => x.TimeShiftFileName == Id).IdChannel;
                         }
-                        return Connections.TAS.GetChannelBasicById(channelId).DisplayName;
+                        return Connections.TAS.GetChannelBasicById(channelId).Title;
                     case WebMediaType.TVEpisode:
                         var ep = Connections.MAS.GetTVEpisodeBasicById(Provider, Id);
                         var season = Connections.MAS.GetTVSeasonBasicById(Provider, ep.SeasonId);

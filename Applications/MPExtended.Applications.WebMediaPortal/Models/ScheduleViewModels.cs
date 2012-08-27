@@ -77,7 +77,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 return Connections.Current.TAS.GetAllChannelsDetailed(WebSortField.Title)
                         .Where(x => x.VisibleInGuide)
-                        .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.DisplayName });
+                        .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Title });
             }
         }
 
@@ -124,11 +124,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             ProgramId = program.Id;
 
-            ChannelName = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel).DisplayName;
+            ChannelName = Connections.Current.TAS.GetChannelDetailedById(program.IdChannel).Title;
         }
 
         public ScheduleViewModel(WebScheduleBasic schedule)
-            : this (schedule.StartTime, schedule.EndTime, schedule.ProgramName, schedule.IdChannel)
+            : this (schedule.StartTime, schedule.EndTime, schedule.Title, schedule.IdChannel)
         {
             Id = schedule.Id;
             ScheduleType = schedule.ScheduleType;
@@ -142,7 +142,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 case WebScheduleType.Weekly:
                 case WebScheduleType.WeeklyEveryTimeOnThisChannel:
                 case WebScheduleType.WorkingDays:
-                    ChannelName = Connections.Current.TAS.GetChannelDetailedById(schedule.IdChannel).DisplayName;
+                    ChannelName = Connections.Current.TAS.GetChannelDetailedById(schedule.IdChannel).Title;
                     break;
                 case WebScheduleType.EveryTimeOnEveryChannel:
                     ChannelName = "";

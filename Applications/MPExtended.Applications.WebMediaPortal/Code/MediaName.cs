@@ -42,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     case WebMediaType.Recording:
                         return Connections.Current.TAS.GetRecordingById(Int32.Parse(id)).Title;
                     case WebMediaType.TV:
-                        return Connections.Current.TAS.GetChannelDetailedById(Int32.Parse(id)).DisplayName;
+                        return Connections.Current.TAS.GetChannelDetailedById(Int32.Parse(id)).Title;
                     case WebMediaType.TVEpisode:
                         return Connections.Current.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
                     case WebMediaType.TVShow:

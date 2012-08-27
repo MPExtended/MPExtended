@@ -63,7 +63,7 @@ namespace MPExtended.Services.TVAccessService
             if (!tas.TestConnectionToTVService())
                 return;
             channelLogosRequired = tas.GetAllChannelsBasic()
-                .Where(ch => logos.FindLocation(ch.DisplayName) == null)
+                .Where(ch => logos.FindLocation(ch.Title) == null)
                 .ToList();
             
             // exit if we already got all logos
@@ -144,15 +144,15 @@ namespace MPExtended.Services.TVAccessService
                     try
                     {
                         Stream logoStream = serviceSet.MASStream.GetImage(WebMediaType.TV, null, ch.Id.ToString());
-                        Log.Trace("Downloaded logo for channel {0} (length {1})", ch.DisplayName, logoStream.Length);
+                        Log.Trace("Downloaded logo for channel {0} (length {1})", ch.Title, logoStream.Length);
                         if (logoStream.Length > 0)
                         {
-                            logos.WriteToCacheDirectory(ch.DisplayName, "png", logoStream);
+                            logos.WriteToCacheDirectory(ch.Title, "png", logoStream);
                         }
                     }
                     catch (EndpointNotFoundException)
                     {
-                        Log.Trace("Logo for channel {0} not available on server", ch.DisplayName);
+                        Log.Trace("Logo for channel {0} not available on server", ch.Title);
                     }
                 }
 
