@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace MPExtended.Libraries.Service.Util
 {
@@ -42,6 +44,22 @@ namespace MPExtended.Libraries.Service.Util
         public static string ToLowerFirst(this string str)
         {
             return str.Substring(0, 1).ToLower() + str.Substring(1);
+        }
+
+        /// <summary>
+        /// Turns an object into JSON
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string ToJSON(this object obj)
+        {
+            if (obj == null) return string.Empty;
+            using (var ms = new MemoryStream())
+            {
+                var ser = new DataContractJsonSerializer(obj.GetType());
+                ser.WriteObject(ms, obj);
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
         }
     }
 }

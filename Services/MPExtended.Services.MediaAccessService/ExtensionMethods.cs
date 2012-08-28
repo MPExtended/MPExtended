@@ -25,6 +25,8 @@ using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.Common.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -107,7 +109,7 @@ namespace MPExtended.Services.MediaAccessService
                 return Queryable.ThenBy(source, keySelector);
             return Queryable.ThenByDescending(source, keySelector);
         }
-    
+
         // Finalize it
         public static List<T> Finalize<T>(this IQueryable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
@@ -190,6 +192,28 @@ namespace MPExtended.Services.MediaAccessService
                 Log.Warn(String.Format("Tried to do invalid sorting; actual values SortBy={0}, OrderBy={1}", sort, order), ex);
                 throw new Exception("Sorting on this property is not supported for this media type");
             }
+        }
+
+        public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
+        {
+            String filterRaw = System.Web.HttpUtility.HtmlDecode(filter);
+            filterRaw = filterRaw.Replace("\\", "");
+
+            if (filter != null)
+            {
+                List<WebFilter> filters;
+                if (filter.StartsWith("["))
+                {
+                    filters = JsonConvert.DeserializeObject<List<WebFilter>>(filterRaw);
+                }
+                else
+                {
+                    filters = new List<WebFilter>();
+                    filters.Add(JsonConvert.DeserializeObject<WebFilter>(filterRaw));
+                }
+                //TODO: filter the list here
+            }
+            return list;
         }
     }
 
