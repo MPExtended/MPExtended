@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xunit>
+   <assemblies>
+      <assembly filename="MPExtended.Tests.Libraries.Service/bin/Debug/MPExtended.Tests.Libraries.Service.dll">
+         <output type="html" filename="output/MPExtended.Tests.Libraries.Service.html" />
+      </assembly>
+   </assemblies>
+</xunit>

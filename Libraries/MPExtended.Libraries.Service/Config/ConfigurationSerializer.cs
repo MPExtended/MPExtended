@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -27,7 +29,23 @@ using MPExtended.Libraries.Service.Config.Upgrade;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal class ConfigurationSerializer<TModel, TSerializer>
+    public interface IConfigurationSerializer
+    {
+        string Filename { get; }
+
+        void LoadIfExists();
+        void Reload();
+        bool Save();
+    }
+
+    public interface IConfigurationSerializer<TModel> where TModel : class, new()
+    {
+        TModel Get();
+        bool Save(TModel model);
+        bool Save(TModel model, Stream destination);
+    }
+
+    internal class ConfigurationSerializer<TModel, TSerializer> : IConfigurationSerializer, IConfigurationSerializer<TModel>
         where TModel : class, new()
         where TSerializer : XmlSerializer
     {
@@ -44,15 +62,16 @@ namespace MPExtended.Libraries.Service.Config
 
         public void LoadIfExists()
         {
-            CreateInstance(true);
+            if (File.Exists(Path.Combine(Installation.Properties.ConfigurationDirectory, Filename)))
+                CreateInstance();
         }
 
         public TModel Get()
         {
-            return CreateInstance(false);
+            return CreateInstance();
         }
 
-        private TModel CreateInstance(bool soft)
+        private TModel CreateInstance()
         {
             if (_instance == null)
             {
@@ -62,18 +81,31 @@ namespace MPExtended.Libraries.Service.Config
                     // the same time. The second thread which gets the lock doesn't have to load the settings again, as it's already been done by the first
                     // thread between the check and getting the lock.
                     if (_instance == null)
-                        _instance = ReadFromDisk(soft);
+                        _instance = ReadFromDisk();
                 }
             }
 
             return _instance;
         }
 
-        private TModel ReadFromDisk(bool soft)
+        private TModel ReadFromDisk()
         {
-            string path = Configuration.GetPath(Filename);
-            if (!File.Exists(path) && soft)
-                return null;
+            string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+
+            // If the configuration file doesn't exist, copy the default configuration file
+            if (!File.Exists(path))
+            {
+                // copy from default location
+                File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), path);
+
+                // allow everyone to write to the config
+                var acl = File.GetAccessControl(path);
+                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
+                acl.AddAccessRule(rule);
+                File.SetAccessControl(path, acl);
+            }
+
             try
             {
                 return UnsafeParse(path);
@@ -100,7 +132,7 @@ namespace MPExtended.Libraries.Service.Config
                 // create backup
                 try
                 {
-                    string backupPath = Path.Combine(Installation.GetConfigurationDirectory(), "ConfigBackup", Filename);
+                    string backupPath = Path.Combine(Installation.Properties.ConfigurationBackupDirectory, Filename);
                     if (!Directory.Exists(Path.GetDirectoryName(backupPath)))
                         Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
                     File.Copy(configPath, backupPath, true);
@@ -124,11 +156,11 @@ namespace MPExtended.Libraries.Service.Config
         protected virtual TModel CleanupMalformedFile(Exception problem, string configPath)
         {
             Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
-            File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
+            File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), configPath, true);
             return UnsafeParse(configPath);
         }
 
-        public bool Save(TModel model)
+        public bool Save(TModel model, Stream destination)
         {
             try
             {
@@ -136,7 +168,8 @@ namespace MPExtended.Libraries.Service.Config
                 writerSettings.CloseOutput = true;
                 writerSettings.Indent = true;
                 writerSettings.OmitXmlDeclaration = false;
-                using (XmlWriter writer = XmlWriter.Create(Configuration.GetPath(Filename), writerSettings))
+
+                using (XmlWriter writer = XmlWriter.Create(destination, writerSettings))
                 {
                     var serializer = Activator.CreateInstance<TSerializer>();
                     serializer.Serialize(writer, model);
@@ -145,18 +178,28 @@ namespace MPExtended.Libraries.Service.Config
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to save settings to file {0}", Filename), ex);
+                Log.Error(String.Format("Failed to save settings for {0}", Filename), ex);
                 return false;
+            }
+        }
+
+        public bool Save(TModel model)
+        {
+            string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.None))
+            {
+                return Save(model, stream);
             }
         }
 
         public bool Save()
         {
-            // If the settings haven't been loaded, they can't have been changed, so don't do anything.
             lock (_instanceLock)
             {
+                // If the settings haven't been loaded, they can't have been changed, so don't do anything.
                 if (_instance == null)
                     return true;
+
                 return Save(_instance);
             }
         }
@@ -167,7 +210,7 @@ namespace MPExtended.Libraries.Service.Config
             // triggered because we wrote to it ourself (either for a Save() call or overwriting it with the default settings).
             if (Monitor.TryEnter(_instanceLock))
             {
-                _instance = ReadFromDisk(false);
+                _instance = ReadFromDisk();
                 Monitor.Exit(_instanceLock);
             }
         }
@@ -194,8 +237,8 @@ namespace MPExtended.Libraries.Service.Config
         protected override TModel CleanupMalformedFile(Exception problem, string configPath)
         {
             var upgrader = new TUpgrader();
-            upgrader.OldPath = upgradeFilename == null ? configPath : Configuration.GetPath(upgradeFilename);
-            upgrader.DefaultPath = Configuration.GetDefaultPath(Filename);
+            upgrader.OldPath = upgradeFilename == null ? configPath : Path.Combine(Installation.Properties.ConfigurationDirectory, upgradeFilename);
+            upgrader.DefaultPath = Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename);
 
             if (upgrader.CanUpgrade())
             {
@@ -207,7 +250,7 @@ namespace MPExtended.Libraries.Service.Config
             else
             {
                 Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
-                File.Copy(Configuration.GetDefaultPath(Filename), configPath, true);
+                File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), configPath, true);
                 return UnsafeParse(configPath);
             }
         }

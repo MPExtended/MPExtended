@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Util;
 
@@ -58,154 +59,64 @@ namespace MPExtended.Libraries.Service
 
     public static class Installation
     {
-        private static List<ServiceAssemblyAttribute> installedServices;
-        private static FileLayoutType? fileLayoutType;
+        internal static List<ServiceAssemblyAttribute> installedServices;
+        public static InstallationProperties Properties { get; internal set; }
+
+        public static void Load(MPExtendedProduct product)
+        {
+            Properties = InstallationProperties.DetectForProduct(product);
+        }
 
         public static FileLayoutType GetFileLayoutType()
         {
-            if(fileLayoutType.HasValue)
-            {
-                return fileLayoutType.Value;
-            }
-
-            // Default to binary installation as we don't have to recognize that
-            fileLayoutType = FileLayoutType.Installed;
-
-            // Source distribution: search for a parent directory with the GlobalVersion.cs file
-            string binDir = AppDomain.CurrentDomain.BaseDirectory;
-            DirectoryInfo info = new DirectoryInfo(binDir);
-            do
-            {
-                if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
-                {
-                    fileLayoutType = FileLayoutType.Source;
-                    break;
-                }
-                info = info.Parent;
-            } while (info != null);
-
-            // Return
-            return fileLayoutType.Value;
+            return Properties.FileLayout;
         }
 
         public static string GetSourceRootDirectory()
         {
-            if (GetFileLayoutType() != FileLayoutType.Source)
-            {
+            if (Properties.FileLayout != FileLayoutType.Source)
                 throw new InvalidOperationException("Source root directory not available for release installations");
-            }
 
-            // It's a bit tricky to find the root source directory for Debug builds. The assembly might be in a different
-            // directory then where it's source tree is (which happens with WebMP for example), so we can't use the Location
-            // of the current executing assembly. The CodeBase points to it's original location on compilation, but this 
-            // doesn't work if you send files to other people (so don't do it!).
-            // Also, not everybody names the root directory MPExtended. Instead, we look for a directory with a child directory
-            // named Config, which has a Debug child directory. It's not 100% foolproof but it works good enough.
-            Uri originalPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            DirectoryInfo info = new DirectoryInfo(Path.GetDirectoryName(originalPath.LocalPath));
-            do
-            {
-                if (File.Exists(Path.Combine(info.FullName, "GlobalVersion.cs")))
-                {
-                    return info.FullName;
-                }
-                info = info.Parent;
-            } while (info != null);
-
-            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            return Path.GetFullPath(Path.Combine(curDir, "..", "..", "..", ".."));
+            return Properties.SourceRoot;
         }
 
         public static string GetSourceBuildDirectoryName()
         {
-#if DEBUG
-            return "Debug";
-#else
-            return "Release";
-#endif
+            return Properties.SourceBuildDirectory;
         }
 
-        public static string GetInstallDirectory(MPExtendedProduct product)
+        public static string GetInstallDirectory()
         {
-            if (GetFileLayoutType() != FileLayoutType.Installed)
-            {
+            if (Properties.FileLayout != FileLayoutType.Installed)
                 throw new InvalidOperationException("Install directory not available for source installations");
-            }
 
-            // If possible, try to read it from the registry, where the install location is set during installation. 
-            string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
-            object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
-            if (regLocation != null)
-            {
-                return regLocation.ToString();
-            }
-
-            // try default installation location
-            string location = null;
-            switch (product)
-            {
-                case MPExtendedProduct.Service:
-                    location = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "MPExtended", "Service");
-                    break;
-                case MPExtendedProduct.WebMediaPortal:
-                    location = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "MPExtended", "WebMediaPortal");
-                    break;
-            }
-            if (Directory.Exists(location))
-            {
-                return location;
-            }
-
-            // Fallback to dynamic detection based upon the current execution location
-            switch(product)
-            {
-                case MPExtendedProduct.Service:
-                    return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-                case MPExtendedProduct.WebMediaPortal:
-                    DirectoryInfo webmpinfo = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-                    return webmpinfo.Parent.Parent.FullName;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        public static bool IsProductInstalled(MPExtendedProduct product)
-        {
-            if (GetFileLayoutType() == FileLayoutType.Source)
-            {
-                return true;
-            }
-            else
-            {
-                string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
-                object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
-                return regLocation != null;
-            }
+            return Properties.InstallationDirectory;
         }
 
         public static string GetConfigurationDirectory()
         {
-            if (GetFileLayoutType() == FileLayoutType.Source)
-            {
-                return Path.Combine(GetSourceRootDirectory(), "Config");
-            }
-            else
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended");
-            }
+            return Properties.ConfigurationDirectory;
         }
 
         public static string GetCacheDirectory()
         {
-            return EnsureDirectoryExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Cache"));
+            return EnsureDirectoryExists(Properties.CacheDirectory);
         }
 
         public static string GetLogDirectory()
         {
-            return EnsureDirectoryExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs"));
+            // This one is special, as it might be called (by Log.Setup) before the properties are loaded.
+            if (Properties != null)
+            {
+                return EnsureDirectoryExists(Properties.LogDirectory);
+            }
+            else
+            {
+                return EnsureDirectoryExists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "MPExtended", "Logs"));
+            }
         }
 
-        internal static string EnsureDirectoryExists(string dir)
+        private static string EnsureDirectoryExists(string dir)
         {
             if (!Directory.Exists(dir))
             {
@@ -214,13 +125,26 @@ namespace MPExtended.Libraries.Service
             return dir;
         }
 
+        public static bool IsProductInstalled(MPExtendedProduct product)
+        {
+            if (Properties.FileLayout == FileLayoutType.Source)
+                return true;
+
+            string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
+            object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
+            return regLocation != null;
+        }
+
         internal static List<ServiceAssemblyAttribute> GetAvailableServices()
         {
             if (installedServices == null)
             {
+                if (Properties.Product != MPExtendedProduct.Service)
+                    throw new InvalidOperationException("GetAvailableServices() can only be called from the services");
+
                 if (GetFileLayoutType() == FileLayoutType.Installed)
                 {
-                    installedServices = Directory.GetFiles(GetInstallDirectory(MPExtendedProduct.Service), "MPExtended.Services.*.dll")
+                    installedServices = Directory.GetFiles(Properties.InstallationDirectory, "MPExtended.Services.*.dll")
                         .Select(path => Assembly.LoadFrom(path))
                         .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
                         .ToList();

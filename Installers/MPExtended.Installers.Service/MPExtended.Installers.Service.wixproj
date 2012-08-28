@@ -38,6 +38,14 @@
     <Compile Include="UI_Configurator.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Applications\MPExtended.Applications.PowerSchedulerPlugin\MPExtended.Applications.PowerSchedulerPlugin.csproj">
+      <Name>MPExtended.Applications.PowerSchedulerPlugin</Name>
+      <Project>{3d4f63ff-7546-42cb-aab9-b93f46ee9186}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\Applications\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj">
       <Name>MPExtended.Applications.ServiceConfigurator</Name>
       <Project>{edd71cef-c318-4229-9427-dd822c6edeb1}</Project>
@@ -56,7 +64,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
       <Name>MPExtended.Libraries.Client</Name>
-      <Project>{06c11dab-29f1-4292-acad-0b6d1f30ddf3}</Project>
+      <Project>{9d78fc9a-a66c-48ac-b528-1cceae5aaa63}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

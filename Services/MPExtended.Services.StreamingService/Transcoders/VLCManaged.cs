@@ -61,7 +61,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 {
                     string directory = Installation.GetFileLayoutType() == FileLayoutType.Source ?
                         Path.Combine(Installation.GetSourceRootDirectory(), "Libraries", "Streaming", "vlc-1.1.11") :
-                        Path.Combine(Installation.GetInstallDirectory(MPExtendedProduct.Service), "Streaming", "vlc-1.1.11");
+                        Path.Combine(Installation.GetInstallDirectory(), "Streaming", "vlc-1.1.11");
 
                     string asmPath = System.IO.Path.Combine(directory, "MPExtended.Libraries.VLCManaged.dll");
                     return System.Reflection.Assembly.LoadFrom(asmPath);

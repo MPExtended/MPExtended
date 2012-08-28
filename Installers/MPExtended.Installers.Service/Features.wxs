@@ -36,6 +36,7 @@
       <ComponentRef Id="Component_TAS_Binaries"/>
       <ComponentRef Id="Component_TAS_Interface"/>
       <ComponentRef Id="Component_TAS_Registry"/>
+      <ComponentRef Id="Component_Powerscheduler_Binaries" />
     </ComponentGroup>
 
     <!-- WSS -->
