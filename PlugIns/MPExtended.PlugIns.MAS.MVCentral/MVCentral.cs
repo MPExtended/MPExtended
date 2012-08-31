@@ -36,6 +36,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
     public partial class MVCentral : Database, IMusicLibrary
     {
         public bool Supported { get; private set; }
+        private bool hasAlbums = true;
 
         [ImportingConstructor]
         public MVCentral(IPluginData data)
@@ -45,11 +46,51 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             {
                 DatabasePath = config["database"];
                 Supported = File.Exists(DatabasePath);
+
+                ReadSettings();
             }
             else
             {
                 Supported = false;
             }
+        }
+
+        public class MvCentralSetting
+        {
+            public String Key { get; set; }
+            public String Name { get; set; }
+            public String Value { get; set; }
+            public String Type { get; set; }
+        }
+
+        private void ReadSettings()
+        {
+            string sql = "SELECT s.key, s.name, s.value, s.type " +
+                       "FROM settings s";
+            var settings = new LazyQuery<MvCentralSetting>(this, sql, new List<SQLFieldMapping>()
+            {
+                new SQLFieldMapping("s", "key", "Key", DataReaders.ReadString),
+                new SQLFieldMapping("s", "name", "Name", DataReaders.ReadString),
+                new SQLFieldMapping("s", "value", "Value", DataReaders.ReadString),
+                new SQLFieldMapping("s", "type", "Type", DataReaders.ReadString),
+            });
+
+            if (settings != null)
+            {
+                foreach (MvCentralSetting s in settings)
+                {
+                    if (s.Key != null && s.Key.Equals("disable_album_support"))
+                    {
+                        hasAlbums = !s.Value.Equals("True");
+                    }
+                }
+            }
+        }
+
+        
+        private object HasAlbumSupportReader(SQLiteDataReader reader, int index)
+        {
+            return hasAlbums;
         }
 
         [MergeListReader]
@@ -217,6 +258,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("a", "styles", "Styles", DataReaders.ReadString),
                 new SQLFieldMapping("a", "biocontent", "Biography", DataReaders.ReadString),
                 new SQLFieldMapping("a", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover),
+                new SQLFieldMapping("a", "id", "HasAlbums", HasAlbumSupportReader),
             });
         }
         #endregion

@@ -328,9 +328,19 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllTracks().AsQueryable().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
 
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicForArtist(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        {
+            return MusicLibraries[provider].GetAllTracks().AsQueryable().Where(p => p.ArtistId.Contains(id)).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
+        }
+
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllTracksDetailed().AsQueryable().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForArtist(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        {
+            return MusicLibraries[provider].GetAllTracksDetailed().AsQueryable().Where(p => p.ArtistId.Contains(id)).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
 
         public WebMusicAlbumBasic GetMusicAlbumBasicById(int? provider, string id)
