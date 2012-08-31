@@ -35,6 +35,14 @@ namespace MPExtended.PlugIns.MAS.MVCentral
     [ExportMetadata("Id", 12)]
     public partial class MVCentral : Database, IMusicLibrary
     {
+        private class Setting
+        {
+            public string Key { get; set; }
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public string Type { get; set; }
+        }
+
         public bool Supported { get; private set; }
         private bool hasAlbums = true;
 
@@ -42,11 +50,10 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         public MVCentral(IPluginData data)
         {
             var config = data.GetConfiguration("mvCentral");
-            if (config.ContainsKey("database"))
+            if (config.ContainsKey("database") && File.Exists(config["database"]))
             {
                 DatabasePath = config["database"];
-                Supported = File.Exists(DatabasePath);
-
+                Supported = true;
                 ReadSettings();
             }
             else
@@ -55,19 +62,11 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             }
         }
 
-        public class MvCentralSetting
-        {
-            public String Key { get; set; }
-            public String Name { get; set; }
-            public String Value { get; set; }
-            public String Type { get; set; }
-        }
-
         private void ReadSettings()
         {
             string sql = "SELECT s.key, s.name, s.value, s.type " +
-                       "FROM settings s";
-            var settings = new LazyQuery<MvCentralSetting>(this, sql, new List<SQLFieldMapping>()
+                         "FROM settings s";
+            var settings = new LazyQuery<Setting>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("s", "key", "Key", DataReaders.ReadString),
                 new SQLFieldMapping("s", "name", "Name", DataReaders.ReadString),
@@ -75,22 +74,8 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("s", "type", "Type", DataReaders.ReadString),
             });
 
-            if (settings != null)
-            {
-                foreach (MvCentralSetting s in settings)
-                {
-                    if (s.Key != null && s.Key.Equals("disable_album_support"))
-                    {
-                        hasAlbums = !s.Value.Equals("True");
-                    }
-                }
-            }
-        }
-
-        
-        private object HasAlbumSupportReader(SQLiteDataReader reader, int index)
-        {
-            return hasAlbums;
+            var disableAlbumSupportList = settings.Where(s => s.Key == "disable_album_support").ToList();
+            hasAlbums = disableAlbumSupportList.Any() ? disableAlbumSupportList.First().Value != "True" : true;
         }
 
         [MergeListReader]
@@ -258,7 +243,10 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("a", "styles", "Styles", DataReaders.ReadString),
                 new SQLFieldMapping("a", "biocontent", "Biography", DataReaders.ReadString),
                 new SQLFieldMapping("a", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover),
-                new SQLFieldMapping("a", "id", "HasAlbums", HasAlbumSupportReader),
+            }, delegate(T item)
+            {
+                item.HasAlbums = hasAlbums;
+                return item;
             });
         }
         #endregion
