@@ -30,6 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Filesystem.wxs" />
+    <Compile Include="Generated.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="UI_Control.wxs" />
     <Compile Include="UI_ExitDialog.wxs" />
