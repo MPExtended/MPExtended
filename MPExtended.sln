@@ -123,10 +123,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.DevTool", "Applications\MPExtended.Applications.Development.DevTool\MPExtended.Applications.Development.DevTool.csproj", "{1D0293A1-5E32-4FAC-8A12-F99579A75134}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.WebMediaPortal", "Installers\MPExtended.Installers.WebMediaPortal\MPExtended.Installers.WebMediaPortal.wixproj", "{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {1D0293A1-5E32-4FAC-8A12-F99579A75134}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.WebMediaPortal", "ServiceHosts\MPExtended.ServiceHosts.WebMediaPortal\MPExtended.ServiceHosts.WebMediaPortal.csproj", "{DF5FBA9C-44F2-412F-9C5A-6B5E8FEF270C}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.WebMediaPortalIIS", "Installers\MPExtended.Installers.WebMediaPortalIIS\MPExtended.Installers.WebMediaPortalIIS.wixproj", "{03BBEB5C-398F-4120-87F0-6ED698C63402}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {1D0293A1-5E32-4FAC-8A12-F99579A75134}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetaService", "MetaService", "{AA75682E-6266-4043-9337-E8C05E5AAB98}"
 EndProject
@@ -147,6 +153,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.Common.Interfaces", "Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj", "{251AC131-5AFC-4B27-ACF1-9E943CABA872}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.PowerSchedulerPlugin", "Applications\MPExtended.Applications.PowerSchedulerPlugin\MPExtended.Applications.PowerSchedulerPlugin.csproj", "{3D4F63FF-7546-42CB-AAB9-B93F46EE9186}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {1D0293A1-5E32-4FAC-8A12-F99579A75134}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Service.Config", "Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj", "{1641D28D-E923-425F-8332-10CC9C98C653}"
 EndProject

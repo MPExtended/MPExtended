@@ -87,7 +87,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)Libraries\Tools\DevTool.exe" /noquestions MonolithicPowerscheduler</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions MonolithicPowerscheduler</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
