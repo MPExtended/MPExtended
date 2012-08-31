@@ -43,22 +43,6 @@ namespace MPExtended.Services.MediaAccessService
     {
         #region General
         private const int API_VERSION = 4;
-        List<WebFilterOperator> operators;
-
-        public MediaAccessService()
-        {
-            operators = new List<WebFilterOperator>();
-            operators.Add(new WebFilterOperator() { Operator = "==", Title = "equals", SuitableTypes = new List<string>() { "text", "num", "bool" } });
-            operators.Add(new WebFilterOperator() { Operator = "!=", Title = "not", SuitableTypes = new List<string>() { "text", "num", "bool" } });
-            operators.Add(new WebFilterOperator() { Operator = ">", Title = "greater than", SuitableTypes = new List<string>() { "text", "num" } });
-            operators.Add(new WebFilterOperator() { Operator = "<", Title = "less than", SuitableTypes = new List<string>() { "text", "num" } });
-            operators.Add(new WebFilterOperator() { Operator = ">=", Title = "greater or equal than", SuitableTypes = new List<string>() { "text", "num" } });
-            operators.Add(new WebFilterOperator() { Operator = "=<", Title = "less or equal than", SuitableTypes = new List<string>() { "text", "num" } });
-
-            //...
-            operators.Add(new WebFilterOperator() { Operator = "c", Title = "contains", SuitableTypes = new List<string>() { "list" } });
-            operators.Add(new WebFilterOperator() { Operator = "s", Title = "starts with", SuitableTypes = new List<string>() { "text" } });
-        }
 
         private ILibrary GetLibrary(int? provider, WebMediaType type)
         {
@@ -942,62 +926,60 @@ namespace MPExtended.Services.MediaAccessService
 
         #region Filters
         /// <summary>
-        /// Get all available values for a given filter
+        /// Get all available values for a given field
         /// </summary>
-        /// <param name="provider">Provider that is filtered</param>
-        /// <param name="mediaType">MediaType that is used</param>
-        /// <param name="filterField">Field that is used for filtering</param>
-        /// <returns>List of available filter elements</returns>
-        public List<WebStringResult> GetFilterElements(int provider, WebMediaType mediaType, string filterField)
+        public IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField)
         {
-            //TODO: return all elements that can be used as a filtered parameter 
-            return null;
+            switch (mediaType)
+            {
+                case WebMediaType.Drive:
+                    return Filters.GetAllValues(filterField, GetAllFileSystemDrives(provider)).ToList();
+                case WebMediaType.Movie:
+                    return Filters.GetAllValues(filterField, GetAllMoviesDetailed(provider)).ToList();
+                case WebMediaType.MusicAlbum:
+                    return Filters.GetAllValues(filterField, GetAllMusicAlbumsBasic(provider)).ToList();
+                case WebMediaType.MusicArtist:
+                    return Filters.GetAllValues(filterField, GetAllMusicArtistsDetailed(provider)).ToList();
+                case WebMediaType.MusicTrack:
+                    return Filters.GetAllValues(filterField, GetAllMusicTracksDetailed(provider)).ToList();
+                case WebMediaType.Picture:
+                    return Filters.GetAllValues(filterField, GetAllPicturesDetailed(provider)).ToList();
+                case WebMediaType.Playlist:
+                    return Filters.GetAllValues(filterField, GetPlaylists(provider)).ToList();
+                case WebMediaType.TVEpisode:
+                    return Filters.GetAllValues(filterField, GetAllTVEpisodesDetailed(provider)).ToList();
+                case WebMediaType.TVShow:
+                    return Filters.GetAllValues(filterField, GetAllTVShowsDetailed(provider)).ToList();
+                default:
+                    Log.Info("GetFilterValues() called with unsupported mediaType={0}; filterField={1}", mediaType, filterField);
+                    throw new ArgumentException("Unsupported MediaType for GetFilterValues()");
+            }
         }
 
         /// <summary>
-        /// Create a filter from a given set of parameters. This String can then be used as a "filter" parameter
-        /// in other MpExtended APIs.
+        /// Create a filter string from a given set of parameters. The result of this method can be used as the "filter"
+        /// parameter in other MPExtended APIs.
         /// 
-        /// To define multiple filters, call this method multiple times and join them in the following format:
-        /// [filter1, filter2, filterN]
-        /// </summary>
-        /// <param name="field">Name of the field that is going to get used for filtering</param>
-        /// <param name="op">Operator of this filter</param>
-        /// <param name="value">Value of the filter</param>
-        /// <param name="conjunction">Conjunction (and, or) to the next filter</param>
-        /// <returns>Filter object</returns>
-        public WebFilter CreateFilter(string field, string op, string value, string conjunction)
-        {
-            return new WebFilter() { Field = field, Operator = op, Value = value, Conjunction = conjunction };
-        }
-
-        /// <summary>
-        /// Create a filter string from a given set of parameters. This String can then be used as a "filter" parameter
-        /// in other MpExtended APIs.
+        /// A filter consists of a field name (alphabetic, case-sensitive), followed by an operator (only special characters),
+        /// followed by the value. Multiple filters are separated with a comma. 
         /// 
-        /// To define multiple filters, call this method multiple times and join them in the following format:
-        /// [filter1, filter2, filterN]
+        /// To define multiple filters, call this method multiple times and join them together. 
         /// </summary>
-        /// <param name="field">Name of the field that is going to get used for filtering</param>
-        /// <param name="op">Operator of this filter</param>
-        /// <param name="value">Value of the filter</param>
-        /// <param name="conjunction">Conjunction (and, or) to the next filter</param>
-        /// <returns>Filter as string</returns>
-        public WebStringResult CreateFilterString(string field, string op, string value, string conjunction)
+        /// <param name="conjunction">Conjuction (and, or) to the next filter</param>
+        /// <returns>The filter string</returns>
+        public WebStringResult CreateFilterString(string field, string op, string value)
         {
-            return CreateFilter(field, op, value, conjunction).ToJSON();
+            return new FilterList(new Filter() { Field = field, Operator = op, Value = value }).ToString();
         }
 
         /// <summary>
         /// Get a list of all available filter operators (==, !=, ...)
         /// </summary>
         /// <returns>Available operators</returns>
-        public List<WebFilterOperator> GetFilterOperators()
+        public IList<WebFilterOperator> GetFilterOperators()
         {
-            return operators;
+            return Filters.Operators;
         }
-
         #endregion
-
     }
 }

@@ -7,8 +7,8 @@ namespace MPExtended.Services.Common.Interfaces
 {
     public class WebFilterOperator
     {
-        public String Operator { get; set; }
-        public String Title { get; set; }
-        public List<String> SuitableTypes { get; set; }
+        public string Operator { get; set; }
+        public string Title { get; set; }
+        public List<string> SuitableTypes { get; set; }
     }
 }

@@ -55,7 +55,6 @@
     </Compile>
     <Compile Include="WebFileType.cs" />
     <Compile Include="WebDictionary.cs" />
-    <Compile Include="WebFilter.cs" />
     <Compile Include="WebFilterOperator.cs" />
     <Compile Include="WebIntResult.cs" />
     <Compile Include="WebMediaType.cs" />

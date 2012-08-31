@@ -95,6 +95,13 @@ namespace MPExtended.Services.MediaAccessService
             return FilterStartsWith(FilterGenre(FilterActor(list, actor), genre), startsWith);
         }
 
+        public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
+        {
+            return String.IsNullOrWhiteSpace(filter) ? 
+                list : 
+                new FilterList(filter).MatchList(list).AsQueryable();
+        }
+
         // Easy aliases for ordering and sorting
         public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
         {
@@ -192,28 +199,6 @@ namespace MPExtended.Services.MediaAccessService
                 Log.Warn(String.Format("Tried to do invalid sorting; actual values SortBy={0}, OrderBy={1}", sort, order), ex);
                 throw new Exception("Sorting on this property is not supported for this media type");
             }
-        }
-
-        public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
-        {
-            String filterRaw = System.Web.HttpUtility.HtmlDecode(filter);
-            filterRaw = filterRaw.Replace("\\", "");
-
-            if (filter != null)
-            {
-                List<WebFilter> filters;
-                if (filter.StartsWith("["))
-                {
-                    filters = JsonConvert.DeserializeObject<List<WebFilter>>(filterRaw);
-                }
-                else
-                {
-                    filters = new List<WebFilter>();
-                    filters.Add(JsonConvert.DeserializeObject<WebFilter>(filterRaw));
-                }
-                //TODO: filter the list here
-            }
-            return list;
         }
     }
 

@@ -521,19 +521,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Filters
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebStringResult> GetFilterElements(int provider, WebMediaType mediaType, string filterField);
+        IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebFilter CreateFilter(string field, string op, string value, string conjunction);
+        WebStringResult CreateFilterString(string field, string op, string value);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStringResult CreateFilterString(string field, string op, string value, string conjunction);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebFilterOperator> GetFilterOperators();
+        IList<WebFilterOperator> GetFilterOperators();
         #endregion
     }
 }
