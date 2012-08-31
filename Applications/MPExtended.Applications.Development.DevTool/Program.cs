@@ -53,7 +53,6 @@ namespace MPExtended.Applications.Development.DevTool
                 new Tools.InterfaceCheck(),
                 new DocGen.DocDevTool(),
                 new Tools.WixFSGenerator(),
-                new Tools.MyGengoImporter(),
                 new Tools.InstallLayoutExporter(),
                 new Tools.MonolithicPowerscheduler(),
                 new Tools.PSPluginInstallGenerator()
