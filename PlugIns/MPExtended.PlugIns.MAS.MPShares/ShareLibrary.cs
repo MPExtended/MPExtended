@@ -34,6 +34,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
     {
         private IPluginData data;
         private Dictionary<string, string> configuration;
+        private string[] sections;
         private List<Share> shares = null;
 
         public bool Supported { get; set; }
@@ -42,13 +43,19 @@ namespace MPExtended.PlugIns.MAS.MPShares
         {
             this.data = data;
             this.configuration = data.GetConfiguration("MP Shares");
+            this.sections = sections;
 
-            if (!Mediaportal.HasValidConfigFile())
+            Supported = Mediaportal.HasValidConfigFile();
+            if (Supported)
             {
-                Supported = false;
-                return;
+                ReadConfiguration();
+                ConfigurationChangeListener.ConfigurationChanged += ReadConfiguration;
+                ConfigurationChangeListener.Enable();
             }
+        }
 
+        private void ReadConfiguration()
+        {
             var localsharelist = new List<Share>();
             foreach (string section in sections)
             {
@@ -85,8 +92,6 @@ namespace MPExtended.PlugIns.MAS.MPShares
             {
                 share.Id = "s" + (shareNr++);
             }
-
-            Supported = true;
         }
 
         public ShareLibrary(IPluginData data, string section)
