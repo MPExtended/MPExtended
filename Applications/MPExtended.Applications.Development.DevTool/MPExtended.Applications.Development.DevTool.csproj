@@ -58,6 +58,7 @@
     <Compile Include="DocGen\WSSGenerator.cs" />
     <Compile Include="IDevTool.cs" />
     <Compile Include="Question.cs" />
+    <Compile Include="Tools\PSPluginInstallGenerator.cs" />
     <Compile Include="Tools\InstallLayoutExporter.cs" />
     <Compile Include="Tools\InterfaceCheck.cs" />
     <Compile Include="Tools\MonolithicPowerscheduler.cs" />

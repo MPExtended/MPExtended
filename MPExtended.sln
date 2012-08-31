@@ -82,6 +82,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.UserSessionService.Interfaces", "Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj", "{CC3525EA-0721-4299-991B-1C7E01A15E6B}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.Service", "Installers\MPExtended.Installers.Service\MPExtended.Installers.Service.wixproj", "{73676C4A-CDDB-407A-AC81-15FD09E22243}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {1D0293A1-5E32-4FAC-8A12-F99579A75134}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.UacServiceHandler", "Applications\MPExtended.Applications.UacServiceHandler\MPExtended.Applications.UacServiceHandler.csproj", "{CA3022CA-1E84-485C-8AB3-1116407E32CA}"
 EndProject
