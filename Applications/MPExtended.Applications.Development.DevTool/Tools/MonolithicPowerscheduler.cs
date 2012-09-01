@@ -38,7 +38,7 @@ namespace MPExtended.Applications.Development.DevTool.Tools
                 return;
 
             string arguments = String.Format(
-                "/target:library /v2 /out:{0}/MPExtended.PowerScheduler.dll {0}/MPExtended.Applications.PowerSchedulerPlugin.dll {0}/MPExtended.Services.MetaService.Interfaces.dll {0}/MPExtended.Services.Common.Interfaces.dll",
+                @"/target:library /v2 ""/out:{0}/MPExtended.PowerScheduler.dll"" ""{0}/MPExtended.Applications.PowerSchedulerPlugin.dll"" ""{0}/MPExtended.Services.MetaService.Interfaces.dll"" ""{0}/MPExtended.Services.Common.Interfaces.dll""",
                 Path.Combine(Installation.GetSourceRootDirectory(), "Applications", "MPExtended.Applications.PowerSchedulerPlugin", "bin", Installation.GetSourceBuildDirectoryName())
             );
             var proc = Process.Start(ilmerge, arguments);
