@@ -79,6 +79,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, "images/default/album.png");
         }
 
+        public ActionResult ArtistImage(string artist, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Cover, "images/default/artist.png");
+        }
+
+        public ActionResult TrackImage(string track, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, "images/default/track.png");
+        }
+
         public ActionResult Track(string track)
         {
             var trackObj = Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);

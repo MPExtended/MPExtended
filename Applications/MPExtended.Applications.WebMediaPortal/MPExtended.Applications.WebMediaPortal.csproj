@@ -152,6 +152,8 @@
     <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
     <Content Include="Content\Images\default\album.png" />
+    <Content Include="Content\Images\default\artist.png" />
+    <Content Include="Content\Images\default\track.png" />
     <Content Include="Content\Images\default\logo.png" />
     <Content Include="Content\Images\default\movie-cover.png" />
     <Content Include="Content\Images\default\tvepisode-banner.png" />
