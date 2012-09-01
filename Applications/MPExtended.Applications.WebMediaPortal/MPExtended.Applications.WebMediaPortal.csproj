@@ -155,6 +155,7 @@
     <Content Include="Content\Images\default\logo.png" />
     <Content Include="Content\Images\default\movie-cover.png" />
     <Content Include="Content\Images\default\tvepisode-banner.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\jwplayer\jwplayer.js" />
     <Content Include="Content\jwplayer\license.txt" />
     <Content Include="Content\jwplayer\player.swf" />
