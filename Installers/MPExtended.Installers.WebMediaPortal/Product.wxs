@@ -57,12 +57,16 @@
     </InstallExecuteSequence>
 
     <!-- Require IIS Express -->
-    <Property Id="IISEXPRESSINSTALLED">
-      <RegistrySearch Id="IISExpressInstalledSearch" Type="raw" Win64="no"
+    <Property Id="IISEXPRESS75INSTALLED">
+      <RegistrySearch Id="IISExpress75InstalledSearch" Type="raw" Win64="no"
                       Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\7.5" Name="InstallPath" />
     </Property>
-    <Condition Message="The installer has detected that the prerequisite IIS Express 7.5 is not installed. Please install IIS Express 7.5 and run the installer again.">
-      <![CDATA[Installed OR IISEXPRESSINSTALLED]]>
+    <Property Id="IISEXPRESS8INSTALLED">
+      <RegistrySearch Id="IISExpress8InstalledSearch" Type="raw" Win64="no"
+                      Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\8.0" Name="InstallPath" />
+    </Property>
+    <Condition Message="The installer has detected that the prerequisite IIS Express 7.5 or newer is not installed. Please install IIS Express 7.5 or newer and run the installer again.">
+      <![CDATA[Installed OR IISEXPRESS75INSTALLED OR IISEXPRESS8INSTALLED]]>
     </Condition>
     
     <!-- Service -->
