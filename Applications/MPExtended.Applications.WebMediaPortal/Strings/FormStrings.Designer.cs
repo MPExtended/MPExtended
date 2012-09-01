@@ -376,6 +376,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ScheduleTitle {
+            get {
+                return ResourceManager.GetString("ScheduleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedule type.
         /// </summary>
         public static string ScheduleType {

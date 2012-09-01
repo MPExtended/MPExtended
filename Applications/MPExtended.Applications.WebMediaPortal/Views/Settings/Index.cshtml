@@ -3,8 +3,7 @@
     ViewBag.Title = "Settings";
 }
 
-<h2>Settings</h2>
-@Html.ActionLink("Configure service URLs", "Services")
+<h2>@UIStrings.Settings</h2>
 <br /><br />
 
 @using (Html.BeginForm())
@@ -44,9 +43,9 @@
                 @Html.LabelFor(x => x.EnableDeinterlace)
             </td>
             <td>
-                @Html.RadioButtonFor(x => x.EnableDeinterlace, "true") Yes
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "true") @UIStrings.Yes
                 &nbsp;&nbsp;&nbsp;&nbsp; 
-                @Html.RadioButtonFor(x => x.EnableDeinterlace, "false") No
+                @Html.RadioButtonFor(x => x.EnableDeinterlace, "false") @UIStrings.No
                 @Html.ValidationMessageFor(x => x.EnableDeinterlace)
             </td>
         </tr>
@@ -97,9 +96,9 @@
                     @Html.LabelFor(x => x.EnableAlbumPlayer)
                 </td>
                 <td>
-                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "true") Yes
+                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "true") @UIStrings.Yes
                     &nbsp;&nbsp;&nbsp;&nbsp; 
-                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "false") No
+                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "false") @UIStrings.No
                     @Html.ValidationMessageFor(x => x.EnableAlbumPlayer)
                 </td>
             </tr>
@@ -137,10 +136,10 @@
         }
     </table>
     <br />
-    <input type="submit" value="Save" />
+    <input type="submit" value="@UIStrings.Save" />
     </div>
 }
 
 <br />
-<h2>About</h2>
-This is WebMediaPortal <strong>@ViewBag.Version</strong>.
+<h2>@UIStrings.About</h2>
+@Html.Raw(String.Format(UIStrings.Version, @ViewBag.Version))

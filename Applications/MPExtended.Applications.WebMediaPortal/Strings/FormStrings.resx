@@ -223,6 +223,9 @@
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Starttime</value>
   </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
   <data name="ScheduleType" xml:space="preserve">
     <value>Schedule type</value>
   </data>

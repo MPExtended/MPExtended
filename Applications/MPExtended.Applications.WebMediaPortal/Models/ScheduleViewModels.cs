@@ -48,6 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int Id { get; set; }
 
         [StringLength(255)]
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleTitle")]
         [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public string Title { get; set; }
 
