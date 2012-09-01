@@ -64,9 +64,17 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}", tempConfigFile);
 
+                // lookup IIS Express installation path from registry
+                object iisExpressLocation = null;
+                foreach (var version in new string[] { "7.5", "8.0" })
+                {
+                    iisExpressLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\IISExpress\" + version, "InstallPath");
+                    if (iisExpressLocation != null && !String.IsNullOrEmpty(iisExpressLocation.ToString().Trim()))
+                        break;
+                }
+
                 // lookup IIS Express location
                 string iisExpress = null;
-                object iisExpressLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\IISExpress\7.5", "InstallPath");
                 string iisExpressDefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "IIS Express", "iisexpress.exe");
                 if (iisExpressLocation != null && File.Exists(Path.Combine(iisExpressLocation.ToString(), "iisexpress.exe")))
                 {

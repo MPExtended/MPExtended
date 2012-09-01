@@ -57,12 +57,16 @@
     </InstallExecuteSequence>
 
     <!-- Require IIS Express -->
-    <Property Id="IISEXPRESSINSTALLED">
-      <RegistrySearch Id="IISExpressInstalledSearch" Type="raw" Win64="no"
+    <Property Id="IISEXPRESS75INSTALLED">
+      <RegistrySearch Id="IISExpress75InstalledSearch" Type="raw" Win64="no"
                       Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\7.5" Name="InstallPath" />
     </Property>
-    <Condition Message="The installer has detected that the prerequisite IIS Express 7.5 is not installed. Please install IIS Express 7.5 and run the installer again.">
-      <![CDATA[Installed OR IISEXPRESSINSTALLED]]>
+    <Property Id="IISEXPRESS8INSTALLED">
+      <RegistrySearch Id="IISExpress8InstalledSearch" Type="raw" Win64="no"
+                      Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\8.0" Name="InstallPath" />
+    </Property>
+    <Condition Message="The installer has detected that the prerequisite IIS Express 7.5 or newer is not installed. Please install IIS Express 7.5 or newer and run the installer again.">
+      <![CDATA[Installed OR IISEXPRESS75INSTALLED OR IISEXPRESS8INSTALLED]]>
     </Condition>
     
     <!-- Service -->
@@ -70,7 +74,12 @@
       <Component Id="Component_Hosting" Guid="72a08c6b-5611-4d41-ab8e-abb1a7315641">
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe" KeyPath="yes" Id="MainService"/>
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.ServiceHosts.WebMediaPortal.exe.config" />
-        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.dll" Id="Hosting_MPExtended.Libraries.Service.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.dll" 
+              Id="Hosting_MPExtended.Libraries.Service.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.Config.dll" 
+              Id="Hosting_MPExtended.Libraries.Service.Config.dll" />
+        <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.Config.XmlSerializers.dll" 
+              Id="Hosting_MPExtended.Libraries.Service.Config.XmlSerializers.dll" />
         <File Source="$(var.MPExtended.ServiceHosts.WebMediaPortal.TargetDir)\IISExpressTemplate.config" />
 
         <ServiceInstall
