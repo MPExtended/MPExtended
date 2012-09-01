@@ -55,7 +55,8 @@ namespace MPExtended.Applications.Development.DevTool
                 new Tools.WixFSGenerator(),
                 new Tools.InstallLayoutExporter(),
                 new Tools.MonolithicPowerscheduler(),
-                new Tools.PSPluginInstallGenerator()
+                new Tools.PSPluginInstallGenerator(),
+                new Tools.TransifexDownloader()
             };
         }
 
