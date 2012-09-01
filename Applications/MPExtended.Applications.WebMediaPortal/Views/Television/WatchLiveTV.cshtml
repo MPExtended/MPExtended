@@ -1,11 +1,11 @@
 ﻿@model MPExtended.Services.TVAccessService.Interfaces.WebChannelDetailed
 @{
     var ProgramTitle = Model.CurrentProgram != null ? Model.CurrentProgram.Title : UIStrings.Unknown;
-    ViewBag.Title = String.Format(UIStrings.WatchingProgram, ProgramTitle, Model.DisplayName);
+    ViewBag.Title = String.Format(UIStrings.WatchingProgram, ProgramTitle, Model.Title);
 }
 
 <h2>@UIStrings.LiveTV</h2>
-@Html.Raw(String.Format(UIStrings.YouAreWatchingProgram, ProgramTitle, Model.DisplayName))
+@Html.Raw(String.Format(UIStrings.YouAreWatchingProgram, ProgramTitle, Model.Title))
 <br />
 <br />
 
