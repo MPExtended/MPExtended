@@ -151,6 +151,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a valid language.
+        /// </summary>
+        public static string ErrorNoValidLanguage {
+            get {
+                return ResourceManager.GetString("ErrorNoValidLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a valid media streaming profile.
         /// </summary>
         public static string ErrorNoValidMediaProfile {
@@ -255,6 +264,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string FieldRequired {
             get {
                 return ResourceManager.GetString("FieldRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
             }
         }
         

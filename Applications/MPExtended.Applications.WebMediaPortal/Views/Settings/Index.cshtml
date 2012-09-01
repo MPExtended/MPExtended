@@ -11,7 +11,16 @@
 {
     <div>
     <table class="webmp">
-         <tr>
+        <tr>
+            <td>
+                @Html.LabelFor(x => x.Language)
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.Language)
+                @Html.ValidationMessageFor(x => x.Language)
+            </td>
+        </tr>
+        <tr>
             <td>
                 @Html.LabelFor(x => x.Skin)
             </td>

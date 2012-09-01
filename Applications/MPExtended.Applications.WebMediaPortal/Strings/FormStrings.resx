@@ -148,6 +148,9 @@
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Please specify a valid MAS URL</value>
   </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Please select a valid language</value>
+  </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
     <value>Please select a valid media streaming profile</value>
   </data>
@@ -183,6 +186,9 @@
   </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>{0} field is required</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
   </data>
   <data name="LogOnPassword" xml:space="preserve">
     <value>Password</value>
