@@ -53,9 +53,7 @@ namespace MPExtended.Applications.Development.DevTool.Tools
         public void Run()
         {
             WebClient client = new WebClient();
-            client.Headers[HttpRequestHeader.UserAgent] = !String.IsNullOrEmpty(VersionUtil.GetGitVersion()) ?
-                String.Format("MPExtended/{0} (DevTool; commit {1})", VersionUtil.GetVersionName(), VersionUtil.GetGitVersion()) : 
-                String.Format("MPExtended/{0} (DevTool)", VersionUtil.GetVersionName());
+            client.Headers[HttpRequestHeader.UserAgent] = VersionUtil.GetUserAgent("DevTool");
             client.Encoding = Encoding.UTF8;
             client.Credentials = new NetworkCredential(Answers["username"], Answers["password"]);
 
