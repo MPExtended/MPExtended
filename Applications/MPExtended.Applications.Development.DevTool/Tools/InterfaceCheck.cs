@@ -34,6 +34,7 @@ namespace MPExtended.Applications.Development.DevTool.Tools
         {
             string rootpath = Installation.GetSourceRootDirectory();
             CheckService(rootpath, "MPExtended.Services.MediaAccessService", "IMediaAccessService", "MediaAccessService");
+            CheckService(rootpath, "MPExtended.Services.MetaService", new string[] { "IMetaService", "IProtectedMetaService" }, "MetaService");
             CheckService(rootpath, "MPExtended.Services.TVAccessService", "ITVAccessService", "TVAccessService");
             CheckService(rootpath, "MPExtended.Services.StreamingService", new string[] { "IStreamingService", "IWebStreamingService" }, "StreamingService");
             CheckService(rootpath, "MPExtended.Services.UserSessionService", "IUserSessionService", "UserSessionService");
@@ -60,7 +61,8 @@ namespace MPExtended.Applications.Development.DevTool.Tools
             foreach (MethodInfo currentMethod in implMethods)
             {
                 // skip standard methods
-                if (currentMethod.DeclaringType.Name != implementationType.Name || currentMethod.Name == "Dispose")
+                if (currentMethod.DeclaringType.Name != implementationType.Name || currentMethod.Name == "Dispose" ||
+                    currentMethod.Name == "get_Instance" || currentMethod.Name == "SetAsInstance") // ISingletonService
                 {
                     continue;
                 }

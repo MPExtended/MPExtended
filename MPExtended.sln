@@ -273,10 +273,10 @@ Global
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Debug|MPExtended Platform.Build.0 = Debug|Any CPU
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Release|MPExtended Platform.ActiveCfg = Release|Any CPU
 		{504A098A-8141-418A-9FC5-C7870C68C716}.Release|MPExtended Platform.Build.0 = Release|Any CPU
-		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|MPExtended Platform.ActiveCfg = Debug|Any CPU
-		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|MPExtended Platform.Build.0 = Debug|Any CPU
-		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|MPExtended Platform.ActiveCfg = Release|Any CPU
-		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|MPExtended Platform.Build.0 = Release|Any CPU
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|MPExtended Platform.ActiveCfg = Debug|x86
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Debug|MPExtended Platform.Build.0 = Debug|x86
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|MPExtended Platform.ActiveCfg = Release|x86
+		{1D0293A1-5E32-4FAC-8A12-F99579A75134}.Release|MPExtended Platform.Build.0 = Release|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Debug|MPExtended Platform.ActiveCfg = Debug|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Release|MPExtended Platform.ActiveCfg = Release|x86
 		{731C1B33-D8AA-450A-A02D-2B8D7F9D3AEE}.Release|MPExtended Platform.Build.0 = Release|x86
