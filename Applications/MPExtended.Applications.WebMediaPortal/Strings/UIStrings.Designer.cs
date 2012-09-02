@@ -439,6 +439,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latest albums.
+        /// </summary>
+        public static string LatestAlbums {
+            get {
+                return ResourceManager.GetString("LatestAlbums", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latest episodes.
         /// </summary>
         public static string LatestEpisodes {
