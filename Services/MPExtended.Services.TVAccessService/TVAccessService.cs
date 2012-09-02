@@ -870,11 +870,11 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int groupId, DateTime startTime, DateTime endTime)
         {
             using (var cache = WebProgramExtensionMethods.CacheSchedules())
             {
-                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                return _tvBusiness.GetTVGuideChannelsForGroup(groupId)
                     .Select(ch => new WebChannelPrograms<WebProgramBasic>()
                     {
                         ChannelId = ch.IdChannel,
@@ -884,11 +884,11 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int channelGroup, DateTime startTime, DateTime endTime)
+        public IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int groupId, DateTime startTime, DateTime endTime)
         {
             using (var cache = WebProgramExtensionMethods.CacheSchedules())
             {
-                return _tvBusiness.GetTVGuideChannelsForGroup(channelGroup)
+                return _tvBusiness.GetTVGuideChannelsForGroup(groupId)
                     .Select(ch => new WebChannelPrograms<WebProgramDetailed>()
                     {
                         ChannelId = ch.IdChannel,
