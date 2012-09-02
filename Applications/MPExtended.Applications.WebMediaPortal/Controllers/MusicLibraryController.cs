@@ -35,7 +35,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
-            var artistList = Connections.Current.MAS.GetAllMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
+            var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
             if (artistList == null)
                 return new HttpNotFoundResult();
             return View(artistList);

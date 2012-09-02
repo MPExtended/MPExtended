@@ -36,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Series
         public ActionResult Index(string genre = null)
         {
-            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetAllTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
+            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
             if (!String.IsNullOrEmpty(genre))
                 series = series.Where(x => x.Genres.Contains(genre));
 

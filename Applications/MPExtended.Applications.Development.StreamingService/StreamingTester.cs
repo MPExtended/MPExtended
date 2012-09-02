@@ -108,7 +108,7 @@ namespace MPExtended.Applications.Development.StreamingService
             try
             {
                 cbMovies.Items.Clear();
-                mMovies = mServiceClient.GetAllMoviesDetailed(movieProvider, null, null);
+                mMovies = mServiceClient.GetMoviesDetailed(movieProvider, null, null);
                 foreach (WebMovieDetailed movie in mMovies)
                 {
                     cbMovies.Items.Add(movie.Title);
