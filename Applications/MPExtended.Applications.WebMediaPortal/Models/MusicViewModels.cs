@@ -40,4 +40,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public WebMusicAlbumBasic Album { get; set; }
         public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
     }
+
+    public class MusicTrackViewModel
+    {
+        public MusicTrackViewModel(){}
+        public MusicTrackViewModel(WebMusicTrackDetailed track)
+        {
+            Track = track;
+        }
+        public WebMusicTrackDetailed Track { get; set; }
+    }
 }

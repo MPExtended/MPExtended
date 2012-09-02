@@ -1,0 +1,16 @@
+﻿@model HomeViewModel
+
+@if (Model.Availability.Music)
+{
+    <h2>@UIStrings.LatestAlbums</h2>
+    <div>
+        @foreach (var track in Model.GetLastAddedMusicTracks())
+        {
+            <div class="column">
+                <div class="row">
+                    @Html.ActionLink(track.Track.Title, "Track", "MusicLibrary", new { track = track.Track.Id }, null)
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -53,6 +53,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return PartialView(new HomeViewModel(ServiceAvailability));
         }
 
+        public ActionResult NewMusicTracks()
+        {
+            return PartialView(new HomeViewModel(ServiceAvailability));
+        }
+
         public ActionResult NewRecordings()
         {
             return PartialView(new HomeViewModel(ServiceAvailability));
