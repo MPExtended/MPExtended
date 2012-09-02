@@ -60,41 +60,7 @@ namespace MPExtended.Services.MediaAccessService
             return source.Skip(start).Take(count);
         }
 
-        // Some special filter methods
-        public static IQueryable<T> FilterGenre<T>(this IQueryable<T> list, string genre) where T : IGenreSortable
-        {
-            if (genre != null)
-                return list.Where(x => ((IGenreSortable)x).Genres.Contains(genre));
-
-            return list;
-        }
-
-        public static IQueryable<T> FilterActor<T>(this IQueryable<T> list, string actor) where T : IActors
-        {
-            if (actor != null)
-                return list.Where(x => ((IActors)x).Actors.Contains(new WebActor() { Title = actor }));
-
-            return list;
-        }
-
-        public static IQueryable<T> FilterStartsWith<T>(this IQueryable<T> list, string startsWith) where T : ITitleSortable
-        {
-            if (startsWith != null)
-                return list.Where(x => x.Title.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase));
-
-            return list;
-        }
-
-        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor) where T : IGenreSortable, IActors
-        {
-            return FilterGenre(FilterActor(list, actor), genre);
-        }
-
-        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor, string startsWith) where T : IGenreSortable, IActors, ITitleSortable
-        {
-            return FilterStartsWith(FilterGenre(FilterActor(list, actor), genre), startsWith);
-        }
-
+        // Filter the list
         public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
         {
             return String.IsNullOrWhiteSpace(filter) ? 
