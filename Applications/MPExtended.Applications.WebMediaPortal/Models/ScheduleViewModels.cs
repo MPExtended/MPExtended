@@ -76,7 +76,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return Connections.Current.TAS.GetAllChannelsDetailed(WebSortField.Title)
+                return Connections.Current.TAS.GetChannelsDetailed(sort: WebSortField.Title)
                         .Where(x => x.VisibleInGuide)
                         .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Title });
             }
