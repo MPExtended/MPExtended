@@ -21,8 +21,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal interface ILogProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal interface ILogProcessingUnit
+    {
         Stream InputStream { get; set; }
 
         bool Setup();

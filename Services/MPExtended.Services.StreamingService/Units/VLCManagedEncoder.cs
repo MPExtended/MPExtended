@@ -83,7 +83,7 @@ namespace MPExtended.Services.StreamingService.Units
 
             // prepare sout, needs some trickery for vlc
             string realSout = sout.Replace("#OUT#", @"\" + output);
-            
+
             // debug
             Log.Debug("VLCManagedEncoder: sout {0}", realSout);
             Log.Debug("VLCManagedEncoder: arguments {0}", String.Join("|", arguments));

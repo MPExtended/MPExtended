@@ -26,7 +26,7 @@ using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.StreamingService.Units
 {
-    class HTTPLiveStreamUnit : IProcessingUnit
+    internal class HTTPLiveStreamUnit : IProcessingUnit
     {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }

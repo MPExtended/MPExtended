@@ -38,14 +38,14 @@ namespace MPExtended.Services.StreamingService.Units
         private bool vlcIsStarted;
         private long position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, long position) 
+        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, long position)
         {
             data = save;
             this.info = info;
             this.position = position;
         }
 
-        public bool Setup() 
+        public bool Setup()
         {
             data.Value.Failed = false;
             vlcIsStarted = false;
@@ -68,14 +68,14 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        public bool Start() 
+        public bool Start()
         {
             while (!vlcIsStarted)
                 Thread.Sleep(100);
             return true;
         }
 
-        public bool Stop() 
+        public bool Stop()
         {
             processThread.Abort();
             return true;
@@ -124,13 +124,13 @@ namespace MPExtended.Services.StreamingService.Units
                         // the actual progress parsing
                         if (line.StartsWith("P"))
                         {
-							// Starting with VLCWrapper 0.2, the output format has changed. It is 'P [time in milliseconds]' now, which is quite easy for
-							// us to handle. With VLC 2 it also returns the time as a 64-bit integer, so we don't have overflow anymore either, but that risk
-							// is with milliseconds quite small anyhow: it requires 596 hours of video.
-							long milliseconds = Int64.Parse(line.Substring(2));
-							calculator.NewTime((int)milliseconds);
-							calculator.SaveStats(data);
-							continue;
+                            // Starting with VLCWrapper 0.2, the output format has changed. It is 'P [time in milliseconds]' now, which is quite easy for
+                            // us to handle. With VLC 2 it also returns the time as a 64-bit integer, so we don't have overflow anymore either, but that risk
+                            // is with milliseconds quite small anyhow: it requires 596 hours of video.
+                            long milliseconds = Int64.Parse(line.Substring(2));
+                            calculator.NewTime((int)milliseconds);
+                            calculator.SaveStats(data);
+                            continue;
                         }
 
                         Log.Warn("VLCWrapperParsing: encountered unknown line {0}", line);

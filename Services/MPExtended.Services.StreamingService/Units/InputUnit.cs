@@ -23,8 +23,10 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal class InputUnit : IProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal class InputUnit : IProcessingUnit
+    {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -34,31 +36,41 @@ namespace MPExtended.Services.StreamingService.Units {
 
         private string source;
 
-        public InputUnit(string source) {
+        public InputUnit(string source)
+        {
             this.source = source;
         }
 
-        public bool Setup() {
-            try {
-                if (source.IndexOf(".ts.tsbuffer") != -1) {
+        public bool Setup()
+        {
+            try
+            {
+                if (source.IndexOf(".ts.tsbuffer") != -1)
+                {
                     Log.Info("Using TsBuffer to read input");
                     DataOutputStream = new TsBuffer(this.source);
-                } else {
+                }
+                else
+                {
                     Log.Info("Using FileStream to read input");
                     DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.Error("Failed to setup InputProcessingUnit", e);
                 return false;
             }
             return true;
         }
 
-        public bool Start() {
+        public bool Start()
+        {
             return true;
         }
 
-        public bool Stop() {
+        public bool Stop()
+        {
             DataOutputStream.Close();
             return true;
         }

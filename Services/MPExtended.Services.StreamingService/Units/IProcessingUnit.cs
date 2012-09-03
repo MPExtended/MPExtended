@@ -21,8 +21,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal interface IProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal interface IProcessingUnit
+    {
         Stream InputStream { get; set; }
         Stream DataOutputStream { get; }
         Stream LogOutputStream { get; }
