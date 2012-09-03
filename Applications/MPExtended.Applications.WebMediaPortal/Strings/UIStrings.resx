@@ -451,4 +451,7 @@
   <data name="Version" xml:space="preserve">
     <value>This is WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Latest albums</value>
+  </data>
 </root>
