@@ -62,6 +62,8 @@ namespace MPExtended.Services.StreamingService.Units
         private Stream transcoderInputStream;
         private bool doInputCopy;
 
+        private StreamContext context;
+
         public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream)
         {
             this.transcoderPath = transcoder;
@@ -69,6 +71,12 @@ namespace MPExtended.Services.StreamingService.Units
             this.inputMethod = inputMethod;
             this.outputMethod = outputMethod;
             this.logStream = logStream;
+        }
+
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, StreamContext context)
+            : this(transcoder, arguments, inputMethod, outputMethod, logStream)
+        {
+            this.context = context;
         }
 
         public bool Setup()
@@ -185,7 +193,17 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 Log.Trace("Transcoder running: {0}", !transcoderApplication.HasExited);
                 Log.Info("Encoding: Waiting till output named pipe is ready");
-                ((NamedPipe)DataOutputStream).WaitTillReady();
+
+                var pipe = (NamedPipe)DataOutputStream;
+                var checkFailed = context != null && context.TranscodingInfo != null;
+                while (!pipe.IsReady && !(checkFailed && context.TranscodingInfo.Failed))
+                    System.Threading.Thread.Sleep(100);
+
+                if (checkFailed && context.TranscodingInfo.Failed)
+                {
+                    Log.Warn("Encoding: Aborting wait because transcoder application failed and will never setup output named pipe.");
+                    return false;
+                }
             }
 
             return true;

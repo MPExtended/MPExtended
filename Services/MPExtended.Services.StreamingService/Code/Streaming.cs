@@ -254,17 +254,23 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
                     stream.Transcoder.BuildPipeline();
 
-                    // start the processes and retrieve output stream
-                    stream.Context.Pipeline.Assemble();
-                    stream.Context.Pipeline.Start();
+                    // start the pipeline, but imm
+                    bool assembleResult = stream.Context.Pipeline.Assemble();
+                    bool startResult = assembleResult ? stream.Context.Pipeline.Start() : true;
+                    if (!assembleResult || !startResult)
+                    {
+                        Log.Warn("Starting pipeline for stream '{0}' failed", identifier);
+                        return null;
+                    }
 
+                    // get the final stream and return it
                     Stream finalStream = Streams[identifier].Context.Pipeline.GetFinalStream();
                     if (finalStream != null)
                     {
                         Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(finalStream);
                     }
 
-                    Log.Info("Started stream with identifier " + identifier);
+                    Log.Info("Started stream with identifier '{0}'", identifier);
                     Streams[identifier].LastActivity = DateTime.Now;
                     return stream.Transcoder.GetStreamURL();
                 }
