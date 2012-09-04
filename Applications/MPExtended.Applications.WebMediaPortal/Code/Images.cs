@@ -33,8 +33,15 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Images
     {
-        private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null)
+        private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null, string etag = null)
         {
+            if (etag != null && HttpContext.Current.Request.Headers["If-None-Match"] == String.Format("\"{0}\"", etag))
+            {
+                HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.NotModified;
+                SetCacheHeaders(6 * 30, etag);
+                return new EmptyResult();
+            }
+
             using (var scope = WCFClient.EnterOperationScope(Connections.Current.MASStream))
             {
                 var image = method.Invoke();
@@ -42,6 +49,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 var returnCode = WCFClient.GetHeader<int>("responseCode");
                 if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
                 {
+                    // don't cache failed-to-load images very long, as artwork may be added later on
+                    SetCacheHeaders(1);
                     if (defaultFile == null)
                     {
                         return new HttpStatusCodeResult(returnCode);
@@ -54,8 +63,19 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     }
                 }
 
+                // we can cache these for quite long, as they probably won't change
+                SetCacheHeaders(6 * 30, etag);
                 return new FileStreamResult(image, WCFClient.GetHeader<string>("contentType", "image/jpeg"));
             }
+        }
+
+        private static void SetCacheHeaders(int liveForDays, string etag = null)
+        {
+            HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public);
+            HttpContext.Current.Response.Cache.SetProxyMaxAge(TimeSpan.FromDays(6 * 30));
+            HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddDays(6 * 30));
+            if (etag != null)
+                HttpContext.Current.Response.Cache.SetETag(String.Format("\"{0}\"", etag));
         }
 
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
@@ -101,7 +121,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
             }
 
-            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile);
+            string etag = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", mediaType, provider, id, artworkType, maxWidth, maxHeight);
+            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile, etag);
         }
 
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)
