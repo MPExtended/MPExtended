@@ -3,10 +3,17 @@
 @if (Model.Availability.TAS)
 {
     <h2>@UIStrings.LatestRecordings</h2>
-    <ul>
+    <div>
         @foreach (var recording in Model.GetLastRecordings())
         {
-            <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })</li>
+               <div class="column">
+                <div class="row">
+                    @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })
+                </div>
+                <div class="row">
+                    <img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="" />
+                </div>
+            </div>
         }
-    </ul>
+    </div>
 }
