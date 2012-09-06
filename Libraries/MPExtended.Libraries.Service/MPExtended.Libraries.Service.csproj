@@ -97,6 +97,7 @@
     <Compile Include="Shared\Filters\FilterSet.cs" />
     <Compile Include="Shared\Filters\IFilter.cs" />
     <Compile Include="Shared\Filters\ParseException.cs" />
+    <Compile Include="Shared\Filters\FilterParser.cs" />
     <Compile Include="Shared\Filters\Tokenizer.cs" />
     <Compile Include="Shared\Filters\Tokens.cs" />
     <Compile Include="Strings\UI.Designer.cs">

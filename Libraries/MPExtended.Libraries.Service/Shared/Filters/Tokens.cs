@@ -51,7 +51,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         public static bool IsOperator(char ch)
         {
-            return ch == '=' || ch == '!' || ch == '>' || ch == '<' || ch == '*' || ch == '$' || ch == '^';
+            return ch == '=' || ch == '!' || ch == '>' || ch == '<' || ch == '*' || ch == '$' || ch == '^' || ch == '~';
         }
     }
 }

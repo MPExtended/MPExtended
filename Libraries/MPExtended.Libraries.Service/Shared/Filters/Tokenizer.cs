@@ -54,14 +54,14 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 while (++pos < data.Length && ExpectToken(Tokens.IsFieldName))
                     value += data[pos];
                 if (String.IsNullOrEmpty(value))
-                    ParseError("field name");
+                    ParseError(true, "field name");
                 tokens.Add(value);
 
                 ResetValue();
                 while (++pos < data.Length && ExpectToken(Tokens.IsOperator))
                     value += data[pos];
                 if (String.IsNullOrEmpty(value))
-                    ParseError("operator");
+                    ParseError(true, "operator");
                 tokens.Add(value);
 
                 ResetValue();
@@ -75,13 +75,13 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 {
                     if (Tokens.IsEscapeCharacter(data[pos]))
                         value += GetNextCharacter("any character");
-                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && NotExpectToken(Tokens.IsConjunction)))
+                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && (NotExpectToken(Tokens.IsConjunction) || NotExpectToken(Tokens.IsWhitespace))))
                         break;
                     else
                         value += data[pos];
                 }
                 if (String.IsNullOrEmpty(value))
-                    ParseError("value");
+                    ParseError(true, "value");
                 if (valueIsQuoted && pos >= data.Length) // if the value is quoted, we want a closing quote
                     ParseError(valueQuoteCharacter.ToString());
                 tokens.Add(value);
@@ -132,6 +132,13 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         {
             string got = pos >= data.Length ? "end of string" : String.Format("'{0}'", data[pos]);
             throw new ParseException("Tokenizer: Unexpected {0}, expected {1} instead.", got, expectedValue);
+        }
+
+        private void ParseError(bool onNextChar, string expectedValue)
+        {
+            if (onNextChar)
+                pos++;
+            ParseError(expectedValue);
         }
     }
 }

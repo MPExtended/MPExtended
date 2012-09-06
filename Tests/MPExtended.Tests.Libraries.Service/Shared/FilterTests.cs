@@ -75,5 +75,43 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed='test', Invalid='Quoting\'").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=""test"", Invalid='Quoting""").Tokenize());
         }
+
+        [Fact]
+        public void Parser()
+        {
+            FilterParser parser;
+            IFilter result;
+            FilterAndSet filters;
+
+            parser = new FilterParser("FirstField=Value, SecondField=OtherValue | OrSecond = SomethingElse | OrThird ~= Field, Last!=Condition");
+            result = parser.Parse();
+
+            Assert.True(result is FilterAndSet);
+            filters = (FilterAndSet)result;
+            Assert.Equal(3, ((FilterAndSet)filters).Count);
+
+            Assert.IsType<Filter>(filters[0]);
+            Assert.Equal("FirstField", (filters[0] as Filter).Field);
+            Assert.Equal("=", (filters[0] as Filter).Operator);
+            Assert.Equal("Value", (filters[0] as Filter).Value);
+
+            Assert.IsType<FilterOrSet>(filters[1]);
+            Assert.Equal(3, (filters[1] as FilterOrSet).Count);
+            (filters[1] as FilterOrSet).ForEach(x => Assert.IsType<Filter>(x));
+            Assert.Equal("SecondField", ((filters[1] as FilterOrSet)[0] as Filter).Field);
+            Assert.Equal("=", ((filters[1] as FilterOrSet)[0] as Filter).Operator);
+            Assert.Equal("OtherValue", ((filters[1] as FilterOrSet)[0] as Filter).Value);
+            Assert.Equal("OrSecond", ((filters[1] as FilterOrSet)[1] as Filter).Field);
+            Assert.Equal("=", ((filters[1] as FilterOrSet)[1] as Filter).Operator);
+            Assert.Equal("SomethingElse", ((filters[1] as FilterOrSet)[1] as Filter).Value);
+            Assert.Equal("OrThird", ((filters[1] as FilterOrSet)[2] as Filter).Field);
+            Assert.Equal("~=", ((filters[1] as FilterOrSet)[2] as Filter).Operator);
+            Assert.Equal("Field", ((filters[1] as FilterOrSet)[2] as Filter).Value);
+
+            Assert.IsType<Filter>(filters[2]);
+            Assert.Equal("Last", (filters[2] as Filter).Field);
+            Assert.Equal("!=", (filters[2] as Filter).Operator);
+            Assert.Equal("Condition", (filters[2] as Filter).Value);
+        }
     }
 }
