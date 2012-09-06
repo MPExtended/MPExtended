@@ -22,7 +22,7 @@ using System.Text.RegularExpressions;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    internal static class Transformations
+    public static class Transformations
     {
         public enum Transformation
         {
