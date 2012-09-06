@@ -93,6 +93,9 @@
     <Compile Include="MpConnection\Messages\MessageDialogAction.cs" />
     <Compile Include="MpConnection\Messages\MessageDialog.cs" />
     <Compile Include="MpConnection\Messages\MpDialog.cs" />
+    <Compile Include="Shared\Filters\ParseException.cs" />
+    <Compile Include="Shared\Filters\Tokenizer.cs" />
+    <Compile Include="Shared\Filters\Tokens.cs" />
     <Compile Include="Strings\UI.Designer.cs">
       <DependentUpon>UI.resx</DependentUpon>
       <AutoGen>True</AutoGen>
