@@ -454,4 +454,7 @@
   <data name="LatestAlbums" xml:space="preserve">
     <value>Latest albums</value>
   </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Latest tracks</value>
+  </data>
 </root>

@@ -105,7 +105,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.TAS.GetRecordingsByRange(0, 4, WebSortField.StartTime, WebSortOrder.Desc);
+                return Connections.Current.TAS.GetRecordingsByRange(0, count - 1, WebSortField.StartTime, WebSortOrder.Desc);
             }
             catch (Exception)
             {
