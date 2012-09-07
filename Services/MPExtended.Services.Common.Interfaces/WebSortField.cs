@@ -36,8 +36,6 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Type = 12,
         [EnumMember]
-        Custom = 14,
-        [EnumMember]
         User = 15,
         [EnumMember]
         Channel = 16,
