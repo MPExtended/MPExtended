@@ -159,7 +159,8 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
-                pic.Title = meta.Title.Trim();
+                if (!String.IsNullOrWhiteSpace(meta.Title))
+                    pic.Title = meta.Title.Trim();
                 pic.Comment = meta.Comment;
                 pic.DateTaken = DateTime.Parse(meta.DateTaken);
                 pic.CameraManufacturer = meta.CameraManufacturer;
@@ -171,6 +172,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             {
                 Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
+
+            // Set title to file name if non-existant
+            if (String.IsNullOrEmpty(pic.Title))
+                pic.Title = Path.GetFileName(path);
 
             return pic;
         }
@@ -187,13 +192,18 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
-                pic.Title = meta.Title.Trim();
+                if (!String.IsNullOrWhiteSpace(meta.Title))
+                    pic.Title = meta.Title.Trim();
                 pic.DateTaken = DateTime.Parse(meta.DateTaken);
             }
             catch (Exception ex)
             {
                 Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
             }
+
+            // Set title to file name if non-existant
+            if (String.IsNullOrEmpty(pic.Title))
+                pic.Title = Path.GetFileName(path);
 
             return pic;
         }
