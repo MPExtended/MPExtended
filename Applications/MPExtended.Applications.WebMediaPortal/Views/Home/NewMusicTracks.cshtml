@@ -8,7 +8,9 @@
         {
             <div class="column">
                 <div class="row">
-                    @Html.ActionLink(track.Track.Title, "Track", "MusicLibrary", new { track = track.Track.Id }, null)
+                    <a href="@Url.Action("Track", "MusicLibrary", new { track = track.Track.Id })">
+                        @track.Track.Title
+                    </a>
                 </div>
             </div>
         }

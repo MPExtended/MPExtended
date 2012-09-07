@@ -8,7 +8,9 @@
         {
             <div class="column">
                 <div class="row">
-                    @Html.ActionLink(album.Album.Title, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
+                    <a href="@Url.Action("Album", "MusicLibrary", new { album = album.Album.Id })">
+                        @album.Album.Title
+                    </a>
                 </div>
                 <div class="row">
                     <img class="img" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="" />

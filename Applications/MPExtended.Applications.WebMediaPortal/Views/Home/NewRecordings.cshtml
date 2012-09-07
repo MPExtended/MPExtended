@@ -1,14 +1,16 @@
 ﻿@model HomeViewModel
-
+           
 @if (Model.Availability.TAS)
 {
     <h2>@UIStrings.LatestRecordings</h2>
     <div>
         @foreach (var recording in Model.GetLastRecordings())
         {
-               <div class="column">
+            <div class="column">
                 <div class="row">
-                    @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })
+                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })">
+                        @recording.Title (@(recording.StartTime.ToShortDateString()))
+                    </a>
                 </div>
                 <div class="row">
                     <img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="" />
