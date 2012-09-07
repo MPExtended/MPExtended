@@ -35,14 +35,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         //
         // GET: /MovieLibrary/
-        public ActionResult Index(string genre = null)
+        public ActionResult Index(string filter = null)
         {
-            IEnumerable<WebMovieDetailed> movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, sort: WebSortField.Title, order: WebSortOrder.Asc);
-            if (!String.IsNullOrEmpty(genre))
-            {
-                movieList = movieList.Where(x => x.Genres.Contains(genre));
-            }
-
+            IEnumerable<WebMovieDetailed> movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc);
             return View(movieList.Select(x => new MovieViewModel(x)));
         }
 
