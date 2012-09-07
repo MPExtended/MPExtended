@@ -205,7 +205,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "s.BannerFileNames, s.CurrentBannerFileName " +
                     "FROM season s " +
                     "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
-                    "WHERE HasLocalFiles = 1 AND %where " +
+                    "WHERE %where " +
                     "GROUP BY s.ID, s.SeriesID, s.SeasonIndex " + 
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -245,9 +245,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
         private LazyQuery<T> GetAllEpisodes<T>() where T : WebTVEpisodeBasic, new()
         {
             string sql =                     
-                    "SELECT e.CompositeID, e.EpisodeName, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
+                    "SELECT e.CompositeID, e.EpisodeIndex, e.SeriesID, e.SeasonIndex, e.Watched, e.Rating, e.thumbFilename, " +
                         "e.FirstAired, GROUP_CONCAT(l.EpisodeFilename, '|') AS filename, MIN(l.FileDateAdded) AS dateAdded, " +
                         "e.GuestStars, e.Director, e.Writer, e.IMDB_ID, e.Summary, " +
+                        "CASE WHEN LENGTH(TRIM(e.EpisodeName)) > 0 THEN e.EpisodeName ELSE l.LocalEpisodeName END AS name, " + 
                         "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
                     "FROM online_episodes e " +
                     "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
@@ -261,7 +262,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             {
                 new SQLFieldMapping("e", "CompositeID", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("e", "EpisodeID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadIntAsString, "TVDB")),
-                new SQLFieldMapping("e", "EpisodeName", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("", "name", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("e", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("e", "EpisodeIndex", "EpisodeNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("e", "SeasonIndex", "SeasonId", CustomReaders.ReadSeasonID),
