@@ -448,7 +448,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 return new WebDictionary<string>()
                 {
-                    { "Type", "mpmusic album" },
+                    { "Type", "mpmusic artist" },
                     { "Artist", GetArtistBasicById(id).Title }
                 };
             }
