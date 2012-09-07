@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Web;
@@ -208,7 +209,7 @@ namespace MPExtended.Services.StreamingService.Code
                     orig = Image.FromStream(src.Retrieve());
                 }
 
-                if (!ResizeImage(orig, cache.GetPath(filename), maxWidth, maxHeight))
+                if (!ResizeImage(orig, cache.GetPath(filename), ImageFormat.Jpeg, maxWidth, maxHeight))
                 {
                     WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                     return Stream.Null;
@@ -245,7 +246,7 @@ namespace MPExtended.Services.StreamingService.Code
             return src.Retrieve();
         }
 
-        private static bool ResizeImage(Image origImage, string newFile, int? maxWidth, int? maxHeight)
+        private static bool ResizeImage(Image origImage, string newFile, ImageFormat format, int? maxWidth, int? maxHeight)
         {
             try
             {
@@ -260,7 +261,7 @@ namespace MPExtended.Services.StreamingService.Code
                 g.Dispose();
 
                 // Save resized picture
-                newImage.Save(newFile);
+                newImage.Save(newFile, format);
                 return true;
             }
             catch (Exception ex)
