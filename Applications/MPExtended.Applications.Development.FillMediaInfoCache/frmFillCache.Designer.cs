@@ -89,8 +89,9 @@
             this.Controls.Add(this.lblEpisodes);
             this.Controls.Add(this.lblMovies);
             this.Controls.Add(this.btnStart);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmFillCache";
-            this.Text = "Form1";
+            this.Text = "Fill MediaInfo cache";
             this.Load += new System.EventHandler(this.frmFillCache_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

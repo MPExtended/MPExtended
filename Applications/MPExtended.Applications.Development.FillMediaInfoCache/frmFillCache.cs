@@ -78,26 +78,35 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
                     lblMovies.Text = "Movies (" + bwE.UserState + " / " + movieCount + "):";
                     prgMovies.Value = (int)bwE.UserState;
                 };
-                bwMovies.DoWork += delegate(object bwSender, DoWorkEventArgs bwE)
+                bwMovies.DoWork += delegate(object bwSender, DoWorkEventArgs bwEvent)
                 {
                     int j = 0;
                     BackgroundWorker worker = (BackgroundWorker)bwSender;
                     for (int i = 0; i < movieCount; i += 100)
                     {
-                        var movies = _services.MAS.GetMoviesBasicByRange(null, i, i + 100);
+                        var movies = _services.MAS.GetMoviesBasicByRange(null, i, i + 99);
                         foreach (var movie in movies)
                         {
                             _services.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {
-                                bwE.Cancel = true;
-                                goto outMovies;
+                                bwEvent.Cancel = true;
+                                break;
                             }
                         }
+
+                        if (bwEvent.Cancel)
+                            break;
                     }
-outMovies:
-                    ;
+                };
+                bwMovies.RunWorkerCompleted += delegate(object bwSender, RunWorkerCompletedEventArgs bwEvent)
+                {
+                    if (!bwEpisodes.IsBusy)
+                    {
+                        isRunning = false;
+                        btnStart.Text = "Start";
+                    }
                 };
                 bwMovies.RunWorkerAsync();
 
@@ -109,37 +118,41 @@ outMovies:
                     lblEpisodes.Text = "Episodes (" + bwE.UserState + " / " + episodeCount + "):";
                     prgEpisodes.Value = (int)bwE.UserState;
                 };
-                bwEpisodes.DoWork += delegate(object bwSender, DoWorkEventArgs bwE)
+                bwEpisodes.DoWork += delegate(object bwSender, DoWorkEventArgs bwEvent)
                 {
                     int j = 0;
                     BackgroundWorker worker = (BackgroundWorker)bwSender;
                     for (int i = 0; i < episodeCount; i += 100)
                     {
-                        var episodes = _services.MAS.GetTVEpisodesBasicByRange(null, i, i + 100);
+                        var episodes = _services.MAS.GetTVEpisodesBasicByRange(null, i, i + 99);
                         foreach (var episode in episodes)
                         {
                             _services.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {
-                                bwE.Cancel = true;
-                                goto outEpisodes;
+                                bwEvent.Cancel = true;
+                                break;
                             }
                         }
+
+                        if (bwEvent.Cancel)
+                            break;
                     }
-outEpisodes:
-                    ;
+                };
+                bwEpisodes.RunWorkerCompleted += delegate(object bwSender, RunWorkerCompletedEventArgs bwEvent)
+                {
+                    if (!bwMovies.IsBusy)
+                    {
+                        isRunning = false;
+                        btnStart.Text = "Start";
+                    }
                 };
                 bwEpisodes.RunWorkerAsync();
 
                 btnStart.Text = "Stop";
                 isRunning = true;
             }
-        }
-
-        void bwMovies_DoWork(object sender, DoWorkEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
