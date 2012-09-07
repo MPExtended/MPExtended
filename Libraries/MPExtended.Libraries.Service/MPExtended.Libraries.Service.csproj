@@ -95,6 +95,7 @@
     <Compile Include="MpConnection\Messages\MpDialog.cs" />
     <Compile Include="Shared\Filters\Filter.cs" />
     <Compile Include="Shared\Filters\FilterSet.cs" />
+    <Compile Include="Shared\Filters\AutoSuggestion.cs" />
     <Compile Include="Shared\Filters\IFilter.cs" />
     <Compile Include="Shared\Filters\Operator.cs" />
     <Compile Include="Shared\Filters\ParseException.cs" />

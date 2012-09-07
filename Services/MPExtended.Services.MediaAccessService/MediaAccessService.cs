@@ -929,35 +929,37 @@ namespace MPExtended.Services.MediaAccessService
         /// <summary>
         /// Get all available values for a given field
         /// </summary>
-        public IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField)
+        public IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField, string op, int? limit)
         {
-            throw new NotImplementedException();
-            /*
             switch (mediaType)
             {
                 case WebMediaType.Drive:
-                    return Filters.GetAllValues(filterField, GetAllFileSystemDrives(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllFileSystemDrives(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Movie:
-                    return Filters.GetAllValues(filterField, GetAllMoviesDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllMoviesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicAlbum:
-                    return Filters.GetAllValues(filterField, GetAllMusicAlbumsBasic(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicAlbumsBasic(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicArtist:
-                    return Filters.GetAllValues(filterField, GetAllMusicArtistsDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicArtistsDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicTrack:
-                    return Filters.GetAllValues(filterField, GetAllMusicTracksDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicTracksDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Picture:
-                    return Filters.GetAllValues(filterField, GetAllPicturesDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllPicturesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Playlist:
-                    return Filters.GetAllValues(filterField, GetPlaylists(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetPlaylists(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.TVEpisode:
-                    return Filters.GetAllValues(filterField, GetAllTVEpisodesDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllTVEpisodesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.TVShow:
-                    return Filters.GetAllValues(filterField, GetAllTVShowsDetailed(provider)).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetAllTVShowsDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 default:
-                    Log.Info("GetFilterValues() called with unsupported mediaType={0}; filterField={1}", mediaType, filterField);
+                    Log.Info("GetFilterValues() called with unsupported mediaType='{0}' filterField='{1}' op='{2}' limit='{3}'", mediaType, filterField, op, limit);
                     throw new ArgumentException("Unsupported MediaType for GetFilterValues()");
             }
-             */
+        }
+
+        public IList<string> GetFilterValuesByRange(int? provider, int start, int end, WebMediaType mediaType, string filterField, string op, int? limit)
+        {
+            return GetFilterValues(provider, mediaType, filterField, op, limit).TakeRange(start, end).ToList();
         }
 
         /// <summary>

@@ -100,7 +100,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         private MatchDelegate GetIntMatchDelegate()
         {
             if (!Int32.TryParse(Value, out intValue))
-                throw new ArgumentException("Filter: Invalud value '{0}' for integer field", Value);
+                throw new ArgumentException("Filter: Invalid value '{0}' for integer field", Value);
 
             switch (Operator)
             {
