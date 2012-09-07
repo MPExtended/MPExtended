@@ -35,6 +35,9 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         public static List<WebArtworkDetailed> ArtworkReader(SQLiteDataReader reader, int idx)
         {
             string url = reader.ReadString(idx);
+            if (String.IsNullOrEmpty(url) || url == "unknown")
+                return new List<WebArtworkDetailed>();
+
             Uri uri = new Uri(url);
             var item = new WebArtworkDetailed()
             {

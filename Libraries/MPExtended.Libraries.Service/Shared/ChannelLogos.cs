@@ -38,6 +38,7 @@ namespace MPExtended.Libraries.Service.Shared
 
             List<string> dirs = new List<string>() 
             {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal", "thumbs", "tv", "logos"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Team MediaPortal", "MediaPortal", "thumbs", "tv", "logo"),
                 Configuration.Streaming.TVLogoDirectory,
                 cacheDir

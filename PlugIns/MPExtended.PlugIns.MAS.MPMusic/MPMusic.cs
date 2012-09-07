@@ -146,8 +146,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                             "MAX(i.iRating) AS rating " +
                          "FROM tracks t " +
                          "LEFT JOIN albuminfo i ON t.strAlbum = i.strAlbum AND t.strArtist LIKE '%' || i.strArtist || '%' " +
-                         "WHERE %where " +
-                         "GROUP BY t.strAlbum, t.strAlbumArtist ";
+                         "GROUP BY t.strAlbum, t.strAlbumArtist " +
+                         "HAVING %where ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("t", "strAlbum", "Id", AlbumIdReader),
@@ -158,7 +158,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "artists", "ArtistsId", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "genre", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "composer", "Composer", DataReaders.ReadPipeList),
-                new SQLFieldMapping("t", "date", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("", "date", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "rating", "Rating", DataReaders.ReadInt32),
             }, delegate(WebMusicAlbumBasic album)

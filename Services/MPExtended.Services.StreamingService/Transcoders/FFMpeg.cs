@@ -80,7 +80,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add unit
             EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Configuration.Streaming.FFMpegPath, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError);
+            EncoderUnit unit = new EncoderUnit(Configuration.Streaming.FFMpegPath, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError, Context);
             unit.DebugOutput = false; // change this for debugging
             Context.Pipeline.AddDataUnit(unit, 5);
 

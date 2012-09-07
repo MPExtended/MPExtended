@@ -4,10 +4,10 @@
   
   <DefaultGroup xsi:nil="true" />
 
-  <DefaultMediaProfile xsi:nil="true" />
-  <DefaultTVProfile xsi:nil="true" />
+  <DefaultMediaProfile>Direct</DefaultMediaProfile>
+  <DefaultTVProfile>Direct</DefaultTVProfile>
   <EnableDeinterlace>false</EnableDeinterlace>
-  <DefaultAudioProfile xsi:nil="true" />
+  <DefaultAudioProfile>MP3</DefaultAudioProfile>
   <EnableAlbumPlayer>false</EnableAlbumPlayer>
   
   <TVShowProvider xsi:nil="true" />

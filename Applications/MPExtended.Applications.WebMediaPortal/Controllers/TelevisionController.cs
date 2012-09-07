@@ -108,6 +108,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(rec);
         }
 
+        public ActionResult RecordingPreview(int id, int width = 0, int height = 0)
+        {
+            return Images.ReturnFromService(WebMediaType.Recording, id.ToString(), WebFileType.Content, width, height, "Images/default/movie-cover.png");
+        }
+
+
         public ActionResult WatchRecording(int id)
         {
             var rec = Connections.Current.TAS.GetRecordingById(id);

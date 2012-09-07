@@ -436,4 +436,22 @@
   <data name="FailedToStartStream" xml:space="preserve">
     <value>Starting the stream failed. Please refer to the server logs for more details.</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>Current CPU usage:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Current memory usage:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>System status</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>This is WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Latest albums</value>
+  </data>
 </root>

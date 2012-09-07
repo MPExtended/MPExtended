@@ -62,7 +62,7 @@ namespace MPExtended.Services.TVAccessService
             ITVAccessService tas = TVAccessService.Instance;
             if (!tas.TestConnectionToTVService())
                 return;
-            channelLogosRequired = tas.GetAllChannelsBasic()
+            channelLogosRequired = tas.GetChannelsBasic()
                 .Where(ch => logos.FindLocation(ch.Title) == null)
                 .ToList();
             

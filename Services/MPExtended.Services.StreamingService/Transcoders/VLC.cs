@@ -60,7 +60,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             EncoderUnit.TransportMethod outputMethod = ReadOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             // waiting for output pipe is meaningless for VLC as it opens it way earlier then that it actually writes to it. Instead, log parsing
             // in VLCWrapped handles the delay (yes, this class is standalone probably useless but is provided for debugging).
-            EncoderUnit unit = new EncoderUnit(Context.Profile.TranscoderParameters["path"], arguments, input, outputMethod, log);
+            EncoderUnit unit = new EncoderUnit(Context.Profile.TranscoderParameters["path"], arguments, input, outputMethod, log, Context);
             unit.DebugOutput = false; // change this for debugging
             Context.Pipeline.AddDataUnit(unit, 5);
         }

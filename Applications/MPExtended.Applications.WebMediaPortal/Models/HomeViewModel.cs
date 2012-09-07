@@ -51,6 +51,32 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public IEnumerable<AlbumViewModel> GetLastAddedAlbums(int count = 4)
+        {
+            try
+            {
+                return Connections.Current.MAS.GetMusicAlbumsBasicByRange(Settings.ActiveSettings.MusicProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                    .Select(album => new AlbumViewModel(album));
+            }
+            catch (Exception)
+            {
+                return new List<AlbumViewModel>();
+            }
+        }
+
+        public IEnumerable<MusicTrackViewModel> GetLastAddedMusicTracks(int count = 4)
+        {
+            try
+            {
+                return Connections.Current.MAS.GetMusicTracksDetailedByRange(Settings.ActiveSettings.MusicProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                    .Select(track => new MusicTrackViewModel(track));
+            }
+            catch (Exception)
+            {
+                return new List<MusicTrackViewModel>();
+            }
+        }
+
         public IEnumerable<WebTVEpisodeDetailed> GetLastAddedTVEpisodes(int count = 4)
         {
             try

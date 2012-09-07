@@ -152,9 +152,12 @@
     <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
     <Content Include="Content\Images\default\album.png" />
+    <Content Include="Content\Images\default\artist.png" />
+    <Content Include="Content\Images\default\track.png" />
     <Content Include="Content\Images\default\logo.png" />
     <Content Include="Content\Images\default\movie-cover.png" />
     <Content Include="Content\Images\default\tvepisode-banner.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\jwplayer\jwplayer.js" />
     <Content Include="Content\jwplayer\license.txt" />
     <Content Include="Content\jwplayer\player.swf" />
@@ -490,6 +493,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\NewAlbums.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\NewMusicTracks.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

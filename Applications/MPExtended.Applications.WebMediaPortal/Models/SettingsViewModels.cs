@@ -28,6 +28,7 @@ using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 using Config = MPExtended.Libraries.Service.Config;
 
@@ -120,6 +121,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public IEnumerable<SelectListItem> Languages
+        {
+            get
+            {
+                return CultureDatabase.GetAvailableTranslations(UIStrings.ResourceManager)
+                    .Select(x => new SelectListItem() { Text = x.DisplayName, Value = x.Name });
+            }
+        }
+
         public bool ShowMASConfiguration
         {
             get
@@ -178,6 +188,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("Skins", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidSkin")]
         public string Skin { get; set; }
 
+        [LocalizedDisplayName(typeof(FormStrings), "Language")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
+        [ListChoice("Languages", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
+        public string Language { get; set; }
+
         public SettingsViewModel()
         {
         }
@@ -185,6 +200,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public SettingsViewModel(Config.WebMediaPortal model)
         {
 		    Skin = model.Skin;
+            Language = model.DefaultLanguage;
             StreamType = (StreamTypeWithDescription)model.StreamType;
             EnableDeinterlace = model.EnableDeinterlace;
             EnableAlbumPlayer = model.EnableAlbumPlayer;
@@ -216,6 +232,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Configuration.WebMediaPortal.MusicProvider = MusicProvider;
             Configuration.WebMediaPortal.MovieProvider = MovieProvider;
             Configuration.WebMediaPortal.Skin = Skin;
+            Configuration.WebMediaPortal.DefaultLanguage = Language;
             Configuration.Save();
         }
 

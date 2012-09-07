@@ -61,6 +61,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account Information.
         /// </summary>
         public static string AccountInformation {
@@ -228,6 +237,24 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string CreateSchedule {
             get {
                 return ResourceManager.GetString("CreateSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current CPU usage:.
+        /// </summary>
+        public static string CurrentCPUUsage {
+            get {
+                return ResourceManager.GetString("CurrentCPUUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current memory usage:.
+        /// </summary>
+        public static string CurrentMemoryUsage {
+            get {
+                return ResourceManager.GetString("CurrentMemoryUsage", resourceCulture);
             }
         }
         
@@ -408,6 +435,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Later {
             get {
                 return ResourceManager.GetString("Later", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latest albums.
+        /// </summary>
+        public static string LatestAlbums {
+            get {
+                return ResourceManager.GetString("LatestAlbums", resourceCulture);
             }
         }
         
@@ -727,6 +763,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System status.
+        /// </summary>
+        public static string SystemStatus {
+            get {
+                return ResourceManager.GetString("SystemStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Today&apos;s schedules.
         /// </summary>
         public static string TodaysSchedules {
@@ -786,6 +831,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;..
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
         

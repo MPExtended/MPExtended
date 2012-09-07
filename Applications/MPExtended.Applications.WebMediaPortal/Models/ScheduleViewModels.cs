@@ -48,6 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public int Id { get; set; }
 
         [StringLength(255)]
+        [LocalizedDisplayName(typeof(FormStrings), "ScheduleTitle")]
         [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "FieldRequired")]
         public string Title { get; set; }
 
@@ -75,7 +76,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return Connections.Current.TAS.GetAllChannelsDetailed(WebSortField.Title)
+                return Connections.Current.TAS.GetChannelsDetailed(sort: WebSortField.Title)
                         .Where(x => x.VisibleInGuide)
                         .Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Title });
             }

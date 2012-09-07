@@ -22,8 +22,10 @@ using System.Linq;
 using System.Text;
 using MPExtended.Services.StreamingService.Code;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal class InjectStreamUnit : IProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal class InjectStreamUnit : IProcessingUnit
+    {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
         public Stream LogOutputStream { get; private set; }
@@ -33,20 +35,24 @@ namespace MPExtended.Services.StreamingService.Units {
 
         private Stream source;
 
-        public InjectStreamUnit(Stream source) {
+        public InjectStreamUnit(Stream source)
+        {
             this.source = source;
         }
 
-        public bool Setup() {
+        public bool Setup()
+        {
             this.DataOutputStream = this.source;
             return true;
         }
 
-        public bool Start() {
+        public bool Start()
+        {
             return true;
         }
 
-        public bool Stop() {
+        public bool Stop()
+        {
             this.source.Close();
             return true;
         }

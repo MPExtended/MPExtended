@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Social.Follwit
         {
             get
             {
-                return String.Format("MPExtended {0}", VersionUtil.GetFullVersionString());
+                return VersionUtil.GetUserAgent("FollwitConfig", "1.0");
             }
         }
 

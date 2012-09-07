@@ -20,8 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal interface IBlockingProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal interface IBlockingProcessingUnit
+    {
         bool RunBlocking();
     }
 }

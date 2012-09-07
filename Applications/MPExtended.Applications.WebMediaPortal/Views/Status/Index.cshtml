@@ -79,10 +79,10 @@
 @Html.Action("CurrentSchedules", "Home")
 <br />
 
-<h2>System status</h2>
+<h2>@UIStrings.SystemStatus</h2>
 <ul>
-    <li>Current CPU usage: <span id="cpuUsage">0</span>%</li>
-    <li>Current memory usage: <span id="memoryUsage">0</span>MB / @Model.TotalMemoryMegaBytes MB</li>
+    <li>@UIStrings.CurrentCPUUsage <span id="cpuUsage">0</span>%</li>
+    <li>@UIStrings.CurrentMemoryUsage <span id="memoryUsage">0</span>MB / @Model.TotalMemoryMegaBytes MB</li>
 </ul>
 
 <script type="text/javascript">

@@ -50,7 +50,7 @@ namespace MPExtended.Services.TVAccessService
                 DevicePath = card.DevicePath,
                 Enabled = card.Enabled,
                 GrabEPG = card.GrabEPG,
-                CardId = card.IdCard,
+                Id = card.IdCard,
                 IsChanged = card.IsChanged,
                 LastEpgGrab = card.LastEpgGrab != DateTime.MinValue ? card.LastEpgGrab : new DateTime(2000, 1, 1),
                 Name = card.Name,

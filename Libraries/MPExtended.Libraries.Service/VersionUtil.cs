@@ -98,17 +98,32 @@ namespace MPExtended.Libraries.Service
             }
         }
 
-        public static string GetFullVersionString()
+        private static string GetCommitOrBuildVersion()
         {
             string gitVersion = GetGitVersion();
-            if (gitVersion.Length > 0)
-            {
-                return String.Format("{0} (commit {1})", GetVersionName(), gitVersion);
-            }
-            else
-            {
-                return string.Format("{0} (build {1})", GetVersionName(), GetBuildVersion());
-            }
+            return String.IsNullOrEmpty(gitVersion) ?
+                "build " + GetBuildVersion() :
+                "commit " + gitVersion;
+        }
+
+        public static string GetFullVersionString()
+        {
+            return String.Format("{0} ({1})", GetVersionName(), GetCommitOrBuildVersion());
+        }
+
+        public static string GetUserAgent()
+        {
+            return String.Format("MPExtended/{0} ({1}; .NET {2})", GetVersionName(), GetCommitOrBuildVersion(), Environment.Version.ToString());
+        }
+
+        public static string GetUserAgent(string component, string componentVersion)
+        {
+            return String.Format("{0} {1}/{2}", GetUserAgent(), component, componentVersion);
+        }
+
+        public static string GetUserAgent(string component)
+        {
+            return GetUserAgent(component, GetVersionName());
         }
 
         public static MediaPortalVersion GetMediaPortalVersion()

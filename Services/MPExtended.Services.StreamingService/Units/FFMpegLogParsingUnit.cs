@@ -27,9 +27,9 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
-namespace MPExtended.Services.StreamingService.Units 
+namespace MPExtended.Services.StreamingService.Units
 {
-    internal class FFMpegLogParsingUnit : ILogProcessingUnit 
+    internal class FFMpegLogParsingUnit : ILogProcessingUnit
     {
         public Stream InputStream { get; set; }
         public bool LogMessages { get; set; }
@@ -38,13 +38,13 @@ namespace MPExtended.Services.StreamingService.Units
         private Thread processThread;
         private long startPosition;
 
-        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, long startPosition) 
+        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, long startPosition)
         {
             data = save;
             this.startPosition = startPosition;
         }
 
-        public bool Setup() 
+        public bool Setup()
         {
             // this might be better placed in the Start() method, but EncoderUnit.Start() depends on this
             data.Value.Supported = true;
@@ -69,12 +69,12 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        public bool Start() 
+        public bool Start()
         {
             return true;
         }
 
-        public bool Stop() 
+        public bool Stop()
         {
             processThread.Abort();
             return true;

@@ -22,10 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.StreamingService.Units
 {
-    class HTTPLiveStreamUnit : IProcessingUnit
+    internal class HTTPLiveStreamUnit : IProcessingUnit
     {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
@@ -61,10 +62,17 @@ namespace MPExtended.Services.StreamingService.Units
             // cleanup the old files after a while
             Task.Factory.StartNew(delegate()
             {
-                Thread.Sleep(5000);
-                var dir = Path.GetDirectoryName(indexFile);
-                if (Directory.Exists(dir))
-                    Directory.Delete(dir, true);
+                try
+                {
+                    Thread.Sleep(5000);
+                    var dir = Path.GetDirectoryName(indexFile);
+                    if (Directory.Exists(dir))
+                        Directory.Delete(dir, true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to delete HTTP Live Streaming directory. Either your PC is horribly slow or a 0.001% chance of collision happened.", ex);
+                }
             });
 
             return true;

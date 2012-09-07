@@ -25,8 +25,10 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.StreamingService.Code;
 
-namespace MPExtended.Services.StreamingService.Units {
-    internal class EncoderUnit : IProcessingUnit {
+namespace MPExtended.Services.StreamingService.Units
+{
+    internal class EncoderUnit : IProcessingUnit
+    {
         public enum TransportMethod
         {
             NamedPipe,
@@ -60,7 +62,10 @@ namespace MPExtended.Services.StreamingService.Units {
         private Stream transcoderInputStream;
         private bool doInputCopy;
 
-        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream) {
+        private StreamContext context;
+
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream)
+        {
             this.transcoderPath = transcoder;
             this.arguments = arguments;
             this.inputMethod = inputMethod;
@@ -68,7 +73,14 @@ namespace MPExtended.Services.StreamingService.Units {
             this.logStream = logStream;
         }
 
-        public bool Setup() {
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, StreamContext context)
+            : this(transcoder, arguments, inputMethod, outputMethod, logStream)
+        {
+            this.context = context;
+        }
+
+        public bool Setup()
+        {
             // sets up streams
             string input = "";
             string output = "";
@@ -76,24 +88,30 @@ namespace MPExtended.Services.StreamingService.Units {
             bool needsStdout = false;
 
             // input
-            if (inputMethod == TransportMethod.NamedPipe) {
+            if (inputMethod == TransportMethod.NamedPipe)
+            {
                 transcoderInputStream = new NamedPipe();
                 input = ((NamedPipe)transcoderInputStream).Url;
                 Log.Info("Encoding: starting input named pipe {0}", input);
                 ((NamedPipe)transcoderInputStream).Start(false);
                 doInputCopy = true;
-            } else if (inputMethod == TransportMethod.StandardIn) {
+            }
+            else if (inputMethod == TransportMethod.StandardIn)
+            {
                 needsStdin = true;
                 doInputCopy = true;
-            } 
+            }
 
             // output stream
-            if (outputMethod == TransportMethod.NamedPipe) {
+            if (outputMethod == TransportMethod.NamedPipe)
+            {
                 DataOutputStream = new NamedPipe();
                 output = ((NamedPipe)DataOutputStream).Url;
                 Log.Info("Encoding: starting output named pipe {0}", output);
                 ((NamedPipe)DataOutputStream).Start(false);
-            } else if (outputMethod == TransportMethod.StandardOut) {
+            }
+            else if (outputMethod == TransportMethod.StandardOut)
+            {
                 needsStdout = true;
             }
 
@@ -119,7 +137,7 @@ namespace MPExtended.Services.StreamingService.Units {
             {
                 LogOutputStream = transcoderApplication.StandardError.BaseStream;
             }
-            else 
+            else
             {
                 LogOutputStream = new MemoryStream(4096);
             }
@@ -127,7 +145,8 @@ namespace MPExtended.Services.StreamingService.Units {
             return true;
         }
 
-        private bool SpawnTranscoder(bool needsStdin, bool needsStdout) {
+        private bool SpawnTranscoder(bool needsStdin, bool needsStdout)
+        {
             ProcessStartInfo start = new ProcessStartInfo(transcoderPath, arguments);
             start.UseShellExecute = false;
             start.RedirectStandardInput = needsStdin;
@@ -141,11 +160,14 @@ namespace MPExtended.Services.StreamingService.Units {
             Log.Info("Encoder:   path {0}", transcoderPath);
             Log.Info("Encoder:   arguments {0}", arguments);
 
-            try {
+            try
+            {
                 transcoderApplication = new Process();
                 transcoderApplication.StartInfo = start;
                 transcoderApplication.Start();
-            } catch (Win32Exception e) {
+            }
+            catch (Win32Exception e)
+            {
                 Log.Error("Encoding: Failed to start transcoder", e);
                 Log.Info("ERROR: Transcoder probably doesn't exists");
                 return false;
@@ -153,51 +175,73 @@ namespace MPExtended.Services.StreamingService.Units {
             return true;
         }
 
-        public bool Start() {
+        public bool Start()
+        {
             // wait for the input pipe to be ready
             if (transcoderInputStream is NamedPipe)
                 ((NamedPipe)transcoderInputStream).WaitTillReady();
 
             // copy the inputStream to the transcoderInputStream
-            if(doInputCopy) {
+            if (doInputCopy)
+            {
                 Log.Info("Encoding: Copy stream of type {0} into transcoder input stream of type {1}", InputStream.ToString(), transcoderInputStream.ToString());
                 StreamCopy.AsyncStreamCopy(InputStream, transcoderInputStream, "transinput");
             }
 
             // delay start of next unit till our output stream is ready
-            if (DataOutputStream is NamedPipe && (outputMethod == TransportMethod.NamedPipe || outputMethod == TransportMethod.StandardOut)) {
+            if (DataOutputStream is NamedPipe && (outputMethod == TransportMethod.NamedPipe || outputMethod == TransportMethod.StandardOut))
+            {
                 Log.Trace("Transcoder running: {0}", !transcoderApplication.HasExited);
                 Log.Info("Encoding: Waiting till output named pipe is ready");
-                ((NamedPipe)DataOutputStream).WaitTillReady();
+
+                var pipe = (NamedPipe)DataOutputStream;
+                var checkFailed = context != null && context.TranscodingInfo != null;
+                while (!pipe.IsReady && !(checkFailed && context.TranscodingInfo.Failed))
+                    System.Threading.Thread.Sleep(100);
+
+                if (checkFailed && context.TranscodingInfo.Failed)
+                {
+                    Log.Warn("Encoding: Aborting wait because transcoder application failed and will never setup output named pipe.");
+                    return false;
+                }
             }
 
             return true;
         }
 
-        public bool Stop() {
+        public bool Stop()
+        {
             // close streams
             CloseStream(InputStream, "input");
             CloseStream(transcoderInputStream, "transcoder input");
             CloseStream(DataOutputStream, "transcoder output");
 
-            try  {
-                if (transcoderApplication != null && !transcoderApplication.HasExited) {
+            try
+            {
+                if (transcoderApplication != null && !transcoderApplication.HasExited)
+                {
                     Log.Debug("Encoding: Killing transcoder");
                     transcoderApplication.Kill();
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.Error("Encoding: Failed to kill transcoder", e);
             }
 
             return true;
         }
 
-        private void CloseStream(Stream stream, string logName) {
-            try {
+        private void CloseStream(Stream stream, string logName)
+        {
+            try
+            {
                 if (stream != null) stream.Close();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.Info("Encoding: Failed to close {0} stream: {1}", logName, e.Message);
             }
-        }   
+        }
     }
 }

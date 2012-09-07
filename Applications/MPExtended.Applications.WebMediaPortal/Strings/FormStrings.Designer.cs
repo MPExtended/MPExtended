@@ -151,6 +151,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a valid language.
+        /// </summary>
+        public static string ErrorNoValidLanguage {
+            get {
+                return ResourceManager.GetString("ErrorNoValidLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a valid media streaming profile.
         /// </summary>
         public static string ErrorNoValidMediaProfile {
@@ -259,6 +268,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string LogOnPassword {
@@ -354,6 +372,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string ScheduleStartTime {
             get {
                 return ResourceManager.GetString("ScheduleStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ScheduleTitle {
+            get {
+                return ResourceManager.GetString("ScheduleTitle", resourceCulture);
             }
         }
         

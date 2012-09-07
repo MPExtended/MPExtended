@@ -65,7 +65,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (vcard == null)
                 return HttpNotFound();
 
-            var card = Connections.Current.TAS.GetCards().Where(c => c.CardId == vcard.Id).FirstOrDefault();
+            var card = Connections.Current.TAS.GetCards().Where(c => c.Id == vcard.Id).FirstOrDefault();
             if (card == null)
                 return HttpNotFound();
 

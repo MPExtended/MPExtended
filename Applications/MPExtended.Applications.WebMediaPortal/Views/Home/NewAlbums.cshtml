@@ -1,0 +1,19 @@
+﻿@model HomeViewModel
+
+@if (Model.Availability.Music)
+{
+    <h2>@UIStrings.LatestAlbums</h2>
+    <div>
+        @foreach (var album in Model.GetLastAddedAlbums())
+        {
+            <div class="column">
+                <div class="row">
+                    @Html.ActionLink(album.Album.Title, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
+                </div>
+                <div class="row">
+                    <img class="img" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="" />
+                </div>
+            </div>
+        }
+    </div>
+}

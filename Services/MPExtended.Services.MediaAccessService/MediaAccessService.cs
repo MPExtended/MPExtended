@@ -147,7 +147,7 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Movies
-        public IList<WebCategory> GetAllMovieCategories(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebCategory> GetMovieCategories(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MovieLibraries[provider].GetAllCategories().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
         }
@@ -157,12 +157,12 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetAllMovies().AsQueryable().Filter(filter).Count();
         }
 
-        public IList<WebMovieBasic> GetAllMoviesBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMovieBasic> GetMoviesBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MovieLibraries[provider].GetAllMovies().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
         }
 
-        public IList<WebMovieDetailed> GetAllMoviesDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMovieDetailed> GetMoviesDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MovieLibraries[provider].GetAllMoviesDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
         }
@@ -177,7 +177,7 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetAllMoviesDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
         }
 
-        public IList<WebGenre> GetAllMovieGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebGenre> GetMovieGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MovieLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie).ToList();
         }
@@ -202,7 +202,7 @@ namespace MPExtended.Services.MediaAccessService
             return MovieLibraries[provider].GetMovieDetailedById(id).Finalize(provider, ProviderType.Movie);
         }
 
-        public IList<WebActor> GetAllMovieActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebActor> GetMovieActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MovieLibraries[provider].GetAllMovies().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).Finalize(provider, ProviderType.Movie);
         }
@@ -214,12 +214,12 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebIntResult GetMovieActorCount(int? provider, string filter = null)
         {
-            return GetAllMovieActors(provider).AsQueryable().Filter(filter).Count();
+            return GetMovieActors(provider).AsQueryable().Filter(filter).Count();
         }
         #endregion
 
         #region Music
-        public IList<WebCategory> GetAllMusicCategories(int? provider)
+        public IList<WebCategory> GetMusicCategories(int? provider)
         {
             return MusicLibraries[provider].GetAllCategories().AsQueryable().Finalize(provider, ProviderType.Music);
         }
@@ -239,12 +239,12 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllArtists().AsQueryable().Filter(filter).Count();
         }
 
-        public IList<WebMusicTrackBasic> GetAllMusicTracksBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMusicTrackBasic> GetMusicTracksBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllTracks().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
 
-        public IList<WebMusicTrackDetailed> GetAllMusicTracksDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllTracksDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
@@ -264,7 +264,7 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetTrackBasicById(id).Finalize(provider, ProviderType.Music);
         }
 
-        public IList<WebGenre> GetAllMusicGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebGenre> GetMusicGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
@@ -284,7 +284,7 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetTrackDetailedById(id).Finalize(provider, ProviderType.Music);
         }
 
-        public IList<WebMusicAlbumBasic> GetAllMusicAlbumsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMusicAlbumBasic> GetMusicAlbumsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllAlbums().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
@@ -294,7 +294,7 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllAlbums().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Music);
         }
 
-        public IList<WebMusicArtistBasic> GetAllMusicArtistsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMusicArtistBasic> GetMusicArtistsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllArtists().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
@@ -309,7 +309,7 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetArtistBasicById(id).Finalize(provider, ProviderType.Music);
         }
 
-        public IList<WebMusicArtistDetailed> GetAllMusicArtistsDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebMusicArtistDetailed> GetMusicArtistsDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllArtistsDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
@@ -329,9 +329,19 @@ namespace MPExtended.Services.MediaAccessService
             return MusicLibraries[provider].GetAllTracks().AsQueryable().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
 
+        public IList<WebMusicTrackBasic> GetMusicTracksBasicForArtist(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        {
+            return MusicLibraries[provider].GetAllTracks().AsQueryable().Where(p => p.ArtistId.Contains(id)).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
+        }
+
         public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForAlbum(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return MusicLibraries[provider].GetAllTracksDetailed().AsQueryable().Where(p => p.AlbumId == id).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
+        }
+
+        public IList<WebMusicTrackDetailed> GetMusicTracksDetailedForArtist(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        {
+            return MusicLibraries[provider].GetAllTracksDetailed().AsQueryable().Where(p => p.ArtistId.Contains(id)).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Music);
         }
 
         public WebMusicAlbumBasic GetMusicAlbumBasicById(int? provider, string id)
@@ -351,17 +361,17 @@ namespace MPExtended.Services.MediaAccessService
             return PictureLibraries[provider].GetAllPicturesBasic().AsQueryable().Count();
         }
 
-        public IList<WebPictureBasic> GetAllPicturesBasic(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebPictureBasic> GetPicturesBasic(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return PictureLibraries[provider].GetAllPicturesBasic().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Picture);
         }
 
-        public IList<WebPictureDetailed> GetAllPicturesDetailed(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebPictureDetailed> GetPicturesDetailed(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return PictureLibraries[provider].GetAllPicturesDetailed().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Picture);
         }
 
-        public IList<WebCategory> GetAllPictureCategories(int? provider)
+        public IList<WebCategory> GetPictureCategories(int? provider)
         {
             return PictureLibraries[provider].GetAllPictureCategories().AsQueryable().Finalize(provider, ProviderType.Picture);
         }
@@ -393,12 +403,12 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region TVShows
-        public IList<WebCategory> GetAllTVShowCategories(int? provider)
+        public IList<WebCategory> GetTVShowCategories(int? provider)
         {
             return TVShowLibraries[provider].GetAllCategories().AsQueryable().Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebGenre> GetAllTVShowGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebGenre> GetTVShowGenres(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllGenres().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
         }
@@ -413,12 +423,12 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetAllGenres().AsQueryable().Count();
         }
 
-        public IList<WebTVShowBasic> GetAllTVShowsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebTVShowBasic> GetTVShowsBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVShowDetailed> GetAllTVShowsDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebTVShowDetailed> GetTVShowsDetailed(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllTVShowsDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
         }
@@ -464,12 +474,12 @@ namespace MPExtended.Services.MediaAccessService
         }
 
 
-        public IList<WebTVEpisodeBasic> GetAllTVEpisodesBasic(int? provider, WebSortField? sort = WebSortField.TVEpisodeNumber, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebTVEpisodeBasic> GetTVEpisodesBasic(int? provider, WebSortField? sort = WebSortField.TVEpisodeNumber, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllEpisodesBasic().AsQueryable().SortMediaItemList(sort, order, WebSortField.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
 
-        public IList<WebTVEpisodeDetailed> GetAllTVEpisodesDetailed(int? provider, WebSortField? sort = WebSortField.TVEpisodeNumber, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebTVEpisodeDetailed> GetTVEpisodesDetailed(int? provider, WebSortField? sort = WebSortField.TVEpisodeNumber, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllEpisodesDetailed().AsQueryable().SortMediaItemList(sort, order, WebSortField.TVEpisodeNumber).Finalize(provider, ProviderType.TVShow);
         }
@@ -549,7 +559,7 @@ namespace MPExtended.Services.MediaAccessService
             return TVShowLibraries[provider].GetAllSeasonsBasic().AsQueryable().Where(x => x.ShowId == id).Count();
         }
 
-        public IList<WebActor> GetAllTVShowActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebActor> GetTVShowActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).Finalize(provider, ProviderType.TVShow);
         }
@@ -561,7 +571,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebIntResult GetTVShowActorCount(int? provider, string filter = null)
         {
-            return GetAllTVShowActors(provider).AsQueryable().Filter(filter).Count();
+            return GetTVShowActors(provider).AsQueryable().Filter(filter).Count();
         }
         #endregion
 
@@ -571,7 +581,7 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetDriveListing().AsQueryable().Count();
         }
 
-        public IList<WebDriveBasic> GetAllFileSystemDrives(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebDriveBasic> GetFileSystemDrives(int? provider, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return FileSystemLibraries[provider].GetDriveListing().AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
@@ -581,7 +591,7 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetDriveListing().AsQueryable().SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Filesystem).ToList();
         }
 
-        public IList<WebFolderBasic> GetAllFileSystemFolders(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebFolderBasic> GetFileSystemFolders(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
@@ -596,7 +606,7 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().Count();
         }
 
-        public IList<WebFileBasic> GetAllFileSystemFiles(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebFileBasic> GetFileSystemFiles(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().SortMediaItemList(sort, order).Finalize(provider, ProviderType.Filesystem).ToList();
         }
@@ -611,7 +621,7 @@ namespace MPExtended.Services.MediaAccessService
             return FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().Count();
         }
 
-        public IList<WebFilesystemItem> GetAllFileSystemFilesAndFolders(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<WebFilesystemItem> GetFileSystemFilesAndFolders(int? provider, string id, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             var listA = FileSystemLibraries[provider].GetFilesListing(id).AsQueryable().Select(x => x.ToWebFilesystemItem());
             var listB = FileSystemLibraries[provider].GetFoldersListing(id).AsQueryable().Select(x => x.ToWebFilesystemItem());
@@ -793,7 +803,7 @@ namespace MPExtended.Services.MediaAccessService
             return PlaylistLibraries[provider].GetPlaylists().Finalize(provider, ProviderType.Music);
         }
 
-        public IList<Interfaces.Playlist.WebPlaylistItem> GetAllPlaylistItems(int? provider, string playlistId, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+        public IList<Interfaces.Playlist.WebPlaylistItem> GetPlaylistItems(int? provider, string playlistId, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
             return PlaylistLibraries[provider].GetPlaylistItems(playlistId).Finalize(provider, ProviderType.Music);
         }
@@ -934,23 +944,23 @@ namespace MPExtended.Services.MediaAccessService
             switch (mediaType)
             {
                 case WebMediaType.Drive:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllFileSystemDrives(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetFileSystemDrives(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Movie:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllMoviesDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetMoviesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicAlbum:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicAlbumsBasic(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetMusicAlbumsBasic(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicArtist:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicArtistsDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetMusicArtistsDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.MusicTrack:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllMusicTracksDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetMusicTracksDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Picture:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllPicturesDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetPicturesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.Playlist:
                     return AutoSuggestion.GetValuesForField(filterField, GetPlaylists(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.TVEpisode:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllTVEpisodesDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetTVEpisodesDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 case WebMediaType.TVShow:
-                    return AutoSuggestion.GetValuesForField(filterField, GetAllTVShowsDetailed(provider), op, limit).OrderBy(x => x).ToList();
+                    return AutoSuggestion.GetValuesForField(filterField, GetTVShowsDetailed(provider), op, limit).OrderBy(x => x).ToList();
                 default:
                     Log.Info("GetFilterValues() called with unsupported mediaType='{0}' filterField='{1}' op='{2}' limit='{3}'", mediaType, filterField, op, limit);
                     throw new ArgumentException("Unsupported MediaType for GetFilterValues()");

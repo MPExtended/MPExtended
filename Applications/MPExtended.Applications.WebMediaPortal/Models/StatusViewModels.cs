@@ -42,9 +42,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             // cards
             Cards = new List<TVCardViewModel>();
 
-            foreach (var card in cards.OrderBy(c => c.CardId))
+            foreach (var card in cards.OrderBy(c => c.Id))
             {
-                var match = activeCards.Where(vc => vc.Id == card.CardId);
+                var match = activeCards.Where(vc => vc.Id == card.Id);
                 if (match.Any())
                 {
                     ((List<TVCardViewModel>)Cards).AddRange(match.Select(vc => new TVCardViewModel(card, vc)));
@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public TVCardViewModel(WebCard card)
         {
-            CardId = card.CardId;
+            CardId = card.Id;
             Name = card.Name;
 
             IsActive = false;

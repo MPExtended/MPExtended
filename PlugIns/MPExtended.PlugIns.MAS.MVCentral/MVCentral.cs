@@ -35,21 +35,47 @@ namespace MPExtended.PlugIns.MAS.MVCentral
     [ExportMetadata("Id", 12)]
     public partial class MVCentral : Database, IMusicLibrary
     {
+        private class Setting
+        {
+            public string Key { get; set; }
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public string Type { get; set; }
+        }
+
         public bool Supported { get; private set; }
+        private bool hasAlbums = true;
 
         [ImportingConstructor]
         public MVCentral(IPluginData data)
         {
             var config = data.GetConfiguration("mvCentral");
-            if (config.ContainsKey("database"))
+            if (config.ContainsKey("database") && File.Exists(config["database"]))
             {
                 DatabasePath = config["database"];
-                Supported = File.Exists(DatabasePath);
+                Supported = true;
+                ReadSettings();
             }
             else
             {
                 Supported = false;
             }
+        }
+
+        private void ReadSettings()
+        {
+            string sql = "SELECT s.key, s.name, s.value, s.type " +
+                         "FROM settings s";
+            var settings = new LazyQuery<Setting>(this, sql, new List<SQLFieldMapping>()
+            {
+                new SQLFieldMapping("s", "key", "Key", DataReaders.ReadString),
+                new SQLFieldMapping("s", "name", "Name", DataReaders.ReadString),
+                new SQLFieldMapping("s", "value", "Value", DataReaders.ReadString),
+                new SQLFieldMapping("s", "type", "Type", DataReaders.ReadString),
+            });
+
+            var disableAlbumSupportList = settings.Where(s => s.Key == "disable_album_support").ToList();
+            hasAlbums = disableAlbumSupportList.Any() ? disableAlbumSupportList.First().Value != "True" : true;
         }
 
         [MergeListReader]
@@ -217,6 +243,10 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("a", "styles", "Styles", DataReaders.ReadString),
                 new SQLFieldMapping("a", "biocontent", "Biography", DataReaders.ReadString),
                 new SQLFieldMapping("a", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover),
+            }, delegate(T item)
+            {
+                item.HasAlbums = hasAlbums;
+                return item;
             });
         }
         #endregion

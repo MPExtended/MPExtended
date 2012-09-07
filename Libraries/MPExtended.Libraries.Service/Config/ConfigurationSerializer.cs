@@ -118,7 +118,7 @@ namespace MPExtended.Libraries.Service.Config
 
         protected TModel UnsafeParse(string path)
         {
-            using (var stream = File.OpenRead(path))
+            using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var deserializer = Activator.CreateInstance<TSerializer>();
                 return (TModel)deserializer.Deserialize(stream);

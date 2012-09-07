@@ -19,7 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Text;
+using System.IO;
 
 namespace MPExtended.Libraries.Service.Util
 {
@@ -37,6 +40,18 @@ namespace MPExtended.Libraries.Service.Util
             return GetLanguages().FirstOrDefault(x => 
                 x.DisplayName == name || x.EnglishName == name || x.NativeName == name || x.Name == name || 
                 x.TwoLetterISOLanguageName == name || x.ThreeLetterISOLanguageName == name || x.ThreeLetterWindowsLanguageName == name);
+        }
+
+        public static IEnumerable<CultureInfo> GetAvailableTranslations(ResourceManager rm)
+        {
+            var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            foreach (var culture in cultures)
+            {
+                ResourceSet rs = rm.GetResourceSet(culture, true, false);
+                if (rs == null || culture.LCID == CultureInfo.InvariantCulture.LCID || culture.Parent.LCID != CultureInfo.InvariantCulture.LCID)
+                    continue;
+                yield return culture;
+            }
         }
     }
 }

@@ -24,9 +24,9 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 
-namespace MPExtended.Services.StreamingService.Units 
+namespace MPExtended.Services.StreamingService.Units
 {
-    internal class ImpersonationInputUnit : IProcessingUnit 
+    internal class ImpersonationInputUnit : IProcessingUnit
     {
         public Stream InputStream { get; set; }
         public Stream DataOutputStream { get; private set; }
@@ -37,21 +37,21 @@ namespace MPExtended.Services.StreamingService.Units
 
         private string source;
 
-        public ImpersonationInputUnit(string source) 
+        public ImpersonationInputUnit(string source)
         {
             this.source = source;
         }
 
-        public bool Setup() 
+        public bool Setup()
         {
-            try 
+            try
             {
-                using(var impersonator = new NetworkShareImpersonator())
+                using (var impersonator = new NetworkShareImpersonator())
                 {
                     DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 Log.Error("Failed to setup ImpersonationInputUnit", e);
                 return false;
@@ -59,12 +59,12 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        public bool Start() 
+        public bool Start()
         {
             return true;
         }
 
-        public bool Stop() 
+        public bool Stop()
         {
             DataOutputStream.Close();
             return true;

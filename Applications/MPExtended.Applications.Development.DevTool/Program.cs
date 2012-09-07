@@ -53,9 +53,10 @@ namespace MPExtended.Applications.Development.DevTool
                 new Tools.InterfaceCheck(),
                 new DocGen.DocDevTool(),
                 new Tools.WixFSGenerator(),
-                new Tools.MyGengoImporter(),
                 new Tools.InstallLayoutExporter(),
-                new Tools.MonolithicPowerscheduler()
+                new Tools.MonolithicPowerscheduler(),
+                new Tools.PSPluginInstallGenerator(),
+                new Tools.TransifexDownloader()
             };
         }
 
@@ -65,10 +66,10 @@ namespace MPExtended.Applications.Development.DevTool
             {
                 if (tool.GetType().Name == args[1])
                 {
+                    (tool as IDevTool).OutputStream = Console.Out;
                     if (tool is IQuestioningDevTool)
                     {
                         int arg = 2;
-                        (tool as IDevTool).OutputStream = Console.Out;
                         (tool as IQuestioningDevTool).Answers = new Dictionary<string, string>();
                         foreach (var question in (tool as IQuestioningDevTool).Questions)
                         {

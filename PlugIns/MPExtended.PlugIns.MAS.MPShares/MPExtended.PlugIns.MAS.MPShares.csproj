@@ -53,6 +53,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="AllShares.cs" />
+    <Compile Include="ConfigurationChangeListener.cs" />
     <Compile Include="MovieShares.cs" />
     <Compile Include="PictureShares.cs" />
     <Compile Include="ShareLibrary.cs" />

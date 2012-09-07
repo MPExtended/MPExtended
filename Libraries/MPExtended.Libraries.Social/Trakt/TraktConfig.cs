@@ -71,7 +71,7 @@ namespace MPExtended.Libraries.Social.Trakt
         {
             get
             {
-                return String.Format("MPExtended {0}", VersionUtil.GetFullVersionString());
+                return VersionUtil.GetUserAgent("TraktPlugin", "1.0");
             }
         }
 
