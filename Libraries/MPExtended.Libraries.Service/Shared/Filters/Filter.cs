@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         private Type expectedType;
         private PropertyInfo property;
         private MatchDelegate matcher;
+
+        private int intValue;
+        private long longValue;
 
         public Filter(string field, string oper, string value)
         {
@@ -58,33 +62,106 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         private MatchDelegate GetMatchDelegate()
         {
+            if (property.PropertyType == typeof(string))
+                return GetStringMatchDelegate();
+            if (property.PropertyType == typeof(int))
+                return GetIntMatchDelegate();
+            if (property.PropertyType == typeof(long))
+                return GetLongMatchDelegate();
+            if (property.PropertyType.GetInterfaces().Any(x => x == typeof(IEnumerable)))
+                return GetListMatchDelegate();
+
+            Log.Error("Filter: Cannot load match delegate for field of type '{0}' (property name {1})", property.PropertyType, property.Name);
+            throw new ArgumentException("Filter: Cannot filter on field of type '{0}'", property.PropertyType.ToString());
+        }
+
+        private MatchDelegate GetStringMatchDelegate()
+        {
             switch (Operator)
             {
                 case "=":
-                    return x => property.GetValue(x, null).ToString() == Value;
+                    return x => (string)property.GetValue(x, null) == Value;
                 case "~=":
-                    return x => property.GetValue(x, null).ToString().Equals(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)property.GetValue(x, null)).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "!=":
-                    return x => property.GetValue(x, null).ToString() != Value;
+                    return x => (string)property.GetValue(x, null) != Value;
                 case "*=":
-                    return x => property.GetValue(x, null).ToString().Contains(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)property.GetValue(x, null)).Contains(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "^=":
-                    return x => property.GetValue(x, null).ToString().StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)property.GetValue(x, null)).StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "$=":
-                    return x => property.GetValue(x, null).ToString().EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
-
-                // TODO: We should be able to do this *a lot* faster
-                case ">":
-                    return x => Double.Parse(property.GetValue(x, null).ToString(), CultureInfo.InvariantCulture) > Double.Parse(Value);
-                case ">=":
-                    return x => Double.Parse(property.GetValue(x, null).ToString(), CultureInfo.InvariantCulture) >= Double.Parse(Value);
-                case "<":
-                    return x => Double.Parse(property.GetValue(x, null).ToString(), CultureInfo.InvariantCulture) < Double.Parse(Value);
-                case "=<":
-                    return x => Double.Parse(property.GetValue(x, null).ToString(), CultureInfo.InvariantCulture) <= Double.Parse(Value);
+                    return x => ((string)property.GetValue(x, null)).EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
 
                 default:
-                    throw new ParseException("Filter: Invalid operator '{0}'", Operator);
+                    throw new ParseException("Filter: Invalid operator '{0}' for string field", Operator);
+            }
+        }
+
+        private MatchDelegate GetIntMatchDelegate()
+        {
+            if (!Int32.TryParse(Value, out intValue))
+                throw new ArgumentException("Filter: Invalud value '{0}' for integer field", Value);
+
+            switch (Operator)
+            {
+                case "=":
+                    return x => (int)property.GetValue(x, null) == intValue;
+                case "!=":
+                    return x => (int)property.GetValue(x, null) != intValue;
+                case ">":
+                    return x => (int)property.GetValue(x, null) > intValue;
+                case ">=":
+                    return x => (int)property.GetValue(x, null) >= intValue;
+                case "<":
+                    return x => (int)property.GetValue(x, null) < intValue;
+                case "<=":
+                    return x => (int)property.GetValue(x, null) <= intValue;
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
+            }
+        }
+
+        private MatchDelegate GetLongMatchDelegate()
+        {
+            if (!Int64.TryParse(Value, out longValue))
+                throw new ArgumentException("Filter: Invalud value '{0}' for integer field", Value);
+
+            switch (Operator)
+            {
+                case "=":
+                    return x => (long)property.GetValue(x, null) == longValue;
+                case "!=":
+                    return x => (long)property.GetValue(x, null) != longValue;
+                case ">":
+                    return x => (long)property.GetValue(x, null) > longValue;
+                case ">=":
+                    return x => (long)property.GetValue(x, null) >= longValue;
+                case "<":
+                    return x => (long)property.GetValue(x, null) < longValue;
+                case "<=":
+                    return x => (long)property.GetValue(x, null) <= longValue;
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
+            }
+        }
+
+        private MatchDelegate GetListMatchDelegate()
+        {
+            switch (Operator)
+            {
+                case "*=":
+                    return delegate(object x)
+                        {
+                            foreach(var item in (IEnumerable)property.GetValue(x, null))
+                            {
+                                if (item.ToString() == Value)
+                                    return true;
+                            }
+
+                            return false;
+                        };
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for list field", Operator);
             }
         }
     }

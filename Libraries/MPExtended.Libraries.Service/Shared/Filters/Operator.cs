@@ -31,14 +31,14 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         public static List<Operator> GetAll()
         {
             return new List<Operator> {
-                new Operator() { Syntax = "==", Name = "equals", Types = new string[] { "string", "integer", "boolean" } },
+                new Operator() { Syntax = "==", Name = "equals", Types = new string[] { "string", "number", "boolean" } },
                 new Operator() { Syntax = "~=", Name = "equals (case-insensitive)", Types = new string[] { "string" } },
-                new Operator() { Syntax = "!=", Name = "not equals", Types = new string[] { "string", "integer", "boolean" } },
+                new Operator() { Syntax = "!=", Name = "not equals", Types = new string[] { "string", "number", "boolean" } },
 
-                new Operator() { Syntax = ">",  Name = "greater than", Types = new string[] { "string", "integer" } },
-                new Operator() { Syntax = "<",  Name = "less than", Types = new string[] { "string", "integer" } },
-                new Operator() { Syntax = ">=", Name = "greater or equal than", Types = new string[] { "string", "integer" } },
-                new Operator() { Syntax = "<=", Name = "less or equal than", Types = new string[] { "string", "integer" } },
+                new Operator() { Syntax = ">",  Name = "greater than", Types = new string[] { "number" } },
+                new Operator() { Syntax = "<",  Name = "less than", Types = new string[] { "number" } },
+                new Operator() { Syntax = ">=", Name = "greater or equal than", Types = new string[] { "number" } },
+                new Operator() { Syntax = "<=", Name = "less or equal than", Types = new string[] { "number" } },
 
                 new Operator() { Syntax = "*=", Name = "contains", Types = new string[] { "list", "string" } },
                 new Operator() { Syntax = "^=", Name = "starts with", Types = new string[] { "string" } },
