@@ -22,6 +22,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -930,6 +931,8 @@ namespace MPExtended.Services.MediaAccessService
         /// </summary>
         public IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField)
         {
+            throw new NotImplementedException();
+            /*
             switch (mediaType)
             {
                 case WebMediaType.Drive:
@@ -954,6 +957,7 @@ namespace MPExtended.Services.MediaAccessService
                     Log.Info("GetFilterValues() called with unsupported mediaType={0}; filterField={1}", mediaType, filterField);
                     throw new ArgumentException("Unsupported MediaType for GetFilterValues()");
             }
+             */
         }
 
         /// <summary>
@@ -965,11 +969,14 @@ namespace MPExtended.Services.MediaAccessService
         /// 
         /// To define multiple filters, call this method multiple times and join them together. 
         /// </summary>
-        /// <param name="conjunction">Conjuction (and, or) to the next filter</param>
+        /// <param name="conjunction">Conjuction (and, or) to the next filter (null for the last filter)</param>
         /// <returns>The filter string</returns>
-        public WebStringResult CreateFilterString(string field, string op, string value)
+        public WebStringResult CreateFilterString(string field, string op, string value, string conjunction)
         {
-            return new FilterList(new Filter() { Field = field, Operator = op, Value = value }).ToString();
+            string val = value.Replace("\\", "\\\\").Replace("'", "\\'");
+            return conjunction == null ?
+                String.Format("{0}{1}'{2}'", field, op, val) : 
+                String.Format("{0}{1}'{2}'{3} ", field, op, val, conjunction == "and" ? "," : "|");
         }
 
         /// <summary>
@@ -978,7 +985,12 @@ namespace MPExtended.Services.MediaAccessService
         /// <returns>Available operators</returns>
         public IList<WebFilterOperator> GetFilterOperators()
         {
-            return Filters.Operators;
+            return Operator.GetAll().Select(x => new WebFilterOperator()
+            {
+                Operator = x.Syntax,
+                SuitableTypes = x.Types.ToList(),
+                Title = x.Name
+            }).ToList();
         }
         #endregion
     }

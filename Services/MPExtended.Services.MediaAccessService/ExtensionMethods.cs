@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.Common.Interfaces;
@@ -63,9 +64,13 @@ namespace MPExtended.Services.MediaAccessService
         // Filter the list
         public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
         {
-            return String.IsNullOrWhiteSpace(filter) ? 
-                list : 
-                new FilterList(filter).MatchList(list).AsQueryable();
+            if (String.IsNullOrWhiteSpace(filter))
+                return list;
+
+            var parser = new FilterParser(filter);
+            var filterInstance = parser.Parse();
+            filterInstance.ExpectType(list.GetType().GetGenericArguments().Single());
+            return list.Where(x => filterInstance.Matches<T>(x));
         }
 
         // Easy aliases for ordering and sorting

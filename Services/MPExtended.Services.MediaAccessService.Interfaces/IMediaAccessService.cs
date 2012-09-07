@@ -524,7 +524,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebStringResult CreateFilterString(string field, string op, string value);
+        WebStringResult CreateFilterString(string field, string op, string value, string conjunction);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
