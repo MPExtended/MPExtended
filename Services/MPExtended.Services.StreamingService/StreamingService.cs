@@ -376,11 +376,11 @@ namespace MPExtended.Services.StreamingService
             return Images.GetImage(new ImageMediaSource(type, provider, id, WebFileType.Content, 0));
         }
 
-        public Stream GetImageResized(WebMediaType type, int? provider, string id, int maxWidth, int maxHeight)
+        public Stream GetImageResized(WebMediaType type, int? provider, string id, int maxWidth, int maxHeight, string borders = null)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
-            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebFileType.Content, 0), calcMaxWidth, calcMaxHeight);
+            return Images.GetResizedImage(new ImageMediaSource(type, provider, id, WebFileType.Content, 0), calcMaxWidth, calcMaxHeight, borders);
         }
 
         public Stream GetArtwork(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset)
@@ -388,11 +388,11 @@ namespace MPExtended.Services.StreamingService
             return Images.GetImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset));
         }
 
-        public Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight)
+        public Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight, string borders = null)
         {
             int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
-            return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), calcMaxWidth, calcMaxHeight);
+            return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), calcMaxWidth, calcMaxHeight, borders);
         }
         #endregion
     }

@@ -38,7 +38,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetImageResized(WebMediaType type, int? provider, string id, int maxWidth, int maxHeight);
+        Stream GetImageResized(WebMediaType type, int? provider, string id, int maxWidth, int maxHeight, string borders = null);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
@@ -50,6 +50,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
-        Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight);
+        Stream GetArtworkResized(WebMediaType mediatype, int? provider, string id, WebFileType artworktype, int offset, int maxWidth, int maxHeight, string borders = null);
     }
 }
