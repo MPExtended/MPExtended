@@ -164,7 +164,6 @@ namespace MPExtended.Services.TVAccessService
                 IsTv = ch.IsTv,
                 LastGrabTime = ch.LastGrabTime != DateTime.MinValue ? ch.LastGrabTime : new DateTime(2000, 1, 1),
                 NextProgram = ch.NextProgram.ToWebProgramDetailed(),
-                SortOrder = ch.SortOrder,
                 TimesWatched = ch.TimesWatched,
                 TotalTimeWatched = ch.TotalTimeWatched != DateTime.MinValue ? ch.TotalTimeWatched : new DateTime(2000, 1, 1),
                 VisibleInGuide = ch.VisibleInGuide
@@ -215,7 +214,6 @@ namespace MPExtended.Services.TVAccessService
                 Id = ch.IdChannel,
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,
-                SortOrder = ch.SortOrder,
             };
         }
 
