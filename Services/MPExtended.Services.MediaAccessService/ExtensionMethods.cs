@@ -40,6 +40,31 @@ namespace MPExtended.Services.MediaAccessService
             return source.Skip(start).Take(count);
         }
 
+        // Easy aliases for ordering and sorting
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
+        {
+            return OrderBy(source, keySelector, order.HasValue ? order.Value : WebSortOrder.Asc);
+        }
+
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder order)
+        {
+            if (order == WebSortOrder.Asc)
+                return Enumerable.OrderBy(source, keySelector);
+            return Enumerable.OrderByDescending(source, keySelector);
+        }
+
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
+        {
+            return ThenBy(source, keySelector, order.HasValue ? order.Value : WebSortOrder.Asc);
+        }
+
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder order)
+        {
+            if (order == WebSortOrder.Asc)
+                return Enumerable.ThenBy(source, keySelector);
+            return Enumerable.ThenByDescending(source, keySelector);
+        }
+
         // Finalize it
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
