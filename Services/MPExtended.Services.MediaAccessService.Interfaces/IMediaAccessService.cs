@@ -529,6 +529,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Filters
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebIntResult GetFilterValuesCount(int? provider, WebMediaType mediaType, string filterField, string op, int? limit);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<string> GetFilterValues(int? provider, WebMediaType mediaType, string filterField, string op, int? limit);
 
         [OperationContract]

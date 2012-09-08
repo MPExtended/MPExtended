@@ -967,6 +967,11 @@ namespace MPExtended.Services.MediaAccessService
             }
         }
 
+        public WebIntResult GetFilterValuesCount(int? provider, WebMediaType mediaType, string filterField, string op, int? limit)
+        {
+            return GetFilterValues(provider, mediaType, filterField, op, limit).Count();
+        }
+
         public IList<string> GetFilterValuesByRange(int? provider, int start, int end, WebMediaType mediaType, string filterField, string op, int? limit)
         {
             return GetFilterValues(provider, mediaType, filterField, op, limit).TakeRange(start, end).ToList();
