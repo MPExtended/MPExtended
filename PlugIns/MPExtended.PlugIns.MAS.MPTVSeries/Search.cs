@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using MPExtended.Libraries.SQLitePlugin;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.TVShow;

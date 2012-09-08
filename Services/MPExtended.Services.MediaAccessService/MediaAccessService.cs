@@ -22,6 +22,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;

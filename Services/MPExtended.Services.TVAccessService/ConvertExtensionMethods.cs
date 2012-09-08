@@ -39,8 +39,6 @@ namespace MPExtended.Services.TVAccessService
                 return null;
             }
 
-            //card.T
-
             // See TvEngine3/TVLibrary/TvService/Scheduler/Scheduler.cs:1295 (SetupRecordingFolder) for the default fallback paths from MP
             return new WebCard
             {

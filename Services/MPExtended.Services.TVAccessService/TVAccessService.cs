@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;

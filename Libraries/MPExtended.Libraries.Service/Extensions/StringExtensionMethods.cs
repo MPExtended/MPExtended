@@ -22,9 +22,9 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Json;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Extensions
 {
-    public static class StringExtensions
+    public static class StringExtensionMethods
     {
         public static bool Contains(this string str, string value, StringComparison comparison)
         {

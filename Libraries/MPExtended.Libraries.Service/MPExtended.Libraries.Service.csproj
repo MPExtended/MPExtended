@@ -84,6 +84,8 @@
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
+    <Compile Include="Extensions\QueryableExtensionMethods.cs" />
+    <Compile Include="Extensions\EnumerableExtensionMethods.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
     <Compile Include="Hosting\ISingletonService.cs" />
     <Compile Include="MpConnection\AccessRequestingClient.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />
     <Compile Include="Util\RandomGenerator.cs" />
-    <Compile Include="Util\StringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensionMethods.cs" />
     <Compile Include="Util\WifiRemote.cs" />
     <Compile Include="WCF\CustomQueryStringConverter.cs" />
     <Compile Include="Hosting\BaseAddresses.cs" />
@@ -160,6 +162,10 @@
     <None Include="Hosting\App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
       <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
       <Name>MPExtended.Libraries.Service.Config</Name>

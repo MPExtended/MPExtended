@@ -64,11 +64,11 @@ namespace MPExtended.Libraries.Service
             }
         }
 
-        public static Services Services
+        public static Config.Services Services
         {
             get
             {
-                return config.Get<Services>(ConfigurationFile.Services).Get();
+                return config.Get<Config.Services>(ConfigurationFile.Services).Get();
             }
         }
 

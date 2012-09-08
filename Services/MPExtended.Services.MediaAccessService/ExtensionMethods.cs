@@ -22,49 +22,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.Shared.Filters;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.Common.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MPExtended.Services.MediaAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        // Take a range from the list
-        public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
-        {
-            int count = end - start + 1;
-            return source.Skip(start).Take(count);
-        }
-
-        // Easy aliases for ordering and sorting
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
-        {
-            return OrderBy(source, keySelector, order.HasValue ? order.Value : WebSortOrder.Asc);
-        }
-
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Enumerable.OrderBy(source, keySelector);
-            return Enumerable.OrderByDescending(source, keySelector);
-        }
-
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
-        {
-            return ThenBy(source, keySelector, order.HasValue ? order.Value : WebSortOrder.Asc);
-        }
-
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Enumerable.ThenBy(source, keySelector);
-            return Enumerable.ThenByDescending(source, keySelector);
-        }
-
         // Finalize it
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
@@ -79,40 +45,6 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class IQueryableExtensionMethods
     {
-        // Take a range from the list
-        public static IQueryable<T> TakeRange<T>(this IQueryable<T> source, int start, int end)
-        {
-            int count = end - start + 1;
-            return source.Skip(start).Take(count);
-        }
-
-        // Filter the list
-        public static IQueryable<T> Filter<T>(this IQueryable<T> list, string filter)
-        {
-            if (String.IsNullOrWhiteSpace(filter))
-                return list;
-
-            var parser = new FilterParser(filter);
-            var filterInstance = parser.Parse();
-            filterInstance.ExpectType(list.GetType().GetGenericArguments().Single());
-            return list.Where(x => filterInstance.Matches<T>(x));
-        }
-
-        // Easy aliases for ordering and sorting
-        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Queryable.OrderBy(source, keySelector);
-            return Queryable.OrderByDescending(source, keySelector);
-        }
-
-        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Queryable.ThenBy(source, keySelector);
-            return Queryable.ThenByDescending(source, keySelector);
-        }
-
         // Finalize it
         public static List<T> Finalize<T>(this IQueryable<T> list, int? providerId, ProviderType type) where T : WebObject
         {

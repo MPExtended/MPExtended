@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Extensions;
 
 namespace MPExtended.Libraries.Service.Shared.Filters
 {

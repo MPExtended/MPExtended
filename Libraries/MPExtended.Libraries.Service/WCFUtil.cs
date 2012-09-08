@@ -24,7 +24,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Libraries.Service.Network;
-using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service.Extensions;
 
 namespace MPExtended.Libraries.Service
 {
