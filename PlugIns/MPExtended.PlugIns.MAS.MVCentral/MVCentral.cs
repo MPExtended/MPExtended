@@ -123,7 +123,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
             // Unavailable fields: TrackNumber, Year, Genres, 
-            string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, a.id AS album_id, a.album, p.id AS artist_id, p.artist, " +
+            string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, t.artfullpath, a.id AS album_id, a.album, p.id AS artist_id, p.artist, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " +
                          "FROM track_info t " +
                          "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
@@ -146,6 +146,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("t", "track", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("l", "duration", "Duration", PlayTimeReader),
                 new SQLFieldMapping("t", "rating", "Rating", DataReaders.ReadFloat),
+                new SQLFieldMapping("t", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover)
             }, delegate(T item)
             {
                 if (item is WebMusicTrackDetailed)

@@ -12,6 +12,9 @@
                         @track.Track.Title
                     </a>
                 </div>
+                <div class="row">
+                    <img class="img" src="@Url.Action("Track", "MusicLibrary", new { track = track.Track.Id, width = 150 })" alt="" />
+                </div>
             </div>
         }
     </div>

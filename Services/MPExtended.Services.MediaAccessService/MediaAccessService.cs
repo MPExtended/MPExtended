@@ -690,6 +690,8 @@ namespace MPExtended.Services.MediaAccessService
                 return MusicLibraries[provider].GetArtistBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
             else if (mediatype == WebMediaType.MusicAlbum && filetype == WebFileType.Cover)
                 return MusicLibraries[provider].GetAlbumBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
+            else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Cover)
+                return MusicLibraries[provider].GetTrackBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
             else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Content)
                 return MusicLibraries[provider].GetTrackBasicById(id).Path;
 
