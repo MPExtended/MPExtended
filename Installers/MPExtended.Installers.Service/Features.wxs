@@ -20,6 +20,7 @@
       <ComponentRef Id="Component_General_Interface"/>
       <ComponentRef Id="Component_General_Config"/>
       <ComponentRef Id="Component_General_Logs"/>
+      <ComponentGroupRef Id="Component_Translations"/>
     </ComponentGroup>
 
     <!-- MAS -->

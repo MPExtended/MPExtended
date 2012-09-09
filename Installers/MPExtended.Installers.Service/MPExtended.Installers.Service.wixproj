@@ -32,6 +32,7 @@
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Generated.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="Translations.wxs" />
     <Compile Include="UI_Control.wxs" />
     <Compile Include="UI_ExitDialog.wxs" />
     <Compile Include="StreamBinaries.wxs" />
@@ -247,7 +248,8 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions PSPluginInstallGenerator</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions PSPluginInstallGenerator
+"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions WixFSGenerator "Libraries\MPExtended.Libraries.Service\bin\$(ConfigurationName)" "$(ProjectDir)Translations.wxs" "Translations" "InstallDirectory" "y"</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

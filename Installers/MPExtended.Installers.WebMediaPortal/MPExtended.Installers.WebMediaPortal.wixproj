@@ -24,6 +24,7 @@
     <Compile Include="Features.wxs" />
     <Compile Include="Filesystem.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="Translations.wxs" />
     <Compile Include="UI_Control.wxs" />
     <Compile Include="WWW.wxs" />
   </ItemGroup>
@@ -72,7 +73,8 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions WixFSGenerator "Applications\MPExtended.Applications.WebMediaPortal" "$(ProjectDir)WWW.wxs" "WWW"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions WixFSGenerator "Applications\MPExtended.Applications.WebMediaPortal" "$(ProjectDir)WWW.wxs" "WWW" "Dir_WWW" "n"
+"$(SolutionDir)Applications\MPExtended.Applications.Development.DevTool\$(OutDir)MPExtended.Applications.Development.DevTool.exe" /noquestions WixFSGenerator "Applications\MPExtended.Applications.WebMediaPortal\bin" "$(ProjectDir)Translations.wxs" "Translations" "BinDirectory" "y"</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

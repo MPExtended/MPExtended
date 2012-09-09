@@ -45,25 +45,27 @@ namespace MPExtended.Applications.Development.DevTool.Tools
                 return new List<Question>() {
                     new Question("inputDirectory", "Enter directory to include: " + Installation.GetSourceRootDirectory() + @"\"),
                     new Question("outputFile", "Enter output file: "),
-                    new Question("prefix", "Enter prefix of the directory and component: ")
+                    new Question("prefix", "Enter prefix of the directory and component: "),
+                    new Question("parentName", "Enter id of parent directory: "),
+                    new Question("noImmediate", "Skip immediate files (only include subdirectories)? "),
                 };
             }
         }
 
         public void Run()
         {
-            RunFromInput(Answers["inputDirectory"], Answers["outputFile"], Answers["prefix"]);
+            RunFromInput(Answers["inputDirectory"], Answers["outputFile"], Answers["prefix"], Answers["parentName"], Answers["noImmediate"] == "y");
         }
 
-        public void RunFromInput(string inputDir, string outputFile, string name)
+        public void RunFromInput(string inputDir, string outputFile, string name, string parentName, bool skipImmediate)
         {
             // setup XML file
             XNamespace ns = "http://schemas.microsoft.com/wix/2006/wi";
             XElement componentGroup = new XElement(ns + "ComponentGroup", new XAttribute("Id", "Component_" + name));
-            XElement directoryRef = new XElement(ns + "DirectoryRef", new XAttribute("Id", "Dir_" + name));
+            XElement directoryRef = new XElement(ns + "DirectoryRef", new XAttribute("Id", parentName));
 
             // build content
-            AddDirectory(inputDir, "Component_Generated_" + name, "Dir_Generated_" + name, ns, directoryRef, componentGroup);
+            AddDirectory(inputDir, "Component_Generated_" + name, "Dir_Generated_" + name, ns, directoryRef, componentGroup, skipImmediate);
 
             // save
             XDocument doc = new XDocument(
@@ -83,14 +85,14 @@ namespace MPExtended.Applications.Development.DevTool.Tools
             OutputStream.WriteLine("Done!");
         }
 
-        private bool AddDirectory(string path, string baseComponent, string basePrefix, XNamespace ns, XElement dirNode, XElement componentGroup)
+        private bool AddDirectory(string path, string baseComponent, string basePrefix, XNamespace ns, XElement dirNode, XElement componentGroup, bool skipImmediate = false)
         {
             bool didAdd = false;
             string fullPath = Path.Combine(Installation.GetSourceRootDirectory(), path);
             var files = Directory.GetFiles(fullPath)
                 .Select(x => Path.GetFileName(x))
                 .Where(x => !forbiddenExtensions.Contains(Path.GetExtension(x)) && !forbiddenFiles.Contains(x));
-            if (files.Count() > 0)
+            if (files.Count() > 0 && !skipImmediate)
             {
                 // create stable GUIDs
                 MD5 provider = MD5.Create();

@@ -21,6 +21,7 @@
       <ComponentRef Id="Component_WWW_Binaries"/>
       <ComponentRef Id="Component_WWW_Libraries"/>
       <ComponentGroupRef Id="Component_WWW"/>
+      <ComponentGroupRef Id="Component_Translations"/>
     </ComponentGroup>
   </Fragment>
 
