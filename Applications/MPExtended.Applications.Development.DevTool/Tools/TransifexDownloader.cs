@@ -53,15 +53,14 @@ namespace MPExtended.Applications.Development.DevTool.Tools
         public void Run()
         {
             WebClient client = new WebClient();
-            client.Headers[HttpRequestHeader.UserAgent] = VersionUtil.GetUserAgent("DevTool");
+            //client.Headers[HttpRequestHeader.UserAgent] = VersionUtil.GetUserAgent("DevTool"); <<-- This seems to cause a HTTP 401 response
             client.Encoding = Encoding.UTF8;
             client.Credentials = new NetworkCredential(Answers["username"], Answers["password"]);
 
+            var languages = GetLanguageList(client).ToList();
             foreach (var resource in resources)
             {
-                var details = client.DownloadString(String.Format("https://www.transifex.com/api/2/project/mpextended/resource/{0}/?details", resource.Key));
-                var response = JObject.Parse(details);
-                foreach (var code in response["available_languages"].Select(x => (string)x["code"]))
+                foreach (var code in languages)
                 {
                     var resx = client.DownloadString(String.Format("https://www.transifex.com/api/2/project/mpextended/resource/{0}/translation/{1}/?file", resource.Key, code));
                     var path = Path.Combine(Installation.GetSourceRootDirectory(), String.Format(resource.Value, code));
@@ -70,6 +69,42 @@ namespace MPExtended.Applications.Development.DevTool.Tools
                         writer.Write(resx);
                     }
                     OutputStream.WriteLine("Got translation of resource '{0}' for language '{1}'", resource.Key, code);
+                }
+            }
+        }
+
+        private class LanguageStatistics
+        {
+            public int TranslatedStrings { get; set; }
+            public int TotalStrings { get; set; }
+        }
+
+        private IEnumerable<string> GetLanguageList(WebClient client)
+        {
+            var languages = new Dictionary<string, LanguageStatistics>();
+            foreach (var resource in resources)
+            {
+                var stats = client.DownloadString(String.Format("https://www.transifex.com/api/2/project/mpextended/resource/{0}/stats/", resource.Key));
+                var response = JObject.Parse(stats);
+                foreach (var item in response)
+                {
+                    if (!languages.ContainsKey(item.Key))
+                        languages[item.Key] = new LanguageStatistics() { TranslatedStrings = 0, TotalStrings = 0 };
+                    languages[item.Key].TranslatedStrings += (int)item.Value["translated_entities"];
+                    languages[item.Key].TotalStrings += (int)item.Value["translated_entities"] + (int)item.Value["untranslated_entities"];
+                }
+            }
+
+            foreach (var lang in languages)
+            {
+                float percentage = lang.Value.TranslatedStrings * 1f / lang.Value.TotalStrings;
+                if (percentage < 0.8f)
+                {
+                    OutputStream.WriteLine("Skipping language '{0}' because translated count {1}% is below threshold (80%)", lang.Key, Math.Round(percentage * 100));
+                }
+                else if (lang.Key != "en") // skip the source language
+                {
+                    yield return lang.Key;
                 }
             }
         }
