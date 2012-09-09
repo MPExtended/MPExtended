@@ -509,4 +509,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="ExternalIpLabel" xml:space="preserve">
     <value>External address</value>
   </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>
