@@ -5,12 +5,19 @@
 
 <h2>@UIStrings.YourArtists</h2>
 
-<ul class="list">
+<div>
     @if (Model != null)
     {
         foreach (var artist in Model)
         {
-            <li>@Html.ActionLink(artist.Title, "Albums", new { artist = artist.Id })</li>
+            <div id="MusicBox" style="padding: 10px 10px 20px 10px; float:  left; height:  200px;">
+                <div>
+                    <a href="@Url.Action("Albums", new { artist = artist.Id })"> <img class="img" height="150" width="150" src="@Url.Action("ArtistImage", "MusicLibrary", new { artist = artist.Id, width = 150 })" alt="No Image" /> </a>
+                </div>
+                <div id="musicText" style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">
+                    @Html.ActionLink(artist.Title, "Albums", new { artist = artist.Id })
+                </div>
+            </div>
         }
     }
-</ul>
+</div>

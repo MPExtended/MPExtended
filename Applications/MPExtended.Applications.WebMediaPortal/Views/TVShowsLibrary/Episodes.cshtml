@@ -6,15 +6,14 @@
 <h2>@String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber)</h2>
 
 <div class="imageColumn">
-    <img src="@Url.Action("Image", new { season = @Model.Season.Id, width = 300 })" alt="" />
+    <img src="@Url.Action("Image", new { season = @Model.Season.Id, width = 500 })" alt="No Image" />
 </div>
 
 <div class="listColumn">
     <ul>
         @foreach (var episode in Model.Episodes)
         {
-            <li>@Html.ActionLink(String.Format(UIStrings.EpisodeDisplay, episode.EpisodeNumber, episode.Title), "Details", new { episode = episode.Id })
-            </li>   
+            <li>@Html.ActionLink(String.Format(UIStrings.EpisodeDisplay, episode.EpisodeNumber, episode.Title), "Details", new { episode = episode.Id })</li>   
         }
     </ul>
 </div>

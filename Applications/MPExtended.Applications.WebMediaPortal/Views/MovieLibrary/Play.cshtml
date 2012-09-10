@@ -3,9 +3,9 @@
 	ViewBag.Title = String.Format(UIStrings.WatchingMovie, Model.Movie.Title);
 }
 
-<h2>@UIStrings.Play</h2>
-@Html.Raw(String.Format(UIStrings.YouAreWatchingMovie, Model.Movie.Title))
-<br /><br />
+<h2>Play @Model.Movie.Title</h2>
+
+<br />
 
 @{
     Html.RenderAction("Player", "Stream", new

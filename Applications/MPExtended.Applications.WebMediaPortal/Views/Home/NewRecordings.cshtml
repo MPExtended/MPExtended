@@ -1,19 +1,18 @@
 ﻿@model HomeViewModel
-           
+
 @if (Model.Availability.TAS)
 {
     <h2>@UIStrings.LatestRecordings</h2>
+    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
         @foreach (var recording in Model.GetLastRecordings())
         {
-            <div class="column">
+               <div class="column" style="text-align: center;">
                 <div class="row">
-                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })">
-                        @recording.Title (@(recording.StartTime.ToShortDateString()))
-                    </a>
+                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })"><img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="No Image" /></a>
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="" />
+                    @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })
                 </div>
             </div>
         }

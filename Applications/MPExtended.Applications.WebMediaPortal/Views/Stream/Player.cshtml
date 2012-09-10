@@ -1,5 +1,9 @@
 ﻿@model PlayerViewModel
 
+@Html.Partial(Model.PlayerViewName)
+
+<br />
+<br />
 @using (Html.BeginForm())
 {
     @Html.DropDownList("transcoder", Model.TranscoderSelectList)
@@ -8,7 +12,3 @@
 
 <br />
 @Html.ActionLink(UIStrings.DownloadPlaylist, "Playlist", new { type = Model.MediaType, itemId = Model.MediaId, transcoder = Model.Transcoder })
-
-<br />
-<br />
-@Html.Partial(Model.PlayerViewName)

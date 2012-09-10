@@ -11,18 +11,9 @@
 
 <div id="seekbar" class="dragdealer" style="width: @(Model.Size.Width)px;">
     <div class="red-bar handle">
+        <img src="@Url.ContentLink("Images/butt212.png")" alt="^" />
     </div>
 </div>
-
-<ul>
-    <li><a href="#" onclick="jwplayer().play();">Toggle the playback</a></li>
-    <li><a href="#" onclick="jwplayer().setMute();">Toggle the audio</a></li>
-    <li><a href="#" onclick="jwplayer().stop();">Stop playback</a></li>
-    <li>Position: <span id="elapsedText">0</span></li>
-    <li>Duration: <span id="durationText">0</span></li>
-    <li>Percentage: <span id="percentageText">0</span></li>
-    <li><a href="#" onclick="alert(jwplayer().getPosition());">Test</a></li>
-</ul>
 
 <script type='text/javascript'>
     var startPos = 0;
@@ -52,13 +43,10 @@
         ]
     }).onTime(function (callback) {
         var pos = parseFloat(startPos) + callback.position;
-        setText("elapsedText", pos.toString());
         percentage = pos / callback.duration;
         slider.setValue(percentage);
-        setText("percentageText", percentage.toString());
     }).onPlay(function () {
         videoLength = jwplayer().getDuration();
-        setText("durationText", videoLength.toString());
         slider.enable();
     }).onReady(function () {
         play(0, false);

@@ -3,17 +3,19 @@
 @if (Model.Availability.Music)
 {
     <h2>@UIStrings.LatestTracks</h2>
+    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
         @foreach (var track in Model.GetLastAddedMusicTracks())
         {
-            <div class="column">
-                <div class="row">
-                    <a href="@Url.Action("Track", "MusicLibrary", new { track = track.Track.Id })">
-                        @track.Track.Title
-                    </a>
+            <div class="column" style="text-align: center;">
+                <div class="row" style="height: 55px; width: 150px;">
+                    @Html.ActionLink(track.Track.Artist.First(), "Track", "MusicLibrary", new { track = track.Track.Id }, null)
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("Track", "MusicLibrary", new { track = track.Track.Id, width = 150 })" alt="" />
+                    <a href="@Url.Action("Track", "MusicLibrary", new { track = track.Track.Id }, null)"><img class="img" src="@Url.Action("TrackImage", "MusicLibrary", new { track = track.Track.Id, width = 150 })" alt="No Image" /></a>
+                </div>
+                <div class="row">
+                    @Html.ActionLink(track.Track.Title, "Track", "MusicLibrary", new { track = track.Track.Id }, null)
                 </div>
             </div>
         }

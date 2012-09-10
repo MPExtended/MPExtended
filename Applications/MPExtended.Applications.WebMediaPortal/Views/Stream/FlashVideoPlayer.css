@@ -1,8 +1,16 @@
 ﻿.dragdealer
 {
     position: relative;
-    height: 15px;
-    background: #EEE;
+    height: 18px;
+background: #212121; /* Old browsers */
+background: -moz-linear-gradient(top,  #212121 5%, #444444 71%, #fffcfc 77%, #444444 83%, #2a2a2a 99%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,#212121), color-stop(71%,#444444), color-stop(77%,#fffcfc), color-stop(83%,#444444), color-stop(99%,#2a2a2a)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #212121 5%,#444444 71%,#fffcfc 77%,#444444 83%,#2a2a2a 99%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #212121 5%,#444444 71%,#fffcfc 77%,#444444 83%,#2a2a2a 99%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #212121 5%,#444444 71%,#fffcfc 77%,#444444 83%,#2a2a2a 99%); /* IE10+ */
+background: linear-gradient(to bottom,  #212121 5%,#444444 71%,#fffcfc 77%,#444444 83%,#2a2a2a 99%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#212121', endColorstr='#2a2a2a',GradientType=0 ); /* IE6-9 */
+
 }
 .dragdealer .handle
 {
@@ -11,10 +19,10 @@
 }
 .dragdealer .red-bar
 {
-    width: 10px;
-    height: 15px;
-    background: #CC0000;
-    color: #FFF;
+    width: 16px;
+    margin-left: -1px;
+    margin-top: 2px;
+    height: 16px;
     line-height: 15px;
     text-align: center;
 }

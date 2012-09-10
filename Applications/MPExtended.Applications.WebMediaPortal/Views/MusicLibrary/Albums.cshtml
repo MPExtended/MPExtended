@@ -8,12 +8,12 @@
 
 @foreach (var album in Model.Albums)
 {
-    <a href="@Url.Action("Album", new { album = album.Id })">
-        <div class="album">
-            <img height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" />
-            <p>
-                @album.Title
-            </p>
+    <div style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
+        <div>
+            <a href="@Url.Action("Album", new { album = album.Id })"> <img height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" /></a>
         </div>
-    </a>
+        <div style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">
+            @Html.ActionLink(album.Title, "Album", new { album = album.Id })
+        </div>
+    </div>
 }

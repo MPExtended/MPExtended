@@ -3,17 +3,16 @@
 @if (Model.Availability.Movies)
 {
     <h2>@UIStrings.LatestMovies</h2>
+    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
         @foreach (var movie in Model.GetLastAddedMovies())
         {
-            <div class="column">
+            <div class="column" style="text-align: center;">
                 <div class="row">
-                    <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })">
-                        @movie.Movie.Title
-                    </a>
+                    <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id }, null)"> <img class="img" height="221" width="150" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 150 })" alt="No Image" /> </a>
                 </div>
                 <div class="row">
-                    <img class="img" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 150 })" alt="" />
+                    @Html.ActionLink(movie.Movie.Title, "Details", "MovieLibrary", new { movie = movie.Id }, null)
                 </div>
             </div>
         }

@@ -6,17 +6,20 @@
 <h2>@Model.Show.Title</h2>
 
 <div class="imageColumn extended">
-    <img src="@Url.Action("SeriesPoster", new { show = Model.Show.Id, width = 500 })" alt="" />
+    <img src="@Url.Action("SeriesPoster", new { show = Model.Show.Id, width = 500 })" alt="No Image" />
 </div>
 
-<div class="listColumn">
-    <ul>
-        @foreach (var season in Model.Seasons)
+
+<div>
+    @foreach (var season in Model.Seasons)
+    {
+        if (!season.SeasonNumber.Equals(0))
         {
-            if (!season.SeasonNumber.Equals(0))
-            {
-                <li>@Html.ActionLink(String.Format(UIStrings.Season, season.SeasonNumber), "Episodes", new { season = season.Id })</li>
-            }
+        <div class="seasonWrap" style="float: left; padding: 10px;">
+            <a href="@Url.Action("Episodes", new { season = season.Id })"><img class="seasonPoster" src="@Url.Action("Image", new { season = season.Id, width = 100 })" alt="No Image" /></a>
+            <a style="text-align: center;" href="@Url.Action("Episodes", new { season = season.Id })"><div class="seasonTitle">@String.Format("Season" + " - " + season.SeasonNumber)<br/>@season.Year</div></a>
+        </div>
         }
-    </ul>
+    }
 </div>
+

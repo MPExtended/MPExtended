@@ -14,10 +14,12 @@
     <div class="item">
         @if(ViewBag.Availability.Music) { Html.RenderAction("NewAlbums", "Home"); }
     </div>
-        <br class="noFloat" />
+	@* Disable them for now because they make the homepage overly crowded
+    <br class="noFloat" />
     <div class="item">
         @if(ViewBag.Availability.Music) { Html.RenderAction("NewMusicTracks", "Home"); }
     </div>
+	*@
     <br class="noFloat" />
     <div class="item">
         @if(ViewBag.Availability.TAS) { Html.RenderAction("NewRecordings", "Home"); }

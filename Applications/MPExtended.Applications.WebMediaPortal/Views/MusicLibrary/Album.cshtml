@@ -5,9 +5,14 @@
 
 <h2>@String.Format(UIStrings.AlbumBy, Model.Album.Title, Model.Album.AlbumArtist)</h2>
 
-<ul>
+<div>
 @foreach (var track in Model.Tracks)
 {
-    <li>@Html.ActionLink(track.Title, "Track", new { track = track.Id })</li>
+    <div style="padding: 10px 10px 20px 10px; float:  left; height:  200px;">
+        <div>
+            <a href="@Url.Action("Track", new { track = track.Id })"> <img class="img" height="150" width="150" src="@Url.Action("TrackImage", "MusicLibrary", new { track = track.Id, width = 150 })" alt="No Image" /> </a>
+        </div>
+        <div style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">@Html.ActionLink(track.Title, "Track", new { track = track.Id })</div>
+    </div>
 }
-</ul>
+</div>
