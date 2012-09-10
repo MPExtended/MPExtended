@@ -130,5 +130,35 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Equal("!=", (filters[2] as Filter).Operator);
             Assert.Equal("Condition", (filters[2] as Filter).Value);
         }
+
+        [Fact]
+        public void Filter()
+        {
+            Assert.True(TestAgainstFilter("FirstField == EqualsValue", new { FirstField = "EqualsValue" }));
+            Assert.False(TestAgainstFilter("FirstField = OtherValue", new { FirstField = "EqualsValue" }));
+            Assert.True(TestAgainstFilter("Field ^= 'Begin  '", new { Field = "Begin  with some spaces" }));
+            Assert.True(TestAgainstFilter("Field ~= CaSeInSensitivE", new { Field = "caseinsensITIVe" }));
+            Assert.True(TestAgainstFilter("Field *= text", new { Field = "some text" }));
+            
+            Assert.False(TestAgainstFilter("Field > 10", new { Field = 1 }));
+            Assert.True(TestAgainstFilter("Field < 8", new { Field = 1 }));
+            Assert.True(TestAgainstFilter("Field <= 8", new { Field = 8 }));
+
+            Assert.True(TestAgainstFilter("Field > 1234567890", new { Field = 1234567891L }));
+            Assert.False(TestAgainstFilter("Field != 800", new { Field = 800L }));
+
+            Assert.True(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "test", "hello" } }));
+            Assert.False(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "else", "text" } }));
+            Assert.True(TestAgainstFilter("Field *= 8", new { Field = new List<int>() { 5, 7, 8 } }));
+        }
+
+        private bool TestAgainstFilter(string filterText, object obj)
+        {
+            FilterParser parser = new FilterParser(filterText);
+            IFilter filter = parser.Parse();
+
+            filter.ExpectType(obj.GetType());
+            return filter.Matches(obj);
+        }
     }
 }
