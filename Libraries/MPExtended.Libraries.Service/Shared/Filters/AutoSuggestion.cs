@@ -33,13 +33,12 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 return items
                     .SelectMany<T, object>(x => property.GetValue(x, null) as IEnumerable<object>)
                     .Select(x => x.ToString())
-                    .ToList();
+                    .Distinct();
             }
 
             return items
                 .Select(x => property.GetValue(x, null).ToString())
-                .Distinct()
-                .OrderBy(x => x);
+                .Distinct();
         }
 
         public static IEnumerable<string> GetValuesForField<T>(string field, IEnumerable<T> items, string op, int? limit)
