@@ -80,6 +80,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             switch (Operator)
             {
                 case "=":
+                case "==":
                     return x => (string)property.GetValue(x, null) == Value;
                 case "~=":
                     return x => ((string)property.GetValue(x, null)).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
@@ -105,6 +106,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             switch (Operator)
             {
                 case "=":
+                case "==":
                     return x => (int)property.GetValue(x, null) == intValue;
                 case "!=":
                     return x => (int)property.GetValue(x, null) != intValue;
@@ -129,6 +131,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             switch (Operator)
             {
                 case "=":
+                case "==":
                     return x => (long)property.GetValue(x, null) == longValue;
                 case "!=":
                     return x => (long)property.GetValue(x, null) != longValue;
