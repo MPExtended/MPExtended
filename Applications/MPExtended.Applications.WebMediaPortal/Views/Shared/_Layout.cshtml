@@ -9,7 +9,7 @@
 <body>
     <div id="header">
         <a href="@Url.Action("Index", "Home")">
-            <img id='logo' src="@Url.ContentLink("Images/logo.png")" alt="No Image" />
+            <img id='logo' src="@Url.ContentLink("Images/logo.png")" alt="Logo" />
         </a>
 
         <div id="logindisplay">
@@ -26,50 +26,8 @@
             }
         </div>
 
-        <div class="navigation">
-            <ul id="navlist">
-                <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
-                @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
-                @if (ViewBag.Availability.Movies) { 
-                    <li class="dropdown" style="padding-right: 31px;">
-                        @Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") <img src="@Url.ContentLink("Images/dwnarw.png")" alt="^" />
-                        <ul class="ddBox" style="border-bottom: 1px dotted #8A8575;">
-                            @foreach (var genre in MPExtended.Applications.WebMediaPortal.Code.Connections.Current.MAS.GetMovieGenres(null)) {
-                                <li><a href="@Url.Action("Index", "MovieLibrary")?genre=@genre.Title">@genre.Title</a></li>
-                            }
-                        </ul>
-                    </li> 
-                }
-                @if (ViewBag.Availability.TVShows) { 
-                    <li class="dropdown" style="padding-right: 31px;">@Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") <img src="@Url.ContentLink("Images/dwnarw.png")" alt="^" />
-                        <ul class="ddBox" style="border-bottom: 1px dotted #8A8575;">
-                            @foreach (var genre in MPExtended.Applications.WebMediaPortal.Code.Connections.Current.MAS.GetTVShowGenres(null)) {
-                                if(genre.Title == "Action and Adventure") { <li><a href="TVShowsLibrary?genre=Action and Adventure">Action</a></li>; continue;}
-                                if(genre.Title == "Home and Garden") { <li><a href="TVShowsLibrary?genre=Home and Garden">Home/Garden</a></li>; continue;}
-                                if(genre.Title == "Science-Fiction") { <li><a href="TVShowsLibrary?genre=Science-Fiction">Sci-Fi</a></li>; continue;}
-                                    <li><a href="@Url.Action("Index", "TVShowsLibrary")?genre=@genre.Title">@genre.Title</a></li>
-                            }
-                        </ul>
-                    </li> }
-                
-                @if (ViewBag.Availability.TAS)
-                {
-                    <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
-                    <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
-                    <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
-                    <li>@Html.ActionLink(UIStrings.Status, "Index", "Status")</li>
-                }
-                
-                <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
-            </ul>
-        </div>
+        @{Html.RenderAction("Menu", "Site");}
     </div>
     @RenderBody()
 </body>
 </html>
- 
-
-
-<div id="MovieGenreList">
-
-</div>

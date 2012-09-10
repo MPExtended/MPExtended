@@ -12,7 +12,9 @@
                     @Html.ActionLink(album.Album.AlbumArtist, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
                 </div>
                 <div class="row">
-                    <a href="@Url.Action("Album", "MusicLibrary", new { album = album.Album.Id }, null)"><img class="img" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="No Image" /></a>
+                    <a href="@Url.Action("Album", "MusicLibrary", new { album = album.Album.Id }, null)">
+                        <img class="img" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="No image" />
+                    </a>
                 </div>
                 <div class="row">
                     @Html.ActionLink(album.Album.Title, "Album", "MusicLibrary", new { album = album.Album.Id }, null)

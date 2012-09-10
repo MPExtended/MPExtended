@@ -7,9 +7,11 @@
     <div>
         @foreach (var recording in Model.GetLastRecordings())
         {
-               <div class="column" style="text-align: center;">
+            <div class="column" style="text-align: center;">
                 <div class="row">
-                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })"><img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="No Image" /></a>
+                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })">
+                        <img class="img" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="No image" />
+                    </a>
                 </div>
                 <div class="row">
                     @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })

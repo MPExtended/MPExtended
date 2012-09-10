@@ -1,25 +1,27 @@
 ﻿@model TVShowViewModel
 @{
-	ViewBag.Title = Model.Show.Title;
+    ViewBag.Title = Model.Show.Title;
 }
 
 <h2>@Model.Show.Title</h2>
 
 <div class="imageColumn extended">
-    <img src="@Url.Action("SeriesPoster", new { show = Model.Show.Id, width = 500 })" alt="No Image" />
+    <img src="@Url.Action("SeriesPoster", new { show = Model.Show.Id, width = 500 })" alt="No image" />
 </div>
-
 
 <div>
     @foreach (var season in Model.Seasons)
     {
         if (!season.SeasonNumber.Equals(0))
         {
-        <div class="seasonWrap" style="float: left; padding: 10px;">
-            <a href="@Url.Action("Episodes", new { season = season.Id })"><img class="seasonPoster" src="@Url.Action("Image", new { season = season.Id, width = 100 })" alt="No Image" /></a>
-            <a style="text-align: center;" href="@Url.Action("Episodes", new { season = season.Id })"><div class="seasonTitle">@String.Format("Season" + " - " + season.SeasonNumber)<br/>@season.Year</div></a>
-        </div>
+            <div class="seasonWrap" style="float: left; padding: 10px;">
+                <a href="@Url.Action("Episodes", new { season = season.Id })">
+                    <img class="seasonPoster" src="@Url.Action("Image", new { season = season.Id, width = 100 })" alt="No image" />
+                </a>
+                <a style="text-align: center;" href="@Url.Action("Episodes", new { season = season.Id })">
+                    <div class="seasonTitle">@String.Format(UIStrings.Season, season.SeasonNumber)<br />@season.Year</div>
+                </a>
+            </div>
         }
     }
 </div>
-

@@ -79,7 +79,6 @@ body
 
 
 /******************** Navigation ************************/
-
 #navlist 
 { 
     list-style-type: none; 
@@ -103,65 +102,66 @@ body
     text-decoration: none; 
     border-left: 1px dotted #8A8575; 
     color: #8A8575; 
-    
 }
 
-#navlist li ul 
+#navlist li.dropdown
+{
+    padding-right: 31px;
+}
+
+#navlist li.dropdown img
+{
+    float: right;
+    margin: -28px -15px 0px 0px;
+}
+
+#navlist li.dropdown a:hover
+{
+	color: #F6855E;
+}
+
+#navlist li.dropdown ul 
 { 
-    opacity: 0; 
+    display: none;
     position: absolute; 
-    left: 0; width: 101%; 
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    left: 0;
+    width: 101%; 
+    padding: 0 0 4px 0; 
+    margin: 0;
+    border-left: 1px dotted #8A8575;
+    border-right: 1px dotted #8A8575;
+    border-bottom: 1px dotted #8A8575;
     list-style-type: none; 
-    padding: 0; 
-    margin: 0; 
-    
 }
 
-#navlist li:hover ul 
+#navlist li.dropdown:hover ul 
 { 
-    opacity: 1; 
-    
+    display: block;
 }
 
-#navlist li ul li 
+#navlist li.dropdown ul li 
 { 
     float: none; 
     position: static; 
     height: 0; 
     line-height: 0;
-    
 }
 
-#navlist li:hover ul li 
+#navlist li.dropdown:hover ul li 
 { 
     height: 17px; 
     line-height: 17px; 
     color: #F6855E; 
-    
 }
 
-ul#navlist li ul li a 
+#navlist li.dropdown ul li a 
 { 
     font-size: 14px; 
+    border-left: none;
     background-color: #FBF9EF;
-    border-right: 1px dotted #8A8575;
-    
-}
-
-ul#navlist li a:hover
-{
-	color: #F6855E;
-}
-
-.dropdown
-{
-    
-}
-
-.dropdown img
-{
-    float: right;
-    margin: -28px -15px 0px 0px;
 }
 
 /******************** General ************************/
@@ -213,7 +213,6 @@ a:active
 	text-decoration: none;
 	font-weight: bold;
 }
-
 
 /******************** Lists ************************/
 ul li a

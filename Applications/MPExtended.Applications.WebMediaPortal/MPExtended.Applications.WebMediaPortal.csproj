@@ -105,6 +105,8 @@
     <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Code\Connections.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\SiteController.cs" />
+    <Compile Include="Models\SiteViewModels.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaInfoFormatter.cs" />
@@ -499,6 +501,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\NewMusicTracks.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Site\Menu.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
