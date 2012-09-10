@@ -66,6 +66,21 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Equal("hello,more", tokens[10]);
             Assert.Equal(11, tokens.Count);
 
+            tokenizer = new Tokenizer(@"Field=Name With Whitespace,   AnotherField ^=  Prefixed and Suffixed space   | QuotedField='   Includes space  '");
+            tokens = tokenizer.Tokenize();
+            Assert.Equal("Field", tokens[0]);
+            Assert.Equal("=", tokens[1]);
+            Assert.Equal("Name With Whitespace", tokens[2]);
+            Assert.Equal(",", tokens[3]);
+            Assert.Equal("AnotherField", tokens[4]);
+            Assert.Equal("^=", tokens[5]);
+            Assert.Equal("Prefixed and Suffixed space", tokens[6]);
+            Assert.Equal("|", tokens[7]);
+            Assert.Equal("QuotedField", tokens[8]);
+            Assert.Equal("=", tokens[9]);
+            Assert.Equal("   Includes space  ", tokens[10]);
+            Assert.Equal(11, tokens.Count);
+
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, NoValue=").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, Missing'Operator'").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, Missing='Operator', InSecond'Field'").Tokenize());
@@ -74,6 +89,8 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed='test', Invalid='Quoting").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed='test', Invalid='Quoting\'").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=""test"", Invalid='Quoting""").Tokenize());
+            Assert.Throws<ParseException>(() => new Tokenizer(@"WithoutValue=     ").Tokenize());
+            Assert.DoesNotThrow(() => new Tokenizer(@"WithoutValue='        '").Tokenize());
         }
 
         [Fact]

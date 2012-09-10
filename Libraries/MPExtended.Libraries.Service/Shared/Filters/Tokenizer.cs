@@ -53,16 +53,16 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 ResetValue();
                 while (++pos < data.Length && ExpectToken(Tokens.IsFieldName))
                     value += data[pos];
-                if (String.IsNullOrEmpty(value))
+                if (String.IsNullOrWhiteSpace(value))
                     ParseError(true, "field name");
                 tokens.Add(value);
 
                 ResetValue();
                 while (++pos < data.Length && ExpectToken(Tokens.IsOperator))
                     value += data[pos];
-                if (String.IsNullOrEmpty(value))
+                if (String.IsNullOrWhiteSpace(value))
                     ParseError(true, "operator");
-                tokens.Add(value);
+                tokens.Add(value.Trim());
 
                 ResetValue();
                 valueIsQuoted = Tokens.IsQuote(GetNextCharacter("value"));
@@ -75,16 +75,16 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 {
                     if (Tokens.IsEscapeCharacter(data[pos]))
                         value += GetNextCharacter("any character");
-                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && (NotExpectToken(Tokens.IsConjunction) || NotExpectToken(Tokens.IsWhitespace))))
+                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && NotExpectToken(Tokens.IsConjunction)))
                         break;
                     else
                         value += data[pos];
                 }
-                if (String.IsNullOrEmpty(value))
+                if (valueIsQuoted ? String.IsNullOrEmpty(value) : String.IsNullOrWhiteSpace(value))
                     ParseError(true, "value");
                 if (valueIsQuoted && pos >= data.Length) // if the value is quoted, we want a closing quote
                     ParseError(valueQuoteCharacter.ToString());
-                tokens.Add(value);
+                tokens.Add(valueIsQuoted ? value : value.Trim());
 
                 ResetValue();
                 if (++pos < data.Length)
