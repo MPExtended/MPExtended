@@ -34,12 +34,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     public class TVShowsLibraryController : BaseController
     {
         // Series
-        public ActionResult Index(string genre = null)
+        public ActionResult Index(string filter = null)
         {
-            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetTVShowsDetailed(Settings.ActiveSettings.TVShowProvider);
-            if (!String.IsNullOrEmpty(genre))
-                series = series.Where(x => x.Genres.Contains(genre));
-
+            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetTVShowsDetailed(Settings.ActiveSettings.TVShowProvider, filter, WebSortField.Title, WebSortOrder.Asc);
             return View(series);
         }
 

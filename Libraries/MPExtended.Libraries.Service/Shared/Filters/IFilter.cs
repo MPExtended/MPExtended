@@ -20,28 +20,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Shared.Filters
 {
-    public static class StringExtensions
+    public interface IFilter
     {
-        public static bool Contains(this string str, string value, StringComparison comparison)
-        {
-            return str.IndexOf(value, comparison) >= 0;
-        }
-
-        public static bool Contains(this string str, string value, bool caseSensitive)
-        {
-            return Contains(str, value, caseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
-        }
-
-        public static string ToUpperFirst(this string str)
-        {
-            return str.Substring(0, 1).ToUpper() + str.Substring(1);
-        }
-
-        public static string ToLowerFirst(this string str)
-        {
-            return str.Substring(0, 1).ToLower() + str.Substring(1);
-        }
+        void ExpectType(Type type);
+        bool Matches<T>(T obj);
     }
 }

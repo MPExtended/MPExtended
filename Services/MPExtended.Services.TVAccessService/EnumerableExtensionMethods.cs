@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.TVAccessService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
 
@@ -26,29 +27,6 @@ namespace MPExtended.Services.TVAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
-        {
-            int count = Math.Min(end - start + 1, source.Count() - start);
-
-            if (source is List<T>)
-                return ((List<T>)source).GetRange(start, count);
-            return source.Skip(start).Take(count);
-        }
-
-        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
-        {
-            if (order == WebSortOrder.Desc)
-                return Enumerable.OrderByDescending(source, keySelector);
-            return Enumerable.OrderBy(source, keySelector);
-        }
-
-        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedEnumerable<TSource> source, Func<TSource, TKey> keySelector, WebSortOrder? order)
-        {
-            if (order == WebSortOrder.Desc)
-                return Enumerable.ThenByDescending(source, keySelector);
-            return Enumerable.ThenBy(source, keySelector);
-        }
-
         public static IEnumerable<T> SortChannelList<T>(this IEnumerable<T> list, WebSortField? sortInput, WebSortOrder? orderInput) where T : WebChannelBasic
         {
             switch (sortInput)

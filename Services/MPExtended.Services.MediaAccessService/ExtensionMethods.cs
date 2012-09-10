@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 using MPExtended.Services.Common.Interfaces;
@@ -30,13 +31,6 @@ namespace MPExtended.Services.MediaAccessService
 {
     internal static class IEnumerableExtensionMethods
     {
-        // Take a range from the list
-        public static IEnumerable<T> TakeRange<T>(this IEnumerable<T> source, int start, int end)
-        {
-            int count = end - start + 1;
-            return source.Skip(start).Take(count);
-        }
-
         // Finalize it
         public static List<T> Finalize<T>(this IEnumerable<T> list, int? providerId, ProviderType type) where T : WebObject
         {
@@ -51,63 +45,6 @@ namespace MPExtended.Services.MediaAccessService
 
     internal static class IQueryableExtensionMethods
     {
-        // Take a range from the list
-        public static IQueryable<T> TakeRange<T>(this IQueryable<T> source, int start, int end)
-        {
-            int count = end - start + 1;
-            return source.Skip(start).Take(count);
-        }
-
-        // Some special filter methods
-        public static IQueryable<T> FilterGenre<T>(this IQueryable<T> list, string genre) where T : IGenreSortable
-        {
-            if (genre != null)
-                return list.Where(x => ((IGenreSortable)x).Genres.Contains(genre));
-
-            return list;
-        }
-
-        public static IQueryable<T> FilterActor<T>(this IQueryable<T> list, string actor) where T : IActors
-        {
-            if (actor != null)
-                return list.Where(x => ((IActors)x).Actors.Contains(new WebActor() { Title = actor }));
-
-            return list;
-        }
-
-        public static IQueryable<T> FilterStartsWith<T>(this IQueryable<T> list, string startsWith) where T : ITitleSortable
-        {
-            if (startsWith != null)
-                return list.Where(x => x.Title.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase));
-
-            return list;
-        }
-
-        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor) where T : IGenreSortable, IActors
-        {
-            return FilterGenre(FilterActor(list, actor), genre);
-        }
-
-        public static IQueryable<T> CommonFilter<T>(this IQueryable<T> list, string genre, string actor, string startsWith) where T : IGenreSortable, IActors, ITitleSortable
-        {
-            return FilterStartsWith(FilterGenre(FilterActor(list, actor), genre), startsWith);
-        }
-
-        // Easy aliases for ordering and sorting
-        public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Queryable.OrderBy(source, keySelector);
-            return Queryable.OrderByDescending(source, keySelector);
-        }
-
-        public static IOrderedQueryable<TSource> ThenBy<TSource, TKey>(this IOrderedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, WebSortOrder order)
-        {
-            if (order == WebSortOrder.Asc)
-                return Queryable.ThenBy(source, keySelector);
-            return Queryable.ThenByDescending(source, keySelector);
-        }
-    
         // Finalize it
         public static List<T> Finalize<T>(this IQueryable<T> list, int? providerId, ProviderType type) where T : WebObject
         {

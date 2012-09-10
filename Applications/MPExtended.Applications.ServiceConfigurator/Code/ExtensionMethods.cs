@@ -68,8 +68,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
         }
 
-
-
         public static void UpdateStreamingList(this ObservableCollection<WpfStreamingSession> oldList, List<WebStreamingSession> newList)
         {
             //update/add entries
@@ -128,5 +126,4 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
         }
     }
-
 }
