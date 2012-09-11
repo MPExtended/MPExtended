@@ -114,11 +114,12 @@ namespace MPExtended.Libraries.Service.Config
             {
                 if (ignoreFailure)
                 {
-                    Log.Warn("Failed to read configuration file from disk.", ex);
+                    Log.Warn("Configuration: Failed to read configuration file from disk.", ex);
                     return null;
                 }
                 else
                 {
+                    Log.Trace("Configuration: Failed to read configuration file, going to HandleMalformedFile()");
                     return HandleMalformedFile(ex, path);
                 }
             }
@@ -131,6 +132,7 @@ namespace MPExtended.Libraries.Service.Config
 
         protected TModel UnsafeParse(string path)
         {
+            Log.Trace("Configuration: Reading configuration file {0} from {1}", Filename, path);
             using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var deserializer = Activator.CreateInstance<TSerializer>();
@@ -152,7 +154,7 @@ namespace MPExtended.Libraries.Service.Config
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(String.Format("Failed to backup config file {0}", Filename), ex);
+                    Log.Error(String.Format("Configuration: Failed to backup config file {0}", Filename), ex);
                 }
 
                 // cleanup the malformed file
@@ -161,14 +163,14 @@ namespace MPExtended.Libraries.Service.Config
             catch (Exception ex)
             {
                 // Whatever... you probably fucked up badly with development versions to let this happen, so sort out the mess yourself.
-                Log.Error(String.Format("Giving up on malformed configuration file {0}; sort out the mess yourself", Filename), ex);
+                Log.Error(String.Format("Configuration: Giving up on malformed configuration file {0}; sort out the mess yourself", Filename), ex);
                 return new TModel();
             }
         }
 
         protected virtual TModel CleanupMalformedFile(Exception problem, string configPath)
         {
-            Log.Warn("Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
+            Log.Warn("Configuration: Failed to deserialize {0}, replacing with default file (error: {1})", Filename, problem.Message);
             File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), configPath, true);
             return UnsafeParse(configPath);
         }
@@ -191,13 +193,14 @@ namespace MPExtended.Libraries.Service.Config
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to save settings for {0}", Filename), ex);
+                Log.Error(String.Format("Configuration: Failed to save settings for {0}", Filename), ex);
                 return false;
             }
         }
 
         public bool Save(TModel model)
         {
+            Log.Trace("Configuration: Writing new version of {0}", Filename);
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
             using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.Read))
             {
@@ -230,7 +233,7 @@ namespace MPExtended.Libraries.Service.Config
                 }
                 else
                 {
-                    Log.Debug("Keep using old configuration");
+                    Log.Debug("Configuration: Keep using old configuration because new one is invalid.");
                 }
 
                 Monitor.Exit(_instanceLock);
