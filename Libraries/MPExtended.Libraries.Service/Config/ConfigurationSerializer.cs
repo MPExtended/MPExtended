@@ -88,7 +88,7 @@ namespace MPExtended.Libraries.Service.Config
             return _instance;
         }
 
-        private TModel ReadFromDisk()
+        private TModel ReadFromDisk(bool ignoreFailure)
         {
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
 
@@ -112,8 +112,21 @@ namespace MPExtended.Libraries.Service.Config
             }
             catch (Exception ex)
             {
-                return HandleMalformedFile(ex, path);
+                if (ignoreFailure)
+                {
+                    Log.Warn("Failed to read configuration file from disk.", ex);
+                    return null;
+                }
+                else
+                {
+                    return HandleMalformedFile(ex, path);
+                }
             }
+        }
+
+        private TModel ReadFromDisk()
+        {
+            return ReadFromDisk(false);
         }
 
         protected TModel UnsafeParse(string path)
@@ -210,7 +223,16 @@ namespace MPExtended.Libraries.Service.Config
             // triggered because we wrote to it ourself (either for a Save() call or overwriting it with the default settings).
             if (Monitor.TryEnter(_instanceLock))
             {
-                _instance = ReadFromDisk();
+                var result = ReadFromDisk(true);
+                if (result != null)
+                {
+                    _instance = result;
+                }
+                else
+                {
+                    Log.Debug("Keep using old configuration");
+                }
+
                 Monitor.Exit(_instanceLock);
             }
         }
@@ -224,7 +246,7 @@ namespace MPExtended.Libraries.Service.Config
         private string upgradeFilename;
 
         public ConfigurationSerializer(string filename, string upgradeFilename)
-            : base (filename)
+            : base(filename)
         {
             this.upgradeFilename = upgradeFilename;
         }
