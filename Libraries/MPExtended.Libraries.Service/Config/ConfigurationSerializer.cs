@@ -186,7 +186,7 @@ namespace MPExtended.Libraries.Service.Config
         public bool Save(TModel model)
         {
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
-            using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.None))
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.Read))
             {
                 return Save(model, stream);
             }

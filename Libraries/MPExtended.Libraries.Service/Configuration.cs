@@ -48,6 +48,7 @@ namespace MPExtended.Libraries.Service
         public static event ConfigurationReloadedEventHandler Reloaded;
 
         private static FileSystemWatcher watcher;
+        private static Dictionary<string, long> reloadedFiles = new Dictionary<string, long>();
         private static ConfigurationList config;
 
         static Configuration()
@@ -135,9 +136,16 @@ namespace MPExtended.Libraries.Service
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(delegate(object sender, FileSystemEventArgs e)
             {
-                var serializer = config.Select(s => s.Value).FirstOrDefault(s => s.Filename == Path.GetFileName(e.FullPath));
+                // This isn't strictly required, but makes sure we only reloaded the configuration once when it has been changed.
+                long stamp = File.GetLastWriteTime(e.FullPath).Ticks;
+                if (reloadedFiles.ContainsKey(e.Name) && reloadedFiles[e.Name] >= stamp)
+                    return;
+
+                reloadedFiles[e.Name] = stamp;
+                var serializer = config.Select(s => s.Value).FirstOrDefault(s => s.Filename == e.Name);
                 if (serializer != null)
                 {
+                    Log.Debug("Reloading configuration file '{0}' due to changes.", serializer.Filename);
                     serializer.Reload();
                     if (Reloaded != null)
                         Reloaded();
