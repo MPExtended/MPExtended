@@ -23,6 +23,7 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -47,10 +48,21 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Status/
         public ActionResult Index()
         {
-            var recordingDiskInfo = Connections.Current.TAS.GetAllRecordingDiskInformation();
-            var cards = Connections.Current.TAS.GetCards();
-            var activeCards = Connections.Current.TAS.GetActiveCards();
-            return View(new StatusViewModel(cards, activeCards, recordingDiskInfo));
+            var model = new StatusViewModel();
+
+            if (Connections.Current.HasTASConnection)
+            {
+                model.AddDiskInfo(Connections.Current.TAS.GetAllRecordingDiskInformation());
+                model.AddDiskInfo(Connections.Current.TAS.GetLocalDiskInformation());
+                model.SetCardList(Connections.Current.TAS.GetCards(), Connections.Current.TAS.GetActiveCards());
+            }
+
+            if (Connections.Current.HasMASConnection)
+            {
+                model.AddDiskInfo(Connections.Current.MAS.GetLocalDiskInformation());
+            }
+
+            return View(model);
         }
 
         public ActionResult Stop(string user)

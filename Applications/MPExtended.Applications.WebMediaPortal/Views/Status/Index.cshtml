@@ -4,50 +4,49 @@
     Html.jQuery().Enable();
 }
 
-<h2>@UIStrings.Cards</h2>
-<table class="webmp">
-    <tr>
-        <th>@UIStrings.Card</th>
-        <th>@UIStrings.CardName</th>
-        <th>@UIStrings.CardState</th>
-        <th>@UIStrings.CardGrabbingEPG</th>
-        <th>@UIStrings.Channel</th>
-        <th>@UIStrings.CardScrambled</th>
-        <th>@UIStrings.Username</th>
-        <th colspan="2">&nbsp;</th>
-    </tr>
-
-    @foreach (var card in Model.Cards)
-    {
+@if (Model.HasTAS)
+{
+    <h2>@UIStrings.Cards</h2>
+    <table class="webmp">
         <tr>
-            <td>@card.CardId</td>
-            <td>@card.Name</td>
-            <td>@card.State</td>
-            <td>@(card.GrabbingEPG ? UIStrings.Yes : UIStrings.No)</td>
-            <td>@card.ChannelName</td>
-            @if (card.IsActive)
-            {
-                <td>@(card.Scrambled ? UIStrings.Yes : UIStrings.No)</td>
-                <td>@card.Username</td>
-                if (!card.VirtualCard.IsRecording) {
-                    <td>@Html.ActionLink(UIStrings.Stop, "Stop", new { user = card.Username })</td>
-                } else {
+            <th>@UIStrings.Card</th>
+            <th>@UIStrings.CardName</th>
+            <th>@UIStrings.CardState</th>
+            <th>@UIStrings.CardGrabbingEPG</th>
+            <th>@UIStrings.Channel</th>
+            <th>@UIStrings.CardScrambled</th>
+            <th>@UIStrings.Username</th>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+
+        @foreach (var card in Model.Cards)
+        {
+            <tr>
+                <td>@card.CardId</td>
+                <td>@card.Name</td>
+                <td>@card.State</td>
+                <td>@(card.GrabbingEPG ? UIStrings.Yes : UIStrings.No)</td>
+                <td>@card.ChannelName</td>
+                @if (card.IsActive)
+                {
+                    <td>@(card.Scrambled ? UIStrings.Yes : UIStrings.No)</td>
+                    <td>@card.Username</td>
+                    <td>@(!card.VirtualCard.IsRecording ? Html.ActionLink(UIStrings.Stop, "Stop", new { user = card.Username }) : MvcHtmlString.Empty)</td>
+                    <td>@Html.ActionLink(UIStrings.Details, "Details", new { user = card.Username })</td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 }
-                <td>@Html.ActionLink(UIStrings.Details, "Details", new { user = card.Username })</td>
-            }
-            else
-            {
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            }
-        </tr>
-    }
-</table>
-<br />
-
+            </tr>
+        }
+    </table>
+    <br />
+}
+    
 <h2>@UIStrings.DiskInformation</h2>
 <table class="webmp">
     <tr>
@@ -76,8 +75,11 @@
 </table>
 <br />
 
-@Html.Action("CurrentSchedules", "Home")
-<br />
+@if (Model.HasTAS)
+{
+    @Html.Action("CurrentSchedules", "Home")
+    <br />
+}
 
 <h2>@UIStrings.SystemStatus</h2>
 <ul>

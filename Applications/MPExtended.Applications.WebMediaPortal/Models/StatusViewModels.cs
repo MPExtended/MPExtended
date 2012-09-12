@@ -18,28 +18,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Management;
+using System.Web;
+using MoreLinq;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Strings;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class StatusViewModel
     {
-        public IEnumerable<TVCardViewModel> Cards { get; set; }
-        public IEnumerable<WebDiskSpaceInformation> DiskInformation { get; set; }
-        public long TotalMemoryMegaBytes { get; set; }
+        public bool HasMAS { get { return Connections.Current.HasMASConnection; } }
+        public bool HasTAS { get { return Connections.Current.HasTASConnection; } }
 
-        public StatusViewModel(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards, IEnumerable<WebDiskSpaceInformation> recordingDiskInfo)
+        public IEnumerable<TVCardViewModel> Cards { get; private set; }
+        public IEnumerable<WebDiskSpaceInformation> DiskInformation { get; private set; }
+        public long TotalMemoryMegaBytes { get; private set; }
+
+        public StatusViewModel()
         {
-            DiskInformation = recordingDiskInfo;
             TotalMemoryMegaBytes = GetTotalMemoryBytes() / 1024 / 1024;
+        }
 
-            // cards
+        public void SetCardList(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards)
+        {
             Cards = new List<TVCardViewModel>();
 
             foreach (var card in cards.OrderBy(c => c.Id))
@@ -54,6 +59,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     ((List<TVCardViewModel>)Cards).Add(new TVCardViewModel(card));
                 }
             }
+        }
+
+        public void SetDiskInfo(IEnumerable<WebDiskSpaceInformation> diskInfo)
+        {
+            DiskInformation = diskInfo;
+        }
+
+        public void AddDiskInfo(IEnumerable<WebDiskSpaceInformation> diskInfo)
+        {
+            DiskInformation = DiskInformation == null ?
+                diskInfo.DistinctBy(x => x.Disk) :
+                DiskInformation.Concat(diskInfo).DistinctBy(x => x.Disk);
         }
 
         internal static long GetTotalMemoryBytes()
@@ -118,7 +135,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public IEnumerable<string> GetRTSPClients()
         {
-            if (!IsActive) 
+            if (!IsActive)
                 return new List<string>();
 
             Uri uri = new Uri(VirtualCard.RTSPUrl);
