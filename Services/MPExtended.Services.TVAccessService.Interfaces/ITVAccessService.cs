@@ -32,6 +32,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebDiskSpaceInformation> GetLocalDiskInformation();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null);
 
         [OperationContract]

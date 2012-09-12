@@ -21,15 +21,15 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using MPExtended.Services.TVAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
-namespace MPExtended.Services.TVAccessService
+namespace MPExtended.Libraries.Service.Shared
 {
-    internal static class DiskSpaceInformation
+    public static class DiskSpaceInformation
     {
         [DllImport("kernel32.dll", SetLastError=true, CharSet=CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+        private static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
            out ulong lpFreeBytesAvailable,
            out ulong lpTotalNumberOfBytes,
            out ulong lpTotalNumberOfFreeBytes);

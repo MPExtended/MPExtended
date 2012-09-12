@@ -23,6 +23,7 @@ using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
+using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
@@ -144,6 +145,13 @@ namespace MPExtended.Services.MediaAccessService
         public WebDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id)
         {
             return GetLibrary(provider, type).GetExternalMediaInfo(type, id);
+        }
+
+        public IList<WebDiskSpaceInformation> GetLocalDiskInformation()
+        {
+            return DriveInfo.GetDrives()
+                .Select(x => DiskSpaceInformation.GetSpaceInformation(x.Name))
+                .ToList();
         }
         #endregion
 

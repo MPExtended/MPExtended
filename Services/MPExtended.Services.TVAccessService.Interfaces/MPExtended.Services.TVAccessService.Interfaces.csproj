@@ -69,7 +69,6 @@
     <Compile Include="WebChannelGroup.cs" />
     <Compile Include="WebChannelPrograms.cs" />
     <Compile Include="WebChannelState.cs" />
-    <Compile Include="WebDiskSpaceInformation.cs" />
     <Compile Include="WebRecordingFileInfo.cs" />
     <Compile Include="WebProgramBasic.cs" />
     <Compile Include="WebProgramDetailed.cs" />

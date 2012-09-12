@@ -25,6 +25,7 @@ using System.ServiceModel;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
+using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -139,6 +140,13 @@ namespace MPExtended.Services.TVAccessService
             setting.Value = value;
             setting.Persist();
             return true;
+        }
+
+        public IList<WebDiskSpaceInformation> GetLocalDiskInformation()
+        {
+            return DriveInfo.GetDrives()
+                .Select(x => DiskSpaceInformation.GetSpaceInformation(x.Name))
+                .ToList();
         }
 
         /// <summary>

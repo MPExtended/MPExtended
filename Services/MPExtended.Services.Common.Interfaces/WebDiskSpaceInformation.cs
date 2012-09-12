@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.TVAccessService.Interfaces
+namespace MPExtended.Services.Common.Interfaces
 {
     public class WebDiskSpaceInformation
     {

@@ -93,7 +93,6 @@
     </Compile>
     <Compile Include="LogoDownloader.cs" />
     <Compile Include="CacheLifetimeToken.cs" />
-    <Compile Include="DiskSpaceInformation.cs" />
     <Compile Include="EnumerableExtensionMethods.cs" />
     <Compile Include="ConvertExtensionMethods.cs" />
     <Compile Include="ExtensionMethods.cs" />

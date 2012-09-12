@@ -53,6 +53,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="WebDiskSpaceInformation.cs" />
     <Compile Include="WebFileType.cs" />
     <Compile Include="WebDictionary.cs" />
     <Compile Include="WebFilterOperator.cs" />

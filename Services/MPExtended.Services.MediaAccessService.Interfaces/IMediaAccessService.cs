@@ -47,6 +47,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebDictionary<string> GetExternalMediaInfo(int? provider, WebMediaType type, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebDiskSpaceInformation> GetLocalDiskInformation();
         #endregion
 
         #region Movies
