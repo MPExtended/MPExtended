@@ -985,7 +985,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public IList<string> GetFilterValuesByRange(int? provider, int start, int end, WebMediaType mediaType, string filterField, string op = null, int? limit = null, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return GetFilterValues(provider, mediaType, filterField, op, limit).TakeRange(start, end).ToList();
+            return GetFilterValues(provider, mediaType, filterField, op, limit, order).TakeRange(start, end).ToList();
         }
 
         /// <summary>
