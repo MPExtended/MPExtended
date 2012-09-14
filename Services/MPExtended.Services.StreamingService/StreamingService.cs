@@ -76,7 +76,7 @@ namespace MPExtended.Services.StreamingService
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
-            return Configuration.Streaming.Transcoders.Select(x => x.ToWebTranscoderProfile()).ToList();
+            return Configuration.StreamingProfiles.Transcoders.Select(x => x.ToWebTranscoderProfile()).ToList();
         }
 
         public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target)
@@ -145,11 +145,11 @@ namespace MPExtended.Services.StreamingService
                     {
                         Log.Warn("Client tried to get stream size for non-existing timeshifting {0}, using default aspectratio", itemId);
                     }
-                    return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), MediaInfoHelper.DEFAULT_ASPECT_RATIO).ToWebResolution();
+                    return _stream.CalculateSize(Configuration.StreamingProfiles.GetTranscoderProfileByName(profile), MediaInfoHelper.DEFAULT_ASPECT_RATIO).ToWebResolution();
                 }
             }
 
-            return _stream.CalculateSize(Configuration.Streaming.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
+            return _stream.CalculateSize(Configuration.StreamingProfiles.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
         }
 
         public WebBoolResult AuthorizeStreaming()
@@ -248,7 +248,7 @@ namespace MPExtended.Services.StreamingService
         {
             Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000);
+            return _stream.StartStream(identifier, Configuration.StreamingProfiles.GetTranscoderProfileByName(profileName), startPosition * 1000);
         }
 
         public WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, long startPosition, int audioId, int subtitleId)
@@ -256,7 +256,7 @@ namespace MPExtended.Services.StreamingService
             Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
                 identifier, profileName, startPosition, audioId, subtitleId);
             _stream.EndStream(identifier); // first end previous stream, if any available
-            return _stream.StartStream(identifier, Configuration.Streaming.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
+            return _stream.StartStream(identifier, Configuration.StreamingProfiles.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
         }
 
         public WebBoolResult StopStream(string identifier)
@@ -325,7 +325,7 @@ namespace MPExtended.Services.StreamingService
             }
 
             // calculate timeout, which is by default 5 minutes for direct streaming and 5 seconds for transcoded streams
-            var profile = Configuration.Streaming.Transcoders.FirstOrDefault(x => x.Name == profileName);
+            var profile = Configuration.StreamingProfiles.Transcoders.FirstOrDefault(x => x.Name == profileName);
             if(profile == null)
             {
                 Log.Warn("Tried DoStream with non-existing profile {0}", profileName);

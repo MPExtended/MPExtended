@@ -167,7 +167,7 @@ namespace MPExtended.Services.StreamingService.Code
             using (var impersonator = source.GetImpersonator())
             {
                 info.Arguments = String.Format("-ss {0} -i \"{1}\" {2} -vframes 1 -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
-                info.FileName = Configuration.Streaming.FFMpegPath;
+                info.FileName = Configuration.StreamingProfiles.FFMpegPath;
                 info.CreateNoWindow = true;
                 info.UseShellExecute = false;
                 Process proc = new Process();

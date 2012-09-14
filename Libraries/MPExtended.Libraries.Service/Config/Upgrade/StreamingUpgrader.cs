@@ -36,7 +36,6 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             model.DefaultSubtitleStream = file.Element("defaultStreams").Element("subtitle").Value;
 
             model.TVLogoDirectory = TransformationCallbacks.FolderSubstitution(file.Element("tvLogoDirectory").Value);
-            model.FFMpegPath = file.Element("ffmpeg").Element("path").Value;
 
             if (file.Element("watchsharing").Element("type").Value == "trakt")
             {
@@ -49,8 +48,6 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
                 model.WatchSharing.FollwitConfiguration = ParseWatchSharingConfig(file);
             }
 
-            model.Transcoders = ParseAndMergeTranscoders(file);
-
             return model;
         }
 
@@ -61,53 +58,6 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
                     { "username", file.Element("watchsharing").Element("username").Value },
                     { "passwordHash", file.Element("watchsharing").Element("passwordHash").Value },
                 };
-        }
-
-        private List<TranscoderProfile> ParseAndMergeTranscoders(XElement oldFile)
-        {
-            // load all the transcoders from the old file
-            var list = new List<TranscoderProfile>();
-            foreach (var node in oldFile.Elements("transcoders").Elements("transcoder"))
-            {
-                var profile = new TranscoderProfile()
-                {
-                    Name = node.Element("name").Value,
-                    Description = node.Element("description").Value,
-                    Bandwidth = Int32.Parse(node.Element("bandwidth").Value),
-                    Targets = new List<string>() { node.Element("target").Value },
-                    Transport = node.Element("transport").Value,
-                    MaxOutputHeight = node.Element("maxOutputHeight") != null ? Int32.Parse(node.Element("maxOutputHeight").Value) : 0,
-                    MaxOutputWidth = node.Element("maxOutputWidth") != null ? Int32.Parse(node.Element("maxOutputWidth").Value) : 0,
-                    MIME = node.Element("mime").Value,
-                    HasVideoStream = node.Element("videoStream").Value == "true",
-                    Transcoder = (string)node.Element("transcoderConfiguration").Attribute("implementation")
-                };
-
-                foreach (var configNode in node.Elements("transcoderConfiguration").Descendants())
-                {
-                    profile.TranscoderParameters[configNode.Name.LocalName] = configNode.Value;
-                }
-
-                list.Add(profile);
-            }
-
-            // parse the new default file
-            var defaultSerializer = new StreamingSerializer();
-            Streaming defaultModel;
-            using (var file = File.OpenRead(DefaultPath))
-            {
-                defaultModel = (Streaming)defaultSerializer.Deserialize(file);
-            }
-
-            // merge the lists
-            var finalList = defaultModel.Transcoders;
-            foreach (var oldProfile in list)
-            {
-                if (!finalList.Any(x => x.Name == oldProfile.Name))
-                    finalList.Add(oldProfile);
-            }
-
-            return finalList;
         }
     }
 }

@@ -33,12 +33,13 @@ namespace MPExtended.Libraries.Service
 {
     public enum ConfigurationFile
     {
-        Services = 1,
-        MediaAccess = 2,
-        Streaming = 3,
-        Authentication = 4,
-        WebMediaPortal = 5,
-        WebMediaPortalHosting = 6
+        Services,
+        MediaAccess,
+        Streaming,
+        StreamingProfiles,
+        Authentication,
+        WebMediaPortal,
+        WebMediaPortalHosting
     }
 
     public class Configuration
@@ -87,6 +88,14 @@ namespace MPExtended.Libraries.Service
             get
             {
                 return config.Get<Streaming>(ConfigurationFile.Streaming).Get();
+            }
+        }
+
+        public static StreamingProfiles StreamingProfiles
+        {
+            get
+            {
+                return config.Get<StreamingProfiles>(ConfigurationFile.StreamingProfiles).Get();
             }
         }
 

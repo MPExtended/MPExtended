@@ -35,6 +35,7 @@ namespace MPExtended.Tests.Libraries.Service.Config.Tests
             AddConfigurationFile("MediaAccess.xml", "ParsingTests/MediaAccess.xml");
             AddConfigurationFile("Services.xml", "ParsingTests/Services.xml");
             AddConfigurationFile("Streaming.xml", "ParsingTests/Streaming.xml");
+            AddConfigurationFile("StreamingProfiles.xml", "ParsingTests/StreamingProfiles.xml");
         }
 
         [Fact]
@@ -98,10 +99,14 @@ namespace MPExtended.Tests.Libraries.Service.Config.Tests
             Assert.True(Configuration.Streaming.WatchSharing.TraktEnabled);
             Assert.Equal("user", Configuration.Streaming.WatchSharing.TraktConfiguration["username"]);
             Assert.Equal("abcd", Configuration.Streaming.WatchSharing.TraktConfiguration["passwordHash"]);
+        }
 
-            Assert.Equal(Path.Combine(Installation.Properties.SourceRoot, "Libraries", "Streaming", "ffmpeg.exe"), Configuration.Streaming.FFMpegPath);
+        [Fact]
+        public void StreamingProfiles()
+        {
+            Assert.Equal(Path.Combine(Installation.Properties.SourceRoot, "Libraries", "Streaming", "ffmpeg.exe"), Configuration.StreamingProfiles.FFMpegPath);
 
-            var profiles = Configuration.Streaming.Transcoders;
+            var profiles = Configuration.StreamingProfiles.Transcoders;
             Assert.Equal(2, profiles.Count);
             
             var firstProfile = profiles.Single(x => x.Name == "TEST P1");
