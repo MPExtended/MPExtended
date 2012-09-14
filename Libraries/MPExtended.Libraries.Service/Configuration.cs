@@ -23,6 +23,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Config.Upgrade;
@@ -142,14 +143,17 @@ namespace MPExtended.Libraries.Service
                     return;
 
                 reloadedFiles[e.Name] = stamp;
-                var serializer = config.Select(s => s.Value).FirstOrDefault(s => s.Filename == e.Name);
-                if (serializer != null)
+                Task.Factory.StartNew(delegate()
                 {
-                    Log.Debug("Reloading configuration file '{0}' due to changes.", serializer.Filename);
-                    serializer.Reload();
-                    if (Reloaded != null)
-                        Reloaded();
-                }
+                    var serializer = config.Select(s => s.Value).FirstOrDefault(s => s.Filename == e.Name);
+                    if (serializer != null)
+                    {
+                        Log.Debug("Reloading configuration file '{0}' due to changes.", serializer.Filename);
+                        serializer.Reload();
+                        if (Reloaded != null)
+                            Reloaded();
+                    }
+                });
             });
 
             // start watching

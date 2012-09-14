@@ -26,6 +26,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using MPExtended.Libraries.Service.Config.Upgrade;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.Config
 {
@@ -88,7 +89,7 @@ namespace MPExtended.Libraries.Service.Config
             return _instance;
         }
 
-        private TModel ReadFromDisk(bool ignoreFailure)
+        private TModel ReadFromDisk()
         {
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
 
@@ -112,22 +113,9 @@ namespace MPExtended.Libraries.Service.Config
             }
             catch (Exception ex)
             {
-                if (ignoreFailure)
-                {
-                    Log.Warn("Configuration: Failed to read configuration file from disk.", ex);
-                    return null;
-                }
-                else
-                {
-                    Log.Trace("Configuration: Failed to read configuration file, going to HandleMalformedFile()");
-                    return HandleMalformedFile(ex, path);
-                }
+                Log.Trace("Configuration: Failed to read configuration file from disk, going to HandleMalformedFile()");
+                return HandleMalformedFile(ex, path);
             }
-        }
-
-        private TModel ReadFromDisk()
-        {
-            return ReadFromDisk(false);
         }
 
         protected TModel UnsafeParse(string path)
@@ -135,9 +123,14 @@ namespace MPExtended.Libraries.Service.Config
             Log.Trace("Configuration: Reading configuration file {0} from {1}", Filename, path);
             using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var deserializer = Activator.CreateInstance<TSerializer>();
-                return (TModel)deserializer.Deserialize(stream);
+                return UnsafeParse(stream);
             }
+        }
+
+        protected TModel UnsafeParse(Stream stream)
+        {
+            var deserializer = Activator.CreateInstance<TSerializer>();
+            return (TModel)deserializer.Deserialize(stream);
         }
 
         protected virtual TModel HandleMalformedFile(Exception problem, string configPath)
@@ -226,14 +219,23 @@ namespace MPExtended.Libraries.Service.Config
             // triggered because we wrote to it ourself (either for a Save() call or overwriting it with the default settings).
             if (Monitor.TryEnter(_instanceLock))
             {
-                var result = ReadFromDisk(true);
-                if (result != null)
+                string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+                var stream = FileUtil.TryOpen(path, FileMode.Open, FileAccess.Read, FileShare.Read, 5000);
+                if (stream != null)
                 {
-                    _instance = result;
+                    Log.Trace("Configuration: Reading configuration file {0} from {1}.", Filename, path);
+                    try
+                    {
+                        _instance = UnsafeParse(stream);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warn("Configuration: Keep using old configuration because new one is invalid.", ex);
+                    }
                 }
                 else
                 {
-                    Log.Debug("Configuration: Keep using old configuration because new one is invalid.");
+                    Log.Warn("Configuration: Failed to open configuration file {0} from {1}.", Filename, path);
                 }
 
                 Monitor.Exit(_instanceLock);
