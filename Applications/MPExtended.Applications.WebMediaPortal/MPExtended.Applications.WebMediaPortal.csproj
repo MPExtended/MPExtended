@@ -151,15 +151,23 @@
     <Compile Include="Models\StreamModels.cs" />
     <Compile Include="Models\TVGuideViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\btnPlay.png" />
     <Content Include="Content\Images\calendar.gif" />
     <Content Include="Content\Images\default\album.png" />
     <Content Include="Content\Images\default\artist.png" />
-    <Content Include="Content\Images\default\track.png" />
     <Content Include="Content\Images\default\logo.png" />
+    <Content Include="Content\Images\default\movie-actor.png" />
     <Content Include="Content\Images\default\movie-cover.png" />
+    <Content Include="Content\Images\default\recording.png" />
+    <Content Include="Content\Images\default\track.png" />
     <Content Include="Content\Images\default\tvepisode-banner.png" />
+    <Content Include="Content\Images\default\tvseason-banner.png" />
+    <Content Include="Content\Images\default\tvshow-actor.png" />
+    <Content Include="Content\Images\default\tvshow-banner.png" />
+    <Content Include="Content\Images\down-arrow.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\slider-button.png" />
     <Content Include="Content\jwplayer\jwplayer.js" />
     <Content Include="Content\jwplayer\license.txt" />
     <Content Include="Content\jwplayer\player.swf" />
@@ -235,7 +243,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Images\logomp-small.png" />
     <Content Include="Views\Home\Index.css" />
     <Content Include="Views\MovieLibrary\Movie.css" />
     <Content Include="Views\MusicLibrary\Albums.css" />
@@ -470,7 +477,6 @@
     <Content Include="Skins\aredon\Content\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\jwplayer\newtubedark.zip" />
     <Content Include="Content\jwplayer\slim.zip" />
     <Content Include="Content\jwplayer\whotube.zip" />
   </ItemGroup>

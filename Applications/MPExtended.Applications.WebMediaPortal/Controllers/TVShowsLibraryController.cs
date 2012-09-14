@@ -81,7 +81,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Image(string season, int width = 0, int height = 0)
+        public ActionResult SeasonImage(string season, int width = 0, int height = 0)
         {
             return Images.ReturnFromService(WebMediaType.TVSeason, season, WebFileType.Banner, width, height, "Images/default/tvseason-banner.png");
         }

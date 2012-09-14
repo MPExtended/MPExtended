@@ -76,17 +76,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, width, height, "images/default/album.png");
+            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, width, height, "Images/default/album.png");
         }
 
         public ActionResult ArtistImage(string artist, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Cover, width, height, "images/default/artist.png");
+            return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Cover, width, height, "Images/default/artist.png");
         }
 
         public ActionResult TrackImage(string track, int width = 0, int height = 0)
         {
-            return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, width, height, "images/default/track.png");
+            return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, width, height, "Images/default/track.png");
         }
 
         public ActionResult Track(string track)
