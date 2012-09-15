@@ -54,6 +54,9 @@ namespace MPExtended.Libraries.Service.Util
             {
                 try
                 {
+                    if (!Mediaportal.IsSectionInConfigFile("WifiRemote"))
+                        return 8017;
+
                     string port = Mediaportal.ReadSectionFromConfigFile("WifiRemote")["port"];
                     return Int32.Parse(port);
                 }

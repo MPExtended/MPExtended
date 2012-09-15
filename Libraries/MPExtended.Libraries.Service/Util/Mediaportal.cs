@@ -98,6 +98,15 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
+        public static bool IsSectionInConfigFile(string sectionName)
+        {
+            if (!HasValidConfigFile())
+                return false;
+
+            XElement file = XElement.Load(GetConfigFilePath());
+            return file.Elements("section").Any(x => x.Attribute("name").Value == sectionName);
+        }
+
         public static Dictionary<string, string> ReadSectionFromConfigFile(string sectionName)
         {
             try

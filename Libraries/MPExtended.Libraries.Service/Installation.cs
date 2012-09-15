@@ -60,6 +60,7 @@ namespace MPExtended.Libraries.Service
     public static class Installation
     {
         internal static List<ServiceAssemblyAttribute> installedServices;
+        private static List<ServiceConfiguration> installedServicesReturnList;
         public static InstallationProperties Properties { get; internal set; }
 
         public static void Load(MPExtendedProduct product)
@@ -181,7 +182,10 @@ namespace MPExtended.Libraries.Service
 
         public static List<ServiceConfiguration> GetInstalledServices()
         {
-            var list = GetAvailableServices().Select(x => new ServiceConfiguration()
+            if (installedServicesReturnList != null)
+                return installedServicesReturnList;
+
+            installedServicesReturnList = GetAvailableServices().Select(x => new ServiceConfiguration()
             {
                 Port = Configuration.Services.Port,
                 Service = x.Service,
@@ -189,14 +193,14 @@ namespace MPExtended.Libraries.Service
 
             if (WifiRemote.IsInstalled)
             {
-                list.Add(new ServiceConfiguration()
+                installedServicesReturnList.Add(new ServiceConfiguration()
                 {
                     Port = WifiRemote.Port,
                     Service = MPExtendedService.WifiRemote,
                 });
             }
 
-            return list;
+            return installedServicesReturnList;
         }
 
         public static bool IsServiceInstalled(MPExtendedService srv)
