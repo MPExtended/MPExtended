@@ -131,6 +131,7 @@ body
     width: 101%; 
     padding: 0 0 4px 0; 
     margin: 0;
+    background-color: #FBF9EF;
     border-left: 1px dotted #8A8575;
     border-right: 1px dotted #8A8575;
     border-bottom: 1px dotted #8A8575;
@@ -161,7 +162,6 @@ body
 { 
     font-size: 14px; 
     border-left: none;
-    background-color: #FBF9EF;
 }
 
 /******************** General ************************/
