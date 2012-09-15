@@ -182,6 +182,7 @@
               <!-- Stream config -->
               <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
                 <File Source="$(var.SolutionDir)\Config\Streaming.xml" />
+                <File Source="$(var.SolutionDir)\Config\StreamingProfiles.xml" />
               </Component>
             </Directory>
 
