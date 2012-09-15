@@ -36,12 +36,14 @@ namespace MPExtended.Services.MetaService
 
         public ZeroconfPublisher()
         {
-            Configuration.Reloaded += delegate()
+            Configuration.Reloaded += delegate(ConfigurationFile file)
             {
-                // The configuration has changed: update the service properties (currently do it always, maybe check if
-                // some value actually changed in the future).
-                Unpublish();
-                Publish();
+                // Republish the zeroconf services when the configuration changes, as it may change the zeroconf name.
+                if (file == ConfigurationFile.Services)
+                {
+                    Unpublish();
+                    Publish();
+                }
             };
         }
 

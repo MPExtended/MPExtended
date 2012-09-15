@@ -46,7 +46,7 @@ namespace MPExtended.Libraries.Service
     {
         public const int DEFAULT_PORT = 4322;
 
-        public delegate void ConfigurationReloadedEventHandler();
+        public delegate void ConfigurationReloadedEventHandler(ConfigurationFile file);
         public static event ConfigurationReloadedEventHandler Reloaded;
 
         private static FileSystemWatcher watcher;
@@ -160,7 +160,7 @@ namespace MPExtended.Libraries.Service
                         Log.Debug("Reloading configuration file '{0}' due to changes.", serializer.Filename);
                         serializer.Reload();
                         if (Reloaded != null)
-                            Reloaded();
+                            Reloaded(serializer.ConfigFile);
                     }
                 });
             });

@@ -63,6 +63,20 @@ namespace MPExtended.Services.MediaAccessService
 
         internal ProviderHandler()
         {
+            Initialize();
+            Instance = this;
+            Configuration.Reloaded += delegate(ConfigurationFile file)
+            {
+                if (file == ConfigurationFile.MediaAccess)
+                {
+                    Log.Debug("Reloading all libraries because of changes to MediaAccess.xml");
+                    Initialize();
+                }
+            };
+        }
+
+        private void Initialize()
+        {
             if (!Compose())
             {
                 return;
@@ -81,8 +95,6 @@ namespace MPExtended.Services.MediaAccessService
             {
                 Log.Error("Failed to load MAS backends", ex);
             }
-
-            Instance = this;
         }
 
         private bool Compose()

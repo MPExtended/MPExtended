@@ -32,6 +32,7 @@ namespace MPExtended.Libraries.Service.Config
 {
     public interface IConfigurationSerializer
     {
+        ConfigurationFile ConfigFile { get; }
         string Filename { get; }
 
         void LoadIfExists();
@@ -50,13 +51,15 @@ namespace MPExtended.Libraries.Service.Config
         where TModel : class, new()
         where TSerializer : XmlSerializer
     {
+        public ConfigurationFile ConfigFile { get; private set; }
         public string Filename { get; private set; }
 
         private TModel _instance;
         private object _instanceLock;
 
-        public ConfigurationSerializer(string filename)
+        public ConfigurationSerializer(ConfigurationFile file, string filename)
         {
+            this.ConfigFile = file;
             this.Filename = filename;
             this._instanceLock = new object();
         }
@@ -250,14 +253,14 @@ namespace MPExtended.Libraries.Service.Config
     {
         private string upgradeFilename;
 
-        public ConfigurationSerializer(string filename, string upgradeFilename)
-            : base(filename)
+        public ConfigurationSerializer(ConfigurationFile file, string filename, string upgradeFilename)
+            : base(file, filename)
         {
             this.upgradeFilename = upgradeFilename;
         }
 
-        public ConfigurationSerializer(string filename)
-            : this(filename, null)
+        public ConfigurationSerializer(ConfigurationFile file, string filename)
+            : this(file, filename, null)
         {
         }
 
