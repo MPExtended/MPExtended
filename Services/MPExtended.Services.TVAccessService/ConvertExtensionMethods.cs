@@ -161,7 +161,7 @@ namespace MPExtended.Services.TVAccessService
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,
                 LastGrabTime = ch.LastGrabTime != DateTime.MinValue ? ch.LastGrabTime : new DateTime(2000, 1, 1),
-                NextProgram = ch.NextProgram.ToWebProgramDetailed(),
+                NextProgram = ch.NextProgram != null ? ch.NextProgram.ToWebProgramDetailed() : null,
                 TimesWatched = ch.TimesWatched,
                 TotalTimeWatched = ch.TotalTimeWatched != DateTime.MinValue ? ch.TotalTimeWatched : new DateTime(2000, 1, 1),
                 VisibleInGuide = ch.VisibleInGuide
