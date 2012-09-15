@@ -27,12 +27,11 @@ namespace MPExtended.Services.StreamingService.Code
     /* The whole purpose of this class is to provide versioning of our imagecache directory. Old versions
      * of MPExtended have been known to write bogus entries into the cache. This makes sure we empty the
      * cache on access if it has been written by an older version of MPExtended. 
-     * 
-     * Ideally, we store this in a database somewhere instead of in a text-file, but that is a bit harder
-     * implementation and not something that's going to be done in the short-term. 
      */
     internal class ImageCache
     {
+        private const int CACHE_VERSION = 2;
+
         private string path;
 
         public ImageCache()
@@ -43,13 +42,13 @@ namespace MPExtended.Services.StreamingService.Code
                 Directory.CreateDirectory(path);
             }
 
-            string versionFile = Path.Combine(path, "written-by.txt");
-            string version = VersionUtil.GetBuildVersion().ToString();
-            if (!File.Exists(versionFile) || File.ReadAllText(versionFile).Trim() != version)
+            string versionFile = Path.Combine(path, "version.txt");
+            int currentCacheVersion = -1;
+            if (!File.Exists(versionFile) || !Int32.TryParse(File.ReadAllText(versionFile).Trim(), out currentCacheVersion) || currentCacheVersion < CACHE_VERSION)
             {
-                Log.Info("Deleting invalid imagecache - probably written by an older MPExtended version, nothing to worry about.");
+                Log.Info("Deleting invalid imagecache (version {0}), probably written by an older MPExtended version.", currentCacheVersion);
                 EmptyCache();
-                File.WriteAllText(versionFile, version);
+                File.WriteAllText(versionFile, CACHE_VERSION.ToString());
             }
         }
 
