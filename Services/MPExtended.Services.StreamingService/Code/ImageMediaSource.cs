@@ -41,6 +41,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         private static ChannelLogos _logos = null;
         private string path = null;
+        private WebFileInfo fileInfoCache = null;
 
         public string Extension
         {
@@ -93,6 +94,9 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo)
             {
+                if (fileInfoCache != null)
+                    return fileInfoCache;
+
                 if (_logos == null)
                     _logos = new ChannelLogos();
 
@@ -105,11 +109,13 @@ namespace MPExtended.Services.StreamingService.Code
                 if(location == null)
                 {
                     Log.Debug("Did not find tv logo for channel {0} with id {1}", channel.Title, idChannel);
-                    return new WebFileInfo() { Exists = false };
+                    fileInfoCache = new WebFileInfo() { Exists = false };
+                    return fileInfoCache;
                 }
 
                 // great, return it
-                return new WebFileInfo(location);
+                fileInfoCache = new WebFileInfo(location);
+                return fileInfoCache;
             }
 
             return path != null ? new WebFileInfo(path) : base.GetFileInfo();
