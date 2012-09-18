@@ -353,7 +353,8 @@ namespace MPExtended.Services.TVAccessService
                 StartTime = p.StartTime != DateTime.MinValue ? p.StartTime : new DateTime(2000, 1, 1),
                 Title = p.Title,
                 DurationInMinutes = (int)((p.EndTime - p.StartTime).TotalMinutes),
-                IsScheduled = Schedule.ListAll().Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
+                IsScheduled = (AllSchedules == null ? Schedule.ListAll() : AllSchedules)
+                                    .Where(schedule => schedule.IdChannel == p.IdChannel && schedule.IsRecordingProgram(p, true)).Count() > 0
             };
         }
     }
