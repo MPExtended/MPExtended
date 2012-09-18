@@ -30,7 +30,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult TestConnectionToTVService();
+        WebBoolResult TestConnection();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

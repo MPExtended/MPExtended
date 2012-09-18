@@ -93,7 +93,7 @@ namespace MPExtended.Services.MediaAccessService
             };
         }
 
-        public WebBoolResult TestConnectionToTVService()
+        public WebBoolResult TestConnection()
         {
             return true;
         }
