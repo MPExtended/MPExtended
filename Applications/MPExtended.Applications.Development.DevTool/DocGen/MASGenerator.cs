@@ -38,13 +38,14 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
 
         protected override int GenerateSortOrder(string methodName)
         {
-            if (methodName.Contains("Movie")) return 2;
-            if (methodName.Contains("Music")) return 3;
-            if (methodName.Contains("Playlist")) return 4;
-            if (methodName.Contains("Picture")) return 5;
-            if (methodName.Contains("TV")) return 6;
-            if (methodName.Contains("FileSystem")) return 7;
-            return 1; // show unknown at first
+            if (methodName.Contains("Filter")) return 2;
+            if (methodName.Contains("Movie")) return 3;
+            if (methodName.Contains("Music")) return 4;
+            if (methodName.Contains("Playlist")) return 5;
+            if (methodName.Contains("Picture")) return 6;
+            if (methodName.Contains("TV")) return 7;
+            if (methodName.Contains("FileSystem")) return 8;
+            return 1; // show unknown at top
         }
 
         protected override Dictionary<int, string> GetHeadings()
@@ -52,12 +53,13 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             return new Dictionary<int, string>()
             {
                 { 1, "General" },
-                { 2, "Movie" },
-                { 3, "Music" },
-                { 4, "Playlist" },
-                { 5, "Picture" },
-                { 6, "TVShow" },
-                { 7, "FileSystem" },
+                { 2, "Filters" },
+                { 3, "Movie" },
+                { 4, "Music" },
+                { 5, "Playlist" },
+                { 6, "Picture" },
+                { 7, "TVShow" },
+                { 8, "FileSystem" },
             };
         }
 
