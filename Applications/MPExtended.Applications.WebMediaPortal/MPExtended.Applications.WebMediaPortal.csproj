@@ -102,6 +102,7 @@
     <Compile Include="Code\Connections.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
+    <Compile Include="Models\ServiceSetModel.cs" />
     <Compile Include="Models\SiteViewModels.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
@@ -213,6 +214,8 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Views\Settings\Services.css" />
+    <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />
     <Content Include="Views\Stream\HLSPlayer.js" />
     <Content Include="Skins\aredon\Content\bg.png" />
@@ -506,6 +509,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Site\Menu.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\Services.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\ServicesSaved.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

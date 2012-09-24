@@ -266,4 +266,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
     }
+
+    public class ServiceAddressesViewModel
+    {
+        [DisplayName("TAS address")]
+        public string TAS { get; set; }
+
+        [DisplayName("MAS address")]
+        public string MAS { get; set; }
+
+        public ServiceAddressesViewModel()
+        {
+            TAS = Configuration.WebMediaPortal.TASUrl;
+            MAS = Configuration.WebMediaPortal.MASUrl;
+        }
+    }
 }

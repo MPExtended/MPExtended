@@ -56,8 +56,8 @@ namespace MPExtended.Libraries.Service.Config
         public WebMediaPortal()
         {
             StreamType = StreamType.DirectWhenPossible;
-            MASUrl = "auto://127.0.0.1:4322/";
-            TASUrl = "auto://127.0.0.1:4322/";
+            MASUrl = "127.0.0.1:4322";
+            TASUrl = "127.0.0.1:4322";
             Skin = "default";
         }
     }

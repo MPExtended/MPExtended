@@ -1,0 +1,58 @@
+﻿@model ServiceAddressesViewModel
+           
+@Html.jQuery().Enable()
+@Html.jQuery().AddDocumentReadyScript("discoverServices(\"" + Url.Action("DiscoverServices") + "\", \"" + Url.ContentLink("Images/logo-mp.png") + "\", \"Configure\", \"Media\", \"TV\", \"Couldn't find any servers on your network.\");")
+@Html.Assets().AddViewStylesheet("Settings/Services.css")
+@Html.Assets().AddViewScript("Settings/Services.js")
+
+@{
+    ViewBag.Title = UIStrings.Settings;
+}
+
+<h2>Service address</h2>
+<br />
+
+You can configure the host addresses WebMediaPortal connects to here. This is useful in a multiseat setup, where the TV Service and MediaPortal are installed on a different computer. Please make 
+sure to install the MPExtended Services on all computers you reference here. 
+
+<br />
+<br />
+
+<h3>Configure manually</h3>
+@using (Html.BeginForm("Services", "Settings", FormMethod.Post, new { id = "servicesForm" }))
+{
+    <div>
+    <table class="webmp">
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.MAS)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.MAS)
+                @Html.ValidationMessageFor(m => m.MAS)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.TAS)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.TAS)
+                @Html.ValidationMessageFor(m => m.TAS)
+            </td>
+        </tr>
+    </table>
+    <br />
+    <input type="submit" value="@UIStrings.Save" />
+    </div>
+}
+
+<br />
+
+<h3>Or choose from your network</h3>
+<div class="search">
+    <div id="loader">
+        <img alt="Searching" src="@Url.ContentLink("Images/ajax-loader.gif")" /><br />
+        Searching
+    </div>
+</div>
