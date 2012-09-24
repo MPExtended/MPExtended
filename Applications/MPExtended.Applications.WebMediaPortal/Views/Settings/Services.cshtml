@@ -1,0 +1,75 @@
+﻿@model ServiceAddressesViewModel
+           
+@Html.jQuery().Enable()
+@Html.jQuery().AddDocumentReadyScript("discoverServices(\"" + Url.Action("DiscoverServices") + "\", \"" + Url.ContentLink("Images/logo-mp.png") + "\", " +
+    "\"" + UIStrings.CopyToForm + "\", \"MediaPortal\", \"TV\", \"" + UIStrings.MultiseatNoServersFound + "\");")
+@Html.Assets().AddViewStylesheet("Settings/Services.css")
+@Html.Assets().AddViewScript("Settings/Services.js")
+
+@{
+    ViewBag.Title = UIStrings.Multiseat;
+}
+
+<h2>@UIStrings.Multiseat</h2>
+<br />
+
+@UIStrings.MultiseatExplanation
+
+<br />
+<br />
+
+@using (Html.BeginForm("Services", "Settings", FormMethod.Post, new { id = "servicesForm" }))
+{
+    <div>
+    <table class="webmp">
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.MAS)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.MAS)
+                @Html.ValidationMessageFor(m => m.MAS)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.TAS)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.TAS)
+                @Html.ValidationMessageFor(m => m.TAS)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Username)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Username)
+                @Html.ValidationMessageFor(m => m.Username)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Password)
+            </td>
+            <td>
+                @Html.PasswordFor(m => m.Password, new { value = Model.Password })
+                @Html.ValidationMessageFor(m => m.Password)
+            </td>
+        </tr>
+    </table>
+    <br />
+    <input type="submit" value="@UIStrings.Save" />
+    </div>
+}
+
+<br />
+
+<h3>@UIStrings.MultiseatSearchOnNetwork</h3>
+<div class="search">
+    <div id="loader">
+        <img alt="@UIStrings.Searching" src="@Url.ContentLink("Images/ajax-loader.gif")" /><br />
+        @UIStrings.Searching
+    </div>
+</div>

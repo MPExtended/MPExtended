@@ -266,4 +266,27 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
     }
+
+    public class ServiceAddressesViewModel
+    {
+        [LocalizedDisplayName(typeof(FormStrings), "MultiseatTAS")]
+        public string TAS { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "MultiseatMAS")]
+        public string MAS { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "LogOnUsername")]
+        public string Username { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "LogOnPassword")]
+        public string Password { get; set; }
+
+        public ServiceAddressesViewModel()
+        {
+            TAS = Configuration.WebMediaPortal.TASUrl;
+            MAS = Configuration.WebMediaPortal.MASUrl;
+            Username = Configuration.WebMediaPortal.ServiceUsername;
+            Password = Configuration.WebMediaPortal.ServicePassword;
+        }
+    }
 }

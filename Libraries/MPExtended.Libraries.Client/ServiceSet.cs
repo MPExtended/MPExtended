@@ -226,6 +226,9 @@ namespace MPExtended.Libraries.Client
 
         private T CreateConnection<T>(string address, string service, string username, string password, bool streamConnection)
         {
+            if (address == null || service == null)
+                return default(T);
+
             ConnectionFactory<T> factory = new ConnectionFactory<T>()
             {
                 Username = username,

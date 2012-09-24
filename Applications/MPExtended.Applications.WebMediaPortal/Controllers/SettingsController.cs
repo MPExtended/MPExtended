@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MoreLinq;
+using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
@@ -51,6 +53,34 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             model.SaveToConfiguration();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Services()
+        {
+            return View(new ServiceAddressesViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Services(ServiceAddressesViewModel model)
+        {
+            Configuration.WebMediaPortal.MASUrl = model.MAS;
+            Configuration.WebMediaPortal.TASUrl = model.TAS;
+            Configuration.WebMediaPortal.ServiceUsername = model.Username;
+            Configuration.WebMediaPortal.ServicePassword = model.Password;
+            Configuration.Save();
+            Connections.SetUrls(model.MAS, model.TAS);
+            Log.Info("WebMediaPortal version {0} now connected with MAS {1} and TAS {2}",
+                VersionUtil.GetFullVersionString(), Settings.ActiveSettings.MASUrl, Settings.ActiveSettings.TASUrl);
+            Connections.LogServiceVersions();
+            ServiceAvailability.Reload();
+            return View("ServicesSaved");
+        }
+
+        public ActionResult DiscoverServices()
+        {
+            IServiceDiscoverer discoverer = new ServiceDiscoverer();
+            var sets = discoverer.DiscoverSets(TimeSpan.FromSeconds(5));
+            return Json(sets.DistinctBy(x => x.GetSetIdentifier()).Select(x => new FoundServicesModel(x)), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -223,6 +223,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy to form.
+        /// </summary>
+        public static string CopyToForm {
+            get {
+                return ResourceManager.GetString("CopyToForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -538,6 +547,52 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiseat.
+        /// </summary>
+        public static string Multiseat {
+            get {
+                return ResourceManager.GetString("Multiseat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure WebMediaPortal for multiseat installations..
+        /// </summary>
+        public static string MultiseatConfiguration {
+            get {
+                return ResourceManager.GetString("MultiseatConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can configure the hosts WebMediaPortal connects to here. This is useful in a multiseat setup, where the TV Service and MediaPortal are installed on a different computer. Please make 
+        ///sure to install the MPExtended Services on all computers referenced here, and that the username and password have access on all computers..
+        /// </summary>
+        public static string MultiseatExplanation {
+            get {
+                return ResourceManager.GetString("MultiseatExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t find any servers on your network..
+        /// </summary>
+        public static string MultiseatNoServersFound {
+            get {
+                return ResourceManager.GetString("MultiseatNoServersFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search on network.
+        /// </summary>
+        public static string MultiseatSearchOnNetwork {
+            get {
+                return ResourceManager.GetString("MultiseatSearchOnNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Music.
         /// </summary>
         public static string Music {
@@ -687,6 +742,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string SearchFieldPlaceholder {
             get {
                 return ResourceManager.GetString("SearchFieldPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching.
+        /// </summary>
+        public static string Searching {
+            get {
+                return ResourceManager.GetString("Searching", resourceCulture);
             }
         }
         

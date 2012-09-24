@@ -313,6 +313,24 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MediaPortal server (MAS).
+        /// </summary>
+        public static string MultiseatMAS {
+            get {
+                return ResourceManager.GetString("MultiseatMAS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TV Server (TAS).
+        /// </summary>
+        public static string MultiseatTAS {
+            get {
+                return ResourceManager.GetString("MultiseatTAS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Music database.
         /// </summary>
         public static string MusicDatabase {
