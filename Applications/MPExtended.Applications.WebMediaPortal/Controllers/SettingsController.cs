@@ -65,6 +65,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             Configuration.WebMediaPortal.MASUrl = model.MAS;
             Configuration.WebMediaPortal.TASUrl = model.TAS;
+            Configuration.WebMediaPortal.ServiceUsername = model.Username;
+            Configuration.WebMediaPortal.ServicePassword = model.Password;
             Configuration.Save();
             Connections.SetUrls(model.MAS, model.TAS);
             Log.Info("WebMediaPortal version {0} now connected with MAS {1} and TAS {2}",

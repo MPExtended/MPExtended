@@ -39,7 +39,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         internal static void SetUrls(string mas, string tas)
         {
             var addressSet = new ServiceAddressSet(mas, tas, null);
-            serviceSet = addressSet.Connect();
+            serviceSet = addressSet.Connect(Configuration.WebMediaPortal.ServiceUsername, Configuration.WebMediaPortal.ServicePassword);
         }
 
         internal static void LogServiceVersions()

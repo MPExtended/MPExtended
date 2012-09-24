@@ -24,7 +24,7 @@
         $("div.search .result a").click(function () {
             $("#servicesForm input[name='MAS']").val($(this).data("mas"));
             $("#servicesForm input[name='TAS']").val($(this).data("tas"));
-            $("#servicesForm").submit();
+            //$("#servicesForm").submit();
             return false;
         });
     });

@@ -49,6 +49,8 @@ namespace MPExtended.Libraries.Service.Config
         
         public string MASUrl { get; set; }
         public string TASUrl { get; set; }
+        public string ServiceUsername { get; set; }
+        public string ServicePassword { get; set; }
         
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }

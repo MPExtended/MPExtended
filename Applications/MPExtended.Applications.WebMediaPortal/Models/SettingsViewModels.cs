@@ -275,10 +275,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [DisplayName("MAS address")]
         public string MAS { get; set; }
 
+        [DisplayName("Service username")]
+        public string Username { get; set; }
+
+        [DisplayName("Service password")]
+        public string Password { get; set; }
+
         public ServiceAddressesViewModel()
         {
             TAS = Configuration.WebMediaPortal.TASUrl;
             MAS = Configuration.WebMediaPortal.MASUrl;
+            Username = Configuration.WebMediaPortal.ServiceUsername;
+            Password = Configuration.WebMediaPortal.ServicePassword;
         }
     }
 }
