@@ -44,9 +44,37 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         internal static void LogServiceVersions()
         {
-            string masVersion = Current.HasMASConnection ? Current.MAS.GetServiceDescription().ServiceVersion : "<unconnected>";
-            string tasVersion = Current.HasTASConnection ? Current.TAS.GetServiceDescription().ServiceVersion : "<unconnected>";
-            Log.Debug("Connected to MAS version {0}, TAS version {1}", masVersion, tasVersion);
+            try
+            {
+                if (Current.Addresses.MAS != null)
+                {
+                    Log.Debug("MAS: Connected to version {0}", Current.MAS.GetServiceDescription().ServiceVersion);
+                }
+                else
+                {
+                    Log.Debug("MAS: No service configured");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug("MAS: connection failed", ex);
+            }
+
+            try
+            {
+                if (Current.Addresses.TAS != null)
+                {
+                    Log.Debug("TAS: Connected to version {0}", Current.TAS.GetServiceDescription().ServiceVersion);
+                }
+                else
+                {
+                    Log.Debug("TAS: No service configured");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug("TAS connection failed", ex);
+            }
         }
     }
 }
