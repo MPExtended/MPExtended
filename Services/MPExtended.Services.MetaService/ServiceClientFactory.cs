@@ -58,19 +58,26 @@ namespace MPExtended.Services.MetaService
             }
         }
 
+        private static ClientFactory<T> CreateClientFactory<T>()
+        {
+            var factory = new ClientFactory<T>();
+            factory.UsePipeForLocalhost = true;
+            return factory;
+        }
+
         public static IMediaAccessService CreateLocalMAS()
         {
-            return new ClientFactory<IMediaAccessService>().CreateConnection("127.0.0.1", "MPExtended/MediaAccessService");
+            return CreateClientFactory<IMediaAccessService>().CreateConnection("127.0.0.1", "MPExtended/MediaAccessService");
         }
 
         public static ITVAccessService CreateLocalTAS()
         {
-            return new ClientFactory<ITVAccessService>().CreateConnection("127.0.0.1", "MPExtended/TVAccessService");
+            return CreateClientFactory<ITVAccessService>().CreateConnection("127.0.0.1", "MPExtended/TVAccessService");
         }
 
         public static IWebStreamingService CreateLocalWSS()
         {
-            return new ClientFactory<IWebStreamingService>().CreateConnection("127.0.0.1", "MPExtended/StreamingService");
+            return CreateClientFactory<IWebStreamingService>().CreateConnection("127.0.0.1", "MPExtended/StreamingService/soap");
         }
     }
 }
