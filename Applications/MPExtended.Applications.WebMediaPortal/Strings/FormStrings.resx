@@ -202,6 +202,12 @@
   <data name="MovieDatabase" xml:space="preserve">
     <value>Movie database</value>
   </data>
+  <data name="MultiseatMAS" xml:space="preserve">
+    <value>MediaPortal server (MAS)</value>
+  </data>
+  <data name="MultiseatTAS" xml:space="preserve">
+    <value>TV Server (TAS)</value>
+  </data>
   <data name="MusicDatabase" xml:space="preserve">
     <value>Music database</value>
   </data>

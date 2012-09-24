@@ -1,19 +1,19 @@
 ﻿@model ServiceAddressesViewModel
            
 @Html.jQuery().Enable()
-@Html.jQuery().AddDocumentReadyScript("discoverServices(\"" + Url.Action("DiscoverServices") + "\", \"" + Url.ContentLink("Images/logo-mp.png") + "\", \"Copy to form\", \"Media\", \"TV\", \"Couldn't find any servers on your network.\");")
+@Html.jQuery().AddDocumentReadyScript("discoverServices(\"" + Url.Action("DiscoverServices") + "\", \"" + Url.ContentLink("Images/logo-mp.png") + "\", " +
+    "\"" + UIStrings.CopyToForm + "\", \"MediaPortal\", \"TV\", \"" + UIStrings.MultiseatNoServersFound + "\");")
 @Html.Assets().AddViewStylesheet("Settings/Services.css")
 @Html.Assets().AddViewScript("Settings/Services.js")
 
 @{
-    ViewBag.Title = UIStrings.Settings;
+    ViewBag.Title = UIStrings.Multiseat;
 }
 
-<h2>Service address</h2>
+<h2>@UIStrings.Multiseat</h2>
 <br />
 
-You can configure the host addresses WebMediaPortal connects to here. This is useful in a multiseat setup, where the TV Service and MediaPortal are installed on a different computer. Please make 
-sure to install the MPExtended Services on all computers referenced here, and that the username and password have access on all computers.
+@UIStrings.MultiseatExplanation
 
 <br />
 <br />
@@ -66,10 +66,10 @@ sure to install the MPExtended Services on all computers referenced here, and th
 
 <br />
 
-<h3>Search on network</h3>
+<h3>@UIStrings.MultiseatSearchOnNetwork</h3>
 <div class="search">
     <div id="loader">
-        <img alt="Searching" src="@Url.ContentLink("Images/ajax-loader.gif")" /><br />
-        Searching
+        <img alt="@UIStrings.Searching" src="@Url.ContentLink("Images/ajax-loader.gif")" /><br />
+        @UIStrings.Searching
     </div>
 </div>

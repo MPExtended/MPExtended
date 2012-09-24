@@ -457,4 +457,26 @@
   <data name="LatestTracks" xml:space="preserve">
     <value>Latest tracks</value>
   </data>
+  <data name="CopyToForm" xml:space="preserve">
+    <value>Copy to form</value>
+  </data>
+  <data name="Multiseat" xml:space="preserve">
+    <value>Multiseat</value>
+  </data>
+  <data name="MultiseatConfiguration" xml:space="preserve">
+    <value>Configure WebMediaPortal for multiseat installations.</value>
+  </data>
+  <data name="MultiseatExplanation" xml:space="preserve">
+    <value>You can configure the hosts WebMediaPortal connects to here. This is useful in a multiseat setup, where the TV Service and MediaPortal are installed on a different computer. Please make 
+sure to install the MPExtended Services on all computers referenced here, and that the username and password have access on all computers.</value>
+  </data>
+  <data name="MultiseatNoServersFound" xml:space="preserve">
+    <value>Couldn't find any servers on your network.</value>
+  </data>
+  <data name="MultiseatSearchOnNetwork" xml:space="preserve">
+    <value>Search on network</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Searching</value>
+  </data>
 </root>

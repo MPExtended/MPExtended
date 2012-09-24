@@ -269,16 +269,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class ServiceAddressesViewModel
     {
-        [DisplayName("TAS address")]
+        [LocalizedDisplayName(typeof(FormStrings), "MultiseatTAS")]
         public string TAS { get; set; }
 
-        [DisplayName("MAS address")]
+        [LocalizedDisplayName(typeof(FormStrings), "MultiseatMAS")]
         public string MAS { get; set; }
 
-        [DisplayName("Service username")]
+        [LocalizedDisplayName(typeof(FormStrings), "LogOnUsername")]
         public string Username { get; set; }
 
-        [DisplayName("Service password")]
+        [LocalizedDisplayName(typeof(FormStrings), "LogOnPassword")]
         public string Password { get; set; }
 
         public ServiceAddressesViewModel()
