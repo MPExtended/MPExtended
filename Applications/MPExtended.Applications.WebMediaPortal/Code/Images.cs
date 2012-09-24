@@ -112,10 +112,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.TVShowProvider;
                     break;
                 case WebMediaType.TV:
-                    service = Connections.Current.MASStream;
+                    service = Connections.Current.TASStream;
                     break;
                 case WebMediaType.Recording:
-                    service = Connections.Current.MASStream;
+                    service = Connections.Current.TASStream;
                     return ReturnFromService(() => service.ExtractImageResized(mediaType, provider, id, 15, maxWidth, maxHeight), defaultFile);
                 default:
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
