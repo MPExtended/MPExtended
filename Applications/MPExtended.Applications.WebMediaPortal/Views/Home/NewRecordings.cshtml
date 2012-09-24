@@ -1,11 +1,13 @@
-﻿@model HomeViewModel
+﻿@model IEnumerable<MPExtended.Services.TVAccessService.Interfaces.WebRecordingBasic>
+           
+@Html.Assets().AddViewStylesheet("Home/Index.css")
 
-@if (Model.Availability.TAS)
+@if (ViewBag.Availability.TAS)
 {
     <h2>@UIStrings.LatestRecordings</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
-        @foreach (var recording in Model.GetLastRecordings())
+        @foreach (var recording in Model)
         {
             <div class="column" style="text-align: center;">
                 <div class="row">

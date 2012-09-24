@@ -1,18 +1,20 @@
-﻿@model HomeViewModel
+﻿@model IEnumerable<TVEpisodeViewModel>
+           
+@Html.Assets().AddViewStylesheet("Home/Index.css")
 
-@if (Model.Availability.TVShows)
+@if (ViewBag.Availability.TVShows)
 {
     <h2>@UIStrings.LatestEpisodes</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
-        @foreach (var episode in Model.GetLastAiredTVEpisodes())
+        @foreach (var episode in Model)
         {
             <div class="column" style="text-align: center;">
                 <div class="row">
                     <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id }, null)"> <img class="img" height="84" width="150" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="No image" /> </a>
                 </div>
                 <div class="row">
-                    @Html.ActionLink(episode.Show + " - " + episode.SeasonNumber + "x" + episode.EpisodeNumber, 
+                    @Html.ActionLink(episode.Show.Title + " - " + episode.Episode.SeasonNumber + "x" + episode.Episode.EpisodeNumber, 
                         "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
                 </div>
             </div>

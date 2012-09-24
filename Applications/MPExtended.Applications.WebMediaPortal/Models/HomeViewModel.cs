@@ -38,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Availability = availabilityModel;
         }
 
-        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count = 4)
+        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<AlbumViewModel> GetLastAddedAlbums(int count = 4)
+        public IEnumerable<AlbumViewModel> GetLastAddedAlbums(int count)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<MusicTrackViewModel> GetLastAddedMusicTracks(int count = 4)
+        public IEnumerable<MusicTrackViewModel> GetLastAddedMusicTracks(int count)
         {
             try
             {
@@ -77,31 +77,33 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<WebTVEpisodeDetailed> GetLastAddedTVEpisodes(int count = 4)
+        public IEnumerable<TVEpisodeViewModel> GetLastAddedTVEpisodes(int count)
         {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc);
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc)
+                    .Select(ep => new TVEpisodeViewModel(ep));
             }
             catch (Exception)
             {
-                return new List<WebTVEpisodeDetailed>();
+                return new List<TVEpisodeViewModel>();
             }
         }
 
-        public IEnumerable<WebTVEpisodeDetailed> GetLastAiredTVEpisodes(int count = 4)
+        public IEnumerable<TVEpisodeViewModel> GetLastAiredTVEpisodes(int count)
         {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc);
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc)
+                    .Select(ep => new TVEpisodeViewModel(ep));
             }
             catch (Exception)
             {
-                return new List<WebTVEpisodeDetailed>();
+                return new List<TVEpisodeViewModel>();
             }
         }
 
-        public IEnumerable<WebRecordingBasic> GetLastRecordings(int count = 4)
+        public IEnumerable<WebRecordingBasic> GetLastRecordings(int count)
         {
             try
             {

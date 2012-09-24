@@ -1,11 +1,13 @@
-﻿@model HomeViewModel
+﻿@model IEnumerable<AlbumViewModel>
+           
+@Html.Assets().AddViewStylesheet("Home/Index.css")
 
-@if (Model.Availability.Music)
+@if (ViewBag.Availability.Music)
 {
     <h2>@UIStrings.LatestAlbums</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
-        @foreach (var album in Model.GetLastAddedAlbums())
+        @foreach (var album in Model)
         {
             <div class="column" style="text-align: center;">
                 <div class="row" style="height: 55px; width: 150px;">

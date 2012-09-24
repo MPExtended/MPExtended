@@ -35,37 +35,42 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            return View();
+            return View(new HomeViewModel(ServiceAvailability));
         }
 
-        public ActionResult NewMovies()
+        public ActionResult NewMovies(int count)
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetLastAddedMovies(count));
         }
 
-        public ActionResult NewEpisodes()
+        public ActionResult NewEpisodes(int count)
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetLastAddedTVEpisodes(count));
         }
 
-        public ActionResult NewAlbums()
+        public ActionResult AiredEpisodes(int count)
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetLastAiredTVEpisodes(count));
         }
 
-        public ActionResult NewMusicTracks()
+        public ActionResult NewAlbums(int count)
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetLastAddedAlbums(count));
         }
 
-        public ActionResult NewRecordings()
+        public ActionResult NewMusicTracks(int count)
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetLastAddedMusicTracks(count));
+        }
+
+        public ActionResult NewRecordings(int count)
+        {
+            return View(new HomeViewModel(ServiceAvailability).GetLastRecordings(count));
         }
 
         public ActionResult CurrentSchedules()
         {
-            return PartialView(new HomeViewModel(ServiceAvailability));
+            return View(new HomeViewModel(ServiceAvailability).GetTodaysSchedules());
         }
     }
 }

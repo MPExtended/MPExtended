@@ -86,6 +86,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         private WebMediaInfo mediaInfo;
         private WebFileInfo fileInfo;
 
+        // TODO: Lazy-load these
         public WebTVShowDetailed Show { get; private set; }
         public WebTVSeasonDetailed Season { get; private set; }
         public WebTVEpisodeDetailed Episode { get; private set; }
@@ -113,7 +114,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-
         public string Quality
         {
             get
@@ -130,11 +130,26 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public string Id
+        {
+            get
+            {
+                return Episode.Id;
+            }
+        }
+
         public TVEpisodeViewModel(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             Show = show;
             Season = season;
             Episode = episode;
+        }
+
+        public TVEpisodeViewModel(WebTVEpisodeDetailed episode)
+        {
+            Episode = episode;
+            Season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.SeasonId);
+            Show = Connections.Current.MAS.GetTVShowDetailedById(Episode.PID, Episode.ShowId);
         }
 
         public TVEpisodeViewModel(string episodeId)
