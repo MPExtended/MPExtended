@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 using Newtonsoft.Json.Linq;
 
@@ -63,11 +64,11 @@ namespace MPExtended.Applications.Development.DevTool.Tools
                 foreach (var code in languages)
                 {
                     var resx = client.DownloadString(String.Format("https://www.transifex.com/api/2/project/mpextended/resource/{0}/translation/{1}/?file", resource.Key, code));
+                    var file = XElement.Parse(resx);
+                    file.Elements("data").Where(x => String.IsNullOrEmpty(x.Element("value").Value)).Remove();
+
                     var path = Path.Combine(Installation.GetSourceRootDirectory(), String.Format(resource.Value, code));
-                    using (StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8))
-                    {
-                        writer.Write(resx);
-                    }
+                    file.Save(path);
                     OutputStream.WriteLine("Got translation of resource '{0}' for language '{1}'", resource.Key, code);
                 }
             }
