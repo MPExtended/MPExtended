@@ -52,6 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             model.SaveToConfiguration();
+            Settings.ApplySkinSettings();
             return RedirectToAction("Index");
         }
 
