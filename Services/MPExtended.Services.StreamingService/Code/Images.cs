@@ -24,16 +24,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.ServiceModel.Web;
-using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
-using MPExtended.Libraries.Service.Shared;
-using MPExtended.Libraries.Service.Util;
-using MPExtended.Services.Common.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.MediaInfo;
-using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -41,7 +32,12 @@ namespace MPExtended.Services.StreamingService.Code
     {
         private static ImageCache cache = new ImageCache();
 
-        public static Stream ExtractImage(MediaSource source, long startPosition, int? maxWidth, int? maxHeight)
+        public static Stream ExtractImage(MediaSource source, long position, string format)
+        {
+            return Images.ExtractImage(source, position, null, null, null, format);
+        }
+
+        public static Stream ExtractImage(MediaSource source, long position, int? maxWidth, int? maxHeight, string borders, string format)
         {
             if (!source.Exists)
             {
@@ -57,37 +53,21 @@ namespace MPExtended.Services.StreamingService.Code
                 return Stream.Null;
             }
 
-            // calculate size
-            string ffmpegResize = "";
-            if (maxWidth != null || maxHeight != null)
-            {
-                try
-                {
-                    decimal resolution = MediaInfoWrapper.GetMediaInfo(source).VideoStreams.First().DisplayAspectRatio;
-                    ffmpegResize = "-s " + Resolution.Calculate(resolution, maxWidth, maxHeight).ToString();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Error while getting resolution of video stream, not resizing", ex);
-                }
-            }
-            
             // get temporary filename
-            string filename = String.Format("extract_{0}_{1}_{2}_{3}.jpg", source.GetUniqueIdentifier(), startPosition, 
-                maxWidth == null ? "null" : maxWidth.ToString(), maxHeight == null ? "null" : maxHeight.ToString());
+            string filename = String.Format("extract_{0}_{1}.jpg", source.GetUniqueIdentifier(), position);
             string tempFile = cache.GetPath(filename);
 
             // maybe it exists in cache, return that then
             if (cache.Contains(filename))
             {
-                return StreamImage(new ImageMediaSource(tempFile));
+                return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
             }
 
             // execute it
             ProcessStartInfo info = new ProcessStartInfo();
             using (var impersonator = source.GetImpersonator())
             {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" {2} -vframes 1 -f image2 {3}", startPosition, source.GetPath(), ffmpegResize, tempFile);
+                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -f image2 {2}", position, source.GetPath(), tempFile);
                 info.FileName = Configuration.StreamingProfiles.FFMpegPath;
                 info.CreateNoWindow = true;
                 info.UseShellExecute = false;
@@ -105,112 +85,146 @@ namespace MPExtended.Services.StreamingService.Code
                 return Stream.Null;
             }
 
-            return StreamImage(new ImageMediaSource(tempFile));
+            return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
         }
 
-        public static Stream GetResizedImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders)
+        public static Stream GetImage(ImageMediaSource src, string format)
         {
-            // load file
-            if (!src.Exists)
-            {
-                Log.Info("Requested resized image for non-existing source {0}", src.GetDebugName());
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
-                return Stream.Null;
-            }
-
-            // create cache path
-            string filename = String.Format("resize_{0}_{1}_{2}_{3}.jpg", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders);
-
-            // check for existence on disk
-            if (!cache.Contains(filename))
-            {
-                if (!ResizeImage(src.Retrieve(), cache.GetPath(filename), ImageFormat.Jpeg, maxWidth, maxHeight, borders))
-                {
-                    WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
-                    return Stream.Null;
-                }
-            }
-
-            return StreamImage(new ImageMediaSource(cache.GetPath(filename)));
+            return StreamPostprocessedImage(src, null, null, null, format);
         }
 
-        public static Stream GetImage(ImageMediaSource source)
+        public static Stream GetResizedImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders, string format)
         {
-            return StreamImage(source);
+            return StreamPostprocessedImage(src, maxWidth, maxHeight, borders, format);
         }
 
-        private static Stream StreamImage(ImageMediaSource src) 
+        private static Stream StreamPostprocessedImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders, string format)
         {
+            if (format == null)
+                format = src.Extension.Substring(1);
+
             if (!src.Exists)
             {
                 Log.Info("Tried to stream image from non-existing source {0}", src.GetDebugName());
-                WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
+                WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
                 return Stream.Null;
             }
 
-            Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() {
+            if (borders != null && !maxWidth.HasValue && !maxHeight.HasValue)
+            {
+                Log.Error("ResizeImage() called with a broders value but width or height is null");
+                WCFUtil.SetResponseCode(HttpStatusCode.BadRequest);
+                return Stream.Null;
+            }
+
+            // return from cache if possible
+            string filename = String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format);
+            if (cache.Contains(filename))
+            {
+                WCFUtil.SetContentType(Path.GetExtension(filename));
+                return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+
+            try
+            {
+                bool hasToResize = maxWidth.HasValue || maxHeight.HasValue;
+                bool hasToRecode = format != src.Extension.Substring(1);
+
+                if (!hasToResize && !hasToRecode)
+                {
+                    WCFUtil.SetContentType(GetMime(src.Extension));
+                    return src.Retrieve();
+                }
+
+                var image = hasToResize ? ResizeImage(src, maxWidth, maxHeight, borders) : Image.FromStream(src.Retrieve());
+                string path = cache.GetPath(String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format));
+                SaveImageToFile(image, path, format);
+                image.Dispose();
+                WCFUtil.SetContentType(GetCodecInfo(format).MimeType);
+                return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to post-process and stream image {0}", src.GetDebugName()), ex);
+                return Stream.Null;
+            }
+        }
+
+        private static string GetMime(string extension)
+        {
+            Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() 
+            {
                 { ".jpeg", "image/jpeg" },
                 { ".jpg", "image/jpeg" },
                 { ".png", "image/png" },
                 { ".gif", "image/gif" },
                 { ".bmp", "image/x-ms-bmp" },
             };
-            string mime = commonMimeTypes.ContainsKey(src.Extension) ? commonMimeTypes[src.Extension] : "application/octet-stream";
-            WCFUtil.SetContentType(mime);
-
-            return src.Retrieve();
+            return commonMimeTypes.ContainsKey(extension) ? commonMimeTypes[extension] : "application/octet-stream";
         }
 
-        private static bool ResizeImage(Stream inputStream, string newFile, ImageFormat outputFormat, int? maxWidth, int? maxHeight, string borders)
+        private static Image ResizeImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders)
         {
-            using (var image = Image.FromStream(inputStream))
+            using (var origImage = Image.FromStream(src.Retrieve()))
             {
-                return ResizeImage(Image.FromStream(inputStream), newFile, outputFormat, maxWidth, maxHeight, borders);
-            }
-        }
-
-        private static bool ResizeImage(Image origImage, string newFile, ImageFormat outputFormat, int? maxWidth, int? maxHeight, string borders)
-        {
-            try
-            {
-                if (!String.IsNullOrEmpty(borders) && (!maxWidth.HasValue || !maxHeight.HasValue))
-                {
-                    Log.Error("ResizeImage() called with a broders value but width or height is null");
-                    throw new ArgumentException("Both width and height parameters need to be specified when requesting borders");
-                }
-
                 Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
                 int bitmapWidth = !String.IsNullOrEmpty(borders) ? maxWidth.Value : newSize.Width;
                 int bitmapHeight = !String.IsNullOrEmpty(borders) ? maxHeight.Value : newSize.Height;
-                using (Bitmap newImage = new Bitmap(bitmapWidth, bitmapHeight, PixelFormat.Format32bppArgb))
+
+                Bitmap newImage = new Bitmap(bitmapWidth, bitmapHeight, PixelFormat.Format32bppArgb);
+                using (Graphics graphic = Graphics.FromImage(newImage))
                 {
-                    using (Graphics graphic = Graphics.FromImage(newImage))
-                    {
-                        graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        graphic.SmoothingMode = SmoothingMode.HighQuality;
-                        graphic.CompositingQuality = CompositingQuality.HighQuality;
-                        graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphic.SmoothingMode = SmoothingMode.HighQuality;
+                    graphic.CompositingQuality = CompositingQuality.HighQuality;
+                    graphic.CompositingMode = CompositingMode.SourceCopy;
+                    graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                        if (!String.IsNullOrEmpty(borders))
-                            graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapWidth, bitmapHeight);
+                    if (!String.IsNullOrEmpty(borders))
+                        graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapWidth, bitmapHeight);
 
-                        int leftOffset = !String.IsNullOrEmpty(borders) ? (maxWidth.Value - newSize.Width) / 2 : 0;
-                        int heightOffset = !String.IsNullOrEmpty(borders) ? (maxHeight.Value - newSize.Height) / 2 : 0;
-                        graphic.DrawImage(origImage, leftOffset, heightOffset, newSize.Width, newSize.Height);
-                    }
-
-                    var ici = ImageCodecInfo.GetImageEncoders().First(x => x.FormatID == outputFormat.Guid);
-                    var encoderParams = new EncoderParameters(1);
-                    encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)95);
-                    newImage.Save(newFile, ici, encoderParams);
+                    int leftOffset = !String.IsNullOrEmpty(borders) ? (maxWidth.Value - newSize.Width) / 2 : 0;
+                    int heightOffset = !String.IsNullOrEmpty(borders) ? (maxHeight.Value - newSize.Height) / 2 : 0;
+                    graphic.DrawImage(origImage, leftOffset, heightOffset, newSize.Width, newSize.Height);
                 }
-                return true;
+
+                return newImage;
             }
-            catch (Exception ex)
+        }
+
+        private static ImageCodecInfo GetCodecInfo(string format)
+        {
+            switch (format)
             {
-                Log.Warn("Couldn't resize image", ex);
+                case "png":
+                    return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Png.Guid);
+                case "jpeg":
+                case "jpg":
+                    return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Jpeg.Guid);
+                default:
+                    throw new ArgumentException();
             }
-            return false;
+        }
+
+        private static void SaveImageToFile(Image image, string path, string format)
+        {
+            switch (format)
+            {
+                case "png":
+                    image.Save(path, ImageFormat.Png);
+                    break;
+
+                case "jpeg":
+                case "jpg":
+                    var jpegInfo = GetCodecInfo(format);
+                    var jpegParameters = new EncoderParameters(1);
+                    jpegParameters.Param[0] = new EncoderParameter(Encoder.Quality, 95L);
+                    image.Save(path, jpegInfo, jpegParameters);
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

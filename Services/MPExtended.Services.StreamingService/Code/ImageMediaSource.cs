@@ -17,23 +17,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.ServiceModel.Web;
-using MPExtended.Libraries.Client;
+using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.MediaInfo;
-using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -88,6 +79,13 @@ namespace MPExtended.Services.StreamingService.Code
         protected bool IsCustomized()
         {
             return path != null || ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo);
+        }
+
+        public override string GetUniqueIdentifier()
+        {
+            if (MediaType == WebMediaType.File && path != null)
+                return String.Format("path-{0}", path.GetHashCode());
+            return base.GetUniqueIdentifier();
         }
 
         public override WebFileInfo GetFileInfo()

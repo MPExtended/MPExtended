@@ -30,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Code
      */
     internal class ImageCache
     {
-        private const int CACHE_VERSION = 2;
+        private const int CACHE_VERSION = 3;
 
         private string path;
 
