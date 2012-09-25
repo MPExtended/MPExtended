@@ -218,18 +218,6 @@
     <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />
     <Content Include="Views\Stream\HLSPlayer.js" />
-    <Content Include="Skins\aredon\Content\bg.png" />
-    <Content Include="Skins\aredon\Content\chosen\chosen-sprite.png" />
-    <Content Include="Skins\aredon\Content\chosen\chosen.css" />
-    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.js" />
-    <Content Include="Skins\aredon\Content\chosen\chosen.jquery.min.js" />
-    <Content Include="Skins\aredon\Content\chosen\chosen.proto.js" />
-    <Content Include="Skins\aredon\Content\chosen\chosen.proto.min.js" />
-    <Content Include="Skins\aredon\Content\Images\bg.png" />
-    <Content Include="Skins\aredon\Content\Images\left.gif" />
-    <Content Include="Skins\aredon\Content\Images\logo.png" />
-    <Content Include="Skins\aredon\Content\Images\right.gif" />
-    <Content Include="Skins\aredon\Home\Index.css" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -265,8 +253,6 @@
     <Content Include="Content\Themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\dragdealer.js" />
     <Content Include="Views\Television\TVGuide.js" />
-    <Content Include="Skins\aredon\Content\Site.css" />
-    <Content Include="Skins\aredon\Television\TVGuide.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -412,9 +398,6 @@
     <Content Include="Views\Stream\Player.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Skins\aredon\Web.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Schedule\AddScheduleByProgram.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -466,34 +449,10 @@
     <Content Include="Views\Status\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Skins\aredon\Television\TVGuide.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Shared\_Layout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Settings\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Home\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Home\NewEpisodes.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Home\NewMovies.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Skins\aredon\Content\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\jwplayer\slim.zip" />
@@ -501,6 +460,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Plugins\" />
+    <Folder Include="Skins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Error\General.cshtml" />
