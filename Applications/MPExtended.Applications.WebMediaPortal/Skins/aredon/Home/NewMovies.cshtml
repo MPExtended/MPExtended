@@ -1,10 +1,10 @@
-﻿@model MPExtended.Applications.WebMediaPortal.Models.HomeViewModel
+﻿@model IEnumerable<MovieViewModel>
 
-@if (Model.Availability.TVShows)
+@if (ViewBag.Availability.TVShows)
 {
     <h2>@UIStrings.LatestMovies</h2>
     <div>
-        @foreach (var movie in Model.GetLastAddedMovies())
+        @foreach (var movie in Model)
         {
             <div class="column">
                 <div class="thumb_wrap">
