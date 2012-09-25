@@ -199,7 +199,10 @@ namespace MPExtended.Services.StreamingService.Code
                         graphic.DrawImage(origImage, leftOffset, heightOffset, newSize.Width, newSize.Height);
                     }
 
-                    newImage.Save(newFile, outputFormat);
+                    var ici = ImageCodecInfo.GetImageEncoders().First(x => x.FormatID == outputFormat.Guid);
+                    var encoderParams = new EncoderParameters(1);
+                    encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)95);
+                    newImage.Save(newFile, ici, encoderParams);
                 }
                 return true;
             }
