@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ClientService" xml:space="preserve">
+    <value>Asiakaskoneen palvelu</value>
+  </data>
+  <data name="DefaultMediaStreamingProfile" xml:space="preserve">
+    <value>Oletus virtautusprofiili medialle</value>
+  </data>
+  <data name="DefaultMusicStreamingProfile" xml:space="preserve">
+    <value>Oletus virtautusprofiili musiikille</value>
+  </data>
+  <data name="DefaultSkinName" xml:space="preserve">
+    <value>oletus</value>
+    <comment>Name of the default skin</comment>
+  </data>
+  <data name="DefaultTVGroup" xml:space="preserve">
+    <value>Oletus TV ryhmä</value>
+  </data>
+  <data name="DefaultTVStreamingProfile" xml:space="preserve">
+    <value>Oletus virtautusprofiili TV:lle</value>
+  </data>
+  <data name="DirectStreamingProfileDescription" xml:space="preserve">
+    <value>Suora: Paras suorituskyky, toimii vain paikallisessa verkossa</value>
+  </data>
+  <data name="DirectWhenPossibleDescription" xml:space="preserve">
+    <value>Suora kun mahdollista, muuten proxyn kautta</value>
+  </data>
+  <data name="EnableAlbumPlayer" xml:space="preserve">
+    <value>Soita musiikki albumeittain?</value>
+  </data>
+  <data name="ErrorNoValidClientService" xml:space="preserve">
+    <value>Anna kelvollinen MAS osoite</value>
+  </data>
+  <data name="ErrorNoValidMediaProfile" xml:space="preserve">
+    <value>Valitse kelvollinen virtautusprofiili medialle</value>
+  </data>
+  <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
+    <value>Valitse kelvollinen elokuvatietokanta</value>
+  </data>
+  <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
+    <value>Valitse kelvollinen musiikkitietokanta</value>
+  </data>
+  <data name="ErrorNoValidMusicProfile" xml:space="preserve">
+    <value>Valitse kelvollinen virtautusprofiili musiikille</value>
+  </data>
+  <data name="ErrorNoValidServerService" xml:space="preserve">
+    <value>Valitse kelvollinen TAS osoite</value>
+  </data>
+  <data name="ErrorNoValidSkin" xml:space="preserve">
+    <value>Valitse kelvollinen ulkoasu</value>
+  </data>
+  <data name="ErrorNoValidTVGroup" xml:space="preserve">
+    <value>Valitse kelvollinen TV ryhmä</value>
+  </data>
+  <data name="ErrorNoValidTVProfile" xml:space="preserve">
+    <value>Valitse kelvollinen virtautusprofiili TV:lle</value>
+  </data>
+  <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
+    <value>Valitse kelvollinen TV-sarjatietokanta</value>
+  </data>
+  <data name="FailedToConnectToClient" xml:space="preserve">
+    <value>Yhteys valittuun asiakaskoneen palveluun epäonnistui</value>
+  </data>
+  <data name="FailedToConnectToServer" xml:space="preserve">
+    <value>Yhteys valittuun palvelinkoneen palveluun epäonnistui</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>{0} kenttä on vaadittu</value>
+  </data>
+  <data name="LogOnPassword" xml:space="preserve">
+    <value>Salasana</value>
+  </data>
+  <data name="LogOnRememberMe" xml:space="preserve">
+    <value>Muista minut?</value>
+  </data>
+  <data name="LogOnUsername" xml:space="preserve">
+    <value>Käyttäjänimi</value>
+  </data>
+  <data name="MovieDatabase" xml:space="preserve">
+    <value>Elokuvatietokanta</value>
+  </data>
+  <data name="MusicDatabase" xml:space="preserve">
+    <value>Musiikkitietokanta</value>
+  </data>
+  <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
+    <value>Proxyn takana: lopettaa ajansiirtotallennukset välittömästi, toimii internetin kautta</value>
+  </data>
+  <data name="ScheduleChannel" xml:space="preserve">
+    <value>Kanava</value>
+  </data>
+  <data name="ScheduleEndTime" xml:space="preserve">
+    <value>Lopetusaika</value>
+  </data>
+  <data name="ScheduleSelectValidChannel" xml:space="preserve">
+    <value>Valitse kelvollinen kanava</value>
+  </data>
+  <data name="ScheduleSelectValidType" xml:space="preserve">
+    <value>Valitse kelvollinen ajastuksen tyyppi</value>
+  </data>
+  <data name="ScheduleStartTime" xml:space="preserve">
+    <value>Aloitusaika</value>
+  </data>
+  <data name="ScheduleType" xml:space="preserve">
+    <value>Ajastuksen tyyppi</value>
+  </data>
+  <data name="ScheduleTypeDaily" xml:space="preserve">
+    <value>Päivittäin</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
+    <value>Joka kerta kaikilta kanavilta</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
+    <value>Joka kerta tältä kanavalta</value>
+  </data>
+  <data name="ScheduleTypeOnce" xml:space="preserve">
+    <value>Kerran</value>
+  </data>
+  <data name="ScheduleTypeWeekends" xml:space="preserve">
+    <value>Viikonloppuisin</value>
+  </data>
+  <data name="ScheduleTypeWeekly" xml:space="preserve">
+    <value>Viikottain</value>
+  </data>
+  <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
+    <value>Viikottain tältä kanavalta</value>
+  </data>
+  <data name="ScheduleTypeWorkingDays" xml:space="preserve">
+    <value>Arkipäivisin</value>
+  </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>{0} (album) by {1}</value>
+  </data>
+  <data name="SearchResultChannelGroup" xml:space="preserve">
+    <value>{0} (kanavaryhmä)</value>
+  </data>
+  <data name="SearchResultProgram" xml:space="preserve">
+    <value>{0} ({1} on {2})</value>
+  </data>
+  <data name="SearchResultRecording" xml:space="preserve">
+    <value>{0} (tallennettu {1})</value>
+  </data>
+  <data name="SearchResultSchedule" xml:space="preserve">
+    <value>{0} (ajastus)</value>
+  </data>
+  <data name="SearchResultTrack" xml:space="preserve">
+    <value>{0} by {1}</value>
+  </data>
+  <data name="ServerService" xml:space="preserve">
+    <value>Palvelinkoneen palvelu</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Ulkoasu</value>
+  </data>
+  <data name="StateIdle" xml:space="preserve">
+    <value>Jouten</value>
+  </data>
+  <data name="StateRecording" xml:space="preserve">
+    <value>Tallennus käynnissä</value>
+  </data>
+  <data name="StateScanning" xml:space="preserve">
+    <value>Etsii</value>
+  </data>
+  <data name="StateTimeshifting" xml:space="preserve">
+    <value>Ajansiirtotallennus käynnisä</value>
+  </data>
+  <data name="StreamType" xml:space="preserve">
+    <value>Virran tyyppi</value>
+  </data>
+  <data name="TVShowDatabase" xml:space="preserve">
+    <value>TV-sarjatietokanta</value>
+  </data>
+  <data name="UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Käyttäjänimi tai salasana on väärin.</value>
+  </data>
+  <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
+    <value>VLC soitin: Käytä lomituksenpoistoa oletuksena?</value>
+  </data>
+</root>

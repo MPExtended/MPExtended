@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountInformation" xml:space="preserve">
+    <value>Information concernant le compte</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="LatestEpisodes" xml:space="preserve">
+    <value>Derniers épisodes</value>
+  </data>
+  <data name="LatestMovies" xml:space="preserve">
+    <value>Derniers films</value>
+  </data>
+  <data name="LatestRecordings" xml:space="preserve">
+    <value>Derniers enregistrements</value>
+  </data>
+  <data name="LogOn" xml:space="preserve">
+    <value>Ouvrir une session</value>
+  </data>
+  <data name="LogOnFailed" xml:space="preserve">
+    <value>Echec lors de l'ouverture de la session. SVP, corriger les erreurs et essayer de nouveau.</value>
+  </data>
+  <data name="Movies" xml:space="preserve">
+    <value>Films</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Musique</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Lecture</value>
+  </data>
+  <data name="PleaseEnterUsernameAndPassword" xml:space="preserve">
+    <value>SVP, entrer votre nom d'utilisateur et mot de passe</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Notation</value>
+  </data>
+  <data name="TodaysSchedules" xml:space="preserve">
+    <value>Horaires des programmes de la journée</value>
+  </data>
+  <data name="TVShows" xml:space="preserve">
+    <value>Séries</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Inconnu</value>
+    <comment>Shown when program title is unknown in TVGuide</comment>
+  </data>
+  <data name="WatchingMovie" xml:space="preserve">
+    <value>Vu {0}</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bienvenue</value>
+  </data>
+  <data name="YouAreWatchingMovie" xml:space="preserve">
+    <value>Vous regardez &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="YourArtists" xml:space="preserve">
+    <value>Vos artistes</value>
+  </data>
+  <data name="YourMovies" xml:space="preserve">
+    <value>Vos films</value>
+  </data>
+  <data name="YourTVShows" xml:space="preserve">
+    <value>Vos séries</value>
+  </data>
+  <data name="AlbumBy" xml:space="preserve">
+    <value>{0} par {1}</value>
+  </data>
+  <data name="AlbumsFromArtist" xml:space="preserve">
+    <value>Albums de {0}</value>
+  </data>
+  <data name="Aired" xml:space="preserve">
+    <value>Diffusé {0}</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Téléchargement</value>
+  </data>
+  <data name="GuestStarring" xml:space="preserve">
+    <value>Invité</value>
+  </data>
+  <data name="WrittenBy" xml:space="preserve">
+    <value>Ecrit par:</value>
+  </data>
+  <data name="EpisodeDisplay" xml:space="preserve">
+    <value>Episode {0} - {1}</value>
+  </data>
+  <data name="Season" xml:space="preserve">
+    <value>Saison {0}</value>
+  </data>
+  <data name="ShowSeason" xml:space="preserve">
+    <value>{0} saison {1}</value>
+  </data>
+  <data name="WatchingEpisode" xml:space="preserve">
+    <value>Vu {0}</value>
+  </data>
+  <data name="YouAreWatchingEpisode" xml:space="preserve">
+    <value>Vous regardez &lt;strong&gt;{0} -Saison {1} Episode {2} - {3}&lt;/strong&gt;.</value>
+  </data>
+  <data name="ErrorPageText" xml:space="preserve">
+    <value>SVP, veuillez insérer l'information ci-dessous, lors de l'envoi du rapport d'erreur.</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Page d'accueil</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Fermer la session</value>
+  </data>
+  <data name="Recordings" xml:space="preserve">
+    <value>Enregistrements</value>
+  </data>
+  <data name="Schedules" xml:space="preserve">
+    <value>Horaires des programmes</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Réglages</value>
+  </data>
+  <data name="SorryAnErrorOccurred" xml:space="preserve">
+    <value>Désolé, une erreur est intervenue lors de la recherche.</value>
+  </data>
+  <data name="TVGuide" xml:space="preserve">
+    <value>Guide TV</value>
+  </data>
+  <data name="WelcomeUsername" xml:space="preserve">
+    <value>Bienvenue &lt;strong&gt;{0}&lt;/strong&gt;!</value>
+  </data>
+  <data name="CancelSchedule" xml:space="preserve">
+    <value>Annuler la programmation d'enregistrement</value>
+  </data>
+  <data name="CreateSchedule" xml:space="preserve">
+    <value>Horaire des programmes</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="Earlier" xml:space="preserve">
+    <value>Plus tôt</value>
+  </data>
+  <data name="Later" xml:space="preserve">
+    <value>Plus tard</value>
+  </data>
+  <data name="LiveTV" xml:space="preserve">
+    <value>TV en direct</value>
+  </data>
+  <data name="ProgramChannelDetails" xml:space="preserve">
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; à &lt;strong&gt;{1}&lt;/strong&gt; sur la chaîne &lt;strong&gt;{2}&lt;/strong&gt;</value>
+  </data>
+  <data name="RecordedOn" xml:space="preserve">
+    <value>Enregistré sur</value>
+  </data>
+  <data name="ScheduleHeaderEndTime" xml:space="preserve">
+    <value>Heure de fin</value>
+  </data>
+  <data name="ScheduleHeaderRepetition" xml:space="preserve">
+    <value>Répétition</value>
+  </data>
+  <data name="ScheduleHeaderStartTime" xml:space="preserve">
+    <value>Heure de début</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Mise à jour</value>
+  </data>
+  <data name="WatchingProgram" xml:space="preserve">
+    <value>Vu {0} sur {1}</value>
+  </data>
+  <data name="WatchingRecording" xml:space="preserve">
+    <value>Vu {0}</value>
+  </data>
+  <data name="YouAreWatchingProgram" xml:space="preserve">
+    <value>Vous regardez &lt;strong&gt;{0}&lt;/strong&gt; de &lt;strong&gt;{1}&lt;/strong&gt;</value>
+  </data>
+  <data name="YouAreWatchingRecording" xml:space="preserve">
+    <value>Vous regardez &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="YourRecordings" xml:space="preserve">
+    <value>Vos enregistrements</value>
+  </data>
+  <data name="AddSchedule" xml:space="preserve">
+    <value>Ajouter une programmation d'enregistrement</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="Program" xml:space="preserve">
+    <value>Programme</value>
+  </data>
+  <data name="DownloadPlaylist" xml:space="preserve">
+    <value>Télécharger le fichier (.m3u) de playlist pour l'utiliser avec un lecteur externe</value>
+  </data>
+  <data name="InstallFlashPlayerToUseThisPlayer" xml:space="preserve">
+    <value>Installer Adobe Flash Player pour utiliser son lecteur.</value>
+  </data>
+  <data name="VLCEnableDeinterlacing" xml:space="preserve">
+    <value>Permettre le désentrelacement</value>
+  </data>
+  <data name="VLCPause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="VLCPlay" xml:space="preserve">
+    <value>Lecture</value>
+  </data>
+  <data name="VLCStop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="VLCSwitchFullscreen" xml:space="preserve">
+    <value>Changer pour le plein écran</value>
+  </data>
+  <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
+    <value>Votre version de VLC est ancienne, et ne supporte pas le désentrelacement. Veuillez réaliser une mise à jour soit la 1.1.11 ou supérieur.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editer</value>
+  </data>
+  <data name="EditSchedule" xml:space="preserve">
+    <value>Editer les horaires</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="SearchFieldPlaceholder" xml:space="preserve">
+    <value>Recherche ...</value>
+    <comment>Placeholder in the search field when no text has been entered</comment>
+  </data>
+  <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">
+    <value>Désolé, votre recherche n'a donné aucun résultat.</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="TVServerStatus" xml:space="preserve">
+    <value>Statut du serveur TV</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cartes Tuner</value>
+  </data>
+  <data name="Card" xml:space="preserve">
+    <value>Carte</value>
+  </data>
+  <data name="CardDetails" xml:space="preserve">
+    <value>Informations concernant la carte</value>
+  </data>
+  <data name="CardGrabbingEPG" xml:space="preserve">
+    <value>Récupérer la grille de programme (EPG)</value>
+  </data>
+  <data name="CardName" xml:space="preserve">
+    <value>Nom de la carte</value>
+  </data>
+  <data name="CardRecordingFile" xml:space="preserve">
+    <value>Fichier d'enregistrement</value>
+  </data>
+  <data name="CardRTSPStream" xml:space="preserve">
+    <value>Flux RTSP</value>
+  </data>
+  <data name="CardScrambled" xml:space="preserve">
+    <value>Mélangé</value>
+  </data>
+  <data name="CardState" xml:space="preserve">
+    <value>Etat</value>
+  </data>
+  <data name="CardTimeshiftingFile" xml:space="preserve">
+    <value>Enregistrement du Timeshifting</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Chaîne</value>
+  </data>
+  <data name="DiskInfoAvailable" xml:space="preserve">
+    <value>Disponible</value>
+  </data>
+  <data name="DiskInfoDisk" xml:space="preserve">
+    <value>Disque</value>
+  </data>
+  <data name="DiskInformation" xml:space="preserve">
+    <value>Information concernant le disque</value>
+  </data>
+  <data name="DiskInfoSize" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="DiskInfoUsed" xml:space="preserve">
+    <value>Utilisé</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="StreamingClients" xml:space="preserve">
+    <value>Flux de clients</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+    <comment>Page title on error page</comment>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Page non trouvée</value>
+    <comment>Page title on 404 page</comment>
+  </data>
+  <data name="SorryPageNotFound" xml:space="preserve">
+    <value>Désolé, la page recherchée n'existe pas.</value>
+  </data>
+  <data name="WatchLive" xml:space="preserve">
+    <value>Regarder en direct</value>
+  </data>
+  <data name="ListeningTrack" xml:space="preserve">
+    <value>Ecouté {0}</value>
+  </data>
+  <data name="YouAreListening" xml:space="preserve">
+    <value>Vous écoutez &lt;strong&gt;{0}&lt;/strong&gt; par &lt;strong&gt;{1}&lt;/strong&gt;</value>
+  </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Echec lors du démarrage des flux. SVP, veuillez consulter le log du serveur pour plus d'informations.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>A propos</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>CPU utilisé:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Memoire utilisée:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>Statut du système</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version: WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Derniers albums</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Dernières pistes</value>
+  </data>
+</root>

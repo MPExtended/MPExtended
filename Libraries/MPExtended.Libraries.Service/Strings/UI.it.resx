@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActionNeedsAdmin" xml:space="preserve">
-    <value>This action needs administrative rights.</value>
+    <value>Questa azione necessità di diritti amministrativi</value>
   </data>
   <data name="ActiveStreams" xml:space="preserve">
-    <value>Currently active streams</value>
+    <value>Active streams correnti</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>You can configure the port on which WebMediaPortal runs here. If you change this value from the default of 8080, you have to configure your firewall manually. </value>
+    <value>Puoi configurare la porta nella quale  WebMediaPortal viene eseguito. Se cambi questo valore dal default di 8080, dovrai riconfigurare il firewall manualmente.</value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
-    <value>Default audio language:</value>
+    <value>Lingua Audio Default :</value>
   </data>
   <data name="DefaultLanguage" xml:space="preserve">
-    <value>Default language</value>
+    <value>Lingua Default</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
-    <value>Some clients don't support configuring the audio and subtitle language on a per-stream basis. You can configure the default audio and subtitle language for tehse clients here.</value>
+    <value>Alcuni client non supportano la configurazione della lingua audio e sottotitolisu un per-stream di base. Puoi configurare qui la lingua audio e sottotitoli per questi client.</value>
   </data>
   <data name="DefaultSubtitleLanguage" xml:space="preserve">
-    <value>Default subtitle language:</value>
+    <value>Lingua Sottotitoli Default:</value>
   </data>
   <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
-    <value>Discarding invalid changes made on the social tab.</value>
+    <value>Scarta cambiamenti non validi nella tabella social.</value>
   </data>
   <data name="ExportedLogsAndConfig" xml:space="preserve">
-    <value>Exported logs and configuration data to {0}</value>
+    <value>Esporta log e dati configurazione su {0}</value>
   </data>
   <data name="ExportLogsAndConfiguration" xml:space="preserve">
-    <value>Export logs and configuration</value>
+    <value>Esporta log e configurazione</value>
   </data>
   <data name="LoginFailed" xml:space="preserve">
-    <value>Login failed.</value>
+    <value>Login fallito.</value>
   </data>
   <data name="LoginSuccessful" xml:space="preserve">
-    <value>Login successful!</value>
+    <value>Login eseguito!</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -160,22 +160,22 @@
     <value>Port:</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
-    <value>Not installed</value>
+    <value>Non installata</value>
   </data>
   <data name="ServiceNotInstalledPopup" xml:space="preserve">
-    <value>MPExtended Service is not installed. Please make sure your installation is correct.</value>
+    <value>MPExtended Service non è installato. Perfavore controlla che l'installazione sia corretta.</value>
   </data>
   <data name="ServiceStarted" xml:space="preserve">
-    <value>Service started</value>
+    <value>Servizio started</value>
   </data>
   <data name="ServiceStarting" xml:space="preserve">
-    <value>Service stopping</value>
+    <value>Servizio stopping</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
-    <value>Service stopped</value>
+    <value>Servizio fermato</value>
   </data>
   <data name="ServiceUnknown" xml:space="preserve">
-    <value>Service status unknown</value>
+    <value>Stato Servizio sconosciuto</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
@@ -196,37 +196,37 @@
     <value>IP Address</value>
   </data>
   <data name="StreamingKickSession" xml:space="preserve">
-    <value>Kick session</value>
+    <value>Chiudi sessione</value>
   </data>
   <data name="StreamingProfile" xml:space="preserve">
-    <value>Profile</value>
+    <value>Profilo</value>
   </data>
   <data name="StreamingProgress" xml:space="preserve">
-    <value>Progress</value>
+    <value>Progresso</value>
   </data>
   <data name="SubtitlesDisabled" xml:space="preserve">
-    <value>Disable subtitles</value>
+    <value>Disabilita sottotitoli</value>
   </data>
   <data name="SubtitlesExternal" xml:space="preserve">
-    <value>Use external .srt file</value>
+    <value>Usa file .srt esterno</value>
   </data>
   <data name="SubtitlesFirstStream" xml:space="preserve">
-    <value>First stream in file</value>
+    <value>Primo stream nel file</value>
   </data>
   <data name="TabAuthentication" xml:space="preserve">
-    <value>Authentication</value>
+    <value>Autetificazione</value>
   </data>
   <data name="TabConfiguration" xml:space="preserve">
-    <value>Configuration</value>
+    <value>Configurazione</value>
   </data>
   <data name="TabLogs" xml:space="preserve">
-    <value>Logs</value>
+    <value>Log</value>
   </data>
   <data name="TabPlugins" xml:space="preserve">
     <value>Plugins</value>
   </data>
   <data name="TabProject" xml:space="preserve">
-    <value>Project</value>
+    <value>Progetto</value>
   </data>
   <data name="TabQRCode" xml:space="preserve">
     <value>QR-Code</value>
@@ -238,22 +238,22 @@
     <value>Streaming</value>
   </data>
   <data name="TabTroubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
+    <value>Risoluzione Problemi</value>
   </data>
   <data name="TabWebMediaPortal" xml:space="preserve">
     <value>WebMediaPortal</value>
   </data>
   <data name="TestingCredentials" xml:space="preserve">
-    <value>Testing credentials, please wait...</value>
+    <value>Testando le credenziali, perfavore aspetta...</value>
   </data>
   <data name="TestLinksFor" xml:space="preserve">
-    <value>Test links for</value>
+    <value>Test del links per</value>
   </data>
   <data name="TrayCloseMediaPortal" xml:space="preserve">
-    <value>Close MediaPortal</value>
+    <value>Chiudi MediaPortal</value>
   </data>
   <data name="TrayExit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Esci</value>
   </data>
   <data name="TrayHibernate" xml:space="preserve">
     <value>Hibernate</value>
@@ -268,82 +268,82 @@
     <value>Monitor off</value>
   </data>
   <data name="TrayOpenConfigurator" xml:space="preserve">
-    <value>Open MPExtended Configurator</value>
+    <value>Apri il Configuratore di MPExtended</value>
   </data>
   <data name="TrayOpenWebMP" xml:space="preserve">
-    <value>Open WebMediaPortal</value>
+    <value>Apri WebMediaportal</value>
   </data>
   <data name="TrayPowermodes" xml:space="preserve">
-    <value>Powermodes</value>
+    <value>Modalità di alimentazione</value>
   </data>
   <data name="TrayReboot" xml:space="preserve">
-    <value>Reboot</value>
+    <value>Riavvia</value>
   </data>
   <data name="TrayScreensaver" xml:space="preserve">
     <value>Screensaver</value>
   </data>
   <data name="TrayShutdown" xml:space="preserve">
-    <value>Shutdown</value>
+    <value>Spegni</value>
   </data>
   <data name="TrayStartMediaPortal" xml:space="preserve">
-    <value>Start MediaPortal</value>
+    <value>Avvia Mediaportal</value>
   </data>
   <data name="TraySuspend" xml:space="preserve">
-    <value>Suspend</value>
+    <value>Sospendi</value>
   </data>
   <data name="TrayTooltip" xml:space="preserve">
     <value>MPExtended</value>
   </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
-    <value>To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues).</value>
+    <value>Per controllare la validità del contenuto richiesto utilizza uno del link seguenti... Puoi utillizzare localhost per testare il servizio sulla stessa macchina. Seleziona uno degli IP dalla lista a tendina per testarlo sugli altri PC nella rete locale (es. per escludere problemi sul firewall)</value>
   </data>
   <data name="TVServer" xml:space="preserve">
-    <value>TVServer</value>
+    <value>Server TV</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>An unexpected error occured. Please file a bugreport with the service's log files attached.</value>
+    <value>C'è stato un errore imprevisto. Per favore invia un report allegando i file di log del servizio.</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
-    <value>MPExtended Configurator</value>
+    <value>Configuratore di MPExtended</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add account</value>
+    <value>Aggiungi Utente</value>
   </data>
   <data name="AuthenticationIntroText" xml:space="preserve">
-    <value>You can configure authentication for MPExtended here. It is recommended that you enable authentication and change the password (or delete) of the default account, admin. Never make an installation accessible from the internet without using authentication and secure passwords.</value>
+    <value>Puoi configurare qui l'autenticazione per MPExtended. Si raccomanda di abilitare l'autenticazione e cambiare la password dell' utente predefinito, admin (o eliminarlo).</value>
   </data>
   <data name="Autodetection" xml:space="preserve">
-    <value>Autodetection</value>
+    <value>Rilevamento automatico</value>
   </data>
   <data name="AutodetectionText" xml:space="preserve">
-    <value>The services support autodetection via Bonjour/Zeroconf, which allows clients on the local network to automatically find the services and configure themselves.</value>
+    <value>Il servizio supporta il rilevamento automatico tramite servizio Bonjour/Zeroconf, che permette ai client della rete locale di trovare automaticamente i servizi e configurarli.</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
-    <value>check for updates</value>
+    <value>Controlla gli aggiornamenti</value>
   </data>
   <data name="CheckingForUpdates" xml:space="preserve">
-    <value>checking for updates...</value>
+    <value>Sto controllando gli aggiornamenti... </value>
   </data>
   <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Sorry, the network credentials you entered are invalid. </value>
+    <value>Spiacente, le credenziali di rete inserite non sono valide.</value>
   </data>
   <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Successfully validated the network credentials.</value>
+    <value>Credenziali di rete correttamente convalidate.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete account</value>
+    <value>Elimina Utente</value>
   </data>
   <data name="Documentation" xml:space="preserve">
-    <value>Documentation:</value>
+    <value>Documentazione:</value>
   </data>
   <data name="EnableAuthentication" xml:space="preserve">
-    <value>Enable authentication (recommended!)</value>
+    <value>Abilita autenticazione (raccomandato!)</value>
   </data>
   <data name="EnableAutodetection" xml:space="preserve">
-    <value>Enable autodetection</value>
+    <value>Abilita rilevamento automatico</value>
   </data>
   <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
-    <value>failed to retrieve update information</value>
+    <value>Impossibile scaricare informazioni sugli aggiornamenti</value>
   </data>
   <data name="Forum" xml:space="preserve">
     <value>Forum:</value>
@@ -352,167 +352,161 @@
     <value>Homepage:</value>
   </data>
   <data name="IncludeAuthentication" xml:space="preserve">
-    <value>Include authentication for user:</value>
+    <value>Includi l'autenticazione per l'utente:</value>
   </data>
   <data name="IRCText" xml:space="preserve">
-    <value>IRC:
-   irc.freenode.net / channel #mp-extended</value>
+    <value>IRC:⏎  irc.freenode.net / channel #mp-extended</value>
   </data>
   <data name="MPExtendedIntroduction" xml:space="preserve">
-    <value>MPExtended is an open source project that aims at providing access to MediaPortal from all over the world, using clients for your webbrowser, Android, iOS and more.
-
-This is the service component, which provides access to the databases and media files for all clients.</value>
+    <value>MPExtended è un progetto open source che intende fornire accesso a Mediaportal da tutto il mondo utillizzando il browser web, Android, IOS ed altro. ⏎ ⏎ Si tratta di un servizio che fornisce accesso ai database ed ai files multimediali a tutti i client.</value>
   </data>
   <data name="NetworkDrives" xml:space="preserve">
-    <value>Network drives</value>
+    <value>Unità di rete</value>
   </data>
   <data name="NetworkDrivesText" xml:space="preserve">
-    <value>If you have put your media files on a different system (such as a dedicated server or a NAS), MPExtended needs the credentials for this drive to access them. Usually this are the credentials of your Windows account.</value>
+    <value>Se hai files multimediali su un sistema diverso (come un server dedicato o un NAS), MPExtended ha bisogno delle credenziali per avere accesso alla risorsa. Di solito le credenziali sono quelle del tuo account Windows.</value>
   </data>
   <data name="NoUpdateAvailable" xml:space="preserve">
-    <value>no update available</value>
+    <value>nessun aggiornamento disponibile</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
   <data name="PortText" xml:space="preserve">
-    <value>You can configure the port on which the services listen here.</value>
+    <value>Puoi configurare la porta sulla quale il servizio si mette in ascolto.</value>
   </data>
   <data name="QRCode" xml:space="preserve">
     <value>QR Code</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
-    <value>You can scan the QR code with supported clients to add this MPExtended installation automatically.</value>
+    <value>Puoi scansionare il QR code con i client compatibili per aggiungere l'installazione di MPExtended automaticamente.</value>
   </data>
   <data name="SaveBarcodeAsImageFile" xml:space="preserve">
-    <value>Save barcode as image file</value>
+    <value>Salva il barcode come immagine</value>
   </data>
   <data name="SavedBarcodeTo" xml:space="preserve">
-    <value>Saved barcode to {0}!</value>
+    <value>Barcode salvato in {0}!</value>
   </data>
   <data name="SaveToFile" xml:space="preserve">
-    <value>Save to file</value>
+    <value>Salva su file</value>
   </data>
   <data name="ServiceName" xml:space="preserve">
-    <value>Service Name</value>
+    <value>Nome del Servizio</value>
   </data>
   <data name="Services" xml:space="preserve">
-    <value>Services</value>
+    <value>Servizi</value>
   </data>
   <data name="Test" xml:space="preserve">
     <value>Test</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
-    <value>update available: version {0}, released on {1}</value>
+    <value>Aggiornamento disponibile: versione {0}, rilasciata il {1}</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Nome utente</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version:</value>
+    <value>Versione:</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Esporta</value>
   </data>
   <data name="LogFile" xml:space="preserve">
-    <value>Log file:</value>
+    <value>File di Log:</value>
   </data>
   <data name="LogFiles" xml:space="preserve">
-    <value>Log files</value>
+    <value>Files di Log</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>None</value>
+    <value>Nessuna</value>
   </data>
   <data name="Plugin" xml:space="preserve">
     <value>Plugin</value>
   </data>
   <data name="ScrollToEnd" xml:space="preserve">
-    <value>Scroll to end</value>
+    <value>Vai alla fine</value>
   </data>
   <data name="Site" xml:space="preserve">
-    <value>Site</value>
+    <value>Sito</value>
   </data>
   <data name="SocialIntroText" xml:space="preserve">
-    <value>MPExtended supports synchronization of the movies and shows you watch in clients to Trakt and follw.it. You can configure your account for these sites here.</value>
+    <value>MPExtended supporta la sincronizzazione dei film e show visti in TRakt e wollow.it. Puoi configuare qui il tuo account per questi siti.</value>
   </data>
   <data name="LogAndConfigurationArchive" xml:space="preserve">
-    <value>Log and configuration archive (.zip)</value>
+    <value>Archivio log e configurazione (.zip)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Browse</value>
+    <value>Naviga</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleziona</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
-    <value>Donate to MPExtended</value>
+    <value>Dona a MPExtended</value>
   </data>
   <data name="CleanCaches" xml:space="preserve">
-    <value>Clean cache</value>
+    <value>Pulisci cache</value>
   </data>
   <data name="EnableHTTPS" xml:space="preserve">
-    <value>Enable HTTPS</value>
+    <value>AbilitaHTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>Due to limitations in Windows and IIS Express, you can only use ports between 44300 and 44399 for HTTPS. You also have to configure your firewall manually to allow these connections.
+    <value>A causa di alcune limitazioni in Windows and IIS Express, puoi usare solo le porte tra 44300 e 44399 per HTTPS. Devi anche configurare manualmente il firewall per abilitare questa connessione.
 
-Please note that it isn't possible to configure the SSL/TLS certificate used. When using HTTPS, you will get warnings in your browser about a potentially untrusted connection. </value>
+Nota che non è possibile configurare il certificato SSL/TLS usato. Quando usi  HTTPS, verraio allertato dal browser su una connessione potenzialmente pericolosa. </value>
   </data>
   <data name="HTTPSInvalidPort" xml:space="preserve">
-    <value>The port you entered for HTTPS is invalid. You can use only ports 44300 until 44399 for HTTPS. </value>
+    <value>La porta inserita per HTTPS non è valida.Puoi usare solo porte dal 44300a 44399 per HTTPS.</value>
   </data>
   <data name="HTTPSPort" xml:space="preserve">
     <value>HTTPS Port:</value>
   </data>
   <data name="TabActivity" xml:space="preserve">
-    <value>Activity</value>
+    <value>Attività</value>
   </data>
   <data name="UserMustHaveNameAndPassword" xml:space="preserve">
-    <value>Please enter both a username and password for this user. </value>
+    <value>Perfavore inserisci username e password per questo utente</value>
   </data>
   <data name="BonjourChecking" xml:space="preserve">
-    <value>Checking your Bonjour installation...</value>
+    <value>Sto controllando la tua installazione Bonjour ...</value>
   </data>
   <data name="BonjourNotInstalled" xml:space="preserve">
-    <value>Bonjour isn't installed on your computer. To use this feature, </value>
+    <value>Bonjour non è installata nel tuo computer. Per usare questa feature, </value>
   </data>
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
-    <value>please download Bonjour. </value>
+    <value>perfavore scarica Bonjour.</value>
   </data>
   <data name="Enable" xml:space="preserve">
-    <value>Enable</value>
+    <value>Abilita</value>
   </data>
   <data name="AccessRequest" xml:space="preserve">
-    <value>Do you want to give the application '{0}' (with IP address {1}) full access to the MPExtended services?</value>
+    <value>Vuoi dare all'applicazione '{0}' (con indirizzo IP  {1}) full access al servizio MPExtended ?</value>
   </data>
   <data name="AccessRequestDenyAccess" xml:space="preserve">
-    <value>Deny</value>
+    <value>Rifiuta</value>
   </data>
   <data name="AccessRequestGrantAccess" xml:space="preserve">
-    <value>Grant access</value>
+    <value>Permetti accesso</value>
   </data>
   <data name="AccessRequestSelectUser" xml:space="preserve">
-    <value>Select user:</value>
+    <value>Seleziona Utente:</value>
   </data>
   <data name="AccessRequestWifiRemote" xml:space="preserve">
-    <value>Do you wish to allow '{0}' access? (If so, assign a user in the next step)</value>
+    <value>Vuoi autorizzare '{0}' all'accesso? (se si, assegna una utenza nel prossimo menu)</value>
   </data>
   <data name="AccessRequestEnable" xml:space="preserve">
-    <value>Enable access requests of clients</value>
+    <value>Abilita le richieste di accesso dei clients</value>
   </data>
   <data name="ExternalIpCustom" xml:space="preserve">
     <value>Custom</value>
   </data>
   <data name="ExternalIpDefault" xml:space="preserve">
-    <value>Automatically detect external IP</value>
+    <value>Cancella automaticamente IP esterni</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
-    <value>External address</value>
+    <value>Indirizzi esterni</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
-  </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language</value>
   </data>
 </root>

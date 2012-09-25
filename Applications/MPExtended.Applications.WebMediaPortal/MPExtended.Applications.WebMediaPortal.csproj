@@ -427,14 +427,34 @@
     <Content Include="Views\Search\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Strings\FormStrings.de.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.es.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.fi.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.fr.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.it.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.lt.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.nl.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.no.resx" />
     <EmbeddedResource Include="Strings\FormStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FormStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings\FormStrings.sl.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.sv.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.de.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.es.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.fi.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.fr.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.it.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.lt.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.nl.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.no.resx" />
     <EmbeddedResource Include="Strings\UIStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings\UIStrings.sl.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.sv.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\FlashAudioAlbumPlayer.cshtml" />
