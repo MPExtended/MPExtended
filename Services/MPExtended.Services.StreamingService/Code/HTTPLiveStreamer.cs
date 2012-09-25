@@ -99,8 +99,19 @@ namespace MPExtended.Services.StreamingService.Code
 
         private Stream StripCarriageReturn(string path)
         {
-            // read original file
-            var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            // open original file, but retry if we fail with an IOException, which might happen because VLC is still writing to it
+            FileStream fileStream = null;
+            try
+            {
+                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            }
+            catch (IOException)
+            {
+                System.Threading.Thread.Sleep(20);
+                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            }
+
+            // read contents of original file
             string text;
             using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
             {
