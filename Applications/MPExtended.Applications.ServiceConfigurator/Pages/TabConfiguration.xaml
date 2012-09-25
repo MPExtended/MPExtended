@@ -46,11 +46,19 @@
                 <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="118,0,0,6" Name="btnTestCredentials" VerticalAlignment="Bottom" Width="120" Click="btnTestCredentials_Click" />
             </Grid>
         </GroupBox>
-        <GroupBox Header="{x:Static strings:UI.ExternalIpLabel}" Height="91" HorizontalAlignment="Left" Margin="292,271,0,0" Name="groupBox1" VerticalAlignment="Top" Width="256">
+        
+        <GroupBox Header="{x:Static strings:UI.ExternalIpLabel}" Height="91" HorizontalAlignment="Left" Margin="292,271,0,0" VerticalAlignment="Top" Width="256">
             <Grid>
                 <CheckBox Content="{x:Static strings:UI.ExternalIpDefault}" Height="16" HorizontalAlignment="Left" Margin="10,10,0,0" Name="cbAutoDetectExternalIp" VerticalAlignment="Top" Width="228" Checked="cbAutoDetectExternalIp_Checked" Unchecked="cbAutoDetectExternalIp_Unchecked" />
                 <Label Content="{x:Static strings:UI.ExternalIpCustom}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="4,34,0,0" Name="label1" VerticalAlignment="Top" Width="62" />
                 <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="66,36,0,0" Name="txtCustomExternalAddress" Text="" VerticalAlignment="Top" Width="172" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="{x:Static strings:UI.Language}" Height="60" HorizontalAlignment="Left" Margin="12,368,0,0" VerticalAlignment="Top" Width="256">
+            <Grid>
+                <Label Content="{x:Static strings:UI.Language}" FontWeight="Bold" Height="28" Width="78" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
+                <ComboBox Height="23" HorizontalAlignment="Left" Margin="80,6,0,0" VerticalAlignment="Top" Width="158" ItemsSource="{Binding}" Name="cbLanguage" SelectionChanged="ChangeLanguage"/>
             </Grid>
         </GroupBox>
     </Grid>

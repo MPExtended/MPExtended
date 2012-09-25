@@ -81,6 +81,13 @@ namespace MPExtended.Applications.ServiceConfigurator
                 Environment.CurrentDirectory = Installation.GetInstallDirectory();
             }
 
+            // set language
+            if (Configuration.Services.DefaultLanguage != null)
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo(Configuration.Services.DefaultLanguage);
+                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(Configuration.Services.DefaultLanguage);
+            }
+
             // set startup form
             this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
         }

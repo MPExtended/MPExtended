@@ -18,8 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
@@ -38,6 +40,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabConfiguration : Page, ITabCloseCallback
     {
+        private static BackgroundWorker loadLanguagesWorker;
+        private static IEnumerable<CultureInfo> availableTranslations;
+
+        public static void StartLoadingTranslations()
+        {
+            loadLanguagesWorker = new BackgroundWorker();
+            loadLanguagesWorker.DoWork += delegate(object source, DoWorkEventArgs args)
+            {
+                availableTranslations = CultureDatabase.GetAvailableTranslations(UI.ResourceManager).ToList();
+            };
+            loadLanguagesWorker.RunWorkerAsync();
+        }
+
         public TabConfiguration()
         {
             InitializeComponent();
@@ -47,34 +62,69 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtServiceName.Text = GetServiceName();
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
+            cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
             cbAutoDetectExternalIp.IsChecked = Configuration.Services.ExternalAddress.Autodetect;
+
             if (Configuration.Services.ExternalAddress.Autodetect)
             {
-                GetExternalIp();
+                GetExternalAddress();
             }
             else
             {
                 txtCustomExternalAddress.Text = Configuration.Services.ExternalAddress.Custom;
             }
 
-            cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
-
+            // load dynamic data
+            while (loadLanguagesWorker.IsBusy)
+                Thread.Sleep(20);
+            LoadLanguageChoices();
             CheckBonjour();
         }
 
-        private void GetExternalIp()
+        public void TabClosed()
         {
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += delegate(object source, DoWorkEventArgs args)
-            {
-                args.Result = ExternalAddress.GetIP().ToString();
-            };
-            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
-            {
-                txtCustomExternalAddress.Text = (string)args.Result;
-            };
+            Configuration.Services.DefaultLanguage = (string)cbLanguage.SelectedValue;
+            Configuration.Services.Port = Int32.Parse(txtPort.Text);
+            Configuration.Services.BonjourName = txtServiceName.Text;
+            Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
+            Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
+            Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
+            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
+            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
 
-            bw.RunWorkerAsync();
+            if (!cbAutoDetectExternalIp.IsChecked.Value)
+            {
+                Configuration.Services.ExternalAddress.Custom = txtCustomExternalAddress.Text;
+            }
+
+            Configuration.Save();
+        }
+
+        private void LoadLanguageChoices()
+        {
+            cbLanguage.DisplayMemberPath = "DisplayName";
+            cbLanguage.SelectedValuePath = "Name";
+            cbLanguage.DataContext = availableTranslations;
+
+            if (Configuration.Services.DefaultLanguage != null &&
+                availableTranslations.Select(x => x.Name).Contains(Configuration.Services.DefaultLanguage))
+                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == Configuration.Services.DefaultLanguage);
+
+            if (cbLanguage.SelectedValue == null &&
+                availableTranslations.Contains(Thread.CurrentThread.CurrentUICulture))
+                cbLanguage.SelectedValue = Thread.CurrentThread.CurrentUICulture;
+
+            if (cbLanguage.SelectedValue == null)
+                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == "en");
+        }
+
+        private void ChangeLanguage(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbLanguage.SelectedItem != null)
+            {
+                Thread.CurrentThread.CurrentCulture = (CultureInfo)cbLanguage.SelectedItem;
+                Thread.CurrentThread.CurrentUICulture = (CultureInfo)cbLanguage.SelectedItem;
+            }
         }
 
         private void CheckBonjour()
@@ -113,24 +163,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             bw.RunWorkerAsync();
         }
 
-        public void TabClosed()
-        {
-            Configuration.Services.Port = Int32.Parse(txtPort.Text);
-            Configuration.Services.BonjourName = txtServiceName.Text;
-            Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
-            Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
-            Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
-            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
-            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
-
-            if (!cbAutoDetectExternalIp.IsChecked.Value)
-            {
-                Configuration.Services.ExternalAddress.Custom = txtCustomExternalAddress.Text;
-            }
-
-            Configuration.Save();
-        }
-
         private string GetServiceName()
         {
             string value = Configuration.Services.BonjourName;
@@ -149,6 +181,32 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        private void GetExternalAddress()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += delegate(object source, DoWorkEventArgs args)
+            {
+                args.Result = ExternalAddress.GetIP().ToString();
+            };
+            bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
+            {
+                txtCustomExternalAddress.Text = (string)args.Result;
+            };
+
+            bw.RunWorkerAsync();
+        }
+
+        private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = false;
+            GetExternalAddress();
+        }
+
+        private void cbAutoDetectExternalIp_Unchecked(object sender, RoutedEventArgs e)
+        {
+            txtCustomExternalAddress.IsEnabled = true;
+        }
+
         private void btnTestCredentials_Click(object sender, RoutedEventArgs e)
         {
             if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
@@ -164,17 +222,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
-        }
-
-        private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
-        {
-            txtCustomExternalAddress.IsEnabled = false;
-            GetExternalIp();
-        }
-
-        private void cbAutoDetectExternalIp_Unchecked(object sender, RoutedEventArgs e)
-        {
-            txtCustomExternalAddress.IsEnabled = true;
         }
     }
 }

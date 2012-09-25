@@ -72,6 +72,8 @@ namespace MPExtended.Libraries.Service.Config
         public string MASConnection { get; set; }
         public string TASConnection { get; set; }
 
+        public string DefaultLanguage { get; set; }
+
         public NetworkImpersonation NetworkImpersonation { get; set; }
 
         public Services()

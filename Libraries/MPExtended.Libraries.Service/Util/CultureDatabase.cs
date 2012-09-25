@@ -47,6 +47,10 @@ namespace MPExtended.Libraries.Service.Util
             var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
             foreach (var culture in cultures)
             {
+                // This is the source language
+                if (culture.Name == "en")
+                    yield return culture;
+
                 ResourceSet rs = rm.GetResourceSet(culture, true, false);
                 if (rs == null || culture.LCID == CultureInfo.InvariantCulture.LCID || culture.Parent.LCID != CultureInfo.InvariantCulture.LCID)
                     continue;

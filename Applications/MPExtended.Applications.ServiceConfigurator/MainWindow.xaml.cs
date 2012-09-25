@@ -79,6 +79,9 @@ namespace MPExtended.Applications.ServiceConfigurator
             {
                 tcMainTabs.Items.Remove(tiWebMediaPortal);
             }
+
+            // initialize some tabs
+            Pages.TabConfiguration.StartLoadingTranslations();
         }
 
         /// <summary>
