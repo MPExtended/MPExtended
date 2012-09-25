@@ -165,11 +165,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // Delegate to HLS streaming if needed
             WebTranscoderProfile profile = GetStreamControl(type).GetTranscoderProfileByName(transcoder);
-            StreamTarget target = StreamTarget.GetVideoTargets().First(x => profile.Targets.Contains(x.Name));
-            if (target.Player == VideoPlayer.HLS)
-            {
+            if (profile.HasVideoStream && StreamTarget.GetVideoTargets().First(x => profile.Targets.Contains(x.Name)).Player == VideoPlayer.HLS)
                 return GenerateHttpLiveStream(type, itemId, profile, starttime, continuationId);
-            }
 
             // Generate random identifier, and continuationId if needed
             string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
