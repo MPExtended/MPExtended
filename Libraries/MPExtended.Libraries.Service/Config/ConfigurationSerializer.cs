@@ -235,6 +235,10 @@ namespace MPExtended.Libraries.Service.Config
                     {
                         Log.Warn("Configuration: Keep using old configuration because new one is invalid.", ex);
                     }
+                    finally
+                    {
+                        stream.Close();
+                    }
                 }
                 else
                 {
