@@ -119,6 +119,10 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         foreach (string key in toDelete)
                         {
+                            // The stream could've been terminated between the moment we decide it should be terminated and we get here. 
+                            if (!Streams.ContainsKey(key))
+                                continue;
+
                             if (Streams[key].UseActivityForTimeout)
                             {
                                 Log.Info("Stream {0} had last service activity at {1}, so cancel it", key, Streams[key].LastActivity);
