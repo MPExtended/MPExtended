@@ -5,6 +5,7 @@
     @Html.Assets().AddContentStylesheet("Site.css")
     @Html.Assets().Render()
     @RenderSection("HeadHtml", false)
+    <link type="image/png" href="@Url.ContentLink("Images/favicon.png")" rel="icon" />
 </head>
 <body>
     <div id="header">
