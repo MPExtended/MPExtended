@@ -418,7 +418,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             List<string> profiles = new List<string>();
             foreach (StreamTarget target in targets)
             {
-                profiles = profiles.Concat(streamControl.GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).Distinct().ToList();
+                if (target.ValidForRequest(Request))
+                    profiles = profiles.Concat(streamControl.GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).Distinct().ToList();
             }
 
             // get view properties

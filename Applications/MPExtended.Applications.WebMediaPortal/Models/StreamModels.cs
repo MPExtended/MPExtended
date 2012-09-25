@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
@@ -37,6 +38,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             this.Player = player;
             this.HasVideo = video;
             this.Name = name;
+        }
+
+        public bool ValidForRequest(HttpRequestBase request)
+        {
+            if (Name == "mobile-hls-video")
+                return request.UserAgent.Contains("iPhone") || request.UserAgent.Contains("iPad") || request.UserAgent.Contains("iPod");
+
+            return true;
         }
 
         public static List<StreamTarget> GetAudioTargets()
@@ -100,7 +109,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public string GetTranscoderForTrack(WebMusicTrackDetailed track)
         {
-            if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg")
+            if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg" && false)
             {
                 return "Direct";
             }
