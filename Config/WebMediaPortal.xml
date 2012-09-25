@@ -6,9 +6,9 @@
 
   <DefaultMediaProfile>Direct</DefaultMediaProfile>
   <DefaultTVProfile>Direct</DefaultTVProfile>
-  <EnableDeinterlace>false</EnableDeinterlace>
+  <EnableDeinterlace>true</EnableDeinterlace>
   <DefaultAudioProfile>MP3</DefaultAudioProfile>
-  <EnableAlbumPlayer>false</EnableAlbumPlayer>
+  <EnableAlbumPlayer>true</EnableAlbumPlayer>
   
   <TVShowProvider xsi:nil="true" />
   <MovieProvider xsi:nil="true" />
