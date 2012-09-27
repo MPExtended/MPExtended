@@ -14,7 +14,7 @@
     <Grid Width="AUTO">
         <tb:TaskbarIcon 
           IconSource="/Artwork/TrayIcon.ico"
-          ToolTipText="{x:Static strings:UI.TrayTooltip}" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
+          ToolTipText="MPExtended" TrayLeftMouseUp="TaskbarIcon_TrayLeftMouseUp">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border
                   Background="White"
@@ -25,7 +25,7 @@
                   Width="160"
                   Height="40">
                     <TextBlock
-                        Text="{x:Static strings:UI.TrayTooltip}"
+                        Text="MPExtended"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
                 </Border>

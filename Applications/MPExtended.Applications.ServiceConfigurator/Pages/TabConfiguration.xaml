@@ -34,7 +34,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="Network drives" Height="241" HorizontalAlignment="Left" Margin="12,136,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="300">
+        <GroupBox Header="{x:Static strings:UI.NetworkDrives}" Height="241" HorizontalAlignment="Left" Margin="12,136,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="300">
             <Grid Height="219">
                 <TextBlock Height="124" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="276" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
 

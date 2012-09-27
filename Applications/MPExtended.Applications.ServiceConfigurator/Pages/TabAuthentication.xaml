@@ -18,7 +18,7 @@
 
         <TextBox Height="23" HorizontalAlignment="Left" Margin="172,124,0,0" Name="txtUsername" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Username}" Width="190" TextChanged="txtUsername_TextChanged" />
         <PasswordBox Height="23" HorizontalAlignment="Left" Margin="172,153,0,0" Name="txtPassword" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Password}" Width="190" />
-        <Button Content="Add account" Height="23" HorizontalAlignment="Left" Margin="376,153,0,0" Name="btnAdd" VerticalAlignment="Top" Width="141" Click="btnAdd_Click"/>
+        <Button Content="{x:Static strings:UI.AddAccount}" Height="23" HorizontalAlignment="Left" Margin="376,153,0,0" Name="btnAdd" VerticalAlignment="Top" Width="141" Click="btnAdd_Click"/>
 
         <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,190,12,12" Name="lvUsers" VerticalAlignment="Stretch" ItemsSource="{Binding}">
             <ListView.ContextMenu>

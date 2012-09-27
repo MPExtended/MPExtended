@@ -10,7 +10,7 @@
 
     <Grid>
         <TextBox BorderThickness="0" Text="{x:Static strings:UI.TroubleshootingHeaderText}" TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
-        <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
+        <Label Content="{x:Static strings:UI.TabTroubleshooting}" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
         <Label Content="{x:Static strings:UI.TestLinksFor}" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
         <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="207,122,6,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="336" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
         

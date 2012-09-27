@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Suspend</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>To check the validity of the requested content please use the following links... You can use localhost to test the service on the same machine. Select one of the IPs from the dropdown list to get urls for testing on other PCs on the network (e.g. to rule out firewall issues).</value>
   </data>
@@ -377,9 +374,6 @@ This is the service component, which provides access to the databases and media 
   </data>
   <data name="PortText" xml:space="preserve">
     <value>You can configure the port on which the services listen here.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR Code</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>You can scan the QR code with supported clients to add this MPExtended installation automatically.</value>

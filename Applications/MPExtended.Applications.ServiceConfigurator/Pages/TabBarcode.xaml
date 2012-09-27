@@ -9,7 +9,7 @@
 	Title="TabBarcode">
 
     <Grid>
-        <Label Content="{x:Static strings:UI.QRCode}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
+        <Label Content="{x:Static strings:UI.TabQRCode}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="225,6,0,0" Name="label15" VerticalAlignment="Top" FontSize="14" />
         <TextBlock Text="{x:Static strings:UI.QRCodeIntroText}" Height="47" HorizontalAlignment="Left" Margin="10,44,0,0" Name="lblScan" VerticalAlignment="Top" TextWrapping="Wrap" Width="619" />
                 
         <Image Margin="10,93,6,70" Name="imgQRCode" Stretch="Uniform" StretchDirection="Both" HorizontalAlignment="Stretch" OpacityMask="White" />

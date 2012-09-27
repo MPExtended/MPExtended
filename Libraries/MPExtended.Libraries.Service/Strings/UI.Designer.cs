@@ -651,15 +651,6 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Code.
-        /// </summary>
-        public static string QRCode {
-            get {
-                return ResourceManager.GetString("QRCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You can scan the QR code with supported clients to add this MPExtended installation automatically..
         /// </summary>
         public static string QRCodeIntroText {
@@ -1160,15 +1151,6 @@ namespace MPExtended.Libraries.Service.Strings {
         public static string TraySuspend {
             get {
                 return ResourceManager.GetString("TraySuspend", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MPExtended.
-        /// </summary>
-        public static string TrayTooltip {
-            get {
-                return ResourceManager.GetString("TrayTooltip", resourceCulture);
             }
         }
         
