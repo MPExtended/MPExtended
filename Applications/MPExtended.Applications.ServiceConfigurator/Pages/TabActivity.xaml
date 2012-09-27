@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	  Title="TabStreaming">
 
     <Grid>
@@ -21,9 +21,9 @@
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ClientDescription}" Header="{x:Static strings:UI.StreamingClient}" Width="140" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ClientIP}" Header="{x:Static strings:UI.StreamingIPAddress}" Width="100"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="{x:Static strings:UI.StreamingProfile}" Width="70" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Profile}" Header="{x:Static strings:UI.StreamingProfile}" Width="100" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Progress}" Header="{x:Static strings:UI.StreamingProgress}" Width="60"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="{x:Static strings:UI.StreamingFile}" Width="150"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=File}" Header="{x:Static strings:UI.StreamingFile}" Width="200"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="451">
+             d:DesignHeight="300" d:DesignWidth="635">
     <Grid Width="Auto">
-    <Grid Name="ConfigurationItems" Width="Auto">
-    </Grid>
+        <Grid Name="ConfigurationItems" Width="Auto">
+        </Grid>
     </Grid>
 </UserControl>

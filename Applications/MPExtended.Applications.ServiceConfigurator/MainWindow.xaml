@@ -6,8 +6,8 @@
        Title="{x:Static strings:UI.WindowTitle}" 
        Height="600"
        MinHeight="600" 
-       Width="750"
-       MinWidth="750" 
+       Width="820"
+       MinWidth="820" 
        Closing="Window_Closing" 
        Icon="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png">
 
@@ -54,12 +54,12 @@
 
         <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-241,-184" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
 
-        <Image HorizontalAlignment="Left" Margin="6,0,11,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
-        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="100" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
-        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Foreground="#FF009600" />
+        <Image HorizontalAlignment="Left" Margin="16,0,21,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="120" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" FontWeight="Bold" Foreground="#FF009600" />
 
-        <Button Content="{x:Static strings:UI.OK}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnOK" VerticalAlignment="Bottom" Width="75" Click="btnOK_Click"/>
-        <Separator Height="1" Name="separator" Width="145" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
+        <Button Content="{x:Static strings:UI.OK}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnOK" VerticalAlignment="Bottom" Width="110" Click="btnOK_Click"/>
+        <Separator Height="1" Name="separator" Width="165" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
 
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,0,0,8" Name="tbDonate" VerticalAlignment="Bottom">
             <Hyperlink NavigateUri="http://mpextended.github.com/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
@@ -85,27 +85,27 @@
                 </Style>
             </TabControl.Resources>
 
-            <TabItem Header="{x:Static strings:UI.TabProject}" Width="140" Name="tiGeneral" Tag="Pages/TabProject.xaml">
+            <TabItem Header="{x:Static strings:UI.TabProject}" Width="160" Name="tiGeneral" Tag="Pages/TabProject.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabConfiguration}" Width="140" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
+            <TabItem Header="{x:Static strings:UI.TabConfiguration}" Width="160" Name="tiConfiguration" Tag="Pages/TabConfiguration.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="140" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
+            <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="160" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabSocial}" Width="140" Name="tiSocial" Tag="Pages/TabSocial.xaml">
+            <TabItem Header="{x:Static strings:UI.TabSocial}" Width="160" Name="tiSocial" Tag="Pages/TabSocial.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="140" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
+            <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="160" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="140" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
+            <TabItem Header="{x:Static strings:UI.TabQRCode}" Width="160" Name="tiBarcode" Tag="Pages/TabBarcode.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabActivity}" Width="140" Name="tiActivity" Tag="Pages/TabActivity.xaml">
+            <TabItem Header="{x:Static strings:UI.TabActivity}" Width="160" Name="tiActivity" Tag="Pages/TabActivity.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="140" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
+            <TabItem Header="{x:Static strings:UI.TabStreaming}" Width="160" Name="tiStreaming" Tag="Pages/TabStreaming.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabLogs}" Width="140" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
+            <TabItem Header="{x:Static strings:UI.TabLogs}" Width="160" Name="tiLogs" Tag="Pages/TabServerLogs.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabTroubleshooting}" Width="140" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
+            <TabItem Header="{x:Static strings:UI.TabTroubleshooting}" Width="160" Name="tiTroubleShooting" Tag="Pages/TabTroubleshooting.xaml">
             </TabItem>
-            <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="140" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
+            <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="160" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
             </TabItem>
         </TabControl>
     </Grid>

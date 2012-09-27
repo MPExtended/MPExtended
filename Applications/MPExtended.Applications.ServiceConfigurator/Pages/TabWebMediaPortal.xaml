@@ -5,22 +5,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabWebMediaPortal">
     <Grid>
-        <GroupBox Header="WebMediaPortal" Height="268" HorizontalAlignment="Stretch" Margin="6,6,6,0" Name="gbServices" VerticalAlignment="Top" Width="Auto">
-            <Grid Height="260" Margin="0,0,0,0">
-                <TextBlock Height="41" Margin="11,6,1,0" Name="tbPort" Text="{x:Static strings:UI.ConfigureWebMPPort}" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <GroupBox Header="WebMediaPortal" Height="290" HorizontalAlignment="Stretch" Margin="6,6,6,0" Name="gbServices" VerticalAlignment="Top" Width="Auto">
+            <Grid Height="264" Margin="0,0,0,0">
+                <TextBlock Height="72" Margin="11,6,1,0" Name="tbPort" Text="{x:Static strings:UI.ConfigureWebMPPort}" TextWrapping="Wrap" VerticalAlignment="Top" />
                 
-                <Label Content="{x:Static strings:UI.Port}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,41,0,0" Name="lblPort" VerticalAlignment="Top" Width="80" />
-                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="100,43,0,0" Name="txtPort" Text="8080" VerticalAlignment="Top" Width="158" />
+                <Label Content="{x:Static strings:UI.Port}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,57,0,0" Name="lblPort" VerticalAlignment="Top" Width="142" />
+                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="208,59,0,0" Name="txtPort" Text="8080" VerticalAlignment="Top" Width="158" />
 
-                <CheckBox Content="{x:Static strings:UI.EnableHTTPS}" Height="16" HorizontalAlignment="Left" Margin="12,96,0,0" Name="cbHTTPS" VerticalAlignment="Top" Width="226" Checked="ChangeHTTPSCheckbox" Unchecked="ChangeHTTPSCheckbox"/>
-                <Label Content="{x:Static strings:UI.HTTPSPort}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,118,0,0" Name="lblHTTPSPort" VerticalAlignment="Top" Width="80" />
-                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="100,120,0,0" Name="txtHTTPSPort" Text="8080" VerticalAlignment="Top" Width="158" LostFocus="txtHTTPSPort_LostFocus" />
+                <CheckBox Content="{x:Static strings:UI.EnableHTTPS}" Height="16" HorizontalAlignment="Left" Margin="12,92,0,0" Name="cbHTTPS" VerticalAlignment="Top" Width="515" Checked="ChangeHTTPSCheckbox" Unchecked="ChangeHTTPSCheckbox"/>
+                <Label Content="{x:Static strings:UI.HTTPSPort}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,114,0,0" Name="lblHTTPSPort" VerticalAlignment="Top" Width="196" />
+                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="208,116,0,0" Name="txtHTTPSPort" Text="8080" VerticalAlignment="Top" Width="158" LostFocus="txtHTTPSPort_LostFocus" />
                 
-                <Label HorizontalAlignment="Stretch" Margin="6,156,0,0" Name="lblHTTPSDisclaimer" VerticalAlignment="Top">
-                    <TextBlock Text="{x:Static strings:UI.HTTPSDisclaimer}" TextWrapping="WrapWithOverflow" Height="Auto" Width="Auto" />
+                <Label HorizontalAlignment="Stretch" Margin="5,148,1,0" Name="lblHTTPSDisclaimer" VerticalAlignment="Top">
+                    <TextBlock Text="{x:Static strings:UI.HTTPSDisclaimer}" TextWrapping="WrapWithOverflow" Height="122" Width="Auto" />
                 </Label>
             </Grid>
         </GroupBox>

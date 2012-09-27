@@ -5,21 +5,21 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabGeneral">
 
     <Grid>        
-        <GroupBox Header="{x:Static strings:UI.Services}" Height="120" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="{x:Static strings:UI.Services}" Height="118" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="300">
             <Grid>
                 <TextBlock Height="37" Margin="6,6,6,0" Name="tbPort" Text="{x:Static strings:UI.PortText}" TextWrapping="Wrap" VerticalAlignment="Top" />
-                <Label Content="{x:Static strings:UI.Port}" Height="28" HorizontalAlignment="Left" Margin="0,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="62" FontWeight="Bold" />
-                <TextBox Height="23"  Margin="80,51,0,0" Name="txtPort" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Text="4322" IsReadOnly="False" IsEnabled="True" />
+                <Label Content="{x:Static strings:UI.Port}" Height="28" HorizontalAlignment="Left" Margin="0,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="178" FontWeight="Bold" />
+                <TextBox Height="23"  Margin="0,51,6,0" Name="txtPort" HorizontalAlignment="Right" VerticalAlignment="Top" Width="98" Text="4322" IsReadOnly="False" IsEnabled="True" />
             </Grid>
         </GroupBox>
-        
-        <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="253" HorizontalAlignment="Left" Margin="292,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="256">
+
+        <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="299" HorizontalAlignment="Left" Margin="323,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="300">
             <Grid>
-                <TextBlock TextWrapping="Wrap" Height="120" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="228">
+                <TextBlock TextWrapping="Wrap" Height="149" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="272">
                     <!-- This text is automatically updated at runtime -->
                     <Run Text="{x:Static strings:UI.AutodetectionText}" />
                     <LineBreak />
@@ -27,38 +27,39 @@
                     <Run Text="{x:Static strings:UI.BonjourChecking}" />
                 </TextBlock>
 
-                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="10,0,0,63" Name="cbBonjourEnabled" VerticalAlignment="Bottom" IsEnabled="false"/>
-                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,29" Name="lblServiceName" VerticalAlignment="Bottom" FontWeight="Bold" IsEnabled="false" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="99,0,0,32" Name="txtServiceName" Text="" VerticalAlignment="Bottom" Width="139" IsEnabled="false" />
-                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Right" Margin="0,0,6,6" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Bottom" Width="228" />
+                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="12,165,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" IsEnabled="false" Width="270" />
+                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,187,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="false" Width="276" />
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="10,221,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="272" IsEnabled="false" />
+                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Right" Margin="0,250,48,0" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Top" Width="228" />
             </Grid>
         </GroupBox>
-        
-        <GroupBox Header="Network drives" Height="220" HorizontalAlignment="Left" Margin="12,142,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="256">
-            <Grid>
-                <TextBlock Height="158" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="232" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
-                <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblUsername" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,61" Width="78" Height="28" />
-                <TextBox Name="txtNetworkUser"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="118,0,0,64" Width="120" Height="23" />
 
-                <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblPassword" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,32" Width="78" Height="28" />
-                <PasswordBox Name="txtNetworkPassword" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="118,0,0,35" Width="120" Height="23" />
+        <GroupBox Header="Network drives" Height="241" HorizontalAlignment="Left" Margin="12,136,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="300">
+            <Grid Height="219">
+                <TextBlock Height="124" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="276" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
+
+                <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblUsername" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,130,0,0" Width="161" Height="28" />
+                <TextBox Name="txtNetworkUser"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,132,6,0" Width="115" Height="23" />
+
+                <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblPassword" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,156,0,0" Width="155" Height="28" />
+                <PasswordBox Name="txtNetworkPassword" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,159,6,0" Width="115" Height="23" />
                 
-                <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="118,0,0,6" Name="btnTestCredentials" VerticalAlignment="Bottom" Width="120" Click="btnTestCredentials_Click" />
-            </Grid>
-        </GroupBox>
-        
-        <GroupBox Header="{x:Static strings:UI.ExternalIpLabel}" Height="91" HorizontalAlignment="Left" Margin="292,271,0,0" VerticalAlignment="Top" Width="256">
-            <Grid>
-                <CheckBox Content="{x:Static strings:UI.ExternalIpDefault}" Height="16" HorizontalAlignment="Left" Margin="10,10,0,0" Name="cbAutoDetectExternalIp" VerticalAlignment="Top" Width="228" Checked="cbAutoDetectExternalIp_Checked" Unchecked="cbAutoDetectExternalIp_Unchecked" />
-                <Label Content="{x:Static strings:UI.ExternalIpCustom}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="4,34,0,0" Name="label1" VerticalAlignment="Top" Width="62" />
-                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="66,36,0,0" Name="txtCustomExternalAddress" Text="" VerticalAlignment="Top" Width="172" />
+                <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="134,187,0,0" Name="btnTestCredentials" VerticalAlignment="Top" Width="148" Click="btnTestCredentials_Click" />
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{x:Static strings:UI.Language}" Height="60" HorizontalAlignment="Left" Margin="12,368,0,0" VerticalAlignment="Top" Width="256">
+        <GroupBox Header="{x:Static strings:UI.ExternalIpLabel}" Height="96" HorizontalAlignment="Left" Margin="323,317,0,0" VerticalAlignment="Top" Width="300">
             <Grid>
-                <Label Content="{x:Static strings:UI.Language}" FontWeight="Bold" Height="28" Width="78" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
-                <ComboBox Height="23" HorizontalAlignment="Left" Margin="80,6,0,0" VerticalAlignment="Top" Width="158" ItemsSource="{Binding}" Name="cbLanguage" SelectionChanged="ChangeLanguage"/>
+                <CheckBox Content="{x:Static strings:UI.ExternalIpDefault}" Height="16" HorizontalAlignment="Left" Margin="10,10,0,0" Name="cbAutoDetectExternalIp" VerticalAlignment="Top" Width="272" Checked="cbAutoDetectExternalIp_Checked" Unchecked="cbAutoDetectExternalIp_Unchecked" />
+                <Label Content="{x:Static strings:UI.ExternalIpCustom}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,32,0,0" Name="label1" VerticalAlignment="Top" Width="124" />
+                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="147,34,0,0" Name="txtCustomExternalAddress" Text="" VerticalAlignment="Top" Width="135" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="{x:Static strings:UI.Language}" Height="93" HorizontalAlignment="Left" Margin="12,383,0,0" VerticalAlignment="Top" Width="300">
+            <Grid>
+                <Label Content="{x:Static strings:UI.Language}" FontWeight="Bold" Height="28" Width="282" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
+                <ComboBox Height="23" HorizontalAlignment="Left" Margin="6,38,0,0" VerticalAlignment="Top" Width="276" ItemsSource="{Binding}" Name="cbLanguage" SelectionChanged="ChangeLanguage"/>
             </Grid>
         </GroupBox>
     </Grid>

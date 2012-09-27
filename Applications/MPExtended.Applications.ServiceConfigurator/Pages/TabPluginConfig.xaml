@@ -6,12 +6,12 @@
       xmlns:my="clr-namespace:MPExtended.Applications.ServiceConfigurator.Pages"
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabPluginConfig">
 
     <Grid>
         <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,11,12,0" Name="cbPluginConfigs" VerticalAlignment="Top" Width="402" ItemsSource="{Binding}" SelectionChanged="cbPluginConfigs_SelectionChanged" />
-        <Label Content="{x:Static strings:UI.Plugin}" Height="28" HorizontalAlignment="Left" Margin="7,9,0,0" Name="lblPlugins" VerticalAlignment="Top" Width="61" />
+        <Label Content="{x:Static strings:UI.Plugin}" Height="28" HorizontalAlignment="Left" Margin="7,9,0,0" Name="lblPlugins" VerticalAlignment="Top" Width="208" />
         <my:SectionPluginSettings Margin="7,43,12,7" x:Name="sectionPluginSettings" Background="{x:Null}" />
     </Grid>
 </Page>

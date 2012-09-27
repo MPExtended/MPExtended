@@ -148,6 +148,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     link.NavigateUri = new Uri("http://support.apple.com/kb/DL999");
                     link.RequestNavigate += CommonEventHandlers.NavigateHyperlink;
                     link.Inlines.Add(UI.BonjourNotInstalledDownload);
+                    tbAutodetection.Inlines.Add(" ");
                     tbAutodetection.Inlines.Add(link);
 
                     cbBonjourEnabled.IsChecked = false;

@@ -12,7 +12,7 @@
         <TextBox BorderThickness="0" Text="{x:Static strings:UI.TroubleshootingHeaderText}" TextWrapping="Wrap" Margin="6,40,6,206" IsReadOnly="True" Background="{x:Null}"></TextBox>
         <Label Content="Troubleshooting" Height="28" HorizontalAlignment="Left" Margin="168,6,0,0" Name="label6" VerticalAlignment="Top" Width="153" FontWeight="Bold" FontSize="14" />
         <Label Content="{x:Static strings:UI.TestLinksFor}" Height="28" HorizontalAlignment="Left" Margin="6,120,0,0" Name="label7" VerticalAlignment="Top" FontWeight="Bold" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="129,120,0,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="414" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
+        <ComboBox Height="23" HorizontalAlignment="Stretch" Margin="207,122,6,0" Name="cbNetworkInterfaces" VerticalAlignment="Top" Width="336" SelectionChanged="cbNetworkInterfaces_SelectionChanged" ItemsSource="{Binding}"/>
         
         <Grid Name="gridLinks" Margin="6,160,15,40">
             <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
                 <RowDefinition Height="29" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -47,7 +47,7 @@
             </TextBlock>
         </Grid>
 
-        <Button Content="{x:Static strings:UI.CleanCaches}" Height="23" HorizontalAlignment="Right" Margin="0,0,15,12" Name="btnCleanCache" VerticalAlignment="Bottom" Width="100" Click="btnCleanCache_Click" />
-        <Button Content="{x:Static strings:UI.ExportLogsAndConfiguration}" Height="23" HorizontalAlignment="Left" Margin="12,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="224" Click="btnExport_Click" />
+        <Button Content="{x:Static strings:UI.CleanCaches}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,12" Name="btnCleanCache" VerticalAlignment="Bottom" Width="210" Click="btnCleanCache_Click" />
+        <Button Content="{x:Static strings:UI.ExportLogsAndConfiguration}" Height="23" HorizontalAlignment="Left" Margin="12,0,0,12" Name="btnExport" VerticalAlignment="Bottom" Width="290" Click="btnExport_Click" />
     </Grid>
 </Page>

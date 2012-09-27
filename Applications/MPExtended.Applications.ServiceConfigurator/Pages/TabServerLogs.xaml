@@ -5,15 +5,18 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabServerLogs">
 
     <Grid>
         <Label Content="{x:Static strings:UI.LogFiles}" Height="28" Name="lblLogs" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" />
-        <ListView Name="lvLogViewer" Margin="6,34,6,32" />
-        <CheckBox Content="{x:Static strings:UI.ScrollToEnd}" HorizontalAlignment="Left" Margin="6,0,0,6" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
-        <Label Content="{x:Static strings:UI.LogFile}" HorizontalAlignment="Left" Margin="135,0,0,-1" Name="label13" Height="28" VerticalAlignment="Bottom" />
-        <ComboBox HorizontalAlignment="Left" Margin="192,0,0,3" Name="cbLogFiles" Width="214" Height="23" VerticalAlignment="Bottom" ItemsSource="{Binding}" SelectionChanged="cbLogFiles_SelectionChanged" />
-        <Button Content="{x:Static strings:UI.Export}" Margin="0,0,8,3" Name="btnSaveLog" HorizontalAlignment="Right" Width="102" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
+        
+        <Label Content="{x:Static strings:UI.LogFile}" HorizontalAlignment="Left" Margin="0,32,0,0" Name="label13" Height="28" VerticalAlignment="Top" Width="159" />
+        <ComboBox HorizontalAlignment="Right" Margin="0,34,6,0" Name="cbLogFiles" Width="452" Height="23" VerticalAlignment="Top" ItemsSource="{Binding}" SelectionChanged="cbLogFiles_SelectionChanged" />
+        
+        <ListView Name="lvLogViewer" Margin="6,63,6,35" />
+        
+        <CheckBox Content="{x:Static strings:UI.ScrollToEnd}" HorizontalAlignment="Left" Margin="6,0,0,9" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Export}" Margin="0,0,6,6" Name="btnSaveLog" HorizontalAlignment="Right" Width="221" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
     </Grid>
 </Page>

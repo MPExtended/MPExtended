@@ -5,22 +5,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabAuthentication">
 
     <Grid>
-        <TextBlock Height="57" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbText" VerticalAlignment="Top" TextWrapping="Wrap" Text="{x:Static strings:UI.AuthenticationIntroText}" />
+        <TextBlock Height="77" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbText" VerticalAlignment="Top" TextWrapping="Wrap" Text="{x:Static strings:UI.AuthenticationIntroText}" />
 
-        <CheckBox Content="{x:Static strings:UI.EnableAuthentication}" Height="16" HorizontalAlignment="Left" Margin="12,75,0,0" Name="cbEnable" VerticalAlignment="Top" Click="cbEnable_CheckedChanged" />
+        <CheckBox Content="{x:Static strings:UI.EnableAuthentication}" Height="16" HorizontalAlignment="Left" Margin="18,95,0,0" Name="cbEnable" VerticalAlignment="Top" Click="cbEnable_CheckedChanged" />
 
-        <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,111,0,0" Name="lblUsername" VerticalAlignment="Top" />
-        <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,140,0,0" Name="lblPassword" VerticalAlignment="Top" />
+        <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,121,0,0" Name="lblUsername" VerticalAlignment="Top" />
+        <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="12,150,0,0" Name="lblPassword" VerticalAlignment="Top" />
 
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="102,113,0,0" Name="txtUsername" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Username}" Width="190" TextChanged="txtUsername_TextChanged" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="102,142,0,0" Name="txtPassword" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Password}" Width="190" />
-        <Button Content="Add account" Height="23" HorizontalAlignment="Left" Margin="311,141,0,0" Name="btnAdd" VerticalAlignment="Top" Width="141" Click="btnAdd_Click"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="172,124,0,0" Name="txtUsername" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Username}" Width="190" TextChanged="txtUsername_TextChanged" />
+        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="172,153,0,0" Name="txtPassword" VerticalAlignment="Top" ToolTip="{x:Static strings:UI.Password}" Width="190" />
+        <Button Content="Add account" Height="23" HorizontalAlignment="Left" Margin="376,153,0,0" Name="btnAdd" VerticalAlignment="Top" Width="141" Click="btnAdd_Click"/>
 
-        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,184,12,12" Name="lvUsers" VerticalAlignment="Stretch" ItemsSource="{Binding}">
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,190,12,12" Name="lvUsers" VerticalAlignment="Stretch" ItemsSource="{Binding}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{x:Static strings:UI.DeleteAccount}" Name="miDelete" Click="miDelete_Click" />

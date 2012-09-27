@@ -55,7 +55,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             foreach (PluginConfigItem item in configuration)
             {               
                 Label text = new Label();
-                text.Margin = new Thickness(10, rowHeight - 2, 0, 0);
+                text.Margin = new Thickness(0, rowHeight - 2, 0, 0);
                 text.VerticalAlignment = VerticalAlignment.Top;
                 text.HorizontalAlignment = HorizontalAlignment.Left;
                 text.Content = item.DisplayName;
@@ -98,7 +98,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void CreateFolderSelect(int rowHeight, PluginConfigItem item)
         {
             TextBox textbox = new TextBox();
-            textbox.Margin = new Thickness(130, rowHeight, 110, 0);
+            textbox.Margin = new Thickness(130, rowHeight, 145, 0);
             textbox.Text = item.Value;
             textbox.VerticalAlignment = VerticalAlignment.Top;
             textbox.Tag = item.Name;
@@ -111,7 +111,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             btnSelectFolder.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFolder.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFolder.Margin = new Thickness(0, rowHeight, 10, 0);
-            btnSelectFolder.Width = 75;
+            btnSelectFolder.Width = 125;
             btnSelectFolder.Tag = textbox;
             ConfigurationItems.Children.Add(btnSelectFolder);
         }
@@ -151,7 +151,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void CreateFileChooser(int rowHeight, PluginConfigItem item)
         {
             TextBox textbox = new TextBox();
-            textbox.Margin = new Thickness(130, rowHeight, 110, 0);
+            textbox.Margin = new Thickness(130, rowHeight, 145, 0);
             textbox.Text = item.Value;
             textbox.VerticalAlignment = VerticalAlignment.Top;
             textbox.Tag = item.Name;
@@ -164,7 +164,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             btnSelectFile.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFile.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFile.Margin = new Thickness(0, rowHeight, 10, 0);
-            btnSelectFile.Width = 75;
+            btnSelectFile.Width = 125;
             btnSelectFile.Tag = textbox;
             ConfigurationItems.Children.Add(btnSelectFile);
         }

@@ -5,17 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="560"
+      d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabSocial">
 
     <Grid>
-        <TextBlock Height="75" HorizontalAlignment="Left" Margin="12,12,0,0" Name="tbExplanation" VerticalAlignment="Top" Width="536" TextWrapping="Wrap" Text="{x:Static strings:UI.SocialIntroText}" />
+        <TextBlock Height="75" HorizontalAlignment="Left" Margin="12,12,12,0" Name="tbExplanation" VerticalAlignment="Top" TextWrapping="Wrap" Text="{x:Static strings:UI.SocialIntroText}" />
         
         <GroupBox Header="Trakt" Height="125" HorizontalAlignment="Stretch" Margin="12,60,12,0" Name="gbTrakt" VerticalAlignment="Top">            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="160" />
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="100*" />
                 </Grid.ColumnDefinitions>
@@ -27,13 +27,13 @@
                     <RowDefinition Height="8*" />
                 </Grid.RowDefinitions>
                 
-                <CheckBox Grid.Column="1" Grid.Row="0" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbTraktEnable" Checked="checkChange" Unchecked="checkChange" Tag="Trakt"/>
+                <CheckBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbTraktEnable" Checked="checkChange" Unchecked="checkChange" Tag="Trakt"/>
                 <Label Grid.Column="1" Grid.Row="1" Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblTraktUsername" Height="28"/>
                 <Label Grid.Column="1" Grid.Row="2" Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblTraktPassword" Height="28" />
                 <TextBox Grid.Column="2" Grid.Row="1" Name="tbTraktUsername" Height="23" TextChanged="textChanged" Tag="Trakt"/>
                 <PasswordBox Grid.Column="2" Grid.Row="2" Name="tbTraktPassword" Height="23" PasswordChanged="textChanged" Tag="Trakt"/>
-                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="200" HorizontalAlignment="Left" Margin="20,0,0,0" Name="btnTraktTest" Click="testClick" Tag="Trakt" />
-                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblTraktResults" Height="28" Margin="17,0,0,0" />
+                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="150" HorizontalAlignment="Left" Margin="12,0,0,0" Name="btnTraktTest" Click="testClick" Tag="Trakt" />
+                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblTraktResults" Height="28" Margin="12,0,0,0" />
             </Grid>
         </GroupBox>
 
@@ -41,7 +41,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="160" />
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="100*" />
                 </Grid.ColumnDefinitions>
@@ -52,13 +52,13 @@
                     <RowDefinition Height="35" />
                 </Grid.RowDefinitions>
 
-                <CheckBox Grid.Column="1" Grid.Row="0" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbFollwitEnable" Checked="checkChange" Unchecked="checkChange" Tag="Follwit" />
+                <CheckBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Content="{x:Static strings:UI.Enable}" Height="23" Margin="4,5,0,0" Name="cbFollwitEnable" Checked="checkChange" Unchecked="checkChange" Tag="Follwit" />
                 <Label Grid.Column="1" Grid.Row="1" Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblFollwitUsername" Height="28"/>
                 <Label Grid.Column="1" Grid.Row="2" Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblFollwitPassword" Height="28"/>
                 <TextBox Grid.Column="2" Grid.Row="1" Name="tbFollwitUsername" Height="23" TextChanged="textChanged" Tag="Follwit"/>
                 <PasswordBox Grid.Column="2" Grid.Row="2" Name="tbFollwitPassword" Height="23" PasswordChanged="textChanged" Tag="Follwit"/>
-                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="200" HorizontalAlignment="Left" Margin="20,0,0,0" Name="btnFollwitTest" Click="testClick" Tag="Follwit" />
-                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblFollwitResults" Height="28" Margin="17,0,0,0" />
+                <Button Grid.Column="3" Grid.Row="1" Content="{x:Static strings:UI.Test}" Height="23" Width="150" HorizontalAlignment="Left" Margin="12,0,0,0" Name="btnFollwitTest" Click="testClick" Tag="Follwit" />
+                <Label Grid.Column="3" Grid.Row="2" Content="Credentials invalid!" FontWeight="Bold" Name="lblFollwitResults" Height="28" Margin="12,0,0,0" />
             </Grid>
         </GroupBox>
     </Grid>
