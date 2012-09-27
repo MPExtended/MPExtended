@@ -159,7 +159,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             if (!String.IsNullOrEmpty(encoderOptions))
             {
 			    sout = "#transcode{" + encoderOptions + "," + subtitleTranscoder;
-				if (!Context.Profile.TranscoderParameters.ContainsKey("noResize") || Context.Profile.TranscoderParameters["noResize"] != "true")
+				if (!Context.Profile.TranscoderParameters.ContainsKey("noResize") || Context.Profile.TranscoderParameters["noResize"] != "yes")
 					sout += ",width=" + Context.OutputSize.Width + ",height=" + Context.OutputSize.Height;
 				sout += "}" + muxerOptions;
             }

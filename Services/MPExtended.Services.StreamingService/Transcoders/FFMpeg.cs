@@ -55,7 +55,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // calculate full argument string
             string arguments;
-            bool doResize = !Context.Profile.TranscoderParameters.ContainsKey("noResize") || Context.Profile.TranscoderParameters["noResize"] != "true";
+            bool doResize = !Context.Profile.TranscoderParameters.ContainsKey("noResize") || Context.Profile.TranscoderParameters["noResize"] != "yes";
             if (Context.Profile.HasVideoStream && doResize)
             {
                 arguments = String.Format(
