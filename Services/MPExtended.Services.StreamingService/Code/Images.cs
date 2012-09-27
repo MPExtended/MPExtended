@@ -152,15 +152,16 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static string GetMime(string extension)
         {
+            string lowerExtension = extension.Substring(1).ToLower();
             Dictionary<string, string> commonMimeTypes = new Dictionary<string, string>() 
             {
-                { ".jpeg", "image/jpeg" },
-                { ".jpg", "image/jpeg" },
-                { ".png", "image/png" },
-                { ".gif", "image/gif" },
-                { ".bmp", "image/x-ms-bmp" },
+                { "jpeg", "image/jpeg" },
+                { "jpg", "image/jpeg" },
+                { "png", "image/png" },
+                { "gif", "image/gif" },
+                { "bmp", "image/x-ms-bmp" },
             };
-            return commonMimeTypes.ContainsKey(extension) ? commonMimeTypes[extension] : "application/octet-stream";
+            return commonMimeTypes.ContainsKey(lowerExtension) ? commonMimeTypes[lowerExtension] : "application/octet-stream";
         }
 
         private static Image ResizeImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders)
@@ -194,7 +195,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static ImageCodecInfo GetCodecInfo(string format)
         {
-            switch (format)
+            switch (format.ToLower())
             {
                 case "png":
                     return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Png.Guid);
@@ -202,13 +203,14 @@ namespace MPExtended.Services.StreamingService.Code
                 case "jpg":
                     return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Jpeg.Guid);
                 default:
-                    throw new ArgumentException();
+                    Log.Warn("Requested invalid file format '{0}'", format);
+                    throw new ArgumentException(String.Format("Invalid file format '{0}'", format));
             }
         }
 
         private static void SaveImageToFile(Image image, string path, string format)
         {
-            switch (format)
+            switch (format.ToLower())
             {
                 case "png":
                     image.Save(path, ImageFormat.Png);
@@ -223,7 +225,8 @@ namespace MPExtended.Services.StreamingService.Code
                     break;
 
                 default:
-                    throw new ArgumentException();
+                    Log.Warn("Requested invalid file format '{0}'", format);
+                    throw new ArgumentException(String.Format("Invalid file format '{0}'", format));
             }
         }
     }
