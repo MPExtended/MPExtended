@@ -99,15 +99,7 @@ namespace MPExtended.Libraries.Service.Config
             // If the configuration file doesn't exist, copy the default configuration file
             if (!File.Exists(path))
             {
-                // copy from default location
-                File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), path);
-
-                // allow everyone to write to the config
-                var acl = File.GetAccessControl(path);
-                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
-                acl.AddAccessRule(rule);
-                File.SetAccessControl(path, acl);
+                CreateNonExistingFile(path);
             }
 
             try
@@ -119,6 +111,19 @@ namespace MPExtended.Libraries.Service.Config
                 Log.Trace("Configuration: Failed to read configuration file from disk, going to HandleMalformedFile()");
                 return HandleMalformedFile(ex, path);
             }
+        }
+
+        protected virtual void CreateNonExistingFile(string path)
+        {
+            // copy from default location
+            File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), path);
+
+            // allow everyone to write to the config
+            var acl = File.GetAccessControl(path);
+            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
+            acl.AddAccessRule(rule);
+            File.SetAccessControl(path, acl);
         }
 
         protected TModel UnsafeParse(string path)
@@ -198,7 +203,7 @@ namespace MPExtended.Libraries.Service.Config
         {
             Log.Trace("Configuration: Writing new version of {0}", Filename);
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
-            using (var stream = new FileStream(path, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.Write, FileShare.Read))
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
             {
                 return Save(model, stream);
             }
@@ -266,6 +271,30 @@ namespace MPExtended.Libraries.Service.Config
         public ConfigurationSerializer(ConfigurationFile file, string filename)
             : this(file, filename, null)
         {
+        }
+
+        protected override void CreateNonExistingFile(string path)
+        {
+            if (upgradeFilename == null)
+            {
+                base.CreateNonExistingFile(path);
+                return;
+            }
+
+            var upgrader = new TUpgrader();
+            upgrader.OldPath = Path.Combine(Installation.Properties.ConfigurationDirectory, upgradeFilename);
+            upgrader.DefaultPath = Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename);
+
+            if (upgrader.CanUpgrade())
+            {
+                Log.Info("Config file {0} doesn't exist, creating from old config file {1}", Filename, upgradeFilename);
+                TModel model = upgrader.PerformUpgrade();
+                Save(model);
+            }
+            else
+            {
+                base.CreateNonExistingFile(path);
+            }
         }
 
         protected override TModel CleanupMalformedFile(Exception problem, string configPath)
