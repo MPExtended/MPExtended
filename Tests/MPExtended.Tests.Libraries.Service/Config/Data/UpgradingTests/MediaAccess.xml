@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appconfig>
+  <defaultPlugins>
+    <tvshow>TVDefault</tvshow>
+    <movie>MovieDefault</movie>
+    <music>MusicDefault</music>
+    <picture>PicsDefault</picture>
+    <filesystem>FSDefault</filesystem>
+  </defaultPlugins>
+
+  <disabledPlugins>
+    <!-- 
+    
+    You can disable faulty plugins here. Code of these plugins is never executed, so if a plugin makes the service crash 
+    it's safe to disable it here. You can also use this to prevent services from showing up in the provider list on 
+    clients.
+    
+      <disabled>MP MyVideo</disabled>
+    
+    -->  
+  </disabledPlugins>
+
+  <pluginConfiguration>
+    <plugin name="PluginA">
+      <key type="file" displayname="dp">value</key>
+      <setting type="folder" displayname="dp2">another value</setting>
+    </plugin>
+    <plugin name="PluginB">
+      <key type="file" displayname="xy">more tests</key>
+    </plugin>
+  </pluginConfiguration>
+</appconfig>
