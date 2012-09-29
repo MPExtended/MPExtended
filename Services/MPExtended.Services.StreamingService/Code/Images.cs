@@ -100,9 +100,6 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static Stream StreamPostprocessedImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders, string format)
         {
-            if (format == null)
-                format = src.Extension.Substring(1);
-
             if (!src.Exists)
             {
                 Log.Info("Tried to stream image from non-existing source {0}", src.GetDebugName());
@@ -116,6 +113,9 @@ namespace MPExtended.Services.StreamingService.Code
                 WCFUtil.SetResponseCode(HttpStatusCode.BadRequest);
                 return Stream.Null;
             }
+
+            if (format == null)
+                format = src.Extension.Substring(1);
 
             // return from cache if possible
             string filename = String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format);
