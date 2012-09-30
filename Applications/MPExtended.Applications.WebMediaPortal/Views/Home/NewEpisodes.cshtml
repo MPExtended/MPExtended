@@ -11,7 +11,9 @@
         {
             <div class="column" style="text-align: center;">
                 <div class="row">
-                    <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id }, null)"> <img class="img" height="84" width="150" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="No image" /> </a>
+                    <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id }, null)"> 
+                        <img class="img" width="150" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="No image" />
+                    </a>
                 </div>
                 <div class="row">
                     @Html.ActionLink(episode.Show.Title + " - " + episode.Episode.SeasonNumber + "x" + episode.Episode.EpisodeNumber, 

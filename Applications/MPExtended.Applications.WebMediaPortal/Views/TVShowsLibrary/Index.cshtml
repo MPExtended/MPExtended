@@ -11,7 +11,7 @@
         <div style="float: left;">
             <div style="padding: 0px 5px 0px 5px;">
                 <a href="@Url.Action("Seasons", "TVShowsLibrary", new { show = show.Id })">
-                    <img height="55" width="300" src="@Url.Action("SeriesBanner", new { show = @show.Id, width = 300 })" alt="No image" />
+                    <img width="300" src="@Url.Action("SeriesBanner", new { show = @show.Id, width = 300 })" alt="No image" />
                 </a>
             </div>
             <div style="text-align: center; padding-bottom: 20px;">@Html.ActionLink(show.Title, "Seasons", new { show = show.Id })</div>       

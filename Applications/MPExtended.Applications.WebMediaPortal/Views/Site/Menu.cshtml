@@ -6,7 +6,8 @@
         @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
         @if (ViewBag.Availability.Movies) { 
             <li class="dropdown">
-                @Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
+                @Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") 
+                <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
                 <ul>
                     @foreach (var genre in Model.MovieGenres) {
                         <li><a href="@Url.Action("Index", "MovieLibrary", new { filter = "Genres*='" + genre + "'" })">@genre</a></li>
@@ -17,7 +18,8 @@
                 
         @if (ViewBag.Availability.TVShows) { 
             <li class="dropdown">
-                @Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
+                @Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") 
+                <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
                 <ul>
                     @foreach (var genre in Model.TVShowGenres) {
                         <li><a href="@Url.Action("Index", "TVShowsLibrary", new { filter = "Genres*='" + genre + "'" })">@genre</a></li>
