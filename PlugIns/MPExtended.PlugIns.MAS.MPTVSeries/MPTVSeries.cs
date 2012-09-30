@@ -116,9 +116,9 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             });
 
             string sql = 
-                    "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, s.BannerFileNames, STRFTIME('%Y', s.FirstAired) AS year, " +
-                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
-                        "s.IMDB_ID, s.added " +
+                    "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, STRFTIME('%Y', s.FirstAired) AS year, s.Actors, s.Rating, s.ContentRating, " +
+                        "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
+                        "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, s.fanart " +
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
@@ -131,10 +131,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadIntAsString, "TVDB")),
                 new SQLFieldMapping("s", "Pretty_Name", "Title", CustomReaders.FixNameReader),
                 new SQLFieldMapping("s", "Genre", "Genres", DataReaders.ReadPipeList),
-                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "PosterFileNames", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Poster, configuration["banner"])),
-                new SQLFieldMapping("s", "fanart", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
                 new SQLFieldMapping("s", "Actors", "Actors", CustomReaders.ActorReader),
                 new SQLFieldMapping("s", "Rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("s", "ContentRating", "ContentRating", DataReaders.ReadString),
@@ -145,7 +142,10 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "AirsTime", "AirsTime", DataReaders.ReadString),
                 new SQLFieldMapping("s", "Runtime", "Runtime", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "IMDB_ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadString, "IMDB")),
-                new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime)
+                new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
+                new SQLFieldMapping("s", "PosterFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Poster, configuration["banner"])),
+                new SQLFieldMapping("s", "fanart", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
             }, delegate (T obj) 
             {
                 // cannot rely on information provided by MPTVSeries here because they count differently, which makes things inconsistent
@@ -202,7 +202,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             // and load seasons
             string sql = 
                     "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, STRFTIME('%Y', MIN(e.FirstAired)) AS year, " +
-                        "s.BannerFileNames " +
+                        "s.BannerFileNames, s.CurrentBannerFileName " +
                     "FROM season s " +
                     "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
                     "WHERE HasLocalFiles = 1 AND %where " +
@@ -213,7 +213,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"]))
+                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"]))
             }, delegate (T obj) {
                 obj.EpisodeCount = episodeCountTable.ContainsKey(obj.Id) ? episodeCountTable[obj.Id] : 0;
                 obj.UnwatchedEpisodeCount = episodeUnwatchedCountTable.ContainsKey(obj.Id) ? episodeUnwatchedCountTable[obj.Id] : 0;

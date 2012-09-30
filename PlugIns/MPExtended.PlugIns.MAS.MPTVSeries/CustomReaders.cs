@@ -95,6 +95,36 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             }).ToList();
         }
 
+        [MergeListReader]
+        public static List<WebArtworkDetailed> PreferedArtworkReader(SQLiteDataReader reader, int index, object param)
+        {
+            ArtworkReaderParameters args = (ArtworkReaderParameters)param;
+            int i = 0;
+            var items = (IEnumerable<string>)DataReaders.ReadPipeList(reader, index);
+
+            string preferedItem = (string)DataReaders.ReadString(reader, index + 1);
+            if (!String.IsNullOrEmpty(preferedItem))
+            {
+                preferedItem = preferedItem.Substring(1);
+                if (!items.Contains(preferedItem))
+                    items = items.Concat(new List<string>() { preferedItem });
+            }
+            
+            return items.Select(x =>
+            {
+                string path = Path.Combine(args.DirectoryName, x.Replace('/', '\\'));
+                return new WebArtworkDetailed()
+                {
+                    Type = args.FileType,
+                    Path = path,
+                    Offset = i++,
+                    Filetype = Path.GetExtension(path).Substring(1),
+                    Rating = x == preferedItem ? 2 : 1,
+                    Id = path.GetHashCode().ToString()
+                };
+            }).ToList();
+        }
+
         [AllowSQLCompare("(%table.SeriesID || '_s' || %table.SeasonIndex) = %prepared")]
         [AllowSQLSort("%table.SeriesID %order, %table.SeasonIndex %order")]
         public static string ReadSeasonID(SQLiteDataReader reader, int offset)
