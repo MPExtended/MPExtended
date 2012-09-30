@@ -25,6 +25,7 @@ using System.IO;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -44,9 +45,18 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
             using (var scope = WCFClient.EnterOperationScope(Connections.Current.MASStream))
             {
-                var image = method.Invoke();
+                int returnCode = 0;
+                Stream image = Stream.Null;
+                try
+                {
+                    image = method.Invoke();
+                    returnCode = WCFClient.GetHeader<int>("responseCode");
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failure while loading image", ex);
+                }
 
-                var returnCode = WCFClient.GetHeader<int>("responseCode");
                 if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
                 {
                     // don't cache failed-to-load images very long, as artwork may be added later on
