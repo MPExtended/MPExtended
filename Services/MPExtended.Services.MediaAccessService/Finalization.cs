@@ -98,6 +98,15 @@ namespace MPExtended.Services.MediaAccessService
                 }).ToList();
             }
 
+            if (item is IActors)
+            {
+                (item as IActors).Actors = (item as IActors).Actors.Select(x => new WebActor()
+                {
+                    PID = item.PID,
+                    Title = x.Title
+                }).ToList();
+            }
+
             if (item is ICategorySortable)
             {
                 (item as ICategorySortable).Categories = (item as ICategorySortable).Categories.Select(x => new WebCategory()
