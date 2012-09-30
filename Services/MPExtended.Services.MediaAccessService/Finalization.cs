@@ -57,7 +57,9 @@ namespace MPExtended.Services.MediaAccessService
                         Filetype = x.Filetype,
                         Id = x.Id,
                         Rating = x.Rating
-                    }).ToList();
+                    })
+                        .OrderByDescending(x => x.Rating)
+                        .ToList();
                 }
 
                 if (isActors)
@@ -95,7 +97,9 @@ namespace MPExtended.Services.MediaAccessService
                     Filetype = x.Filetype,
                     Id = x.Id,
                     Rating = x.Rating
-                }).ToList();
+                })
+                    .OrderByDescending(x => x.Rating)
+                    .ToList();
             }
 
             if (item is IActors)
