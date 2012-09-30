@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Images
     {
-        private static ActionResult ReturnFromService(Func<Stream> method, string defaultFile = null, string etag = null)
+        private static ActionResult ReturnFromService(object service, Func<Stream> method, string defaultFile = null, string etag = null)
         {
             if (etag != null && HttpContext.Current.Request.Headers["If-None-Match"] == String.Format("\"{0}\"", etag))
             {
@@ -43,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 return new EmptyResult();
             }
 
-            using (var scope = WCFClient.EnterOperationScope(Connections.Current.MASStream))
+            using (var scope = WCFClient.EnterOperationScope(service))
             {
                 int returnCode = 0;
                 Stream image = Stream.Null;
@@ -126,13 +126,13 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     break;
                 case WebMediaType.Recording:
                     service = Connections.Current.TASStream;
-                    return ReturnFromService(() => service.ExtractImageResized(mediaType, provider, id, 15, maxWidth, maxHeight), defaultFile);
+                    return ReturnFromService(service, () => service.ExtractImageResized(mediaType, provider, id, 15, maxWidth, maxHeight), defaultFile);
                 default:
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
             }
 
             string etag = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", mediaType, provider, id, artworkType, maxWidth, maxHeight);
-            return ReturnFromService(() => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile, etag);
+            return ReturnFromService(service, () => service.GetArtworkResized(mediaType, provider, id, artworkType, 0, maxWidth, maxHeight), defaultFile, etag);
         }
 
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)
