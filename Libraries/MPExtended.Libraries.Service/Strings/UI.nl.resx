@@ -139,10 +139,10 @@
     <value>Standaard ondertitel taal:</value>
   </data>
   <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
-    <value>Terugzetten van verkeerd gedane wijzigingen op het sociale tabblad.</value>
+    <value>Ongeldige wijzigingen op het sociale tabblad ongedaan gemaakt. </value>
   </data>
   <data name="ExportedLogsAndConfig" xml:space="preserve">
-    <value>Geëxporteerde logs en configuratiegegevens naar {0}</value>
+    <value>Logs en configuratiegegevens geëxporteerd naar {0}</value>
   </data>
   <data name="ExportLogsAndConfiguration" xml:space="preserve">
     <value>Export logs en ​​configuratie</value>
@@ -244,7 +244,7 @@
     <value>WebMediaPortal</value>
   </data>
   <data name="TestingCredentials" xml:space="preserve">
-    <value>Testen van verificatiegegevens, even geduld ...</value>
+    <value>Testen van inloggegevens, even geduld ...</value>
   </data>
   <data name="TestLinksFor" xml:space="preserve">
     <value>Test links voor</value>
@@ -291,12 +291,9 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Onderbreken</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Gebruik de volgende links om de juistheid van de gevraagde content te controleren...
-Gebruik 'localhost' om de service te testen op dezelfde machine. Selecteer een van de IP's uit de lijst om url's te testen op andere PC's in het netwerk ( b.v. om firewall problemen uit te sluiten).</value>
+Gebruik 'localhost' om de service te testen op dezelfde machine. Selecteer een van de IP's uit de lijst om url's te testen op andere PC's in het netwerk (b.v. om firewall problemen uit te sluiten).</value>
   </data>
   <data name="TVServer" xml:space="preserve">
     <value>TVServer</value>
@@ -323,7 +320,7 @@ Gebruik 'localhost' om de service te testen op dezelfde machine. Selecteer een v
     <value>controleer op updates</value>
   </data>
   <data name="CheckingForUpdates" xml:space="preserve">
-    <value>controleren van updates...</value>
+    <value>controleren op updates...</value>
   </data>
   <data name="CredentialValidationFailed" xml:space="preserve">
     <value>Sorry, de ingevoerde netwerk verificatiegegevens zijn onjuist.</value>
@@ -368,7 +365,7 @@ Dit is de service component, welke toegang tot de databases en de media-bestande
     <value>Netwerk schijven</value>
   </data>
   <data name="NetworkDrivesText" xml:space="preserve">
-    <value>Als uw media bestanden op een ander systeem staan (zoals een dedicated server of een NAS), dan heeft MPExtended de verificatiegegevens nodig om toegang tot deze schijf te krijgen. Meestal zijn dit de verificatiegegevens van uw Windows-account.</value>
+    <value>Als uw mediabestanden op een ander systeem staan (zoals een dedicated server of een NAS), dan heeft MPExtended de verificatiegegevens nodig om toegang tot deze schijf te krijgen. Meestal zijn dit de verificatiegegevens van uw Windows-account.</value>
   </data>
   <data name="NoUpdateAvailable" xml:space="preserve">
     <value>geen update beschikbaar</value>
@@ -378,9 +375,6 @@ Dit is de service component, welke toegang tot de databases en de media-bestande
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Hier kunt u de poort configureren waarnaar de services luisteren.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR-code</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>U kunt de QR-code scannen met ondersteunende clienten om automatisch deze MPExtended installatie toe te voegen.</value>
@@ -505,12 +499,15 @@ Houd er rekening mee dat het niet mogelijk is om het gebruikte SSL / TLS-certifi
     <value>Aangepast</value>
   </data>
   <data name="ExternalIpDefault" xml:space="preserve">
-    <value>Extern IP automatisch detecteren</value>
+    <value>Externe IP automatisch detecteren</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
     <value>Extern adres</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Taal</value>
   </data>
 </root>

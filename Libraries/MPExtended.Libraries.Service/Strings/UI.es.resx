@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Suspender</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPextended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>para comprobar la validez del contenido solicitado por favor utilice los siguientes enlaces... Puedes usar localhost para probar el servicio en el mismo equipo. Selecciona una de las IPs de la lista desplegable para obtener las URLs para probar en otros PCs de la red (p.e. para descartar problemas de firewall).</value>
   </data>
@@ -374,9 +371,6 @@
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Aquí puedes configurar el puerto en el que escuchan los servicios.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>Código QR</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Puedes escanear el código QR con clientes soportados para añadir esta instalación de MPExtended automáticamente.</value>
@@ -476,5 +470,38 @@
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Habilitar</value>
+  </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>¿Quieres darle a la aplicación '{0}' (dirección IP {1}) acceso completo a los servicios de MPExteded?</value>
+  </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Denegar</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Conceder acceso</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Seleccionar usuario:</value>
+  </data>
+  <data name="AccessRequestWifiRemote" xml:space="preserve">
+    <value>¿Quieres darle acceso a '{0}'? (Tendrás que asignarle un nombre en el siguiente paso)</value>
+  </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Habilitar petición de acceso para los clientes</value>
+  </data>
+  <data name="ExternalIpCustom" xml:space="preserve">
+    <value>Personalizada</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Detectar automáticamente IP externa</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>Dirección externa</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lenguaje</value>
   </data>
 </root>

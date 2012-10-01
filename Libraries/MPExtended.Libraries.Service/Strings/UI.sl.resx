@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Spanje</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Za preverjanje zahtevanih vsebin uporabi sledeče povezave. Za preverjanje na istem računalniku lahko uporabiš localhost. Izberi enega izmed IP naslovov iz seznama, če želiš preverjati na drugih računalnikih v omrežju (npr. za izločitev težav s požarnim zidom).</value>
   </data>
@@ -376,9 +373,6 @@ To je strežnik, ki omogoča povezavo na baze podatkov, datoteke z vsebinami za 
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Tu lahko nastaviš IP vrata, na katerih bodo storitve poslušale.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR koda</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Na podprtih odjemalcih lahko prečitaš tole QR kodo, da se ta MPExtended namestitev avtomatsko nastavi na klientu.</value>

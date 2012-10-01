@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Suspenduoti/užmigdyti</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Norint patikrinti užklausiamo turinio tinkamumą prašome naudoti šias nuorodas... 
 Galite naudoti localhost norint patikrinti paslaugą šiame kompiuteryje. Norėdami patikrinti tinkle esančius kompiuterius pasirinkite IP iš pateikiamo sąrašo (pvz. norint patikrinti išeinančias ugniasienės taisykles).</value>
@@ -375,9 +372,6 @@ Galite naudoti localhost norint patikrinti paslaugą šiame kompiuteryje. Norėd
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Gali nustatyti portą kuriuo laukiama paslaugų.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR kodas</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Galite skenuoti QR kodą palaikomais klientais norint prijungti prie MPExtended automatiškai.</value>
@@ -507,5 +501,8 @@ Galite naudoti localhost norint patikrinti paslaugą šiame kompiuteryje. Norėd
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Kalba</value>
   </data>
 </root>

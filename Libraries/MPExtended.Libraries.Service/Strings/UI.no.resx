@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Suspender</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>For å sjekke validitet bruk følgende linker... Du kan bruke localhost for å teste servicen på samme maskin. Velg en IP adresse fra nedtrekkslisten for å finne URL-er for å teste fra andre PC-er på nettverket (for å eksluder brannmur problemer)</value>
   </data>
@@ -374,9 +371,6 @@
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Du kan konfiguere hvilken port servicen lytter til her.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR Kode</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Du kan skanne QR koden til godkjente klienter for å kjøre installasjonen automatisk.</value>

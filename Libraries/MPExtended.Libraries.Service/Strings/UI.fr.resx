@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Suspendre</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Pour vérifier la validité du contenu demandé, veuillez utiliser les liens suivants ... Vous pouvez utiliser localhost pour tester le service sur la même machine. Sélectionnez une adresse IP dans la liste déroulante permettant d'obtenir des URL afin de tester d'autres ordinateurs sur le réseau (par exemple, pour écarter toute anomalie avec le pare-feu).</value>
   </data>
@@ -377,9 +374,6 @@ C'est ce composant, qui donne accès aux bases de données et aux fichiers multi
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Vous pouvez configurer le port sur lequel les services écoutent, ici.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>Code QR</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Vous pouvez scanner le code QR permettant l'installation automatique de MPExtended avec des clients l'autorisant.</value>
@@ -511,5 +505,8 @@ SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. 
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
   </data>
 </root>

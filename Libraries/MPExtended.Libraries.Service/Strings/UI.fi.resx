@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Lepotila</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Tarkistaaksesi pyydetyn sisällön kelpoisuus, käytä seuraavia linkkejä... Käytä localhostia kokeillaksesi samalla tietokoneella toimivaa palvelua. Jos palvelu on toisella tietokoneella, valitse sen tietokoneen IP-osoite alasvetovalikosta saadaksesi testilinkit (esim. palomuuriongelmien havaitsemiseen). </value>
   </data>
@@ -376,9 +373,6 @@ Tämä on palvelukomponentti joka mahdollistaa kaikkien asiakaskoneiden pääsyn
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Tässä voit määrittää portin jossa palvelut kuuntelevat.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR-koodi</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Voit skannata QR-koodin tuetuilla laitteilla lisätäksesi tämän MPExtendedin asennuksen automaattisesti.</value>

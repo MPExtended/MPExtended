@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Pausieren -suspend-</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Um die Gültigkeit des angeforderten Contents zu überprüfen, benutze bitte die folgenden Links... Ist der Dienst auf dem lokalen Rechner installiert, kann "localhost" verwendet werden. Wähle eine der IPs aus der Dropdown Liste, um von anderen PCs zu testen (um etwa Firewall Probleme auszuschließen).</value>
   </data>
@@ -375,9 +372,6 @@ irc.freenode.net / Kanal #mp-extended</value>
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Hier kannst du einstellen, welchen Port für die Dienste benutzen.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR-Code</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Du kannst den QR-Code scannen, um diese MPExtended-Installation automatisch hinzuzufügen.</value>
@@ -509,5 +503,8 @@ Bitte beachte, dass das benutzte SSL/TLS Zertifikat nicht konfiguriert werden ka
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprache</value>
   </data>
 </root>

@@ -148,6 +148,9 @@
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Por favor especifica una URL MAS válida</value>
   </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Por favor selecciona un lenguaje válido</value>
+  </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
     <value>Por favor selecciona un perfil de streaming multimedia válido</value>
   </data>
@@ -184,6 +187,9 @@
   <data name="FieldRequired" xml:space="preserve">
     <value>El campo {0} es obligatorio</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lenguaje</value>
+  </data>
   <data name="LogOnPassword" xml:space="preserve">
     <value>Contraseña</value>
   </data>
@@ -216,6 +222,9 @@
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Hora de inicio</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Título</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
     <value>Tipo de programación</value>

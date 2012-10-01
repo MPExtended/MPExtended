@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Viloläge</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>För att kontrollera giltigheten hos det begärda innehållet vänligen använd följande länkar ... Du kan använda localhost för att testa tjänsten på samma maskin. Välj en av IP-adresserna från rullgardinsmenyn för att få webbadresser för att testa på andra datorer i nätverket (t.ex. för att utesluta problem med brandväggen).</value>
   </data>
@@ -375,9 +372,6 @@
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Du kan konfigurera den port som tjänsten lyssnar på här.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR-Kod</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Du kan skanna QR-koden med klienter som stöds för att lägga till MPExtended installationen automatiskt.</value>
@@ -507,5 +501,8 @@
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Språk</value>
   </data>
 </root>

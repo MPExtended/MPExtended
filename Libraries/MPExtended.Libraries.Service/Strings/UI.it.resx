@@ -291,9 +291,6 @@
   <data name="TraySuspend" xml:space="preserve">
     <value>Sospendi</value>
   </data>
-  <data name="TrayTooltip" xml:space="preserve">
-    <value>MPExtended</value>
-  </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
     <value>Per controllare la validità del contenuto richiesto utilizza uno del link seguenti... Puoi utillizzare localhost per testare il servizio sulla stessa macchina. Seleziona uno degli IP dalla lista a tendina per testarlo sugli altri PC nella rete locale (es. per escludere problemi sul firewall)</value>
   </data>
@@ -374,9 +371,6 @@
   </data>
   <data name="PortText" xml:space="preserve">
     <value>Puoi configurare la porta sulla quale il servizio si mette in ascolto.</value>
-  </data>
-  <data name="QRCode" xml:space="preserve">
-    <value>QR Code</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
     <value>Puoi scansionare il QR code con i client compatibili per aggiungere l'installazione di MPExtended automaticamente.</value>
@@ -508,5 +502,8 @@ Nota che non è possibile configurare il certificato SSL/TLS usato. Quando usi  
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
   </data>
 </root>

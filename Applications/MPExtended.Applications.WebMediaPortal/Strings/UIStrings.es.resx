@@ -182,7 +182,7 @@
     <value>Tus series</value>
   </data>
   <data name="AlbumBy" xml:space="preserve">
-    <value>{0} por {1}</value>
+    <value>{0} de {1}</value>
   </data>
   <data name="AlbumsFromArtist" xml:space="preserve">
     <value>Álbumes de {0}</value>
@@ -215,7 +215,7 @@
     <value>Estás viendo &lt;strong&gt;{0} - Temporada {1} Episodio {2} - {3}&lt;/strong&gt;.</value>
   </data>
   <data name="ErrorPageText" xml:space="preserve">
-    <value>Por favor incluya la siguiente información cuando reporte este error.</value>
+    <value>Por favor incluye la siguiente información cuando reportes este error.</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Inicio</value>
@@ -233,7 +233,7 @@
     <value>Ajustes</value>
   </data>
   <data name="SorryAnErrorOccurred" xml:space="preserve">
-    <value>Lo siento, ha ocurrido un error procesando tu petición.</value>
+    <value>Lo siento, ha ocurrido un error al procesar tu petición.</value>
   </data>
   <data name="TVGuide" xml:space="preserve">
     <value>Guía de TV</value>
@@ -245,7 +245,7 @@
     <value>Cancelar programación</value>
   </data>
   <data name="CreateSchedule" xml:space="preserve">
-    <value>Programación</value>
+    <value>Programar</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Eliminar</value>
@@ -432,5 +432,29 @@
   </data>
   <data name="YouAreListening" xml:space="preserve">
     <value>Estás escuchando &lt;strong&gt;{0}&lt;/strong&gt; por &lt;strong&gt;{1}&lt;/strong&gt;</value>
+  </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Error al iniciar el stream. Consulta el log para más información.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>Uso actual de la CPU:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Uso actual de la memoria:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>Estado del sistema</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Últimos álbumes</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Últimas canciones</value>
   </data>
 </root>
