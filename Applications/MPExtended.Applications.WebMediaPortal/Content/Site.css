@@ -98,7 +98,8 @@ body
 #navlist li a 
 { 
     display: block; 
-    padding: 0 15px; 
+    padding: 0 15px;
+    white-space: nowrap;
     text-decoration: none; 
     border-left: 1px dotted #8A8575; 
     color: #8A8575; 
@@ -128,7 +129,7 @@ body
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     left: 0;
-    width: 101%; 
+    width: auto; 
     padding: 0 0 4px 0; 
     margin: 0;
     background-color: #FBF9EF;

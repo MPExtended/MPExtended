@@ -10,16 +10,13 @@
         @foreach (var album in Model)
         {
             <div class="column" style="text-align: center;">
-                <div class="row" style="height: 55px; width: 150px;">
-                    @Html.ActionLink(album.Album.AlbumArtist, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
-                </div>
                 <div class="row">
                     <a href="@Url.Action("Album", "MusicLibrary", new { album = album.Album.Id }, null)">
-                        <img class="img" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="No image" width="150" />
+                        <img class="img" width="150" height="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="No image" />
                     </a>
                 </div>
                 <div class="row">
-                    @Html.ActionLink(album.Album.Title, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
+                    @Html.ActionLink(album.Album.AlbumArtist + " - " + album.Album.Title, "Album", "MusicLibrary", new { album = album.Album.Id }, null)
                 </div>
             </div>
         }
