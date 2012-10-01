@@ -143,7 +143,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 if (!(bool)args.Result)
                 {
                     tbAutodetection.Inlines.Add(new LineBreak());
-                    tbAutodetection.Inlines.Add(UI.BonjourNotInstalled);
+                    tbAutodetection.Inlines.Add(UI.BonjourNotInstalled.Trim());
                     Hyperlink link = new Hyperlink();
                     link.NavigateUri = new Uri("http://support.apple.com/kb/DL999");
                     link.RequestNavigate += CommonEventHandlers.NavigateHyperlink;
