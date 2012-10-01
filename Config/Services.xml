@@ -14,7 +14,7 @@
   <BonjourName />
 
   <ExternalAddress>
-    <Autodetect>false</Autodetect>
+    <Autodetect>true</Autodetect>
     <Custom />
   </ExternalAddress>
   
