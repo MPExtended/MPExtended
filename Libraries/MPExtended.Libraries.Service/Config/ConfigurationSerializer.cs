@@ -205,6 +205,7 @@ namespace MPExtended.Libraries.Service.Config
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
             using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
             {
+                stream.SetLength(0);
                 return Save(model, stream);
             }
         }
