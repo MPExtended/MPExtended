@@ -75,12 +75,6 @@
 </table>
 <br />
 
-@if (Model.HasTAS)
-{
-    @Html.Action("CurrentSchedules", "Home")
-    <br />
-}
-
 <h2>@UIStrings.SystemStatus</h2>
 <ul>
     <li>@UIStrings.CurrentCPUUsage <span id="cpuUsage">0</span>%</li>
