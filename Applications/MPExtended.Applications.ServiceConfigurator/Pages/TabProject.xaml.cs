@@ -35,6 +35,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabProject : Page
     {
+        private class UpdateStatus
+        {
+            public bool Succeeded { get; set; }
+            public bool UpdateAvailable { get; set; }
+            public ReleasedVersion LastVersion { get; set; }
+        }
+
         private BackgroundWorker versionChecker;
 
         public TabProject()
@@ -51,25 +58,34 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             versionChecker = new BackgroundWorker();
             versionChecker.DoWork += delegate(object s, DoWorkEventArgs args)
             {
+                var result = new UpdateStatus();
+                result.Succeeded = UpdateChecker.IsWorking();
+                if (result.Succeeded)
+                {
+                    result.UpdateAvailable = UpdateChecker.IsUpdateAvailable();
+                    result.LastVersion = UpdateChecker.GetLastReleasedVersion();
+                }
+                args.Result = result;
+            };
+            versionChecker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
+            {
+                var result = (UpdateStatus)args.Result;
+
                 string text;
-                if (!UpdateChecker.IsWorking())
+                if (!result.Succeeded)
                 {
                     text = UI.FailedToRetrieveUpdateInformation;
                 }
-                else if (UpdateChecker.IsUpdateAvailable())
+                else if (result.UpdateAvailable)
                 {
-                    text = String.Format(UI.UpdateAvailable, UpdateChecker.GetLastReleasedVersion().Version, UpdateChecker.GetLastReleasedVersion().ReleaseDate);
+                    text = String.Format(UI.UpdateAvailable, result.LastVersion.Version, result.LastVersion.ReleaseDate);
                 }
                 else
                 {
                     text = UI.NoUpdateAvailable;
                 }
 
-                args.Result = String.Format("{0} ({1})", VersionUtil.GetVersionName(), text);
-            };
-            versionChecker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
-            {
-                tbVersion.Text = args.Result as string;
+                tbVersion.Text = String.Format("{0} ({1})", VersionUtil.GetVersionName(), text);
             };
             versionChecker.RunWorkerAsync();
         }
