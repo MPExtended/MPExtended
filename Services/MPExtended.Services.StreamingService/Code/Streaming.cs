@@ -433,7 +433,10 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (info.VideoStreams.Count > 0)
                 {
-                    return Resolution.Calculate(info.VideoStreams.First().DisplayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+                    var res = Resolution.Calculate(info.VideoStreams.First().DisplayAspectRatio, profile.MaxOutputWidth, profile.MaxOutputHeight, 2);
+                    if (res.Width == 0 && res.Height == 0)
+                        return new Resolution(info.VideoStreams.First().Width, info.VideoStreams.First().Height);
+                    return res;
                 }
             }
             catch (Exception ex)
