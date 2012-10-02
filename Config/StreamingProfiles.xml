@@ -17,8 +17,8 @@
       <Transport>http</Transport>
       <MIME>video/x-unknown</MIME>
       <HasVideoStream>true</HasVideoStream>
-      <MaxOutputWidth>0</MaxOutputWidth>
-      <MaxOutputHeight>0</MaxOutputHeight>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.Direct</Transcoder>
       <TranscoderParameters />
