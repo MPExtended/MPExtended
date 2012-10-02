@@ -44,6 +44,7 @@ namespace MPExtended.Services.TVAccessService
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
+        private bool _tveInstalled;
 
         public void SetAsInstance()
         {
@@ -53,13 +54,13 @@ namespace MPExtended.Services.TVAccessService
         public TVAccessService()
         {
             _tvBusiness = new TvBusinessLayer();
-
-            // try to initialize Gentle and TVE API
             InitializeGentleAndTVE();
         }
 
         private void InitializeGentleAndTVE()
         {
+            _tveInstalled = true;
+
             try
             {
                 // Use the same Gentle.config as the TVEngine
@@ -72,6 +73,7 @@ namespace MPExtended.Services.TVAccessService
                 if (!File.Exists(gentleConfigFile))
                 {
                     Log.Info("Cannot find Gentle.config file, assuming TVEngine isn't installed...");
+                    _tveInstalled = false;
                     return;
                 }
 
@@ -112,6 +114,9 @@ namespace MPExtended.Services.TVAccessService
         #region TV Server
         public WebBoolResult TestConnectionToTVService()
         {
+            if (!_tveInstalled)
+                return false;
+
             if (!RemoteControl.IsConnected)
             {
                 return false;
