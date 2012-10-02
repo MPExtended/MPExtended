@@ -25,3 +25,16 @@ br.noFloat
 {
     max-width: 150px;
 }
+
+/* Add some spaces between the rows... */
+.row a
+{
+    display: block;
+    min-height: 45px;
+}
+
+/* ...but not on the homepage */
+.home .row a
+{
+    display: inline;
+}

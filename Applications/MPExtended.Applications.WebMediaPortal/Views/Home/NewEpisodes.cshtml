@@ -4,7 +4,7 @@
 
 @if (ViewBag.Availability.TVShows)
 {
-    <h2>@UIStrings.LatestEpisodes</h2>
+    <h2>@Html.ActionLink(UIStrings.LatestEpisodes, "NewEpisodes", "Home", new { count = 50 }, new { })</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
         @foreach (var episode in Model)

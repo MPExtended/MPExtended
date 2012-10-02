@@ -4,7 +4,7 @@
 
 @if (ViewBag.Availability.Movies)
 {
-    <h2>@UIStrings.LatestMovies</h2>
+    <h2>@Html.ActionLink(UIStrings.LatestMovies, "NewMovies", "Home", new { count = 50 }, new { })</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
     <div>
         @foreach (var movie in Model)
