@@ -102,7 +102,7 @@ namespace MPExtended.Services.TVAccessService
         {
             return new WebTVServiceDescription()
             {
-                HasConnectionToTVServer = RemoteControl.IsConnected,
+                HasConnectionToTVServer = TestConnectionToTVService(),
                 ApiVersion = API_VERSION,
                 ServiceVersion = VersionUtil.GetVersionName(),
             };
