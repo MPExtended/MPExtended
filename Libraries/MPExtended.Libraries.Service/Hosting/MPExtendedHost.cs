@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -56,6 +57,12 @@ namespace MPExtended.Libraries.Service.Hosting
                         Log.Fatal("Terminating because of previous exception");
                     }
                 };
+
+                // set the thread locale to English; we don't output any user-facing messages from the service anyway. 
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                // TODO: Set CultureInfo.DefaultThreadCurrent{,UI}Culture when we switch to .NET4.5
+
                 // start watching the configuration files for changes
                 Configuration.Load();
                 Configuration.EnableChangeWatching();
