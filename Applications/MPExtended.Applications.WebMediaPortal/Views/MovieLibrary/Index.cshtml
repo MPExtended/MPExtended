@@ -7,7 +7,7 @@
 <h2>@UIStrings.YourMovies</h2>
 @foreach (var movie in Model)
 {
-    <a href="@Url.Action(UIStrings.Details, "MovieLibrary", new { movie = movie.Id })">
+    <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })">
         <div class="movie">
             <img alt="@movie.Movie.Title Cover" width="100" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 100 })" />
             <div class="movieDetails" style="float: right">
