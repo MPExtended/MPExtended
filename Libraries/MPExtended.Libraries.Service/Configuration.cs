@@ -56,7 +56,7 @@ namespace MPExtended.Libraries.Service
         static Configuration()
         {
             TransformationCallbacks.Install();
-            config = new ConfigurationList();
+            Reset();
         }
 
         public static Authentication Authentication
@@ -117,7 +117,7 @@ namespace MPExtended.Libraries.Service
 
         public static void Reset()
         {
-            config = new ConfigurationList();
+            config = new ConfigurationList(Installation.Properties.Product);
         }
 
         public static void Load()

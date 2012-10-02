@@ -26,16 +26,26 @@ namespace MPExtended.Libraries.Service.Config
 {
     internal sealed class ConfigurationList : Dictionary<ConfigurationFile, IConfigurationSerializer>
     {
-        public ConfigurationList()
+        public ConfigurationList(MPExtendedProduct product)
             : base()
         {
             this[ConfigurationFile.Authentication] = new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>(ConfigurationFile.Authentication, "Authentication.xml", "Services.xml");
-            this[ConfigurationFile.MediaAccess] = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>(ConfigurationFile.MediaAccess, "MediaAccess.xml");
-            this[ConfigurationFile.Services] = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>(ConfigurationFile.Services, "Services.xml");
-            this[ConfigurationFile.Streaming] = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>(ConfigurationFile.Streaming, "Streaming.xml");
-            this[ConfigurationFile.StreamingProfiles] = new ConfigurationSerializer<StreamingProfiles, StreamingProfilesSerializer>(ConfigurationFile.StreamingProfiles, "StreamingProfiles.xml");
+
+            if (product == MPExtendedProduct.Service)
+            {
+                this[ConfigurationFile.MediaAccess] = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>(ConfigurationFile.MediaAccess, "MediaAccess.xml");
+                this[ConfigurationFile.Services] = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>(ConfigurationFile.Services, "Services.xml");
+                this[ConfigurationFile.Streaming] = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>(ConfigurationFile.Streaming, "Streaming.xml");
+                this[ConfigurationFile.StreamingProfiles] = new ConfigurationSerializer<StreamingProfiles, StreamingProfilesSerializer>(ConfigurationFile.StreamingProfiles, "StreamingProfiles.xml");
+            }
+
+            if (product == MPExtendedProduct.WebMediaPortal)
+            {
+                this[ConfigurationFile.WebMediaPortal] = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>(ConfigurationFile.WebMediaPortal, "WebMediaPortal.xml");
+            }
+
+            // Also load this file for the service, as it is used by the configurator. We might need to add an additional product for that later on, when this becomes problematic. 
             this[ConfigurationFile.WebMediaPortalHosting] = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>(ConfigurationFile.WebMediaPortalHosting, "WebMediaPortalHosting.xml");
-            this[ConfigurationFile.WebMediaPortal] = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>(ConfigurationFile.WebMediaPortal, "WebMediaPortal.xml");
         }
 
         public IConfigurationSerializer Get(ConfigurationFile file)
