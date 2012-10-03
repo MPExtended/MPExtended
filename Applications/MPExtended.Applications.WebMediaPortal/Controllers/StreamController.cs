@@ -102,7 +102,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         protected WebTranscoderProfile GetProfile(IWebStreamingService streamControl, string defaultProfile)
         {
             string profileName = Request.QueryString["transcoder"] ?? Request.Form["transcoder"] ?? defaultProfile;
-            return streamControl.GetTranscoderProfileByName(profileName);
+            var profile = streamControl.GetTranscoderProfileByName(profileName);
+            if (profile != null)
+                return profile;
+
+            Log.Error("Warning: Requested non-existing profile {0}; using default {1}", profileName, defaultProfile);
+            return streamControl.GetTranscoderProfileByName(defaultProfile);
         }
 
         protected IWebStreamingService GetStreamControl(WebMediaType type)
