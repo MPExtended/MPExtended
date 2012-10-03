@@ -23,8 +23,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator
 {
@@ -90,6 +92,18 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             // set startup form
             this.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
+        }
+
+        private void LogErrorAndWarnUser(Exception e)
+        {
+            Log.Fatal("Possibly fatal error occured", e);
+            MessageBox.Show(UI.UnexpectedError, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void HandleDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            LogErrorAndWarnUser(e.Exception);
+            e.Handled = false;
         }
     }
 }
