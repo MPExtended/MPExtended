@@ -57,16 +57,13 @@ namespace MPExtended.Services.TVAccessService
 
         private void Init()
         {
-            // load list of channel logos that we don't have yet
-            logos = new ChannelLogos();
-            ITVAccessService tas = TVAccessService.Instance;
-            if (!tas.TestConnectionToTVService())
+            // don't do anything if we don't have a TVE connection
+            if (!TVAccessService.Instance.TestConnectionToTVService())
                 return;
-            channelLogosRequired = tas.GetChannelsBasic()
-                .Where(ch => logos.FindLocation(ch.Title) == null)
-                .ToList();
-            
+
             // exit if we already got all logos
+            logos = new ChannelLogos();
+            ScanForRequiredLogos();
             if (channelLogosRequired.Count == 0)
             {
                 Log.Trace("All channel logos already available, not downloading any...");
@@ -89,11 +86,28 @@ namespace MPExtended.Services.TVAccessService
             backgroundTimer.Start();
         }
 
+        private void ScanForRequiredLogos()
+        {
+            ITVAccessService tas = TVAccessService.Instance;
+            if (!tas.TestConnectionToTVService())
+                return;
+            channelLogosRequired = tas.GetChannelsBasic()
+                .Where(ch => logos.FindLocation(ch.Title) == null)
+                .ToList();
+        }
+
         private void TimerElapsed(object source, ElapsedEventArgs args)
         {
-            if (PerformCheck())
+            try
             {
-                backgroundTimer.Stop();
+                if (PerformCheck())
+                {
+                    backgroundTimer.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to check for channel logos", ex);
             }
         }
 
@@ -124,6 +138,7 @@ namespace MPExtended.Services.TVAccessService
             }
 
             // exit if we got all the logos
+            ScanForRequiredLogos();
             if (channelLogosRequired.Count == 0)
             {
                 Log.Trace("Yes, got all channel logos now!");
@@ -144,11 +159,8 @@ namespace MPExtended.Services.TVAccessService
                     try
                     {
                         Stream logoStream = serviceSet.MASStream.GetImage(WebMediaType.TV, null, ch.Id.ToString());
-                        Log.Trace("Downloaded logo for channel {0} (length {1})", ch.Title, logoStream.Length);
-                        if (logoStream.Length > 0)
-                        {
-                            logos.WriteToCacheDirectory(ch.Title, "png", logoStream);
-                        }
+                        logos.WriteToCacheDirectory(ch.Title, "png", logoStream);
+                        Log.Debug("Downloaded logo for channel {0}", ch.Title);
                     }
                     catch (EndpointNotFoundException)
                     {
