@@ -37,6 +37,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
         public static void Export(string savePath)
         {
+            // save configuration, as we're going to change it
+            Configuration.Save();
+
             // create zipfile
             using (var zipFile = ZipPackage.Open(savePath, FileMode.Create))
             {
@@ -48,22 +51,21 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                     File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(logPart.GetStream());
                 }
 
+                // copy literal config files
+                WriteConfigFile(zipFile, (IConfigurationSerializer<MediaAccess>)Configuration.GetSerializer(ConfigurationFile.MediaAccess));
+                WriteConfigFile(zipFile, (IConfigurationSerializer<StreamingProfiles>)Configuration.GetSerializer(ConfigurationFile.StreamingProfiles));
+
                 // copy Authentication.xml without the passwords
                 var authPart = zipFile.CreatePart(new Uri("/Authentication.xml", UriKind.Relative), "", CompressionOption.Maximum);
                 var authSerializer = (IConfigurationSerializer<Authentication>)Configuration.GetSerializer(ConfigurationFile.Authentication);
                 foreach (var user in authSerializer.Get().Users)
-                    user.EncryptedPassword = PASSWORD_SUBSTITUTE;
+                    user.SetPasswordFromPlaintext(PASSWORD_SUBSTITUTE);
                 authSerializer.Save(authSerializer.Get(), authPart.GetStream());
-
-                // copy MediaAccess.xml
-                var masPart = zipFile.CreatePart(new Uri("/MediaAccess.xml", UriKind.Relative), "", CompressionOption.Maximum);
-                var masSerializer = (IConfigurationSerializer<MediaAccess>)Configuration.GetSerializer(ConfigurationFile.MediaAccess);
-                masSerializer.Save(masSerializer.Get(), masPart.GetStream());
 
                 // copy Services.xml without network password
                 var servicePart = zipFile.CreatePart(new Uri("/Services.xml", UriKind.Relative), "", CompressionOption.Maximum);
                 var serviceSerializer = (IConfigurationSerializer<ServicesConfig>)Configuration.GetSerializer(ConfigurationFile.Services);
-                serviceSerializer.Get().NetworkImpersonation.EncryptedPassword = PASSWORD_SUBSTITUTE;
+                serviceSerializer.Get().NetworkImpersonation.SetPasswordFromPlaintext(PASSWORD_SUBSTITUTE);
                 serviceSerializer.Save(serviceSerializer.Get(), servicePart.GetStream());
 
                 // copy Streaming.xml without watch sharing password
@@ -73,6 +75,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 streamingSerializer.Get().WatchSharing.TraktConfiguration["passwordHash"] = PASSWORD_SUBSTITUTE;
                 streamingSerializer.Save(streamingSerializer.Get(), streamingPart.GetStream());
             }
+
+            // reset the configuration after the changes we made to the passwords
+            Configuration.Reset();
+        }
+
+        private static void WriteConfigFile<T>(Package file, IConfigurationSerializer<T> serializer) where T : class, new()
+        {
+            var fileName = serializer.Filename;
+            var part = file.CreatePart(new Uri("/" + fileName, UriKind.Relative), "", CompressionOption.Maximum);
+            serializer.Save(serializer.Get(), part.GetStream());
         }
 
         public static void ExportWithFileChooser()

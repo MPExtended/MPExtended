@@ -40,7 +40,7 @@ namespace MPExtended.Libraries.Service.Config
         bool Save();
     }
 
-    public interface IConfigurationSerializer<TModel> where TModel : class, new()
+    public interface IConfigurationSerializer<TModel> : IConfigurationSerializer where TModel : class, new()
     {
         TModel Get();
         bool Save(TModel model);
