@@ -27,16 +27,24 @@ namespace MPExtended.Libraries.Service.Network
 {
     public static class NetworkInformation
     {
-        private static string _ipAddress;
+        private static string _ip4Address;
+        private static string _ipBothAddress;
 
         public static string GetIPAddress()
         {
-            if (_ipAddress == null)
-                _ipAddress = LoadIPAddress();
-            return _ipAddress;
+            return GetIPAddress(Configuration.Services.EnableIPv6);
         }
 
-        private static string LoadIPAddress()
+        public static string GetIPAddress(bool enableIPv6)
+        {
+            if (enableIPv6 && _ipBothAddress == null)
+                _ipBothAddress = LoadIPAddress(true);
+            if (!enableIPv6 && _ip4Address == null)
+                _ip4Address = LoadIPAddress(false);
+            return enableIPv6 ? _ipBothAddress : _ip4Address;
+        }
+
+        private static string LoadIPAddress(bool enableIPv6)
         {
             var interfaces = NetworkInterface.GetAllNetworkInterfaces()
                 .Where(x => x.OperationalStatus == OperationalStatus.Up);
@@ -44,14 +52,14 @@ namespace MPExtended.Libraries.Service.Network
             string[] preferedInterfaces = new string[] { "Local Area Connection" };
             var lanAddresses = interfaces.Where(x => preferedInterfaces.Contains(x.Name))
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (Configuration.Services.EnableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
+                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (enableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
                     .Select(x => x.ToString());
             if (lanAddresses.Any())
                 return lanAddresses.First();
 
             var addresses = interfaces
                 .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (Configuration.Services.EnableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (enableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
                 .Select(x => x.ToString());
             if (addresses.Any(x => x != "127.0.0.1"))
                 return addresses.First(x => x != "127.0.0.1");
