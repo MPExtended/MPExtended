@@ -475,4 +475,19 @@ Ota huomioon että SSL/TLS-sertifikaattien määrittäminen ei ole mahdollista. 
   <data name="Enable" xml:space="preserve">
     <value>Ota käyttöön</value>
   </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Kumoa</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Myönnä oikeudet</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Valitse käyttäjä:</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
 </root>

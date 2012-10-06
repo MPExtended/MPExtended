@@ -148,6 +148,9 @@
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Spesifiser en gyldig MAS URL</value>
   </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Vennligst velg et gyldig språk</value>
+  </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
     <value>Velg en gyldig media strømnings profil</value>
   </data>
@@ -184,6 +187,9 @@
   <data name="FieldRequired" xml:space="preserve">
     <value>felt er nødvendig</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Språk</value>
+  </data>
   <data name="LogOnPassword" xml:space="preserve">
     <value>Passord</value>
   </data>
@@ -216,6 +222,9 @@
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Starttid</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Tittel</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
     <value>Tidsskjema type</value>

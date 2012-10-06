@@ -471,4 +471,37 @@
   <data name="Enable" xml:space="preserve">
     <value>Tillate</value>
   </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Vil du gi applikasjon '{0}' (med IP adresse {1}) full tilgang til MPExtended tjenesten?</value>
+  </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Nekt</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Tillat</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Velg bruker:</value>
+  </data>
+  <data name="AccessRequestWifiRemote" xml:space="preserve">
+    <value>Vil du gi '{0}' tilgang? (Hvis ja, velg bruker i neste steg)</value>
+  </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Tillat klienter å be om tilgang</value>
+  </data>
+  <data name="ExternalIpCustom" xml:space="preserve">
+    <value>Tilpasset</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Finn ekstern IP adresse automatisk</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>Ekstern adresse</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Språk</value>
+  </data>
 </root>

@@ -433,4 +433,28 @@
   <data name="YouAreListening" xml:space="preserve">
     <value>Du lytter til </value>
   </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Oppstart av strøm feilet. Vennligst se server loggen for detaljer.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>Nåværende CPU forbruk:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Nåværende minne forbruk:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>System status.</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Dette er WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Siste album</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Siste spor</value>
+  </data>
 </root>

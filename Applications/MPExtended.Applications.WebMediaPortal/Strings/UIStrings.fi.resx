@@ -433,4 +433,28 @@
   <data name="YouAreListening" xml:space="preserve">
     <value>Kuuntelet &lt;strong&gt;{0}&lt;/strong&gt; &lt;strong&gt;{1}&lt;/strong&gt;:lta.</value>
   </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Virran toistaminen epäonnistui. Ole hyvä ja tarkista palvelun loki tiedot.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Noin</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>Prosessorin käyttö:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Muistin käyttö:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>Järjestelmän tila</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Tämä on WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Uusimmat albumit</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Uusimmat kappaleet</value>
+  </data>
 </root>

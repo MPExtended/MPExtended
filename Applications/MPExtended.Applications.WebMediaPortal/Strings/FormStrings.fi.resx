@@ -148,6 +148,9 @@
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Anna kelvollinen MAS osoite</value>
   </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Ole hyvä ja valitse kieli</value>
+  </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
     <value>Valitse kelvollinen virtautusprofiili medialle</value>
   </data>
@@ -184,6 +187,9 @@
   <data name="FieldRequired" xml:space="preserve">
     <value>{0} kenttä on vaadittu</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
   <data name="LogOnPassword" xml:space="preserve">
     <value>Salasana</value>
   </data>
@@ -216,6 +222,9 @@
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Aloitusaika</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Otsikko</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
     <value>Ajastuksen tyyppi</value>
