@@ -20,7 +20,7 @@
 		'stretching': 'uniform',
 		'repeat': 'list',
         'playlist': [
-                @foreach (var track in Model.Tracks)
+                @foreach (var track in Model.Tracks.OrderBy(x => x.TrackNumber))
                 {
                     <text>
                     { 'title': '@track.Title',
