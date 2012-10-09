@@ -6,7 +6,7 @@
 <h2>@String.Format(UIStrings.AlbumBy, Model.Album.Title, Model.Album.AlbumArtist)</h2>
 
 <div>
-@foreach (var track in Model.Tracks)
+@foreach (var track in Model.Tracks.OrderBy(x => x.TrackNumber))
 {
     <div style="padding: 10px 10px 20px 10px; float:  left; height:  200px;">
         <div>
