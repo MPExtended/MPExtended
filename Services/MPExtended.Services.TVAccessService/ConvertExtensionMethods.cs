@@ -429,6 +429,7 @@ namespace MPExtended.Services.TVAccessService
                 return null;
             }
 
+            var channel = Channel.Retrieve(rec.IdChannel);
             return new WebRecordingBasic
             {
                 Description = rec.Description,
@@ -453,7 +454,7 @@ namespace MPExtended.Services.TVAccessService
                 StopTime = rec.StopTime,
                 TimesWatched = rec.TimesWatched,
                 Title = rec.Title,
-                ChannelName = Channel.Retrieve(rec.IdChannel).DisplayName
+                ChannelName = channel == null ? null : channel.DisplayName
             };
         }
     }
