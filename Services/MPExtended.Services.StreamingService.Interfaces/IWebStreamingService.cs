@@ -29,7 +29,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId);
+        WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId, int? offset);
 
         // playerPosition is in seconds
         [OperationContract]
@@ -38,7 +38,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult InitStream(WebMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout);
+        WebBoolResult InitStream(WebMediaType type, int? provider, string itemId, int? offset, string clientDescription, string identifier, int? idleTimeout);
 
         // startPosition is in seconds
         [OperationContract]
@@ -64,7 +64,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResolution GetStreamSize(WebMediaType type, int? provider, string itemId, string profile);
+        WebResolution GetStreamSize(WebMediaType type, int? provider, string itemId, int? offset, string profile);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -76,6 +76,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId);
+        WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId, int? offset);
     }
 }

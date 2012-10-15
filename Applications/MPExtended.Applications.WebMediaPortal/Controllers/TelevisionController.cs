@@ -103,7 +103,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return HttpNotFound();
 
             var fileInfo = Connections.Current.TAS.GetRecordingFileInfo(rec.Id);
-            var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString());
+            var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString(), 0);
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
             return View(rec);
         }

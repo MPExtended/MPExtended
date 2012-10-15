@@ -108,7 +108,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (mediaInfo == null)
-                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, Episode.PID, Episode.Id);
+                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, Episode.PID, Episode.Id, 0);
 
                 return mediaInfo;
             }

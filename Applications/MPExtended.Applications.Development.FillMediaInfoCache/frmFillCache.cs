@@ -87,7 +87,7 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
                         var movies = _services.MAS.GetMoviesBasicByRange(null, i, i + 99);
                         foreach (var movie in movies)
                         {
-                            _services.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id);
+                            _services.MASStreamControl.GetMediaInfo(WebMediaType.Movie, movie.PID, movie.Id, 0);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {
@@ -127,7 +127,7 @@ namespace MPExtended.Applications.Development.FillMediaInfoCache
                         var episodes = _services.MAS.GetTVEpisodesBasicByRange(null, i, i + 99);
                         foreach (var episode in episodes)
                         {
-                            _services.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id);
+                            _services.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, episode.PID, episode.Id, 0);
                             worker.ReportProgress(5, ++j);
                             if (worker.CancellationPending)
                             {

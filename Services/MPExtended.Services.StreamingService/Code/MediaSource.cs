@@ -100,6 +100,11 @@ namespace MPExtended.Services.StreamingService.Code
         {
         }
 
+        public MediaSource(WebMediaType type, int? provider, string id, int? offset)
+            : this(type, provider, id, WebFileType.Content, offset ?? 0)
+        {
+        }
+
         public MediaSource(WebMediaType type, int? provider, string id)
             : this(type, provider, id, WebFileType.Content, 0)
         {

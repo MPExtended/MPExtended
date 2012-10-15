@@ -59,7 +59,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (mediaInfo == null)
-                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id);
+                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id, 0);
 
                 return mediaInfo;
             }

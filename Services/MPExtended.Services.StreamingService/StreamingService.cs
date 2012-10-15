@@ -95,7 +95,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Info methods
-        public WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId)
+        public WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId, int? offset)
         {
             if (type == WebMediaType.TV)
             {
@@ -110,7 +110,7 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            return MediaInfoHelper.LoadMediaInfoOrSurrogate(new MediaSource(type, provider, itemId));
+            return MediaInfoHelper.LoadMediaInfoOrSurrogate(new MediaSource(type, provider, itemId, offset));
         }
 
         public WebTranscodingInfo GetTranscodingInfo(string identifier, long? playerPosition)
@@ -129,7 +129,7 @@ namespace MPExtended.Services.StreamingService
                 .ToList();
         }
 
-        public WebResolution GetStreamSize(WebMediaType type, int? provider, string itemId, string profile)
+        public WebResolution GetStreamSize(WebMediaType type, int? provider, string itemId, int? offset, string profile)
         {
             if (type == WebMediaType.TV)
             {
@@ -149,7 +149,7 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            return _stream.CalculateSize(Configuration.StreamingProfiles.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId)).ToWebResolution();
+            return _stream.CalculateSize(Configuration.StreamingProfiles.GetTranscoderProfileByName(profile), new MediaSource(type, provider, itemId, offset)).ToWebResolution();
         }
 
         public WebBoolResult AuthorizeStreaming()
@@ -170,10 +170,10 @@ namespace MPExtended.Services.StreamingService
             return true;
         }
 
-        public WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId)
+        public WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId, int? offset)
         {
             // check if we actually now about this file
-            MediaSource source = new MediaSource(type, provider, itemId);
+            MediaSource source = new MediaSource(type, provider, itemId, offset);
             string path = source.GetPath();
             if (path == null || path.Length == 0)
             {
@@ -215,7 +215,7 @@ namespace MPExtended.Services.StreamingService
         #endregion
 
         #region Streaming
-        public WebBoolResult InitStream(WebMediaType type, int? provider, string itemId, string clientDescription, string identifier, int? idleTimeout)
+        public WebBoolResult InitStream(WebMediaType type, int? provider, string itemId, int? offset, string clientDescription, string identifier, int? idleTimeout)
         {
             AuthorizeStreaming();
             if (type == WebMediaType.TV)
@@ -239,9 +239,9 @@ namespace MPExtended.Services.StreamingService
                 }
             }
 
-            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; clientDescription={3}; identifier={4}; idleTimeout={5}", 
-                type, provider, itemId, clientDescription, identifier, idleTimeout);
-            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
+            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; offset={3}; clientDescription={4}; identifier={5}; idleTimeout={6}", 
+                type, provider, itemId, offset, clientDescription, identifier, idleTimeout);
+            return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId, offset), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
         public WebStringResult StartStream(string identifier, string profileName, long startPosition)
@@ -339,7 +339,7 @@ namespace MPExtended.Services.StreamingService
             string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
             Log.Debug("DoStream: using identifier {0} and timeout={1}", identifier, timeout);
 
-            if (!InitStream(type, provider, itemId, clientDescription, identifier, timeout))
+            if (!InitStream(type, provider, itemId, null, clientDescription, identifier, timeout))
             {
                 Log.Info("DoStream: InitStream() failed");
                 FinishStream(identifier);

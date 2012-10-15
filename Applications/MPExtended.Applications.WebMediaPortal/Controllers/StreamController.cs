@@ -196,7 +196,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
                 WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, timeout))
+                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, timeout))
                 {
                     Log.Error("InitStream failed");
                     return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -352,7 +352,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
                 {
                     WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
+                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
                     {
                         Log.Error("InitStream for HLS failed");
                         return null; 
@@ -461,7 +461,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
                 // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
                 // HACK: currently there is no method in WSS to get the aspect ratio for streams with a fixed aspect ratio. 
-                model.Size = GetStreamControl(type).GetStreamSize(type, null, "", profile.Name);
+                model.Size = GetStreamControl(type).GetStreamSize(type, null, "", 0, profile.Name);
             }
             else if (!StreamTarget.GetAllTargets().First(t => profile.Targets.Contains(t.Name)).HasVideo)
             {
@@ -469,7 +469,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             else
             {
-                model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, profile.Name);
+                model.Size = GetStreamControl(type).GetStreamSize(type, GetProvider(type), itemId, 0, profile.Name);
             }
 
             // generate url
