@@ -647,22 +647,22 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebChannelBasic> GetRadioChannelsBasic(int? groupId, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return GetChannels(groupId, sort, order).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
+            return GetRadioChannels(groupId, sort, order).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelBasic> GetRadioChannelsBasicByRange(int start, int end, int? groupId, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return GetChannels(groupId, sort, order).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
+            return GetRadioChannels(groupId, sort, order).Select(ch => ch.ToWebChannelBasic()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailed(int? groupId, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return GetChannels(groupId, sort, order).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
+            return GetRadioChannels(groupId, sort, order).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).ToList();
         }
 
         public IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int start, int end, int? groupId, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return GetChannels(groupId, sort, order).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).TakeRange(start, end).ToList();
+            return GetRadioChannels(groupId, sort, order).Select(ch => ch.ToWebChannelDetailed()).SortChannelList(sort, order).TakeRange(start, end).ToList();
         }
 
         public IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName)
