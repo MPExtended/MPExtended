@@ -32,6 +32,7 @@ using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
 
@@ -509,18 +510,39 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), transcoder ?? defaultProfile);
 
-            // generate url
-            RouteValueDictionary parameters = new RouteValueDictionary();
-            parameters["item"] = itemId;
-            parameters["transcoder"] = profile.Name;
-            parameters["continuationId"] = "playlist-" + randomGenerator.Next(10000, 99999);
-            string url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
-
             // create playlist
             StringBuilder m3u = new StringBuilder();
             m3u.AppendLine("#EXTM3U");
-            m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
-            m3u.AppendLine(url);
+
+            RouteValueDictionary parameters;
+            String url;
+            String continuationId = "playlist-" + randomGenerator.Next(10000, 99999);
+            switch (type)
+            {
+                case WebMediaType.MusicAlbum:
+                    // add all album tracks
+                    foreach (WebMusicTrackBasic track in Connections.Current.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, itemId, WebSortField.MusicTrackNumber))
+                    {
+                        parameters = new RouteValueDictionary();
+                        parameters["item"] = track.Id;
+                        parameters["transcoder"] = profile.Name;
+                        parameters["continuationId"] = continuationId;
+                        m3u.AppendLine(String.Format("#EXTINF:{0},{1}", track.Duration, track.Title));
+                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+                        m3u.AppendLine(url);
+                    }
+                    break;
+                default:
+                    // add default streaming url
+                    parameters = new RouteValueDictionary();
+                    parameters["item"] = itemId;
+                    parameters["transcoder"] = profile.Name;
+                    parameters["continuationId"] = continuationId;
+                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+                    m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
+                    m3u.AppendLine(url);
+                    break;
+            }
 
             // return it
             byte[] data = Encoding.UTF8.GetBytes(m3u.ToString());
