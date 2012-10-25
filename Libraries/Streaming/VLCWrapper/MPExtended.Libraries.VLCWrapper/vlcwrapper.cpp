@@ -22,32 +22,14 @@
 //   standalone .zip file
 // - Create .lib file (http://wiki.videolan.org/GenerateLibFromDll)
 // - Change include and library directories
-//
-// There is some preprocessor magic to make it usable on Linux too. It's
-// probably a bit too much, but I like having this working on Linux for
-// testing.
 
-#ifdef __unix__
-#define PLATFORM_LINUX
-#endif
-#ifdef _MSC_VER
-#define PLATFORM_WIN32
-#endif
-
-#ifdef PLATFORM_LINUX
-#define inline __inline
-#endif
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
 #include <vlc/libvlc_media_player.h>
 #include <vlc/libvlc_events.h>
-
-#ifdef PLATFORM_LINUX
-#include <unistd.h>
-#include <stdbool.h>
-#endif
-
-#ifdef PLATFORM_WIN32
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <Windows.h>
 
 // missing C99 support...
@@ -57,11 +39,6 @@
 #define bool _Bool
 #define true 1
 #define false 0
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define ENDLN(x) (x "\n")
 
@@ -102,11 +79,7 @@ void register_event(libvlc_event_manager_t *eventManager, libvlc_event_type_t ev
 }
 
 void millisleep(int millisecs) {
-#if defined(PLATFORM_LINUX)
-   usleep(millisecs * 1000);
-#elif defined(PLATFORM_WIN32)
    Sleep(millisecs);
-#endif
 }
 
 int main(int argc, char **argv) {
