@@ -60,7 +60,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 if ((HttpStatusCode)returnCode != HttpStatusCode.OK)
                 {
                     // don't cache failed-to-load images very long, as artwork may be added later on
-                    SetCacheHeaders(1);
+                    SetCacheHeaders(0);
                     if (defaultFile == null)
                     {
                         return new HttpStatusCodeResult(returnCode);
@@ -79,11 +79,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
         }
 
-        private static void SetCacheHeaders(int liveForDays, string etag = null)
+        private static void SetCacheHeaders(double liveForDays, string etag = null)
         {
             HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public);
-            HttpContext.Current.Response.Cache.SetProxyMaxAge(TimeSpan.FromDays(6 * 30));
-            HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddDays(6 * 30));
+            HttpContext.Current.Response.Cache.SetProxyMaxAge(TimeSpan.FromDays(liveForDays));
+            HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddDays(liveForDays));
             if (etag != null)
                 HttpContext.Current.Response.Cache.SetETag(String.Format("\"{0}\"", etag));
         }
