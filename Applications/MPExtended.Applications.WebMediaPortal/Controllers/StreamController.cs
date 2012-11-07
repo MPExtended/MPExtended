@@ -490,6 +490,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
+            model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
             WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
