@@ -14,6 +14,32 @@ namespace MPExtended.Scrapers.TVSeries
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVSeriesImporter : IScraperService, IFeedback
     {
+        class FeedBacker : IFeedback
+        {
+            private TVSeriesImporter mImporter;
+            String RequestId { get; set; }
+            public FeedBacker(String _requestId, TVSeriesImporter _importer)
+            {
+                RequestId = _requestId;
+                mImporter = _importer;
+            }
+            public ReturnCode ChooseFromSelection(ChooseFromSelectionDescriptor descriptor, out CItem selected)
+            {
+                return mImporter.HandleItemSelection(RequestId, descriptor, out selected);
+            }
+
+            public ReturnCode GetStringFromUser(GetStringFromUserDescriptor descriptor, out string input)
+            {
+                input = null;
+                return ReturnCode.Cancel;
+            }
+
+            public ReturnCode YesNoOkDialog(ChooseFromYesNoDescriptor descriptor)
+            {
+                return ReturnCode.Cancel;
+            }
+        }
+
         private void CheckConflictingProgramsRunning()
         {
             bool paused = false;
@@ -80,10 +106,14 @@ namespace MPExtended.Scrapers.TVSeries
         private Watcher m_watcherUpdater;
         public bool mImporterPausedManually { get; set; }
 
+        private List<WebScraperInputRequest> mPendingRequests;
+
         public TVSeriesImporter()
         {
             OnlineParsing.OnlineParsingProgress += new OnlineParsing.OnlineParsingProgressHandler(parserUpdater_OnlineParsingProgress);
             OnlineParsing.OnlineParsingCompleted += new OnlineParsing.OnlineParsingCompletedHandler(parserUpdater_OnlineParsingCompleted);
+
+            mPendingRequests = new List<WebScraperInputRequest>();
         }
 
         public Process GetProcess(string name)
@@ -276,6 +306,11 @@ namespace MPExtended.Scrapers.TVSeries
 
                 mCurrentStatus = status;
                 mCurrentPercentage = nProgress;
+
+                if (progress.CurrentAction == ParsingAction.IdentifyNewEpisodes)
+                {
+                    int newEp = progress.CurrentItem;
+                }
             }
         }
 
@@ -334,32 +369,147 @@ namespace MPExtended.Scrapers.TVSeries
 
         public WebScraperStatus GetScraperStatus()
         {
-            return new WebScraperStatus() { CurrentAction = mCurrentStatus, CurrentProgress = mCurrentPercentage, InputNeeded = 0 };
+            return new WebScraperStatus() { CurrentAction = mCurrentStatus, CurrentProgress = mCurrentPercentage, InputNeeded = mPendingRequests.Count };
         }
 
         public WebScraperInputRequest GetScraperInputRequest(int index)
         {
 
 
-            return null;
+            return mPendingRequests[index];
         }
 
         public IList<WebScraperInputRequest> GetAllScraperInputRequests()
         {
-            return null;
+            return mPendingRequests;
         }
 
         public WebResult SetScraperInputRequest(String requestId, String matchId, String text)
         {
-
+            if (text != null && !text.Equals(""))
+            {
+                DBOnlineSeries series = OnlineParsing.SearchForSeries(text, true, new FeedBacker(requestId, this));
+                mPendingTextResults[requestId] = text;
+            }
+            else
+            {
+                mPendingListSelections.Add(requestId, matchId);
+            }
 
             return false;
         }
 
+        public Dictionary<String, String> mPendingListSelections = new Dictionary<String, String>();
+        public Dictionary<String, String> mPendingTextResults = new Dictionary<String, String>();
+
         public ReturnCode ChooseFromSelection(ChooseFromSelectionDescriptor descriptor, out CItem selected)
         {
+            return HandleItemSelection(descriptor.m_sItemToMatch, descriptor, out selected);
+        }
+
+        private ReturnCode HandleItemSelection(string _title, ChooseFromSelectionDescriptor descriptor, out CItem selected)
+        {
+            WebScraperInputRequest req = new WebScraperInputRequest();
+            req.Title = _title;
+            req.Id = _title;
+
+            if (descriptor.m_List != null && descriptor.m_List.Count > 0)
+            {
+                if (descriptor.m_List[0].m_Tag == null)
+                {
+                    if (mPendingTextResults.ContainsKey(req.Id))
+                    {
+                        selected = descriptor.m_List[0];
+                        return ReturnCode.OK;
+                    }
+                    else
+                    {
+                        req.InputType = WebInputTypes.TextInput;
+                        req.Text = descriptor.m_List[0].m_sName;
+                    }
+                }
+                else
+                {
+                    req.InputOptions = new List<WebScraperInputMatch>();
+                    req.InputType = WebInputTypes.ItemSelect;
+                    foreach (CItem i in descriptor.m_List)
+                    {
+                        WebScraperInputMatch match = new WebScraperInputMatch();
+                        match.Id = i.m_sName;
+                        if (mPendingListSelections.ContainsKey(req.Id))
+                        {
+                            CItem selectedMatch = GetRequestMatchItem(req.Id, mPendingListSelections[req.Id]).Tag as CItem;
+                            //the user already sent a reply for this
+                            RemovePendingRequest(req);
+                            selected = selectedMatch;
+                            return ReturnCode.OK;
+                        }
+                        else
+                        {
+
+                            match.Title = i.m_sName;
+                            match.Description = i.m_sDescription;
+                            match.Tag = i;
+
+                            if (i.m_Tag != null && i.m_Tag.GetType() == typeof(DBTable))
+                            {
+                                //TODO: maybe add additional info here?
+                            }
+                            req.InputOptions.Add(match);
+                        }
+                    }
+                }
+            }
+
+            AddPendingRequest(req);
+
             selected = null;
             return ReturnCode.Cancel;
+        }
+
+        private WebScraperInputMatch GetRequestMatchItem(string _requestId, string _matchId)
+        {
+            foreach (WebScraperInputRequest r in mPendingRequests)
+            {
+                if (r.Id.Equals(_requestId))
+                {
+                    foreach (WebScraperInputMatch m in r.InputOptions)
+                    {
+                        if (m.Id.Equals(_matchId))
+                        {
+                            return m;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        private void RemovePendingRequest(WebScraperInputRequest req)
+        {
+            foreach (WebScraperInputRequest r in mPendingRequests)
+            {
+                if (r.Id.Equals(req.Id))
+                {
+                    //request already added
+                    mPendingRequests.Remove(r);
+                    return;
+                }
+            }
+        }
+
+        private void AddPendingRequest(WebScraperInputRequest req)
+        {
+            foreach (WebScraperInputRequest r in mPendingRequests)
+            {
+                if (r.Id.Equals(req.Id))
+                {
+                    //request already added
+                    mPendingRequests.Remove(r);
+                    break;
+                }
+            }
+            mPendingRequests.Add(req);
         }
 
         public ReturnCode GetStringFromUser(GetStringFromUserDescriptor descriptor, out string input)
@@ -375,6 +525,6 @@ namespace MPExtended.Scrapers.TVSeries
 
         public bool IsRunning { get { return mImporterRunning; } }
 
-        
+
     }
 }

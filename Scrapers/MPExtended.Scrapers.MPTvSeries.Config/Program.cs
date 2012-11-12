@@ -18,10 +18,11 @@ namespace MPExtended.Scrapers.MPTvSeries.Config
             Application.SetCompatibleTextRenderingDefault(false);
 
             ConfigurationForm form = new ConfigurationForm();
-            form.TabControlSettings.TabPages.RemoveAt(3);//follw.it
-            form.TabControlSettings.TabPages.RemoveAt(3);//General
-            form.TabControlSettings.TabPages.RemoveAt(3);//views/filters
-            form.TabControlSettings.TabPages.RemoveAt(3);//layout
+            TabControl tabs = (TabControl)form.Controls[0].Controls[0].Controls[0];
+            tabs.TabPages.RemoveAt(3);//follw.it
+            tabs.TabPages.RemoveAt(3);//General
+            tabs.TabPages.RemoveAt(3);//views/filters
+            tabs.TabPages.RemoveAt(3);//layout
             Application.Run(form);
 
             

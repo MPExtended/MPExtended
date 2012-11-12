@@ -40,6 +40,10 @@
     <Reference Include="FollwitApi">
       <HintPath>..\..\Libraries\Scrapers\FollwitApi.dll</HintPath>
     </Reference>
+    <Reference Include="MP-TVSeries, Version=3.3.0.1944, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Team MediaPortal\MediaPortal\plugins\Windows\MP-TVSeries.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -66,10 +70,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\New folder\MP-TvSeries\MP-TVSeries\MP-TVSeries.csproj">
-      <Project>{A983AA7A-DE3C-4587-9416-22373A35B721}</Project>
-      <Name>MP-TVSeries</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>

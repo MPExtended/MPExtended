@@ -17,6 +17,7 @@ namespace MPExtended.Scrapers.ScraperManager
         private DialogResult result = DialogResult.Cancel;
         private WebScraperInputRequest request = null;
         private WebScraperInputMatch selection = null;
+        public String NewSearchText { get; set; }
 
         public WebScraperInputMatch SelectedMatch { get { return selection; } }
         public SearchResultForm()
@@ -73,6 +74,11 @@ namespace MPExtended.Scrapers.ScraperManager
                 item.Tag = r;
                 lvSearchResult.Items.Add(item);
             }*/
+
+            NewSearchText = txtSeriesName.Text;
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void cmdChoose_Click(object sender, EventArgs e)
@@ -114,7 +120,10 @@ namespace MPExtended.Scrapers.ScraperManager
                 //bcSearchResult.BannerImage = m_selection.Banner;
 
                 //txtOverview.Text = m_selection.Overview;
-                linkImdb.Text = selection.ImdbId.Equals("") ? "" : "http://www.imdb.com/title/" + selection.ImdbId;
+                if (selection.ImdbId != null)
+                {
+                    linkImdb.Text = selection.ImdbId.Equals("") ? "" : "http://www.imdb.com/title/" + selection.ImdbId;
+                }
                 txtFirstAired.Text = selection.FirstAired.ToShortDateString();
                 txtOverview.Text = selection.Description;
             }

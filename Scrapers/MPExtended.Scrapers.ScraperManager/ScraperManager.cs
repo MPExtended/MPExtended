@@ -107,6 +107,8 @@ namespace MPExtended.Scrapers.ScraperManager
                 proxyChannel = null;
             }
             selected = (ProxyInfo)cbAvailableScrapers.SelectedItem;
+
+            timerUpdateScraperState.Start();
         }
 
         private void cmdStart_Click(object sender, EventArgs e)
@@ -172,6 +174,10 @@ namespace MPExtended.Scrapers.ScraperManager
                 }
 
             }
+            catch (EndpointNotFoundException ex)
+            {
+                timerUpdateScraperState.Stop();
+            }
             catch (Exception ex)
             {
 
@@ -215,6 +221,8 @@ namespace MPExtended.Scrapers.ScraperManager
                     {
                         if (r.Id.Equals(n.Id))
                         {
+                            r.InputOptions = n.InputOptions;
+                            r.InputType = n.InputType;
                             found = true;
                             break;
                         }
@@ -233,12 +241,20 @@ namespace MPExtended.Scrapers.ScraperManager
             if (cbInputRequests.SelectedItem != null)
             {
                 WebScraperInputRequest request = (WebScraperInputRequest)cbInputRequests.SelectedItem;
+
                 SearchResultForm dialog = new SearchResultForm(Proxy, request);
                 DialogResult res = dialog.ShowDialog();
                 if (res == System.Windows.Forms.DialogResult.OK)
                 {
-                    WebScraperInputMatch match = dialog.SelectedMatch;
-                    Proxy.SetScraperInputRequest(request.Id, match.Id, null);
+                    if (dialog.NewSearchText != null)
+                    {
+                        Proxy.SetScraperInputRequest(request.Id, null, dialog.NewSearchText);
+                    }
+                    else
+                    {
+                        WebScraperInputMatch match = dialog.SelectedMatch;
+                        Proxy.SetScraperInputRequest(request.Id, match.Id, null);
+                    }
                 }
             }
         }

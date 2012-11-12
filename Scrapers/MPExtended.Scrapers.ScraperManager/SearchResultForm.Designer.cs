@@ -67,12 +67,12 @@
             // chId
             // 
             this.chId.Text = "Id";
-            this.chId.Width = 106;
+            this.chId.Width = 1;
             // 
             // chName
             // 
             this.chName.Text = "Name";
-            this.chName.Width = 213;
+            this.chName.Width = 316;
             // 
             // groupBox1
             // 
@@ -183,7 +183,6 @@
             // 
             // cmdSearch
             // 
-            this.cmdSearch.Enabled = false;
             this.cmdSearch.Location = new System.Drawing.Point(265, 5);
             this.cmdSearch.Name = "cmdSearch";
             this.cmdSearch.Size = new System.Drawing.Size(75, 23);
@@ -194,7 +193,6 @@
             // 
             // txtSeriesName
             // 
-            this.txtSeriesName.Enabled = false;
             this.txtSeriesName.Location = new System.Drawing.Point(12, 7);
             this.txtSeriesName.Name = "txtSeriesName";
             this.txtSeriesName.Size = new System.Drawing.Size(247, 20);
