@@ -7,6 +7,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
 {
     public class WebScraperInputMatch
     {
+        public object Tag { get; set; }
         public String Id { get; set; }
         public String Title { get; set; }
         public String ImdbId { get; set; }
