@@ -32,12 +32,19 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public string Identifier { get; set; }
         public StreamContext Context { get; set; }
 
-        public string GetStreamURL()
+        protected bool ReadOutputStream { get; set; }
+
+        public FFMpeg()
+        {
+            ReadOutputStream = true;
+        }
+
+        public virtual string GetStreamURL()
         {
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/RetrieveStream?identifier=" + Identifier;
         }
 
-        public void BuildPipeline()
+        public virtual void BuildPipeline()
         {
             // add input
             bool doInputReader = Context.Source.NeedsInputReaderUnit;
@@ -46,6 +53,28 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
             }
 
+            string arguments = GenerateFFMpegArguments();
+
+            // fix input thing
+            if (!doInputReader)
+                arguments = arguments.Replace("#IN#", Context.Source.GetPath());
+
+            // add unit
+            EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            EncoderUnit unit = new EncoderUnit(Configuration.StreamingProfiles.FFMpegPath, arguments, input, ReadOutputStream ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other, EncoderUnit.LogStream.StandardError, Context);
+            unit.DebugOutput = false; // change this for debugging
+            Context.Pipeline.AddDataUnit(unit, 5);
+
+            // setup output parsing
+            var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, Context.StartPosition);
+            logunit.LogMessages = true;
+            logunit.LogProgress = true;
+            Context.Pipeline.AddLogUnit(logunit, 6);
+        }
+
+        public virtual string GenerateFFMpegArguments()
+        {
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
             string mappings = "";
             if (Context.AudioTrackId != null)
@@ -59,37 +88,23 @@ namespace MPExtended.Services.StreamingService.Transcoders
             if (Context.Profile.HasVideoStream && doResize)
             {
                 arguments = String.Format(
-                    "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5} \"#OUT#\"",
+                    "-y {0} -i \"#IN#\" -s {1} -aspect {2}:{3} {4} {5}{6}",
                     Context.StartPosition != 0 ? "-ss " + (Context.StartPosition / 1000) : "",
                     Context.OutputSize, Context.OutputSize.Width, Context.OutputSize.Height,
-                    mappings, Context.Profile.TranscoderParameters["codecParameters"]
+                    mappings, Context.Profile.TranscoderParameters["codecParameters"],
+                    ReadOutputStream ? " \"#OUT#\"" : ""                    
                 );
             }
             else
             {
                 arguments = String.Format(
-                    "-y {0} -i \"#IN#\" {1} {2} \"#OUT#\"",
+                    "-y {0} -i \"#IN#\" {1} {2}{3}",
                     Context.StartPosition != 0 ? "-ss " + (Context.StartPosition / 1000) : "",
-                    mappings, Context.Profile.TranscoderParameters["codecParameters"]
+                    mappings, Context.Profile.TranscoderParameters["codecParameters"],
+                    ReadOutputStream ? " \"#OUT#\"" : ""
                 );
             }
-
-            // fix input thing
-            if (!doInputReader)
-                arguments = arguments.Replace("#IN#", Context.Source.GetPath());
-
-            // add unit
-            EncoderUnit.TransportMethod input = doInputReader ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(Configuration.StreamingProfiles.FFMpegPath, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.StandardError, Context);
-            unit.DebugOutput = false; // change this for debugging
-            Context.Pipeline.AddDataUnit(unit, 5);
-
-            // setup output parsing
-            var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
-            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, Context.StartPosition);
-            logunit.LogMessages = true;
-            logunit.LogProgress = true;
-            Context.Pipeline.AddLogUnit(logunit, 6);
+            return arguments;
         }
     }
 }

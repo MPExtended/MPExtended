@@ -441,6 +441,133 @@
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming HD</Name>
+      <Description>HD-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>2280</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming ultra HQ</Name>
+      <Description>Ultra high-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>1280</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <MaxOutputWidth>800</MaxOutputWidth>
+      <MaxOutputHeight>600</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming HQ</Name>
+      <Description>High-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>896</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <MaxOutputWidth>800</MaxOutputWidth>
+      <MaxOutputHeight>600</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming medium</Name>
+      <Description>Medium-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>640</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <MaxOutputWidth>600</MaxOutputWidth>
+      <MaxOutputHeight>400</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming LQ</Name>
+      <Description>Low-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>320</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <Transport>http</Transport>
+      <MaxOutputWidth>400</MaxOutputWidth>
+      <MaxOutputHeight>300</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 64k -ac 1 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>FFmpeg HTTP Live Streaming ultra LQ</Name>
+      <Description>Ultra low-quality HTTP Live Streaming profile based on ffmpeg</Description>
+      <Bandwidth>176</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>
+      <MaxOutputWidth>400</MaxOutputWidth>
+      <MaxOutputHeight>300</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 48k -ac 1 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <httpLiveRemoveOld>5</httpLiveRemoveOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
 
     <!-- Flash streaming for WebMediaPortal -->
     <TranscoderProfile>
@@ -575,6 +702,6 @@
         <encoder>vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>
-    </TranscoderProfile>
+    </TranscoderProfile>   
   </Transcoders>
 </StreamingProfiles>

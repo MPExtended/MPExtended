@@ -63,7 +63,7 @@ namespace MPExtended.Services.StreamingService.Code
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + Identifier + "&action=playlist&parameters=index.m3u8";
         }
 
-        public Stream ProvideCustomActionFile(string action, string param)
+        public virtual Stream ProvideCustomActionFile(string action, string param)
         {
             switch (action)
             {

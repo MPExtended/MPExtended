@@ -82,6 +82,8 @@
     <Compile Include="MediaInfo\IMediaInfoCache.cs" />
     <Compile Include="MediaInfo\XmlCache.cs" />
     <Compile Include="Code\HTTPLiveStreamer.cs" />
+    <Compile Include="Transcoders\FFMpegHTTPLiveStreamer.cs" />
+    <Compile Include="Transcoders\FFMpegWrapperHTTPLiveStreaming.cs" />
     <Compile Include="Transcoders\Generic.cs" />
     <Compile Include="Transcoders\IRetrieveHookTranscoder.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
