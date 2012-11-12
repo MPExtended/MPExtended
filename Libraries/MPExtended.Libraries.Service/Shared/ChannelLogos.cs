@@ -72,9 +72,12 @@ namespace MPExtended.Libraries.Service.Shared
         public void WriteToCacheDirectory(string channelName, string logoFormat, Stream logo)
         {
             string path = Path.Combine(GetCacheDirectory(), String.Format("{0}.{1}", channelName, logoFormat));
-            using (FileStream writeStream = File.Open(path, FileMode.CreateNew, FileAccess.Write))
+            if (!File.Exists(path))
             {
-                logo.CopyTo(writeStream);
+                using (FileStream writeStream = File.Open(path, FileMode.CreateNew, FileAccess.Write))
+                {
+                    logo.CopyTo(writeStream);
+                }
             }
         }
 
