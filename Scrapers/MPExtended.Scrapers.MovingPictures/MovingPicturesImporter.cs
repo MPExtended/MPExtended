@@ -70,7 +70,7 @@ namespace MPExtended.Scrapers.MovingPictures
 
         private Thread initThread;
         private List<MovieMatch> matches = new List<MovieMatch>();
-        private Thread mopiCheckThread;
+        private Thread conflictingCheckThread;
         private string mCurrentAction;
         private int mCurrentPercentage;
         private bool mImporterPausedManually;
@@ -157,8 +157,8 @@ namespace MPExtended.Scrapers.MovingPictures
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
             initThread.Start();
       
-            mopiCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
-            mopiCheckThread.Start();
+            conflictingCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
+            conflictingCheckThread.Start();
         }
 
         public WebResult StartScraper()
@@ -213,6 +213,12 @@ namespace MPExtended.Scrapers.MovingPictures
             Console.WriteLine("Resuming MovingPictures Scraper");
             mScraperState = WebScraperState.Running;
             MovingPicturesCore.Importer.Start();
+            return true;
+        }
+
+        public WebResult TriggerUpdate()
+        {
+            MovingPicturesCore.Importer.RestartScanner();
             return true;
         }
 
@@ -301,7 +307,5 @@ namespace MPExtended.Scrapers.MovingPictures
             }
             return false;
         }
-
-        public bool IsRunning { get { return mScraperState == WebScraperState.Running; } }
     }
 }

@@ -54,12 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Local Parsing Classes\LocalParse.cs" />
     <Compile Include="Local Parsing Classes\ParserFilename.cs" />
     <Compile Include="Local Parsing Classes\Watcher.cs" />
     <Compile Include="TVSeriesImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TvSeriesMatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

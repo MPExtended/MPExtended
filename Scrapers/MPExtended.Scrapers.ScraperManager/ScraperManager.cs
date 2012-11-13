@@ -27,6 +27,7 @@ namespace MPExtended.Scrapers.ScraperManager
         private ProxyInfo selected;
         private WebScraperStatus currentStatus;
         private List<WebScraperInputRequest> requests;
+        private SearchResultForm dialog;
 
         private IScraperService Proxy
         {
@@ -80,8 +81,9 @@ namespace MPExtended.Scrapers.ScraperManager
 
         private void ScraperManager_Load(object sender, EventArgs e)
         {
-            cbAvailableScrapers.Items.Add(new ProxyInfo() { Name = "Movies", Address = "net.tcp://localhost:9761/MPExtended/ScraperServiceMopi" });
             cbAvailableScrapers.Items.Add(new ProxyInfo() { Name = "TvSeries", Address = "net.tcp://localhost:9760/MPExtended/ScraperServiceTVSeries" });
+            cbAvailableScrapers.Items.Add(new ProxyInfo() { Name = "Movies", Address = "net.tcp://localhost:9761/MPExtended/ScraperServiceMopi" });
+            
             cbAvailableScrapers.SelectedIndex = 0;
             timerUpdateScraperState.Start();
         }
@@ -106,6 +108,12 @@ namespace MPExtended.Scrapers.ScraperManager
 
                 proxyChannel = null;
             }
+
+            cmdStart.Enabled = true;
+            cmdPauseResume.Enabled = false;
+            cmdStop.Enabled = false;
+            cmdRefresh.Enabled = false;
+
             selected = (ProxyInfo)cbAvailableScrapers.SelectedItem;
 
             timerUpdateScraperState.Start();
@@ -114,6 +122,11 @@ namespace MPExtended.Scrapers.ScraperManager
         private void cmdStart_Click(object sender, EventArgs e)
         {
             bool result = Proxy.StartScraper();
+        }
+
+        private void cmdRefresh_Click(object sender, EventArgs e)
+        {
+            Proxy.TriggerUpdate();
         }
 
         private void cmdPauseResume_Click(object sender, EventArgs e)
@@ -151,6 +164,11 @@ namespace MPExtended.Scrapers.ScraperManager
                     {
                         cmdPauseResume.Text = "Pause";
                     }
+
+                    cmdStart.Enabled = currentStatus.ScraperState == WebScraperState.Stopped;
+                    cmdPauseResume.Enabled = currentStatus.ScraperState != WebScraperState.Stopped;
+                    cmdStop.Enabled = currentStatus.ScraperState != WebScraperState.Stopped;
+                    cmdRefresh.Enabled = currentStatus.ScraperState != WebScraperState.Stopped;
 
                     IList<WebScraperInputRequest> reqs = null;
                     if (currentStatus.InputNeeded > 0)
@@ -223,6 +241,10 @@ namespace MPExtended.Scrapers.ScraperManager
                         {
                             r.InputOptions = n.InputOptions;
                             r.InputType = n.InputType;
+                            if (dialog != null)
+                            {
+                                dialog.UpdateRequest(r);
+                            }
                             found = true;
                             break;
                         }
@@ -242,7 +264,7 @@ namespace MPExtended.Scrapers.ScraperManager
             {
                 WebScraperInputRequest request = (WebScraperInputRequest)cbInputRequests.SelectedItem;
 
-                SearchResultForm dialog = new SearchResultForm(Proxy, request);
+                dialog = new SearchResultForm(Proxy, request);
                 DialogResult res = dialog.ShowDialog();
                 if (res == System.Windows.Forms.DialogResult.OK)
                 {

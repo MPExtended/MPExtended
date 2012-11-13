@@ -115,7 +115,7 @@ namespace MPExtended.Scrapers.MovingPictures
 
                     command = Console.ReadLine();
                 }
-                if (importer.IsRunning)
+                if (importer.GetScraperStatus().ScraperState != WebScraperState.Stopped)
                 {
                     importer.StopScraper();
                 }

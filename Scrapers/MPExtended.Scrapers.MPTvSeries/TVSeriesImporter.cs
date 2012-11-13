@@ -91,7 +91,7 @@ namespace MPExtended.Scrapers.TVSeries
         }
 
         private Thread initThread;
-        private Thread mopiCheckThread;
+        private Thread conflictingCheckThread;
         private bool mImporterRunning;
         private bool mImporterPaused;
         private string mCurrentStatus;
@@ -107,6 +107,10 @@ namespace MPExtended.Scrapers.TVSeries
         public bool mImporterPausedManually { get; set; }
 
         private List<WebScraperInputRequest> mPendingRequests;
+        private Dictionary<String, CItem> mCachedItems;
+
+        private WebScraperState mScraperState = WebScraperState.Stopped;
+
 
         public TVSeriesImporter()
         {
@@ -114,6 +118,7 @@ namespace MPExtended.Scrapers.TVSeries
             OnlineParsing.OnlineParsingCompleted += new OnlineParsing.OnlineParsingCompletedHandler(parserUpdater_OnlineParsingCompleted);
 
             mPendingRequests = new List<WebScraperInputRequest>();
+            mCachedItems = new Dictionary<String, CItem>();
         }
 
         public Process GetProcess(string name)
@@ -145,14 +150,16 @@ namespace MPExtended.Scrapers.TVSeries
             InitImporter();
             #endregion
 
-            mopiCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
-            mopiCheckThread.Start();
+            conflictingCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
+            conflictingCheckThread.Start();
+
+            mScraperState = WebScraperState.Running;
         }
 
         private void InitImporter()
         {
             m_parserUpdater = new OnlineParsing(this);
-
+            DBOption.SetOptions(DBOption.cImportDelay, 5);
             int importDelay = DBOption.GetOptions(DBOption.cImportDelay);
             Console.WriteLine(String.Format("Starting initial import scan in: {0} secs", importDelay));
 
@@ -316,66 +323,126 @@ namespace MPExtended.Scrapers.TVSeries
 
         public WebResult StartScraper()
         {
-            Console.WriteLine("Starting Scraper");
-            InitialiseScraper();
-            mImporterPaused = false;
-            mImporterPausedManually = false;
-            mImporterRunning = true;
-            //Starting scraper importer
-            m_watcherUpdater.StartFolderWatch();
+            if (mScraperState == WebScraperState.Stopped)
+            {
+                Console.WriteLine("Starting Scraper");
+                InitialiseScraper();
+                mImporterPaused = false;
+                mImporterPausedManually = false;
+                mImporterRunning = true;
+                mScraperState = WebScraperState.Running;
+                //Starting scraper importer
+                m_watcherUpdater.StartFolderWatch();
 
-            return true;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Scraper already running");
+                return false;
+            }
         }
-
-
 
         public WebResult StopScraper()
         {
-            Console.WriteLine("Stopping Scraper");
-            mImporterRunning = false;
-            //Stopping scraper importer
-            stopFolderWatches();
-            m_parserUpdater.Cancel();
-            return true;
+            if (mScraperState == WebScraperState.Running)
+            {
+                Console.WriteLine("Stopping Scraper");
+                mImporterRunning = false;
+                //Stopping scraper importer
+                stopFolderWatches();
+                m_parserUpdater.Cancel();
+                mScraperState = WebScraperState.Stopped;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Scraper not running");
+                return false;
+            }
         }
 
         public WebResult PauseScraper()
         {
-            Console.WriteLine("Pausing Scraper");
-            mImporterPausedManually = true;
-            return PauseTvSeriesScraper();
+            if (mScraperState == WebScraperState.Running)
+            {
+                Console.WriteLine("Pausing Scraper");
+                mImporterPausedManually = true;
+                return PauseTvSeriesScraper();
+            }
+            else
+            {
+                Console.WriteLine("Scraper not running");
+                return false;
+            }
         }
 
         private bool PauseTvSeriesScraper()
         {
             mImporterPaused = true;
             m_watcherUpdater.StopFolderWatch();
+            mScraperState = WebScraperState.Paused;
             return true;
         }
 
         public WebResult ResumeScraper()
         {
-            Console.WriteLine("Resuming Scraper");
-            mImporterPausedManually = false;
-            return ResumeTvSeriesScraper();
+            if (mScraperState == WebScraperState.Paused)
+            {
+                Console.WriteLine("Resuming Scraper");
+                mImporterPausedManually = false;
+                return ResumeTvSeriesScraper();
+            }
+            else
+            {
+                Console.WriteLine("Scraper already running");
+                return false;
+            }
         }
 
         private bool ResumeTvSeriesScraper()
         {
             mImporterPaused = false;
             m_watcherUpdater.StartFolderWatch();
+            mScraperState = WebScraperState.Running;
             return true;
+
+        }
+
+        public WebResult TriggerUpdate()
+        {
+            if (mScraperState == WebScraperState.Running)
+            {
+                Console.WriteLine("Scraper started Update");
+                lock (m_parserUpdaterQueue)
+                {
+                    m_parserUpdaterQueue.Add(new CParsingParameters(true, false));
+                }
+                // Start Import if delayed
+                m_scanTimer.Change(1000, 1000);
+
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Scraper not running");
+                return false;
+            }
         }
 
         public WebScraperStatus GetScraperStatus()
         {
-            return new WebScraperStatus() { CurrentAction = mCurrentStatus, CurrentProgress = mCurrentPercentage, InputNeeded = mPendingRequests.Count };
+            return new WebScraperStatus()
+            {
+                CurrentAction = mCurrentStatus,
+                CurrentProgress = mCurrentPercentage,
+                InputNeeded = mPendingRequests.Count,
+                ScraperState = mScraperState
+            };
         }
 
         public WebScraperInputRequest GetScraperInputRequest(int index)
         {
-
-
             return mPendingRequests[index];
         }
 
@@ -388,12 +455,25 @@ namespace MPExtended.Scrapers.TVSeries
         {
             if (text != null && !text.Equals(""))
             {
+                WebScraperInputRequest req = GetPendingRequest(requestId);
+                if (req != null)
+                {
+                    RemoveCachedItems(req);
+                }
+
                 DBOnlineSeries series = OnlineParsing.SearchForSeries(text, true, new FeedBacker(requestId, this));
                 mPendingTextResults[requestId] = text;
             }
             else
             {
                 mPendingListSelections.Add(requestId, matchId);
+
+                lock (m_parserUpdaterQueue)
+                {
+                    m_parserUpdaterQueue.Add(new CParsingParameters(true, false));
+                }
+                // Start Import if delayed
+                m_scanTimer.Change(1000, 1000);
             }
 
             return false;
@@ -412,6 +492,15 @@ namespace MPExtended.Scrapers.TVSeries
             WebScraperInputRequest req = new WebScraperInputRequest();
             req.Title = _title;
             req.Id = _title;
+
+            if (mPendingListSelections.ContainsKey(req.Id))
+            {
+                CItem selectedMatch = mCachedItems[mPendingListSelections[req.Id]];
+                //the user already sent a reply for this
+                RemovePendingRequest(req);
+                selected = selectedMatch;
+                return ReturnCode.OK;
+            }
 
             if (descriptor.m_List != null && descriptor.m_List.Count > 0)
             {
@@ -436,27 +525,18 @@ namespace MPExtended.Scrapers.TVSeries
                     {
                         WebScraperInputMatch match = new WebScraperInputMatch();
                         match.Id = i.m_sName;
-                        if (mPendingListSelections.ContainsKey(req.Id))
-                        {
-                            CItem selectedMatch = GetRequestMatchItem(req.Id, mPendingListSelections[req.Id]).Tag as CItem;
-                            //the user already sent a reply for this
-                            RemovePendingRequest(req);
-                            selected = selectedMatch;
-                            return ReturnCode.OK;
-                        }
-                        else
-                        {
 
-                            match.Title = i.m_sName;
-                            match.Description = i.m_sDescription;
-                            match.Tag = i;
+                        match.Title = i.m_sName;
+                        match.Description = i.m_sDescription;
+                        //match.Tag = i;
+                        mCachedItems[match.Id] = i;
 
-                            if (i.m_Tag != null && i.m_Tag.GetType() == typeof(DBTable))
-                            {
-                                //TODO: maybe add additional info here?
-                            }
-                            req.InputOptions.Add(match);
+                        if (i.m_Tag != null && i.m_Tag.GetType() == typeof(DBTable))
+                        {
+                            //TODO: maybe add additional info here?
                         }
+                        req.InputOptions.Add(match);
+
                     }
                 }
             }
@@ -491,9 +571,21 @@ namespace MPExtended.Scrapers.TVSeries
             {
                 if (r.Id.Equals(req.Id))
                 {
+                    RemoveCachedItems(r);
                     //request already added
                     mPendingRequests.Remove(r);
                     return;
+                }
+            }
+        }
+
+        private void RemoveCachedItems(WebScraperInputRequest req)
+        {
+            if (req.InputOptions != null)
+            {
+                foreach (WebScraperInputMatch m in req.InputOptions)
+                {
+                    mCachedItems.Remove(m.Id);
                 }
             }
         }
@@ -512,6 +604,18 @@ namespace MPExtended.Scrapers.TVSeries
             mPendingRequests.Add(req);
         }
 
+        private WebScraperInputRequest GetPendingRequest(String reqId)
+        {
+            foreach (WebScraperInputRequest r in mPendingRequests)
+            {
+                if (r.Id.Equals(reqId))
+                {
+                    return r;
+                }
+            }
+            return null;
+        }
+
         public ReturnCode GetStringFromUser(GetStringFromUserDescriptor descriptor, out string input)
         {
             input = null;
@@ -524,7 +628,6 @@ namespace MPExtended.Scrapers.TVSeries
         }
 
         public bool IsRunning { get { return mImporterRunning; } }
-
 
     }
 }

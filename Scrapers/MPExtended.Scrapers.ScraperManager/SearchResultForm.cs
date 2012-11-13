@@ -17,6 +17,7 @@ namespace MPExtended.Scrapers.ScraperManager
         private DialogResult result = DialogResult.Cancel;
         private WebScraperInputRequest request = null;
         private WebScraperInputMatch selection = null;
+        private bool mNeedsRefresh;
         public String NewSearchText { get; set; }
 
         public WebScraperInputMatch SelectedMatch { get { return selection; } }
@@ -74,11 +75,9 @@ namespace MPExtended.Scrapers.ScraperManager
                 item.Tag = r;
                 lvSearchResult.Items.Add(item);
             }*/
-
-            NewSearchText = txtSeriesName.Text;
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            scraper.SetScraperInputRequest(request.Id, null, txtSeriesName.Text);
+            mNeedsRefresh = true;
+            lvSearchResult.Items.Clear();
         }
 
         private void cmdChoose_Click(object sender, EventArgs e)
@@ -140,5 +139,15 @@ namespace MPExtended.Scrapers.ScraperManager
         }
 
 
+
+        internal void UpdateRequest(WebScraperInputRequest _request)
+        {
+            if (request.Id.Equals(_request.Id) && mNeedsRefresh)
+            {
+                request = _request;
+                FillSearchResults();
+                mNeedsRefresh = false;
+            }
+        }
     }
 }

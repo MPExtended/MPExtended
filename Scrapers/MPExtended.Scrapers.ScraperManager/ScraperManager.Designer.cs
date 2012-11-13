@@ -39,7 +39,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsCurrentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblScraperState = new System.Windows.Forms.Label();
+            this.cmdRefresh = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbAvailableScrapers
@@ -48,7 +51,7 @@
             this.cbAvailableScrapers.FormattingEnabled = true;
             this.cbAvailableScrapers.Location = new System.Drawing.Point(12, 12);
             this.cbAvailableScrapers.Name = "cbAvailableScrapers";
-            this.cbAvailableScrapers.Size = new System.Drawing.Size(332, 21);
+            this.cbAvailableScrapers.Size = new System.Drawing.Size(269, 21);
             this.cbAvailableScrapers.TabIndex = 0;
             this.cbAvailableScrapers.SelectedIndexChanged += new System.EventHandler(this.cbAvailableScrapers_SelectedIndexChanged);
             // 
@@ -61,24 +64,24 @@
             // 
             this.cbInputRequests.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbInputRequests.FormattingEnabled = true;
-            this.cbInputRequests.Location = new System.Drawing.Point(12, 95);
+            this.cbInputRequests.Location = new System.Drawing.Point(13, 28);
             this.cbInputRequests.Name = "cbInputRequests";
-            this.cbInputRequests.Size = new System.Drawing.Size(251, 21);
+            this.cbInputRequests.Size = new System.Drawing.Size(309, 21);
             this.cbInputRequests.TabIndex = 3;
             // 
             // cmdMatchItems
             // 
-            this.cmdMatchItems.Location = new System.Drawing.Point(269, 93);
+            this.cmdMatchItems.Location = new System.Drawing.Point(13, 64);
             this.cmdMatchItems.Name = "cmdMatchItems";
-            this.cmdMatchItems.Size = new System.Drawing.Size(75, 23);
+            this.cmdMatchItems.Size = new System.Drawing.Size(99, 23);
             this.cmdMatchItems.TabIndex = 4;
-            this.cmdMatchItems.Text = "Match";
+            this.cmdMatchItems.Text = "Select Match";
             this.cmdMatchItems.UseVisualStyleBackColor = true;
             this.cmdMatchItems.Click += new System.EventHandler(this.cmdMatchItems_Click);
             // 
             // cmdStart
             // 
-            this.cmdStart.Location = new System.Drawing.Point(12, 50);
+            this.cmdStart.Location = new System.Drawing.Point(12, 51);
             this.cmdStart.Name = "cmdStart";
             this.cmdStart.Size = new System.Drawing.Size(75, 23);
             this.cmdStart.TabIndex = 5;
@@ -88,9 +91,9 @@
             // 
             // cmdPauseResume
             // 
-            this.cmdPauseResume.Location = new System.Drawing.Point(93, 50);
+            this.cmdPauseResume.Location = new System.Drawing.Point(93, 51);
             this.cmdPauseResume.Name = "cmdPauseResume";
-            this.cmdPauseResume.Size = new System.Drawing.Size(89, 23);
+            this.cmdPauseResume.Size = new System.Drawing.Size(107, 23);
             this.cmdPauseResume.TabIndex = 5;
             this.cmdPauseResume.Text = "Pause";
             this.cmdPauseResume.UseVisualStyleBackColor = true;
@@ -98,7 +101,7 @@
             // 
             // cmdStop
             // 
-            this.cmdStop.Location = new System.Drawing.Point(188, 50);
+            this.cmdStop.Location = new System.Drawing.Point(206, 51);
             this.cmdStop.Name = "cmdStop";
             this.cmdStop.Size = new System.Drawing.Size(75, 23);
             this.cmdStop.TabIndex = 5;
@@ -110,9 +113,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsCurrentStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 155);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 220);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(359, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(369, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -125,30 +128,52 @@
             // lblScraperState
             // 
             this.lblScraperState.AutoSize = true;
-            this.lblScraperState.Location = new System.Drawing.Point(269, 55);
+            this.lblScraperState.Location = new System.Drawing.Point(287, 15);
             this.lblScraperState.Name = "lblScraperState";
-            this.lblScraperState.Size = new System.Drawing.Size(35, 13);
+            this.lblScraperState.Size = new System.Drawing.Size(47, 13);
             this.lblScraperState.TabIndex = 7;
-            this.lblScraperState.Text = "label1";
+            this.lblScraperState.Text = "Stopped";
+            // 
+            // cmdRefresh
+            // 
+            this.cmdRefresh.Location = new System.Drawing.Point(287, 51);
+            this.cmdRefresh.Name = "cmdRefresh";
+            this.cmdRefresh.Size = new System.Drawing.Size(62, 23);
+            this.cmdRefresh.TabIndex = 8;
+            this.cmdRefresh.Text = "Update";
+            this.cmdRefresh.UseVisualStyleBackColor = true;
+            this.cmdRefresh.Click += new System.EventHandler(this.cmdRefresh_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cmdMatchItems);
+            this.groupBox1.Controls.Add(this.cbInputRequests);
+            this.groupBox1.Location = new System.Drawing.Point(12, 100);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(337, 93);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Pending Input Requests";
             // 
             // ScraperManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 177);
+            this.ClientSize = new System.Drawing.Size(369, 242);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.cmdRefresh);
             this.Controls.Add(this.lblScraperState);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.cmdStop);
             this.Controls.Add(this.cmdPauseResume);
             this.Controls.Add(this.cmdStart);
-            this.Controls.Add(this.cmdMatchItems);
-            this.Controls.Add(this.cbInputRequests);
             this.Controls.Add(this.cbAvailableScrapers);
             this.Name = "ScraperManager";
             this.Text = "Scraper Manager";
             this.Load += new System.EventHandler(this.ScraperManager_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,6 +191,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsCurrentStatus;
         private System.Windows.Forms.Label lblScraperState;
+        private System.Windows.Forms.Button cmdRefresh;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

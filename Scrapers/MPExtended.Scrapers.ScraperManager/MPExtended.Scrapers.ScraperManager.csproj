@@ -47,12 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="ItemChoiceSelecter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemChoiceSelecter.Designer.cs">
-      <DependentUpon>ItemChoiceSelecter.cs</DependentUpon>
-    </Compile>
     <Compile Include="ScraperManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,9 +61,6 @@
     <Compile Include="SearchResultForm.Designer.cs">
       <DependentUpon>SearchResultForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ItemChoiceSelecter.resx">
-      <DependentUpon>ItemChoiceSelecter.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ScraperManager.resx">
       <DependentUpon>ScraperManager.cs</DependentUpon>
     </EmbeddedResource>
