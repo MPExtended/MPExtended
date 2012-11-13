@@ -30,10 +30,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
             httpLive.AppendPipeline();
         }
 
-        public override string GenerateFFMpegArguments()
+        public override string GenerateArguments()
         {
-            string arguments = base.GenerateFFMpegArguments();
-            string outputDirectory = httpLive.GetTemporaryDirectory();
+            string arguments = base.GenerateArguments();
+            string outputDirectory = httpLive.TemporaryDirectory;
             string playlist = Path.Combine(outputDirectory, "index.m3u8");
             string segment = Path.Combine(outputDirectory, "%06d.ts");
             return string.Format("{0} -segment_list \"{1}\" \"{2}\"", arguments, playlist, segment);            

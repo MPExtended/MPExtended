@@ -53,7 +53,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
             }
 
-            string arguments = GenerateFFMpegArguments();
+            string arguments = GenerateArguments();
 
             // fix input thing
             if (!doInputReader)
@@ -73,7 +73,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             Context.Pipeline.AddLogUnit(logunit, 6);
         }
 
-        public virtual string GenerateFFMpegArguments()
+        public virtual string GenerateArguments()
         {
             // calculate stream mappings (no way I'm going to add subtitle support; it's just broken)
             string mappings = "";

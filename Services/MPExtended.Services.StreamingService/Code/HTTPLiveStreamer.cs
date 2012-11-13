@@ -30,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         protected string Identifier { get; set; }
         protected StreamContext Context { get; set; }
-        protected string TemporaryDirectory { get; set; }
+        public string TemporaryDirectory { get; protected set; }
 
         private int keepSegments;
 

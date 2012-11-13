@@ -17,11 +17,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
             indexUrl = WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + identifier + "&action=segment&parameters=";            
         }
 
-        public string GetTemporaryDirectory()
-        {
-            return TemporaryDirectory;
-        }
-
         public override Stream ProvideCustomActionFile(string action, string param)
         {
             if (action == "playlist")
@@ -52,18 +47,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
         string replacePathsWithURLs(string path)
         {
-            // open original file, but retry if we fail with an IOException, which might happen because VLC is still writing to it
-            FileStream fileStream = null;
-            try
-            {
-                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            }
-            catch (IOException)
-            {
-                System.Threading.Thread.Sleep(20);
-                fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            }
-
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);            
             string playlist = "";
             using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
             {
