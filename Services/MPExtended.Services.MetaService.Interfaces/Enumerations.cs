@@ -20,6 +20,8 @@ namespace MPExtended.Services.MetaService.Interfaces
         [EnumMember]
         MetaService = 5,
         [EnumMember]
-        WifiRemote = 6
+        WifiRemote = 6,
+        [EnumMember]
+        ScraperService = 7
     }
 }

@@ -13,8 +13,11 @@ using MPExtended.Services.ScraperService.Interfaces;
 namespace MPExtended.Scrapers.MovingPictures
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class MovingPicturesImporter : IScraperService
+    public class MovingPicturesImporter : IPrivateScraperService
     {
+        private static int SCRAPER_ID = 1;
+        private static String SCRAPER_NAME = "MovingPictures Importer";
+
         private void CheckConflictingProgramsRunning()
         {
             while (mScraperState != WebScraperState.Stopped)
@@ -156,9 +159,18 @@ namespace MPExtended.Scrapers.MovingPictures
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
             initThread.Start();
-      
+
             conflictingCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
             conflictingCheckThread.Start();
+        }
+
+        public WebScraper GetScraperDescription()
+        {
+            return new WebScraper()
+            {
+                ScraperId = SCRAPER_ID,
+                ScraperName = SCRAPER_NAME
+            };
         }
 
         public WebResult StartScraper()
@@ -224,10 +236,10 @@ namespace MPExtended.Scrapers.MovingPictures
 
         public WebScraperStatus GetScraperStatus()
         {
-            return new WebScraperStatus() 
-            { 
-                CurrentAction = mCurrentAction, 
-                CurrentProgress = mCurrentPercentage, 
+            return new WebScraperStatus()
+            {
+                CurrentAction = mCurrentAction,
+                CurrentProgress = mCurrentPercentage,
                 InputNeeded = matches.Count,
                 ScraperState = mScraperState
             };

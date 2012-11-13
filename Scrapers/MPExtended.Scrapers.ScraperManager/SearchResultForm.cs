@@ -13,7 +13,7 @@ namespace MPExtended.Scrapers.ScraperManager
 {
     public partial class SearchResultForm : Form
     {
-        IScraperService scraper;
+        IPrivateScraperService scraper;
         private DialogResult result = DialogResult.Cancel;
         private WebScraperInputRequest request = null;
         private WebScraperInputMatch selection = null;
@@ -33,14 +33,14 @@ namespace MPExtended.Scrapers.ScraperManager
             FillSearchResults();
         }
 
-        public SearchResultForm(IScraperService _scraper)
+        public SearchResultForm(IPrivateScraperService _scraper)
             : this()
         {
             scraper = _scraper;
             FillSearchResults();
         }
 
-        public SearchResultForm(IScraperService _scraper, WebScraperInputRequest _req)
+        public SearchResultForm(IPrivateScraperService _scraper, WebScraperInputRequest _req)
             : this()
         {
             scraper = _scraper;

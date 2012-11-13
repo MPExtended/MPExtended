@@ -80,6 +80,10 @@
       <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
       <Name>MPExtended.Services.ScraperService.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Scrapers.MovingPictures\MPExtended.Scrapers.MovingPictures.csproj">
+      <Project>{E166526F-5595-43C9-9CC8-A493DA613279}</Project>
+      <Name>MPExtended.Scrapers.MovingPictures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

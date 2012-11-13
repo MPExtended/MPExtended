@@ -84,6 +84,14 @@
       <Project>{11B46BC9-331A-45CC-9F1D-2EC580197B36}</Project>
       <Name>MPExtended.Services.MetaService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
+      <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
+      <Name>MPExtended.Services.ScraperService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService\MPExtended.Services.ScraperService.csproj">
+      <Project>{7B0BAB36-B28B-4016-AF70-6AED43703458}</Project>
+      <Name>MPExtended.Services.ScraperService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
       <Name>MPExtended.Services.StreamingService.Interfaces</Name>

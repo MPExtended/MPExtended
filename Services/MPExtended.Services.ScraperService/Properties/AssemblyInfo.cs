@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MPExtended.Services.ScraperService.Interfaces")]
+[assembly: AssemblyTitle("MPExtended.Services.ScraperService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("MPExtended ScraperService")]
 [assembly: AssemblyCulture("")]
@@ -16,4 +16,9 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ddf2d158-4769-4d00-ac06-ddc777e86c1c")]
+[assembly: Guid("df1b7a1c-19ab-4fdd-8f62-9943428c74a2")]
+
+// The hosting information
+[assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
+    Service = MPExtended.Libraries.Service.MPExtendedService.ScraperService,
+    WCFType = typeof(MPExtended.Services.ScraperService.ScraperService))]

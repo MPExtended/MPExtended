@@ -12,8 +12,11 @@ using WindowPlugins.GUITVSeries.Feedback;
 namespace MPExtended.Scrapers.TVSeries
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class TVSeriesImporter : IScraperService, IFeedback
+    public class TVSeriesImporter : IPrivateScraperService, IFeedback
     {
+        private static int SCRAPER_ID = 0;
+        private static String SCRAPER_NAME = "MP-TvSeries Importer";
+
         class FeedBacker : IFeedback
         {
             private TVSeriesImporter mImporter;
@@ -319,6 +322,15 @@ namespace MPExtended.Scrapers.TVSeries
                     int newEp = progress.CurrentItem;
                 }
             }
+        }
+
+        public WebScraper GetScraperDescription()
+        {
+            return new WebScraper()
+            {
+                ScraperId = SCRAPER_ID,
+                ScraperName = SCRAPER_NAME
+            };
         }
 
         public WebResult StartScraper()
@@ -628,6 +640,5 @@ namespace MPExtended.Scrapers.TVSeries
         }
 
         public bool IsRunning { get { return mImporterRunning; } }
-
     }
 }

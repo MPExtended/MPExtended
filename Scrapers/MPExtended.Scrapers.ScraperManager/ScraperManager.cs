@@ -23,13 +23,14 @@ namespace MPExtended.Scrapers.ScraperManager
                 return Name;
             }
         }
-        private IScraperService proxyChannel;
+
+        private IPrivateScraperService proxyChannel;
         private ProxyInfo selected;
         private WebScraperStatus currentStatus;
         private List<WebScraperInputRequest> requests;
         private SearchResultForm dialog;
 
-        private IScraperService Proxy
+        private IPrivateScraperService Proxy
         {
             get
             {
@@ -63,7 +64,7 @@ namespace MPExtended.Scrapers.ScraperManager
                     binding.ReliableSession.Enabled = true;
                     binding.ReliableSession.Ordered = true;
 
-                    proxyChannel = ChannelFactory<IScraperService>.CreateChannel(
+                    proxyChannel = ChannelFactory<IPrivateScraperService>.CreateChannel(
                         binding,
                         new EndpointAddress(selected.Address)
                     );
