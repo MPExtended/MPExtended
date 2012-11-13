@@ -121,6 +121,7 @@ namespace MPExtended.Services.StreamingService.Code
             string filename = String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format);
             if (cache.Contains(filename))
             {
+                WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
                 WCFUtil.SetContentType(Path.GetExtension(filename));
                 return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
             }
@@ -132,14 +133,19 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (!hasToResize && !hasToRecode)
                 {
+                    WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000");
                     WCFUtil.SetContentType(GetMime(src.Extension));
                     return src.Retrieve();
                 }
 
+                // save image to cache
                 var image = hasToResize ? ResizeImage(src, maxWidth, maxHeight, borders) : Image.FromStream(src.Retrieve());
                 string path = cache.GetPath(String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format));
                 SaveImageToFile(image, path, format);
                 image.Dispose();
+
+                // return image to client
+                WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000");
                 WCFUtil.SetContentType(GetCodecInfo(format).MimeType);
                 return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
