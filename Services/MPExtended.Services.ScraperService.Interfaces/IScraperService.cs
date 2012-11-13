@@ -28,6 +28,10 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebResult TriggerUpdate();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebScraperStatus GetScraperStatus();
 
         [OperationContract]
