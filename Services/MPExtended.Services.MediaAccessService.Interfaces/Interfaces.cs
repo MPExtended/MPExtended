@@ -10,6 +10,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebActor> Actors { get; set; }
     }
 
+    public interface IGuestStars
+    {
+        IList<WebActor> GuestStars { get; set; }
+    }
+
     public interface IArtwork
     {
         IList<WebArtwork> Artwork { get; set; }

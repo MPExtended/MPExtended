@@ -42,6 +42,7 @@ namespace MPExtended.Services.MediaAccessService
             int realProvider = ProviderHandler.GetProviderId(providerType, provider);
             bool isArtwork = operList.First() is IArtwork;
             bool isActors = operList.First() is IActors;
+            bool isGuestStars = operList.First() is IGuestStars;
 
             List<T> retlist = new List<T>();
             foreach (T item in operList)
@@ -65,6 +66,15 @@ namespace MPExtended.Services.MediaAccessService
                 if (isActors)
                 {
                     (item as IActors).Actors = (item as IActors).Actors.Select(x => new WebActor()
+                    {
+                        PID = realProvider,
+                        Title = x.Title
+                    }).ToList();
+                }
+
+                if (isGuestStars)
+                {
+                    (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebActor()
                     {
                         PID = realProvider,
                         Title = x.Title
@@ -105,6 +115,15 @@ namespace MPExtended.Services.MediaAccessService
             if (item is IActors)
             {
                 (item as IActors).Actors = (item as IActors).Actors.Select(x => new WebActor()
+                {
+                    PID = item.PID,
+                    Title = x.Title
+                }).ToList();
+            }
+
+            if (item is IGuestStars)
+            {
+                (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebActor()
                 {
                     PID = item.PID,
                     Title = x.Title

@@ -273,7 +273,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("e", "Watched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("e", "Rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("e", "thumbFilename", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
-                new SQLFieldMapping("e", "GuestStars", "GuestStars", DataReaders.ReadPipeList),
+                new SQLFieldMapping("e", "GuestStars", "GuestStars", CustomReaders.ActorReader),
                 new SQLFieldMapping("e", "Director", "Directors", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "Writer", "Writers", DataReaders.ReadPipeList),
                 new SQLFieldMapping("e", "IMDB_ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadString, "IMDB")),
