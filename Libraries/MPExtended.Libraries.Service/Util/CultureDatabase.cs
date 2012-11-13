@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.IO;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Libraries.Service.Util
 {
@@ -56,6 +57,11 @@ namespace MPExtended.Libraries.Service.Util
                     continue;
                 yield return culture;
             }
+        }
+
+        public static CultureInfo GetTranslationCulture()
+        {
+            return GetLanguage(Configuration.Services.DefaultLanguage);
         }
     }
 }

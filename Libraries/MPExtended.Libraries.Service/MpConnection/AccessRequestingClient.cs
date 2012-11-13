@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.MpConnection.Messages;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.MpConnection
 {
@@ -56,9 +57,10 @@ namespace MPExtended.Libraries.Service.MpConnection
             SendCommand(msg);
         }
 
-        public void SendRequestAccessDialog(string clientName, string ip, List<String> users)
+        public void SendRequestAccessDialog(string clientName, string ip, List<string> users)
         {
-            string msg = String.Format(Strings.UI.AccessRequestWifiRemote, clientName, ip);
+            string translatedMessage = Strings.UI.ResourceManager.GetString("AccessRequestWifiRemote", CultureDatabase.GetTranslationCulture());
+            string msg = String.Format(translatedMessage, clientName, ip);
             SendShowSelectDialogRequest("MPExtended", msg, users);
         }
 
