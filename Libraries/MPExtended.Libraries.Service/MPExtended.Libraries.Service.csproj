@@ -177,6 +177,7 @@
     <EmbeddedResource Include="Strings\UI.es.resx" />
     <EmbeddedResource Include="Strings\UI.fi.resx" />
     <EmbeddedResource Include="Strings\UI.fr.resx" />
+    <EmbeddedResource Include="Strings\UI.he.resx" />
     <EmbeddedResource Include="Strings\UI.it.resx" />
     <EmbeddedResource Include="Strings\UI.lt.resx" />
     <EmbeddedResource Include="Strings\UI.nl.resx" />
@@ -186,6 +187,7 @@
       <LastGenOutput>UI.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings\UI.sk.resx" />
     <EmbeddedResource Include="Strings\UI.sl.resx" />
     <EmbeddedResource Include="Strings\UI.sv.resx" />
   </ItemGroup>

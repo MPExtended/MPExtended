@@ -414,6 +414,7 @@
     <EmbeddedResource Include="Strings\FormStrings.es.resx" />
     <EmbeddedResource Include="Strings\FormStrings.fi.resx" />
     <EmbeddedResource Include="Strings\FormStrings.fr.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.he.resx" />
     <EmbeddedResource Include="Strings\FormStrings.it.resx" />
     <EmbeddedResource Include="Strings\FormStrings.lt.resx" />
     <EmbeddedResource Include="Strings\FormStrings.nl.resx" />
@@ -422,12 +423,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FormStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings\FormStrings.sk.resx" />
     <EmbeddedResource Include="Strings\FormStrings.sl.resx" />
     <EmbeddedResource Include="Strings\FormStrings.sv.resx" />
     <EmbeddedResource Include="Strings\UIStrings.de.resx" />
     <EmbeddedResource Include="Strings\UIStrings.es.resx" />
     <EmbeddedResource Include="Strings\UIStrings.fi.resx" />
     <EmbeddedResource Include="Strings\UIStrings.fr.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.he.resx" />
     <EmbeddedResource Include="Strings\UIStrings.it.resx" />
     <EmbeddedResource Include="Strings\UIStrings.lt.resx" />
     <EmbeddedResource Include="Strings\UIStrings.nl.resx" />
@@ -436,6 +439,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Strings\UIStrings.sk.resx" />
     <EmbeddedResource Include="Strings\UIStrings.sl.resx" />
     <EmbeddedResource Include="Strings\UIStrings.sv.resx" />
   </ItemGroup>

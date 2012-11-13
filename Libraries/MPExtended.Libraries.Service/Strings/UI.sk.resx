@@ -118,394 +118,395 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActionNeedsAdmin" xml:space="preserve">
-    <value>Tämä toiminto vaatii järjestelmänvalvojan oikeudet.</value>
+    <value>Akcia vyžaduje práva administrátora.</value>
   </data>
   <data name="ActiveStreams" xml:space="preserve">
-    <value>Aktiiviset virrat</value>
+    <value>Aktívne streamy</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>Tässä voit valita WebMediaPortalin käyttämän portin. Jos vaihdat portin numeroa oletuksesta 8080, joudut määrittämään palomuurisi manuaalisesti päästämään liikenteen läpi.</value>
+    <value>Tu sa nastavuje port, na ktorom beží WebMediaPortal. Pokiaľ zadáte inú hodnotu ako 8080, bude potrebné ručne nastaviť váš firewall.</value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
-    <value>Oletus äänen kieli</value>
+    <value>Predvolený jazyk zvuku:</value>
   </data>
   <data name="DefaultLanguage" xml:space="preserve">
-    <value>Oletuskieli</value>
+    <value>Predvolený jazyk</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
-    <value>Jotkin asiakaskoneet eivät tue äänen kielen ja tekstityksien määrittämistä erikseen jokaiselle virralle. Tässä voit määrittää näille oletus äänen kielen ja oletus tekstityksen kielen.</value>
+    <value>Niektoré klienty nepodporujú voľbu zvukovej stopy a titulkov v každom streame. Tu je možné nastaviť predvolenú zvukovú stopu a titulky.</value>
   </data>
   <data name="DefaultSubtitleLanguage" xml:space="preserve">
-    <value>Oletus tekstityksen kieli:</value>
+    <value>Predvolený jazyk titulkov:</value>
   </data>
   <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
-    <value>Hylkään kelpaamattomat muutokset Sosiaalisuus-välilehdellä.</value>
+    <value>Neplatné zmeny na tabe sociálne neboli zapamätané.</value>
   </data>
   <data name="ExportedLogsAndConfig" xml:space="preserve">
-    <value>Viety lokit ja määritystiedot tiedostoon {0}</value>
+    <value>Logy a konfiguračné údaje exportované do {0}</value>
   </data>
   <data name="ExportLogsAndConfiguration" xml:space="preserve">
-    <value>Vie lokit ja määritystiedot</value>
+    <value>Exportovať logy a konfiguráciu</value>
   </data>
   <data name="LoginFailed" xml:space="preserve">
-    <value>Kirjautuminen epäonnistui</value>
+    <value>Prihlásenie sa zlyhalo.</value>
   </data>
   <data name="LoginSuccessful" xml:space="preserve">
-    <value>Kirjautuminen onnistui!</value>
+    <value>Prihlásenie sa úspešné.</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Médiá</value>
   </data>
   <data name="Port" xml:space="preserve">
-    <value>Portti:</value>
+    <value>Port:</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
-    <value>Ei asennettu</value>
+    <value>Nenainštalovaná</value>
   </data>
   <data name="ServiceNotInstalledPopup" xml:space="preserve">
-    <value>MPExtended Service ei ole asennettu. Varmista että asennuksesi on oikein.</value>
+    <value>Služba MPExtended nie je inštalovaná. Uistite sa, či je inštalácia funkčná.</value>
   </data>
   <data name="ServiceStarted" xml:space="preserve">
-    <value>Palvelu aloitettu</value>
+    <value>Služba bola spustená</value>
   </data>
   <data name="ServiceStarting" xml:space="preserve">
-    <value>Palvelu pysähtyy</value>
+    <value>Služba sa zastavuje</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
-    <value>Palvelu pysäytetty</value>
+    <value>Služba zastavená</value>
   </data>
   <data name="ServiceUnknown" xml:space="preserve">
-    <value>Palvelun tila tuntematon</value>
+    <value>Stav služby je neznámy</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Aloita</value>
+    <value>Štart</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Pysäytä</value>
+    <value>Stop</value>
   </data>
   <data name="Streaming" xml:space="preserve">
-    <value>Virtautus</value>
+    <value>Streaming</value>
   </data>
   <data name="StreamingClient" xml:space="preserve">
-    <value>Asiakaskone</value>
+    <value>Klient</value>
   </data>
   <data name="StreamingFile" xml:space="preserve">
-    <value>Tiedosto</value>
+    <value>Súbor</value>
   </data>
   <data name="StreamingIPAddress" xml:space="preserve">
-    <value>IP-osoite</value>
+    <value>IP adresa</value>
   </data>
   <data name="StreamingKickSession" xml:space="preserve">
-    <value>Hylkää istunto</value>
+    <value>Kick session</value>
   </data>
   <data name="StreamingProfile" xml:space="preserve">
-    <value>Profiili</value>
+    <value>Profil</value>
   </data>
   <data name="StreamingProgress" xml:space="preserve">
-    <value>Edistyminen</value>
+    <value>Priebeh</value>
   </data>
   <data name="SubtitlesDisabled" xml:space="preserve">
-    <value>Poista tekstitykset käytöstä</value>
+    <value>Nepovoliť titulky</value>
   </data>
   <data name="SubtitlesExternal" xml:space="preserve">
-    <value>Käytä ulkoista .srt tekstitystiedostoa</value>
+    <value>Použiť externý .srt súbor</value>
   </data>
   <data name="SubtitlesFirstStream" xml:space="preserve">
-    <value>Ensimmäinen virta tiedostossa</value>
+    <value>Prvý stream súboru</value>
   </data>
   <data name="TabAuthentication" xml:space="preserve">
-    <value>Varmennus</value>
+    <value>Overenie</value>
   </data>
   <data name="TabConfiguration" xml:space="preserve">
-    <value>Määritys</value>
+    <value>Konfigurácia</value>
   </data>
   <data name="TabLogs" xml:space="preserve">
-    <value>Lokit</value>
+    <value>Logy</value>
   </data>
   <data name="TabPlugins" xml:space="preserve">
-    <value>Lisäosat</value>
+    <value>Doplnky</value>
   </data>
   <data name="TabProject" xml:space="preserve">
-    <value>Projekti</value>
+    <value>Projekt</value>
   </data>
   <data name="TabQRCode" xml:space="preserve">
-    <value>QR-koodi</value>
+    <value>QR kód</value>
   </data>
   <data name="TabSocial" xml:space="preserve">
-    <value>Sosiaalisuus</value>
+    <value>Sociálne</value>
   </data>
   <data name="TabStreaming" xml:space="preserve">
-    <value>Virtautus</value>
+    <value>Streaming</value>
   </data>
   <data name="TabTroubleshooting" xml:space="preserve">
-    <value>Vianetsintä</value>
+    <value>Problémy</value>
   </data>
   <data name="TabWebMediaPortal" xml:space="preserve">
     <value>WebMediaPortal</value>
   </data>
   <data name="TestingCredentials" xml:space="preserve">
-    <value>Testaan kirjautumistietoja, odota...</value>
+    <value>Testujem prihlásenie, čakajte prosím...</value>
   </data>
   <data name="TestLinksFor" xml:space="preserve">
-    <value>Testaa linkkejä</value>
+    <value>Testovacie linky pre</value>
   </data>
   <data name="TrayCloseMediaPortal" xml:space="preserve">
-    <value>Sulje MediaPortal</value>
+    <value>Zatvoriť MediaPortal</value>
   </data>
   <data name="TrayExit" xml:space="preserve">
-    <value>Poistu</value>
+    <value>Ukončiť</value>
   </data>
   <data name="TrayHibernate" xml:space="preserve">
-    <value>Horrostila</value>
+    <value>Hibernovať</value>
   </data>
   <data name="TrayLock" xml:space="preserve">
-    <value>Lukitse</value>
+    <value>Zamknúť</value>
   </data>
   <data name="TrayLogOff" xml:space="preserve">
-    <value>Kirjaudu ulos</value>
+    <value>Odhlásiť sa</value>
   </data>
   <data name="TrayMonitorOff" xml:space="preserve">
-    <value>Näyttö pois päältä</value>
+    <value>Monitor off</value>
   </data>
   <data name="TrayOpenConfigurator" xml:space="preserve">
-    <value>Avaa MPExtendedin Määrittäjä</value>
+    <value>Otvoriť MPExtended konfiguráciu</value>
   </data>
   <data name="TrayOpenWebMP" xml:space="preserve">
-    <value>Avaa WebMediaPortal</value>
+    <value>Otvoriť WebMediaPortal</value>
   </data>
   <data name="TrayPowermodes" xml:space="preserve">
-    <value>Virrankäyttömallit</value>
+    <value>Beh PC</value>
   </data>
   <data name="TrayReboot" xml:space="preserve">
-    <value>Käynnistä uudelleen</value>
+    <value>Reštartovať</value>
   </data>
   <data name="TrayScreensaver" xml:space="preserve">
-    <value>Näytönsäästäjä</value>
+    <value>Šetrič obrazovky</value>
   </data>
   <data name="TrayShutdown" xml:space="preserve">
-    <value>Sammuta</value>
+    <value>Vypnúť</value>
   </data>
   <data name="TrayStartMediaPortal" xml:space="preserve">
-    <value>Avaa MediaPortal</value>
+    <value>Spustiť MediaPortal</value>
   </data>
   <data name="TraySuspend" xml:space="preserve">
-    <value>Lepotila</value>
+    <value>Uspať</value>
   </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
-    <value>Tarkistaaksesi pyydetyn sisällön kelpoisuus, käytä seuraavia linkkejä... Käytä localhostia kokeillaksesi samalla tietokoneella toimivaa palvelua. Jos palvelu on toisella tietokoneella, valitse sen tietokoneen IP-osoite alasvetovalikosta saadaksesi testilinkit (esim. palomuuriongelmien havaitsemiseen). </value>
+    <value>Na kontrolu platnosti požadovaného obsahu použite nasledovné linky... Použite localhost na otestovanie služby v rámci jedného počítača. Vyberte si IP adresu z ponúkaného zoznamu pre testy z iného PC na sieti (napríklad na vylúčenie problémov z firewallom).</value>
   </data>
   <data name="TVServer" xml:space="preserve">
-    <value>TV palvelin</value>
+    <value>TVServer</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Odottamaton virhe. Tee virheraportti joka sisältää palvelun lokitiedostot.</value>
+    <value>Nastala neočakávaná chyba. Prosím vyplňte "bugreport" a priložte log súbory.</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
-    <value>MPExtended Määrittäjä</value>
+    <value>MPExtended konfigurácia</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Lisää tili</value>
+    <value>Pridať účet</value>
   </data>
   <data name="AuthenticationIntroText" xml:space="preserve">
-    <value>Tässä voit määrittää varmennuksen MPExtended-palvelulle. On suositeltavaa että otat varmennuksen käyttöön ja vaihdat (tai poistat) salasanan oletustilitä admin. Älä koskaan avaa palvelua internetiin ottamatta varmennusta käyttöön.</value>
+    <value>Tu nastavte overenie používateľov MPExtended. Odporúčame overovanie povoliť a zmeniť heslo používateľovi admin (alebo ho vymazať). Nikdy nesprístupňujte inštaláciu z internetu bez overovania a použitia bezpečných hesiel.</value>
   </data>
   <data name="Autodetection" xml:space="preserve">
-    <value>Automaattinen tunnistus</value>
+    <value>Autodetekcia</value>
   </data>
   <data name="AutodetectionText" xml:space="preserve">
-    <value>Tämä palvelu tukee automaattista tunnistusta Bonjour/Zeroconfin avulla. Se antaa asiakaskoneiden löytää palvelut automaattisesti lähiverkossa ja tehdä omat asetuksensa.</value>
+    <value>Služba podporuje autodetekciu cez Bonjour/Zeroconf, čo umožňuje klientom v lokálnej sieti automaticky nájsť poskytované služby a nastaviť sa.</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
-    <value>tarkista päivitykset</value>
+    <value>kontrola aktualizácií</value>
   </data>
   <data name="CheckingForUpdates" xml:space="preserve">
-    <value>tarkistaa päivitykset...</value>
+    <value>kontrolujem aktualizácie</value>
   </data>
   <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Antamasi verkon tunnukset eivät kelpaa.</value>
+    <value>Žiaľ, zadané sieťové meno alebo heslo je neplatné.</value>
   </data>
   <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Verkon tunnukset kelpaavat.</value>
+    <value>Sieťové meno a heslo úspešne overené.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Poista tili</value>
+    <value>Vymazaž účet</value>
   </data>
   <data name="Documentation" xml:space="preserve">
-    <value>Dokumentaatio:</value>
+    <value>Dokumentácia:</value>
   </data>
   <data name="EnableAuthentication" xml:space="preserve">
-    <value>Ota varmennus käyttöön (Suositeltu!)</value>
+    <value>Povoliť overenie (odporúčané!)</value>
   </data>
   <data name="EnableAutodetection" xml:space="preserve">
-    <value>Ota automaattinen tunnistus käyttöön</value>
+    <value>Povoliť autodetekciu</value>
   </data>
   <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
-    <value>päivitystietojen haku epäonnistui</value>
+    <value>nepdodarilo sa zistiť stav aktualizácií</value>
   </data>
   <data name="Forum" xml:space="preserve">
-    <value>Keskustelupalsta:</value>
+    <value>Fórum:</value>
   </data>
   <data name="Homepage" xml:space="preserve">
-    <value>Kotisivu:</value>
+    <value>Domáca stránka:</value>
   </data>
   <data name="IncludeAuthentication" xml:space="preserve">
-    <value>Sisällytä käyttäjän varmennus:</value>
+    <value>Vložiť overenie pre používateľa:</value>
   </data>
   <data name="IRCText" xml:space="preserve">
-    <value>IRC:⏎ irc.freenode.net / channel #mp-extended</value>
+    <value>IRC:
+   irc.freenode.net / channel #mp-extended</value>
   </data>
   <data name="MPExtendedIntroduction" xml:space="preserve">
-    <value>MPExtended on vapaan lähdekoodin projekti jonka tavoitteena on mahdollistaa MediaPortalin käyttö mistä tahansa verkkoselaimella, Androidilla, iOS:llä ja muilla laitteilla.
+    <value>MPExtended je open source projekt zameraný na poskytnutie prístupu k MediaPortalu z celého sveta, použitím klientov pre webové prehliadače, systémy Android, iOS and iné.
 
-Tämä on palvelukomponentti joka mahdollistaa kaikkien asiakaskoneiden pääsyn tietokantoihin ja mediatiedostoihin.</value>
+Toto je komponent služby, ktorý poskytuje prítup do databáz a mediálnych súborov všetkých klientov.</value>
   </data>
   <data name="NetworkDrives" xml:space="preserve">
-    <value>Verkkolevyt</value>
+    <value>Sieťové zložky</value>
   </data>
   <data name="NetworkDrivesText" xml:space="preserve">
-    <value>Jos mediatiedostosi sijaitsevat toisessa järjestelmässä (esim. toinen windows-kone, palvelin tai NAS), MPExtended tarvitsee tunnukset tähän järjestelmään. Monesti nämä ovat Windows-tunnuksesi.</value>
+    <value>Ak sú vaše mediálne súbory uložené na inom systéme (vyhradený server, alebo NAS), MPExtended potrebuje meno a heslo na prístup k nim. Zvyčajne tie k vášmu účtu vo Windows.</value>
   </data>
   <data name="NoUpdateAvailable" xml:space="preserve">
-    <value>ei päivityksiä saatavana</value>
+    <value>aktualizizácie nie su k dispozícii</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Salasana</value>
+    <value>Heslo</value>
   </data>
   <data name="PortText" xml:space="preserve">
-    <value>Tässä voit määrittää portin jossa palvelut kuuntelevat.</value>
+    <value>Tu sa nastavuje port na ktorom služba počúva.</value>
   </data>
   <data name="QRCodeIntroText" xml:space="preserve">
-    <value>Voit skannata QR-koodin tuetuilla laitteilla lisätäksesi tämän MPExtendedin asennuksen automaattisesti.</value>
+    <value>Použite QR kód, podporované klienty si takto pridajú túto inštaláciu MPExtended automaticky.</value>
   </data>
   <data name="SaveBarcodeAsImageFile" xml:space="preserve">
-    <value>Tallenna viivakoodi kuvatiedostona</value>
+    <value>Uložiť čiarový kód ako obrázok</value>
   </data>
   <data name="SavedBarcodeTo" xml:space="preserve">
-    <value>Viivakoodi tallennettu tiedostoon {0}!</value>
+    <value>Čiarový kód uložený do {0}.</value>
   </data>
   <data name="SaveToFile" xml:space="preserve">
-    <value>Tallenna tiedostoon</value>
+    <value>Uložiť so súboru</value>
   </data>
   <data name="ServiceName" xml:space="preserve">
-    <value>Palvelun nimi</value>
+    <value>Meno služby</value>
   </data>
   <data name="Services" xml:space="preserve">
-    <value>Palvelut</value>
+    <value>Služby</value>
   </data>
   <data name="Test" xml:space="preserve">
-    <value>Testaa</value>
+    <value>Test</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
-    <value>päivitys saatavilla: versio {0}, julkaistu {1}</value>
+    <value>nová verzia k dispozícii: {0}, dostupná na {1}</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Käyttäjänimi</value>
+    <value>Meno</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Versio:</value>
+    <value>Verzia:</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Vie</value>
+    <value>Export</value>
   </data>
   <data name="LogFile" xml:space="preserve">
-    <value>Lokitiedosto</value>
+    <value>Log súbor:</value>
   </data>
   <data name="LogFiles" xml:space="preserve">
-    <value>Lokitiedostot</value>
+    <value>Logy</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>Ei mitään</value>
+    <value>Žiadne</value>
   </data>
   <data name="Plugin" xml:space="preserve">
-    <value>Lisäosa</value>
+    <value>Doplnok</value>
   </data>
   <data name="ScrollToEnd" xml:space="preserve">
-    <value>Vieritä loppuun</value>
+    <value>Presunúť sa na koniec</value>
   </data>
   <data name="Site" xml:space="preserve">
-    <value>Sivusto</value>
+    <value>Stránka</value>
   </data>
   <data name="SocialIntroText" xml:space="preserve">
-    <value>MPExtended tukee katsomiesi elokuvien ja sarjojen synkronointia Trakt ja follw.it -palveluihin. Voit määrittää tilisi näille sivustoille tässä.</value>
+    <value>MPExtended podporuje synchornizáciu filmov a seriálov ktoré sledujete s Trakt a follw.it. Tu si nakonfigurujte svoje účty.</value>
   </data>
   <data name="LogAndConfigurationArchive" xml:space="preserve">
-    <value>Loki ja määritystietojen arkisto (.zip)</value>
+    <value>Log a (.zip) súbor konfigurácie</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Selaa</value>
+    <value>Prezerať</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Valitse</value>
+    <value>Vybrať</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
-    <value>Lahjoita MPExtendedille</value>
+    <value>Prispejte na MPExtended</value>
   </data>
   <data name="CleanCaches" xml:space="preserve">
-    <value>Tyhjennä välimuisti</value>
+    <value>Vyčistiť cache</value>
   </data>
   <data name="EnableHTTPS" xml:space="preserve">
-    <value>Ota HTTPS käyttöön</value>
+    <value>Povoliť HTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>Windowsin ja IIS Expressin rajoituksien vuoksi HTTPS:lle voi käyttää vain portteja väliltä 44300-44399. Sinun on myös itse määritettävä palomuurisi päästämään nämä yhteydet läpi.
+    <value>Obmedzenie vo Windows a IIS Express spôsobuje to, že pre HTTPS je možné pouižiť len porty od 44300 do 44399. Aby toto pripojenie fungovalo, je tiež nutné ručne nastaviť firewall.
 
-Ota huomioon että SSL/TLS-sertifikaattien määrittäminen ei ole mahdollista. Käytettäessä HTTPS:ää selaimesi varoittaa sinua mahdollisesti epäluotettavasta yhteydestä.</value>
+Tiež nie je možné nastaviť použitie SSL/TLS certifikátu. Pri použiti HTTPS dostanete hlásenia o nedôveryhodnom pripojení.</value>
   </data>
   <data name="HTTPSInvalidPort" xml:space="preserve">
-    <value>HTTPS portti ei kelpaa. Voit käyttää portteja vain väliltä 44300-44399.</value>
+    <value>Zadané číslo portu je neplatné. Pre HTTPS je možné použiť len porty od 44300 do 44399.</value>
   </data>
   <data name="HTTPSPort" xml:space="preserve">
-    <value>HTTPS portti:</value>
+    <value>HTTPS Port:</value>
   </data>
   <data name="TabActivity" xml:space="preserve">
-    <value>Aktiviteetti</value>
+    <value>Aktivita</value>
   </data>
   <data name="UserMustHaveNameAndPassword" xml:space="preserve">
-    <value>Syötä käyttäjänimi ja salasana tälle käyttäjälle.</value>
+    <value>Zadajte meno aj heslo tohto používateľa.</value>
   </data>
   <data name="BonjourChecking" xml:space="preserve">
-    <value>Tarkistaa Bonjour asennusta...</value>
+    <value>Kontrolujem vašu inštaláciu Bonjour...</value>
   </data>
   <data name="BonjourNotInstalled" xml:space="preserve">
-    <value>Bonjour ei ole asennettu. Käyttääksesi tätä toimintoa,</value>
+    <value>Bonjour nie je na vašom počítači inštalovaný.</value>
   </data>
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
-    <value>lataa Bonjour.</value>
+    <value>Prosím, stiahnite si Bonjour.</value>
   </data>
   <data name="Enable" xml:space="preserve">
-    <value>Ota käyttöön</value>
+    <value>Povoliť</value>
   </data>
   <data name="AccessRequest" xml:space="preserve">
-    <value>Haluatko antaa ohjelmalle '{0}' (IP osoitteessa {1}) täydet oikeudet MPExtended palveluihin?</value>
+    <value>Naozaj chcete prideliť aplikácii '{0}' (s IP adresou {1}) plný prístup k MPExtended službám?</value>
   </data>
   <data name="AccessRequestDenyAccess" xml:space="preserve">
-    <value>Kumoa</value>
+    <value>Zamietnuť</value>
   </data>
   <data name="AccessRequestGrantAccess" xml:space="preserve">
-    <value>Myönnä oikeudet</value>
+    <value>Povoliť prístup</value>
   </data>
   <data name="AccessRequestSelectUser" xml:space="preserve">
-    <value>Valitse käyttäjä:</value>
+    <value>Vyberte používateľa:</value>
   </data>
   <data name="AccessRequestWifiRemote" xml:space="preserve">
-    <value>Haluatko sallia '{0}' yhteyden? (Jos sallit, niin määritä käyttäjä seuraavassa kohdassa)</value>
+    <value>Povoliť '{0}' prístup? (Pokiaľ áno, pridajte používateľa v nasledujúcom kroku.)</value>
   </data>
   <data name="AccessRequestEnable" xml:space="preserve">
-    <value>Salli yhteyspyynnöt asiakaskoneilta</value>
+    <value>Povoliť klientom žiadosti o prístup</value>
   </data>
   <data name="ExternalIpCustom" xml:space="preserve">
-    <value>Mukautettu</value>
+    <value>Vlastná</value>
   </data>
   <data name="ExternalIpDefault" xml:space="preserve">
-    <value>Automaattisesti huomaa ulkopuolinen IP</value>
+    <value>Zistiť externú IP adresu automaticky</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
-    <value>Ulkopuolinen osoite</value>
+    <value>Externá adresa</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Kieli</value>
+    <value>Jazyk</value>
   </data>
 </root>
