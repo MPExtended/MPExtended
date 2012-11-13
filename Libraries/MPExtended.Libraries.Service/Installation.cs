@@ -36,7 +36,8 @@ namespace MPExtended.Libraries.Service
         StreamingService,
         UserSessionService,
         MetaService,
-        WifiRemote
+        WifiRemote,
+        ScraperService
     }
 
     public enum MPExtendedProduct
