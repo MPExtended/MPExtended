@@ -27,6 +27,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public int Year { get; set; }
         public int EpisodeCount { get; set; }
         public int UnwatchedEpisodeCount { get; set; }
+        public int SeasonCount { get; set; }
         public float Rating { get; set; }
         public string ContentRating { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
