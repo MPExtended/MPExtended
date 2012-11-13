@@ -9,7 +9,7 @@
     <div>
         @foreach (var episode in Model)
         {
-            <div class="column" style="text-align: center;">
+            <div class="column" style="text-align: center; height: 165px;">
                 <div class="row">
                     <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id }, null)"> 
                         <img class="img" width="150" height="84" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="No image" />
