@@ -181,6 +181,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScraperService", "ScraperSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.ScraperService", "Services\MPExtended.Services.ScraperService\MPExtended.Services.ScraperService.csproj", "{7B0BAB36-B28B-4016-AF70-6AED43703458}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Scrapers.MediaManager", "Scrapers\MPExtended.Scrapers.MediaManager\MPExtended.Scrapers.MediaManager.csproj", "{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -834,6 +836,18 @@ Global
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Release|MPExtended Platform.ActiveCfg = Release|Any CPU
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|MPExtended Platform.ActiveCfg = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|MPExtended Platform.ActiveCfg = Release|Any CPU
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -893,6 +907,7 @@ Global
 		{1E9CA574-FA9F-45F8-B2A6-EAD51C7D7B79} = {C1D9B2D6-C9BF-4C56-A283-31AE2715BA29}
 		{E166526F-5595-43C9-9CC8-A493DA613279} = {C1D9B2D6-C9BF-4C56-A283-31AE2715BA29}
 		{6A9683C0-9209-4656-935A-3F307890067E} = {C1D9B2D6-C9BF-4C56-A283-31AE2715BA29}
+		{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD} = {C1D9B2D6-C9BF-4C56-A283-31AE2715BA29}
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2} = {24275201-43B4-4CD0-98C8-97E8ACFB99C1}
 		{7B0BAB36-B28B-4016-AF70-6AED43703458} = {24275201-43B4-4CD0-98C8-97E8ACFB99C1}
 	EndGlobalSection
