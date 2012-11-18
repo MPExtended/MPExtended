@@ -82,7 +82,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         
             // actually load it
             WebMediaInfo outInfo;
-            using (var impersonator = source.GetImpersonator())
+            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
             {
                 outInfo = DoLoadMediaInfo(source.GetPath(), false);
             }
@@ -194,22 +194,28 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     });
                 }
 
-                // language in subtitle filename
-                var files = Directory.GetFiles(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".*.srt");
-                foreach (var file in files)
+                try
                 {
-                    string basename = Path.GetFileName(file).Substring(Path.GetFileNameWithoutExtension(source).Length);
-                    string tag = basename.Substring(1, basename.Length - 5);
-                    retinfo.SubtitleStreams.Add(new WebSubtitleStream()
+                    // language in subtitle filename
+                    foreach (string file in Directory.EnumerateFiles(Path.GetDirectoryName(source), Path.GetFileNameWithoutExtension(source) + ".*.srt"))
                     {
-                        Language = LookupCountryCode(tag),
-                        LanguageFull = tag,
-                        ID = ++lastId,
-                        Index = ++scodecnr,
-                        Filename = file
-                    });
+                        string basename = Path.GetFileName(file).Substring(Path.GetFileNameWithoutExtension(source).Length);
+                        string tag = basename.Substring(1, basename.Length - 5);
+                        retinfo.SubtitleStreams.Add(new WebSubtitleStream()
+                        {
+                            Language = LookupCountryCode(tag),
+                            LanguageFull = tag,
+                            ID = ++lastId,
+                            Index = ++scodecnr,
+                            Filename = file
+                        });
+                    }
                 }
-
+                catch (UnauthorizedAccessException)
+                {
+                    // enumerating network shares could fail, not sure why though
+                    Log.Debug("Failed to enumerate files in {0}", Path.GetDirectoryName(source));
+                }
                 
                 // return
                 info.Close();

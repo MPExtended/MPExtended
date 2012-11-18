@@ -110,6 +110,7 @@
     <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Network\ExternalAddress.cs" />
+    <Compile Include="Util\TranscoderProcess.cs" />
     <Compile Include="Util\MIME.cs" />
     <Compile Include="Util\Reference.cs" />
     <Compile Include="MpConnection\Messages\MessageAuthenticationResponse.cs" />
