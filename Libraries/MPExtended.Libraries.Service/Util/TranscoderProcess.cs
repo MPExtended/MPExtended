@@ -135,13 +135,13 @@ namespace MPExtended.Libraries.Service.Util
         private static extern bool CreatePipe(out IntPtr hReadPipe, out IntPtr hWritePipe, ref SECURITY_ATTRIBUTES lpPipeAttributes, int nSize);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool SetHandleInformation(IntPtr hObject, int dwMask, uint dwFlags);
+        private static extern bool SetHandleInformation(IntPtr hObject, int dwMask, uint dwFlags);
         
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern IntPtr GetStdHandle(int nStdHandle);
 
         [DllImport("userenv.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool CreateEnvironmentBlock(out IntPtr lpEnvironment, IntPtr hToken, bool bInherit);
+        private static extern bool CreateEnvironmentBlock(out IntPtr lpEnvironment, IntPtr hToken, bool bInherit);
 
         private const int LOGON32_LOGON_INTERACTIVE = 2;
         private const int LOGON32_PROVIDER_DEFAULT = 0;
@@ -264,9 +264,9 @@ namespace MPExtended.Libraries.Service.Util
 
                 String commandLine = GetCommandLine();
 
-                Log.Debug("TranscoderProcess: userToken = {0:x8}", userToken);
                 Log.Debug("TranscoderProcess: commandLine = {0}", commandLine);
-                Log.Debug("TranscoderProcess: processFlags = {0}", createFlags);
+                Log.Trace("TranscoderProcess: userToken = {0:x8}", userToken);
+                Log.Trace("TranscoderProcess: processFlags = {0}", createFlags);
 
                 // Create process as user, fail hard if this is unsuccessful so it can be caught in EncoderUnit
                 if (!CreateProcessAsUserW(userToken, null, GetCommandLine(), IntPtr.Zero, IntPtr.Zero, true, createFlags, IntPtr.Zero, null, ref startupInfo, out processInformation))

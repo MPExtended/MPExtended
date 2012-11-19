@@ -730,15 +730,12 @@ namespace MPExtended.Services.MediaAccessService
                     tryImpersonation = true;
                 }
 
-                if (tryImpersonation)
+                if (tryImpersonation && new Uri(path).IsUnc && !FileUtil.IsAccessible(path))
                 {
-                    if (new Uri(path).IsUnc)
+                    using (var impersonator = new NetworkShareImpersonator())
                     {
-                        using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator(!FileUtil.IsAccessible(path)))
-                        {
-                            retVal = new WebFileInfo(path);
-                            retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
-                        }
+                        retVal = new WebFileInfo(path);
+                        retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
                         retVal.OnNetworkDrive = true;
                     }
                 }

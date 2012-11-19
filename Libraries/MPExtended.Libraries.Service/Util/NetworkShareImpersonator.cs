@@ -29,10 +29,9 @@ namespace MPExtended.Libraries.Service.Util
 
         public NetworkShareImpersonator(bool impersonate)
         {
-            bool impersonationEnabled = Configuration.Services.NetworkImpersonation.IsEnabled();
             string username = Configuration.Services.NetworkImpersonation.Username;
             string password = Configuration.Services.NetworkImpersonation.GetPassword();
-            if (impersonate && impersonationEnabled && !String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            if (impersonate && Configuration.Services.NetworkImpersonation.IsEnabled())
             {
                 try
                 {
@@ -40,8 +39,7 @@ namespace MPExtended.Libraries.Service.Util
                 }
                 catch (Exception e)
                 {
-                    Log.Warn(e.Message);
-                    Log.Warn("Failed to impersonate {0}", username);
+                    Log.Warn("Failed to impersonate {0} -> {1}", username, e.Message);
                     impersonator = null;
                 }
             }
