@@ -173,7 +173,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
             catch (Win32Exception e)
             {
-                Log.Error("Encoding: Failed to start transcoder", e);
+                Log.Error("Encoding: Failed to start transcoder");
                 Log.Info("ERROR: Transcoder probably doesn't exists");
                 return false;
             }
@@ -226,7 +226,7 @@ namespace MPExtended.Services.StreamingService.Units
                 if (transcoderApplication != null && !transcoderApplication.HasExited)
                 {
                     Log.Debug("Encoding: Killing transcoder");
-                    transcoderApplication.Kill();
+                    transcoderApplication.Stop();
                 }
             }
             catch (Exception e)

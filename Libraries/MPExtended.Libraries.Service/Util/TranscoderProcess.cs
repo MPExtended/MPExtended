@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -92,6 +93,23 @@ namespace MPExtended.Libraries.Service.Util
             INHERIT_PARENT_AFFINITY = 0x00010000
         }
 
+
+
+        [Flags()]
+        public enum ProcessAccess : int
+        {
+            PROCESS_ALL_ACCESS = PROCESS_CREATE_THREAD | PROCESS_DUPLICATE_HANDLE | PROCESS_QUERY_INFORMATION | PROCESS_SET_INFORMATION | PROCESS_TERMINATE | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_SYNCHRONIZE,
+            PROCESS_CREATE_THREAD = 0x2,
+            PROCESS_DUPLICATE_HANDLE = 0x40,
+            PROCESS_QUERY_INFORMATION = 0x400,
+            PROCESS_SET_INFORMATION = 0x200,
+            PROCESS_TERMINATE = 0x1,
+            PROCESS_VM_OPERATION = 0x8,
+            PROCESS_VM_READ = 0x10,
+            PROCESS_VM_WRITE = 0x20,
+            PROCESS_SYNCHRONIZE = 0x100000
+        }
+
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool LogonUser(string username, string domain, string password, int logonType, int logonProvider, out IntPtr userToken);
 
@@ -104,6 +122,15 @@ namespace MPExtended.Libraries.Service.Util
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool CreateProcessAsUserW(IntPtr token, [MarshalAs(UnmanagedType.LPTStr)] string lpApplicationName, [MarshalAs(UnmanagedType.LPTStr)] string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles, CreateProcessFlags dwCreationFlags, IntPtr lpEnvironment, [MarshalAs(UnmanagedType.LPTStr)] string lpCurrentDirectory, [In] ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern IntPtr OpenProcess(ProcessAccess dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
+        
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool CreatePipe(out IntPtr hReadPipe, out IntPtr hWritePipe, ref SECURITY_ATTRIBUTES lpPipeAttributes, int nSize);
 
@@ -169,24 +196,40 @@ namespace MPExtended.Libraries.Service.Util
             return result.ToString();
         }
 
+        public void Stop()
+        {
+            IntPtr hProcess = IntPtr.Zero;
+            try
+            {
+                int id = Id;
+                Log.Debug("TranscoderProcess: Terminating process pid={0}", id);
+                hProcess = OpenProcess(ProcessAccess.PROCESS_TERMINATE, false, id);
+                if (hProcess == IntPtr.Zero)
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "TranscoderProcess: OpenProcess failed");
+                if (!TerminateProcess(hProcess, 0))
+                    // This shouldn't be a problem normally, the process has probably exited before calling TerminateProcess()
+                    Log.Warn("TranscoderProcess: TerminateProcess failed (0x{0:x8})", Marshal.GetLastWin32Error());
+            }
+            finally
+            {
+                if (hProcess != IntPtr.Zero)
+                    CloseHandle(hProcess);
+            }
+        }
+
         public bool StartAsUser(string domain, string username, string password)
         {
+            PROCESS_INFORMATION processInformation = new PROCESS_INFORMATION();
             IntPtr userToken = IntPtr.Zero;
             IntPtr token = IntPtr.Zero;
 
             try 
             {
                 if (!LogonUser(username, domain, password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, out token))
-                {
-                    Log.Error("TranscoderProcess: LogonUser {0}\\{1} failed (0x{2:x8})", domain, username, Marshal.GetLastWin32Error());
-                    return false;
-                }
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), String.Format("TranscoderProcess: LogonUser {0}\\{1} failed", domain, username));
 
                 if (!DuplicateTokenEx(token, MAXIMUM_ALLOWED | TOKEN_QUERY | TOKEN_DUPLICATE, IntPtr.Zero, SECURITY_IMPERSONATION, TOKEN_PRIMARY, out userToken))
-                {
-                    Log.Error("TranscoderProcess: DuplicateToken failed (0x{0:x8})", Marshal.GetLastWin32Error());
-                    return false;
-                }
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "TranscoderProcess: DuplicateToken failed");
 
                 STARTUPINFO startupInfo = new STARTUPINFO();
                 startupInfo.cb = Marshal.SizeOf(typeof(STARTUPINFO));
@@ -219,25 +262,22 @@ namespace MPExtended.Libraries.Service.Util
                 if (StartInfo.CreateNoWindow)
                     createFlags |= CreateProcessFlags.CREATE_NO_WINDOW;
 
-                PROCESS_INFORMATION processInformation = new PROCESS_INFORMATION();
-
                 String commandLine = GetCommandLine();
 
                 Log.Debug("TranscoderProcess: userToken = {0:x8}", userToken);
                 Log.Debug("TranscoderProcess: commandLine = {0}", commandLine);
                 Log.Debug("TranscoderProcess: processFlags = {0}", createFlags);
 
+                // Create process as user, fail hard if this is unsuccessful so it can be caught in EncoderUnit
                 if (!CreateProcessAsUserW(userToken, null, GetCommandLine(), IntPtr.Zero, IntPtr.Zero, true, createFlags, IntPtr.Zero, null, ref startupInfo, out processInformation))
-                {
-                    Log.Error("TranscoderProcess: CreateProcessAsUser failed (0x{0:x8})", Marshal.GetLastWin32Error());
-                    return false;
-                }
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "TranscoderProcess: CreateProcessAsUser failed");
 
                 Log.Debug("TranscoderProcess: CreateProcessAsUser succeeded, pid={0}", processInformation.dwProcessId);
 
                 if (processInformation.hThread != (IntPtr)(-1))
                 {
                     CloseHandle(processInformation.hThread);
+                    processInformation.hThread = IntPtr.Zero;
                 }
 
 	            if (StartInfo.RedirectStandardInput) 
@@ -269,7 +309,7 @@ namespace MPExtended.Libraries.Service.Util
 
                 typeof(Process).InvokeMember("SetProcessHandle", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, this, new object[] { safeProcessHandle });
                 typeof(Process).InvokeMember("SetProcessId", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, this, new object[] { processInformation.dwProcessId });
-                
+
                 return true;
             } 
             finally 
@@ -279,6 +319,10 @@ namespace MPExtended.Libraries.Service.Util
                     CloseHandle(token);
                 if (userToken != IntPtr.Zero)
                     CloseHandle(userToken);
+                if (processInformation.hProcess != IntPtr.Zero)
+                    CloseHandle(processInformation.hProcess);
+                if (processInformation.hThread != IntPtr.Zero)
+                    CloseHandle(processInformation.hThread);
             }
         }
 
@@ -298,7 +342,7 @@ namespace MPExtended.Libraries.Service.Util
                     else
                         success = SetHandleInformation(readHandle, HANDLE_FLAG_INHERIT, 0);
                 if (!success)
-                    throw new IOException("TranscoderProcess: could not create standard pipe");
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "TranscoderProcess: could not create standard pipe");
             }
             else
             {
