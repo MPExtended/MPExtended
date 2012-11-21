@@ -249,7 +249,7 @@ namespace MPExtended.Services.TVAccessService
                         Type = WebTVSearchResultType.Recording,
                         StartTime = rec.StartTime,
                         EndTime = rec.EndTime,
-                        ChannelName = Channel.Retrieve(rec.IdChannel).DisplayName
+                        ChannelName = GetChannelDisplayName(rec.IdChannel)
                     }));
             }
 
@@ -263,7 +263,7 @@ namespace MPExtended.Services.TVAccessService
                         Score = 50 + (int)Math.Round((decimal)text.Length / schedule.ProgramName.Length * 50),
                         Title = schedule.ProgramName,
                         Type = WebTVSearchResultType.Schedule,
-                        ChannelName = Channel.Retrieve(schedule.IdChannel).DisplayName
+                        ChannelName = GetChannelDisplayName(schedule.IdChannel)
                     }));
             }
 
@@ -278,11 +278,17 @@ namespace MPExtended.Services.TVAccessService
                         Type = WebTVSearchResultType.Program,
                         StartTime = program.StartTime,
                         EndTime = program.EndTime,
-                        ChannelName = Channel.Retrieve(program.IdChannel).DisplayName
+                        ChannelName = GetChannelDisplayName(program.IdChannel)
                     }));
             }
 
             return result.OrderByDescending(x => x.Score).ToList();
+        }
+
+        private string GetChannelDisplayName(int idChannel)
+        {
+            Channel channel = Channel.Retrieve(idChannel);
+            return channel == null ? String.Empty : channel.DisplayName;
         }
 
         public IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null)
