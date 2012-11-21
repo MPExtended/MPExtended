@@ -188,7 +188,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else if (SupportsDirectAccess)
             {
-                using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator())
+                using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(NeedsImpersonation))
                 {
                     return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }

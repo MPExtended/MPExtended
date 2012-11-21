@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace MPExtended.Libraries.Service.Util
 {
-    public class TranscoderProcess: Process
+    public class TranscoderProcess : Process
     {
         [StructLayout(LayoutKind.Sequential)]
         private struct PROCESS_INFORMATION
@@ -93,10 +93,8 @@ namespace MPExtended.Libraries.Service.Util
             INHERIT_PARENT_AFFINITY = 0x00010000
         }
 
-
-
-        [Flags()]
-        public enum ProcessAccess : int
+        [Flags]
+        private enum ProcessAccess : int
         {
             PROCESS_ALL_ACCESS = PROCESS_CREATE_THREAD | PROCESS_DUPLICATE_HANDLE | PROCESS_QUERY_INFORMATION | PROCESS_SET_INFORMATION | PROCESS_TERMINATE | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_SYNCHRONIZE,
             PROCESS_CREATE_THREAD = 0x2,
@@ -123,20 +121,20 @@ namespace MPExtended.Libraries.Service.Util
         private static extern bool CreateProcessAsUserW(IntPtr token, [MarshalAs(UnmanagedType.LPTStr)] string lpApplicationName, [MarshalAs(UnmanagedType.LPTStr)] string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles, CreateProcessFlags dwCreationFlags, IntPtr lpEnvironment, [MarshalAs(UnmanagedType.LPTStr)] string lpCurrentDirectory, [In] ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern IntPtr OpenProcess(ProcessAccess dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
+        private static extern IntPtr OpenProcess(ProcessAccess dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+        private static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
-        
+        private static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool CreatePipe(out IntPtr hReadPipe, out IntPtr hWritePipe, ref SECURITY_ATTRIBUTES lpPipeAttributes, int nSize);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool SetHandleInformation(IntPtr hObject, int dwMask, uint dwFlags);
-        
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern IntPtr GetStdHandle(int nStdHandle);
 
@@ -178,6 +176,7 @@ namespace MPExtended.Libraries.Service.Util
             StringBuilder result = new StringBuilder();
             string applicationName = StartInfo.FileName.Trim();
             string arguments = StartInfo.Arguments;
+
             bool applicationNameIsQuoted = applicationName.StartsWith("\"") && applicationName.EndsWith("\"");
             if (!applicationNameIsQuoted)
             {
@@ -188,7 +187,8 @@ namespace MPExtended.Libraries.Service.Util
             {
                 result.Append("\"");
             }
-            if ((arguments != null) && (arguments.Length > 0))
+
+            if (arguments != null && arguments.Length > 0)
             {
                 result.Append(" ");
                 result.Append(arguments);
@@ -223,7 +223,7 @@ namespace MPExtended.Libraries.Service.Util
             IntPtr userToken = IntPtr.Zero;
             IntPtr token = IntPtr.Zero;
 
-            try 
+            try
             {
                 if (!LogonUser(username, domain, password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, out token))
                     throw new Win32Exception(Marshal.GetLastWin32Error(), String.Format("TranscoderProcess: LogonUser {0}\\{1} failed", domain, username));
@@ -280,7 +280,7 @@ namespace MPExtended.Libraries.Service.Util
                     processInformation.hThread = IntPtr.Zero;
                 }
 
-	            if (StartInfo.RedirectStandardInput) 
+                if (StartInfo.RedirectStandardInput)
                 {
                     CloseHandle(stdinReadHandle);
                     StreamWriter standardInput = new StreamWriter(new FileStream(new SafeFileHandle(stdinWriteHandle, true), FileAccess.Write, 4096), Console.Out.Encoding);
@@ -288,14 +288,14 @@ namespace MPExtended.Libraries.Service.Util
                     typeof(Process).InvokeMember("standardInput", BindingFlags.SetField | BindingFlags.NonPublic | BindingFlags.Instance, null, this, new object[] { standardInput });
                 }
 
-                if (StartInfo.RedirectStandardOutput) 
+                if (StartInfo.RedirectStandardOutput)
                 {
                     CloseHandle(stdoutWriteHandle);
                     StreamReader standardOutput = new StreamReader(new FileStream(new SafeFileHandle(stdoutReadHandle, true), FileAccess.Read, 4096), StartInfo.StandardOutputEncoding ?? Console.Out.Encoding);
                     typeof(Process).InvokeMember("standardOutput", BindingFlags.SetField | BindingFlags.NonPublic | BindingFlags.Instance, null, this, new object[] { standardOutput });
-                }               
-                
-                if (StartInfo.RedirectStandardError) 
+                }
+
+                if (StartInfo.RedirectStandardError)
                 {
                     CloseHandle(stderrWriteHandle);
                     StreamReader standardError = new StreamReader(new FileStream(new SafeFileHandle(stderrReadHandle, true), FileAccess.Read, 4096), StartInfo.StandardErrorEncoding ?? Console.Out.Encoding);
@@ -311,8 +311,8 @@ namespace MPExtended.Libraries.Service.Util
                 typeof(Process).InvokeMember("SetProcessId", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, this, new object[] { processInformation.dwProcessId });
 
                 return true;
-            } 
-            finally 
+            }
+            finally
             {
                 // cleanup
                 if (token != IntPtr.Zero)
@@ -336,11 +336,19 @@ namespace MPExtended.Libraries.Service.Util
                 security.bInheritHandle = true;
                 security.lpSecurityDescriptor = IntPtr.Zero;
                 success = CreatePipe(out readHandle, out writeHandle, ref security, 4096);
+
                 if (success)
+                {
                     if (isInput)
+                    {
                         success = SetHandleInformation(writeHandle, HANDLE_FLAG_INHERIT, 0);
+                    }
                     else
+                    {
                         success = SetHandleInformation(readHandle, HANDLE_FLAG_INHERIT, 0);
+                    }
+                }
+
                 if (!success)
                     throw new Win32Exception(Marshal.GetLastWin32Error(), "TranscoderProcess: could not create standard pipe");
             }

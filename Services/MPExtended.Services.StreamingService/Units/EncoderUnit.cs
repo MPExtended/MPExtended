@@ -173,8 +173,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
             catch (Win32Exception e)
             {
-                Log.Error("Encoding: Failed to start transcoder");
-                Log.Info("ERROR: Transcoder probably doesn't exists");
+                Log.Error("Encoding: Failed to start transcoder", e);
                 return false;
             }
             return true;

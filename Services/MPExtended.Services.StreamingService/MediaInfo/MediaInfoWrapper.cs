@@ -211,10 +211,10 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                         });
                     }
                 }
-                catch (UnauthorizedAccessException)
+                catch (UnauthorizedAccessException ex)
                 {
                     // enumerating network shares could fail, not sure why though
-                    Log.Debug("Failed to enumerate files in {0}", Path.GetDirectoryName(source));
+                    Log.Debug(String.Format("Failed to enumerate files in {0}", Path.GetDirectoryName(source)), ex);
                 }
                 
                 // return
