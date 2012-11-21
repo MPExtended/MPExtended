@@ -30,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         protected string Identifier { get; set; }
         protected StreamContext Context { get; set; }
-        protected string TemporaryDirectory { get; set; }
+        public string TemporaryDirectory { get; protected set; }
 
         private int keepSegments;
 
@@ -63,7 +63,7 @@ namespace MPExtended.Services.StreamingService.Code
             return WCFUtil.GetCurrentRoot() + "StreamingService/stream/CustomTranscoderData?identifier=" + Identifier + "&action=playlist&parameters=index.m3u8";
         }
 
-        public Stream ProvideCustomActionFile(string action, string param)
+        public virtual Stream ProvideCustomActionFile(string action, string param)
         {
             switch (action)
             {
