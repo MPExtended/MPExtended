@@ -59,10 +59,10 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Start()
         {
+            DataOutputStream = pipeClient;
+
             injectionTask = Task.Factory.StartNew(delegate()
             {
-                DataOutputStream = pipeClient;
-
                 byte[] bytes = new byte[1000];
                 int result = InputStream.Read(bytes, 0, 1000);
                 string bytesToFile = ByteArrayToString(bytes);
