@@ -77,7 +77,7 @@ namespace MPExtended.Services.StreamingService.Code
             get
             {
                 bool impersonationEnabled = Configuration.Services.NetworkImpersonation.IsEnabled();
-                return impersonationEnabled && SupportsDirectAccess && GetFileInfo().OnNetworkDrive && !File.Exists(GetPath());
+                return impersonationEnabled && SupportsDirectAccess && GetFileInfo().OnNetworkDrive && !FileUtil.IsAccessible(GetPath());
             }
         }
 
@@ -188,7 +188,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             else if (SupportsDirectAccess)
             {
-                using (var impersonator = GetImpersonator())
+                using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(NeedsImpersonation))
                 {
                     return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
@@ -201,11 +201,6 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 return Connections.MAS.RetrieveFile(Provider, MediaType, FileType, Id, Offset);
             }
-        }
-
-        public NetworkShareImpersonator GetImpersonator()
-        {
-            return new NetworkShareImpersonator(NeedsImpersonation);
         }
 
         public virtual string GetMediaDisplayName()

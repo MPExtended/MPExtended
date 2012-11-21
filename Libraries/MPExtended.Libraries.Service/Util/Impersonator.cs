@@ -62,7 +62,8 @@ namespace MPExtended.Libraries.Service.Util
             IntPtr token = IntPtr.Zero;
             IntPtr duplicatedToken = IntPtr.Zero;
 
-            try {
+            try
+            {
                 if (!RevertToSelf())
                     return false;
 
@@ -79,7 +80,9 @@ namespace MPExtended.Libraries.Service.Util
 
                 // succeeded
                 return true;
-            } finally {
+            }
+            finally
+            {
                 // cleanup
                 if (token != IntPtr.Zero)
                     CloseHandle(token);

@@ -48,5 +48,22 @@ namespace MPExtended.Libraries.Service.Util
 
             return null;
         }
+
+        // This function is needed because File.Exists() does not work on network share violations as advertised on MSDN!
+        public static bool IsAccessible(string path) 
+        {
+            bool result = false;
+            
+            try
+            {
+                using (FileStream stream = File.OpenRead(path))
+                    result = true;
+            }
+            catch
+            {
+            }
+
+            return result;
+        }
     }
 }

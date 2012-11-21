@@ -717,22 +717,26 @@ namespace MPExtended.Services.MediaAccessService
                 path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
                 WebFileInfo retVal = null;
 
+                bool tryImpersonation = false;
                 try
                 {
                     // first try it the usual way
                     retVal = GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
+                    tryImpersonation = retVal == null || !retVal.Exists;
                 }
                 catch (UnauthorizedAccessException)
                 {
                     // access denied, try impersonation
-                    if (new Uri(path).IsUnc)
+                    tryImpersonation = true;
+                }
+
+                if (tryImpersonation && new Uri(path).IsUnc && !FileUtil.IsAccessible(path))
+                {
+                    using (var impersonator = new NetworkShareImpersonator())
                     {
-                        using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
-                        {
-                            retVal = new WebFileInfo(path);
-                            retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
-                            retVal.OnNetworkDrive = true;
-                        }
+                        retVal = new WebFileInfo(path);
+                        retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
+                        retVal.OnNetworkDrive = true;
                     }
                 }
 
@@ -788,7 +792,7 @@ namespace MPExtended.Services.MediaAccessService
                 // try to load it from a network drive
                 if (info.OnNetworkDrive && info.Exists)
                 {
-                    using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                    using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator())
                     {
                         return new FileStream(path, FileMode.Open, FileAccess.Read);
                     }

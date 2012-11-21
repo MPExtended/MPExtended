@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using MPExtended.Libraries.Service;
 
@@ -113,7 +115,10 @@ namespace MPExtended.Services.StreamingService.Code {
                 pipe = client;
                 isReady = true;
             } else {
-                NamedPipeServerStream server = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+                // Grant read/write access to everyone, so the pipe can be written to from impersonated processes
+                PipeSecurity pipeSecurity = new PipeSecurity();
+                pipeSecurity.SetAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), PipeAccessRights.ReadWrite, AccessControlType.Allow)); 
+                NamedPipeServerStream server = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 4096, 4096, pipeSecurity);
                 server.BeginWaitForConnection(new AsyncCallback(WaitForConnection), server);
             }
         }

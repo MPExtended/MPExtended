@@ -31,15 +31,15 @@ namespace MPExtended.Libraries.Service.Util
         {
             string username = Configuration.Services.NetworkImpersonation.Username;
             string password = Configuration.Services.NetworkImpersonation.GetPassword();
-            if (impersonate && !String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            if (impersonate && Configuration.Services.NetworkImpersonation.IsEnabled())
             {
                 try
                 {
                     impersonator = new Impersonator(Configuration.Services.NetworkImpersonation.Domain, username, password);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Log.Warn("Failed to impersonate {0}", username);
+                    Log.Warn("Failed to impersonate {0} -> {1}", username, e.Message);
                     impersonator = null;
                 }
             }

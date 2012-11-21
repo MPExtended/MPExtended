@@ -21,8 +21,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Units
@@ -58,7 +60,7 @@ namespace MPExtended.Services.StreamingService.Units
         private TransportMethod inputMethod;
         private TransportMethod outputMethod;
         private LogStream logStream;
-        private Process transcoderApplication;
+        private TranscoderProcess transcoderApplication;
         private Stream transcoderInputStream;
         private bool doInputCopy;
 
@@ -162,14 +164,16 @@ namespace MPExtended.Services.StreamingService.Units
 
             try
             {
-                transcoderApplication = new Process();
+                transcoderApplication = new TranscoderProcess();
                 transcoderApplication.StartInfo = start;
-                transcoderApplication.Start();
+                if (context.Source.NeedsImpersonation)
+                    transcoderApplication.StartAsUser(Configuration.Services.NetworkImpersonation.Domain, Configuration.Services.NetworkImpersonation.Username, Configuration.Services.NetworkImpersonation.GetPassword());
+                else
+                    transcoderApplication.Start();
             }
             catch (Win32Exception e)
             {
                 Log.Error("Encoding: Failed to start transcoder", e);
-                Log.Info("ERROR: Transcoder probably doesn't exists");
                 return false;
             }
             return true;
@@ -221,7 +225,7 @@ namespace MPExtended.Services.StreamingService.Units
                 if (transcoderApplication != null && !transcoderApplication.HasExited)
                 {
                     Log.Debug("Encoding: Killing transcoder");
-                    transcoderApplication.Kill();
+                    transcoderApplication.Stop();
                 }
             }
             catch (Exception e)

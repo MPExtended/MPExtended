@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -65,7 +66,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             // execute it
             ProcessStartInfo info = new ProcessStartInfo();
-            using (var impersonator = source.GetImpersonator())
+            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
             {
                 info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -f image2 {2}", position, source.GetPath(), tempFile);
                 info.FileName = Configuration.StreamingProfiles.FFMpegPath;
