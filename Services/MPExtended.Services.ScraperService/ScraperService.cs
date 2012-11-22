@@ -10,6 +10,8 @@ using System.Diagnostics;
 using MPExtended.Libraries.Service.Hosting;
 using System.IO;
 using System.Reflection;
+using MPExtended.Services.Common.Interfaces;
+using MPExtended.Scrapers.ItemDownloader;
 
 namespace MPExtended.Services.ScraperService
 {
@@ -59,6 +61,7 @@ namespace MPExtended.Services.ScraperService
 
         private IPrivateScraperService mTvSeriesScraper;
         private IPrivateScraperService mMovingPicturesScraper;
+        private IPrivateScraperService mDownloaderScraper;
 
         private Process mTvSeriesCommandLine;
         private Process mMopiCommandLine;
@@ -68,6 +71,9 @@ namespace MPExtended.Services.ScraperService
             StartMpTvSeriesCommandLine();
 
             StartMopiCommandLine();
+
+            mDownloaderScraper = new ItemDownloader("lyfesaver.net:4322", "diebagger", "Addicted20");
+
             ServiceState.Stopping += new ServiceState.ServiceStoppingEventHandler(ServiceState_Stopping);
         }
 
@@ -161,6 +167,8 @@ namespace MPExtended.Services.ScraperService
                     return CreateProxy(ref mTvSeriesScraper, "net.tcp://localhost:9760/MPExtended/ScraperServiceTVSeries");
                 case 1:
                     return CreateProxy(ref mMovingPicturesScraper, "net.tcp://localhost:9761/MPExtended/ScraperServiceMopi");
+                case 2:
+                    return mDownloaderScraper;
                 default:
                     return CreateProxy(ref mTvSeriesScraper, "net.tcp://localhost:9760/MPExtended/ScraperServiceTVSeries");
             }
@@ -171,7 +179,7 @@ namespace MPExtended.Services.ScraperService
             IList<WebScraper> scrapers = new List<WebScraper>();
             AddScraper(scrapers, 0);
             AddScraper(scrapers, 1);
-
+            AddScraper(scrapers, 2);
             return scrapers;
         }
 
@@ -255,6 +263,37 @@ namespace MPExtended.Services.ScraperService
             IPrivateScraperService service = GetScraper(scraperId);
 
             return service.SetScraperInputRequest(requestId, matchId, text);
+        }
+
+
+        public WebResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset)
+        {
+            IPrivateScraperService service = GetScraper(scraperId);
+
+            return service.AddItemToScraper(title, type, provider, itemId, offset);
+        }
+
+
+        public List<WebScraperItem> GetScraperItems(int? scraperId)
+        {
+            IPrivateScraperService service = GetScraper(scraperId);
+
+            return service.GetScraperItems();
+        }
+
+        public List<WebScraperAction> GetScraperActions(int? scraperId)
+        {
+            IPrivateScraperService service = GetScraper(scraperId);
+
+            return service.GetScraperActions();
+        }
+
+
+        public WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId)
+        {
+            IPrivateScraperService service = GetScraper(scraperId);
+
+            return service.InvokeScraperAction(itemId, actionId);
         }
     }
 }

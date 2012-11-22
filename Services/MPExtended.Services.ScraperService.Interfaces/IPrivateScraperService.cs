@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.ScraperService.Interfaces
 {
@@ -49,5 +50,21 @@ namespace MPExtended.Services.ScraperService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebResult SetScraperInputRequest(String requestId, String matchId, String text);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebResult AddItemToScraper(String title, WebMediaType type, int? provider, string itemId, int? offset);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        List<WebScraperItem> GetScraperItems();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        List<WebScraperAction> GetScraperActions();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult InvokeScraperAction(string itemId, string actionId);
     }
 }
