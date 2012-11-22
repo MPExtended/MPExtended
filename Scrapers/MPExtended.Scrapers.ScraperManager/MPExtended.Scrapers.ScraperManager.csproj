@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MPExtended.Scrapers.ScraperManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <ExecutableExtension>.exe</ExecutableExtension>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -60,6 +63,9 @@
     </Compile>
     <Compile Include="SearchResultForm.Designer.cs">
       <DependentUpon>SearchResultForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressRenderer.cs">
+      <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="ScraperManager.resx">
       <DependentUpon>ScraperManager.cs</DependentUpon>
@@ -89,6 +95,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Downloads\ObjectListView-2.6.0\ObjectListViewDemo\ObjectListView\ObjectListView2010.csproj">
+      <Project>{18FEDA0C-D147-4286-B39A-01204808106A}</Project>
+      <Name>ObjectListView2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
       <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
       <Name>MPExtended.Services.ScraperService.Interfaces</Name>

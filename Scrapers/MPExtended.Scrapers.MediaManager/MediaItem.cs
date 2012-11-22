@@ -9,5 +9,10 @@ namespace MPExtended.Scrapers.MediaManager
     public class MediaItem
     {
         public FileInfo File { get; set; }
+
+        public virtual String GetDestination()
+        {
+            return null;
+        }
     }
 }

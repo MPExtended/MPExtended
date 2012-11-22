@@ -9,6 +9,7 @@ using Cornerstone.GUI.Dialogs;
 using System.Diagnostics;
 using System.ServiceModel;
 using MPExtended.Services.ScraperService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Scrapers.MovingPictures
 {
@@ -318,6 +319,29 @@ namespace MPExtended.Scrapers.MovingPictures
                 }
             }
             return false;
+        }
+
+
+        public WebResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
+        {
+            return true;
+        }
+
+
+        public List<WebScraperItem> GetScraperItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<WebScraperAction> GetScraperActions()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public WebBoolResult InvokeScraperAction(string itemId, string actionId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

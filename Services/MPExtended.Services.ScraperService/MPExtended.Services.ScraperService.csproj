@@ -54,9 +54,17 @@
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Scrapers\MPExtended.Scrapers.MediaManager\MPExtended.Scrapers.ItemDownloader\MPExtended.Scrapers.ItemDownloader.csproj">
+      <Project>{D97F1E95-83A6-47F9-A6F6-C688977636F2}</Project>
+      <Name>MPExtended.Scrapers.ItemDownloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Scrapers\MPExtended.Scrapers.MPTvSeries\MPExtended.Scrapers.TVSeries.csproj">
       <Project>{766B240B-A270-4AD4-BCBA-AD6E00173665}</Project>
       <Name>MPExtended.Scrapers.TVSeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
       <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>

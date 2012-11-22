@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Services.ScraperService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Scrapers.MediaManager
 {
     public class MediaManager: IPrivateScraperService
     {
+
+
+
         #region IPrivateScraperService overrides
         public WebScraper GetScraperDescription()
         {
-            throw new NotImplementedException();
+            return new WebScraper()
+            {
+                ScraperId = 4,
+                ScraperName = "MediaManager"
+            };
         }
 
         public WebResult StartScraper()
@@ -58,8 +66,28 @@ namespace MPExtended.Scrapers.MediaManager
         {
             throw new NotImplementedException();
         }
+        
+        public WebResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<WebScraperItem> GetScraperItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<WebScraperAction> GetScraperActions()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public WebBoolResult InvokeScraperAction(string itemId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
-
-
     }
 }

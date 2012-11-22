@@ -118,6 +118,10 @@
       <Project>{6A9683C0-9209-4656-935A-3F307890067E}</Project>
       <Name>MPExtended.Scrapers.MovingPictures.Config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
       <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
       <Name>MPExtended.Services.ScraperService.Interfaces</Name>

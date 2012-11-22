@@ -13,14 +13,15 @@ namespace MPExtended.Scrapers.ScraperManager
 {
     public partial class SearchResultForm : Form
     {
-        IPrivateScraperService scraper;
-        private DialogResult result = DialogResult.Cancel;
-        private WebScraperInputRequest request = null;
-        private WebScraperInputMatch selection = null;
-        private bool mNeedsRefresh;
+        private IScraperService _service;
+        private WebScraper _scraper;
+        private DialogResult _result = DialogResult.Cancel;
+        private WebScraperInputRequest _request = null;
+        private WebScraperInputMatch _selection = null;
+        private bool _needsRefresh;
         public String NewSearchText { get; set; }
 
-        public WebScraperInputMatch SelectedMatch { get { return selection; } }
+        public WebScraperInputMatch SelectedMatch { get { return _selection; } }
         public SearchResultForm()
         {
             InitializeComponent();
@@ -29,35 +30,36 @@ namespace MPExtended.Scrapers.ScraperManager
         public SearchResultForm(WebScraperInputRequest _req)
             : this()
         {
-            request = _req;
+            _request = _req;
             FillSearchResults();
         }
 
-        public SearchResultForm(IPrivateScraperService _scraper)
+        public SearchResultForm(IScraperService _scraper)
             : this()
         {
-            scraper = _scraper;
+            _service = _scraper;
             FillSearchResults();
         }
 
-        public SearchResultForm(IPrivateScraperService _scraper, WebScraperInputRequest _req)
+        public SearchResultForm(IScraperService service, WebScraper scraper, WebScraperInputRequest req)
             : this()
         {
-            scraper = _scraper;
-            request = _req;
+            _service = service;
+            _scraper = scraper;
+            _request = req;
             FillSearchResults();
         }
 
         private void FillSearchResults()
         {
             lvSearchResult.Items.Clear();
-            if (request != null && request.InputOptions != null && request.InputOptions.Count > 0)
+            if (_request != null && _request.InputOptions != null && _request.InputOptions.Count > 0)
             {
-                for (int i = 0; i < request.InputOptions.Count; i++)
+                for (int i = 0; i < _request.InputOptions.Count; i++)
                 {
-                    ListViewItem item = new ListViewItem(request.InputOptions[i].ImdbId);
-                    item.SubItems.Add(request.InputOptions[i].Title);
-                    item.Tag = request.InputOptions[i];
+                    ListViewItem item = new ListViewItem(_request.InputOptions[i].ImdbId);
+                    item.SubItems.Add(_request.InputOptions[i].Title);
+                    item.Tag = _request.InputOptions[i];
                     lvSearchResult.Items.Add(item);
                 }
             }
@@ -75,14 +77,14 @@ namespace MPExtended.Scrapers.ScraperManager
                 item.Tag = r;
                 lvSearchResult.Items.Add(item);
             }*/
-            scraper.SetScraperInputRequest(request.Id, null, txtSeriesName.Text);
-            mNeedsRefresh = true;
+            _service.SetScraperInputRequest(_scraper.ScraperId, _request.Id, null, txtSeriesName.Text);
+            _needsRefresh = true;
             lvSearchResult.Items.Clear();
         }
 
         private void cmdChoose_Click(object sender, EventArgs e)
         {
-            if (selection == null)
+            if (_selection == null)
             {
                 lblStatus.Text = "Please select a series first";
             }
@@ -95,15 +97,15 @@ namespace MPExtended.Scrapers.ScraperManager
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            result = DialogResult.Cancel;
+            _result = DialogResult.Cancel;
             this.Close();
         }
 
 
         public WebScraperInputMatch Selection
         {
-            get { return selection; }
-            set { selection = value; }
+            get { return _selection; }
+            set { _selection = value; }
         }
 
         private void lvSearchResult_AfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -115,16 +117,16 @@ namespace MPExtended.Scrapers.ScraperManager
         {
             if (lvSearchResult.SelectedItems.Count == 1)
             {
-                selection = (WebScraperInputMatch)lvSearchResult.SelectedItems[0].Tag;
+                _selection = (WebScraperInputMatch)lvSearchResult.SelectedItems[0].Tag;
                 //bcSearchResult.BannerImage = m_selection.Banner;
 
                 //txtOverview.Text = m_selection.Overview;
-                if (selection.ImdbId != null)
+                if (_selection.ImdbId != null)
                 {
-                    linkImdb.Text = selection.ImdbId.Equals("") ? "" : "http://www.imdb.com/title/" + selection.ImdbId;
+                    linkImdb.Text = _selection.ImdbId.Equals("") ? "" : "http://www.imdb.com/title/" + _selection.ImdbId;
                 }
-                txtFirstAired.Text = selection.FirstAired.ToShortDateString();
-                txtOverview.Text = selection.Description;
+                txtFirstAired.Text = _selection.FirstAired.ToShortDateString();
+                txtOverview.Text = _selection.Description;
             }
         }
 
@@ -142,11 +144,11 @@ namespace MPExtended.Scrapers.ScraperManager
 
         internal void UpdateRequest(WebScraperInputRequest _request)
         {
-            if (request.Id.Equals(_request.Id) && mNeedsRefresh)
+            if (_request.Id.Equals(_request.Id) && _needsRefresh)
             {
-                request = _request;
+                _request = _request;
                 FillSearchResults();
-                mNeedsRefresh = false;
+                _needsRefresh = false;
             }
         }
     }

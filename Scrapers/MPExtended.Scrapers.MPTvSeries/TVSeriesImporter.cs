@@ -8,6 +8,7 @@ using System.ServiceModel;
 using MPExtended.Services.ScraperService.Interfaces;
 using WindowPlugins.GUITVSeries;
 using WindowPlugins.GUITVSeries.Feedback;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Scrapers.TVSeries
 {
@@ -640,5 +641,28 @@ namespace MPExtended.Scrapers.TVSeries
         }
 
         public bool IsRunning { get { return mImporterRunning; } }
+
+
+        public WebResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
+        {
+            return true;
+        }
+
+
+        public List<WebScraperItem> GetScraperItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<WebScraperAction> GetScraperActions()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public WebBoolResult InvokeScraperAction(string itemId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
