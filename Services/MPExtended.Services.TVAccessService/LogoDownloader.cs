@@ -116,6 +116,12 @@ namespace MPExtended.Services.TVAccessService
             IServiceDiscoverer discoverer = new ServiceDiscoverer();
             foreach (IServiceAddressSet set in discoverer.DiscoverSets(TimeSpan.FromSeconds(15)))
             {
+                if (set.MASStream == null)
+                {
+                    Log.Trace("Found service set {0} without MAS stream, ignoring...");
+                    continue;
+                }
+
                 Log.Trace("Found service set {0} with MAS streams at {1}", set.GetSetIdentifier(), set.MASStream);
                 string ipAddress = set.MASStream.Substring(0, set.MASStream.IndexOf(':'));
                 if (!alreadyHandledClients.Contains(set.MASStream) && !NetworkInformation.IsLocalAddress(ipAddress))
