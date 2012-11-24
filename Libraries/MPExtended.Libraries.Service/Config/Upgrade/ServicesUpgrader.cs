@@ -30,6 +30,9 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             var file = XElement.Load(OldPath);
             var model = new Services();
 
+            model.AccessRequestEnabled = true;
+            model.ExternalAddress.Autodetect = true;
+
             model.BonjourEnabled = file.Element("bonjour").Element("enabled").Value == "true";
             model.BonjourName = file.Element("bonjour").Element("pcname").Value;
 
