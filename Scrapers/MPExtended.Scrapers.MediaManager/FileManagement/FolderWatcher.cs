@@ -56,33 +56,35 @@ namespace MPExtended.Scrapers.MediaManager.FileManagement
             _folderWatch.Created += new FileSystemEventHandler(File_Created);
             _folderWatch.Deleted += new FileSystemEventHandler(File_Deleted);
             _folderWatch.Renamed += new RenamedEventHandler(File_Renamed);
-
-            _folderWatch.EnableRaisingEvents = true;
-
-            _fileCreatedCheck = new Thread(new ThreadStart(FileCheckThread));
-            _fileCreatedCheck.Name = "FileCheckThread";
-            _folderWatchRunning = true;
-            _fileCreatedCheck.Start();
         }
 
-        void File_Renamed(object sender, RenamedEventArgs e)
+        void File_Renamed(object sender, RenamedEventArgs args)
         {
-            throw new NotImplementedException();
+            if (ValidFileExtension(args.Name))
+            {
+                if (FileRenamed != null) FileRenamed(args);
+            }
         }
 
-        void File_Deleted(object sender, FileSystemEventArgs e)
+        void File_Deleted(object sender, FileSystemEventArgs args)
         {
-            throw new NotImplementedException();
+            if (ValidFileExtension(args.Name))
+            {
+                if (FileDeleted != null) FileDeleted(args);
+            }
         }
 
-        void File_Created(object sender, FileSystemEventArgs e)
+        void File_Created(object sender, FileSystemEventArgs args)
         {
-            throw new NotImplementedException();
+            if (ValidFileExtension(args.Name))
+            {
+                _newCreatedFiles.Add(new FileInfo(args.FullPath));
+            }
         }
 
-        void File_Changed(object sender, FileSystemEventArgs e)
+        void File_Changed(object sender, FileSystemEventArgs args)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
 
@@ -116,38 +118,6 @@ namespace MPExtended.Scrapers.MediaManager.FileManagement
             _folderWatch.EnableRaisingEvents = false;
             _folderWatchRunning = false;
             _fileCreatedCheck.Abort();
-        }
-
-
-        void watcher_Created(object sender, FileSystemEventArgs e)
-        {
-            if (ValidFileExtension(e.Name))
-            {
-                _newCreatedFiles.Add(new FileInfo(e.FullPath));
-            }
-        }
-
-
-
-        void watcher_Changed(object sender, FileSystemEventArgs e)
-        {
-
-        }
-
-        void m_watcher_Renamed(object sender, RenamedEventArgs e)
-        {
-            if (ValidFileExtension(e.Name))
-            {
-                if (FileRenamed != null) FileRenamed(e);
-            }
-        }
-
-        void m_watcher_Deleted(object sender, FileSystemEventArgs args)
-        {
-            if (ValidFileExtension(args.Name))
-            {
-                if (FileDeleted != null) FileDeleted(args);
-            }
         }
 
         private bool ValidFileExtension(string _name)

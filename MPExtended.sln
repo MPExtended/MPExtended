@@ -183,6 +183,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.Scraper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Scrapers.MediaManager", "Scrapers\MPExtended.Scrapers.MediaManager\MPExtended.Scrapers.MediaManager.csproj", "{CA799F94-DDB7-4C35-8CA8-5DDD8D2803BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Scrapers.ItemDownloader", "Scrapers\MPExtended.Scrapers.MediaManager\MPExtended.Scrapers.ItemDownloader\MPExtended.Scrapers.ItemDownloader.csproj", "{D97F1E95-83A6-47F9-A6F6-C688977636F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectListView2010", "..\..\..\..\..\Downloads\ObjectListView-2.6.0\ObjectListViewDemo\ObjectListView\ObjectListView2010.csproj", "{18FEDA0C-D147-4286-B39A-01204808106A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
