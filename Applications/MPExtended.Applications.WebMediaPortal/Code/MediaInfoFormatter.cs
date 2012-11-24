@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
@@ -31,6 +32,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static string GetShortQualityName(WebMediaInfo info)
         {
+            if (!info.VideoStreams.Any())
+                return UIStrings.Unknown;
+
             WebVideoStream vidStream = info.VideoStreams.First();
 
             if (vidStream.Width >= 1920 || vidStream.Height >= 1080)
