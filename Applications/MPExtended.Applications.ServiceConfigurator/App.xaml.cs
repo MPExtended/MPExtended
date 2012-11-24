@@ -83,6 +83,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                 Environment.CurrentDirectory = Installation.GetInstallDirectory();
             }
 
+            // Load the configuration:
+            // - This is needed to make sure Authentication.xml is created before Services.xml is upgraded. 
+            // - This makes sure all our configuration files are valid. 
+            Configuration.Load();
+
             // set language
             if (Configuration.Services.DefaultLanguage != null)
             {

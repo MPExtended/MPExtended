@@ -69,18 +69,22 @@ namespace MPExtended.Tests.Libraries.Service.Config.Tests
         public void Authentication()
         {
             Assert.True(Configuration.Authentication.Enabled);
-            Assert.Equal(1, Configuration.Authentication.Users.Count);
+            Assert.Equal(2, Configuration.Authentication.Users.Count);
 
             Assert.Equal("admin", Configuration.Authentication.Users[0].Username);
             Assert.True(Configuration.Authentication.Users[0].ValidatePassword("admin"));
+
+            Assert.Equal("abc", Configuration.Authentication.Users[1].Username);
+            Assert.True(Configuration.Authentication.Users[1].ValidatePassword("abc"));
         }
 
         [Fact]
         public void Services()
         {
-            Assert.Equal("DOMAIN", Configuration.Services.NetworkImpersonation.Domain);
-            Assert.Equal("Account Name", Configuration.Services.NetworkImpersonation.Username);
-            Assert.Equal("admin", Configuration.Services.NetworkImpersonation.GetPassword());
+            Assert.False(Configuration.Services.NetworkImpersonation.IsEnabled());
+            Assert.Empty(Configuration.Services.NetworkImpersonation.Domain);
+            Assert.Empty(Configuration.Services.NetworkImpersonation.Username);
+            Assert.Empty(Configuration.Services.NetworkImpersonation.GetPassword());
 
             Assert.True(Configuration.Services.BonjourEnabled);
             Assert.Equal("PC Name", Configuration.Services.BonjourName);

@@ -39,12 +39,13 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             model.Port = Int32.Parse(file.Element("port").Value);
             model.EnableIPv6 = file.Element("enableIPv6").Value == "true";
 
+            // Do not upgrade these, as the password has been encrypted with a different key in MPExtended 0.4.3
             model.NetworkImpersonation = new NetworkImpersonation()
             {
-                Domain = file.Element("networkImpersonation").Element("domain").Value,
-                Username = file.Element("networkImpersonation").Element("username").Value,
-                EncryptedPassword = file.Element("networkImpersonation").Element("password").Value,
-                ReadInStreamingService = file.Element("networkImpersonation").Element("readInStreamingService").Value == "true"
+                Domain = String.Empty,
+                Username = String.Empty,
+                EncryptedPassword = String.Empty,
+                ReadInStreamingService = true
             };
 
             return model;
