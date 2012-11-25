@@ -5,6 +5,10 @@
       <username>admin</username>
       <password>VF4iJh8Ccd//JDuWSygi/A==</password>
     </user>
+    <user>
+      <username>abc</username>
+      <password>4f1CxoOKXeooRA4IWeRI9g==</password>
+    </user>
   </users>
 
   <!-- Use this to use a different user for accessing network shares -->

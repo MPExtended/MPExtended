@@ -63,16 +63,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
             cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
-            cbAutoDetectExternalIp.IsChecked = Configuration.Services.ExternalAddress.Autodetect;
 
-            if (Configuration.Services.ExternalAddress.Autodetect)
-            {
-                GetExternalAddress();
-            }
-            else
-            {
+            // if autodetection is enabled, setting this property fires the _Checked event which loads the address
+            cbAutoDetectExternalIp.IsChecked = Configuration.Services.ExternalAddress.Autodetect;
+            if (!Configuration.Services.ExternalAddress.Autodetect)
                 txtCustomExternalAddress.Text = Configuration.Services.ExternalAddress.Custom;
-            }
 
             // load dynamic data
             while (loadLanguagesWorker.IsBusy)

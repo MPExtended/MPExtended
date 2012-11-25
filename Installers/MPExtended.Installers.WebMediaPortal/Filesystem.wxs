@@ -52,14 +52,17 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.Config.XmlSerializers.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
                 </Component>
                 
                 <!-- Libraries for WebMP -->
                 <Component Id="Component_WWW_Libraries" Guid="75ab3f9d-d58f-40be-8b72-9e659222077b">
+                  <File Source="$(var.SolutionDir)\Libraries\Misc\Deusty.Net.dll" />
                   <File Source="$(var.SolutionDir)\Libraries\Misc\MoreLinq.dll" />
                   <File Source="$(var.SolutionDir)\Libraries\Misc\Newtonsoft.Json.dll" />
+                  <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
                   <File Source="$(var.SolutionDir)\Libraries\MVC\Microsoft.Web.Infrastructure.dll" />
                   <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.dll" />
                   <File Source="$(var.SolutionDir)\Libraries\MVC\System.Web.ApplicationServices.dll" />

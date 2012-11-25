@@ -105,7 +105,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string preferedItem = (string)DataReaders.ReadString(reader, index + 1);
             if (!String.IsNullOrEmpty(preferedItem))
             {
-                preferedItem = preferedItem.Substring(1);
+                if (preferedItem.StartsWith("\\"))
+                    preferedItem = preferedItem.Substring(1);
                 if (!items.Contains(preferedItem))
                     items = items.Concat(new List<string>() { preferedItem });
             }

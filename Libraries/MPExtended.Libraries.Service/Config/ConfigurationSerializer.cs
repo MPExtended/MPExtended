@@ -64,7 +64,7 @@ namespace MPExtended.Libraries.Service.Config
             this._instanceLock = new object();
         }
 
-        public void LoadIfExists()
+        public virtual void LoadIfExists()
         {
             if (File.Exists(Path.Combine(Installation.Properties.ConfigurationDirectory, Filename)))
                 CreateInstance();
@@ -272,6 +272,29 @@ namespace MPExtended.Libraries.Service.Config
         public ConfigurationSerializer(ConfigurationFile file, string filename)
             : this(file, filename, null)
         {
+        }
+
+        public override void LoadIfExists()
+        {
+            string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+            if (File.Exists(path) || upgradeFilename == null)
+            {
+                base.LoadIfExists();
+                return;
+            }
+
+            var upgrader = new TUpgrader();
+            upgrader.OldPath = Path.Combine(Installation.Properties.ConfigurationDirectory, upgradeFilename);
+            upgrader.DefaultPath = Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename);
+
+            if (upgrader.CanUpgrade())
+            {
+                Log.Info("Config file {0} doesn't exist, creating from old config file {1}", Filename, upgradeFilename);
+                TModel model = upgrader.PerformUpgrade();
+                Save(model);
+            }
+
+            base.LoadIfExists();
         }
 
         protected override void CreateNonExistingFile(string path)

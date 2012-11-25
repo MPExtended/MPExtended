@@ -41,8 +41,10 @@
               <Directory Id="BinDirectory" Name="bin">
                 <!-- Binaries for WebMP -->
                 <Component Id="Component_WWW_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\Deusty.Net.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MoreLinq.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\Newtonsoft.Json.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\ZeroconfService.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.pdb" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Client.dll" />
@@ -54,6 +56,7 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Service.Config.XmlSerializers.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
                 </Component>

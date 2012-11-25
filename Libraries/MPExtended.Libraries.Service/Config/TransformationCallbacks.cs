@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.Config
@@ -72,7 +73,15 @@ namespace MPExtended.Libraries.Service.Config
 
         internal static string Decrypt(string input)
         {
-            return Encryption.Decrypt(PASSWORD_KEY, input);
+            try
+            {
+                return Encryption.Decrypt(PASSWORD_KEY, input);
+            }
+            catch (CryptographicException ex)
+            {
+                Log.Warn("Failed to decrypt string from configuration file", ex);
+                return String.Empty;
+            }
         }
     }
 }

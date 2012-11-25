@@ -30,6 +30,7 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             var file = XElement.Load(OldPath);
             var model = new WebMediaPortalHosting();
 
+            model.EnableTLS = false;
             model.Port = Int32.Parse(file.Element("port").Value);
 
             return model;
