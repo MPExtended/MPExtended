@@ -87,7 +87,7 @@ namespace MPExtended.Services.MetaService
         #endregion
 
         #region IMetaService implementation
-        private const int API_VERSION = 4;
+        private const int API_VERSION = 5;
 
         public WebBoolResult TestConnection()
         {

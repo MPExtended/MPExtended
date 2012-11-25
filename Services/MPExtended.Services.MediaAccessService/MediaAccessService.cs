@@ -45,7 +45,7 @@ namespace MPExtended.Services.MediaAccessService
     public class MediaAccessService : ProviderHandler, IMediaAccessService
     {
         #region General
-        private const int API_VERSION = 4;
+        private const int API_VERSION = 5;
 
         private ILibrary GetLibrary(int? provider, WebMediaType type)
         {

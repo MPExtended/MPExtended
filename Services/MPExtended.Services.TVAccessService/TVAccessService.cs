@@ -37,7 +37,7 @@ namespace MPExtended.Services.TVAccessService
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class TVAccessService : ITVAccessService, ISingletonService
     {
-        private const int API_VERSION = 4;
+        private const int API_VERSION = 5;
 
         #region Service
         public static ITVAccessService Instance { get; private set; }
