@@ -47,7 +47,7 @@ namespace MPExtended.Libraries.Service.Shared
                 Available = (float)Math.Round(freeBytes / 1024.0 / 1024 / 1024, 2),
                 Size = (float)Math.Round(totalBytes / 1024.0 / 1024 / 1024, 2),
                 Used = (float)Math.Round((totalBytes - freeBytes) / 1024.0 / 1024 / 1024, 2),
-                PercentageUsed = totalBytes > 0 ? (float)(100 - Math.Round((float)freeBytes / (float)totalBytes * 100, 1)) : (float)100
+                PercentageUsed = totalBytes > 0 ? (float)(100 - Math.Round((float)freeBytes / (float)totalBytes * 100, 1)) : (float)0
             };
         }
     }
