@@ -8,29 +8,24 @@
     <div class="item">
         @Html.Partial("NewMovies", Model.GetLastAddedMovies(4))
     </div>
-    <br class="noFloat" />
 
     <div class="item">
         @Html.Partial("NewEpisodes", Model.GetLastAiredTVEpisodes(4))
     </div>
-    <br class="noFloat" />
 
     <div class="item">
         @Html.Partial("NewAlbums", Model.GetLastAddedAlbums(4))
     </div>
-    <br class="noFloat" />
 
 	@* Disable them for now because they make the homepage overly crowded
     <div class="item">
         @Html.Partial("NewMusicTracks", Model.GetLastAddedMusicTracks(4))
     </div>
-    <br class="noFloat" />
 	*@
     
     <div class="item">
         @Html.Partial("NewRecordings", Model.GetLastRecordings(4))
     </div>
-    <br class="noFloat" />
 
     <div class="item">
         @Html.Partial("CurrentSchedules", Model.GetTodaysSchedules())

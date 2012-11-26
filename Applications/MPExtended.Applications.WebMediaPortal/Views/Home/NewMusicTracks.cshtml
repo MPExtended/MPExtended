@@ -5,11 +5,11 @@
 @if (ViewBag.Availability.Music && Model.Count() > 0)
 {
     <h2>@Html.ActionLink(UIStrings.LatestTracks, "NewMusicTracks", "Home", new { count = 50 }, new { })</h2>
-    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
+    <div class="dotted-line"></div>
     <div>
         @foreach (var track in Model)
         {
-            <div class="column" style="text-align: center;">
+            <div class="column">
                 <div class="row" style="height: 55px; width: 150px;">
                     @Html.ActionLink(track.Track.Artist.First(), "Track", "MusicLibrary", new { track = track.Track.Id }, null)
                 </div>

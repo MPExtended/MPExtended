@@ -5,11 +5,11 @@
 @if (ViewBag.Availability.Music && Model.Count() > 0)
 {
     <h2>@Html.ActionLink(UIStrings.LatestAlbums, "NewAlbums", "Home", new { count = 50 }, new { })</h2>
-    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
+    <div class="dotted-line"></div>
     <div>
         @foreach (var album in Model)
         {
-            <div class="column" style="text-align: center;">
+            <div class="column">
                 <div class="row">
                     <a href="@Url.Action("Album", "MusicLibrary", new { album = album.Album.Id }, null)">
                         <img class="img" width="150" height="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Album.Id, width = 150 })" alt="No image" />

@@ -5,11 +5,11 @@
 @if (ViewBag.Availability.TVShows && Model.Count() > 0)
 {
     <h2>@Html.ActionLink(UIStrings.LatestEpisodes, "NewEpisodes", "Home", new { count = 50 }, new { })</h2>
-    <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
+    <div class="dotted-line"></div>
     <div>
         @foreach (var episode in Model)
         {
-            <div class="column" style="text-align: center; height: 165px;">
+            <div class="column">
                 <div class="row">
                     <a href="@Url.Action("Details", "TVShowsLibrary", new { episode = episode.Id }, null)"> 
                         <img class="img" width="150" height="84" src="@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = episode.Id, width = 150 })" alt="No image" />

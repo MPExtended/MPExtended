@@ -3,9 +3,11 @@
     margin-top: 15px;
 }
 
-br.noFloat
+.dotted-line 
 {
-    clear: both;
+    border-top: 1px dotted #8A8575; 
+    width: 675px; 
+    margin-bottom: 10px;
 }
 
 .row
@@ -15,10 +17,11 @@ br.noFloat
 
 .column
 {
-    float: left;
-    margin-right: 25px;
+    text-align: center;
+    margin: 0 25px 8px 0;
     max-width: 150px;
-    display: inline;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .img
