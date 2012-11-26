@@ -114,11 +114,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
+        public bool Accessible
+        {
+            get
+            {
+                return Connections.Current.MASStreamControl.GetItemSupportStatus(WebMediaType.TVEpisode, Episode.PID, Episode.Id, 0).Supported;
+            }
+        }
+
         public string Quality
         {
             get
             {
-                return MediaInfoFormatter.GetShortQualityName(MediaInfo);
+                return MediaInfoFormatter.GetShortQualityName(Accessible, MediaInfo);
             }
         }
 
@@ -126,7 +134,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return MediaInfoFormatter.GetFullInfoString(MediaInfo, FileInfo);
+                return MediaInfoFormatter.GetFullInfoString(Accessible, MediaInfo, FileInfo);
             }
         }
 

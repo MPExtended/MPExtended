@@ -5,6 +5,7 @@
 @if (ViewBag.Availability.TAS && Model.Count() > 0)
 {
     <h2>@UIStrings.TodaysSchedules</h2>
+    <div class="dotted-line"></div>
     <div>
         <ul>
             @foreach (var schedule in Model)

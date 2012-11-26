@@ -37,15 +37,17 @@ namespace MPExtended.Libraries.Service.Shared
         public static WebDiskSpaceInformation GetSpaceInformation(string directory)
         {
             ulong freeBytes, totalBytes, freeBytesAvailable;
-            GetDiskFreeSpaceEx(directory, out freeBytesAvailable, out totalBytes, out freeBytes);
+            directory = Path.GetPathRoot(directory);
+            if (!GetDiskFreeSpaceEx(directory, out freeBytesAvailable, out totalBytes, out freeBytes))
+                Log.Warn("GetDiskFreeSpaceEx failed (0x{0:x8})", Marshal.GetLastWin32Error());
 
             return new WebDiskSpaceInformation()
             {
-                Disk = Path.GetPathRoot(directory),
+                Disk = directory,
                 Available = (float)Math.Round(freeBytes / 1024.0 / 1024 / 1024, 2),
                 Size = (float)Math.Round(totalBytes / 1024.0 / 1024 / 1024, 2),
                 Used = (float)Math.Round((totalBytes - freeBytes) / 1024.0 / 1024 / 1024, 2),
-                PercentageUsed = (float)(100 - Math.Round((float)freeBytes / (float)totalBytes * 100, 1))
+                PercentageUsed = totalBytes > 0 ? (float)(100 - Math.Round((float)freeBytes / (float)totalBytes * 100, 1)) : (float)0
             };
         }
     }

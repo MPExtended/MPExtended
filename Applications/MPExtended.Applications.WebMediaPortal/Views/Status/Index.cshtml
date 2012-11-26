@@ -56,7 +56,7 @@
         <th>@UIStrings.DiskInfoAvailable</th>
     </tr>
 
-    @foreach (var disk in Model.DiskInformation)
+    @foreach (var disk in Model.DiskInformation.OrderBy(x => x.Disk))
     {
         <tr>
             <td>@disk.Disk</td>
@@ -89,8 +89,10 @@ $(function () {
             dataType: "json",
             cache: false,
             success: function (result) {
-                $("#cpuUsage").html(Math.round(result.CPU));
-                $("#memoryUsage").html(Math.round(result.Memory));
+                if (!('Error' in result)) {
+                    $("#cpuUsage").html(Math.round(result.CPU));
+                    $("#memoryUsage").html(Math.round(result.Memory));
+                }
             }
         });
     };

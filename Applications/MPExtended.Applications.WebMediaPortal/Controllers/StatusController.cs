@@ -23,6 +23,7 @@ using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
@@ -86,12 +87,20 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public JsonResult GetPerformanceCounters()
         {
-            var returnObject = new
+            try
             {
-                CPU = cpuCounter.NextValue(),
-                Memory = totalMemory - memoryCounter.NextValue()
-            };
-            return Json(returnObject, JsonRequestBehavior.AllowGet);
+                var returnObject = new
+                {
+                    CPU = cpuCounter.NextValue(),
+                    Memory = totalMemory - memoryCounter.NextValue()
+                };
+                return Json(returnObject, JsonRequestBehavior.AllowGet);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Log.Info("Failed to read performance counters, got UnauthorizedAccessException");
+                return Json(new { Error = true }, JsonRequestBehavior.AllowGet);
+            }
         } 
     }
 }

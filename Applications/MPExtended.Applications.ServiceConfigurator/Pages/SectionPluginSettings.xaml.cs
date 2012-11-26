@@ -160,7 +160,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             Button btnSelectFile = new Button();
             btnSelectFile.Click += new RoutedEventHandler(btnSelectFile_Click);
-            btnSelectFile.Content = UI.Select;
+            btnSelectFile.Content = UI.Browse;
             btnSelectFile.VerticalAlignment = VerticalAlignment.Top;
             btnSelectFile.HorizontalAlignment = HorizontalAlignment.Right;
             btnSelectFile.Margin = new Thickness(0, rowHeight, 10, 0);
