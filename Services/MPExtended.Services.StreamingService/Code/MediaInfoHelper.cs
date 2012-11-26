@@ -69,8 +69,8 @@ namespace MPExtended.Services.StreamingService.Code
                     DisplayAspectRatioString = "16:9",
                     ID = 2,
                     Index = 0,
-                    Height = 1280, // gives this any problems?
-                    Width = 720
+                    Height = 720,
+                    Width = 1280
                 }
             };
             return surr;
