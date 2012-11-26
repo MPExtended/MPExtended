@@ -42,8 +42,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public bool ValidForRequest(HttpRequestBase request)
         {
+            // TODO: We need to find a better solution for this
             if (Name == "mobile-hls-video")
-                return request.UserAgent.Contains("iPhone") || request.UserAgent.Contains("iPad") || request.UserAgent.Contains("iPod");
+                return request.UserAgent.Contains("iPhone") || request.UserAgent.Contains("iPad") || request.UserAgent.Contains("iPod") || request.UserAgent.Contains("Mac OS X");
 
             return true;
         }
