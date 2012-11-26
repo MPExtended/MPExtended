@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
@@ -54,9 +55,11 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         {
             if (!tags.ContainsKey(resolvedPath))
             {
+                var uri = resolvedPath + "?v=" + VersionUtil.GetBuildVersion().GetHashCode().ToString();
+
                 TagBuilder builder = new TagBuilder("script");
                 builder.MergeAttribute("type", "text/javascript");
-                builder.MergeAttribute("src", resolvedPath);
+                builder.MergeAttribute("src", uri);
                 tags.Add(resolvedPath, builder.ToString(TagRenderMode.Normal));
             }
 
@@ -89,10 +92,12 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         {
             if (!tags.ContainsKey(resolvedPath))
             {
+                var uri = resolvedPath + "?v=" + VersionUtil.GetBuildVersion().GetHashCode().ToString();
+
                 TagBuilder builder = new TagBuilder("link");
                 builder.MergeAttribute("rel", "stylesheet");
                 builder.MergeAttribute("type", "text/css");
-                builder.MergeAttribute("href", resolvedPath);
+                builder.MergeAttribute("href", uri);
                 tags.Add(resolvedPath, builder.ToString(TagRenderMode.SelfClosing));
             }
 
