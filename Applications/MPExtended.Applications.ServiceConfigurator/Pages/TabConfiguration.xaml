@@ -19,7 +19,7 @@
 
         <GroupBox Header="{x:Static strings:UI.Autodetection}" Height="299" HorizontalAlignment="Left" Margin="323,12,0,0" Name="gbAutodetection" VerticalAlignment="Top" Width="300">
             <Grid>
-                <TextBlock TextWrapping="Wrap" Height="149" HorizontalAlignment="Left" Margin="10,10,0,0" Name="tbAutodetection" VerticalAlignment="Top" Width="272">
+                <TextBlock TextWrapping="Wrap" Height="149" Margin="6,6,6,0" Name="tbAutodetection" VerticalAlignment="Top" Width="272">
                     <!-- This text is automatically updated at runtime -->
                     <Run Text="{x:Static strings:UI.AutodetectionText}" />
                     <LineBreak />
@@ -27,10 +27,10 @@
                     <Run Text="{x:Static strings:UI.BonjourChecking}" />
                 </TextBlock>
 
-                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="12,165,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" IsEnabled="false" Width="270" />
-                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="6,187,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="false" Width="276" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="10,221,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="272" IsEnabled="false" />
-                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Right" Margin="0,250,48,0" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Top" Width="228" />
+                <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="8,176,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" IsEnabled="false" Width="270" />
+                <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="4,195,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="false" Width="276" />
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="8,221,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="272" IsEnabled="false" />
+                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Left" Margin="8,250,0,0" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Top" Width="228" />
             </Grid>
         </GroupBox>
 
@@ -50,9 +50,9 @@
 
         <GroupBox Header="{x:Static strings:UI.ExternalIpLabel}" Height="96" HorizontalAlignment="Left" Margin="323,317,0,0" VerticalAlignment="Top" Width="300">
             <Grid>
-                <CheckBox Content="{x:Static strings:UI.ExternalIpDefault}" Height="16" HorizontalAlignment="Left" Margin="10,10,0,0" Name="cbAutoDetectExternalIp" VerticalAlignment="Top" Width="272" Checked="cbAutoDetectExternalIp_Checked" Unchecked="cbAutoDetectExternalIp_Unchecked" />
-                <Label Content="{x:Static strings:UI.ExternalIpCustom}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="6,32,0,0" Name="label1" VerticalAlignment="Top" Width="124" />
-                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="147,34,0,0" Name="txtCustomExternalAddress" Text="" VerticalAlignment="Top" Width="135" />
+                <CheckBox Content="{x:Static strings:UI.ExternalIpDefault}" Height="16" HorizontalAlignment="Left" Margin="8,10,0,0" Name="cbAutoDetectExternalIp" VerticalAlignment="Top" Width="272" Checked="cbAutoDetectExternalIp_Checked" Unchecked="cbAutoDetectExternalIp_Unchecked" />
+                <Label Content="{x:Static strings:UI.ExternalIpCustom}" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="4,32,0,0" Name="label1" VerticalAlignment="Top" Width="124" />
+                <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="True" IsReadOnly="False" Margin="145,34,0,0" Name="txtCustomExternalAddress" Text="" VerticalAlignment="Top" Width="137" />
             </Grid>
         </GroupBox>
 
