@@ -30,6 +30,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     {
         private static string[] units = new string[] { "B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB" };
 
+        public static string GetShortQualityName(bool accessible, WebMediaInfo info)
+        {
+            return accessible ? GetShortQualityName(info) : "Inaccessible";
+        }
+
         public static string GetShortQualityName(WebMediaInfo info)
         {
             if (!info.VideoStreams.Any())
@@ -44,9 +49,19 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             return "SD";
         }
 
+        public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebFileInfo fileInfo)
+        {
+            return accessible ? GetFullInfoString(info, fileInfo) : "Inaccessible";
+        }
+
         public static string GetFullInfoString(WebMediaInfo info, WebFileInfo fileInfo)
         {
             return GetFullInfoString(info, fileInfo.Size);
+        }
+
+        public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebRecordingFileInfo fileInfo)
+        {
+            return accessible ? GetFullInfoString(info, fileInfo) : "Inaccessible";
         }
 
         public static string GetFullInfoString(WebMediaInfo info, WebRecordingFileInfo fileInfo)
