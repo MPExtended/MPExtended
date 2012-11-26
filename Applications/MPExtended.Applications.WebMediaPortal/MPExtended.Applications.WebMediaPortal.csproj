@@ -102,6 +102,7 @@
     <Compile Include="Code\Connections.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
+    <Compile Include="Models\MediaItemModel.cs" />
     <Compile Include="Models\ServiceSetModel.cs" />
     <Compile Include="Models\SiteViewModels.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />

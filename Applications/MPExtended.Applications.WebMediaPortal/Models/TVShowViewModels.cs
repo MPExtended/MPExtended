@@ -81,70 +81,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
     }
 
-    public class TVEpisodeViewModel
+    public class TVEpisodeViewModel : MediaItemModel
     {
-        private WebMediaInfo mediaInfo;
-        private WebFileInfo fileInfo;
-
         // TODO: Lazy-load these
         public WebTVShowDetailed Show { get; private set; }
         public WebTVSeasonDetailed Season { get; private set; }
         public WebTVEpisodeDetailed Episode { get; private set; }
 
-        // See MovieViewModel for rationale behind making these a property
-        public WebFileInfo FileInfo
-        {
-            get
-            {
-                if (fileInfo == null)
-                    fileInfo = Connections.Current.MAS.GetFileInfo(Episode.PID, WebMediaType.TVEpisode, WebFileType.Content, Episode.Id, 0);
-
-                return fileInfo;
-            }
-        }
-
-        public WebMediaInfo MediaInfo
-        {
-            get
-            {
-                if (mediaInfo == null)
-                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.TVEpisode, Episode.PID, Episode.Id, 0);
-
-                return mediaInfo;
-            }
-        }
-
-        public bool Accessible
-        {
-            get
-            {
-                return Connections.Current.MASStreamControl.GetItemSupportStatus(WebMediaType.TVEpisode, Episode.PID, Episode.Id, 0).Supported;
-            }
-        }
-
-        public string Quality
-        {
-            get
-            {
-                return MediaInfoFormatter.GetShortQualityName(Accessible, MediaInfo);
-            }
-        }
-
-        public string FullQuality
-        {
-            get
-            {
-                return MediaInfoFormatter.GetFullInfoString(Accessible, MediaInfo, FileInfo);
-            }
-        }
-
-        public string Id
-        {
-            get
-            {
-                return Episode.Id;
-            }
-        }
+        protected override WebMediaItem Item { get { return Episode; } }
 
         public TVEpisodeViewModel(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
