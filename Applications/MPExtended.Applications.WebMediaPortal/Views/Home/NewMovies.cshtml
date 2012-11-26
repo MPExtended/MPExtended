@@ -2,7 +2,7 @@
            
 @Html.Assets().AddViewStylesheet("Home/Index.css")
 
-@if (ViewBag.Availability.Movies)
+@if (ViewBag.Availability.Movies && Model.Count() > 0)
 {
     <h2>@Html.ActionLink(UIStrings.LatestMovies, "NewMovies", "Home", new { count = 50 }, new { })</h2>
     <div style="border-top: 1px dotted #8A8575; width: 675px; margin-bottom: 10px"></div>
