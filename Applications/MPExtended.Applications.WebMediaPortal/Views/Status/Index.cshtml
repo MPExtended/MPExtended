@@ -89,8 +89,10 @@ $(function () {
             dataType: "json",
             cache: false,
             success: function (result) {
-                $("#cpuUsage").html(Math.round(result.CPU));
-                $("#memoryUsage").html(Math.round(result.Memory));
+                if (!('Error' in result)) {
+                    $("#cpuUsage").html(Math.round(result.CPU));
+                    $("#memoryUsage").html(Math.round(result.Memory));
+                }
             }
         });
     };
