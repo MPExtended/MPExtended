@@ -71,7 +71,8 @@ namespace MPExtended.Libraries.Service.Shared
 
         public void WriteToCacheDirectory(string channelName, string logoFormat, Stream logo)
         {
-            string path = Path.Combine(GetCacheDirectory(), String.Format("{0}.{1}", channelName, logoFormat));
+            string fileName = PathUtil.StripInvalidCharacters(channelName, '_');
+            string path = Path.Combine(GetCacheDirectory(), String.Format("{0}.{1}", fileName, logoFormat));
             if (!File.Exists(path))
             {
                 using (FileStream writeStream = File.Open(path, FileMode.CreateNew, FileAccess.Write))
