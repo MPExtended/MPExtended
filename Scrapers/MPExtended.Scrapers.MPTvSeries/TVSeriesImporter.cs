@@ -651,18 +651,18 @@ namespace MPExtended.Scrapers.TVSeries
 
         public List<WebScraperItem> GetScraperItems()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public List<WebScraperAction> GetScraperActions()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
 
         public WebBoolResult InvokeScraperAction(string itemId, string actionId)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

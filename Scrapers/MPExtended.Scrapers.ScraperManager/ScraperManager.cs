@@ -10,6 +10,7 @@ using MPExtended.Services.ScraperService.Interfaces;
 using System.ServiceModel;
 using BrightIdeasSoftware;
 using MPExtended.Services.Common.Interfaces;
+using System.ServiceModel.Security;
 
 namespace MPExtended.Scrapers.ScraperManager
 {
@@ -22,6 +23,7 @@ namespace MPExtended.Scrapers.ScraperManager
         private List<WebScraperInputRequest> requests;
         private SearchResultForm dialog;
         private List<WebScraperItem> _listItems;
+        private bool _isConnected;
 
         private IScraperService Proxy
         {
@@ -58,10 +60,10 @@ namespace MPExtended.Scrapers.ScraperManager
                     binding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
                     binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
 
-                    var endpointAddress = new EndpointAddress("http://10.1.0.166:4322/MPExtended/ScraperService");
+                    var endpointAddress = new EndpointAddress(String.Format("http://{0}/MPExtended/ScraperService", txtServiceAddress.Text));
                     var factory = new ChannelFactory<IScraperService>(binding, endpointAddress);
-                    factory.Credentials.UserName.UserName = "diebagger";
-                    factory.Credentials.UserName.Password = "Opperate20";
+                    factory.Credentials.UserName.UserName = txtServiceUser.Text; ;
+                    factory.Credentials.UserName.Password = txtServicePass.Text;
 
 
                     proxyChannel = factory.CreateChannel();
@@ -98,16 +100,6 @@ namespace MPExtended.Scrapers.ScraperManager
 
             _listItems = new List<WebScraperItem>();
             olvScraperItems.SetObjects(_listItems);
-
-            IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
-
-            foreach (WebScraper s in scrapers)
-            {
-                cbAvailableScrapers.Items.Add(s);
-            }
-
-            cbAvailableScrapers.SelectedIndex = 0;
-            timerUpdateScraperState.Start();
         }
 
         private void cmdConnect_Click(object sender, EventArgs e)
@@ -172,7 +164,7 @@ namespace MPExtended.Scrapers.ScraperManager
         {
             try
             {
-                if (Proxy != null)
+                if (Proxy != null && selected != null)
                 {
                     currentStatus = Proxy.GetScraperStatus(selected.ScraperId);
                     tsCurrentStatus.Text = currentStatus.CurrentAction;
@@ -213,8 +205,10 @@ namespace MPExtended.Scrapers.ScraperManager
                     }
 
                     List<WebScraperItem> items = Proxy.GetScraperItems(selected.ScraperId);
-                        UpdateItems(items);                  
-                    
+                    if (items != null)
+                    {
+                        UpdateItems(items);
+                    }
                 }
 
             }
@@ -392,6 +386,58 @@ namespace MPExtended.Scrapers.ScraperManager
             WebScraperAction action = e.ClickedItem.Tag as WebScraperAction;
 
             Proxy.InvokeScraperAction(selected.ScraperId, item.ItemId, action.ActionId);
+        }
+
+        private void cmdConnect_Click_1(object sender, EventArgs e)
+        {
+            if (!_isConnected)
+            {
+                ConnectToScraper();
+            }
+            else
+            {
+                DisconnectScraper();
+            }
+            
+        }
+
+        private void DisconnectScraper()
+        {
+            timerUpdateScraperState.Stop();
+            cmdConnect.Text = "Connect";
+            _isConnected = true;
+            proxyChannel = null;
+        }
+
+        private void ConnectToScraper()
+        {
+            try
+            {
+                IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
+
+                foreach (WebScraper s in scrapers)
+                {
+                    cbAvailableScrapers.Items.Add(s);
+                }
+
+                if (cbAvailableScrapers.Items.Count > 0)
+                {
+                    cbAvailableScrapers.SelectedIndex = 0;
+                }
+                timerUpdateScraperState.Start();
+                cmdConnect.Text = "Disconnect";
+                _isConnected = true;
+            }
+            catch (MessageSecurityException)
+            {
+                MessageBox.Show("Wrong username/password");
+                proxyChannel = null;
+            }
+            catch (EndpointNotFoundException)
+            {
+                MessageBox.Show("Couldn't connect to server");
+                proxyChannel = null;
+            }
         }
     }
 }

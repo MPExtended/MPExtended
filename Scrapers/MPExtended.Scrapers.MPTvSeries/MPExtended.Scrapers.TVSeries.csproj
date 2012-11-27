@@ -37,6 +37,9 @@
     <Reference Include="Core">
       <HintPath>..\..\Libraries\Scrapers\Core.dll</HintPath>
     </Reference>
+    <Reference Include="Databases">
+      <HintPath>..\..\Libraries\Scrapers\Databases.dll</HintPath>
+    </Reference>
     <Reference Include="FollwitApi">
       <HintPath>..\..\Libraries\Scrapers\FollwitApi.dll</HintPath>
     </Reference>
