@@ -5,29 +5,41 @@
 <h3>@UIStrings.Welcome</h3>
 
 <div class="home">
-    <div class="item">
-        @Html.Partial("NewMovies", Model.GetLastAddedMovies(4))
-    </div>
+    @if (ViewBag.Availability.Movies)
+    {
+        <div class="item">
+            @Html.Partial("NewMovies", Model.GetLastAddedMovies(4))
+        </div>
+    }
 
-    <div class="item">
-        @Html.Partial("NewEpisodes", Model.GetLastAiredTVEpisodes(4))
-    </div>
+    @if (ViewBag.Availability.TVShows)
+    {
+        <div class="item">
+            @Html.Partial("NewEpisodes", Model.GetLastAiredTVEpisodes(4))
+        </div>
+    }
 
-    <div class="item">
-        @Html.Partial("NewAlbums", Model.GetLastAddedAlbums(4))
-    </div>
+    @if (ViewBag.Availability.Music)
+    {
+        <div class="item">
+            @Html.Partial("NewAlbums", Model.GetLastAddedAlbums(4))
+        </div>
 
-	@* Disable them for now because they make the homepage overly crowded
-    <div class="item">
-        @Html.Partial("NewMusicTracks", Model.GetLastAddedMusicTracks(4))
-    </div>
-	*@
+	    @* Disable them for now because they make the homepage overly crowded
+        <div class="item">
+            @Html.Partial("NewMusicTracks", Model.GetLastAddedMusicTracks(4))
+        </div>
+	    *@
+    }
     
-    <div class="item">
-        @Html.Partial("NewRecordings", Model.GetLastRecordings(4))
-    </div>
+    @if (ViewBag.Availability.TAS)
+    {
+        <div class="item">
+            @Html.Partial("NewRecordings", Model.GetLastRecordings(4))
+        </div>
 
-    <div class="item">
-        @Html.Partial("CurrentSchedules", Model.GetTodaysSchedules())
-    </div>
+        <div class="item">
+            @Html.Partial("CurrentSchedules", Model.GetTodaysSchedules())
+        </div>
+    }
 </div>
