@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Services.ScraperService.Interfaces;
-using MPExtended.Scrapers.TVSeries;
 using MPExtended.Libraries.Service;
 using System.Diagnostics;
 using MPExtended.Libraries.Service.Hosting;
@@ -72,7 +71,7 @@ namespace MPExtended.Services.ScraperService
 
             StartMopiCommandLine();
 
-            mDownloaderScraper = new ItemDownloader("lyfesaver.net:4322", "diebagger", "Addicted20");
+            //mDownloaderScraper = new ItemDownloader("lyfesaver.net:4322", "diebagger", "Addicted20");
 
             ServiceState.Stopping += new ServiceState.ServiceStoppingEventHandler(ServiceState_Stopping);
         }
@@ -83,6 +82,7 @@ namespace MPExtended.Services.ScraperService
         private void StartMpTvSeriesCommandLine()
         {
             String file = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\MpTvSeriesScraper\MPExtended.Scrapers.TVSeries.exe";
+            //String file = @"C:\Users\DieBagger\Documents\Projects\MediaPortal\MpExt\git\Scrapers\MPExtended.Scrapers.MPTvSeries\bin\Debug\MPExtended.Scrapers.TVSeries.exe";
             if (File.Exists(file))
             {
                 mTvSeriesCommandLine = new Process();
@@ -109,6 +109,8 @@ namespace MPExtended.Services.ScraperService
         private void StartMopiCommandLine()
         {
             String file = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\MovingPicturesScraper\MPExtended.Scrapers.MovingPictures.exe";
+
+            //String file = @"C:\Users\DieBagger\Documents\Projects\MediaPortal\MpExt\git\Scrapers\MPExtended.Scrapers.MovingPictures\bin\Debug\MPExtended.Scrapers.MovingPictures.exe";
             if (File.Exists(file))
             {
                 String current = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -179,7 +181,7 @@ namespace MPExtended.Services.ScraperService
             IList<WebScraper> scrapers = new List<WebScraper>();
             AddScraper(scrapers, 0);
             AddScraper(scrapers, 1);
-            AddScraper(scrapers, 2);
+            //AddScraper(scrapers, 2);
             return scrapers;
         }
 
