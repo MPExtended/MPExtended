@@ -75,6 +75,7 @@
     <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderHandler.cs" />
+    <Compile Include="ServicePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
