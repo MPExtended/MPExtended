@@ -70,8 +70,7 @@
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Finalization.cs" />
-    <Compile Include="ILibraryList.cs" />
-    <Compile Include="LazyLibraryList.cs" />
+    <Compile Include="LibraryList.cs" />
     <Compile Include="MediaAccessService.cs" />
     <Compile Include="PluginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

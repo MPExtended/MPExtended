@@ -21,43 +21,41 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Composition;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
 {
-    internal class LazyLibraryList<T> : ILibraryList<T> where T : ILibrary
+    public interface ILibraryList<T> where T : ILibrary
     {
-        private IDictionary<int, Lazy<T, IDictionary<string, object>>> items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
+        List<WebBackendProvider> GetAllAsBackendProvider();
+        int GetKeyByName(string name);
+        IEnumerable<WebSearchResult> SearchAll(string text);
+        T this[int? key] { get; }
+    }
+
+    internal class LibraryList<T> : ILibraryList<T> where T : ILibrary
+    {
+        private IDictionary<int, Plugin<T>> items;
         private ProviderType type;
 
-        public LazyLibraryList(ProviderType type)
+        public LibraryList(IDictionary<int, Plugin<T>> dict, ProviderType providerType) 
         {
-            this.type = type;
-        }
+            type = providerType;
 
-        public LazyLibraryList(IDictionary<int, Lazy<T, IDictionary<string, object>>> dict, ProviderType type) 
-            : this (type)
-        {
-            items = new Dictionary<int, Lazy<T, IDictionary<string, object>>>();
-            foreach (var item in dict)
+            items = new Dictionary<int, Plugin<T>>();
+            foreach (var plugin in dict)
             {
-                Add(item.Key, item.Value);
-            }
-        }
-
-        public void Add(int key, Lazy<T, IDictionary<string, object>> value) 
-        {
-            try
-            {
-                if (value.Value.Supported)
+                try
                 {
-                    items[key] = value;
+                    if (plugin.Value.Value.Supported)
+                        items[plugin.Key] = plugin.Value;
                 }
-            }
-            catch (Exception ex)
-            {
-                string name = value.Metadata.ContainsKey("Name") ? (string)value.Metadata["Name"] : "<unknown>";
-                Log.Error(String.Format("Failed to load plugin {0}", name), ex);
+                catch (Exception ex)
+                {
+                    string name = plugin.Value.Metadata.ContainsKey("Name") ? (string)plugin.Value.Metadata["Name"] : "<unknown>";
+                    Log.Error(String.Format("Failed to load plugin {0}", name), ex);
+                }
             }
         }
 
@@ -65,44 +63,16 @@ namespace MPExtended.Services.MediaAccessService
         {
             get
             {
-                return GetValue(key);
+                int realKey = key.HasValue ? key.Value : ProviderHandler.GetDefaultProvider(type);
+
+                if (!items.ContainsKey(realKey) || !items[realKey].Value.Supported)
+                {
+                    Log.Error("Tried to get library for unknown id {0}", key);
+                    return default(T);
+                }
+
+                return items[realKey].Value;
             }
-        }
-
-        public ICollection<int> Keys
-        {
-            get
-            {
-                return items.Select(x => x.Key).ToList();
-            }
-        }
-
-        public T GetValue(int? passedId)
-        {
-            int key = passedId.HasValue ? passedId.Value : ProviderHandler.GetDefaultProvider(type);
-
-            if (!items.ContainsKey(key) || !items[key].Value.Supported)
-            {
-                Log.Error("Tried to get library for unknown id {0}", key);
-                return default(T);
-            }
-
-            return items[key].Value;
-        }
-
-        public int Count()
-        {
-            return items.Count;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return items.Select(x => GetValue(x.Key)).GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         // more specific methods below
@@ -110,9 +80,7 @@ namespace MPExtended.Services.MediaAccessService
         {
             var list = items.Where(x => (string)x.Value.Metadata["Name"] == name);
             if (list.Count() > 0)
-            {
                 return list.First().Key;
-            }
 
             return 0;
         }
