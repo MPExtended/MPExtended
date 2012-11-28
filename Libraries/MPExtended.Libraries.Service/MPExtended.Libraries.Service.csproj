@@ -91,6 +91,7 @@
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
     <Compile Include="Hosting\IWcfService.cs" />
     <Compile Include="Hosting\IService.cs" />
+    <Compile Include="Hosting\ServiceInstallation.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Logging\LogDestination.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\GitVersion.cs" />
-    <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
     <Compile Include="Hosting\ServiceState.cs" />
     <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />

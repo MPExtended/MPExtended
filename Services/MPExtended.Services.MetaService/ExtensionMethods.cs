@@ -26,25 +26,26 @@ namespace MPExtended.Services.MetaService
 {
     internal static class ServiceConfigurationExtensionMethods
     {
+        private static Dictionary<string, WebService> knownServices = new Dictionary<string, WebService>()
+        {
+            { "MediaAccessService", WebService.MediaAccessService },
+            { "StreamingService", WebService.StreamingService },
+            { "TVAccessService", WebService.TVAccessService },
+            { "UserSessionService", WebService.UserSessionService },
+            { "MetaService", WebService.MetaService },
+            { "WifiRemote", WebService.WifiRemote }
+        };
+
+        public static bool IsKnownService(this ServiceConfiguration service)
+        {
+            return knownServices.ContainsKey(service.Service);
+        }
+
         public static WebService ToWebService(this ServiceConfiguration service)
         {
-            switch(service.Service)
-            {
-                case MPExtendedService.MediaAccessService:
-                    return WebService.MediaAccessService;
-                case MPExtendedService.StreamingService:
-                    return WebService.StreamingService;
-                case MPExtendedService.TVAccessService:
-                    return WebService.TVAccessService;
-                case MPExtendedService.UserSessionService:
-                    return WebService.UserSessionService;
-                case MPExtendedService.MetaService:
-                    return WebService.MetaService;
-                case MPExtendedService.WifiRemote:
-                    return WebService.WifiRemote;
-                default:
-                    throw new ArgumentException();
-            }
+            if (knownServices.ContainsKey(service.Service))
+                return knownServices[service.Service];
+            throw new ArgumentException();
         }
     }
 }

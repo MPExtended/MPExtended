@@ -69,7 +69,10 @@ namespace MPExtended.Libraries.Service.Hosting
                 Configuration.EnableChangeWatching();
 
                 // load and host all services
-                HostServices();
+                foreach (var service in ServiceInstallation.Instance.GetServices())
+                    Task.Factory.StartNew(CreateServiceHost, (object)service);
+                wcfHost = new WCFHost();
+                wcfHost.Start(ServiceInstallation.Instance.GetWcfServices());
 				
 				// ensure a service dependency on the TVEngine is set
                 Task.Factory.StartNew(TVEDependencyInstaller.EnsureDependencyIsInstalled);
@@ -89,25 +92,10 @@ namespace MPExtended.Libraries.Service.Hosting
             }
         }
 
-        private void HostServices()
-        {
-            var loader = new PluginLoader();
-            loader.AddFromTree("Services", "Services");
-            loader.AddRequiredMetadata("ServiceName");
-
-            var services = loader.GetPlugins<IService>();
-            foreach (var service in services)
-                Task.Factory.StartNew(CreateServiceHost, (object)service);
-
-            wcfHost = new WCFHost();
-            var wcfServices = loader.GetPlugins<IWcfService>();
-            wcfHost.Start(wcfServices);
-        }
-
         private void CreateServiceHost(object passedService)
         {
             var plugin = (Plugin<IService>)passedService;
-            Log.Debug("Opening service '{0}'", plugin.Metadata["ServiceName"]);
+            Log.Debug("Loading service {0}", plugin.Metadata["ServiceName"]);
 
             try
             {

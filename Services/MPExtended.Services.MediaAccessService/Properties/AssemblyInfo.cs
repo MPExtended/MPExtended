@@ -19,8 +19,3 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("0246be9b-9e77-49c8-9253-e63055ca4ed1")]
-
-// The hosting information
-[assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
-    Service = MPExtended.Libraries.Service.MPExtendedService.MediaAccessService,
-    WCFType = typeof(MPExtended.Services.MediaAccessService.MediaAccessService))]
