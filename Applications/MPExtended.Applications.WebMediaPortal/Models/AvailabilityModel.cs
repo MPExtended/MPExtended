@@ -48,9 +48,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             MAS = Connections.Current.HasMASConnection;
 
             var msd = Connections.Current.HasMASConnection ? Connections.Current.MAS.GetServiceDescription() : null;
-            Movies = MAS && msd.DefaultMovieLibrary != 0;
-            TVShows = MAS && msd.DefaultTvShowLibrary != 0;
-            Music = MAS && msd.DefaultMusicLibrary != 0;
+            Movies = MAS &&  (Settings.ActiveSettings.MovieProvider == null ? 
+                              msd.DefaultMovieLibrary != 0 : 
+                              msd.AvailableMovieLibraries.Any(x => x.Id == Settings.ActiveSettings.MovieProvider));
+            TVShows = MAS && (Settings.ActiveSettings.TVShowProvider == null ?
+                              msd.DefaultTvShowLibrary != 0 :
+                              msd.AvailableTvShowLibraries.Any(x => x.Id == Settings.ActiveSettings.TVShowProvider));
+            Music = MAS &&   (Settings.ActiveSettings.MusicProvider == null ?
+                              msd.DefaultMusicLibrary != 0 :
+                              msd.AvailableMusicLibraries.Any(x => x.Id == Settings.ActiveSettings.MusicProvider));
         }
     }
 }

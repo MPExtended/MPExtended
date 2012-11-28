@@ -97,7 +97,7 @@ namespace MPExtended.Services.MetaService
 
         private void DiscoverRemovedService(NetServiceBrowser browser, NetService service, bool moreComing)
         {
-            HandleDiscoverEvent(service, "Disappearance", ServiceFound);
+            HandleDiscoverEvent(service, "Disappearing", ServiceDisappeared);
         }
 
         private void DiscoverFoundService(NetServiceBrowser browser, NetService service, bool moreComing)

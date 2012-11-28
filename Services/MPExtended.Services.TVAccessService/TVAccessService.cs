@@ -808,9 +808,10 @@ namespace MPExtended.Services.TVAccessService
 
         public WebRecordingFileInfo GetRecordingFileInfo(int id)
         {
+            string filename = String.Empty;
             try
             {
-                string filename = GetRecordingById(id).FileName;
+                filename = GetRecordingById(id).FileName;
                 try
                 {
                     return new WebRecordingFileInfo(new FileInfo(filename));
@@ -829,6 +830,10 @@ namespace MPExtended.Services.TVAccessService
                         }
                     }
                 }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Log.Info("Failed to load fileinfo for recording {0} because it does not exists at path {1}", id, filename);
             }
             catch (Exception ex)
             {

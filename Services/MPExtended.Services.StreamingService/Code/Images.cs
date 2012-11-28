@@ -209,6 +209,10 @@ namespace MPExtended.Services.StreamingService.Code
                 case "jpeg":
                 case "jpg":
                     return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Jpeg.Guid);
+                case "gif":
+                    return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Gif.Guid);
+                case "bmp":
+                    return ImageCodecInfo.GetImageEncoders().First(enc => enc.FormatID == ImageFormat.Bmp.Guid);
                 default:
                     Log.Warn("Requested invalid file format '{0}'", format);
                     throw new ArgumentException(String.Format("Invalid file format '{0}'", format));
@@ -221,6 +225,14 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 case "png":
                     image.Save(path, ImageFormat.Png);
+                    break;
+
+                case "gif":
+                    image.Save(path, ImageFormat.Gif);
+                    break;
+
+                case "bmp":
+                    image.Save(path, ImageFormat.Bmp);
                     break;
 
                 case "jpeg":

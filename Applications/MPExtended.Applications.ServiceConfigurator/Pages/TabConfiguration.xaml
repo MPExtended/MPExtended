@@ -30,7 +30,7 @@
                 <CheckBox Content="{x:Static strings:UI.EnableAutodetection}" Height="16" HorizontalAlignment="Left" Margin="8,176,0,0" Name="cbBonjourEnabled" VerticalAlignment="Top" IsEnabled="false" Width="270" />
                 <Label Content="{x:Static strings:UI.ServiceName}" Height="28" HorizontalAlignment="Left" Margin="4,195,0,0" Name="lblServiceName" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="false" Width="276" />
                 <TextBox Height="23" HorizontalAlignment="Left" Margin="8,221,0,0" Name="txtServiceName" Text="" VerticalAlignment="Top" Width="272" IsEnabled="false" />
-                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Left" Margin="8,250,0,0" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Top" Width="228" />
+                <CheckBox Content="{x:Static strings:UI.AccessRequestEnable}" HorizontalAlignment="Left" Margin="8,250,0,0" Name="cbAccessRequestEnabled" Height="16" VerticalAlignment="Top" Width="270" />
             </Grid>
         </GroupBox>
 

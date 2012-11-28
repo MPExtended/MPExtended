@@ -119,7 +119,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     Type = args.FileType,
                     Path = path,
                     Offset = i++,
-                    Filetype = Path.GetExtension(path).Substring(1),
+                    Filetype = Path.GetExtension(path).Length > 0 ? Path.GetExtension(path).Substring(1) : String.Empty,
                     Rating = x == preferedItem ? 2 : 1,
                     Id = path.GetHashCode().ToString()
                 };
