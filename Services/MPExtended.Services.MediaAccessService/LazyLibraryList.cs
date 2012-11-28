@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService
@@ -84,7 +85,7 @@ namespace MPExtended.Services.MediaAccessService
             if (!items.ContainsKey(key) || !items[key].Value.Supported)
             {
                 Log.Error("Tried to get library for unknown id {0}", key);
-                return default(T);
+                throw new MethodCallFailedException(String.Format("Tried to get library for unknown id {0}", key));
             }
 
             return items[key].Value;
