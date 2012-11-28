@@ -39,6 +39,13 @@ namespace MPExtended.Libraries.Service.Composition
             requiredMetadata = new List<string>();
         }
 
+        public void AddDirectory(string directory, string searchPattern)
+        {
+            if (container != null)
+                throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
+            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory, searchPattern));
+        }
+
         public void AddDirectory(string directory)
         {
             if (container != null)
@@ -50,7 +57,7 @@ namespace MPExtended.Libraries.Service.Composition
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Source)
             {
-                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Path.Combine(Installation.GetSourceRootDirectory(), sourceDirectory)));
+                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Path.Combine(Installation.GetSourceRootDirectory(), sourceDirectory)), null);
             }
             else
             {
@@ -62,7 +69,7 @@ namespace MPExtended.Libraries.Service.Composition
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Source)
             {
-                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Installation.GetSourceRootDirectory(), sourceDirectoryGlob));
+                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Installation.GetSourceRootDirectory(), sourceDirectoryGlob), null);
             }
             else
             {
@@ -70,13 +77,25 @@ namespace MPExtended.Libraries.Service.Composition
             }
         }
 
-        private void AddFromSourceDirectoryList(IEnumerable<string> directories)
+        public void AddFromTreeMatch(string sourceDirectoryGlob, string sourceSearchPattern, string installedDirectory)
+        {
+            if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+            {
+                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Installation.GetSourceRootDirectory(), sourceDirectoryGlob), sourceSearchPattern);
+            }
+            else
+            {
+                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
+            }
+        }
+
+        private void AddFromSourceDirectoryList(IEnumerable<string> directories, string searchPattern)
         {
             foreach (string pluginDirectory in directories)
             {
                 string dir = Path.Combine(pluginDirectory, "bin", Installation.GetSourceBuildDirectoryName());
                 if (Directory.Exists(dir))
-                    AddDirectory(dir);
+                    AddDirectory(dir, searchPattern);
             }
         }
 

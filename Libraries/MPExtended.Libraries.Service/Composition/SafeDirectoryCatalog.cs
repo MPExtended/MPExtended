@@ -35,11 +35,14 @@ namespace MPExtended.Libraries.Service.Composition
             get { return aggregateCatalog.Parts; }
         }
 
-        public SafeDirectoryCatalog(string directory)
+        public SafeDirectoryCatalog(string directory, string searchPattern)
         {
+            if (searchPattern == null)
+                searchPattern = "*.dll";
+
             aggregateCatalog = new AggregateCatalog();
 
-            var files = Directory.EnumerateFiles(directory, "*.dll", SearchOption.AllDirectories);
+            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories);
             foreach (var file in files)
             {
                 try
@@ -65,6 +68,11 @@ namespace MPExtended.Libraries.Service.Composition
                     Log.Trace("SafeDirectoryCatalog: FileNotFoundException for assembly {0}", file);
                 }
             }
+        }
+
+        public SafeDirectoryCatalog(string directory)
+            : this (directory, null)
+        {
         }
     }
 }
