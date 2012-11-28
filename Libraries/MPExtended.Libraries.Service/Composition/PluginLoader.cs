@@ -43,24 +43,40 @@ namespace MPExtended.Libraries.Service.Composition
         {
             if (container != null)
                 throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
-            catalog.Catalogs.Add(new DirectoryCatalog(directory));
+            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory));
         }
 
-        public void AddInstalledDirectory(string sourceDirectory, string binaryDirectory)
+        public void AddFromTree(string sourceDirectory, string installedDirectory)
         {
             if (Installation.GetFileLayoutType() == FileLayoutType.Source)
             {
-                string parentDirectory = Path.Combine(Installation.GetSourceRootDirectory(), sourceDirectory);
-                foreach (string pluginDirectory in Directory.GetDirectories(parentDirectory))
-                {
-                    string dir = Path.GetFullPath(Path.Combine(parentDirectory, pluginDirectory, "bin", Installation.GetSourceBuildDirectoryName()));
-                    if (Directory.Exists(dir))
-                        AddDirectory(dir);
-                }
+                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Path.Combine(Installation.GetSourceRootDirectory(), sourceDirectory)));
             }
             else
             {
-                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), binaryDirectory));
+                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
+            }
+        }
+
+        public void AddFromTreeMatch(string sourceDirectoryGlob, string installedDirectory)
+        {
+            if (Installation.GetFileLayoutType() == FileLayoutType.Source)
+            {
+                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Installation.GetSourceRootDirectory(), sourceDirectoryGlob));
+            }
+            else
+            {
+                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
+            }
+        }
+
+        private void AddFromSourceDirectoryList(IEnumerable<string> directories)
+        {
+            foreach (string pluginDirectory in directories)
+            {
+                string dir = Path.Combine(pluginDirectory, "bin", Installation.GetSourceBuildDirectoryName());
+                if (Directory.Exists(dir))
+                    AddDirectory(dir);
             }
         }
 

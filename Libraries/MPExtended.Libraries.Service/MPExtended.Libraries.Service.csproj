@@ -76,6 +76,7 @@
     <Compile Include="Composition\IndexedPluginLoader.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginLoader.cs" />
+    <Compile Include="Composition\SafeDirectoryCatalog.cs" />
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\TransformationCallbacks.cs" />
