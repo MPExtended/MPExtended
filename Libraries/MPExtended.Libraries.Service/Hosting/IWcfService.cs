@@ -22,8 +22,9 @@ using System.Text;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    public interface ISingletonService
+    public interface IWcfService
     {
-        void SetAsInstance();
+        void Start();
+        Type GetServiceType();
     }
 }

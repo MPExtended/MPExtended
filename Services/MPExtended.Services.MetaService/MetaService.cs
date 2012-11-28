@@ -30,12 +30,12 @@ using MPExtended.Services.MetaService.Interfaces;
 namespace MPExtended.Services.MetaService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class MetaService : IMetaService, IProtectedMetaService, ISingletonService
+    public class MetaService : IMetaService, IProtectedMetaService
     {
         #region Initialization
         private const string STARTUP_CONDITION = "MetaService";
 
-        public static MetaService Instance { get; private set; }
+        public static MetaService Instance { get; internal set; }
 
         private IEnumerable<IServicePublisher> publishers;
         private IServiceDetector detector;
@@ -78,11 +78,6 @@ namespace MPExtended.Services.MetaService
             {
                 publisher.Unpublish();
             }
-        }
-
-        public void SetAsInstance()
-        {
-            Instance = this;
         }
         #endregion
 
