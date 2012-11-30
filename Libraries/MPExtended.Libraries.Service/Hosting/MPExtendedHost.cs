@@ -24,6 +24,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Composition;
 using MPExtended.Libraries.Service.Internal;
 using MPExtended.Libraries.Service.Util;
 
@@ -33,12 +34,12 @@ namespace MPExtended.Libraries.Service.Hosting
     {
         private const string STARTUP_CONDITION = "MPExtendedHost";
 
-        private WCFHost wcf;
+        private WCFHost wcfHost;
 
         public MPExtendedHost()
         {
             Thread.CurrentThread.Name = "HostThread";
-            wcf = new WCFHost();
+            wcfHost = new WCFHost();
         }
 
         public bool Open()
@@ -67,16 +68,11 @@ namespace MPExtended.Libraries.Service.Hosting
                 Configuration.Load();
                 Configuration.EnableChangeWatching();
 
-                // start the WCF services
-                wcf.Start(Installation.GetAvailableServices().Where(x => x.WCFType != null));
-
-                // init all services
-                var services = Installation.GetAvailableServices().Where(x => x.InitClass != null && x.InitMethod != null);
-                foreach (var service in services)
-                {
-                    BindingFlags flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod;
-                    service.InitClass.InvokeMember(service.InitMethod, flags, null, null, null);
-                }
+                // load and host all services
+                foreach (var service in ServiceInstallation.Instance.GetServices())
+                    Task.Factory.StartNew(CreateServiceHost, (object)service);
+                wcfHost = new WCFHost();
+                wcfHost.Start(ServiceInstallation.Instance.GetWcfServices());
 				
 				// ensure a service dependency on the TVEngine is set
                 Task.Factory.StartNew(TVEDependencyInstaller.EnsureDependencyIsInstalled);
@@ -96,13 +92,28 @@ namespace MPExtended.Libraries.Service.Hosting
             }
         }
 
+        private void CreateServiceHost(object passedService)
+        {
+            var plugin = (Plugin<IService>)passedService;
+            Log.Debug("Loading service {0}", plugin.Metadata["ServiceName"]);
+
+            try
+            {
+                plugin.Value.Start();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(String.Format("Failed to start service {0}", plugin.Metadata["ServiceName"]), ex);
+            }
+        }
+
         public bool Close()
         {
             try
             {
                 Log.Debug("Closing MPExtended ServiceHost...");
                 ServiceState.TriggerStoppingEvent();
-                wcf.Stop();
+                wcfHost.Stop();
                 Log.Flush();
                 return true;
             }

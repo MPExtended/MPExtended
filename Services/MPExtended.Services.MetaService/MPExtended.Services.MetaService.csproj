@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +64,7 @@
     <Compile Include="MetaService.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="AdhocServiceDetector.cs" />
+    <Compile Include="ServicePlugin.cs" />
     <Compile Include="ZeroconfDiscoverer.cs" />
     <Compile Include="ZeroconfPublisher.cs" />
     <Compile Include="ServiceSetComposer.cs" />

@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012 MPExtended
+// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,19 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MPExtended.Services.MediaAccessService.Interfaces;
 
-namespace MPExtended.Services.MediaAccessService
+namespace MPExtended.Libraries.Service.Hosting
 {
-    public interface ILibraryList<T> : IEnumerable<T> where T : ILibrary
+    public interface IService
     {
-        void Add(int key, Lazy<T, IDictionary<string, object>> value);
-        int Count();
-        List<WebBackendProvider> GetAllAsBackendProvider();
-        int GetKeyByName(string name);
-        T GetValue(int? passedId);
-        ICollection<int> Keys { get; }
-        IEnumerable<WebSearchResult> SearchAll(string text);
-        T this[int? key] { get; }
+        void Start();
     }
 }

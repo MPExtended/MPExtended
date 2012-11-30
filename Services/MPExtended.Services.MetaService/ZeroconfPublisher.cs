@@ -52,7 +52,7 @@ namespace MPExtended.Services.MetaService
             // old style services
             foreach (var srv in Installation.GetInstalledServices())
             {
-                if (!ZeroconfDiscoverer.serviceTypes.ContainsKey(srv.ToWebService()))
+                if (srv.ToWebService() == null || !ZeroconfDiscoverer.serviceTypes.ContainsKey(srv.ToWebService()))
                     continue;
 
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();

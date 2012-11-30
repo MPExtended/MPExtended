@@ -22,14 +22,9 @@ using System.Text;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true, Inherited = true)]
-    public class ServiceAssemblyAttribute : Attribute
+    public interface IWcfService
     {
-        public MPExtendedService Service { get; set; }
-        public Type WCFType { get; set; }
-        public string ZeroconfType { get; set; }
-
-        public Type InitClass { get; set; }
-        public string InitMethod { get; set; }
+        void Start();
+        Type GetServiceType();
     }
 }

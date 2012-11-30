@@ -17,19 +17,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using MPExtended.Libraries.Service;
-using MPExtended.Services.StreamingService.MediaInfo;
+using MPExtended.Libraries.Service.Hosting;
 
-namespace MPExtended.Services.StreamingService.Code
+namespace MPExtended.Services.TVAccessService
 {
-    public static class Initialization
+    [Export(typeof(IWcfService))]
+    [ExportMetadata("ServiceName", "TVAccessService")]
+    internal class ServicePlugin : ISingleInstanceWcfService
     {
-        public static void Initialize()
+        public void Start()
         {
-            Task.Factory.StartNew(() => MediaInfoWrapper.LoadCache());
+            LogoDownloader.Setup();
+        }
+
+        public Type GetServiceType()
+        {
+            return typeof(TVAccessService);
+        }
+
+        public void SetInstance(object instance)
+        {
+            TVAccessService.Instance = (TVAccessService)instance;
         }
     }
 }

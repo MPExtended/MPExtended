@@ -17,13 +17,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using MPExtended.Libraries.Service.Hosting;
 
-namespace MPExtended.Libraries.Service.Hosting
+namespace MPExtended.Services.MetaService
 {
-    public interface ISingletonService
+    [Export(typeof(IWcfService))]
+    [ExportMetadata("ServiceName", "MetaService")]
+    internal class ServicePlugin : ISingleInstanceWcfService
     {
-        void SetAsInstance();
+        public void Start()
+        {
+            // We don't need initialization
+        }
+
+        public Type GetServiceType()
+        {
+            return typeof(MetaService);
+        }
+
+        public void SetInstance(object instance)
+        {
+            MetaService.Instance = (MetaService)instance;
+        }
     }
 }
