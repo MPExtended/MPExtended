@@ -29,6 +29,7 @@ using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -47,11 +48,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         // This is the read timeout from the proxy input stream
         private const int STREAM_PROXY_READ_TIMEOUT = 10;
-		
+
         private static List<string> PlayerOpenedBy = new List<string>();
         private static Dictionary<string, string> RunningStreams = new Dictionary<string, string>();
         private static Dictionary<string, string> HttpLiveUrls = new Dictionary<string, string>();
-        
+
         // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
         private static Random randomGenerator = new Random();
 
@@ -153,7 +154,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             else if (GetStreamMode() == StreamType.Direct)
             {
-                Log.Debug("Redirecting user to download at {0}", fullUri.ToString()); 
+                Log.Debug("Redirecting user to download at {0}", fullUri.ToString());
                 GetStreamControl(type).AuthorizeRemoteHostForStreaming(HttpContext.Request.UserHostAddress);
                 return Redirect(fullUri.ToString());
             }
@@ -189,7 +190,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             StreamType streamMode = GetStreamMode();
             int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
             Log.Debug("Starting stream type={0}; itemId={1}; transcoder={2}; starttime={3}; continuationId={4}", type, itemId, transcoder, starttime, continuationId);
-            Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s", 
+            Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s",
                 HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
 
             // Start the stream
@@ -217,7 +218,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Do the actual streaming
             if (streamMode == StreamType.Proxied)
             {
-				GetStreamControl(type).AuthorizeStreaming();
+                GetStreamControl(type).AuthorizeStreaming();
                 ProxyStream(url);
             }
             else if (streamMode == StreamType.Direct)
@@ -326,7 +327,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             else
             {
-                ProxyHttpLiveIndex(HttpLiveUrls[identifier]);
+                ProxyHttpLiveIndex(identifier, HttpLiveUrls[identifier]);
                 return new EmptyResult();
             }
         }
@@ -356,7 +357,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
                     {
                         Log.Error("InitStream for HLS failed");
-                        return null; 
+                        return null;
                     }
                 }
 
@@ -375,11 +376,53 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return identifier;
         }
 
-        private ActionResult ProxyHttpLiveIndex(string source)
+        private void ProxyHttpLiveIndex(string identifier, string source)
         {
             Log.Debug("HLS: Using Proxied streaming mode with playlist at {0}", source);
-            Log.Warn("+++++++ WARNING: THIS IS NOT IMPLEMENTED YET +++++++");
-            ProxyStream(source);
+
+            WebRequest request = WebRequest.Create(source);
+            request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
+            WebResponse response = request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            string playlistContents = reader.ReadToEnd();
+
+            string prefix = HttpLiveUrls[identifier].Substring(0, HttpLiveUrls[identifier].IndexOf("/stream/") + 8);
+            string newPlaylist = playlistContents.Split('\n')
+                            .Select(line => {
+                                if(!line.Trim().StartsWith(prefix))
+                                    return line.Trim();
+
+                                var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
+                                return Url.Action("ProxyHttpLiveSegment", "Stream", new {
+                                    identifier = identifier,
+                                    ctdAction = queryString["action"],
+                                    parameters = queryString["parameters"]
+                                }, Request.Url.Scheme);
+                            })
+                            .Join(Environment.NewLine);
+
+            Response.ContentType = response.ContentType;
+            Response.Write(newPlaylist);
+            Response.Flush();
+        }
+
+        public ActionResult ProxyHttpLiveSegment(string identifier, string ctdAction, string parameters)
+        {
+            if (!IsUserAuthenticated())
+            {
+                Log.Warn("User {0} (host {1}) requested a HLS segment but isn't authenticated - denying access", HttpContext.User.Identity.Name, Request.UserHostAddress);
+                return new HttpUnauthorizedResult();
+            }
+
+            var queryString = HttpUtility.ParseQueryString(String.Empty);
+            queryString["identifier"] = identifier;
+            queryString["action"] = ctdAction;
+            queryString["parameters"] = parameters;
+            var uri = new UriBuilder(HttpLiveUrls[identifier].Substring(0, HttpLiveUrls[identifier].IndexOf("/stream/") + 8));
+            uri.Path += "CustomTranscoderData";
+            uri.Query = queryString.ToString();
+
+            ProxyStream(uri.ToString());
             return new EmptyResult();
         }
 
@@ -452,12 +495,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // get profile
             var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ? Settings.ActiveSettings.DefaultTVProfile :
-                type == WebMediaType.MusicTrack ? Settings.ActiveSettings.DefaultAudioProfile : 
+                type == WebMediaType.MusicTrack ? Settings.ActiveSettings.DefaultAudioProfile :
                 Settings.ActiveSettings.DefaultMediaProfile;
             var profile = GetProfile(GetStreamControl(type), defaultProfile);
- 
+
             // get size
-            if(type == WebMediaType.TV)
+            if (type == WebMediaType.TV)
             {
                 // TODO: we should start the timeshifting through an AJAX call, and then load the player based upon the results
                 // from that call. Also avoids timeouts of the player when initiating the timeshifting takes a long time.
