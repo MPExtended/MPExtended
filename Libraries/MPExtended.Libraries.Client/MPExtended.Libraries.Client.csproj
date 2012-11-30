@@ -85,10 +85,6 @@
       <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
       <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj">
-      <Project>{1641D28D-E923-425F-8332-10CC9C98C653}</Project>
-      <Name>MPExtended.Libraries.Service.Config</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
       <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
       <Name>MPExtended.Services.UserSessionService.Interfaces</Name>

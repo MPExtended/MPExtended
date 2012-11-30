@@ -56,7 +56,7 @@ namespace MPExtended.Libraries.Service.Hosting
         private void LoadServices()
         {
             var loader = new PluginLoader();
-            loader.AddFromTreeMatch(@"Services\MPExtended.Services.*", "MPExtended.Services.*.dll", "Services");
+            loader.AddFromTreeMatch(@"Services\MPExtended.Services.*", "MPExtended.Services.*.dll", @"Plugins\Services");
             loader.AddRequiredMetadata("ServiceName");
             services = loader.GetPlugins<IService>();
             wcfServices = loader.GetPlugins<IWcfService>();

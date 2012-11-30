@@ -96,7 +96,7 @@ namespace MPExtended.Services.MediaAccessService
         private void Initialize()
         {
             var loader = new IndexedPluginLoader<int>("Id");
-            loader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.MAS.*", "Extensions");
+            loader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.MAS.*", @"Plugins\Media");
             loader.AddExport<IPluginData>(new PluginData());
             loader.AddRequiredMetadata("Id");
             loader.AddRequiredMetadata("Name");
