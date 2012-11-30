@@ -83,10 +83,13 @@ namespace MPExtended.Applications.ServiceConfigurator
                 Environment.CurrentDirectory = Installation.GetInstallDirectory();
             }
 
-            // Load the configuration:
+            // Load the configuration and enable change watching:
             // - This is needed to make sure Authentication.xml is created before Services.xml is upgraded. 
             // - This makes sure all our configuration files are valid. 
+            // - Change watching is needed to avoid overwriting manually changed settings when the configurator
+            //   is running for a long time.
             Configuration.Load();
+            Configuration.EnableChangeWatching();
 
             // set language
             if (Configuration.Services.DefaultLanguage != null)
