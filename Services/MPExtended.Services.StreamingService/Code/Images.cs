@@ -61,7 +61,15 @@ namespace MPExtended.Services.StreamingService.Code
             // maybe it exists in cache, return that then
             if (cache.Contains(filename))
             {
-                return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+                // if source is newer, cached image needs to be recreated
+                if (source.GetFileInfo().LastModifiedTime > cache.GetLastModifiedTime(tempFile))
+                {
+                    cache.Invalidate(filename);
+                }
+                else
+                {
+                    return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+                }
             }
 
             // execute it
@@ -122,9 +130,16 @@ namespace MPExtended.Services.StreamingService.Code
             string filename = String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format);
             if (cache.Contains(filename))
             {
-                WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
-                WCFUtil.SetContentType(GetMime(Path.GetExtension(filename)));
-                return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
+                if (src.GetFileInfo().LastModifiedTime > cache.GetLastModifiedTime(cache.GetPath(filename)))
+                {
+                    cache.Invalidate(filename);
+                }
+                else
+                {
+                    WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
+                    WCFUtil.SetContentType(GetMime(Path.GetExtension(filename)));
+                    return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
             }
 
             try
