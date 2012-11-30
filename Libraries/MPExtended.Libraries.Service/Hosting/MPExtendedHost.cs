@@ -79,7 +79,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 }
 				
 				// ensure a service dependency on the TVEngine is set
-                Task.Factory.StartNew(TVEDependencyInstaller.EnsureDependencyIsInstalled);
+                Task.Factory.StartNew(() => TVEDependencyInstaller.EnsureDependencyStatus(TVEDependencyInstaller.DependencyStatus.NoDependencySet));
 
                 // log MP version details
                 Mediaportal.LogVersionDetails();
