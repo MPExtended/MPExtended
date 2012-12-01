@@ -51,15 +51,9 @@
     <!-- Include custom action library -->
     <Binary Id="CustomActionLibrary" SourceFile="$(var.MPExtended.Installers.CustomActions.TargetDir)\MPExtended.Installers.CustomActions.CA.dll" />
     
-    <!-- WifiRemote installer -->
-    <Binary Id="WifiRemoteInstallerBin" SourceFile="$(var.SolutionDir)\Libraries\Installer\WifiRemote-0.7.0.mpe1" />
-    <Property Id="WifiRemotePackagedVersion" Value="0.7.0.0" />
+    <!-- Custom actions -->
     <CustomAction Id="WifiRemoteInstaller" BinaryKey="CustomActionLibrary" DllEntry="InstallWifiRemote" Execute="immediate" Return="check" />
-    
-    <!-- Remove config files on uninstall -->
     <CustomAction Id="RemoveDataFiles" BinaryKey="CustomActionLibrary" DllEntry="RemoveData" Execute="immediate" Return="check" />
-    
-    <!-- Schedule both -->
     <InstallExecuteSequence>
       <Custom Action="WifiRemoteInstaller" Before="InstallFinalize"><![CDATA[(&Feature_WifiRemote=3)]]></Custom>
       <Custom Action="RemoveDataFiles" Before="InstallFinalize"><![CDATA[(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")]]></Custom>

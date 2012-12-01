@@ -46,7 +46,7 @@ namespace MPExtended.Installers.CustomActions
             }
 
             Log.Write("WifiRemote: Leave InstallWifiRemote");
-            return ActionResult.Failure;
+            return ActionResult.Success;
         }
 
         [CustomAction]
