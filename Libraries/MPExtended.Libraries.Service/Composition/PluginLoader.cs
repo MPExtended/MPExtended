@@ -108,8 +108,6 @@ namespace MPExtended.Libraries.Service.Composition
 
         private void CreateContainer()
         {
-            if (catalog.Catalogs.Count == 0)
-                throw new InvalidOperationException("No source has been added to this plugin loader");
             container = new CompositionContainer(catalog);
         }
 
