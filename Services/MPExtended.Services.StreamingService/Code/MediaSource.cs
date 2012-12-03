@@ -138,7 +138,7 @@ namespace MPExtended.Services.StreamingService.Code
                     LastModifiedTime = info.LastModifiedTime,
                     Name = info.Name,
                     OnNetworkDrive = info.OnNetworkDrive,
-                    Path = info.Path,
+                    Path = PathUtil.StripFileProtocolPrefix(info.Path),
                     PID = -1,
                     Size = info.Size
                 };
@@ -155,6 +155,7 @@ namespace MPExtended.Services.StreamingService.Code
                     OnNetworkDrive = false,
                     PID = -1
                 };
+                fileInfoCache.Path = PathUtil.StripFileProtocolPrefix(fileInfoCache.Path);
                 return fileInfoCache;
             }
 
@@ -164,7 +165,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public string GetPath()
         {
-            return MediaType == WebMediaType.TV && FileType == WebFileType.Content ? Id : GetFileInfo().Path;
+            return MediaType == WebMediaType.TV && FileType == WebFileType.Content ? PathUtil.StripFileProtocolPrefix(Id) : GetFileInfo().Path;
         }
 
         public IProcessingUnit GetInputReaderUnit()

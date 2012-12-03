@@ -741,7 +741,7 @@ namespace MPExtended.Services.MediaAccessService
                 }
 
                 // Make sure to always the path property, even if the file doesn't exist. This makes debugging a lot easier, as you get actual paths in your logs now. 
-                retVal.Path = path;
+                retVal.Path = PathUtil.StripFileProtocolPrefix(path);
                 return retVal;
             }
             catch (ArgumentOutOfRangeException)
@@ -760,7 +760,7 @@ namespace MPExtended.Services.MediaAccessService
             return new WebFileInfo()
             {
                 Exists = false,
-                Path = String.IsNullOrWhiteSpace(path) ? null : path
+                Path = String.IsNullOrWhiteSpace(path) ? null : PathUtil.StripFileProtocolPrefix(path)
             };
         }
 
