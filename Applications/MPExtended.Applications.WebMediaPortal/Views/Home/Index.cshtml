@@ -15,7 +15,7 @@
     @if (ViewBag.Availability.TVShows)
     {
         <div class="item">
-            @Html.Partial("NewEpisodes", Model.GetLastAiredTVEpisodes(4))
+            @Html.Partial("AiredEpisodes", Model.GetLastAiredTVEpisodes(4))
         </div>
     }
 

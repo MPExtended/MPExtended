@@ -29,17 +29,32 @@ namespace MPExtended.Installers.CustomActions
 
         private static Version installedVersion;
         private static Version onlineVersion;
-        private static Version packagedVersion;
 
         public static ActionResult Install(Session session)
         {
+            // fail very early if we can't find MPEI
+            string mpei = LookupMPEI();
+            if (mpei == null)
+            {
+                Log.Write("WifiRemote: MPEI not available");
+                return ActionResult.NotExecuted;
+            }
+            Log.Write("WifiRemote: Found MPEI at {0}", mpei);
+    
             // download version information
             session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote update information...", ""));
             Uri downloadUri;
             InitializeVersionInformation(session, out downloadUri);
 
-            // bail out if installed version is the newest one
-            if (installedVersion != null && installedVersion.CompareTo(onlineVersion) >= 0 && installedVersion.CompareTo(packagedVersion) >= 0)
+            // fail early if we couldn't find the online version
+            if (onlineVersion == null)
+            {
+                Log.Write("WifiRemote: Online version unavailable, aborting installation...");
+                return ActionResult.Success;
+            }
+
+            // don't do anything if installed version is the newest one
+            if (installedVersion != null && installedVersion >= onlineVersion)
             {
                 Log.Write("WifiRemote: Installed version is the last one, doing nothing...");
                 return ActionResult.Success;
@@ -47,48 +62,16 @@ namespace MPExtended.Installers.CustomActions
 
             // setup for installation
             string mpeiPackagePath = Path.GetTempFileName();
-            bool extractFromMSI = false;
-
-            // should we download a newer version?
-            if (onlineVersion != null && packagedVersion.CompareTo(onlineVersion) < 0)
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote installer...", ""));
+            if (!DownloadWifiRemote(downloadUri, mpeiPackagePath))
             {
-                Log.Write("WifiRemote: Downloading newer version from update site");
-
-                session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Downloading WifiRemote installer...", ""));
-                if (!DownloadWifiRemote(downloadUri, mpeiPackagePath))
-                {
-                    Log.Write("WifiRemote: Failed to download it, continuing with extracting from MSI");
-                    extractFromMSI = true;
-                }
-            }
-            else
-            {
-                Log.Write("WifiRemote: Not downloading version from update site");
-                extractFromMSI = true;
-            }
-
-            // else extract from package
-            if (extractFromMSI)
-            {
-                Log.Write("WifiRemote: Extracting package from MSI");
-                if (!InstallerDatabase.ExtractBinaryToFile(session, "WifiRemoteInstallerBin", mpeiPackagePath))
-                {
-                    Log.Write("WifiRemote: Failed to extract from MSI");
-                    return ActionResult.Failure;
-                }
+                Log.Write("WifiRemote: Failed to download version from internet, aborting installation...");
+                return ActionResult.Success;
             }
             Log.Write("WifiRemote: Got WifiRemote installer in {0}", mpeiPackagePath);
 
-            // lookup MPEI installer location
-            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Installing WifiRemote MediaPortal plugin with MPEI...", ""));
-            string mpei = LookupMPEI();
-            if (mpei == null)
-            {
-                return ActionResult.NotExecuted;
-            }
-            Log.Write("WifiRemote: Found MPEI at {0}", mpei);
-
             // execute
+            session.Message(InstallMessage.ActionStart, new Record("callAddProgressInfo", "Installing WifiRemote MediaPortal plugin with MPEI...", ""));
             ProcessStartInfo param = new ProcessStartInfo();
             param.FileName = mpei;
             param.Arguments = mpeiPackagePath + " /S";
@@ -107,10 +90,9 @@ namespace MPExtended.Installers.CustomActions
         private static void InitializeVersionInformation(Session session, out Uri downloadUri)
         {
             onlineVersion = GetOnlineVersion(out downloadUri);
-            packagedVersion = new Version(InstallerDatabase.GetProductProperty(session, "WifiRemotePackagedVersion"));
             installedVersion = GetCurrentlyInstalledVersion();
 
-            Log.Write("WifiRemote: We packaged {0}, {1} is available online and {2} is installed", packagedVersion, onlineVersion, installedVersion);
+            Log.Write("WifiRemote: {0} is available online and {1} is installed", onlineVersion, installedVersion);
         }
 
         private static Version GetOnlineVersion(out Uri downloadUri)

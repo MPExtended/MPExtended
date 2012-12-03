@@ -53,6 +53,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         public void TabClosed()
         {
+            bool hasChanged = Configuration.WebMediaPortalHosting.Port != Int32.Parse(txtPort.Text) ||
+                Configuration.WebMediaPortalHosting.EnableTLS != cbHTTPS.IsChecked.GetValueOrDefault(false) ||
+                Configuration.WebMediaPortalHosting.PortTLS != Int32.Parse(txtHTTPSPort.Text);
+            if (!hasChanged)
+                return;
+
             Configuration.WebMediaPortalHosting.Port = Int32.Parse(txtPort.Text);
             Configuration.WebMediaPortalHosting.EnableTLS = cbHTTPS.IsChecked.GetValueOrDefault(false);
             Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);

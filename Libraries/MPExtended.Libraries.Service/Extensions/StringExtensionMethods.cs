@@ -36,6 +36,11 @@ namespace MPExtended.Libraries.Service.Extensions
             return Contains(str, value, caseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
         }
 
+        public static string[] Split(this string str, string separator)
+        {
+            return str.Split(new string[] { separator }, StringSplitOptions.None);
+        }
+
         public static string ToUpperFirst(this string str)
         {
             return str.Substring(0, 1).ToUpper() + str.Substring(1);
@@ -44,6 +49,11 @@ namespace MPExtended.Libraries.Service.Extensions
         public static string ToLowerFirst(this string str)
         {
             return str.Substring(0, 1).ToLower() + str.Substring(1);
+        }
+
+        public static string Join(this IEnumerable<string> source, string separator)
+        {
+            return String.Join(separator, source);
         }
     }
 }

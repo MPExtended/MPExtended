@@ -59,7 +59,8 @@ namespace MPExtended.Libraries.Service.Network
             }
             else
             {
-                return GetIP(forceUpdate).ToString();
+                var ip = GetIP(forceUpdate);
+                return ip != null ? ip.ToString() : null;
             }
         }
 
@@ -115,7 +116,7 @@ namespace MPExtended.Libraries.Service.Network
             }
             else
             {
-                Log.Warn("Couldn't retrieve external IP from any of the external websites. Is a firewall blocking outgoing traffic?");
+                Log.Warn("Couldn't retrieve external IP from any of the external websites. Is your network functioning and the firewall configured correctly?");
                 return null;
             }
         }

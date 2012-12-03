@@ -105,10 +105,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnCleanCache_Click(object sender, RoutedEventArgs e)
         {
-            // do not call Installation.GetCacheDirectory() twice as it also creates the directory
-            string directory = Installation.GetCacheDirectory();
-            Directory.Delete(directory, true);
-            Directory.CreateDirectory(directory);
+            try
+            {
+                // do not call Installation.GetCacheDirectory() twice as it also creates the directory
+                string directory = Installation.GetCacheDirectory();
+                Directory.Delete(directory, true);
+                Directory.CreateDirectory(directory);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to clean cache", ex);
+            }
         }
     }
 }

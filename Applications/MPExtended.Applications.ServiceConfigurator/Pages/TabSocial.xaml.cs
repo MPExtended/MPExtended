@@ -147,14 +147,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 provider.PasswordBox.IsEnabled = true;
                 provider.TestButton.IsEnabled = true;
                 provider.IsDirty = true;
+                provider.Valid = false;
             }
             else
             {
                 provider.UsernameBox.IsEnabled = false;
                 provider.PasswordBox.IsEnabled = false;
                 provider.TestButton.IsEnabled = false;
+                provider.UsernameBox.Text = String.Empty;
+                provider.PasswordBox.Password = String.Empty;
                 provider.ResultsLabel.Content = String.Empty;
-                provider.IsDirty = false;
+                provider.IsDirty = true;
+                provider.Valid = true;
             }
         }
 
@@ -200,6 +204,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         public void TabClosed()
         {
+            if (!providers.Any(x => x.Value.IsDirty))
+                return;
+
             bool invalid = providers.Any(x => x.Value.IsDirty && !x.Value.Valid);
             if (invalid)
             {
@@ -207,7 +214,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 return;
             }
 
-            foreach (var kvp in providers)
+            foreach (var kvp in providers.Where(x => x.Value.IsDirty))
             {
                 var provider = kvp.Value;
                 if (provider.Enabled)
@@ -219,6 +226,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 else
                 {
                     provider.EnabledSetting.Value = false;
+                    provider.Configuration["username"] = String.Empty;
+                    provider.Configuration["passwordHash"] = String.Empty;
                 }
             }
             Configuration.Save();

@@ -60,8 +60,7 @@ namespace MPExtended.Libraries.Service.Util
 
         public static string StripFileProtocolPrefix(string path)
         {
-            Uri uri = new Uri(path);
-            return uri.Scheme == "file" ? uri.LocalPath : path;
+            return path.StartsWith("file://") ? path.Substring(7) : path;
         }
 
         public static string GetAbsolutePath(string basePath, string relativePath)

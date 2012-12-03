@@ -361,6 +361,7 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void btnStartStopService_Click(object sender, RoutedEventArgs e)
         {
+            Log.Debug("StartStopService: inside btnStartStopService_Click()");
             if (!UacServiceHelper.IsAdmin())
             {
                 Log.Debug("StartStopService: no admin rights, use UacServiceHandler");
