@@ -88,6 +88,7 @@
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
+    <Compile Include="Hosting\AssemblyLoader.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
     <Compile Include="Hosting\IWcfService.cs" />

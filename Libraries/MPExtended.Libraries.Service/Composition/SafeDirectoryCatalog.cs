@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Libraries.Service.Composition
 {
@@ -42,6 +43,7 @@ namespace MPExtended.Libraries.Service.Composition
 
             aggregateCatalog = new AggregateCatalog();
 
+            bool hasValidFile = false;
             var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories);
             foreach (var file in files)
             {
@@ -54,6 +56,7 @@ namespace MPExtended.Libraries.Service.Composition
                     asmCatalog.Parts.ToArray();
 
                     aggregateCatalog.Catalogs.Add(asmCatalog);
+                    hasValidFile = true;
                 }
                 catch (BadImageFormatException)
                 {
@@ -67,6 +70,15 @@ namespace MPExtended.Libraries.Service.Composition
                 {
                     Log.Trace("SafeDirectoryCatalog: FileNotFoundException for assembly {0}", file);
                 }
+            }
+
+            if (hasValidFile)
+            {
+                // We need to configure .NET to also search for dependent assemblies in this directory, as it doesn't do 
+                // that by default. We use the AssemblyLoader from the Hosting namespace for this, which also works in
+                // non-service environments.
+                AssemblyLoader.Install();
+                AssemblyLoader.AddSearchDirectory(directory);
             }
         }
 
