@@ -40,17 +40,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             this.Name = name;
         }
 
-        public bool ValidForRequest(HttpRequestBase request)
-        {
-            // FIXME: I'm sorry for the uglyness of this. 
-            if (Name == "mobile-hls-video")
-                return request.UserAgent.Contains("iPhone") || request.UserAgent.Contains("iPad") || request.UserAgent.Contains("iPod") || 
-                    request.UserAgent.Contains("Mac OS X") ||
-                    request.UserAgent.Contains("Android");
-
-            return true;
-        }
-
         public static List<StreamTarget> GetAudioTargets()
         {
             return new List<StreamTarget>() {

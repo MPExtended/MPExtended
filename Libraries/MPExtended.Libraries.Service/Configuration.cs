@@ -37,6 +37,7 @@ namespace MPExtended.Libraries.Service
         MediaAccess,
         Streaming,
         StreamingProfiles,
+        StreamingPlatforms, 
         Authentication,
         WebMediaPortal,
         WebMediaPortalHosting
@@ -88,6 +89,14 @@ namespace MPExtended.Libraries.Service
             get
             {
                 return config.Get<Streaming>(ConfigurationFile.Streaming).Get();
+            }
+        }
+
+        public static StreamingPlatforms StreamingPlatforms
+        {
+            get
+            {
+                return config.Get<StreamingPlatforms>(ConfigurationFile.StreamingPlatforms).Get();
             }
         }
 
