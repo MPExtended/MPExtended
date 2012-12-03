@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.PlugIns.MAS.MPShares
 {
@@ -41,8 +42,15 @@ namespace MPExtended.PlugIns.MAS.MPShares
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += delegate(object sender, FileSystemEventArgs e)
             {
-                if (ConfigurationChanged != null)
-                    ConfigurationChanged();
+                try
+                {
+                    if (ConfigurationChanged != null)
+                        ConfigurationChanged();
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to reload MPShares configuration", ex);
+                }
             };
             watcher.EnableRaisingEvents = true;
         }
