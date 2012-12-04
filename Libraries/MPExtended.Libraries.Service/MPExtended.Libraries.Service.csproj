@@ -55,6 +55,7 @@
       <HintPath>..\Misc\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
@@ -72,6 +73,10 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Composition\IndexedPluginLoader.cs" />
+    <Compile Include="Composition\Plugin.cs" />
+    <Compile Include="Composition\PluginLoader.cs" />
+    <Compile Include="Composition\SafeDirectoryCatalog.cs" />
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\TransformationCallbacks.cs" />
@@ -83,11 +88,16 @@
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
+    <Compile Include="Hosting\AssemblyLoader.cs" />
+    <Compile Include="Shared\MethodCallFailedException.cs" />
+    <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
+    <Compile Include="Hosting\IWcfService.cs" />
+    <Compile Include="Hosting\IService.cs" />
+    <Compile Include="Hosting\ServiceInstallation.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />
     <Compile Include="Internal\TVEDependencyInstaller.cs" />
-    <Compile Include="Hosting\ISingletonService.cs" />
     <Compile Include="MpConnection\AccessRequestingClient.cs" />
     <Compile Include="MpConnection\Messages\MessageDialogAction.cs" />
     <Compile Include="MpConnection\Messages\MessageDialog.cs" />
@@ -128,7 +138,6 @@
     <Compile Include="Logging\LogDestination.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\GitVersion.cs" />
-    <Compile Include="Hosting\ServiceAssemblyAttribute.cs" />
     <Compile Include="Hosting\ServiceState.cs" />
     <Compile Include="Shared\ChannelLogos.cs" />
     <Compile Include="Util\CultureDatabase.cs" />
@@ -200,6 +209,7 @@
       <Name>MPExtended.Libraries.Client</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(SolutionDir)Libraries\Tools\write-git-version.bat" "$(ProjectDir)" "$(ProjectDir)Properties\GitVersion.cs"</PreBuildEvent>

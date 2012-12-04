@@ -19,6 +19,14 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="Service">
+            <!-- General registry (installation path) -->
+            <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
+              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                <RegistryValue Type="string" Name="ServiceInstallLocation" Value="[MPEXTENDEDDIRECTORY]Service" />
+              </RegistryKey>
+              <RemoveRegistryKey Root="HKLM" Key="Software\MPExtended" Action="removeOnUninstall" />
+            </Component>
+            
             <!-- General libraries -->
             <Component Id="Component_General_Libraries" Guid="35e478f2-4369-4067-8e7e-bb46f1096ae2">
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.Config.dll" />
@@ -28,115 +36,127 @@
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\MoreLinq.dll" />
+              <File Source="$(var.SolutionDir)\Libraries\Misc\Deusty.Net.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\Newtonsoft.Json.dll" />
               <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
-            
-            <!-- MetaService -->
-            <Component Id="Component_General_MetaService" Guid="fcd3c49f-3653-471b-a8aa-4f98dddfa64f">
-              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.dll" />
-              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.pdb" />
-            </Component>
-            
-            <!-- General registry (installation path) -->
-            <Component Id="Component_General_Registry" Guid="f0f086e4-f8ae-45df-9c68-d4b2e7f45f2a">
-              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="ServiceInstallLocation" Value="[MPEXTENDEDDIRECTORY]Service" />
-              </RegistryKey>
-              <RemoveRegistryKey Root="HKLM" Key="Software\MPExtended" Action="removeOnUninstall" />
-            </Component>
 
-            <!-- Interfaces -->
-            <Component Id="Component_General_Interface" Guid="393dd13f-aeaf-4363-9924-2b64a5f3bc55">
+            <!-- General interfaces -->
+            <Component Id="Component_General_Interfaces" Guid="27e88e57-f85e-48c1-9527-b2fb10520f4f">
               <File Source="$(var.MPExtended.Services.Common.Interfaces.TargetDir)\MPExtended.Services.Common.Interfaces.dll" />
-            </Component>
-            <Component Id="Component_MAS_Interface" Guid="eb4bc4da-62e5-4978-9e58-89cbbcd6dc4d">
               <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.Interfaces.dll" />
-            </Component>
-            <Component Id="Component_TAS_Interface" Guid="d917e28e-1bcb-4d4d-aa49-05c48fe3e89f">
+              <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.Interfaces.dll" />
+              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
               <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.Interfaces.dll" />
-            </Component>
-
-            <!-- MAS -->
-            <Component Id="Component_MAS_Binaries" Guid="61a8f10a-2010-46d2-be8e-1e84fb959b89">
-              <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
-              <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.pdb" />
-            </Component>
-
-            <!-- MAS registry -->
-            <Component Id="Component_MAS_Registry" Guid="c9e2ad15-09dd-4f8f-b3be-c24a8cb01379">
-              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="MediaAccessServiceInstalled" Value="true" />
-              </RegistryKey>
-            </Component>
-
-            <!-- MAS extensions -->
-            <Directory Id="ExtensionDirectory" Name="Extensions">
-              <Component Id="Component_MAS_Extensions" Guid="0a8f8159-497e-40f2-89d6-7c68969276f4">
-                <!-- general libraries -->
-                <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.dll" />
-                <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.pdb" />
-                <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
-
-                <!-- all plugins that we release -->
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.pdb" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
-                <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.pdb" />
-              </Component>
-            </Directory>
-
-            <!-- TAS -->
-            <Component Id="Component_TAS_Binaries" Guid="6185c32a-a5ef-4727-bea8-ebd6547726cb">
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Common.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Framework.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.MySQL.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.SQLServer.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\log4net.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MySql.Data.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvBusinessLayer.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvControl.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TVDatabase.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvLibrary.Interfaces.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.dll" />
-              <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.pdb" />
-            </Component>
-
-            <!-- TAS registry -->
-            <Component Id="Component_TAS_Registry" Guid="ee36481d-d196-40b5-bac4-0a6100811738">
-              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="TVAccessServiceInstalled" Value="true" />
-              </RegistryKey>
-            </Component>
-
-            <!-- USS -->
-            <Component Id="Component_USS_Binaries" Guid="fe44be32-fa7d-4439-a16a-ddbab9e592b4">
               <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.dll" />
-              <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.pdb" />
             </Component>
 
-            <!-- USS registry -->
-            <Component Id="Component_USS_Registry" Guid="7ca76699-1f6f-4e64-a5f9-63c2fb65b3d7">
-              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="UserSessionServiceInstalled" Value="true" />
-              </RegistryKey>
-            </Component>
+            <!-- Plugins -->
+            <Directory Id="Directory_Plugins" Name="Plugins">
+              <!-- Services -->
+              <Directory Id="Directory_Plugins_Service" Name="Services">
+                <!-- MetaService -->
+                <Component Id="Component_General_MetaService" Guid="fcd3c49f-3653-471b-a8aa-4f98dddfa64f">
+                  <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.dll" />
+                  <File Source="$(var.MPExtended.Services.MetaService.TargetDir)\MPExtended.Services.MetaService.pdb" />
+                </Component>
+                
+                <!-- MAS -->
+                <Component Id="Component_MAS_Binaries" Guid="61a8f10a-2010-46d2-be8e-1e84fb959b89">
+                  <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.dll" />
+                  <File Source="$(var.MPExtended.Services.MediaAccessService.TargetDir)\MPExtended.Services.MediaAccessService.pdb" />
+                </Component>
+                
+                <!-- MAS registry -->
+                <Component Id="Component_MAS_Registry" Guid="c9e2ad15-09dd-4f8f-b3be-c24a8cb01379">
+                  <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Type="string" Name="MediaAccessServiceInstalled" Value="true" />
+                  </RegistryKey>
+                </Component>
 
+                <!-- TAS -->
+                <Component Id="Component_TAS_Binaries" Guid="6185c32a-a5ef-4727-bea8-ebd6547726cb">
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Common.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Framework.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.MySQL.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.SQLServer.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\log4net.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MySql.Data.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvBusinessLayer.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvControl.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TVDatabase.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvLibrary.Interfaces.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.pdb" />
+                </Component>
+                
+                <!-- TAS registry -->
+                <Component Id="Component_TAS_Registry" Guid="ee36481d-d196-40b5-bac4-0a6100811738">
+                  <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Type="string" Name="TVAccessServiceInstalled" Value="true" />
+                  </RegistryKey>
+                </Component>
+
+                <!-- USS -->
+                <Component Id="Component_USS_Binaries" Guid="fe44be32-fa7d-4439-a16a-ddbab9e592b4">
+                  <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.dll" />
+                  <File Source="$(var.MPExtended.Services.UserSessionService.TargetDir)\MPExtended.Services.UserSessionService.pdb" />
+                </Component>
+
+                <!-- USS registry -->
+                <Component Id="Component_USS_Registry" Guid="7ca76699-1f6f-4e64-a5f9-63c2fb65b3d7">
+                  <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Type="string" Name="UserSessionServiceInstalled" Value="true" />
+                  </RegistryKey>
+                </Component>
+                
+                <!-- WSS -->
+                <Component Id="Component_WSS_Binaries" Guid="3a0d3e40-c061-40b7-bd78-195c35d702c8">
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.pdb" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.pdb" />
+                </Component>
+
+                <!-- WSS registry -->
+                <Component Id="Component_WSS_Registry" Guid="6af94ecd-b794-46c6-a780-28d2c0a653eb">
+                  <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Type="string" Name="StreamingServiceInstalled" Value="true" />
+                  </RegistryKey>
+                </Component>
+
+              </Directory>
+
+              <!-- MAS plugins -->
+              <Directory Id="Directory_Plugins_MAS" Name="Media">
+                <Component Id="Component_MAS_Plugins" Guid="0a8f8159-497e-40f2-89d6-7c68969276f4">
+                  <!-- General libraries -->
+                  <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.dll" />
+                  <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.pdb" />
+                  <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
+
+                  <!-- All plugins that we release -->
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPShares.TargetDir)\MPExtended.PlugIns.MAS.MPShares.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPTVSeries.TargetDir)\MPExtended.PlugIns.MAS.MPTVSeries.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPMusic.TargetDir)\MPExtended.PlugIns.MAS.MPMusic.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MVCentral.TargetDir)\MPExtended.PlugIns.MAS.MVCentral.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MPMovingPictures.TargetDir)\MPExtended.PlugIns.MAS.MPMovingPictures.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.MyFilms.TargetDir)\MPExtended.PlugIns.MAS.MyFilms.pdb" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.dll" />
+                  <File Source="$(var.MPExtended.PlugIns.MAS.FSPictures.TargetDir)\MPExtended.PlugIns.MAS.FSPictures.pdb" />
+                </Component>
+              </Directory>
+            </Directory>
+ 
             <!-- Configurator -->
             <Component Id="Component_Configurator_Binaries" Guid="b35532af-5cc4-41a7-9bce-03175b3d8f92">
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.exe" Id="ConfiguratorExecutable" />
@@ -144,30 +164,12 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\MPExtended.Applications.ServiceConfigurator.pdb" />
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.exe" />
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
-              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Deusty.Net.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
             </Component>
 
-            <!-- WSS -->
-            <Component Id="Component_WSS_Binaries" Guid="3a0d3e40-c061-40b7-bd78-195c35d702c8">
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.dll" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.pdb" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.Interfaces.dll" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.dll" />
-              <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.pdb" />
-            </Component>
-
-            <!-- WSS registry -->
-            <Component Id="Component_WSS_Registry" Guid="6af94ecd-b794-46c6-a780-28d2c0a653eb">
-              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
-                <RegistryValue Type="string" Name="StreamingServiceInstalled" Value="true" />
-              </RegistryKey>
-            </Component>
-
             <!-- Configuration -->
-            <Directory Id="ConfigDefaultDirectory" Name="DefaultConfig">
+            <Directory Id="Directory_DefaultConfig" Name="DefaultConfig">
               <!-- General config -->
               <Component Id="Component_General_Config" Guid="10b3c51a-e27c-436a-986d-8222ae9a8fed">
                 <File Source="$(var.SolutionDir)\Config\Services.xml" />
@@ -186,7 +188,7 @@
               </Component>
             </Directory>
 
-            <Directory Id="StreamingDirectory" Name="Streaming">
+            <Directory Id="Directory_Streaming" Name="Streaming">
               <!-- Filled from StreamBinaries.wxs -->
             </Directory>
           </Directory>

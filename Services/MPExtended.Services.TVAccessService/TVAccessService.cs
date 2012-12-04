@@ -35,21 +35,16 @@ using TvDatabase;
 namespace MPExtended.Services.TVAccessService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class TVAccessService : ITVAccessService, ISingletonService
+    public class TVAccessService : ITVAccessService
     {
-        private const int API_VERSION = 4;
+        private const int API_VERSION = 5;
 
         #region Service
-        public static ITVAccessService Instance { get; private set; }
+        public static ITVAccessService Instance { get; internal set; }
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
         private bool _tveInstalled;
-
-        public void SetAsInstance()
-        {
-            Instance = this;
-        }
 
         public TVAccessService()
         {

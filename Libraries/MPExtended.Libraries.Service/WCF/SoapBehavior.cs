@@ -26,6 +26,7 @@ using System.ServiceModel.Dispatcher;
 using System.Collections.ObjectModel;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared;
 
 namespace MPExtended.Libraries.Service.WCF
 {
@@ -39,7 +40,8 @@ namespace MPExtended.Libraries.Service.WCF
 
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
-            Log.Error("Unhandled exception in service (SOAP interface)", error);
+            if (!(error is MethodCallFailedException))
+                Log.Error("Unhandled exception in service (SOAP interface)", error);
         }
 
         public void AddBindingParameters(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase, Collection<ServiceEndpoint> endpoints, BindingParameterCollection bindingParameters)

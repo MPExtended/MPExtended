@@ -49,7 +49,7 @@
   </Fragment>
 
   <Fragment>
-    <DirectoryRef Id="StreamingDirectory">
+    <DirectoryRef Id="Directory_Streaming">
       <Component Id="Component_Streaming_FFMpeg" Guid="5b6c60e8-e751-4747-982a-db96a979753c">
         <File Source="$(var.SolutionDir)\Libraries\Streaming\ffmpeg.exe" />
       </Component>

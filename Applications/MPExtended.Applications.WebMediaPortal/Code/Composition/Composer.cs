@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,6 +24,7 @@ using System.Web;
 using System.Web.Mvc;
 using MoreLinq;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Composition;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 {
@@ -44,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 
         private string rootDirectory;
         private bool compositionDone = false;
-        private IEnumerable<Lazy<IController, IDictionary<string, object>>> controllers;
+        private IEnumerable<Plugin<IController>> controllers;
         private List<string> installedSkins;
         private List<string> installedPlugins;
 
@@ -55,22 +54,21 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 
         public void Compose()
         {
-            AggregateCatalog catalog = new AggregateCatalog();
+            var pluginLoader = new PluginLoader();
 
             var pluginFinder = new PluginFinder();
-            RegisterExtensions(pluginFinder, catalog, "plugins");
+            RegisterExtensions(pluginFinder, pluginLoader, "plugins");
             installedPlugins = pluginFinder.GetNames().ToList();
 
             var skinFinder = new SkinFinder();
-            RegisterExtensions(skinFinder, catalog, "skins");
+            RegisterExtensions(skinFinder, pluginLoader, "skins");
             installedSkins = skinFinder.GetNames().ToList();
 
-            var container = new CompositionContainer(catalog);
-            controllers = container.GetExports<IController, IDictionary<string, object>>();
+            controllers = pluginLoader.GetPlugins<IController>();
             compositionDone = true;
         }
 
-        private static void RegisterExtensions(ExtensionFinder finder, AggregateCatalog catalog, string logName)
+        private static void RegisterExtensions(ExtensionFinder finder, PluginLoader loader, string logName)
         {
             var directories = finder.GetDirectories()
                 .Where(dir => Directory.Exists(Path.Combine(dir, "bin")));
@@ -81,7 +79,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                 foreach (var dir in directories)
                 {
                     Log.Debug("- {0}", Path.GetFileName(dir));
-                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(dir, "bin")));
+                    loader.AddDirectory(dir);
                 }
             }
         }
@@ -97,15 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                 .ToList();
         }
 
-        public IEnumerable<Lazy<IController, IDictionary<string, object>>> GetControllers()
-        {
-            if (!compositionDone)
-                throw new InvalidOperationException("Composition needs to happen first");
-
-            return controllers;
-        }
-
-        public IEnumerable<Lazy<IController, IDictionary<string, object>>> GetActiveControllers()
+        public IEnumerable<Plugin<IController>> GetActiveControllers()
         {
             if (!compositionDone)
                 throw new InvalidOperationException("Composition needs to happen first");

@@ -65,12 +65,12 @@ namespace MPExtended.Applications.ServiceConfigurator
             InitServiceController();
 
             // hide tabs not applicable for current situation
-            if (!Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
+            if (!Installation.IsServiceInstalled("MediaAccessService"))
             {
                 tcMainTabs.Items.Remove(tiPlugin);
                 tcMainTabs.Items.Remove(tiSocial);
             }
-            if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
+            if (!Installation.IsServiceInstalled("StreamingService"))
             {
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);

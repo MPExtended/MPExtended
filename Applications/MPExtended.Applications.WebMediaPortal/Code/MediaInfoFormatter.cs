@@ -32,7 +32,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static string GetShortQualityName(bool accessible, WebMediaInfo info)
         {
-            return accessible ? GetShortQualityName(info) : "Inaccessible";
+            return accessible ? GetShortQualityName(info) : UIStrings.FileInaccessible;
         }
 
         public static string GetShortQualityName(WebMediaInfo info)
@@ -51,7 +51,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebFileInfo fileInfo)
         {
-            return accessible ? GetFullInfoString(info, fileInfo) : "Inaccessible";
+            return accessible ? GetFullInfoString(info, fileInfo) : UIStrings.FileInaccessible;
         }
 
         public static string GetFullInfoString(WebMediaInfo info, WebFileInfo fileInfo)
@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebRecordingFileInfo fileInfo)
         {
-            return accessible ? GetFullInfoString(info, fileInfo) : "Inaccessible";
+            return accessible ? GetFullInfoString(info, fileInfo) : UIStrings.FileInaccessible;
         }
 
         public static string GetFullInfoString(WebMediaInfo info, WebRecordingFileInfo fileInfo)

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using MPExtended.Libraries.Service.Composition;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -29,18 +30,15 @@ namespace MPExtended.Libraries.Service.Hosting
         private List<ServiceHost> hosts = new List<ServiceHost>();
         private Dictionary<string, Type> types = new Dictionary<string, Type>();
 
-        public void Start(IEnumerable<ServiceAssemblyAttribute> availableServices)
+        public void Start(IEnumerable<Plugin<IWcfService>> availableServices)
         {
             // This part is quite tricky to force execution in parallel:
             // - Do not use LINQ, it won't work in parallel
             // - Do not close over the loop variable, it'll try to load the last service 4 times:
             //   http://blogs.msdn.com/b/ericlippert/archive/2009/11/12/closing-over-the-loop-variable-considered-harmful.aspx
-            // - Force the TPL to run the tasks in parallel with TaskCreationOptions.LongRunning
             var tasks = new List<Task<ServiceHost>>();
             foreach (var srv in availableServices)
-            {
-                tasks.Add(Task<ServiceHost>.Factory.StartNew(CreateHost, (object)srv, TaskCreationOptions.LongRunning));
-            }
+                tasks.Add(Task<ServiceHost>.Factory.StartNew(CreateHost, (object)srv));
 
             // Finally open all the hosts
             foreach (var srv in tasks)
@@ -66,25 +64,26 @@ namespace MPExtended.Libraries.Service.Hosting
 
         private ServiceHost CreateHost(object srv)
         {
-            return CreateHost((ServiceAssemblyAttribute)srv);
+            return CreateHost((Plugin<IWcfService>)srv);
         }
 
-        private ServiceHost CreateHost(ServiceAssemblyAttribute srv)
+        private ServiceHost CreateHost(Plugin<IWcfService> plugin)
         {
             try
             {
-                Log.Debug("Loading service {0}", srv.WCFType.Name);
+                var type = plugin.Value.GetServiceType();
+                Log.Debug("Loading service {0}", type.Name);
 
                 ServiceHost host;
-                if (typeof(ISingletonService).IsAssignableFrom(srv.WCFType)) // .NET Reflection's way of writing srv.WCFType is ISingletonService
+                if (plugin.Value is ISingleInstanceWcfService)
                 {
-                    object instance = Activator.CreateInstance(srv.WCFType);
-                    (instance as ISingletonService).SetAsInstance();
-                    host = new ServiceHost(instance, BaseAddresses.GetForService(srv.Service));
+                    object instance = Activator.CreateInstance(type);
+                    (plugin.Value as ISingleInstanceWcfService).SetInstance(instance);
+                    host = new ServiceHost(instance, BaseAddresses.GetForService((string)plugin.Metadata["ServiceName"]));
                 }
                 else
                 {
-                    host = new ServiceHost(srv.WCFType, BaseAddresses.GetForService(srv.Service));
+                    host = new ServiceHost(type, BaseAddresses.GetForService((string)plugin.Metadata["ServiceName"]));
                 }
 
                 // configure security if needed
@@ -115,7 +114,7 @@ namespace MPExtended.Libraries.Service.Hosting
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to load service {0}", srv.WCFType.Name), ex);
+                Log.Error(String.Format("Failed to load service {0}", plugin.Metadata["ServiceName"]), ex);
                 return null;
             }
         }

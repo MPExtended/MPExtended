@@ -1,4 +1,4 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
+#region Copyright (C) 2011-2012 MPExtended
 // Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
@@ -29,17 +29,6 @@ using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service
 {
-    public enum MPExtendedService
-    {
-        MediaAccessService,
-        TVAccessService,
-        StreamingService,
-        UserSessionService,
-        MetaService,
-        WifiRemote,
-        ScraperService
-    }
-
     public enum MPExtendedProduct
     {
         Service,
@@ -54,14 +43,13 @@ namespace MPExtended.Libraries.Service
 
     public class ServiceConfiguration
     {
-        public MPExtendedService Service { get; set; }
+        public string Service { get; set; }
         public int Port { get; set; }
     }
 
     public static class Installation
     {
-        internal static List<ServiceAssemblyAttribute> installedServices;
-        private static List<ServiceConfiguration> installedServicesReturnList;
+        private static List<ServiceConfiguration> installedServicesList;
         public static InstallationProperties Properties { get; internal set; }
 
         public static void Load(MPExtendedProduct product)
@@ -137,76 +125,36 @@ namespace MPExtended.Libraries.Service
             return regLocation != null;
         }
 
-        internal static List<ServiceAssemblyAttribute> GetAvailableServices()
-        {
-            if (installedServices == null)
-            {
-                if (Properties.Product != MPExtendedProduct.Service)
-                    throw new InvalidOperationException("GetAvailableServices() can only be called from the services");
-
-                if (GetFileLayoutType() == FileLayoutType.Installed)
-                {
-                    installedServices = Directory.GetFiles(Properties.InstallationDirectory, "MPExtended.Services.*.dll")
-                        .Select(path => Assembly.LoadFrom(path))
-                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
-                        .ToList();
-                }
-                else
-                {
-                    // Loading the assemblies in a mix-and-match style from different directories doesn't work and gives all kind of 
-                    // weird errors, such as MethodMissingException in some classes from an assembly. So we now prefer to load all assemblies
-                    // from the directory where the current assembly runs, and fallback to the Services directory only if some services aren't
-                    // available in our own directory. This makes those services unstable, but that should only happen in non-hosting processes
-                    // such as the configurator. The configurator does load USS from it's own directory (it has a reference) so the only things
-                    // that don't work are MAS, TAS and WSS but those aren't used there anyway. However, it does need to know whether they are
-                    // available because it configures the display of tabs based upon the installed services. This isn't relevant for installed
-                    // services, because everything is loaded from the same directory there anyway. 
-
-                    var myDir = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "MPExtended.Services.*.dll")
-                        .Where(x => !x.Contains(".Interfaces.dll"));
-                    var myFileNames = myDir.Select(x => Path.GetFileName(x));
-                    var serviceFiles = Directory.GetDirectories(Path.Combine(GetSourceRootDirectory(), "Services"))
-                        .Select(x => Path.Combine(x, "bin", GetSourceBuildDirectoryName()))
-                        .SelectMany(x => Directory.GetFiles(x, "MPExtended.Services.*.dll"))
-                        .Where(x => !x.Contains(".Interfaces.dll") && !myFileNames.Contains(Path.GetFileName(x)))
-                        .GroupBy(x => Path.GetFileName(x), (x, y) => y.First());
-
-                    installedServices = myDir.Concat(serviceFiles)
-                        .Select(path => Assembly.LoadFrom(path))
-                        .SelectMany(asm => asm.GetCustomAttributes(typeof(ServiceAssemblyAttribute), false).Cast<ServiceAssemblyAttribute>())
-                        .ToList();
-                }
-            }
-
-            return installedServices;
-        }
-
         public static List<ServiceConfiguration> GetInstalledServices()
         {
-            if (installedServicesReturnList != null)
-                return installedServicesReturnList;
+            if (installedServicesList != null)
+                return installedServicesList;
 
-            installedServicesReturnList = GetAvailableServices().Select(x => new ServiceConfiguration()
+            installedServicesList = new List<ServiceConfiguration>();
+            installedServicesList.AddRange(ServiceInstallation.Instance.GetServices().Select(x => new ServiceConfiguration()
             {
-                Port = Configuration.Services.Port,
-                Service = x.Service,
-            }).ToList();
+                Service = (string)x.Metadata["ServiceName"],
+                Port = Configuration.Services.Port
+            }));
+            installedServicesList.AddRange(ServiceInstallation.Instance.GetWcfServices().Select(x => new ServiceConfiguration()
+            {
+                Service = (string)x.Metadata["ServiceName"],
+                Port = Configuration.Services.Port
+            }));
 
             if (WifiRemote.IsInstalled)
-            {
-                installedServicesReturnList.Add(new ServiceConfiguration()
+                installedServicesList.Add(new ServiceConfiguration()
                 {
-                    Port = WifiRemote.Port,
-                    Service = MPExtendedService.WifiRemote,
+                    Service = "WifiRemote",
+                    Port = WifiRemote.Port
                 });
-            }
 
-            return installedServicesReturnList;
+            return installedServicesList;
         }
 
-        public static bool IsServiceInstalled(MPExtendedService srv)
+        public static bool IsServiceInstalled(string service)
         {
-            return GetInstalledServices().Any(x => x.Service == srv);
+            return GetInstalledServices().Any(x => x.Service == service);
         }
     }
 }

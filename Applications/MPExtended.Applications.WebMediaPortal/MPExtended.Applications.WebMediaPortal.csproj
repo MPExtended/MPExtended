@@ -48,7 +48,6 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\Libraries\Misc\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
@@ -102,6 +101,7 @@
     <Compile Include="Code\Connections.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
+    <Compile Include="Models\MediaItemModel.cs" />
     <Compile Include="Models\ServiceSetModel.cs" />
     <Compile Include="Models\SiteViewModels.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />

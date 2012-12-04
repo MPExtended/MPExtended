@@ -27,11 +27,6 @@ namespace MPExtended.Libraries.Service.Hosting
 {
     internal class BaseAddresses
     {
-        public static Uri[] GetForService(MPExtendedService service)
-        {
-            return GetForService(service.ToString());
-        }
-
         public static Uri[] GetForService(string serviceName)
         {
             List<Uri> ret = new List<Uri>() { };

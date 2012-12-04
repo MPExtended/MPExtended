@@ -33,7 +33,7 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
-                    if (!Installation.IsServiceInstalled(MPExtendedService.MediaAccessService))
+                    if (!Installation.IsServiceInstalled("MediaAccessService"))
                         return false;
                     var msd = ServiceClientFactory.CreateLocalMAS().GetServiceDescription();
                     return msd.AvailableMovieLibraries.Count > 0;
@@ -51,7 +51,7 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
-                    if (!Installation.IsServiceInstalled(MPExtendedService.TVAccessService))
+                    if (!Installation.IsServiceInstalled("TVAccessService"))
                         return false;
                     var tsd = ServiceClientFactory.CreateLocalTAS().GetServiceDescription();
                     return tsd.HasConnectionToTVServer;
@@ -69,7 +69,7 @@ namespace MPExtended.Services.MetaService
             {
                 try
                 {
-                    if (!Installation.IsServiceInstalled(MPExtendedService.StreamingService))
+                    if (!Installation.IsServiceInstalled("StreamingService"))
                         return false;
                     if (!HasActiveMAS && !HasActiveTAS)
                         return false;
@@ -87,7 +87,7 @@ namespace MPExtended.Services.MetaService
         {
             get
             {
-                return Installation.IsServiceInstalled(MPExtendedService.UserSessionService) &&
+                return Installation.IsServiceInstalled("UserSessionService") &&
                     Mediaportal.HasValidConfigFile();
             }
         }
