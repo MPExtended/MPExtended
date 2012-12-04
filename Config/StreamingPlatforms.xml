@@ -4,8 +4,8 @@
     <Name>Android</Name>
     <UserAgentPattern>(android)</UserAgentPattern>
     <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
-    <DefaultVideoProfile>Flash HQ</DefaultVideoProfile>
-    <DefaultTvProfile>Flash HQ</DefaultTvProfile>
+    <DefaultVideoProfile>HTTP Live Streaming HQ</DefaultVideoProfile>
+    <DefaultTvProfile>HTTP Live Streaming HQ</DefaultTvProfile>
     <ValidTargets>
       <Target>pc-flash-audio</Target>
       <Target>pc-vlc-video</Target>
