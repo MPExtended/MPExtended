@@ -26,6 +26,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Shared;
 
 namespace MPExtended.Libraries.Service.WCF
 {
@@ -49,7 +50,8 @@ namespace MPExtended.Libraries.Service.WCF
 
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
-            Log.Error("Unhandled exception in service (JSON interface)", error);
+            if(!(error is MethodCallFailedException))
+                Log.Error("Unhandled exception in service (JSON interface)", error);
             JsonError errorObject = new JsonError { ExceptionType = error.GetType().ToString(), Message = error.Message, StackTrace = error.StackTrace };
 
             // format the exception/message with JSON

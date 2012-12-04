@@ -15,9 +15,9 @@
     <!-- General stuff -->
     <ComponentGroup Id="Component_General">
       <ComponentRef Id="Component_General_Libraries"/>
+      <ComponentRef Id="Component_General_Interfaces"/>
       <ComponentRef Id="Component_General_MetaService"/>
       <ComponentRef Id="Component_General_Registry"/>
-      <ComponentRef Id="Component_General_Interface"/>
       <ComponentRef Id="Component_General_Config"/>
       <ComponentRef Id="Component_General_Logs"/>
       <ComponentGroupRef Id="Component_Translations"/>
@@ -26,8 +26,7 @@
     <!-- MAS -->
     <ComponentGroup Id="Component_MAS">
       <ComponentRef Id="Component_MAS_Binaries"/>
-      <ComponentRef Id="Component_MAS_Interface"/>
-      <ComponentRef Id="Component_MAS_Extensions"/>
+      <ComponentRef Id="Component_MAS_Plugins"/>
       <ComponentRef Id="Component_MAS_Config"/>
       <ComponentRef Id="Component_MAS_Registry"/>
     </ComponentGroup>
@@ -35,7 +34,6 @@
     <!-- TAS -->
     <ComponentGroup Id="Component_TAS">
       <ComponentRef Id="Component_TAS_Binaries"/>
-      <ComponentRef Id="Component_TAS_Interface"/>
       <ComponentRef Id="Component_TAS_Registry"/>
       <ComponentRef Id="Component_Powerscheduler_Binaries" />
     </ComponentGroup>
@@ -43,8 +41,6 @@
     <!-- WSS -->
     <ComponentGroup Id="Component_WSS">
       <ComponentGroupRef Id="Component_Streaming"/>
-      <ComponentRef Id="Component_MAS_Interface"/>
-      <ComponentRef Id="Component_TAS_Interface"/>
       <ComponentRef Id="Component_WSS_Binaries"/>
       <ComponentRef Id="Component_WSS_Registry"/>
       <ComponentRef Id="Component_WSS_Config"/>

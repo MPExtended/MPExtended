@@ -34,6 +34,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public static class Images
     {
+        private static long preRecordInterval = 0;
+
         private static ActionResult ReturnFromService(object service, Func<Stream> method, string defaultFile = null, string etag = null)
         {
             if (etag != null && HttpContext.Current.Request.Headers["If-None-Match"] == String.Format("\"{0}\"", etag))
@@ -125,8 +127,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     service = Connections.Current.TASStream;
                     break;
                 case WebMediaType.Recording:
-                    service = Connections.Current.TASStream;
-                    return ReturnFromService(service, () => service.ExtractImageResized(mediaType, provider, id, 15, maxWidth, maxHeight), defaultFile);
+                    return ExtractRecordingImage(id, maxWidth, maxHeight, defaultFile);
                 default:
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
             }
@@ -138,6 +139,26 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)
         {
             return ReturnFromService(mediaType, id, artworkType, 0, 0, defaultFile);
+        }
+
+        private static ActionResult ExtractRecordingImage(string id, int maxWidth, int maxHeight, string defaultFile = null)
+        {
+            if (preRecordInterval == 0)
+            {
+                try
+                {
+                    var readInterval = Connections.Current.TAS.ReadSettingFromDatabase("preRecordInterval");
+                    preRecordInterval = Int64.Parse(readInterval) * 60 + 30;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to read PreRecordInterval from TV Engine database", ex);
+                    preRecordInterval = 30;
+                }
+            }
+
+            return ReturnFromService(Connections.Current.TASStream, () =>
+                Connections.Current.TASStream.ExtractImageResized(WebMediaType.Recording, 0, id, preRecordInterval, maxWidth, maxHeight), defaultFile);
         }
     }
 }

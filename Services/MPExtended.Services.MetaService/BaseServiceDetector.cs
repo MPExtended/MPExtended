@@ -54,7 +54,7 @@ namespace MPExtended.Services.MetaService
 
         public IList<WebService> GetInstalledServices()
         {
-            return Installation.GetInstalledServices().Select(x => x.ToWebService()).ToList();
+            return Installation.GetInstalledServices().Select(x => x.ToWebService()).Where(x => x != null).ToList();
         }
 
         public IList<WebService> GetActiveServices()

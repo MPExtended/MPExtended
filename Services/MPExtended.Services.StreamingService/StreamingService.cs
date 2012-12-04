@@ -39,7 +39,7 @@ namespace MPExtended.Services.StreamingService
     {
         private static Dictionary<string, WebVirtualCard> _timeshiftings = new Dictionary<string, WebVirtualCard>();
         private static List<string> _authorizedHosts = new List<string>();
-        private const int API_VERSION = 4;
+        private const int API_VERSION = 5;
 
         private Streaming _stream;
         private Downloads _downloads;

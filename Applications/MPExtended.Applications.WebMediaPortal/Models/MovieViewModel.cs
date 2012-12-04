@@ -25,74 +25,18 @@ using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
-using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public class MovieViewModel
+    public class MovieViewModel : MediaItemModel
     {
-        private WebFileInfo fileInfo;
-        private WebMediaInfo mediaInfo;
-
         public WebMovieDetailed Movie { get; set; }
 
-        [ScriptIgnore]
-        public string Id { get; set; }
-
-        // Most of these properties below probably violate the design guidelines by being a property: they are too slow. However,
-        // if I make them a method they won't be properly serialized by the JavaScriptSerializer, so I have to do it this way.
-        // (the alternative, a field, is even worse as it has to be public). 
-
-        public WebFileInfo FileInfo
-        {
-            get
-            {
-                if (fileInfo == null)
-                    fileInfo = Connections.Current.MAS.GetFileInfo(Movie.PID, WebMediaType.Movie, WebFileType.Content, Movie.Id, 0);
-
-                return fileInfo;
-            }
-        }
-
-        public WebMediaInfo MediaInfo
-        {
-            get
-            {
-                if (mediaInfo == null)
-                    mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(WebMediaType.Movie, Movie.PID, Movie.Id, 0);
-
-                return mediaInfo;
-            }
-        }
-
-        public bool Accessible
-        {
-            get
-            {
-                return Connections.Current.MASStreamControl.GetItemSupportStatus(WebMediaType.Movie, Movie.PID, Movie.Id, 0).Supported;
-            }
-        }
-
-        public string Quality
-        {
-            get
-            {
-                return MediaInfoFormatter.GetShortQualityName(Accessible, MediaInfo);
-            }
-        }
-
-        public string FullQuality
-        {
-            get
-            {
-                return MediaInfoFormatter.GetFullInfoString(Accessible, MediaInfo, FileInfo);
-            }
-        }
+        protected override WebMediaItem Item { get { return Movie; } }
 
         public MovieViewModel(WebMovieDetailed movie)
         {
             Movie = movie;
-            Id = Movie.Id;
         }
 
         public MovieViewModel(string id)
@@ -100,7 +44,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Movie = Connections.Current.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id);
-                Id = Movie.Id;
             }
             catch (Exception ex)
             {

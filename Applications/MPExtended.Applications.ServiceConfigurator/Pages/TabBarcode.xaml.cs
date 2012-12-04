@@ -133,14 +133,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 {
                     var srvdesc = new ServiceDescription()
                     {
-                        Name = srv.Service.ToString(),
+                        Name = srv.Service,
                         Port = srv.Port
                     };
 
                     if (auth != null)
                     {
-                        srvdesc.User = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).Username;
-                        srvdesc.Password = (srv.Service == MPExtendedService.WifiRemote ? wifiRemoteAuth : auth).GetPassword();
+                        srvdesc.User = (srv.Service == "WifiRemote" ? wifiRemoteAuth : auth).Username;
+                        srvdesc.Password = (srv.Service == "WifiRemote" ? wifiRemoteAuth : auth).GetPassword();
                     }
 
                     desc.Services.Add(srvdesc);

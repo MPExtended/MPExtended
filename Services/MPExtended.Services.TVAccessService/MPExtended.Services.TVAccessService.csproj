@@ -62,6 +62,7 @@
       <HintPath>..\..\Libraries\Database\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
@@ -100,6 +101,7 @@
     <Compile Include="ConvertExtensionMethods.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GentleProviders.cs" />
+    <Compile Include="ServicePlugin.cs" />
     <Compile Include="TVAccessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -61,7 +61,15 @@ namespace MPExtended.Services.StreamingService.Code
             // maybe it exists in cache, return that then
             if (cache.Contains(filename))
             {
-                return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+                // if source is newer, cached image needs to be recreated
+                if (source.GetFileInfo().LastModifiedTime > cache.GetLastModifiedTime(tempFile))
+                {
+                    cache.Invalidate(filename);
+                }
+                else
+                {
+                    return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+                }
             }
 
             // execute it

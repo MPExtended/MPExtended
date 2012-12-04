@@ -17,10 +17,3 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("d8d5d4c0-010e-4400-a886-66d12737ad9d")]
-
-// The hosting information
-[assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
-    Service = MPExtended.Libraries.Service.MPExtendedService.StreamingService,
-    WCFType = typeof(MPExtended.Services.StreamingService.StreamingService),
-    InitClass = typeof(MPExtended.Services.StreamingService.Code.Initialization),
-    InitMethod = "Initialize")]

@@ -65,6 +65,16 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
+        public void Invalidate(string filename)
+        {
+            File.Delete(GetPath(filename));
+        }
+
+        public DateTime GetLastModifiedTime(string filename)
+        {
+            return File.GetLastWriteTime(GetPath(filename));
+        }
+
         public bool Contains(string filename)
         {
             return File.Exists(GetPath(filename));
