@@ -10,72 +10,41 @@ using MPExtended.Libraries.Service.Hosting;
 using System.IO;
 using System.Reflection;
 using MPExtended.Services.Common.Interfaces;
-using MPExtended.Scrapers.ItemDownloader;
+using MPExtended.Libraries.Service.Composition;
 
 namespace MPExtended.Services.ScraperService
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class ScraperService : IScraperService
     {
-        private IPrivateScraperService CreateProxy(ref IPrivateScraperService service, String address)
-        {
-            bool recreateChannel = false;
-            if (service == null)
-            {
-                recreateChannel = true;
-            }
-            else if (((ICommunicationObject)service).State == CommunicationState.Faulted)
-            {
-                try
-                {
-                    ((ICommunicationObject)service).Close(TimeSpan.FromMilliseconds(500));
-                }
-                catch (Exception)
-                {
-                    // oops. 
-                }
-
-                recreateChannel = true;
-            }
-
-            if (recreateChannel)
-            {
-                NetTcpBinding binding = new NetTcpBinding()
-                {
-                    MaxReceivedMessageSize = 100000000,
-                    ReceiveTimeout = new TimeSpan(0, 0, 10),
-                    SendTimeout = new TimeSpan(0, 0, 10),
-                };
-                binding.ReliableSession.Enabled = true;
-                binding.ReliableSession.Ordered = true;
-
-                service = ChannelFactory<IPrivateScraperService>.CreateChannel(
-                    binding,
-                    new EndpointAddress(address)
-                );
-            }
-
-            return service;
-        }
-
-        private IPrivateScraperService mTvSeriesScraper;
-        private IPrivateScraperService mMovingPicturesScraper;
-        private IPrivateScraperService mDownloaderScraper;
-
-        private Process mTvSeriesCommandLine;
-        private Process mMopiCommandLine;
-
+        private Dictionary<int, Plugin<IScraperPlugin>> scrapers;
         public ScraperService()
         {
-            StartMpTvSeriesCommandLine();
+            scrapers = new Dictionary<int, Plugin<IScraperPlugin>>();
 
-            StartMopiCommandLine();
+            var pluginLoader = new PluginLoader();
+            pluginLoader.AddRequiredMetadata("Name");
+            // first argument is directory name in source tree, second one in installed tree
+            pluginLoader.AddFromTree("PlugIns", "Extensions");
+            var plugins = pluginLoader.GetPlugins<IScraperPlugin>();
+
+            foreach (var plugin in plugins)
+            {
+                Log.Debug("Loaded scraper plugin {0}", plugin.Metadata["Name"]);
+                int id = (int)plugin.Metadata["Id"];
+                scrapers.Add(id, plugin);
+            }
+
+
+            //StartMpTvSeriesCommandLine();
+
+            //StartMopiCommandLine();
 
             //mDownloaderScraper = new ItemDownloader("lyfesaver.net:4322", "diebagger", "Addicted20");
 
-            ServiceState.Stopping += new ServiceState.ServiceStoppingEventHandler(ServiceState_Stopping);
+            //ServiceState.Stopping += new ServiceState.ServiceStoppingEventHandler(ServiceState_Stopping);
         }
-
+        /*
         /// <summary>
         /// Start the mp-tvseries command line scraper.
         /// </summary>
@@ -148,121 +117,100 @@ namespace MPExtended.Services.ScraperService
         {
 
         }
+        
 
         void ServiceState_Stopping()
         {
-            mTvSeriesCommandLine.StandardInput.WriteLine("exit");
+            //mTvSeriesCommandLine.StandardInput.WriteLine("exit");
 
-            mMopiCommandLine.StandardInput.WriteLine("exit");
+            //mMopiCommandLine.StandardInput.WriteLine("exit");
         }
 
         ~ScraperService()
         {
 
         }
+         * */
 
-        private IPrivateScraperService GetScraper(int? scraperId)
+        private IScraperPlugin GetScraper(int? scraperId)
         {
-            switch (scraperId)
-            {
-                case 0:
-                    return CreateProxy(ref mTvSeriesScraper, "net.tcp://localhost:9760/MPExtended/ScraperServiceTVSeries");
-                case 1:
-                    return CreateProxy(ref mMovingPicturesScraper, "net.tcp://localhost:9761/MPExtended/ScraperServiceMopi");
-                case 2:
-                    return mDownloaderScraper;
-                default:
-                    return CreateProxy(ref mTvSeriesScraper, "net.tcp://localhost:9760/MPExtended/ScraperServiceTVSeries");
-            }
+            return scrapers[(int)scraperId].Value;
         }
 
         public IList<WebScraper> GetAvailableScrapers()
         {
-            IList<WebScraper> scrapers = new List<WebScraper>();
-            AddScraper(scrapers, 0);
-            AddScraper(scrapers, 1);
-            //AddScraper(scrapers, 2);
-            return scrapers;
-        }
-
-        private void AddScraper(IList<WebScraper> scrapers, int scraperId)
-        {
-            try
+            IList<WebScraper> returnList = new List<WebScraper>();
+            foreach (Plugin<IScraperPlugin> s in scrapers.Values)
             {
-                WebScraper scraper = GetScraper(scraperId).GetScraperDescription();
-                if (scraper != null)
+                returnList.Add(new WebScraper()
                 {
-                    scrapers.Add(scraper);
-                }
+                    ScraperId = (int)s.Metadata["Id"],
+                    ScraperName = (string)s.Metadata["Name"]
+                });
             }
-            catch (Exception)
-            {
-                Log.Info("Scraper " + scraperId + " not running");
-            }
-        }
 
+            return returnList;
+        }
 
         public WebResult StartScraper(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.StartScraper();
         }
 
-
-
         public WebResult StopScraper(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.StopScraper();
         }
 
         public WebResult PauseScraper(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.PauseScraper();
         }
 
         public WebResult ResumeScraper(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.ResumeScraper();
         }
 
         public WebResult TriggerUpdate(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.TriggerUpdate();
         }
 
         public WebScraperStatus GetScraperStatus(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperStatus();
         }
 
         public WebScraperInputRequest GetScraperInputRequest(int? scraperId, int index)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperInputRequest(index);
         }
 
         public IList<WebScraperInputRequest> GetAllScraperInputRequests(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetAllScraperInputRequests();
         }
 
         public WebResult SetScraperInputRequest(int? scraperId, string requestId, string matchId, string text)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.SetScraperInputRequest(requestId, matchId, text);
         }
@@ -270,7 +218,7 @@ namespace MPExtended.Services.ScraperService
 
         public WebResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.AddItemToScraper(title, type, provider, itemId, offset);
         }
@@ -278,14 +226,14 @@ namespace MPExtended.Services.ScraperService
 
         public List<WebScraperItem> GetScraperItems(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperItems();
         }
 
         public List<WebScraperAction> GetScraperActions(int? scraperId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperActions();
         }
@@ -293,9 +241,17 @@ namespace MPExtended.Services.ScraperService
 
         public WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId)
         {
-            IPrivateScraperService service = GetScraper(scraperId);
+            IScraperPlugin service = GetScraper(scraperId);
 
             return service.InvokeScraperAction(itemId, actionId);
+        }
+
+
+        public WebBoolResult ShowConfig(int? scraperId)
+        {
+            IScraperPlugin service = GetScraper(scraperId);
+
+            return service.ShowConfig();
         }
     }
 }

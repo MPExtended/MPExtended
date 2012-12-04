@@ -17,8 +17,3 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("df1b7a1c-19ab-4fdd-8f62-9943428c74a2")]
-
-// The hosting information
-[assembly: MPExtended.Libraries.Service.Hosting.ServiceAssembly(
-    Service = MPExtended.Libraries.Service.MPExtendedService.ScraperService,
-    WCFType = typeof(MPExtended.Services.ScraperService.ScraperService))]
