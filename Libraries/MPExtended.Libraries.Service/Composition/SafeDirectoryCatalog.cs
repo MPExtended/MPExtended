@@ -62,7 +62,7 @@ namespace MPExtended.Libraries.Service.Composition
                 {
                     Log.Trace("SafeDirectoryCatalog: BadImageFormatException for assembly {0}", file);
                 }
-                catch (ReflectionTypeLoadException ex)
+                catch (ReflectionTypeLoadException)
                 {
                     Log.Trace("SafeDirectoryCatalog: ReflectionTypeLoadException for assembly {0}", file);
                 }
