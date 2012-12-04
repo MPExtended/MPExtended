@@ -5,7 +5,7 @@ using System.Text;
 using MPExtended.Services.ScraperService.Interfaces;
 using WindowPlugins.GUITVSeries.Feedback;
 
-namespace MPExtended.Scrapers.TVSeries
+namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 {
     public class TvSeriesMatch
     {

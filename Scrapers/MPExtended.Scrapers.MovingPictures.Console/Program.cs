@@ -6,22 +6,18 @@ using System.ServiceModel;
 using MPExtended.Libraries.Service;
 using System.Diagnostics;
 using MPExtended.Services.ScraperService.Interfaces;
+using MPExtended.PlugIns.Scrapers.MovingPictures;
 
 namespace MPExtended.Scrapers.MovingPictures
 {
     static class Program
     {
-        private static ServiceHost scraperHost;
-        private static MovingPicturesImporter importer;
+        private static MovingPicturesScraper importer;
         static void Main(string[] args)
         {
             try
             {
-                importer = new MovingPicturesImporter();
-                scraperHost = new ServiceHost(importer);
-
-                scraperHost.Open();
-                Console.WriteLine("Opened ServiceHost...");
+                importer = new MovingPicturesScraper();
                 PrintPossibleCommands();
 
                 String command = Console.ReadLine();
@@ -86,11 +82,23 @@ namespace MPExtended.Scrapers.MovingPictures
                                     Console.WriteLine(i + ": " + request.InputOptions[i]);
                                 }
                             }
-
-                            int selectedindex = Int32.Parse(Console.ReadLine());
-                            if (selectedindex >= 0 && selectedindex < request.InputOptions.Count)
+                            else if (request.InputType == WebInputTypes.TextInput)
                             {
-                                importer.SetScraperInputRequest(request.Id, request.InputOptions[selectedindex].Id, request.InputOptions[selectedindex].Title);
+                                Console.WriteLine("Please input new search term for " + request.Title);
+                            } 
+
+                            String input = Console.ReadLine();
+                            if (request.InputType == WebInputTypes.ItemSelect)
+                            {
+                                int selectedindex = Int32.Parse(input);
+                                if (selectedindex >= 0 && selectedindex < request.InputOptions.Count)
+                                {
+                                    importer.SetScraperInputRequest(request.Id, request.InputOptions[selectedindex].Id, request.InputOptions[selectedindex].Title);
+                                }
+                            }
+                            else if (request.InputType == WebInputTypes.TextInput)
+                            {
+                                importer.SetScraperInputRequest(request.Id, null, input);
                             }
                         }
                         else
@@ -101,11 +109,12 @@ namespace MPExtended.Scrapers.MovingPictures
                     else if (command.Equals("config"))
                     {
                         importer.PauseScraper();
-                        //Process.Start();
+  
                         Process config = new Process();
                         config.StartInfo = new ProcessStartInfo("MPExtended.Scrapers.MovingPictures.Config.exe");
                         config.Start();
                         config.WaitForExit();
+                       
                         importer.ResumeScraper();
                     }
                     else if (command.Equals("help"))
@@ -119,15 +128,10 @@ namespace MPExtended.Scrapers.MovingPictures
                 {
                     importer.StopScraper();
                 }
-                scraperHost.Close();
-            }
-            catch (AddressAlreadyInUseException)
-            {
-                Console.WriteLine("Address for ScraperService is already in use");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to start service");
+                Console.WriteLine("Exception in scraper", ex);
             }
             Console.WriteLine("Moving Pictures Scraper closed");
         }

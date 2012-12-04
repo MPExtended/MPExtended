@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MPExtended.Scrapers.MovingPictures</RootNamespace>
-    <AssemblyName>MPExtended.Scrapers.MovingPictures</AssemblyName>
+    <AssemblyName>MPExtended.Scrapers.MovingPictures.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -83,7 +83,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MovingPicturesImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -113,6 +112,10 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\MPExtended.PlugIns.Scrapers.MovingPictures\MPExtended.PlugIns.Scrapers.MovingPictures.csproj">
+      <Project>{E009FE7C-EA44-4DBC-91EF-27F860121FD7}</Project>
+      <Name>MPExtended.PlugIns.Scrapers.MovingPictures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Scrapers\MPExtended.Scrapers.MovingPictures.Config\MPExtended.Scrapers.MovingPictures.Config.csproj">
       <Project>{6A9683C0-9209-4656-935A-3F307890067E}</Project>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using MPExtended.PlugIns.Scrapers.MovingPictures;
 
 namespace MPExtended.Scrapers.MovingPictures.Config
 {

@@ -1,4 +1,4 @@
-﻿namespace MPExtended.Scrapers.MovingPictures
+﻿namespace MPExtended.PlugIns.Scrapers.MovingPictures
 {
     partial class MovingPicturesConfig
     {

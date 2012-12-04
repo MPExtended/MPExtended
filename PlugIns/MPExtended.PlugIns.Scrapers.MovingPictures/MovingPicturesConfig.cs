@@ -13,7 +13,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database.Tables;
 
-namespace MPExtended.Scrapers.MovingPictures
+namespace MPExtended.PlugIns.Scrapers.MovingPictures
 {
     public partial class MovingPicturesConfig : Form
     {

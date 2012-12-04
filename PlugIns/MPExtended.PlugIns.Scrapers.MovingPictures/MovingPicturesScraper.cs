@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel.Composition;
+using MPExtended.Services.ScraperService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 using System.Threading;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures;
 using Cornerstone.GUI.Dialogs;
 using System.Diagnostics;
-using System.ServiceModel;
-using MPExtended.Services.ScraperService.Interfaces;
-using MPExtended.Services.Common.Interfaces;
 
-namespace MPExtended.Scrapers.MovingPictures
+namespace MPExtended.PlugIns.Scrapers.MovingPictures
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class MovingPicturesImporter : IPrivateScraperService
+    [Export(typeof(IScraperPlugin))]
+    [ExportMetadata("Name", "MovingPictures Scraper")]
+    [ExportMetadata("Id", 100)]
+    public class MovingPicturesScraper : IScraperPlugin
     {
-        private static int SCRAPER_ID = 1;
+
+       private static int SCRAPER_ID = 1;
         private static String SCRAPER_NAME = "MovingPictures Importer";
 
         private void CheckConflictingProgramsRunning()
@@ -80,7 +83,7 @@ namespace MPExtended.Scrapers.MovingPictures
         private bool mImporterPausedManually;
         private WebScraperState mScraperState = WebScraperState.Stopped;
 
-        public MovingPicturesImporter()
+        public MovingPicturesScraper()
         {
             MovingPicturesCore.InitializeProgress += new ProgressDelegate(MovingPicturesCore_InitializeProgress);
             MovingPicturesCore.Importer.Progress += new MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieImporter.ImportProgressHandler(Importer_Progress);
@@ -342,6 +345,14 @@ namespace MPExtended.Scrapers.MovingPictures
         public WebBoolResult InvokeScraperAction(string itemId, string actionId)
         {
             return false;
+        }
+
+        public WebBoolResult ShowConfig()
+        {
+            MovingPicturesConfig config = new MovingPicturesConfig();
+            config.Show();
+
+            return true;
         }
     }
 }

@@ -66,5 +66,9 @@ namespace MPExtended.Services.ScraperService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult ShowConfig(int? scraperId);
     }
 }

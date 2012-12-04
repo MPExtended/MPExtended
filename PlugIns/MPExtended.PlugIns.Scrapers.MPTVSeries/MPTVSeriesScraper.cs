@@ -4,25 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
-using System.ServiceModel;
 using MPExtended.Services.ScraperService.Interfaces;
 using WindowPlugins.GUITVSeries;
 using WindowPlugins.GUITVSeries.Feedback;
 using MPExtended.Services.Common.Interfaces;
+using System.ComponentModel.Composition;
 
-namespace MPExtended.Scrapers.TVSeries
+namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
-    public class TVSeriesImporter : IPrivateScraperService, IFeedback
+    [Export(typeof(IScraperPlugin))]
+    [ExportMetadata("Name", "MPTVSeries Scraper")]
+    [ExportMetadata("Id", 101)]
+    public class MPTVSeriesScraper : IScraperPlugin, IFeedback
     {
         private static int SCRAPER_ID = 0;
         private static String SCRAPER_NAME = "MP-TvSeries Importer";
 
         class FeedBacker : IFeedback
         {
-            private TVSeriesImporter mImporter;
+            private MPTVSeriesScraper mImporter;
             String RequestId { get; set; }
-            public FeedBacker(String _requestId, TVSeriesImporter _importer)
+            public FeedBacker(String _requestId, MPTVSeriesScraper _importer)
             {
                 RequestId = _requestId;
                 mImporter = _importer;
@@ -116,7 +118,7 @@ namespace MPExtended.Scrapers.TVSeries
         private WebScraperState mScraperState = WebScraperState.Stopped;
 
 
-        public TVSeriesImporter()
+        public MPTVSeriesScraper()
         {
             OnlineParsing.OnlineParsingProgress += new OnlineParsing.OnlineParsingProgressHandler(parserUpdater_OnlineParsingProgress);
             OnlineParsing.OnlineParsingCompleted += new OnlineParsing.OnlineParsingCompletedHandler(parserUpdater_OnlineParsingCompleted);
@@ -663,6 +665,12 @@ namespace MPExtended.Scrapers.TVSeries
         public WebBoolResult InvokeScraperAction(string itemId, string actionId)
         {
             return false;
+        }
+
+
+        public WebBoolResult ShowConfig()
+        {
+            throw new NotImplementedException();
         }
     }
 }

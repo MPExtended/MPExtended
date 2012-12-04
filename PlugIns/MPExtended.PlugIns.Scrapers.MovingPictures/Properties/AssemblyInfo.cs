@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MPExtended.Services.ScraperService")]
+[assembly: AssemblyTitle("MPExtended.PlugIns.Scrapers.MovingPictures")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended ScraperService")]
+[assembly: AssemblyProduct("MPExtended.PlugIns.Scrapers.MovingPictures")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("df1b7a1c-19ab-4fdd-8f62-9943428c74a2")]
+[assembly: Guid("1e0097b8-4df0-4e4d-92d9-a5c571796a5b")]

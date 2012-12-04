@@ -13,7 +13,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Scrapers.ItemDownloader
 {
-    public class ItemDownloader : IPrivateScraperService
+    public class ItemDownloader : IScraperPlugin
     {
         private Thread _downloadThread;
         private WebScraperState _state;
@@ -401,6 +401,12 @@ namespace MPExtended.Scrapers.ItemDownloader
                 job.DeleteTemporaryDownload();
                 _pendingDownloads.Remove(job);
             }
+        }
+
+
+        public WebBoolResult ShowConfig()
+        {
+            throw new NotImplementedException();
         }
     }
 }

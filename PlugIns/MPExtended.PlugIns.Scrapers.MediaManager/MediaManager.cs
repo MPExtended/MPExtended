@@ -7,20 +7,10 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Scrapers.MediaManager
 {
-    public class MediaManager: IPrivateScraperService
+    public class MediaManager: IScraperPlugin
     {
 
-
-
         #region IPrivateScraperService overrides
-        public WebScraper GetScraperDescription()
-        {
-            return new WebScraper()
-            {
-                ScraperId = 4,
-                ScraperName = "MediaManager"
-            };
-        }
 
         public WebResult StartScraper()
         {
@@ -88,6 +78,12 @@ namespace MPExtended.Scrapers.MediaManager
         {
             throw new NotImplementedException();
         }
+        
+        public WebBoolResult ShowConfig()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

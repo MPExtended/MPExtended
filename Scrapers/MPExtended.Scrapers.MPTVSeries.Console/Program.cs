@@ -4,23 +4,19 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using MPExtended.Services.ScraperService.Interfaces;
+using MPExtended.PlugIns.Scrapers.MPTVSeries;
+using System.Diagnostics;
 
 namespace MPExtended.Scrapers.TVSeries
 {
     class Program
     {
-        private static ServiceHost scraperHost;
-        private static TVSeriesImporter seriesImporter;
+        private static MPTVSeriesScraper seriesImporter;
         static void Main(string[] args)
         {
             try
             {
-                seriesImporter = new TVSeriesImporter();
-                scraperHost = new ServiceHost(seriesImporter);
-                
-                scraperHost.Open();
-                Console.WriteLine("Opened ServiceHost...");
-
+                seriesImporter = new MPTVSeriesScraper();
                 String command = Console.ReadLine();
 
                 while (!command.Equals("exit"))
@@ -67,6 +63,17 @@ namespace MPExtended.Scrapers.TVSeries
                             }
                         }
                     }
+                    else if (command.Equals("config"))
+                    {
+                       // seriesImporter.PauseScraper();
+
+                        Process config = new Process();
+                        config.StartInfo = new ProcessStartInfo("MPExtended.Scrapers.MPTVSeries.Config.exe");
+                        config.Start();
+                        config.WaitForExit();
+
+                        //seriesImporter.ResumeScraper();
+                    }
 
                     command = Console.ReadLine();
                 }
@@ -74,17 +81,12 @@ namespace MPExtended.Scrapers.TVSeries
                 {
                     seriesImporter.StopScraper();
                 }
-                scraperHost.Close();
-            }
-            catch (AddressAlreadyInUseException)
-            {
-                Console.WriteLine("Address for ScraperService is already in use");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to start service");
             }
-            Console.WriteLine("Mopi Scraper closed");
+            Console.WriteLine("MPTVSeries Scraper closed");
         }
     }
 }

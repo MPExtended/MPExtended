@@ -87,7 +87,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="IPrivateScraperService.cs" />
+    <Compile Include="IScraperPlugin.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IScraperService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

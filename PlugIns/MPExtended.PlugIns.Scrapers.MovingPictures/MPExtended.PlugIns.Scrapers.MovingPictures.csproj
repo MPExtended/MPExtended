@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A9683C0-9209-4656-935A-3F307890067E}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{E009FE7C-EA44-4DBC-91EF-27F860121FD7}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MPExtended.Scrapers.MovingPictures.Config</RootNamespace>
-    <AssemblyName>MPExtended.Scrapers.MovingPictures.Config</AssemblyName>
+    <RootNamespace>MPExtended.PlugIns.Scrapers.MovingPictures</RootNamespace>
+    <AssemblyName>MPExtended.PlugIns.Scrapers.MovingPictures</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,15 +21,45 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\MPExtended.PlugIns.Scrapers.MovingPictures.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\MPExtended.PlugIns.Scrapers.MovingPictures.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.WMPLib">
@@ -70,7 +98,8 @@
     <Reference Include="Dialogs">
       <HintPath>..\..\Libraries\Scrapers\Dialogs.dll</HintPath>
     </Reference>
-    <Reference Include="DirectShowLib">
+    <Reference Include="DirectShowLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Scrapers\DirectShowLib.dll</HintPath>
     </Reference>
     <Reference Include="edtftpnet-1.2.2">
@@ -102,10 +131,7 @@
     <Reference Include="MovingPictures">
       <HintPath>..\..\Libraries\Scrapers\MovingPictures.dll</HintPath>
     </Reference>
-    <Reference Include="MP-TVSeries">
-      <HintPath>..\..\Libraries\Scrapers\MP-TVSeries.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Scrapers\NLog.dll</HintPath>
     </Reference>
@@ -113,13 +139,14 @@
       <HintPath>..\..\Libraries\Scrapers\RemotePlugins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="taglib-sharp">
       <HintPath>..\..\Libraries\Scrapers\taglib-sharp.dll</HintPath>
@@ -127,36 +154,37 @@
     <Reference Include="Utils">
       <HintPath>..\..\Libraries\Scrapers\Utils.dll</HintPath>
     </Reference>
+    <Reference Include="WindowPlugins">
+      <HintPath>..\..\Libraries\Scrapers\WindowPlugins.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
+    <Compile Include="MovingPicturesConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MovingPicturesConfig.Designer.cs">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MovingPicturesScraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Plugins\MPExtended.PlugIns.Scrapers.MovingPictures\MPExtended.PlugIns.Scrapers.MovingPictures.csproj">
-      <Project>{E009FE7C-EA44-4DBC-91EF-27F860121FD7}</Project>
-      <Name>MPExtended.PlugIns.Scrapers.MovingPictures</Name>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
+      <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
+      <Name>MPExtended.Services.ScraperService.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MovingPicturesConfig.resx">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
