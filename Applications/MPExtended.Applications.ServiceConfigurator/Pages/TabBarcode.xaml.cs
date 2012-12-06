@@ -22,7 +22,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
@@ -43,7 +45,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private const int QR_VERSION = 1;
         private const string GENERATOR_APP = "MPExtended";
 
-        private BackgroundWorker BackgroundGenerator;
         private Dictionary<string, User> Users;
 
         public TabBarcode()
@@ -55,17 +56,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             cbUser.DisplayMemberPath = "Key";
             cbUser.SelectedValuePath = "Value";
             cbUser.SelectedIndex = 0;
-
-            BackgroundGenerator = new BackgroundWorker();
-            BackgroundGenerator.DoWork += delegate(object s, DoWorkEventArgs args)
-            {
-                args.Result = GenerateBarcode((User)args.Argument);
-            };
-            BackgroundGenerator.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
-            {
-                imgQRCode.Source = (BitmapSource)args.Result;
-            };
-            BackgroundGenerator.WorkerSupportsCancellation = true;
         }
 
         private void UpdateBarcode(object sender, EventArgs e)
@@ -75,28 +65,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void UpdateBarcode()
         {
-            try
+            var user = cbIncludeAuth.IsChecked == true ? (User)cbUser.SelectedValue : null;
+            Task.Factory.StartNew(delegate()
             {
-                if (cbIncludeAuth.IsChecked == true)
-                {
-                    BackgroundGenerator.RunWorkerAsync((User)cbUser.SelectedValue);
-                }
-                else
-                {
-                    BackgroundGenerator.RunWorkerAsync(null);
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                Log.Warn("Failed to start BackgroundWorker", ex);
-            }
+                var bitmap = GenerateBarcode(user);
+                Dispatcher.Invoke(new Action(() => imgQRCode.Source = (BitmapSource)bitmap));
+            });
         }
 
         /// <summary>
         /// Save the generated barcode as image file to harddisk
         /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">event args</param>
         private void btnSaveToFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog diag = new SaveFileDialog();
