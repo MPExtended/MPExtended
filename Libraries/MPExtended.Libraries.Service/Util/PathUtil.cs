@@ -60,6 +60,9 @@ namespace MPExtended.Libraries.Service.Util
 
         public static string StripFileProtocolPrefix(string path)
         {
+            if (path == null)
+                return null;
+
             return path.StartsWith("file://") ? path.Substring(7) : path;
         }
 
