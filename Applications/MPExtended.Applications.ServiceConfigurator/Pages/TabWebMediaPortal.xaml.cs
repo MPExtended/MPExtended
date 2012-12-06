@@ -59,7 +59,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             if (!hasChanged)
                 return;
 
-            Configuration.WebMediaPortalHosting.Port = Int32.Parse(txtPort.Text);
+            int port;
+            if (!Int32.TryParse(txtPort.Text, out port))
+                port = 8080;
+
+            Configuration.WebMediaPortalHosting.Port = port;
             Configuration.WebMediaPortalHosting.EnableTLS = cbHTTPS.IsChecked.GetValueOrDefault(false);
             Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);
             Configuration.Save();
