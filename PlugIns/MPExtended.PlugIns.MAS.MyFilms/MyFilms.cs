@@ -48,62 +48,52 @@ namespace MPExtended.PlugIns.MAS.MyFilms
         [ImportingConstructor]
         public MyFilms(IPluginData data)
         {
+            Supported = false;
+
             try
             {
-                // load database path
+                // load MyFilms.xml path
                 if (!Mediaportal.HasValidConfigFile())
-                {
-                    Supported = false;
                     return;
-                }
 
                 string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
                 if (!File.Exists(configPath))
-                {
-                    Supported = false;
                     return;
-                }
 
-                // load config file
+                // load current config section
                 XElement configFile = XElement.Load(configPath);
-                string currentConfigNode = configFile
-                    .Elements("section")
-                    .First(x => x.Attribute("name").Value == "MyFilms")
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "Current_Config")
-                    .Value;
-                if (currentConfigNode != "pelis")
+                var entries = configFile.Elements("section").First(x => x.Attribute("name").Value == "MyFilms").Elements("entry");
+                if (!entries.Any(x => x.Attribute("name").Value == "Default_Config") && !entries.Any(x => x.Attribute("name").Value == "Current_Config"))
                 {
-                    Log.Info("MyFilms: currently selected config is {0}, only pelis (Ant Movie Catalog) is supported at the moment", currentConfigNode);
-                    Supported = false;
+                    Log.Info("MyFilms: couldn't find Current_Config or Default_Config value in MyFilms.xml");
+                    return;
+                }
+                var configSectionName = entries.Any(x => x.Attribute("name").Value == "Current_Config") ? 
+                                        entries.First(x => x.Attribute("name").Value == "Current_Config").Value :
+                                        entries.First(x => x.Attribute("name").Value == "Default_Config").Value;
+
+                // look for database path
+                var thisSection = configFile.Elements("section").First(x => x.Attribute("name").Value == configSectionName);
+                if(!thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntCatalog"))
+                {
+                    Log.Info("MyFilms: couldn't find AntCatalog entry in current section ({0})", configSectionName);
                     return;
                 }
 
-                var pelis = configFile
-                    .Elements("section")
-                    .First(x => x.Attribute("name").Value == "pelis");
-
-                DatabasePath = pelis
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "AntCatalog")
-                    .Value;
+                // load database
+                DatabasePath = thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntCatalog").Value;
                 if (!File.Exists(DatabasePath))
                 {
                     Log.Info("MyFilms: cannot find database {0}", DatabasePath);
-                    Supported = false;
                     return;
                 }
 
-                PicturePath = pelis
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "AntPicture")
-                    .Value;
+                PicturePath = thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntPicture").Value;
                 Supported = true;
             }
             catch (Exception ex)
             {
                 Log.Warn("MyFilms: failed to load database path", ex);
-                Supported = false;
                 return;
             }
 
