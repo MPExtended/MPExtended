@@ -78,7 +78,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 }
                 else if (result.UpdateAvailable)
                 {
-                    text = String.Format(UI.UpdateAvailable, result.LastVersion.Version, result.LastVersion.ReleaseDate);
+                    text = String.Format(UI.UpdateAvailable, result.LastVersion.Version, result.LastVersion.ReleaseDate.ToShortDateString());
                 }
                 else
                 {
