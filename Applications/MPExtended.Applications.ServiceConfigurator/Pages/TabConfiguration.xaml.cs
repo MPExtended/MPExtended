@@ -60,7 +60,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // load config
             txtPort.Text = Configuration.Services.Port.ToString();
             txtServiceName.Text = GetServiceName();
-            txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
+            txtNetworkUser.Text = String.IsNullOrEmpty(Configuration.Services.NetworkImpersonation.Domain) ?
+                Configuration.Services.NetworkImpersonation.Username :
+                Configuration.Services.NetworkImpersonation.Domain + "\\" + Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
             cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
 
@@ -82,8 +84,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.Port = Int32.Parse(txtPort.Text);
             Configuration.Services.BonjourName = txtServiceName.Text;
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
-            Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
+
+            var domuser = GetDomainAndUsername(txtNetworkUser.Text);
+            Configuration.Services.NetworkImpersonation.Domain = domuser.Item1;
+            Configuration.Services.NetworkImpersonation.Username = domuser.Item2;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
+
             Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
             Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
 
@@ -192,6 +198,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             bw.RunWorkerAsync();
         }
 
+        private Tuple<string, string> GetDomainAndUsername(string input)
+        {
+            return input.Contains('\\') ?
+                Tuple.Create(input.Substring(0, input.IndexOf('\\')), input.Substring(input.IndexOf('\\') + 1)) :
+                Tuple.Create(String.Empty, input);
+        }
+
         private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
         {
             txtCustomExternalAddress.IsEnabled = false;
@@ -205,7 +218,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnTestCredentials_Click(object sender, RoutedEventArgs e)
         {
-            if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
+            var domuser = GetDomainAndUsername(txtNetworkUser.Text);
+            if (CredentialTester.TestCredentials(domuser.Item1, domuser.Item2, txtNetworkPassword.Password))
             {
                 MessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
