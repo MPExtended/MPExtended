@@ -42,7 +42,13 @@ namespace MPExtended.Libraries.Service.Composition
 
             aggregateCatalog = new AggregateCatalog();
 
-            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories);
+            // Interestingly enough, we need to load the interface libraries first, or we'll get an error about unimplemented types, probably
+            // because the interface library might already have been loaded from another location (via the MPExtended.Libraries.Service ->
+            // MPExtended.Libraries.Client -> Interface dependency), even though that shouldn't matter. Whatever, it's 1:25 am and it works
+            // this way.
+            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories)
+                                 .OrderByDescending(x => x.EndsWith(".Interfaces.dll"))
+                                 .ThenBy(x => x);
             foreach (var file in files)
             {
                 try
