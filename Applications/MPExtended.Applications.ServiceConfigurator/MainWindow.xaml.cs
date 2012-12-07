@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +30,7 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Composition;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Services.UserSessionService.Interfaces;
 
@@ -47,9 +50,7 @@ namespace MPExtended.Applications.ServiceConfigurator
         {
             InitializeComponent();
             Log.Debug("MPExtended.Applications.ServiceConfigurator starting...");
-
-            // tray application 
-            UserServices.Setup(host: true);
+            SetupUSS();
 
             if (StartupArguments.RunAsTrayApp && !StartupArguments.OpenOnStart)
                 Hide();
@@ -82,6 +83,16 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             // initialize some tabs
             Pages.TabConfiguration.StartLoadingTranslations();
+        }
+
+        private void SetupUSS()
+        {
+            if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
+            {
+                AssemblyLoader.Install();
+                AssemblyLoader.AddSearchDirectory(Path.Combine(Installation.GetInstallDirectory(), "Plugins", "Services"));
+            }
+            UserServices.Setup(true);
         }
 
         /// <summary>
