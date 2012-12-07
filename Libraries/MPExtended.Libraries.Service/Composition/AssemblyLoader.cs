@@ -22,7 +22,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace MPExtended.Libraries.Service.Hosting
+namespace MPExtended.Libraries.Service.Composition
 {
     public static class AssemblyLoader
     {
@@ -47,9 +47,11 @@ namespace MPExtended.Libraries.Service.Hosting
 
         private static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
         {
+            var assemblyName = new AssemblyName(args.Name);
+
             foreach (var directory in searchDirectories)
             {
-                var path = Path.Combine(directory, args.Name + ".dll");
+                var path = Path.Combine(directory, assemblyName.Name + ".dll");
                 if (File.Exists(path))
                     return Assembly.LoadFrom(path);
             }

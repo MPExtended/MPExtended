@@ -23,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Libraries.Service.Composition
 {
