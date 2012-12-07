@@ -58,5 +58,10 @@ namespace MPExtended.Libraries.Service.Config
         {
             WatchSharing = new WatchSharingConfiguration();
         }
+
+        public string GetAbsoluteTVLogoDirectory()
+        {
+            return Transformations.FolderNames(TVLogoDirectory);
+        }
     }
 }

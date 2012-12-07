@@ -5,11 +5,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="635"
+      d:DesignHeight="530" d:DesignWidth="635"
 	Title="TabGeneral">
 
-    <Grid>        
-        <GroupBox Header="{x:Static strings:UI.Services}" Height="118" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="300">
+    <Grid Height="535">        
+        <GroupBox Header="{x:Static strings:UI.Services}" Height="106" HorizontalAlignment="Left" Margin="12,12,0,0" Name="gbServices" VerticalAlignment="Top" Width="300">
             <Grid>
                 <TextBlock Height="37" Margin="6,6,6,0" Name="tbPort" Text="{x:Static strings:UI.PortText}" TextWrapping="Wrap" VerticalAlignment="Top" />
                 <Label Content="{x:Static strings:UI.Port}" Height="28" HorizontalAlignment="Left" Margin="0,49,0,0" Name="lblPort" VerticalAlignment="Top" Width="178" FontWeight="Bold" />
@@ -34,7 +34,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{x:Static strings:UI.NetworkDrives}" Height="241" HorizontalAlignment="Left" Margin="12,136,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="300">
+        <GroupBox Header="{x:Static strings:UI.NetworkDrives}" Height="241" HorizontalAlignment="Left" Margin="12,124,0,0" Name="gbNetwork" VerticalAlignment="Top" Width="300">
             <Grid Height="219">
                 <TextBlock Height="124" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="276" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
 
@@ -56,10 +56,18 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{x:Static strings:UI.Language}" Height="93" HorizontalAlignment="Left" Margin="12,383,0,0" VerticalAlignment="Top" Width="300">
+        <GroupBox Header="{x:Static strings:UI.Language}" Height="60" HorizontalAlignment="Left" Margin="12,371,0,0" VerticalAlignment="Top" Width="300">
             <Grid>
                 <Label Content="{x:Static strings:UI.Language}" FontWeight="Bold" Height="28" Width="282" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
-                <ComboBox Height="23" HorizontalAlignment="Left" Margin="6,38,0,0" VerticalAlignment="Top" Width="276" ItemsSource="{Binding}" Name="cbLanguage" SelectionChanged="ChangeLanguage"/>
+                <ComboBox Height="23" HorizontalAlignment="Left" Margin="89,7,0,0" VerticalAlignment="Top" Width="193" ItemsSource="{Binding}" Name="cbLanguage" SelectionChanged="ChangeLanguage"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="{x:Static strings:UI.TVLogoDirectory}" Height="60" HorizontalAlignment="Left" Margin="12,438,0,0" VerticalAlignment="Top" Width="611">
+            <Grid>
+                <Label Content="{x:Static strings:UI.TVLogoDirectory}" FontWeight="Bold" Height="28" Width="282" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
+                <TextBox Height="23" HorizontalAlignment="Left" Margin="134,6,0,0" Name="txtTVLogoDirectory" VerticalAlignment="Top" Width="316" />
+                <Button Content="{x:Static strings:UI.Browse}" Height="23" HorizontalAlignment="Left" Margin="456,6,0,0" Name="btnBrowseTVLogoDirectory" VerticalAlignment="Top" Width="133" Click="btnBrowseTVLogoDirectory_Click" />
             </Grid>
         </GroupBox>
     </Grid>

@@ -24,6 +24,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -33,6 +34,7 @@ using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Network;
+using WpfMessageBox = System.Windows.MessageBox;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -55,6 +57,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // load config
             txtPort.Text = Configuration.Services.Port.ToString();
             txtServiceName.Text = GetServiceName();
+            txtTVLogoDirectory.Text = Configuration.Streaming.GetAbsoluteTVLogoDirectory();
             txtNetworkUser.Text = String.IsNullOrEmpty(Configuration.Services.NetworkImpersonation.Domain) ?
                 Configuration.Services.NetworkImpersonation.Username :
                 Configuration.Services.NetworkImpersonation.Domain + "\\" + Configuration.Services.NetworkImpersonation.Username;
@@ -83,13 +86,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.NetworkImpersonation.Username = domuser.Item2;
             Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
 
+            Configuration.Streaming.TVLogoDirectory = txtTVLogoDirectory.Text;
             Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
-            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
 
+            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
             if (!cbAutoDetectExternalIp.IsChecked.Value)
-            {
                 Configuration.Services.ExternalAddress.Custom = txtCustomExternalAddress.Text;
-            }
 
             Configuration.Save();
         }
@@ -215,17 +217,27 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             var domuser = GetDomainAndUsername(txtNetworkUser.Text);
             if (CredentialTester.TestCredentials(domuser.Item1, domuser.Item2, txtNetworkPassword.Password))
             {
-                MessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                WpfMessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
+        }
+
+        private void btnBrowseTVLogoDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.Desktop;
+            dialog.SelectedPath = txtTVLogoDirectory.Text;
+            var result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+                txtTVLogoDirectory.Text = dialog.SelectedPath;
         }
     }
 }
