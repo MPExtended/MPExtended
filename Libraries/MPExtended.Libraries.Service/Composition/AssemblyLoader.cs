@@ -28,6 +28,7 @@ namespace MPExtended.Libraries.Service.Composition
     {
         private static bool isInstalled = false;
         private static List<string> searchDirectories = new List<string>();
+        private static Dictionary<string, List<Tuple<AssemblyName, string>>> knownAssemblies = new Dictionary<string, List<Tuple<AssemblyName, string>>>();
 
         public static void Install()
         {
@@ -45,13 +46,47 @@ namespace MPExtended.Libraries.Service.Composition
             searchDirectories.Add(directory);
         }
 
+        public static void AddDependencyDirectory(Assembly referencingAssembly, string directory)
+        {
+            foreach (var dependency in referencingAssembly.GetReferencedAssemblies())
+            {
+                if (dependency.Name == "System" || dependency.Name.StartsWith("System.") || dependency.Name == "mscorlib")
+                    continue;
+
+                AddAssemblyLocation(dependency, directory);
+            }
+        }
+
+        public static void AddAssemblyLocation(AssemblyName assembly, string directory)
+        {
+            if (!knownAssemblies.ContainsKey(assembly.Name))
+                knownAssemblies[assembly.Name] = new List<Tuple<AssemblyName, string>>();
+            knownAssemblies[assembly.Name].Add(Tuple.Create(assembly, directory));
+        }
+
         private static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
         {
-            var assemblyName = new AssemblyName(args.Name);
+            var requestedName = new AssemblyName(args.Name);
+
+            if (knownAssemblies.ContainsKey(requestedName.Name))
+            {
+                foreach (var item in knownAssemblies[requestedName.Name])
+                {
+                    if (requestedName.Name == item.Item1.Name &&
+                            (requestedName.Version == null || requestedName.Version == item.Item1.Version) &&
+                            (requestedName.CultureInfo == null || requestedName.CultureInfo == item.Item1.CultureInfo) &&
+                            (requestedName.GetPublicKey() == null || requestedName.GetPublicKey() == item.Item1.GetPublicKey()))
+                    {
+                        var path = Path.Combine(item.Item2, requestedName.Name + ".dll");
+                        if (File.Exists(path))
+                            return Assembly.LoadFrom(path);
+                    }
+                }
+            }
 
             foreach (var directory in searchDirectories)
             {
-                var path = Path.Combine(directory, assemblyName.Name + ".dll");
+                var path = Path.Combine(directory, requestedName.Name + ".dll");
                 if (File.Exists(path))
                     return Assembly.LoadFrom(path);
             }
