@@ -74,6 +74,7 @@ namespace MPExtended.Services.MediaAccessService
 
         public WebMediaServiceDescription GetServiceDescription()
         {
+            LoadProviders();
             return new WebMediaServiceDescription()
             {
                 ApiVersion = API_VERSION,
