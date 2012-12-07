@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
@@ -40,17 +41,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabConfiguration : Page, ITabCloseCallback
     {
-        private static BackgroundWorker loadLanguagesWorker;
-        private static IEnumerable<CultureInfo> availableTranslations;
+        private static Task<List<CultureInfo>> languageLoadingTask;
 
         public static void StartLoadingTranslations()
         {
-            loadLanguagesWorker = new BackgroundWorker();
-            loadLanguagesWorker.DoWork += delegate(object source, DoWorkEventArgs args)
-            {
-                availableTranslations = CultureDatabase.GetAvailableTranslations(UI.ResourceManager).ToList();
-            };
-            loadLanguagesWorker.RunWorkerAsync();
+            languageLoadingTask = Task<List<CultureInfo>>.Factory.StartNew(() => CultureDatabase.GetAvailableTranslations(UI.ResourceManager).ToList());
         }
 
         public TabConfiguration()
@@ -72,8 +67,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 txtCustomExternalAddress.Text = Configuration.Services.ExternalAddress.Custom;
 
             // load dynamic data
-            while (loadLanguagesWorker.IsBusy)
-                Thread.Sleep(20);
             LoadLanguageChoices();
             CheckBonjour();
         }
@@ -103,20 +96,21 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void LoadLanguageChoices()
         {
+            var languages = languageLoadingTask.Result;
             cbLanguage.DisplayMemberPath = "DisplayName";
             cbLanguage.SelectedValuePath = "Name";
-            cbLanguage.DataContext = availableTranslations;
+            cbLanguage.DataContext = languages;
 
             if (Configuration.Services.DefaultLanguage != null &&
-                availableTranslations.Select(x => x.Name).Contains(Configuration.Services.DefaultLanguage))
-                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == Configuration.Services.DefaultLanguage);
+                languages.Select(x => x.Name).Contains(Configuration.Services.DefaultLanguage))
+                cbLanguage.SelectedValue = languages.First(x => x.Name == Configuration.Services.DefaultLanguage);
 
             if (cbLanguage.SelectedValue == null &&
-                availableTranslations.Contains(Thread.CurrentThread.CurrentUICulture))
+                languages.Contains(Thread.CurrentThread.CurrentUICulture))
                 cbLanguage.SelectedValue = Thread.CurrentThread.CurrentUICulture;
 
             if (cbLanguage.SelectedValue == null)
-                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == "en");
+                cbLanguage.SelectedValue = languages.First(x => x.Name == "en");
         }
 
         private void ChangeLanguage(object sender, SelectionChangedEventArgs e)
