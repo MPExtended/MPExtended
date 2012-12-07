@@ -214,6 +214,7 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Views\Settings\Index.js" />
     <Content Include="Views\Settings\Services.css" />
     <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />

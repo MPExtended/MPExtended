@@ -149,3 +149,10 @@
 
 <h2>@UIStrings.About</h2>
 @Html.Raw(String.Format(UIStrings.Version, @ViewBag.Version))
+<a href="#" id="update_checker">Check for updates</a>.
+@{
+    Html.jQuery().Enable();
+    Html.Assets().AddViewScript("Settings/Index.js");
+    Html.jQuery().AddDocumentReadyScript("attachUpdateChecker('a#update_checker', '" + Url.Action("CheckForUpdates") + "', '" + UIStrings.UpdateCheckerError + "', " +
+        "'" + UIStrings.UpdateCheckerNoUpdates + "', '" + UIStrings.UpdateCheckerUpdate + "');");
+}
