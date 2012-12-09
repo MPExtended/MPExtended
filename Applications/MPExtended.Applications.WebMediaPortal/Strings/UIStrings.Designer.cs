@@ -908,6 +908,33 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error loading update information.
+        /// </summary>
+        public static string UpdateCheckerError {
+            get {
+                return ResourceManager.GetString("UpdateCheckerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No updates available.
+        /// </summary>
+        public static string UpdateCheckerNoUpdates {
+            get {
+                return ResourceManager.GetString("UpdateCheckerNoUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update available: version {0}.
+        /// </summary>
+        public static string UpdateCheckerUpdate {
+            get {
+                return ResourceManager.GetString("UpdateCheckerUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         public static string Username {

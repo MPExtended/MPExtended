@@ -482,4 +482,13 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="FileInaccessible" xml:space="preserve">
     <value>File inaccessible</value>
   </data>
+  <data name="UpdateCheckerError" xml:space="preserve">
+    <value>Error loading update information</value>
+  </data>
+  <data name="UpdateCheckerNoUpdates" xml:space="preserve">
+    <value>No updates available</value>
+  </data>
+  <data name="UpdateCheckerUpdate" xml:space="preserve">
+    <value>Update available: version {0}</value>
+  </data>
 </root>

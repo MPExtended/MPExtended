@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,16 +46,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.3.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Database\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -67,54 +61,6 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj">
-      <Project>{26CCB930-9F47-4956-B7E9-5B36AC285663}</Project>
-      <Name>MPExtended.Services.MediaAccessService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj">
-      <Project>{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}</Project>
-      <Name>MPExtended.Services.MediaAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
-      <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
-      <Name>MPExtended.Services.MetaService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService\MPExtended.Services.MetaService.csproj">
-      <Project>{11B46BC9-331A-45CC-9F1D-2EC580197B36}</Project>
-      <Name>MPExtended.Services.MetaService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
-      <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
-      <Name>MPExtended.Services.ScraperService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService\MPExtended.Services.ScraperService.csproj">
-      <Project>{7B0BAB36-B28B-4016-AF70-6AED43703458}</Project>
-      <Name>MPExtended.Services.ScraperService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
-      <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>
-      <Name>MPExtended.Services.StreamingService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj">
-      <Project>{DA449FFD-88D4-42FE-A83A-166C7097D825}</Project>
-      <Name>MPExtended.Services.StreamingService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj">
-      <Project>{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}</Project>
-      <Name>MPExtended.Services.TVAccessService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj">
-      <Project>{5F3A6BBC-96D8-483B-A246-1DD5118465A9}</Project>
-      <Name>MPExtended.Services.TVAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService.Interfaces\MPExtended.Services.UserSessionService.Interfaces.csproj">
-      <Project>{CC3525EA-0721-4299-991B-1C7E01A15E6B}</Project>
-      <Name>MPExtended.Services.UserSessionService.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj">
-      <Project>{26B34D42-CA8B-44BF-A282-E516E2C22588}</Project>
-      <Name>MPExtended.Services.UserSessionService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

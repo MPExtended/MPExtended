@@ -23,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Libraries.Service.Composition
 {
@@ -43,20 +42,26 @@ namespace MPExtended.Libraries.Service.Composition
 
             aggregateCatalog = new AggregateCatalog();
 
-            bool hasValidFile = false;
-            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories);
+            // Interestingly enough, we need to load the interface libraries first, or we'll get an error about unimplemented types, probably
+            // because the interface library might already have been loaded from another location (via the MPExtended.Libraries.Service ->
+            // MPExtended.Libraries.Client -> Interface dependency), even though that shouldn't matter. Whatever, it's 1:25 am and it works
+            // this way.
+            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories)
+                                 .OrderByDescending(x => x.EndsWith(".Interfaces.dll"))
+                                 .ThenBy(x => x);
             foreach (var file in files)
             {
                 try
                 {
-                    var asmCatalog = new AssemblyCatalog(file);
-
-                    // Force MEF to load the assembly file now, so that we can catch any exceptions occuring because of broken
-                    // plugins, and skip those plugins.
+                    // Force MEF to load and scan the assembly file now, so that we can catch any exceptions occuring 
+                    // because of broken plugins, and skip those plugins.
+                    var assembly = Assembly.LoadFrom(file);
+                    var asmCatalog = new AssemblyCatalog(assembly);
                     asmCatalog.Parts.ToArray();
-
                     aggregateCatalog.Catalogs.Add(asmCatalog);
-                    hasValidFile = true;
+
+                    AssemblyLoader.Install();
+                    AssemblyLoader.AddDependencyDirectory(assembly, directory);
                 }
                 catch (BadImageFormatException)
                 {
@@ -70,15 +75,6 @@ namespace MPExtended.Libraries.Service.Composition
                 {
                     Log.Trace("SafeDirectoryCatalog: FileNotFoundException for assembly {0}", file);
                 }
-            }
-
-            if (hasValidFile)
-            {
-                // We need to configure .NET to also search for dependent assemblies in this directory, as it doesn't do 
-                // that by default. We use the AssemblyLoader from the Hosting namespace for this, which also works in
-                // non-service environments.
-                AssemblyLoader.Install();
-                AssemblyLoader.AddSearchDirectory(directory);
             }
         }
 

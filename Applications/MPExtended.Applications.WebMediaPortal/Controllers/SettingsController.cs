@@ -23,6 +23,7 @@ using System.Web.Mvc;
 using MoreLinq;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 
@@ -82,6 +83,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             IServiceDiscoverer discoverer = new ServiceDiscoverer();
             var sets = discoverer.DiscoverSets(TimeSpan.FromSeconds(5));
             return Json(sets.DistinctBy(x => x.GetSetIdentifier()).Select(x => new FoundServicesModel(x)), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CheckForUpdates()
+        {
+            if (!UpdateChecker.IsWorking())
+                return Json(new { Error = true }, JsonRequestBehavior.AllowGet);
+            if (!UpdateChecker.IsUpdateAvailable())
+                return Json(new { Error = false, UpdateAvailable = false }, JsonRequestBehavior.AllowGet);
+
+            var newVersion = UpdateChecker.GetLastReleasedVersion();
+            return Json(new { Error = false, UpdateAvailable = true, NewVersion = newVersion.Version }, JsonRequestBehavior.AllowGet);
         }
     }
 }

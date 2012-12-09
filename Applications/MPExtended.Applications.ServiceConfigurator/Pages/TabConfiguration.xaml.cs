@@ -22,7 +22,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -32,6 +34,7 @@ using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Network;
+using WpfMessageBox = System.Windows.MessageBox;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -40,17 +43,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabConfiguration : Page, ITabCloseCallback
     {
-        private static BackgroundWorker loadLanguagesWorker;
-        private static IEnumerable<CultureInfo> availableTranslations;
+        private static Task<List<CultureInfo>> languageLoadingTask;
 
         public static void StartLoadingTranslations()
         {
-            loadLanguagesWorker = new BackgroundWorker();
-            loadLanguagesWorker.DoWork += delegate(object source, DoWorkEventArgs args)
-            {
-                availableTranslations = CultureDatabase.GetAvailableTranslations(UI.ResourceManager).ToList();
-            };
-            loadLanguagesWorker.RunWorkerAsync();
+            languageLoadingTask = Task<List<CultureInfo>>.Factory.StartNew(() => CultureDatabase.GetAvailableTranslations(UI.ResourceManager).ToList());
         }
 
         public TabConfiguration()
@@ -60,7 +57,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             // load config
             txtPort.Text = Configuration.Services.Port.ToString();
             txtServiceName.Text = GetServiceName();
-            txtNetworkUser.Text = Configuration.Services.NetworkImpersonation.Username;
+            txtTVLogoDirectory.Text = Configuration.Streaming.GetAbsoluteTVLogoDirectory();
+            txtNetworkUser.Text = String.IsNullOrEmpty(Configuration.Services.NetworkImpersonation.Domain) ?
+                Configuration.Services.NetworkImpersonation.Username :
+                Configuration.Services.NetworkImpersonation.Domain + "\\" + Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
             cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
 
@@ -70,8 +70,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 txtCustomExternalAddress.Text = Configuration.Services.ExternalAddress.Custom;
 
             // load dynamic data
-            while (loadLanguagesWorker.IsBusy)
-                Thread.Sleep(20);
             LoadLanguageChoices();
             CheckBonjour();
         }
@@ -82,35 +80,39 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.Services.Port = Int32.Parse(txtPort.Text);
             Configuration.Services.BonjourName = txtServiceName.Text;
             Configuration.Services.BonjourEnabled = cbBonjourEnabled.IsChecked.Value;
-            Configuration.Services.NetworkImpersonation.Username = txtNetworkUser.Text;
-            Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
-            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
-            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
 
+            var domuser = GetDomainAndUsername(txtNetworkUser.Text);
+            Configuration.Services.NetworkImpersonation.Domain = domuser.Item1;
+            Configuration.Services.NetworkImpersonation.Username = domuser.Item2;
+            Configuration.Services.NetworkImpersonation.SetPasswordFromPlaintext(txtNetworkPassword.Password);
+
+            Configuration.Streaming.TVLogoDirectory = txtTVLogoDirectory.Text;
+            Configuration.Services.AccessRequestEnabled = cbAccessRequestEnabled.IsChecked.Value;
+
+            Configuration.Services.ExternalAddress.Autodetect = cbAutoDetectExternalIp.IsChecked.Value;
             if (!cbAutoDetectExternalIp.IsChecked.Value)
-            {
                 Configuration.Services.ExternalAddress.Custom = txtCustomExternalAddress.Text;
-            }
 
             Configuration.Save();
         }
 
         private void LoadLanguageChoices()
         {
+            var languages = languageLoadingTask.Result;
             cbLanguage.DisplayMemberPath = "DisplayName";
             cbLanguage.SelectedValuePath = "Name";
-            cbLanguage.DataContext = availableTranslations;
+            cbLanguage.DataContext = languages;
 
             if (Configuration.Services.DefaultLanguage != null &&
-                availableTranslations.Select(x => x.Name).Contains(Configuration.Services.DefaultLanguage))
-                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == Configuration.Services.DefaultLanguage);
+                languages.Select(x => x.Name).Contains(Configuration.Services.DefaultLanguage))
+                cbLanguage.SelectedValue = languages.First(x => x.Name == Configuration.Services.DefaultLanguage);
 
             if (cbLanguage.SelectedValue == null &&
-                availableTranslations.Contains(Thread.CurrentThread.CurrentUICulture))
+                languages.Contains(Thread.CurrentThread.CurrentUICulture))
                 cbLanguage.SelectedValue = Thread.CurrentThread.CurrentUICulture;
 
             if (cbLanguage.SelectedValue == null)
-                cbLanguage.SelectedValue = availableTranslations.First(x => x.Name == "en");
+                cbLanguage.SelectedValue = languages.First(x => x.Name == "en");
         }
 
         private void ChangeLanguage(object sender, SelectionChangedEventArgs e)
@@ -192,6 +194,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             bw.RunWorkerAsync();
         }
 
+        private Tuple<string, string> GetDomainAndUsername(string input)
+        {
+            return input.Contains('\\') ?
+                Tuple.Create(input.Substring(0, input.IndexOf('\\')), input.Substring(input.IndexOf('\\') + 1)) :
+                Tuple.Create(String.Empty, input);
+        }
+
         private void cbAutoDetectExternalIp_Checked(object sender, RoutedEventArgs e)
         {
             txtCustomExternalAddress.IsEnabled = false;
@@ -205,19 +214,30 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnTestCredentials_Click(object sender, RoutedEventArgs e)
         {
-            if (CredentialTester.TestCredentials("", txtNetworkUser.Text, txtNetworkPassword.Password))
+            var domuser = GetDomainAndUsername(txtNetworkUser.Text);
+            if (CredentialTester.TestCredentials(domuser.Item1, domuser.Item2, txtNetworkPassword.Password))
             {
-                MessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                WpfMessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                WpfMessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
+        }
+
+        private void btnBrowseTVLogoDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.Desktop;
+            dialog.SelectedPath = txtTVLogoDirectory.Text;
+            var result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+                txtTVLogoDirectory.Text = dialog.SelectedPath;
         }
     }
 }
