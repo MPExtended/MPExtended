@@ -81,19 +81,19 @@ namespace MPExtended.Services.MediaAccessService
 
         internal ProviderHandler()
         {
-            Initialize();
+            LoadProviders();
             Instance = this;
             Configuration.Reloaded += delegate(ConfigurationFile file)
             {
                 if (file == ConfigurationFile.MediaAccess)
                 {
                     Log.Debug("Reloading all libraries because of changes to MediaAccess.xml");
-                    Initialize();
+                    LoadProviders();
                 }
             };
         }
 
-        private void Initialize()
+        protected void LoadProviders()
         {
             var loader = new IndexedPluginLoader<int>("Id");
             loader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.MAS.*", @"Plugins\Media");

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Compilation;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Composition;
 using MPExtended.Libraries.Service.Hosting;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.Composition
@@ -54,11 +55,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                 Log.Debug("Loading assembly {0} into Razor BuildManager", assembly.Location);
                 if (!directoriesAdded.Contains(directory))
                 {
-// This method is obsolete, but the suggested alternative method (AppDomainSetup.PrivateBinPath) only works for setting up new
-// application domains and doesn't work on the current domain.
-#pragma warning disable 0618
-                    AppDomain.CurrentDomain.AppendPrivatePath(directory);
-#pragma warning restore 0618
+                    AssemblyLoader.Install();
+                    AssemblyLoader.AddSearchDirectory(directory);
                 }
 
                 BuildManager.AddReferencedAssembly(assembly);

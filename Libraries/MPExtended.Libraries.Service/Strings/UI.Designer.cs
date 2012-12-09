@@ -1155,6 +1155,15 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TV logo directory.
+        /// </summary>
+        public static string TVLogoDirectory {
+            get {
+                return ResourceManager.GetString("TVLogoDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TVServer.
         /// </summary>
         public static string TVServer {
