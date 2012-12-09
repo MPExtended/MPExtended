@@ -46,32 +46,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Proxied,
     }
 
+    public class ProfileViewModel
+    {
+        public string DefaultProfile { get; set; }
+        public List<String> AvailableProfiles { get; set; }
+    }
+
     public class SettingsViewModel
     {
-        public List<SelectListItem> MediaProfiles
-        {
-            get
-            {
-                return GetProfiles(Connections.Current.MASStreamControl, StreamTarget.GetVideoTargets());
-            }
-        }
-
-        public List<SelectListItem> AudioProfiles
-        {
-            get
-            {
-                return GetProfiles(Connections.Current.MASStreamControl, StreamTarget.GetAllTargets());
-            }
-        }
-
-        public List<SelectListItem> TVProfiles
-        {
-            get
-            {
-                return GetProfiles(Connections.Current.TASStreamControl, StreamTarget.GetVideoTargets());
-            }
-        }
-
         public List<SelectListItem> TVGroups
         {
             get
@@ -150,18 +132,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("TVGroups", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVGroup")]
         public int? SelectedGroup { get; set; }
 
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMediaStreamingProfile")]
-        [ListChoice("MediaProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMediaProfile")]
-        public string SelectedMediaProfile { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicStreamingProfile")]
-        [ListChoice("AudioProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicProfile")]
-        public string SelectedAudioProfile { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVStreamingProfile")]
-        [ListChoice("TVProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVProfile")]
-        public string SelectedTVProfile { get; set; }
-
         [LocalizedDisplayName(typeof(FormStrings), "TVShowDatabase")]
         [ListChoice("TVShowDatabases", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVShowDatabase")]
         public int? TVShowProvider { get; set; }
@@ -193,11 +163,46 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("Languages", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
         public string Language { get; set; }
 
+        public List<string> Platforms { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicStreamingProfile")]
+        public Dictionary<string, ProfileViewModel> AudioProfiles { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMediaStreamingProfile")]
+        public Dictionary<string, ProfileViewModel> VideoProfiles { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVStreamingProfile")]
+        public Dictionary<string, ProfileViewModel> TvProfiles { get; set; }
+
         public SettingsViewModel()
         {
+            Platforms = Configuration.StreamingPlatforms.GetPlatforms();
+            AudioProfiles = new Dictionary<string, ProfileViewModel>();
+            VideoProfiles = new Dictionary<string, ProfileViewModel>();
+            TvProfiles = new Dictionary<string, ProfileViewModel>();
+
+            foreach (string platform in Platforms)
+            {
+                AudioProfiles.Add(platform, new ProfileViewModel()
+                {
+                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultAudioProfileForPlatform(platform),
+                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.MASStreamControl, StreamTarget.GetAudioTargets())
+                });
+                VideoProfiles.Add(platform, new ProfileViewModel()
+                {
+                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultVideoProfileForPlatform(platform),
+                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.MASStreamControl, StreamTarget.GetVideoTargets())
+                });
+                TvProfiles.Add(platform, new ProfileViewModel() 
+                {
+                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultTvProfileForPlatform(platform),
+                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.TASStreamControl, StreamTarget.GetVideoTargets())
+                });
+            }
         }
 
-        public SettingsViewModel(Config.WebMediaPortal model)
+        public SettingsViewModel(Config.WebMediaPortal model) 
+            : this()
         {
 		    Skin = model.Skin;
             Language = model.DefaultLanguage;
@@ -205,9 +210,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EnableDeinterlace = model.EnableDeinterlace;
             EnableAlbumPlayer = model.EnableAlbumPlayer;
             SelectedGroup = model.DefaultGroup;
-            SelectedMediaProfile = model.DefaultMediaProfile;
-            SelectedAudioProfile = model.DefaultAudioProfile;
-            SelectedTVProfile = model.DefaultTVProfile;
 
             if (ShowMASConfiguration)
             {
@@ -224,29 +226,35 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Configuration.WebMediaPortal.EnableDeinterlace = EnableDeinterlace;
             Configuration.WebMediaPortal.EnableAlbumPlayer = EnableAlbumPlayer;
             Configuration.WebMediaPortal.DefaultGroup = SelectedGroup;
-            Configuration.WebMediaPortal.DefaultMediaProfile = SelectedMediaProfile;
-            Configuration.WebMediaPortal.DefaultAudioProfile = SelectedAudioProfile;
-            Configuration.WebMediaPortal.DefaultTVProfile = SelectedTVProfile;
-
             Configuration.WebMediaPortal.TVShowProvider = TVShowProvider;
             Configuration.WebMediaPortal.MusicProvider = MusicProvider;
             Configuration.WebMediaPortal.MovieProvider = MovieProvider;
             Configuration.WebMediaPortal.Skin = Skin;
             Configuration.WebMediaPortal.DefaultLanguage = Language;
+
+            foreach (string platform in Platforms)
+            {
+                Configuration.StreamingPlatforms.SetDefaultAudioProfileForPlatform(platform, AudioProfiles[platform].DefaultProfile);
+                Configuration.StreamingPlatforms.SetDefaultVideoProfileForPlatform(platform, VideoProfiles[platform].DefaultProfile);
+                Configuration.StreamingPlatforms.SetDefaultTvProfileForPlatform(platform, TvProfiles[platform].DefaultProfile);
+            }
+            
             Configuration.Save();
         }
 
-        private List<SelectListItem> GetProfiles(IWebStreamingService service, IEnumerable<StreamTarget> targets)
+        private List<String> GetProfilesForPlatform(string platform, IWebStreamingService service, IEnumerable<StreamTarget> targets)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            foreach (StreamTarget target in targets)
-            {
-                foreach(var profile in service.GetTranscoderProfilesForTarget(target.Name))
-                {
-                    items.Add(new SelectListItem() { Text = profile.Name, Value = profile.Name });
-                }
-            }
-            return items.OrderBy(x => x.Value).ToList();
+            List<string> profiles = new List<string>();
+
+            Configuration.StreamingPlatforms.GetValidTargetsForPlatform(platform)
+                .Intersect(targets.Select(x => x.Name))
+                .ToList()
+                .ForEach(target => profiles.AddRange(service.GetTranscoderProfilesForTarget(target)
+                    .Select(x => x.Name)
+                    .Where(x => !profiles.Contains(x))));
+
+            profiles.Sort();
+            return profiles;            
         }
 
         private int GetCurrentProvider(int? setting, int defaultValue)

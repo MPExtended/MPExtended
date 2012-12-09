@@ -39,7 +39,20 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             ViewBag.Version = VersionUtil.GetFullVersionString();
             ServiceAvailability.Reload();
 
-            return View(new SettingsViewModel(Settings.ActiveSettings));
+            SettingsViewModel model = new SettingsViewModel(Settings.ActiveSettings);
+            ProfileViewModel profile; 
+            
+            foreach (string platform in model.Platforms)
+            {
+                profile = model.AudioProfiles[platform];
+                ViewData.Add(platform + "_audio", new SelectList(profile.AvailableProfiles, profile.DefaultProfile));
+                profile = model.VideoProfiles[platform];
+                ViewData.Add(platform + "_video", new SelectList(profile.AvailableProfiles, profile.DefaultProfile));
+                profile = model.TvProfiles[platform];
+                ViewData.Add(platform + "_tv", new SelectList(profile.AvailableProfiles, profile.DefaultProfile));
+            }
+
+            return View(model);
         }
 
         [HttpPost]
@@ -50,6 +63,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (!ModelState.IsValid)
             {
                 return View(new SettingsViewModel(Settings.ActiveSettings));
+            }
+
+            foreach (string platform in model.Platforms)
+            {
+                model.AudioProfiles[platform].DefaultProfile = Request.Form[platform + "_audio"];
+                model.VideoProfiles[platform].DefaultProfile = Request.Form[platform + "_video"];
+                model.TvProfiles[platform].DefaultProfile = Request.Form[platform + "_tv"];
             }
 
             model.SaveToConfiguration();

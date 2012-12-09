@@ -51,88 +51,95 @@
         </tr>
         @{  if(Model.ShowTASConfiguration)
             {
-        <tr>
-            <td>
-                @Html.LabelFor(x => x.SelectedGroup)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.SelectedGroup)
-                @Html.ValidationMessageFor(x => x.SelectedGroup)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(x => x.SelectedTVProfile)
-            </td>
-            <td>
-                @Html.DropDownListFor(x => x.SelectedTVProfile)
-                @Html.ValidationMessageFor(x => x.SelectedTVProfile)
-            </td>
-        </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.SelectedGroup)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(x => x.SelectedGroup)
+                        @Html.ValidationMessageFor(x => x.SelectedGroup)
+                    </td>
+                </tr>
             }
         }
         @{  if (Model.ShowMASConfiguration)
             {
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.SelectedMediaProfile)
-                </td>
-                <td>
-                    @Html.DropDownListFor(x => x.SelectedMediaProfile)
-                    @Html.ValidationMessageFor(x => x.SelectedMediaProfile)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.SelectedAudioProfile)
-                </td>
-                <td>
-                    @Html.DropDownListFor(x => x.SelectedAudioProfile)
-                    @Html.ValidationMessageFor(x => x.SelectedAudioProfile)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.EnableAlbumPlayer)
-                </td>
-                <td>
-                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "true") @UIStrings.Yes
-                    &nbsp;&nbsp;&nbsp;&nbsp; 
-                    @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "false") @UIStrings.No
-                    @Html.ValidationMessageFor(x => x.EnableAlbumPlayer)
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.TVShowProvider)
-                </td>
-                <td>
-                    @Html.DropDownListFor(x => x.TVShowProvider)
-                    @Html.ValidationMessageFor(x => x.TVShowProvider)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.MovieProvider)
-                </td>
-                <td>
-                    @Html.DropDownListFor(x => x.MovieProvider)
-                    @Html.ValidationMessageFor(x => x.MovieProvider)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.MusicProvider)
-                </td>
-                <td>
-                    @Html.DropDownListFor(x => x.MusicProvider)
-                    @Html.ValidationMessageFor(x => x.MusicProvider)
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.EnableAlbumPlayer)
+                    </td>
+                    <td>
+                        @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "true") @UIStrings.Yes
+                        &nbsp;&nbsp;&nbsp;&nbsp; 
+                        @Html.RadioButtonFor(x => x.EnableAlbumPlayer, "false") @UIStrings.No
+                        @Html.ValidationMessageFor(x => x.EnableAlbumPlayer)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.TVShowProvider)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(x => x.TVShowProvider)
+                        @Html.ValidationMessageFor(x => x.TVShowProvider)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.MovieProvider)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(x => x.MovieProvider)
+                        @Html.ValidationMessageFor(x => x.MovieProvider)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.MusicProvider)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(x => x.MusicProvider)
+                        @Html.ValidationMessageFor(x => x.MusicProvider)
+                    </td>
+                </tr>
             }
+        }
+
+        @foreach(string platform in Model.Platforms)
+        {
+            <tr>
+                <td colspan="2">
+                    <br />
+                    <h2>@platform</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.TvProfiles)
+                </td>
+                <td>                                
+                    @Html.DropDownList(@platform + "_tv")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.VideoProfiles)
+                </td>
+                <td>                                
+                    @Html.DropDownList(@platform + "_video")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(x => x.AudioProfiles)
+                </td>
+                <td>                                
+                    @Html.DropDownList(@platform + "_audio")
+                </td>
+            </tr>
         }
     </table>
     <br />

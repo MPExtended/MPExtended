@@ -76,6 +76,11 @@ namespace MPExtended.Libraries.Service.Config
             return this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)).ValidTargets;
         }
 
+        public IEnumerable<string> GetValidTargetsForPlatform(string platform)
+        {
+            return this.FirstOrDefault(x => x.Name == platform).ValidTargets;
+        }
+
         public string GetDefaultProfileForUserAgent(StreamingProfileType type, string userAgent)
         {
             switch (type)
@@ -86,6 +91,19 @@ namespace MPExtended.Libraries.Service.Config
                     return GetDefaultTvProfileForUserAgent(userAgent);
                 default:
                     return GetDefaultVideoProfileForUserAgent(userAgent);
+            }
+        }
+
+        public string GetDefaultProfileForPlatform(StreamingProfileType type, string platform)
+        {
+            switch (type)
+            {
+                case StreamingProfileType.Audio:
+                    return GetDefaultAudioProfileForPlatform(platform);
+                case StreamingProfileType.Tv:
+                    return GetDefaultTvProfileForPlatform(platform);
+                default:
+                    return GetDefaultVideoProfileForPlatform(platform);
             }
         }
 
