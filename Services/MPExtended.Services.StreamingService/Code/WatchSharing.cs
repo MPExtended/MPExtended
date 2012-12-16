@@ -169,7 +169,7 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     if (state.Context.Source.MediaType == WebMediaType.TVEpisode)
                     {
-                        services.ExecuteForAll(s => CallForEpisode(s.StartWatchingEpisode));
+                        services.ExecuteForAll(s => CallForEpisode(identifier, s.StartWatchingEpisode));
                     }
                     else if (state.Context.Source.MediaType == WebMediaType.Movie)
                     {
