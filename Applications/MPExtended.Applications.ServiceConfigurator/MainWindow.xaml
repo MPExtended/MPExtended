@@ -54,10 +54,6 @@
 
         <Image Height="490" HorizontalAlignment="Right" Margin="0,0,-241,-184" Name="imgGlobeBackground" Stretch="Fill" VerticalAlignment="Bottom" Width="550" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/globe.png" Opacity="0.4" />
 
-        <Image HorizontalAlignment="Left" Margin="16,0,21,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
-        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="120" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
-        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" FontWeight="Bold" Foreground="#FF009600" />
-
         <Button Content="{x:Static strings:UI.OK}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="btnOK" VerticalAlignment="Bottom" Width="110" Click="btnOK_Click"/>
         <Separator Height="1" Name="separator" Width="165" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
 
@@ -108,5 +104,9 @@
             <TabItem Header="{x:Static strings:UI.TabWebMediaPortal}" Width="160" Name="tiWebMediaPortal" Tag="Pages/TabWebMediaPortal.xaml">
             </TabItem>
         </TabControl>
+
+        <Image HorizontalAlignment="Left" Margin="16,0,21,58" Name="imgLogo" Stretch="Uniform" Width="131" Source="/MPExtended.Applications.ServiceConfigurator;component/Artwork/MpExtl_Icon.png" Height="126" VerticalAlignment="Bottom" />
+        <Button Content="{x:Static strings:UI.Start}" Height="23" Name="btnStartStopService" Width="120" Click="btnStartStopService_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,190" />
+        <Label Content="lblServiceState" Height="28" Name="lblServiceState" Margin="10,0,0,212" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" FontWeight="Bold" Foreground="#FF009600" />
     </Grid>
 </Window>
