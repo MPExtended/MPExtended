@@ -83,6 +83,7 @@
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
+    <Compile Include="Extensions\TaskExtensionMethods.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />
