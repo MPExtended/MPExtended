@@ -64,25 +64,25 @@ namespace MPExtended.Services.StreamingService.Code
             return true;
         }
 
-        public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool StartWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Start watching episode {0}, season {1}, show {2}", episode.Title, episode.SeasonId, episode.ShowId);
             return true;
         }
 
-        public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
+        public bool WatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode, int progress)
         {
             Log.Debug("WSD: Watching episode {0} ({1}%)", episode.Title, progress);
             return true;
         }
 
-        public bool FinishEpisode(WebTVEpisodeDetailed episode)
+        public bool FinishEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Finished episode {0}", episode.Title);
             return true;
         }
 
-        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool CancelWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             Log.Debug("WSD: Canceled episode {0}", episode.Title);
             return true;

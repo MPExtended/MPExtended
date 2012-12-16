@@ -29,16 +29,45 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
+    public enum SearchResultType
+    {
+        // From WebMediaType
+        Movie = 0,
+        MusicTrack = 1,
+        Picture = 2,
+        TVEpisode = 3,
+        File = 4,
+        TVShow = 5,
+        TVSeason = 6,
+        MusicAlbum = 7,
+        MusicArtist = 8,
+        Folder = 9,
+        Drive = 10,
+        Playlist = 11,
+        // Leaving out items from TAS, as those can't be returned
+
+        // From WebTVSearchResult
+        TVChannel = 100,
+        RadioChannel = 101,
+        Schedule = 102,
+        Recording = 103,
+        TVGroup = 104,
+        RadioGroup = 105,
+        Program = 106
+    }
+
     public class SearchResultsViewModel
     {
         public string Title { get; set; }
         public int Score { get; set; }
         public string URL { get; set; }
+        public SearchResultType Type { get; set; }
 
         public SearchResultsViewModel(WebSearchResult res, string url)
         {
             Score = res.Score;
             URL = url;
+            Type = (SearchResultType)res.Type;
             Title = GetTitle(res);
         }
 
@@ -46,6 +75,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             URL = url;
             Score = res.Score;
+            Type = (SearchResultType)(res.Type + 100);
             Title = GetTitle(res);
         }
 

@@ -66,7 +66,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
 
                 // lookup IIS Express installation path from registry
                 object iisExpressLocation = null;
-                foreach (var version in new string[] { "7.5", "8.0" })
+                foreach (var version in new string[] { "7.5" })
                 {
                     iisExpressLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\IISExpress\" + version, "InstallPath");
                     if (iisExpressLocation != null && !String.IsNullOrEmpty(iisExpressLocation.ToString().Trim()))

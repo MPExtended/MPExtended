@@ -76,7 +76,7 @@ namespace MPExtended.Services.StreamingService.Code
             ProcessStartInfo info = new ProcessStartInfo();
             using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
             {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -f image2 {2}", position, source.GetPath(), tempFile);
+                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 {2}", position, source.GetPath(), tempFile);
                 info.FileName = Configuration.StreamingProfiles.FFMpegPath;
                 info.CreateNoWindow = true;
                 info.UseShellExecute = false;

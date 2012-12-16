@@ -8,26 +8,26 @@
     @if (ViewBag.Availability.Movies)
     {
         <div class="item">
-            @Html.Partial("NewMovies", Model.GetLastAddedMovies(4))
+            @Html.Action("NewMovies", new { count = 4, partial = true })
         </div>
     }
 
     @if (ViewBag.Availability.TVShows)
     {
         <div class="item">
-            @Html.Partial("AiredEpisodes", Model.GetLastAiredTVEpisodes(4))
+            @Html.Action("AiredEpisodes", new { count = 4, partial = true })
         </div>
     }
 
     @if (ViewBag.Availability.Music)
     {
         <div class="item">
-            @Html.Partial("NewAlbums", Model.GetLastAddedAlbums(4))
+            @Html.Action("NewAlbums", new { count = 4, partial = true })
         </div>
 
 	    @* Disable them for now because they make the homepage overly crowded
         <div class="item">
-            @Html.Partial("NewMusicTracks", Model.GetLastAddedMusicTracks(4))
+            @Html.Action("NewMusicTracks", new { count = 4, partial = true })
         </div>
 	    *@
     }
@@ -35,11 +35,11 @@
     @if (ViewBag.Availability.TAS)
     {
         <div class="item">
-            @Html.Partial("NewRecordings", Model.GetLastRecordings(4))
+            @Html.Action("NewRecordings", new { count = 4, partial = true })
         </div>
 
         <div class="item">
-            @Html.Partial("CurrentSchedules", Model.GetTodaysSchedules())
+            @Html.Action("CurrentSchedules", new { partial = true })
         </div>
     }
 </div>

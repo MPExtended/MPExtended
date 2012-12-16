@@ -30,7 +30,6 @@ namespace MPExtended.Libraries.Social
 {
     public class TraktSharingProvider : IWatchSharingService
     {
-        public IMediaAccessService MediaService { get; set; }
         public Dictionary<string,string> Configuration { get; set; }
 
         public int UpdateInterval
@@ -127,31 +126,28 @@ namespace MPExtended.Libraries.Social
             }
         }
 
-        public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool StartWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
-            return CallShowAPI(episode, TraktWatchStatus.Watching, 0);
+            return CallShowAPI(show, season, episode, TraktWatchStatus.Watching, 0);
         }
 
-        public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
+        public bool WatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode, int progress)
         {
-            return CallShowAPI(episode, TraktWatchStatus.Watching, progress);
+            return CallShowAPI(show, season, episode, TraktWatchStatus.Watching, progress);
         }
 
-        public bool FinishEpisode(WebTVEpisodeDetailed episode)
+        public bool FinishEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
-            return CallShowAPI(episode, TraktWatchStatus.Scrobble, 100);
+            return CallShowAPI(show, season, episode, TraktWatchStatus.Scrobble, 100);
         }
 
-        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool CancelWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
-            return CallShowAPI(episode, TraktWatchStatus.CancelWatching, null);
+            return CallShowAPI(show, season, episode, TraktWatchStatus.CancelWatching, null);
         }
 
-        private bool CallShowAPI(WebTVEpisodeBasic episode, TraktWatchStatus state, int? progress)
+        private bool CallShowAPI(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeBasic episode, TraktWatchStatus state, int? progress)
         {
-            WebTVShowDetailed show = MediaService.GetTVShowDetailedById(episode.PID, episode.ShowId);
-            WebTVSeasonDetailed season = MediaService.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
-
             var data = new TraktEpisodeScrobbleData()
             {
                 MediaCenter = TraktConfig.MediaCenter,
