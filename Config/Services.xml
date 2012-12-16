@@ -17,7 +17,8 @@
     <Autodetect>true</Autodetect>
     <Custom />
   </ExternalAddress>
-  
+
+  <SerivceAddress />
   <Port>4322</Port>
   <EnableIPv6>false</EnableIPv6>
 
