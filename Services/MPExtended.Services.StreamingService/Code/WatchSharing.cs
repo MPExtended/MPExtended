@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Social;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -175,7 +176,7 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         services.ExecuteForAll(s => s.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor));
                     }
-                });
+                }).LogOnException();
 
                 // and start the background timer
                 streams[identifier] = state;
@@ -216,7 +217,7 @@ namespace MPExtended.Services.StreamingService.Code
                     Log.Debug("WatchSharing: seeing {0}% as finished for {1}", progress, identifier);
 
                     // send the finished event in the background thread
-                    Task.Factory.StartNew(delegate ()
+                    Task.Factory.StartNew(delegate()
                     {
                         // Stop the timers. Do this before sending the FinishEpisode() events as we could get a race condition with the service otherwise.
                         foreach (var timer in streams[identifier].BackgroundTimers)
@@ -237,7 +238,7 @@ namespace MPExtended.Services.StreamingService.Code
                         // And definitely stop the stream
                         streams.Remove(identifier);
                         Log.Debug("WatchSharing: finished handling {0}", identifier);
-                    });
+                    }).LogOnException();
                     return;
                 }
             }
