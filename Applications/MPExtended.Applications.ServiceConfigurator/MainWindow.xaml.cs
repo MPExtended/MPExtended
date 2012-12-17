@@ -84,6 +84,22 @@ namespace MPExtended.Applications.ServiceConfigurator
             Pages.TabConfiguration.StartLoadingTranslations();
         }
 
+        private void CloseTab()
+        {
+            try
+            {
+                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
+                {
+                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to handle TabClosed() callback when leaving tab", ex);
+                ErrorHandling.OnlyShowError(ex);
+            }
+        }
+
         /// <summary>
         /// Loads the pages into the content
         /// </summary>
@@ -93,12 +109,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             {
                 if (lastTabIndex != tcMainTabs.SelectedIndex)
                 {
-                    if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
-                    {
-                        (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
-                    }
-
-                    // create new tab
+                    CloseTab();
                     TabItem item = tcMainTabs.SelectedItem as TabItem;
                     Frame f = new Frame();
                     f.Source = new Uri((string)item.Tag, UriKind.Relative);
@@ -146,11 +157,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             try
             {
                 // deactive the current tab too, as this is a close action of the user and should have the same effect as selecting another tab
-                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
-                {
-                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
-                }
-
+                CloseTab();
                 this.Hide();
 
                 // exit when we aren't running as tray app
@@ -178,11 +185,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             {
                 // When we exit the app, make sure to unload the tab and stop USS.
                 UserServices.Shutdown();
-
-                if (lastTabIndex >= 0 && ((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content is ITabCloseCallback)
-                {
-                    (((tcMainTabs.Items[lastTabIndex] as TabItem).Content as Frame).Content as ITabCloseCallback).TabClosed();
-                }
+                CloseTab();
             }
         }
 
