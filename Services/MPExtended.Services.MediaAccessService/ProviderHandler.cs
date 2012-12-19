@@ -61,8 +61,12 @@ namespace MPExtended.Services.MediaAccessService
         protected ILibraryList<IFileSystemLibrary> FileSystemLibraries { get; set; }
         protected ILibraryList<IPlaylistLibrary> PlaylistLibraries { get; set; }
 
+        private object concurrentMefLock;
+
         internal ProviderHandler()
         {
+            concurrentMefLock = new object();
+
             Initialize();
             Instance = this;
             Configuration.Reloaded += delegate(ConfigurationFile file)
@@ -77,23 +81,26 @@ namespace MPExtended.Services.MediaAccessService
 
         private void Initialize()
         {
-            if (!Compose())
+            lock (concurrentMefLock)
             {
-                return;
-            }
+                if (!Compose())
+                {
+                    return;
+                }
 
-            try
-            {
-                MovieLibraries = new LazyLibraryList<IMovieLibrary>(CreateList(MovieLibrariesLoaded), ProviderType.Movie);
-                MusicLibraries = new LazyLibraryList<IMusicLibrary>(CreateList(MusicLibrariesLoaded), ProviderType.Music);
-                TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(CreateList(TVShowLibrariesLoaded), ProviderType.TVShow);
-                PictureLibraries = new LazyLibraryList<IPictureLibrary>(CreateList(PictureLibrariesLoaded), ProviderType.Picture);
-                FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(CreateList(FileSystemLibrariesLoaded), ProviderType.Filesystem);
-                PlaylistLibraries = new LazyLibraryList<IPlaylistLibrary>(CreateList(PlaylistLibrariesLoaded), ProviderType.Playlist);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed to load MAS backends", ex);
+                try
+                {
+                    MovieLibraries = new LazyLibraryList<IMovieLibrary>(CreateList(MovieLibrariesLoaded), ProviderType.Movie);
+                    MusicLibraries = new LazyLibraryList<IMusicLibrary>(CreateList(MusicLibrariesLoaded), ProviderType.Music);
+                    TVShowLibraries = new LazyLibraryList<ITVShowLibrary>(CreateList(TVShowLibrariesLoaded), ProviderType.TVShow);
+                    PictureLibraries = new LazyLibraryList<IPictureLibrary>(CreateList(PictureLibrariesLoaded), ProviderType.Picture);
+                    FileSystemLibraries = new LazyLibraryList<IFileSystemLibrary>(CreateList(FileSystemLibrariesLoaded), ProviderType.Filesystem);
+                    PlaylistLibraries = new LazyLibraryList<IPlaylistLibrary>(CreateList(PlaylistLibrariesLoaded), ProviderType.Playlist);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Failed to load MAS backends", ex);
+                }
             }
         }
 
