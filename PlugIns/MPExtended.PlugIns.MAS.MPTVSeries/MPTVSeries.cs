@@ -123,7 +123,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
                     "LEFT JOIN season AS e ON s.ID = e.SeriesID " + 
-                    "WHERE s.ID != 0 AND s.HasLocalFiles = 1 AND %where " +
+                    "WHERE s.ID != 0 AND %where " +
                     "GROUP BY s.ID, s.Pretty_Name, s.Genre, s.BannerFileNames, s.FirstAired, " +
                         "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
                         "s.IMDB_ID, s.added " +
