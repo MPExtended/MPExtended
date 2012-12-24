@@ -20,22 +20,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Network;
 
 namespace MPExtended.Libraries.Service.Util
 {
     public class NetworkShareImpersonator : IDisposable
     {
+        private static MappedDriveConverter mdcCache = null;
+
         private Impersonator impersonator;
 
-        public NetworkShareImpersonator(bool impersonate)
+        public NetworkShareImpersonator()
         {
-            string username = Configuration.Services.NetworkImpersonation.Username;
-            string password = Configuration.Services.NetworkImpersonation.GetPassword();
-            if (impersonate && Configuration.Services.NetworkImpersonation.IsEnabled())
+            if (Configuration.Services.NetworkImpersonation.IsEnabled())
             {
+                string username = Configuration.Services.NetworkImpersonation.Username;
                 try
                 {
-                    impersonator = new Impersonator(Configuration.Services.NetworkImpersonation.Domain, username, password);
+                    impersonator = new Impersonator(Configuration.Services.NetworkImpersonation.Domain, username, Configuration.Services.NetworkImpersonation.GetPassword());
                 }
                 catch (Exception e)
                 {
@@ -45,9 +47,13 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
-        public NetworkShareImpersonator()
-            : this(true)
+        public string RewritePath(string path)
         {
+            if (impersonator == null)
+                return path;
+            if (mdcCache == null)
+                mdcCache = new MappedDriveConverter();
+            return mdcCache.ConvertPathToUnc(Configuration.Services.NetworkImpersonation.Domain, Configuration.Services.NetworkImpersonation.Username, path);
         }
 
         public void Dispose()

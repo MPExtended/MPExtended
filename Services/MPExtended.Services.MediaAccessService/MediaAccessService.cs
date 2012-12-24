@@ -730,18 +730,19 @@ namespace MPExtended.Services.MediaAccessService
                     tryImpersonation = true;
                 }
 
-                if (tryImpersonation && new Uri(path).IsUnc && !FileUtil.IsAccessible(path))
+                if (tryImpersonation && !FileUtil.IsAccessible(path))
                 {
-                    using (var impersonator = new NetworkShareImpersonator())
+                    using (var context = new NetworkShareImpersonator())
                     {
-                        retVal = new WebFileInfo(path);
+                        retVal = new WebFileInfo(context.RewritePath(path));
                         retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
                         retVal.OnNetworkDrive = true;
                     }
                 }
 
                 // Make sure to always the path property, even if the file doesn't exist. This makes debugging a lot easier, as you get actual paths in your logs now. 
-                retVal.Path = PathUtil.StripFileProtocolPrefix(path);
+                if (String.IsNullOrEmpty(retVal.Path))
+                    retVal.Path = PathUtil.StripFileProtocolPrefix(path);
                 retVal.PID = ProviderHandler.GetProviderId(mediatype.ToProviderType(), provider);
                 return retVal;
             }
@@ -794,9 +795,9 @@ namespace MPExtended.Services.MediaAccessService
                 // try to load it from a network drive
                 if (info.OnNetworkDrive && info.Exists)
                 {
-                    using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator())
+                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
                     {
-                        return new FileStream(path, FileMode.Open, FileAccess.Read);
+                        return new FileStream(context.RewritePath(path), FileMode.Open, FileAccess.Read);
                     }
                 }
 
