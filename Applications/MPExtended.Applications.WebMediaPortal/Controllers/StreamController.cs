@@ -121,7 +121,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
                 Settings.ActiveSettings.StreamType :
-                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied);
+                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
         }
 
         //

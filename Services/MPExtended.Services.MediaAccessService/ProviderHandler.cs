@@ -79,8 +79,11 @@ namespace MPExtended.Services.MediaAccessService
         protected ILibraryList<IFileSystemLibrary> FileSystemLibraries { get; set; }
         protected ILibraryList<IPlaylistLibrary> PlaylistLibraries { get; set; }
 
+        private object concurrentCompositionLock;
+
         internal ProviderHandler()
         {
+            concurrentCompositionLock = new object();
             LoadProviders();
             Instance = this;
             Configuration.Reloaded += delegate(ConfigurationFile file)
@@ -95,18 +98,21 @@ namespace MPExtended.Services.MediaAccessService
 
         protected void LoadProviders()
         {
-            var loader = new IndexedPluginLoader<int>("Id");
-            loader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.MAS.*", @"Plugins\Media");
-            loader.AddExport<IPluginData>(new PluginData());
-            loader.AddRequiredMetadata("Id");
-            loader.AddRequiredMetadata("Name");
+            lock (concurrentCompositionLock)
+            {
+                var loader = new IndexedPluginLoader<int>("Id");
+                loader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.MAS.*", @"Plugins\Media");
+                loader.AddExport<IPluginData>(new PluginData());
+                loader.AddRequiredMetadata("Id");
+                loader.AddRequiredMetadata("Name");
 
-            MovieLibraries = new LibraryList<IMovieLibrary>(loader.GetIndexedPlugins<IMovieLibrary>(), ProviderType.Movie);
-            MusicLibraries = new LibraryList<IMusicLibrary>(loader.GetIndexedPlugins<IMusicLibrary>(), ProviderType.Music);
-            TVShowLibraries = new LibraryList<ITVShowLibrary>(loader.GetIndexedPlugins<ITVShowLibrary>(), ProviderType.TVShow);
-            PictureLibraries = new LibraryList<IPictureLibrary>(loader.GetIndexedPlugins<IPictureLibrary>(), ProviderType.Picture);
-            FileSystemLibraries = new LibraryList<IFileSystemLibrary>(loader.GetIndexedPlugins<IFileSystemLibrary>(), ProviderType.Filesystem);
-            PlaylistLibraries = new LibraryList<IPlaylistLibrary>(loader.GetIndexedPlugins<IPlaylistLibrary>(), ProviderType.Playlist);
+                MovieLibraries = new LibraryList<IMovieLibrary>(loader.GetIndexedPlugins<IMovieLibrary>(), ProviderType.Movie);
+                MusicLibraries = new LibraryList<IMusicLibrary>(loader.GetIndexedPlugins<IMusicLibrary>(), ProviderType.Music);
+                TVShowLibraries = new LibraryList<ITVShowLibrary>(loader.GetIndexedPlugins<ITVShowLibrary>(), ProviderType.TVShow);
+                PictureLibraries = new LibraryList<IPictureLibrary>(loader.GetIndexedPlugins<IPictureLibrary>(), ProviderType.Picture);
+                FileSystemLibraries = new LibraryList<IFileSystemLibrary>(loader.GetIndexedPlugins<IFileSystemLibrary>(), ProviderType.Filesystem);
+                PlaylistLibraries = new LibraryList<IPlaylistLibrary>(loader.GetIndexedPlugins<IPlaylistLibrary>(), ProviderType.Playlist);
+            }
         }
     }
 }

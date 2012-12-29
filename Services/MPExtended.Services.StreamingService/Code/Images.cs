@@ -131,7 +131,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (cache.Contains(filename))
             {
                 WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
-                WCFUtil.SetContentType(Path.GetExtension(filename));
+                WCFUtil.SetContentType(GetMime(Path.GetExtension(filename)));
                 return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
             }
 

@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalVersion.cs">
+      <Link>Properties\GlobalVersion.cs</Link>
+    </Compile>
     <Compile Include="FollwitSharingProvider.cs" />
     <Compile Include="Follwit\DataStructures.cs" />
     <Compile Include="Follwit\FollwitAPI.cs" />

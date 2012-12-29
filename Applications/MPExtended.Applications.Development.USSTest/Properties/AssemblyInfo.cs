@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Applications.Development.USSTest")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended UserSessionService tester")]
+[assembly: AssemblyProduct("MPExtended UserSessionService test tool")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

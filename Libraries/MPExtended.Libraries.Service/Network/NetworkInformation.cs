@@ -112,10 +112,13 @@ namespace MPExtended.Libraries.Service.Network
 
         public static bool IsOnLAN(string address)
         {
-            if (IsLocalAddress(address))
-            {
+            return IsOnLAN(address, Configuration.Services.EnableIPv6);
+        }
+
+        public static bool IsOnLAN(string address, bool enableIPv6)
+        {
+            if (IsLocalAddress(address, enableIPv6))
                 return true;
-            }
 
             return IsOnLAN(IPAddress.Parse(address));
         }
