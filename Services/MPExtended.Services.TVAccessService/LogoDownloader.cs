@@ -118,7 +118,7 @@ namespace MPExtended.Services.TVAccessService
             {
                 if (set.MASStream == null)
                 {
-                    Log.Trace("Found service set {0} without MAS stream, ignoring...");
+                    Log.Trace("Found service set {0} without MAS stream, ignoring...", set.GetSetIdentifier());
                     continue;
                 }
 
