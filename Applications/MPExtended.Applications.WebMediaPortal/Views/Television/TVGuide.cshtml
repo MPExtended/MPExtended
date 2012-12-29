@@ -51,9 +51,18 @@
                         @Html.ActionLink(channel.DisplayName, "WatchLiveTV", new { channelId = channel.Id })
                     </div>
                     <div class="programs">
-                        @{  foreach (var program in channel.Programs)
+                        @{
+                            DateTime? lastEnd = null;
+                            double leftOffset = 0;
+                            
+                            foreach (var program in channel.Programs)
                             {
-                                <div class="programcontainer" style="width: @program.GetCssPercentageWidth();">
+                                if (lastEnd != null && lastEnd < program.StartTime)
+                                {
+                                    leftOffset += 100 * (program.StartTime - lastEnd.Value).TotalMinutes / (Model.GuideEnd - Model.GuideStart).TotalMinutes;
+                                }
+                                
+                                <div class="programcontainer" style="width: @program.GetCssPercentageWidth(); left: @leftOffset%;">
                                 @{  if (program.GetPercentageWidth() > 1)
                                     {
                                         <div class="program @(program.IsCurrent ? "current" : "") @(program.IsScheduled ? "scheduled" : "")">
@@ -62,6 +71,8 @@
                                     }
                                 }
                                 </div>
+                            
+                                lastEnd = program.EndTime;
                             }
                         }
                     </div>
