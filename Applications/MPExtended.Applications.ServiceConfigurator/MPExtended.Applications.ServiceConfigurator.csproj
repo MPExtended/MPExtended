@@ -46,6 +46,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>..\..\Libraries\Artwork\MpExtl_Icon_256.ico</ApplicationIcon>
+    <UICulture>en-US</UICulture>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
