@@ -81,6 +81,7 @@
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
+    <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
     <Compile Include="Hosting\IWcfService.cs" />
