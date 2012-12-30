@@ -95,6 +95,7 @@
     <Compile Include="Hosting\IService.cs" />
     <Compile Include="Hosting\ServiceInstallation.cs" />
     <Compile Include="Extensions\TaskExtensionMethods.cs" />
+    <Compile Include="Internal\EnvironmentChecks.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />

@@ -40,7 +40,7 @@ namespace MPExtended.Libraries.Social.Trakt
         { 
             get 
             {
-                return VersionUtil.GetMediaPortalVersionString();
+                return VersionUtil.GetVersionName();
             } 
         }
 
@@ -62,8 +62,7 @@ namespace MPExtended.Libraries.Social.Trakt
         { 
             get 
             {
-                return String.Format("{0} (build {1}, commit {2}, MP {2})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion().ToString(), 
-                    VersionUtil.GetGitVersion(), VersionUtil.GetMediaPortalBuildVersion().ToString());
+                return String.Format("{0} (build {1}, commit {2})", VersionUtil.GetVersionName(), VersionUtil.GetBuildVersion(), VersionUtil.GetGitVersion());
             } 
         }
 

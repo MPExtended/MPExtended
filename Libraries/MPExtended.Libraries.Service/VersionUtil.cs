@@ -149,21 +149,6 @@ namespace MPExtended.Libraries.Service
             return MediaPortalVersion.Unknown;
         }
 
-        public static string GetMediaPortalVersionString()
-        {
-            // Until MediaPortal provides an informational version name somewhere, try to map them ourselves
-            Version v = GetMediaPortalBuildVersion();
-            if (v == null)
-                return "(not installed)";
-
-            // List all exceptions (pre-releases) from the normal versioning scheme here
-            if (v.Major == 1 && v.Minor == 2 && v.Build == 100)
-                return "1.3.0 Alpha";
-
-            // Normal versioning scheme
-            return String.Format("{0}.{1}.{2}", v.Major, v.Minor, v.Build);
-        }
-
         public static Version GetMediaPortalBuildVersion()
         {
             var assemblyPath = GetMediaPortalAssemblyPath();

@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -29,6 +30,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
     {
         public string TemplatePath { get; set; }
         public string PhysicalSitePath { get; set; }
+        public string TemporaryPath { get; set; }
 
         public bool GenerateConfigFile(string outputFile)
         {
@@ -64,6 +66,24 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     Log.Debug("Wrote binding for https on port {0}", Configuration.WebMediaPortalHosting.PortTLS);
                 }
 
+                // some cache directories
+                CreateDirectoryIfNonExistent(TemporaryPath);
+
+                var compiledTemplates = Path.Combine(TemporaryPath, "ASP Compiled Templates");
+                CreateDirectoryIfNonExistent(compiledTemplates);
+                file.Element("system.webServer")
+                    .Element("asp").Add(
+                        new XElement("cache",
+                            new XAttribute("diskTemplateCacheDirectory", compiledTemplates)
+                        )
+                    );
+
+                var temporaryCacheDir = Path.Combine(TemporaryPath, "Temporary Compressed Files");
+                CreateDirectoryIfNonExistent(temporaryCacheDir);
+                file.Element("system.webServer")
+                    .Element("httpCompression")
+                    .Add(new XAttribute("directory", temporaryCacheDir));
+
                 file.Save(outputFile);
                 return true;
             }
@@ -72,6 +92,12 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 Log.Warn("Failed to generate IIS config file", ex);
                 return false;
             }
+        }
+
+        private void CreateDirectoryIfNonExistent(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
     }
 }
