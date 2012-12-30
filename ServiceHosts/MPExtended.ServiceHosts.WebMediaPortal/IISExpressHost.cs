@@ -60,6 +60,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     Path.Combine(Installation.GetInstallDirectory(), "www");
 
                 generator.TemplatePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "IISExpressTemplate.config");
+                generator.TemporaryPath = Path.Combine(Installation.GetCacheDirectory(), "IISExpress");
                 tempConfigFile = Path.GetTempFileName();
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}, using {1} as www directory", tempConfigFile, generator.PhysicalSitePath);
