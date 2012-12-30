@@ -14,14 +14,6 @@
     <AssemblyName>WebMediaPortal</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
     <TargetFrameworkProfile />
     <UseIISExpress>true</UseIISExpress>
   </PropertyGroup>
