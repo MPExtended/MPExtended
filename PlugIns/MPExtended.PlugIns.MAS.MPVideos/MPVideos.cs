@@ -56,7 +56,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres " +
                 "FROM movie m " +
-                "LEFT JOIN movieinfo i ON m.idMovie = i.idMovie " +
+                "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
                 "LEFT JOIN path p ON f.idPath = p.idPath " +
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
