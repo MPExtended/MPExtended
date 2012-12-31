@@ -44,7 +44,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Show = Connections.Current.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, showId);
-                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, WebSortField.TVSeasonNumber, WebSortOrder.Asc);
+                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, WebSortField.TVSeasonNumber, WebSortOrder.Asc)
+                    .Where(x => !String.IsNullOrEmpty(x.Title));
             }
             catch (Exception ex)
             {
@@ -72,7 +73,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 Season = Connections.Current.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, seasonId);
                 Show = Connections.Current.MAS.GetTVShowDetailedById(Season.PID, Season.ShowId);
-                Episodes = Connections.Current.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, WebSortField.TVEpisodeNumber, WebSortOrder.Asc);
+                Episodes = Connections.Current.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, WebSortField.TVEpisodeNumber, WebSortOrder.Asc)
+                    .Where(x => !String.IsNullOrEmpty(x.Title));
             }
             catch (Exception ex)
             {
