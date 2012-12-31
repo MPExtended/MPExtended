@@ -43,6 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 return Connections.Current.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                    .Where(movie => !String.IsNullOrEmpty(movie.Title))
                     .Select(movie => new MovieViewModel(movie));
             }
             catch (Exception)
@@ -56,6 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 return Connections.Current.MAS.GetMusicAlbumsBasicByRange(Settings.ActiveSettings.MusicProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                    .Where(album => !String.IsNullOrEmpty(album.Title) && album.Artists.Any())
                     .Select(album => new AlbumViewModel(album));
             }
             catch (Exception)
@@ -69,6 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 return Connections.Current.MAS.GetMusicTracksDetailedByRange(Settings.ActiveSettings.MusicProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                    .Where(track => !String.IsNullOrEmpty(track.Title) && track.Artist.Any())
                     .Select(track => new MusicTrackViewModel(track));
             }
             catch (Exception)
@@ -82,7 +85,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc)
-                    .Select(ep => new TVEpisodeViewModel(ep));
+                    .Select(ep => new TVEpisodeViewModel(ep))
+                    .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title) && ep.Show != null && ep.Season != null);
             }
             catch (Exception)
             {
@@ -95,7 +99,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc)
-                    .Select(ep => new TVEpisodeViewModel(ep));
+                    .Select(ep => new TVEpisodeViewModel(ep))
+                    .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title) && ep.Show != null && ep.Season != null);
             }
             catch (Exception)
             {
@@ -107,7 +112,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.TAS.GetRecordingsByRange(0, count - 1, WebSortField.StartTime, WebSortOrder.Desc);
+                return Connections.Current.TAS.GetRecordingsByRange(0, count - 1, WebSortField.StartTime, WebSortOrder.Desc)
+                    .Where(rec => rec.Title != null);
             }
             catch (Exception)
             {

@@ -82,6 +82,10 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     det.Artists = det.ArtistId.Where(x => artists.ContainsKey(x)).Select(x => artists[x]).ToList();
                 }
 
+                // if there is no artist, we can't load album artwork, so just skip without artwork
+                if (item.Artist.Count == 0)
+                    return item;
+
                 // for now, use album artwork also for songs
                 var tuple = new Tuple<string, string>(item.Artist.Distinct().First(), item.Album);
                 if (!artwork.ContainsKey(tuple))

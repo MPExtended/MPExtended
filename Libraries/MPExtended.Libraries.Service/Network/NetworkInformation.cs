@@ -138,11 +138,19 @@ namespace MPExtended.Libraries.Service.Network
             if(address == "localhost" || address == "::1" || address == "127.0.0.1")
                 return true;
 
-            bool isLocal = Dns.GetHostAddresses(address)
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6)
-                .Any(x => IsLocalAddress(x));
-            if(isLocal)
-                return true;
+            try
+            {
+                bool isLocal = Dns.GetHostAddresses(address)
+                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6)
+                    .Any(x => IsLocalAddress(x));
+                if (isLocal)
+                    return true;
+            }
+            catch (SocketException)
+            {
+                // This can happen for unknown DNS names and things like that, assume they're not local
+                return false;
+            }
 
             IPAddress ipAddr;
             if(IPAddress.TryParse(address, out ipAddr))

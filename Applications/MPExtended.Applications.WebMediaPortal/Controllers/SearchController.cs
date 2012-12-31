@@ -51,7 +51,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 list = list.Concat(Connections.Current.TAS.Search(text).Select(x => new SearchResultsViewModel(x, CreateLink(x))));
             }
 
-            list = list.Where(x => x.URL != null).OrderByDescending(x => x.Score);
+            list = list.Where(x => x.URL != null && !String.IsNullOrEmpty(x.URL)).OrderByDescending(x => x.Score);
 
             // when there is exactly one hit, or *only* one with hit with a 100% score, just redirect to that page
             if(list.Count == 1 || list.Count(x => x.Score == 100) == 1)
