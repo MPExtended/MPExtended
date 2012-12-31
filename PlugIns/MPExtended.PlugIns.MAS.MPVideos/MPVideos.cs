@@ -48,10 +48,18 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
         }
 
+        private List<string> CreditsReader(SQLiteDataReader reader, int idx)
+        {
+            return ((string)DataReaders.ReadString(reader, idx))
+                .Split('/')
+                .Select(x => x.Trim())
+                .ToList();
+        }
+
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
             string sql =
-                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, " +
+                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strDirector, i.strCredits, " +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres " +
@@ -78,6 +86,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "runtime", "Runtime", DataReaders.ReadInt32),
                 new SQLFieldMapping("i", "IMDBID", "IMDBId", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strPlot", "Summary", DataReaders.ReadString),
+                new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("i", "strCredits", "Writers", CreditsReader),
             });
         }
 
