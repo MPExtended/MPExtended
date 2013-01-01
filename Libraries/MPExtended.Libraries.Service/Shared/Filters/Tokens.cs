@@ -53,5 +53,25 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         {
             return ch == '=' || ch == '!' || ch == '>' || ch == '<' || ch == '*' || ch == '$' || ch == '^' || ch == '~';
         }
+
+        public static bool IsListStart(char ch)
+        {
+            return ch == '[';
+        }
+
+        public static bool IsListStart(string ch)
+        {
+            return ch == "[";
+        }
+
+        public static bool IsListEnd(char ch)
+        {
+            return ch == ']';
+        }
+
+        public static bool IsListEnd(string ch)
+        {
+            return ch == "]";
+        }
     }
 }

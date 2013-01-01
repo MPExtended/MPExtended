@@ -111,16 +111,18 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     items = items.Concat(new List<string>() { preferedItem });
             }
             
-            return items.Select(x =>
+            return items.Select(filename =>
             {
-                string path = Path.Combine(args.DirectoryName, x.Replace('/', '\\'));
+                if (filename.StartsWith("\\"))
+                    filename = filename.Substring(1);
+                string path = Path.Combine(args.DirectoryName, filename.Replace('/', '\\'));
                 return new WebArtworkDetailed()
                 {
                     Type = args.FileType,
                     Path = path,
                     Offset = i++,
                     Filetype = Path.GetExtension(path).Length > 0 ? Path.GetExtension(path).Substring(1) : String.Empty,
-                    Rating = x == preferedItem ? 2 : 1,
+                    Rating = filename == preferedItem ? 2 : 1,
                     Id = path.GetHashCode().ToString()
                 };
             }).ToList();

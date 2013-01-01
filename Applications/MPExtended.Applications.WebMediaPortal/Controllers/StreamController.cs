@@ -122,7 +122,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
             return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
                 Settings.ActiveSettings.StreamType :
-                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress) ? StreamType.Direct : StreamType.Proxied);
+                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
         }
 
         private string GetDefaultProfile(WebMediaType type)
@@ -160,10 +160,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we connect to the services at localhost, actually give the extern IP address to users
-            if (fullUri.Host == "localhost" || fullUri.Host == "127.0.0.1") // TODO: Use NetworkInformation.IsLocalAddress here, once it doesn't use Configuration.Services
-            {
+            if (NetworkInformation.IsLocalAddress(fullUri.Host, false))
                 fullUri.Host = NetworkInformation.GetIPAddress(false);
-            }
 
             // Do the actual streaming
             if (GetStreamMode() == StreamType.Proxied)

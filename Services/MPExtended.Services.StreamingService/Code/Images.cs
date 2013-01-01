@@ -76,7 +76,7 @@ namespace MPExtended.Services.StreamingService.Code
             ProcessStartInfo info = new ProcessStartInfo();
             using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
             {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -f image2 {2}", position, source.GetPath(), tempFile);
+                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 {2}", position, source.GetPath(), tempFile);
                 info.FileName = Configuration.StreamingProfiles.FFMpegPath;
                 info.CreateNoWindow = true;
                 info.UseShellExecute = false;
@@ -131,7 +131,7 @@ namespace MPExtended.Services.StreamingService.Code
             if (cache.Contains(filename))
             {
                 WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
-                WCFUtil.SetContentType(Path.GetExtension(filename));
+                WCFUtil.SetContentType(GetMime(Path.GetExtension(filename)));
                 return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
             }
 

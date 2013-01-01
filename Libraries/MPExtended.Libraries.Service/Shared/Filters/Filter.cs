@@ -34,7 +34,6 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         private delegate bool MatchDelegate(object x);
 
-        private Type expectedType;
         private PropertyInfo property;
         private MatchDelegate matcher;
 
@@ -50,8 +49,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         public void ExpectType(Type type)
         {
-            expectedType = type;
-            property = expectedType.GetProperty(Field);
+            property = type.GetProperty(Field);
             matcher = GetMatchDelegate();
         }
 

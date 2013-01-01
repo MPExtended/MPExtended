@@ -148,8 +148,10 @@ namespace MPExtended.Libraries.Service.Config
                 case MPExtendedProduct.Service:
                     return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 case MPExtendedProduct.WebMediaPortal:
-                    DirectoryInfo webmpinfo = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
-                    return webmpinfo.Parent.Parent.FullName;
+                    DirectoryInfo currentDir = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                    // If we're executing from the WebMP context, we're inside the WebMediaPortal/www/bin directory, but if we're executing from the
+                    // host service context, we're directly inside the WebMediaPortal folder.
+                    return currentDir.FullName.Contains(@"\www\") ? currentDir.Parent.Parent.FullName : currentDir.FullName;
                 default:
                     throw new ArgumentException();
             }

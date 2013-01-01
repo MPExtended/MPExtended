@@ -37,8 +37,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /MovieLibrary/
         public ActionResult Index(string filter = null)
         {
-            IEnumerable<WebMovieDetailed> movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc);
-            return View(movieList.Select(x => new MovieViewModel(x)));
+            var movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc);
+            return View(movieList.Where(x => !String.IsNullOrEmpty(x.Title)).Select(x => new MovieViewModel(x)));
         }
 
         public ActionResult Details(string movie)

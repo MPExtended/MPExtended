@@ -12,14 +12,6 @@
     <AssemblyName>MPExtended.Libraries.Service</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -89,11 +81,14 @@
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
+    <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
     <Compile Include="Hosting\IWcfService.cs" />
     <Compile Include="Hosting\IService.cs" />
     <Compile Include="Hosting\ServiceInstallation.cs" />
+    <Compile Include="Extensions\TaskExtensionMethods.cs" />
+    <Compile Include="Internal\EnvironmentChecks.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />

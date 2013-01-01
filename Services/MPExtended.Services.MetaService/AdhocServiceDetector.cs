@@ -36,7 +36,11 @@ namespace MPExtended.Services.MetaService
                     if (!Installation.IsServiceInstalled("MediaAccessService"))
                         return false;
                     var msd = ServiceClientFactory.CreateLocalMAS().GetServiceDescription();
-                    return msd.AvailableMovieLibraries.Count > 0;
+                    return msd.AvailableFileSystemLibraries.Count > 0 ||
+                        msd.AvailableMovieLibraries.Count > 0 ||
+                        msd.AvailableMusicLibraries.Count > 0 ||
+                        msd.AvailablePictureLibraries.Count > 0 ||
+                        msd.AvailableTvShowLibraries.Count > 0;
                 }
                 catch (Exception)
                 {
@@ -71,7 +75,7 @@ namespace MPExtended.Services.MetaService
                 {
                     if (!Installation.IsServiceInstalled("StreamingService"))
                         return false;
-                    if (!HasActiveMAS && !HasActiveTAS)
+                    if (!Installation.IsServiceInstalled("MediaAccessService") && !Installation.IsServiceInstalled("TVAccessService"))
                         return false;
                     var wsd = ServiceClientFactory.CreateLocalWSS().GetServiceDescription();
                     return wsd.SupportsMedia || wsd.SupportsRecordings || wsd.SupportsTV;

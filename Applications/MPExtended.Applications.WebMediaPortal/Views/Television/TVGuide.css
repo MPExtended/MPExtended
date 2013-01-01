@@ -58,6 +58,7 @@
 #TVGuide .programcontainer
 {
     float: left;
+    position: relative;
     height: 100%;
 }
 

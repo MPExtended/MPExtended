@@ -92,8 +92,7 @@ namespace MPExtended.Libraries.Client
             {
                 try
                 {
-                    MAS.GetServiceDescription();
-                    return true;
+                    return MAS.TestConnection();
                 }
                 catch (Exception)
                 {

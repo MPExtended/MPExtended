@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
@@ -29,8 +30,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return Connections.Current.MAS.GetMovieGenres(Settings.ActiveSettings.MovieProvider)
-                    .Select(x => x.Title);
+                try
+                {
+                    return Connections.Current.MAS.GetMovieGenres(Settings.ActiveSettings.MovieProvider)
+                        .Select(x => x.Title)
+                        .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to load movie genres", ex);
+                    return new List<string>();
+                }
             }
         }
 
@@ -38,8 +48,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
-                return Connections.Current.MAS.GetTVShowGenres(Settings.ActiveSettings.TVShowProvider)
-                    .Select(x => x.Title);
+                try
+                {
+                    return Connections.Current.MAS.GetTVShowGenres(Settings.ActiveSettings.TVShowProvider)
+                        .Select(x => x.Title)
+                        .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to load TVShow genres", ex);
+                    return new List<string>();
+                }
             }
         }
     }

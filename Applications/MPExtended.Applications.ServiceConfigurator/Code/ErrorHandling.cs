@@ -33,5 +33,11 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             string message = UI.UnexpectedError + "\n\n" + ex.Message;
             MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        public static void OnlyShowError(Exception ex)
+        {
+            string message = UI.UnexpectedError + "\n\n" + ex.Message;
+            MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }

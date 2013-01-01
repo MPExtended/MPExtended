@@ -17,6 +17,3 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e95a8300-78ad-45d5-997d-08fdbb116bf4")]
-
-// It needs access to the Transformations class
-[assembly: InternalsVisibleTo("MPExtended.Libraries.Service")]
