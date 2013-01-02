@@ -393,12 +393,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                                     return line.Trim();
 
                                 var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
-                                return Url.Action("ProxyHttpLiveSegment", "Stream", new
+                                return Url.Action("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
                                 {
                                     identifier = identifier,
                                     ctdAction = queryString["action"],
                                     parameters = queryString["parameters"]
-                                }, Request.Url.Scheme, Request.Url.Host);
+                                }), Request.Url.Scheme, Request.Url.Host);
                             })
                             .Join(Environment.NewLine);
 
