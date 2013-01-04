@@ -110,7 +110,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             get
             {
                 if (_season == null)
-                    _season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.ShowId);
+                    _season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.SeasonId);
 
                 return _season;
             }
