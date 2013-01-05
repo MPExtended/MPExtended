@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Servicio iniciado</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Deteniendo servicio</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Servicio detenido</value>
   </data>
@@ -434,9 +431,6 @@ irc.freenode.net / channel #mp-extended</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Navegar</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Seleccionar</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Donar a MPExtended</value>

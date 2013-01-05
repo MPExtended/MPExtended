@@ -168,8 +168,8 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Service started</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Service stopping</value>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Service starting</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Service stopped</value>

@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Storitev pognana</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Storitev se zaustavlja</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Storitev zaustavljena</value>
   </data>
@@ -433,9 +430,6 @@ To je strežnik, ki omogoča povezavo na baze podatkov, datoteke z vsebinami za 
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Brskaj</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Izberi</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Prispevaj projektu MPExtended</value>
