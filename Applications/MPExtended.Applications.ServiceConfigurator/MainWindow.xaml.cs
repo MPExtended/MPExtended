@@ -364,7 +364,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                     break;
                 case ServiceControllerStatus.StartPending:
                     btnStartStopService.Content = UI.Stop;
-                    lblServiceState.Content = UI.ServiceStarting;
+                    lblServiceState.Content = UI.ServiceStartingFixed;
                     lblServiceState.Foreground = Brushes.Teal;
                     break;
                 default:

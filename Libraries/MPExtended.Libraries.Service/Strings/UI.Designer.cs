@@ -741,11 +741,11 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service stopping.
+        ///   Looks up a localized string similar to Service starting.
         /// </summary>
-        public static string ServiceStarting {
+        public static string ServiceStartingFixed {
             get {
-                return ResourceManager.GetString("ServiceStarting", resourceCulture);
+                return ResourceManager.GetString("ServiceStartingFixed", resourceCulture);
             }
         }
         

@@ -148,6 +148,9 @@
   <data name="ErrorNoValidClientService" xml:space="preserve">
     <value>Vnesi ustrezen MAS URL</value>
   </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Izberi ustrezen jezik</value>
+  </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
     <value>Izberi ustrezen profil za pretok medijev</value>
   </data>
@@ -184,6 +187,9 @@
   <data name="FieldRequired" xml:space="preserve">
     <value>Polje {0} je zahtevano!</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jezik</value>
+  </data>
   <data name="LogOnPassword" xml:space="preserve">
     <value>Geslo</value>
   </data>
@@ -216,6 +222,9 @@
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Čas začetka</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Naslov</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
     <value>Tip sporeda</value>

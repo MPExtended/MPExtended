@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Storitev pognana</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Storitev se zaustavlja</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Storitev zaustavljena</value>
   </data>
@@ -434,9 +431,6 @@ To je strežnik, ki omogoča povezavo na baze podatkov, datoteke z vsebinami za 
   <data name="Browse" xml:space="preserve">
     <value>Brskaj</value>
   </data>
-  <data name="Select" xml:space="preserve">
-    <value>Izberi</value>
-  </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Prispevaj projektu MPExtended</value>
   </data>
@@ -473,5 +467,38 @@ Certifikata za SSL/TLS žal ni možno spreminjati. Ko uporabljaš HTTPS, boš v 
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Omogoči</value>
+  </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Dovoliš aplikaciji {0} (z IP naslovom {1}) poln dostop do storitev MPExtended?</value>
+  </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Zavrni</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Dovoli dostop</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Izberi uporabnika:</value>
+  </data>
+  <data name="AccessRequestWifiRemote" xml:space="preserve">
+    <value>Ali dovoliš dostop {0}? (Če ja, v naslednjem koraku izberi uporabnika)</value>
+  </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Omogoči zahteve za dostop odjemalcev.</value>
+  </data>
+  <data name="ExternalIpCustom" xml:space="preserve">
+    <value>Po meri</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Avtomatično ugotovi zunanji IP</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>Zunanji naslov</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jezik</value>
   </data>
 </root>
