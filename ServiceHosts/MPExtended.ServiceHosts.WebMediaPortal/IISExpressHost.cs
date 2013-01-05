@@ -84,6 +84,7 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 }
                 else if (File.Exists(iisExpressDefault))
                 {
+                    iisExpress = iisExpressDefault;
                     Log.Debug("Using IIS Express at default location {0}", iisExpressDefault);
                 } 
                 else
