@@ -7,13 +7,15 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MPExtended.Libraries.MASPlugin")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("MPExtended SQLite library")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyProduct("MPExtended")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+
+// Version and copyright information is handled by GlobalVersion.cs
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("475dff39-e90f-4bd8-aa73-1e7af4b18ade")]
