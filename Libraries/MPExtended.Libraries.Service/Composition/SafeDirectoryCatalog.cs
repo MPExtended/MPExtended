@@ -55,7 +55,8 @@ namespace MPExtended.Libraries.Service.Composition
                 {
                     // Force MEF to load and scan the assembly file now, so that we can catch any exceptions occuring 
                     // because of broken plugins, and skip those plugins.
-                    var assembly = Assembly.LoadFrom(file);
+                    var assemblyName = Path.GetFileNameWithoutExtension(file);
+                    var assembly = AssemblyLoader.LoadAssembly(assemblyName, file);
                     var asmCatalog = new AssemblyCatalog(assembly);
                     asmCatalog.Parts.ToArray();
                     aggregateCatalog.Catalogs.Add(asmCatalog);

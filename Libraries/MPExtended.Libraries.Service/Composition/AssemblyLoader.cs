@@ -24,11 +24,23 @@ using System.Text;
 
 namespace MPExtended.Libraries.Service.Composition
 {
+    internal static class AssemblyNameExtensionMethods
+    {
+        public static bool IsCompatibleWith(this AssemblyName ourName, AssemblyName requestedName)
+        {
+            return requestedName.Name == ourName.Name &&
+                (requestedName.Version == null || requestedName.Version == ourName.Version) &&
+                (requestedName.CultureInfo == null || requestedName.CultureInfo == ourName.CultureInfo) &&
+                (requestedName.GetPublicKey() == null || requestedName.GetPublicKey() == ourName.GetPublicKey());
+        }
+    }
+
     public static class AssemblyLoader
     {
         private static bool isInstalled = false;
         private static List<string> searchDirectories = new List<string>();
         private static Dictionary<string, List<Tuple<AssemblyName, string>>> knownAssemblies = new Dictionary<string, List<Tuple<AssemblyName, string>>>();
+        private static Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
 
         public static void Install()
         {
@@ -64,6 +76,19 @@ namespace MPExtended.Libraries.Service.Composition
             knownAssemblies[assembly.Name].Add(Tuple.Create(assembly, directory));
         }
 
+        public static Assembly LoadAssembly(string assemblyName, string suggestionPath)
+        {
+            var requestedName = new AssemblyName(assemblyName);
+
+            foreach (var item in loadedAssemblies)
+            {
+                if (item.Key.IsCompatibleWith(requestedName))
+                    return item.Value;
+            }
+
+            return LoadAndSaveAssembly(requestedName, suggestionPath);
+        }
+
         private static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
         {
             var requestedName = new AssemblyName(args.Name);
@@ -72,14 +97,11 @@ namespace MPExtended.Libraries.Service.Composition
             {
                 foreach (var item in knownAssemblies[requestedName.Name])
                 {
-                    if (requestedName.Name == item.Item1.Name &&
-                            (requestedName.Version == null || requestedName.Version == item.Item1.Version) &&
-                            (requestedName.CultureInfo == null || requestedName.CultureInfo == item.Item1.CultureInfo) &&
-                            (requestedName.GetPublicKey() == null || requestedName.GetPublicKey() == item.Item1.GetPublicKey()))
+                    if (item.Item1.IsCompatibleWith(requestedName))
                     {
                         var path = Path.Combine(item.Item2, requestedName.Name + ".dll");
                         if (File.Exists(path))
-                            return Assembly.LoadFrom(path);
+                            return LoadAndSaveAssembly(requestedName, path);
                     }
                 }
             }
@@ -91,6 +113,18 @@ namespace MPExtended.Libraries.Service.Composition
                     return Assembly.LoadFrom(path);
             }
 
+            return null;
+        }
+
+        private static Assembly LoadAndSaveAssembly(AssemblyName name, string path)
+        {
+            var assembly = Assembly.LoadFrom(path);
+            var loadedName = assembly.GetName();
+            loadedAssemblies[loadedName] = assembly;
+            if (loadedName.IsCompatibleWith(name))
+                return assembly;
+
+            Log.Error("Failed to load {0} from {1}, as it contains assembly {2}", name, path, loadedName);
             return null;
         }
     }

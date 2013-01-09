@@ -18,6 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using MPExtended.Libraries.Service.Composition;
 
@@ -56,6 +58,7 @@ namespace MPExtended.Libraries.Service.Hosting
         private void LoadServices()
         {
             var loader = new PluginLoader();
+            loader.AddDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             loader.AddFromTreeMatch(@"Services\MPExtended.Services.*", "MPExtended.Services.*.dll", @"Plugins\Services");
             loader.AddRequiredMetadata("ServiceName");
             services = loader.GetPlugins<IService>();
