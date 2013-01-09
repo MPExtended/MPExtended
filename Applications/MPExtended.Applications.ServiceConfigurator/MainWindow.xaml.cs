@@ -49,7 +49,7 @@ namespace MPExtended.Applications.ServiceConfigurator
         public MainWindow()
         {
             InitializeComponent();
-            Log.Debug("MPExtended.Applications.ServiceConfigurator starting...");
+            Log.Debug("MPExtended configurator version {0} starting...", VersionUtil.GetFullVersionString());
             SetupUSS();
 
             if (StartupArguments.RunAsTrayApp && !StartupArguments.OpenOnStart)
