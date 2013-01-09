@@ -86,7 +86,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected bool IsUserAuthenticated()
         {
-            if (PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
+            if (PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated || Configuration.Authentication.UnauthorizedStreams)
                 return true;
 
             // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
