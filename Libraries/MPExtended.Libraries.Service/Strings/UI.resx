@@ -506,4 +506,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="CleanCacheSucceeded" xml:space="preserve">
+    <value>The cache has been cleaned successfully!</value>
+  </data>
 </root>
