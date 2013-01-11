@@ -58,32 +58,36 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
             AggregateCatalog catalog = new AggregateCatalog();
 
             var pluginFinder = new PluginFinder();
-            RegisterExtensions(pluginFinder, catalog, "plugins");
-            installedPlugins = pluginFinder.GetNames().ToList();
+            installedPlugins = RegisterExtensions(catalog, "plugins", true, pluginFinder);
 
             var skinFinder = new SkinFinder();
-            RegisterExtensions(skinFinder, catalog, "skins");
-            installedSkins = skinFinder.GetNames().ToList();
+            installedSkins = RegisterExtensions(catalog, "skins", false, skinFinder);
 
             var container = new CompositionContainer(catalog);
             controllers = container.GetExports<IController, IDictionary<string, object>>();
             compositionDone = true;
         }
 
-        private static void RegisterExtensions(ExtensionFinder finder, AggregateCatalog catalog, string logName)
+        private List<string> RegisterExtensions(AggregateCatalog catalog, string logName, bool requireBinary, ExtensionFinder finder)
         {
             var directories = finder.GetDirectories()
-                .Where(dir => Directory.Exists(Path.Combine(dir, "bin")));
+                .Where(dir => !requireBinary || Directory.Exists(Path.Combine(dir, "bin")));
 
             if (directories.Count() > 0)
             {
                 Log.Debug("Installed {0}:", logName);
                 foreach (var dir in directories)
                 {
-                    Log.Debug("- {0}", Path.GetFileName(dir));
-                    catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(dir, "bin")));
+                    bool hasBinary = Directory.Exists(Path.Combine(dir, "bin"));
+                    Log.Debug("- {0} {1}", Path.GetFileName(dir), hasBinary ? " (with binary)" : "");
+                    if (hasBinary)
+                        catalog.Catalogs.Add(new DirectoryCatalog(Path.Combine(dir, "bin")));
                 }
             }
+
+            return directories
+                .Select(x => Path.GetFileName(x))
+                .ToList();
         }
 
         public IEnumerable<Assembly> GetAllAssemblies()
