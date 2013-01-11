@@ -155,10 +155,13 @@ namespace MPExtended.Services.StreamingService.Code
                 }
 
                 // save image to cache
-                var image = hasToResize ? ResizeImage(src, maxWidth, maxHeight, borders) : Image.FromStream(src.Retrieve());
                 string path = cache.GetPath(String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format));
-                SaveImageToFile(image, path, format);
-                image.Dispose();
+                using (var stream = src.Retrieve())
+                {
+                    var image = hasToResize ? ResizeImage(stream, maxWidth, maxHeight, borders) : Image.FromStream(stream);
+                    SaveImageToFile(image, path, format);
+                    image.Dispose();
+                }
 
                 // return image to client
                 WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000");
@@ -186,9 +189,9 @@ namespace MPExtended.Services.StreamingService.Code
             return commonMimeTypes.ContainsKey(lowerExtension) ? commonMimeTypes[lowerExtension] : "application/octet-stream";
         }
 
-        private static Image ResizeImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders)
+        private static Image ResizeImage(Stream stream, int? maxWidth, int? maxHeight, string borders)
         {
-            using (var origImage = Image.FromStream(src.Retrieve()))
+            using (var origImage = Image.FromStream(stream))
             {
                 Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
                 int bitmapWidth = !String.IsNullOrEmpty(borders) ? maxWidth.Value : newSize.Width;
