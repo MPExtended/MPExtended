@@ -24,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.MpConnection;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.WCF;
@@ -112,6 +113,7 @@ namespace MPExtended.Services.MetaService
                 }
                 return true;
             }, cancelToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            askUserTasks[token].LogOnException();
 
             // return the token to the client
             return request;

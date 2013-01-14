@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.StreamingService.MediaInfo;
 
 namespace MPExtended.Services.StreamingService.Code
@@ -29,7 +30,7 @@ namespace MPExtended.Services.StreamingService.Code
     {
         public static void Initialize()
         {
-            Task.Factory.StartNew(() => MediaInfoWrapper.LoadCache());
+            Task.Factory.StartNew(() => MediaInfoWrapper.LoadCache()).LogOnException();
         }
     }
 }
