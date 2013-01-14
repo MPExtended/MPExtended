@@ -36,8 +36,22 @@
 
             <!-- Web root -->
             <Directory Id="Dir_WWW" Name="www">
-              <!-- This directory is filled by WWW.wxs -->
-              
+              <!-- This directory is also filled by WWW.wxs -->
+
+              <!-- Skins -->
+              <Directory Id="Dir_WWW_Skins" Name="Skins">
+                <Component Id="Component_WWW_Skins" Guid="c083167d-d554-4e34-9564-62bea90b87a7">
+                  <CreateFolder Directory="Dir_WWW_Skins" />
+                </Component>
+              </Directory>
+
+              <!-- Plugins -->
+              <Directory Id="Dir_WWW_Plugins" Name="Plugins">
+                <Component Id="Component_WWW_Plugins" Guid="f6eb18ae-1ecb-4786-8b85-9df57727dd93">
+                  <CreateFolder Directory="Dir_WWW_Plugins" />
+                </Component>
+              </Directory>
+
               <Directory Id="BinDirectory" Name="bin">
                 <!-- Binaries for WebMP -->
                 <Component Id="Component_WWW_Binaries" Guid="0e795d5d-4cff-4dc9-b8e8-2a06c354f6f5">
