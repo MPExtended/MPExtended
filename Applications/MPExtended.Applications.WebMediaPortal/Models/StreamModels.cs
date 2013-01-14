@@ -21,6 +21,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -103,6 +105,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class AlbumPlayerViewModel : PlayerViewModel
     {
+        public static bool EnableAlbumPlayer
+        {
+            get
+            {
+                var profile = Connections.Current.MASStreamControl.GetTranscoderProfileByName(Configuration.WebMediaPortal.DefaultAudioProfile);
+                return Configuration.WebMediaPortal.EnableAlbumPlayer &&
+                    StreamTarget.GetAudioTargets().Any(audioTarget => profile.Targets.Contains(audioTarget.Name));
+            }
+        }
+
         public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
 
         public AlbumPlayerViewModel()
