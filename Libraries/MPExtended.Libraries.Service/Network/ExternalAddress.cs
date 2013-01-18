@@ -26,7 +26,6 @@ namespace MPExtended.Libraries.Service.Network
     public class ExternalAddress
     {
         private const int CACHE_LIFETIME = 300; // in seconds
-        private const string WHATS_MY_IP_URL = "http://automation.whatismyip.com/n09230945.asp";
         private const string APP_ENGINE_URL = "http://agentgatech.appspot.com/";
         private const string DYNDNS_URL = "http://checkip.dyndns.com/";
 
@@ -99,8 +98,7 @@ namespace MPExtended.Libraries.Service.Network
             WebClient client = new WebClient();
             client.Headers[HttpRequestHeader.UserAgent] = VersionUtil.GetUserAgent();
 
-            string ip = RetrieveFromWhatsMyIp(client) ??
-                        RetrieveFromDynDNS(client) ??
+            string ip = RetrieveFromDynDNS(client) ??
                         RetrieveFromAppEngine(client);
 
             if (ip != null)
@@ -132,25 +130,6 @@ namespace MPExtended.Libraries.Service.Network
             {
                 Log.Info("Getting external ip from {0}", APP_ENGINE_URL);
                 return client.DownloadString(APP_ENGINE_URL);
-            }
-            catch (Exception ex)
-            {
-                Log.Warn("Error retrieving external IP address", ex);
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Get external ip from whatismyip.com
-        /// </summary>
-        /// <param name="client">WebClient</param>
-        /// <returns>IP of server</returns>
-        private static string RetrieveFromWhatsMyIp(WebClient client)
-        {
-            try
-            {
-                Log.Info("Getting external ip from {0}", WHATS_MY_IP_URL);
-                return client.DownloadString(WHATS_MY_IP_URL);
             }
             catch (Exception ex)
             {
