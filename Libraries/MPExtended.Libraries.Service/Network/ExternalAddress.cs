@@ -89,34 +89,31 @@ namespace MPExtended.Libraries.Service.Network
         /// <returns>External ip of pc</returns>
         public static IPAddress GetIP(bool forceUpdate)
         {
-            if (!forceUpdate && CachedIP != null
-                && (DateTime.Now - CacheLastUpdated).TotalSeconds < CACHE_LIFETIME)
-            {
+            if (!forceUpdate && CachedIP != null && (DateTime.Now - CacheLastUpdated).TotalSeconds < CACHE_LIFETIME)
                 return CachedIP;
-            }
 
             WebClient client = new WebClient();
             client.Headers[HttpRequestHeader.UserAgent] = VersionUtil.GetUserAgent();
 
-            string ip = RetrieveFromDynDNS(client) ??
-                        RetrieveFromAppEngine(client);
-
-            if (ip != null)
+            var methods = new Func<WebClient, string>[] { RetrieveFromDynDNS, RetrieveFromAppEngine };
+            foreach (var method in methods)
             {
-                CacheLastUpdated = DateTime.Now;
-                if (!IPAddress.TryParse(ip, out CachedIP))
+                string result = method.Invoke(client);
+                if (result == null)
+                    continue;
+
+                if (!IPAddress.TryParse(result, out CachedIP))
                 {
-                    Log.Warn("Failed to parse retrieved external address '{0}'", ip);
-                    return null;
+                    Log.Warn("Failed to parse retrieved external address '{0}'", result);
+                    continue;
                 }
-                
+
+                CacheLastUpdated = DateTime.Now;
                 return CachedIP;
             }
-            else
-            {
-                Log.Warn("Couldn't retrieve external IP from any of the external websites. Is your network functioning and the firewall configured correctly?");
-                return null;
-            }
+
+            Log.Warn("Couldn't retrieve external IP from any of the external websites. Is your network functioning and the firewall configured correctly?");
+            return null;
         }
 
         /// <summary>
