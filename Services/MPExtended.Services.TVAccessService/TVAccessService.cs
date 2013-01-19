@@ -783,8 +783,15 @@ namespace MPExtended.Services.TVAccessService
                 Log.Warn("Tried to cancel timeshifting for invalid user {0}", userName);
                 return false;
             }
-            Log.Debug("Canceling timeshifting for user {0}", userName);
 
+            var card = GetTimeshiftingOrRecordingVirtualCards().FirstOrDefault(x => x.User.Name == userName);
+            if (card != null && card.IsRecording && !card.IsTimeShifting) // this is a recording
+            {
+                Log.Debug("Timeshifting for user {0} is a recording, stopping recording instead!", userName);
+                return StopRecording(card.RecordingScheduleId);
+            }
+
+            Log.Debug("Canceling timeshifting for user {0}", userName);
             return _tvControl.StopTimeShifting(ref currentUser);
         }
         #endregion
