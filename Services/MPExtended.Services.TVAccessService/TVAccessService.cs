@@ -157,11 +157,6 @@ namespace MPExtended.Services.TVAccessService
         /// <returns>A dictionary object that can be sent to e.g. WifiRemote</returns>
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType? type, string id)
         {
-            return GetExternalMediaInfoForMpTvServer(type, id);
-        }
-
-        private WebDictionary<string> GetExternalMediaInfoForMpTvServer(WebMediaType? type, string id)
-        {
             if (type == WebMediaType.Recording)
             {
                 return new WebDictionary<string>()
