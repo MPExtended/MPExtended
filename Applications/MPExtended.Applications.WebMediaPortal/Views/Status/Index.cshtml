@@ -31,7 +31,7 @@
                 {
                     <td>@(card.Scrambled ? UIStrings.Yes : UIStrings.No)</td>
                     <td>@card.Username</td>
-                    <td>@(!card.VirtualCard.IsRecording ? Html.ActionLink(UIStrings.Stop, "Stop", new { user = card.Username }) : MvcHtmlString.Empty)</td>
+                    <td>@Html.ActionLink(UIStrings.Stop, "Stop", new { user = card.Username })</td>
                     <td>@Html.ActionLink(UIStrings.Details, "Details", new { user = card.Username })</td>
                 }
                 else

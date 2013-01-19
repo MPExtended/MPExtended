@@ -464,6 +464,20 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public WebBoolResult StopRecording(int scheduleId)
+        {
+            try
+            {
+                _tvControl.StopRecordingSchedule(scheduleId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to stop recording for schedule {0}", scheduleId), ex);
+                return false;
+            }
+        }
+
         private WebScheduledRecording GetScheduledRecording(Schedule schedule, DateTime date)
         {
             // ignore schedules that don't even match the date we are checking for
@@ -769,8 +783,15 @@ namespace MPExtended.Services.TVAccessService
                 Log.Warn("Tried to cancel timeshifting for invalid user {0}", userName);
                 return false;
             }
-            Log.Debug("Canceling timeshifting for user {0}", userName);
 
+            var card = GetTimeshiftingOrRecordingVirtualCards().FirstOrDefault(x => x.User.Name == userName);
+            if (card != null && card.IsRecording && !card.IsTimeShifting) // this is a recording
+            {
+                Log.Debug("Timeshifting for user {0} is a recording, stopping recording instead!", userName);
+                return StopRecording(card.RecordingScheduleId);
+            }
+
+            Log.Debug("Canceling timeshifting for user {0}", userName);
             return _tvControl.StopTimeShifting(ref currentUser);
         }
         #endregion
