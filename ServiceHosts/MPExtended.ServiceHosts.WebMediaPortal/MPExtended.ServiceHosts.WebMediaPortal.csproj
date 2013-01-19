@@ -45,9 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\GlobalVersion.cs">
-      <Link>Properties\GlobalVersion.cs</Link>
-    </Compile>
     <Compile Include="HostService.cs">
       <SubType>Component</SubType>
     </Compile>

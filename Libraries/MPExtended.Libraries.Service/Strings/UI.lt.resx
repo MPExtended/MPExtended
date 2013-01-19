@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Paslauga paleista</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Paslauga stabdoma</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Paslauga sustabdyta</value>
   </data>
@@ -432,9 +429,6 @@ Galite naudoti localhost norint patikrinti paslaugą šiame kompiuteryje. Norėd
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Naršyti</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Pasirinkti</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Paaukoti MPExtended</value>

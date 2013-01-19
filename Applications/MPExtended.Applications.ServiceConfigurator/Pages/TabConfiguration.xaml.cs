@@ -184,7 +184,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += delegate(object source, DoWorkEventArgs args)
             {
-                args.Result = ExternalAddress.GetIP().ToString();
+                var ip = ExternalAddress.GetIP();
+                args.Result = ip != null ? ip.ToString() : String.Empty;
             };
             bw.RunWorkerCompleted += delegate(object source, RunWorkerCompletedEventArgs args)
             {

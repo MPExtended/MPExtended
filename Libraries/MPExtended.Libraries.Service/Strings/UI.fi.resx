@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Palvelu aloitettu</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Palvelu pysähtyy</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Palvelu pysäytetty</value>
   </data>
@@ -433,9 +430,6 @@ Tämä on palvelukomponentti joka mahdollistaa kaikkien asiakaskoneiden pääsyn
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Selaa</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Valitse</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Lahjoita MPExtendedille</value>

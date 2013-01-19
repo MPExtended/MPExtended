@@ -86,7 +86,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected bool IsUserAuthenticated()
         {
-            if (PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
+            if (!Configuration.Authentication.Enabled || Configuration.Authentication.UnauthorizedStreams ||
+				PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
                 return true;
 
             // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
@@ -411,11 +412,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                                     return line.Trim();
 
                                 var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
-                                return Url.Action("ProxyHttpLiveSegment", "Stream", new {
+                                return Url.Action("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
+                                {
                                     identifier = identifier,
                                     ctdAction = queryString["action"],
                                     parameters = queryString["parameters"]
-                                }, Request.Url.Scheme);
+                                }), Request.Url.Scheme, Request.Url.Host);
                             })
                             .Join(Environment.NewLine);
 

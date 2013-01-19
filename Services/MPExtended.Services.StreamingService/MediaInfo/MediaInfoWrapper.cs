@@ -82,14 +82,20 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         
             // actually load it
             WebMediaInfo outInfo;
-            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
+            if (!source.NeedsImpersonation)
             {
                 outInfo = DoLoadMediaInfo(source.GetPath(), false);
             }
-            if (outInfo != null)
+            else
             {
-                persistentCache.Save(source, outInfo);
+                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
+                {
+                    outInfo = DoLoadMediaInfo(context.RewritePath(source.GetPath()), false);
+                }
             }
+
+            if (outInfo != null)
+                persistentCache.Save(source, outInfo);
             return outInfo;
         }
 

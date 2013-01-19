@@ -64,7 +64,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title))
             };
 
-            return View(Settings.ActiveSettings.EnableAlbumPlayer ? "AlbumPlayer" : "Album", model);
+            return View(AlbumPlayerViewModel.EnableAlbumPlayer ? "AlbumPlayer" : "Album", model);
         }
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)

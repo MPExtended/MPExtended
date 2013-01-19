@@ -62,7 +62,9 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                     return;
 
                 // load current config section
-                XElement configFile = XElement.Load(configPath);
+                XElement configFile;
+                using (var handle = File.Open(configPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    configFile = XElement.Load(handle);
                 var entries = configFile.Elements("section").First(x => x.Attribute("name").Value == "MyFilms").Elements("entry");
                 if (!entries.Any(x => x.Attribute("name").Value == "Default_Config") && !entries.Any(x => x.Attribute("name").Value == "Current_Config"))
                 {

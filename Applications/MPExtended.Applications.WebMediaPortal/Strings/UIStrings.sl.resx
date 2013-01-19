@@ -433,4 +433,28 @@
   <data name="YouAreListening" xml:space="preserve">
     <value>Poslušaš &lt;strong&gt;{0}&lt;/strong&gt; izvajalca &lt;strong&gt;{1}&lt;/strong&gt;</value>
   </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>Predvajanje vira ni uspelo. Poglej log datoteke na strežniku za več podrobnosti.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>O programu</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>Trenutna poraba procesorja:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>Trenutna poraba pomnilnika:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>Status sistema</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>To je WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>Najnovejši albumi</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>Najnovejše skladbe</value>
+  </data>
 </root>

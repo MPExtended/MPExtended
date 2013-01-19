@@ -52,11 +52,13 @@ namespace MPExtended.Applications.Development.DevTool
             return new IDevTool[] {
                 new Tools.InterfaceCheck(),
                 new DocGen.DocDevTool(),
-                new Tools.WixFSGenerator(),
                 new Tools.InstallLayoutExporter(),
                 new Tools.MonolithicPowerscheduler(),
                 new Tools.PSPluginInstallGenerator(),
-                new Tools.TransifexDownloader()
+                new Tools.TransifexDownloader(),
+                new WixFS.CustomGenerator(),
+                new WixFS.WebMPGenerator(),
+                new WixFS.ServiceTranslationsGenerator()
             };
         }
 

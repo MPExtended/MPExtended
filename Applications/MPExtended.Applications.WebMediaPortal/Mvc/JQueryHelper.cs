@@ -118,8 +118,9 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             options.Add("constrainInput", !hasTimepicker && openOnFocus ? "true" : "false");
             if (hasCalendarIcon)
             {
+                var buttonLink = UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent("Images/calendar.gif"), htmlHelper.ViewContext.HttpContext);
                 options.Add("showOn", openOnFocus ? "'both'" : "'button'");
-                options.Add("buttonImage", "'" + UrlHelper.GenerateContentUrl("~/Content/Images/calendar.gif", htmlHelper.ViewContext.HttpContext) + "'");
+                options.Add("buttonImage", "'" + buttonLink + "'");
                 options.Add("buttonImageOnly", "true");
             }
 

@@ -168,8 +168,8 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Service started</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Service stopping</value>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Service starting</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Service stopped</value>
@@ -508,5 +508,8 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   </data>
   <data name="TVLogoDirectory" xml:space="preserve">
     <value>TV logo directory</value>
+  </data>
+  <data name="CleanCacheSucceeded" xml:space="preserve">
+    <value>The cache has been cleaned successfully!</value>
   </data>
 </root>

@@ -49,7 +49,7 @@ namespace MPExtended.Applications.ServiceConfigurator
         public MainWindow()
         {
             InitializeComponent();
-            Log.Debug("MPExtended.Applications.ServiceConfigurator starting...");
+            Log.Debug("MPExtended configurator version {0} starting...", VersionUtil.GetFullVersionString());
             SetupUSS();
 
             if (StartupArguments.RunAsTrayApp && !StartupArguments.OpenOnStart)
@@ -364,7 +364,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                     break;
                 case ServiceControllerStatus.StartPending:
                     btnStartStopService.Content = UI.Stop;
-                    lblServiceState.Content = UI.ServiceStarting;
+                    lblServiceState.Content = UI.ServiceStartingFixed;
                     lblServiceState.Foreground = Brushes.Teal;
                     break;
                 default:

@@ -87,6 +87,7 @@ namespace MPExtended.Services.StreamingService.Code
         public override void Close()
         {
             base.Close();
+            wrappedStream.Close();
             IsClosed = true;
         }
 

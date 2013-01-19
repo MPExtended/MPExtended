@@ -52,12 +52,5 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
 
             return Directory.GetDirectories(GetParentDirectory());
         }
-
-        public virtual IEnumerable<string> GetNames()
-        {
-            return GetDirectories()
-                .Select(x => Path.GetFileName(x))
-                .ToList();
-        }
     }
 }
