@@ -46,9 +46,9 @@ namespace MPExtended.Services.StreamingService.Units
         {
             try
             {
-                using (var impersonator = new NetworkShareImpersonator())
+                using (var context = new NetworkShareImpersonator())
                 {
-                    DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    DataOutputStream = new FileStream(context.RewritePath(source), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             }
             catch (Exception e)

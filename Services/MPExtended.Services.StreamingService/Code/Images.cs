@@ -73,28 +73,38 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // execute it
-            ProcessStartInfo info = new ProcessStartInfo();
-            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
+            if (source.NeedsImpersonation)
             {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, source.GetPath(), tempFile);
-                info.FileName = Configuration.StreamingProfiles.FFMpegPath;
-                info.CreateNoWindow = true;
-                info.UseShellExecute = false;
-                Process proc = new Process();
-                proc.StartInfo = info;
-                proc.Start();
-                proc.WaitForExit();
+                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
+                    ExecuteFFMpegExtraction(position, context.RewritePath(source.GetPath()), tempFile);
+            }
+            else
+            {
+                ExecuteFFMpegExtraction(position, source.GetPath(), tempFile);
             }
 
             // log when failed
             if (!File.Exists(tempFile))
             {
-                Log.Warn("Failed to extract image to temporary file {0} with command {1}", tempFile, info.Arguments);
+                Log.Warn("Failed to extract image to temporary file {0} from {1}", tempFile, source.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
 
             return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+        }
+
+        private static void ExecuteFFMpegExtraction(long position, string path, string tempFile)
+        {
+            var info = new ProcessStartInfo();
+            info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, path, tempFile);
+            info.FileName = Configuration.StreamingProfiles.FFMpegPath;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+            Process proc = new Process();
+            proc.StartInfo = info;
+            proc.Start();
+            proc.WaitForExit();
         }
 
         public static Stream GetImage(ImageMediaSource src, string format)

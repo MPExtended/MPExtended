@@ -187,11 +187,15 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 return new TsBuffer(Id);
             }
-            else if (SupportsDirectAccess)
+            else if (SupportsDirectAccess && !NeedsImpersonation)
             {
-                using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(NeedsImpersonation))
+                return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            }
+            else if (SupportsDirectAccess && NeedsImpersonation)
+            {
+                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
                 {
-                    return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    return new FileStream(context.RewritePath(GetPath()), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             }
             else if (MediaType == WebMediaType.Recording)
@@ -229,7 +233,7 @@ namespace MPExtended.Services.StreamingService.Code
                             var cards = Connections.TAS.GetActiveCards().ToList();
                             if (!cards.Any(x => x.TimeShiftFileName == Id))
                             {
-                                Log.Info("Cannot find card for timeshift buffer {0} (but did find {1}), what's happening?!", 
+                                Log.Info("Cannot find card for timeshift buffer {0} (but did find {1}), what's happening?!",
                                     Id, String.Join(", ", cards.Select(x => x.TimeShiftFileName)));
                                 return String.Empty;
                             }

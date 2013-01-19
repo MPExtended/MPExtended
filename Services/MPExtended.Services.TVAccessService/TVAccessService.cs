@@ -829,20 +829,17 @@ namespace MPExtended.Services.TVAccessService
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    // access denied, try impersonation when on a network share
-                    if (new Uri(filename).IsUnc)
+                    // access denied, try impersonation
+                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
                     {
-                        using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
-                        {
-                            var ret = new WebRecordingFileInfo(filename);
-                            ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
-                            ret.OnNetworkDrive = true;
-                            return ret;
-                        }
+                        var ret = new WebRecordingFileInfo(context.RewritePath(filename));
+                        ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
+                        ret.OnNetworkDrive = true;
+                        return ret;
                     }
                 }
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 Log.Info("Failed to load fileinfo for recording {0} because it does not exists at path {1}", id, filename);
             }
@@ -869,9 +866,9 @@ namespace MPExtended.Services.TVAccessService
                 // try to load it from a network drive
                 if (info.OnNetworkDrive && info.Exists)
                 {
-                    using (NetworkShareImpersonator impersonation = new NetworkShareImpersonator())
+                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
                     {
-                        return new FileStream(info.Path, FileMode.Open, FileAccess.Read);
+                        return new FileStream(context.RewritePath(info.Path), FileMode.Open, FileAccess.Read);
                     }
                 }
 
