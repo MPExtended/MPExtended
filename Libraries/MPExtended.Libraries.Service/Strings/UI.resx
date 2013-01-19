@@ -509,4 +509,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="TVLogoDirectory" xml:space="preserve">
     <value>TV logo directory</value>
   </data>
+  <data name="CleanCacheSucceeded" xml:space="preserve">
+    <value>The cache has been cleaned successfully!</value>
+  </data>
 </root>

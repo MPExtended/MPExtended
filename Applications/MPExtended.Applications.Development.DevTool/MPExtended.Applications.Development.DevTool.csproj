@@ -71,7 +71,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\TransifexDownloader.cs" />
-    <Compile Include="Tools\WixFSGenerator.cs" />
+    <Compile Include="WixFS\ServiceTranslationsGenerator.cs" />
+    <Compile Include="WixFS\CustomGenerator.cs" />
+    <Compile Include="WixFS\WebMPGenerator.cs" />
+    <Compile Include="WixFS\WixFSGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

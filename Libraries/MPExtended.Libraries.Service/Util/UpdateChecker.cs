@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.Service.Util
 
     public class UpdateChecker
     {
-        private const string UPDATE_URL = "http://mpextended.github.com/lastversion.txt?version={0}";
+        private const string UPDATE_URL = "http://www.mpextended.com/lastversion.txt?version={0}";
         private static List<ReleasedVersion> versionInfoCache = null;
 
         public static ReleasedVersion GetLastReleasedVersion()

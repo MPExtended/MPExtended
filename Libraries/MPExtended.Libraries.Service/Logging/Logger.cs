@@ -59,7 +59,7 @@ namespace MPExtended.Libraries.Service.Logging
                     StringBuilder output = new StringBuilder();
                     output.Append(String.Format(dest.LogFormat, DateTime.Now, Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, levelText));
                     output.AppendLine(text);
-                    output.Append(ex.ToString().Replace(" --->", "\r\n --->"));
+                    output.Append(ex != null ? ex.ToString().Replace(" --->", "\r\n --->") : "No exception supplied");
                     dest.Output.WriteLine(output);
                     dest.Output.Flush();
                 }
