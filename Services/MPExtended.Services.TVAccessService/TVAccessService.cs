@@ -464,6 +464,20 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public WebBoolResult StopRecording(int scheduleId)
+        {
+            try
+            {
+                _tvControl.StopRecordingSchedule(scheduleId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to stop recording for schedule {0}", scheduleId), ex);
+                return false;
+            }
+        }
+
         private WebScheduledRecording GetScheduledRecording(Schedule schedule, DateTime date)
         {
             // ignore schedules that don't even match the date we are checking for
