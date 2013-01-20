@@ -28,6 +28,7 @@ using MPExtended.Applications.WebMediaPortal.Code.Composition;
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Applications.WebMediaPortal.Strings;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Interfaces;
 using Config = MPExtended.Libraries.Service.Config;
@@ -234,9 +235,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
             foreach (string platform in Platforms)
             {
-                Configuration.StreamingPlatforms.SetDefaultAudioProfileForPlatform(platform, AudioProfiles[platform].DefaultProfile);
-                Configuration.StreamingPlatforms.SetDefaultVideoProfileForPlatform(platform, VideoProfiles[platform].DefaultProfile);
-                Configuration.StreamingPlatforms.SetDefaultTvProfileForPlatform(platform, TvProfiles[platform].DefaultProfile);
+                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Audio, platform, AudioProfiles[platform].DefaultProfile);
+                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Video, platform, VideoProfiles[platform].DefaultProfile);
+                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Tv, platform, TvProfiles[platform].DefaultProfile);
             }
             
             Configuration.Save();

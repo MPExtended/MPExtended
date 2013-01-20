@@ -2,7 +2,7 @@
 <StreamingPlatforms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/StreamingPlatforms/1">
   <StreamingPlatform>
     <Name>Android</Name>
-    <UserAgentPattern>(android)</UserAgentPattern>
+    <UserAgentPattern>(Android)</UserAgentPattern>
     <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
     <DefaultVideoProfile>HTTP Live Streaming HQ</DefaultVideoProfile>
     <DefaultTvProfile>HTTP Live Streaming HQ</DefaultTvProfile>
@@ -15,7 +15,7 @@
   </StreamingPlatform>
   <StreamingPlatform>
     <Name>Apple</Name>
-    <UserAgentPattern>(iPhone|iPad|iPod|Mac.OS.X)</UserAgentPattern>
+    <UserAgentPattern>(iPhone|iPad|iPod|Mac OS X)</UserAgentPattern>
     <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
     <DefaultVideoProfile>HTTP Live Streaming HQ</DefaultVideoProfile>
     <DefaultTvProfile>HTTP Live Streaming HQ</DefaultTvProfile>
@@ -27,7 +27,7 @@
   </StreamingPlatform>
   <StreamingPlatform>
     <Name>Default</Name>
-    <UserAgentPattern>()</UserAgentPattern>
+    <UserAgentPattern>.*</UserAgentPattern>
     <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
     <DefaultVideoProfile>Flash HQ</DefaultVideoProfile>
     <DefaultTvProfile>Flash HQ</DefaultTvProfile>

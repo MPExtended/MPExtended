@@ -34,10 +34,10 @@ namespace MPExtended.Libraries.Service.Config
         Tv
     }
 
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/StreamingPlatforms/1")]
     public class StreamingPlatform
     {
         public string Name { get; set; }
-        public string UserAgentPattern { get { return userAgentPattern; } set { SetUserAgentPattern(value); } }
         public string DefaultAudioProfile { get; set; }
         public string DefaultVideoProfile { get; set; }
         public string DefaultTvProfile { get; set; }
@@ -45,27 +45,34 @@ namespace MPExtended.Libraries.Service.Config
         public List<string> ValidTargets { get; set; }
 
         private Regex regexPattern;
-        private String userAgentPattern;
+        private string userAgentPattern;
 
-        private void SetUserAgentPattern(string pattern)
+        public string UserAgentPattern
         {
-            userAgentPattern = pattern;
-            regexPattern = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            get
+            {
+                return userAgentPattern;
+            }
+            set
+            {
+                userAgentPattern = value;
+                regexPattern = new Regex(value, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            }
         }
 
         public bool MatchesUserAgent(string userAgent)
         {
             return regexPattern.IsMatch(userAgent);
         }
-
-        public StreamingPlatform()
-        {
-        }
     }
 
     [XmlRoot(ElementName = "StreamingPlatforms", Namespace = "http://mpextended.github.com/schema/config/StreamingPlatforms/1")]
     public class StreamingPlatforms : List<StreamingPlatform>
     {
+        public StreamingPlatforms()
+        {
+        }
+
         public List<String> GetPlatforms()
         {
             return this.Select(x => x.Name).Distinct().ToList();
@@ -73,87 +80,59 @@ namespace MPExtended.Libraries.Service.Config
 
         public IEnumerable<string> GetValidTargetsForUserAgent(string userAgent)
         {
-            return this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)).ValidTargets;
+            var platform = this.FirstOrDefault(x => x.MatchesUserAgent(userAgent));
+            return platform != null ? platform.ValidTargets : new List<string>();
         }
 
-        public IEnumerable<string> GetValidTargetsForPlatform(string platform)
+        public IEnumerable<string> GetValidTargetsForPlatform(string platformName)
         {
-            return this.FirstOrDefault(x => x.Name == platform).ValidTargets;
+            var platform = this.FirstOrDefault(x => x.Name == platformName);
+            return platform != null ? platform.ValidTargets : new List<string>();
         }
 
         public string GetDefaultProfileForUserAgent(StreamingProfileType type, string userAgent)
         {
-            switch (type)
-            {
-                case StreamingProfileType.Audio:
-                    return GetDefaultAudioProfileForUserAgent(userAgent);
-                case StreamingProfileType.Tv:
-                    return GetDefaultTvProfileForUserAgent(userAgent);
-                default:
-                    return GetDefaultVideoProfileForUserAgent(userAgent);
-            }
+            return GetDefaultProfile(type, this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)));
         }
 
         public string GetDefaultProfileForPlatform(StreamingProfileType type, string platform)
         {
-            switch (type)
+            return GetDefaultProfile(type, this.FirstOrDefault(x => x.Name == platform));
+        }
+
+        private string GetDefaultProfile(StreamingProfileType type, StreamingPlatform platform)
+        {
+            if (platform == null)
+                return null;
+
+            var methods = new Dictionary<StreamingProfileType, Func<StreamingPlatform, string>>()
             {
-                case StreamingProfileType.Audio:
-                    return GetDefaultAudioProfileForPlatform(platform);
-                case StreamingProfileType.Tv:
-                    return GetDefaultTvProfileForPlatform(platform);
-                default:
-                    return GetDefaultVideoProfileForPlatform(platform);
-            }
+                { StreamingProfileType.Audio, x => x.DefaultAudioProfile },
+                { StreamingProfileType.Video, x => x.DefaultVideoProfile },
+                { StreamingProfileType.Tv, x => x.DefaultTvProfile },
+            };
+
+            return methods[type].Invoke(platform);
         }
 
-        public string GetDefaultAudioProfileForUserAgent(string userAgent)
+        public void SetDefaultProfileForPlatform(StreamingProfileType type, string platform, string profile)
         {
-            return this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)).DefaultAudioProfile;
+            SetDefaultProfile(type, this.FirstOrDefault(x => x.Name == platform), profile);
         }
 
-        public string GetDefaultAudioProfileForPlatform(string platform)
+        private void SetDefaultProfile(StreamingProfileType type, StreamingPlatform platform, string profile)
         {
-            return this.FirstOrDefault(x => x.Name == platform).DefaultAudioProfile;
-        }
+            if (platform == null)
+                return;
 
-        public void SetDefaultAudioProfileForPlatform(string platform, string profile)
-        {
-            this.FirstOrDefault(x => x.Name == platform).DefaultAudioProfile = profile;
-        }
+            var methods = new Dictionary<StreamingProfileType, Action<StreamingPlatform, string>>()
+            {
+                { StreamingProfileType.Audio, (x, y) => x.DefaultAudioProfile = y },
+                { StreamingProfileType.Video, (x, y) => x.DefaultVideoProfile = y },
+                { StreamingProfileType.Tv, (x, y) => x.DefaultTvProfile = y },
+            };
 
-        public string GetDefaultVideoProfileForUserAgent(string userAgent)
-        {
-            return this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)).DefaultVideoProfile;
-        }
-
-        public string GetDefaultVideoProfileForPlatform(string platform)
-        {
-            return this.FirstOrDefault(x => x.Name == platform).DefaultVideoProfile;
-        }
-
-        public void SetDefaultVideoProfileForPlatform(string platform, string profile)
-        {
-            this.FirstOrDefault(x => x.Name == platform).DefaultVideoProfile = profile;
-        }
-
-        public string GetDefaultTvProfileForUserAgent(string userAgent)
-        {
-            return this.FirstOrDefault(x => x.MatchesUserAgent(userAgent)).DefaultTvProfile;
-        }
-
-        public string GetDefaultTvProfileForPlatform(string platform)
-        {
-            return this.FirstOrDefault(x => x.Name == platform).DefaultTvProfile;
-        }
-
-        public void SetDefaultTvProfileForPlatform(string platform, string profile)
-        {
-            this.FirstOrDefault(x => x.Name == platform).DefaultTvProfile = profile;
-        }
-
-        public StreamingPlatforms()
-        {
+            methods[type].Invoke(platform, profile);
         }
     }
 }
