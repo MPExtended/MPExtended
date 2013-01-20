@@ -48,11 +48,6 @@ namespace MPExtended.Libraries.Service.Config
             this[ConfigurationFile.WebMediaPortalHosting] = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>(ConfigurationFile.WebMediaPortalHosting, "WebMediaPortalHosting.xml");
         }
 
-        public IConfigurationSerializer Get(ConfigurationFile file)
-        {
-            return this[file];
-        }
-
         public IConfigurationSerializer<TModel> Get<TModel>(ConfigurationFile file) where TModel : class, new()
         {
             return (IConfigurationSerializer<TModel>)this[file];

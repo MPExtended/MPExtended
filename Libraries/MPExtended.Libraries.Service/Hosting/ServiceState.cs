@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Service.Hosting
         public delegate void ServiceStoppingEventHandler();
         public static event ServiceStoppingEventHandler Stopping;
 
-        public static List<string> waitConditions = new List<string>();
+        private static List<string> waitConditions = new List<string>();
 
         public static void RegisterStartupCondition(string conditionName)
         {

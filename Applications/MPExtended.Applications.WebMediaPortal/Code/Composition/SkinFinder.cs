@@ -31,11 +31,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
         {
         }
 
-        public SkinFinder(string rootDirectory)
-            : base(rootDirectory)
-        {
-        }
-
         protected override string GetExtensionDirectoryName()
         {
             return "Skins";

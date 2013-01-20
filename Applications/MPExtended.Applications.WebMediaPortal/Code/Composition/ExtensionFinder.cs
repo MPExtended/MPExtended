@@ -33,11 +33,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
             rootDirectory = WebMediaPortalApplication.GetInstallationDirectory();
         }
 
-        public ExtensionFinder(string rootDirectory)
-        {
-            this.rootDirectory = rootDirectory;
-        }
-
         protected abstract string GetExtensionDirectoryName();
 
         public string GetParentDirectory()

@@ -25,7 +25,7 @@ using MPExtended.Libraries.Service.Network;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
-    internal class BaseAddresses
+    internal static class BaseAddresses
     {
         public static Uri[] GetForService(string serviceName)
         {

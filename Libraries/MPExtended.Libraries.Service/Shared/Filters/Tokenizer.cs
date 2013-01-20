@@ -35,11 +35,6 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             this.data = data;
         }
 
-        public List<string> GetTokens()
-        {
-            return tokens;
-        }
-
         public List<string> Tokenize()
         {
             tokens = new List<string>();
