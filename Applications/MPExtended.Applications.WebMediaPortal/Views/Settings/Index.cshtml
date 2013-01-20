@@ -49,7 +49,7 @@
                 @Html.ValidationMessageFor(x => x.EnableDeinterlace)
             </td>
         </tr>
-        @{  if(Model.ShowTASConfiguration)
+        @{  if (Model.ShowTASConfiguration)
             {
                 <tr>
                     <td>
@@ -108,38 +108,53 @@
             }
         }
 
-        @foreach(string platform in Model.Platforms)
+        @for(int i = 0; i < Model.Platforms.Count; i++)
         {
+            @Html.HiddenFor(x => x.Platforms[i].Name)
+
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>    
             <tr>
                 <td colspan="2">
-                    <br />
-                    <h2>@platform</h2>
+                    <h2>@Model.Platforms[i].Name</h2>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.TvProfiles)
-                </td>
-                <td>                                
-                    @Html.DropDownList(@platform + "_tv")
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.VideoProfiles)
-                </td>
-                <td>                                
-                    @Html.DropDownList(@platform + "_video")
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(x => x.AudioProfiles)
-                </td>
-                <td>                                
-                    @Html.DropDownList(@platform + "_audio")
-                </td>
-            </tr>
+            
+            if (Model.ShowTASConfiguration)
+            {
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.Platforms[i].Tv)
+                    </td>
+                    <td>                                
+                        @Html.DropDownListFor(x => x.Platforms[i].Tv)
+                        @Html.ValidationMessageFor(x => x.Platforms[i].Tv)
+                    </td>
+                </tr>
+            }
+
+            if (Model.ShowMASConfiguration)
+            {
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.Platforms[i].Video)
+                    </td>
+                    <td>                                
+                        @Html.DropDownListFor(x => x.Platforms[i].Video)
+                        @Html.ValidationMessageFor(x => x.Platforms[i].Video)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.Platforms[i].Audio)
+                    </td>
+                    <td>                                
+                        @Html.DropDownListFor(x => x.Platforms[i].Audio)
+                        @Html.ValidationMessageFor(x => x.Platforms[i].Audio)
+                    </td>
+                </tr>
+            }
         }
     </table>
     <br />

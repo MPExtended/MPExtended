@@ -47,10 +47,36 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Proxied,
     }
 
-    public class ProfileViewModel
+    public class PlatformViewModel
     {
-        public string DefaultProfile { get; set; }
-        public List<String> AvailableProfiles { get; set; }
+        public string Name { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicStreamingProfile")]
+        [ListChoice("AudioProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicProfile")]
+        public string Audio { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultMediaStreamingProfile")]
+        [ListChoice("VideoProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMediaProfile")]
+        public string Video { get; set; }
+
+        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVStreamingProfile")]
+        [ListChoice("TvProfiles", AllowNull = true, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidTVProfile")]
+        public string Tv { get; set; }
+
+        public IEnumerable<SelectListItem> AudioProfiles { get { return GetProfileSelectList(StreamingProfileType.Audio); } }
+        public IEnumerable<SelectListItem> VideoProfiles { get { return GetProfileSelectList(StreamingProfileType.Video); } }
+        public IEnumerable<SelectListItem> TvProfiles { get { return GetProfileSelectList(StreamingProfileType.Tv); } }
+
+        private IEnumerable<SelectListItem> GetProfileSelectList(StreamingProfileType type)
+        {
+            var service = type == StreamingProfileType.Tv ? Connections.Current.TASStreamControl : Connections.Current.MASStreamControl;
+            var defaultProfile = Configuration.StreamingPlatforms.GetDefaultProfileForPlatform(type, Name);
+            var targets = type == StreamingProfileType.Audio ? StreamTarget.GetAllTargets() : StreamTarget.GetVideoTargets();
+            var supportedTargets =  Configuration.StreamingPlatforms.GetValidTargetsForPlatform(Name).Intersect(targets.Select(x => x.Name));
+            return ProfileModel.GetProfilesForTargets(service, supportedTargets)
+                .Select(x => new SelectListItem() { Text = x.Name, Value = x.Name, Selected = x.Name == defaultProfile })
+                .OrderBy(x => x.Text);
+        }
     }
 
     public class SettingsViewModel
@@ -164,47 +190,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("Languages", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
         public string Language { get; set; }
 
-        public List<string> Platforms { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMusicStreamingProfile")]
-        public Dictionary<string, ProfileViewModel> AudioProfiles { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultMediaStreamingProfile")]
-        public Dictionary<string, ProfileViewModel> VideoProfiles { get; set; }
-
-        [LocalizedDisplayName(typeof(FormStrings), "DefaultTVStreamingProfile")]
-        public Dictionary<string, ProfileViewModel> TvProfiles { get; set; }
+        public List<PlatformViewModel> Platforms { get; set; }
 
         public SettingsViewModel()
         {
-            Platforms = Configuration.StreamingPlatforms.GetPlatforms();
-            AudioProfiles = new Dictionary<string, ProfileViewModel>();
-            VideoProfiles = new Dictionary<string, ProfileViewModel>();
-            TvProfiles = new Dictionary<string, ProfileViewModel>();
-
-            foreach (string platform in Platforms)
-            {
-                AudioProfiles.Add(platform, new ProfileViewModel()
-                {
-                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultAudioProfileForPlatform(platform),
-                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.MASStreamControl, StreamTarget.GetAudioTargets())
-                });
-                VideoProfiles.Add(platform, new ProfileViewModel()
-                {
-                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultVideoProfileForPlatform(platform),
-                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.MASStreamControl, StreamTarget.GetVideoTargets())
-                });
-                TvProfiles.Add(platform, new ProfileViewModel() 
-                {
-                    DefaultProfile = Configuration.StreamingPlatforms.GetDefaultTvProfileForPlatform(platform),
-                    AvailableProfiles = GetProfilesForPlatform(platform, Connections.Current.TASStreamControl, StreamTarget.GetVideoTargets())
-                });
-            }
         }
 
-        public SettingsViewModel(Config.WebMediaPortal model) 
-            : this()
+        public SettingsViewModel(Config.WebMediaPortal model)
         {
+            Platforms = Configuration.StreamingPlatforms
+                .Select(x => new PlatformViewModel() { Name = x.Name })
+                .ToList();
+
 		    Skin = model.Skin;
             Language = model.DefaultLanguage;
             StreamType = (StreamTypeWithDescription)model.StreamType;
@@ -233,29 +230,23 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Configuration.WebMediaPortal.Skin = Skin;
             Configuration.WebMediaPortal.DefaultLanguage = Language;
 
-            foreach (string platform in Platforms)
+            var profileTypes = new Dictionary<StreamingProfileType, Func<PlatformViewModel, string>>()
             {
-                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Audio, platform, AudioProfiles[platform].DefaultProfile);
-                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Video, platform, VideoProfiles[platform].DefaultProfile);
-                Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(StreamingProfileType.Tv, platform, TvProfiles[platform].DefaultProfile);
+                { StreamingProfileType.Audio, x => x.Audio },
+                { StreamingProfileType.Video, x => x.Video },
+                { StreamingProfileType.Tv, x => x.Tv },
+            };
+
+            foreach (var platform in Platforms)
+            {
+                foreach (var pt in profileTypes)
+                {
+                    if (!String.IsNullOrEmpty(pt.Value.Invoke(platform)))
+                        Configuration.StreamingPlatforms.SetDefaultProfileForPlatform(pt.Key, platform.Name, pt.Value.Invoke(platform));
+                }
             }
             
             Configuration.Save();
-        }
-
-        private List<String> GetProfilesForPlatform(string platform, IWebStreamingService service, IEnumerable<StreamTarget> targets)
-        {
-            List<string> profiles = new List<string>();
-
-            Configuration.StreamingPlatforms.GetValidTargetsForPlatform(platform)
-                .Intersect(targets.Select(x => x.Name))
-                .ToList()
-                .ForEach(target => profiles.AddRange(service.GetTranscoderProfilesForTarget(target)
-                    .Select(x => x.Name)
-                    .Where(x => !profiles.Contains(x))));
-
-            profiles.Sort();
-            return profiles;            
         }
 
         private int GetCurrentProvider(int? setting, int defaultValue)

@@ -483,21 +483,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 PlayerOpenedBy.Add(Request.UserHostAddress);
             }
 
-            // get all transcoder profiles
-            List<string> profiles = new List<string>();
-            Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent)
-                .Intersect(targets.Select(x => x.Name))
-                .ToList()
-                .ForEach(target => profiles.AddRange(streamControl.GetTranscoderProfilesForTarget(target)
-                    .Select(x => x.Name)
-                    .Where(x => !profiles.Contains(x))));
-
             // get view properties
             VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
 
             // generate view
-            model.Transcoders = profiles;
+            var supportedTargets = Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent).Intersect(targets.Select(x => x.Name));
+            model.Transcoders = ProfileModel.GetProfilesForTargets(streamControl, supportedTargets).Select(x => x.Name);
             model.Transcoder = profile.Name;
             model.TranscoderProfile = profile;
             model.Player = player;
@@ -552,7 +544,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
-            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, Configuration.StreamingPlatforms.GetDefaultAudioProfileForUserAgent(Request.UserAgent));
+            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
+                Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
         }

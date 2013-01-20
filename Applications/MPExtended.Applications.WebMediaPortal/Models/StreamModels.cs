@@ -21,6 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using MoreLinq;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
@@ -62,6 +63,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public static List<StreamTarget> GetAllTargets()
         {
             return GetAudioTargets().Concat(GetVideoTargets()).ToList();
+        }
+    }
+
+    public class ProfileModel
+    {
+        public static IEnumerable<WebTranscoderProfile> GetProfilesForTargets(IWebStreamingService service, IEnumerable<string> targets)
+        {
+            return targets.Count() > 2 ?
+                service.GetTranscoderProfiles().Where(x => x.Targets.Intersect(targets).Any()) :
+                targets.SelectMany(target => service.GetTranscoderProfilesForTarget(target)).DistinctBy(x => x.Name);
         }
     }
 
