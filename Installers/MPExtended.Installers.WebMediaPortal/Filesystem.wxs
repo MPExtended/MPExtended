@@ -29,6 +29,7 @@
             <Directory Id="Dir_Config" Name="DefaultConfig">
               <Component Id="Component_Config" Guid="e9ff6a7f-c9a1-4ea9-87b7-62cb70ce3cc0">
                 <File Source="$(var.SolutionDir)\Config\Authentication.xml" />
+                <File Source="$(var.SolutionDir)\Config\StreamingPlatforms.xml" />
                 <File Source="$(var.SolutionDir)\Config\WebMediaPortal.xml" />
                 <File Source="$(var.SolutionDir)\Config\WebMediaPortalHosting.xml" />
               </Component>

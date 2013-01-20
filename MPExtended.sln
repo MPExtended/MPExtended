@@ -111,6 +111,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D6
 		Config\MediaAccess.xml = Config\MediaAccess.xml
 		Config\Services.xml = Config\Services.xml
 		Config\Streaming.xml = Config\Streaming.xml
+		Config\StreamingPlatforms.xml = Config\StreamingPlatforms.xml
 		Config\StreamingProfiles.xml = Config\StreamingProfiles.xml
 		Config\WebMediaPortal.xml = Config\WebMediaPortal.xml
 		Config\WebMediaPortalHosting.xml = Config\WebMediaPortalHosting.xml

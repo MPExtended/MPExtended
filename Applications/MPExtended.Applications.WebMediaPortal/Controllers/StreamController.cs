@@ -118,11 +118,31 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.TASStreamControl : Connections.Current.MASStreamControl;
         }
 
+
         protected StreamType GetStreamMode()
         {
             return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
                 Settings.ActiveSettings.StreamType :
                 (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
+        }
+
+        private string GetDefaultProfile(WebMediaType type)
+        {
+            StreamingProfileType profileType;
+            switch (type)
+            {
+                case WebMediaType.TV:
+                case WebMediaType.Recording:
+                    profileType = StreamingProfileType.Tv;
+                    break;
+                case WebMediaType.MusicTrack:
+                    profileType = StreamingProfileType.Audio;
+                    break;
+                default:
+                    profileType = StreamingProfileType.Video;
+                    break;
+            }
+            return Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(profileType, Request.UserAgent);
         }
 
         //
@@ -463,20 +483,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 PlayerOpenedBy.Add(Request.UserHostAddress);
             }
 
-            // get all transcoder profiles
-            List<string> profiles = new List<string>();
-            foreach (StreamTarget target in targets)
-            {
-                if (target.ValidForRequest(Request))
-                    profiles = profiles.Concat(streamControl.GetTranscoderProfilesForTarget(target.Name).Select(x => x.Name)).Distinct().ToList();
-            }
-
             // get view properties
             VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
             string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
 
             // generate view
-            model.Transcoders = profiles;
+            var supportedTargets = Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent).Intersect(targets.Select(x => x.Name));
+            model.Transcoders = ProfileModel.GetProfilesForTargets(streamControl, supportedTargets).Select(x => x.Name);
             model.Transcoder = profile.Name;
             model.TranscoderProfile = profile;
             model.Player = player;
@@ -494,10 +507,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             model.ContinuationId = randomGenerator.Next(100000, 999999).ToString();
 
             // get profile
-            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ? Settings.ActiveSettings.DefaultTVProfile :
-                type == WebMediaType.MusicTrack ? Settings.ActiveSettings.DefaultAudioProfile :
-                Settings.ActiveSettings.DefaultMediaProfile;
-            var profile = GetProfile(GetStreamControl(type), defaultProfile);
+            var profile = GetProfile(GetStreamControl(type), GetDefaultProfile(type));
 
             // get size
             if (type == WebMediaType.TV)
@@ -534,7 +544,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
-            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, Settings.ActiveSettings.DefaultAudioProfile);
+            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
+                Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
             return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
         }
@@ -549,10 +560,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // get profile
-            var defaultProfile = type == WebMediaType.TV || type == WebMediaType.Recording ?
-                Settings.ActiveSettings.DefaultTVProfile :
-                Settings.ActiveSettings.DefaultMediaProfile;
-            var profile = GetProfile(GetStreamControl(type), transcoder ?? defaultProfile);
+            var profile = GetProfile(GetStreamControl(type), transcoder ?? GetDefaultProfile(type));
 
             // create playlist
             StringBuilder m3u = new StringBuilder();

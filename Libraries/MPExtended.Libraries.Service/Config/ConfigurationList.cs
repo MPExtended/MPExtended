@@ -42,6 +42,7 @@ namespace MPExtended.Libraries.Service.Config
             if (product == MPExtendedProduct.WebMediaPortal)
             {
                 this[ConfigurationFile.WebMediaPortal] = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>(ConfigurationFile.WebMediaPortal, "WebMediaPortal.xml");
+                this[ConfigurationFile.StreamingPlatforms] = new ConfigurationSerializer<StreamingPlatforms, StreamingPlatformsSerializer>(ConfigurationFile.StreamingPlatforms, "StreamingPlatforms.xml");
             }
 
             // Also load this file for the service, as it is used by the configurator. We might need to add an additional product for that later on, when this becomes problematic. 
