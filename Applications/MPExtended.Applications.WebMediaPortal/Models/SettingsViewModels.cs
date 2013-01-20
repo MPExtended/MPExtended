@@ -253,18 +253,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             return setting == null ? defaultValue : setting.Value;
         }
-
-        private string GetCurrentUrl(string local, string global)
-        {
-            if (local != null && local.Trim().Length > 0)
-            {
-                return local;
-            }
-            else
-            {
-                return global;
-            }
-        }
     }
 
     public class ServiceAddressesViewModel
