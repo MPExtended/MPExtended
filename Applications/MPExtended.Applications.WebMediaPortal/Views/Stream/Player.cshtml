@@ -7,7 +7,7 @@
 @using (Html.BeginForm())
 {
     @Html.DropDownList("transcoder", Model.TranscoderSelectList)
-    <input type="submit" value="Change player" />
+    <input type="submit" value="@UIStrings.ChangeProfile" />
 }
 
 <br />
