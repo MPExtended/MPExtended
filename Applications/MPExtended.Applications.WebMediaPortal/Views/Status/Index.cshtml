@@ -56,7 +56,7 @@
         <th>@UIStrings.DiskInfoAvailable</th>
     </tr>
 
-    @foreach (var disk in Model.DiskInformation.OrderBy(x => x.Disk))
+    @foreach (var disk in Model.DiskInformation.OrderBy(x => x.Disk.StartsWith(@"\\")).ThenBy(x => x.Disk))
     {
         <tr>
             <td>@disk.Disk</td>
