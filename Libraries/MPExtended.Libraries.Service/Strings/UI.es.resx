@@ -127,10 +127,10 @@
     <value>Puedes configurar el puerto en el que corre WebMediaPortal aquí. Si cambias el valor 8080 que viene por defecto, tendrás que configurar el firewall manualmente.</value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
-    <value>Lenguaje de audio por defecto:</value>
+    <value>Idioma de audio por defecto:</value>
   </data>
   <data name="DefaultLanguage" xml:space="preserve">
-    <value>Lenguaje por defecto</value>
+    <value>Idioma por defecto</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
     <value>Algunos clientes no soportan la configuración del idioma del audio y subtitulos en los streams base. Puedes configurar el idioma por defecto del audio y subtítulos para estos clientes aquí.</value>
@@ -163,13 +163,10 @@
     <value>No instalado</value>
   </data>
   <data name="ServiceNotInstalledPopup" xml:space="preserve">
-    <value>El servicio MPExtended no está instalado. Por favor asegúrese de que su instalación es correcta.</value>
+    <value>El servicio MPExtended no está instalado. Por favor asegúrate de que la instalación es correcta.</value>
   </data>
   <data name="ServiceStarted" xml:space="preserve">
     <value>Servicio iniciado</value>
-  </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Deteniendo servicio</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Servicio detenido</value>
@@ -244,7 +241,7 @@
     <value>WebMediaPortal</value>
   </data>
   <data name="TestingCredentials" xml:space="preserve">
-    <value>Probando credenciales, espere por favor...</value>
+    <value>Probando credenciales, espera por favor...</value>
   </data>
   <data name="TestLinksFor" xml:space="preserve">
     <value>Links de prueba para</value>
@@ -265,7 +262,7 @@
     <value>Cerra sesión</value>
   </data>
   <data name="TrayMonitorOff" xml:space="preserve">
-    <value>Desmonitorizar</value>
+    <value>No monitorizar</value>
   </data>
   <data name="TrayOpenConfigurator" xml:space="preserve">
     <value>Abrir configuración de MPExtended</value>
@@ -292,19 +289,19 @@
     <value>Suspender</value>
   </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
-    <value>para comprobar la validez del contenido solicitado por favor utilice los siguientes enlaces... Puedes usar localhost para probar el servicio en el mismo equipo. Selecciona una de las IPs de la lista desplegable para obtener las URLs para probar en otros PCs de la red (p.e. para descartar problemas de firewall).</value>
+    <value>Para comprobar la validez del contenido solicitado por favor utiliza los siguientes enlaces... Puedes usar localhost para probar el servicio en el mismo equipo. Selecciona una de las IPs de la lista desplegable para obtener las URLs para probar en otros PCs de la red (p.e. para descartar problemas de firewall).</value>
   </data>
   <data name="TVServer" xml:space="preserve">
     <value>Servidor de TV</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Ocurrió un error inesperado. Por favor envíe un reporte del error adjuntando los logs del servicio.</value>
+    <value>Ocurrió un error inesperado. Por favor envía un reporte del error adjuntando los logs del servicio.</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
     <value>Configurador de MPExtended</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Añadir acceso directo</value>
+    <value>Añadir cuenta</value>
   </data>
   <data name="AuthenticationIntroText" xml:space="preserve">
     <value>Puedes configurar la autenticación para MPExtended aquí. Es recomendable que actives la autenticación y cambies la contraseña (o borres) de la cuenta por defecto, admin. Nunca hagas una instalación accesible desde internet sin usar autenticación y contraseñas seguras.</value>
@@ -316,16 +313,16 @@
     <value>Los servicios soportan autenticación vía Bonjour/Zeroconf, que permiten a los clientes de la red local descubrir automáticamente los servicios y configurarlos.</value>
   </data>
   <data name="CheckForUpdates" xml:space="preserve">
-    <value>comprobar actualizaciones</value>
+    <value>Buscar actualizaciones</value>
   </data>
   <data name="CheckingForUpdates" xml:space="preserve">
     <value>comprobando actualizaciones...</value>
   </data>
   <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Lo siento, los credenciales de red introducidos son inválidos.</value>
+    <value>Lo siento, las credenciales de red introducidas son inválidas.</value>
   </data>
   <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Validados correctamente los credenciales de red.</value>
+    <value>Credenciales de red validadas correctamente.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Eliminar cuenta</value>
@@ -352,10 +349,13 @@
     <value>Incluir autenticación para el usuario:</value>
   </data>
   <data name="IRCText" xml:space="preserve">
-    <value>IRC:⏎ irc.freenode.net / channel #mp-extended</value>
+    <value>IRC:
+irc.freenode.net / channel #mp-extended</value>
   </data>
   <data name="MPExtendedIntroduction" xml:space="preserve">
-    <value>MPExtended es un proyecto de código abierto que tiene como objetivo proveer acceso a MediaPortal desde cualquier parte del mundo, usando clientes para tu navegador de internet, Android, IOS y más.⏎ ⏎ Éste es el componende del servicio que provee acceso a las bases de datos y archivos multimedia para todos los clientes.</value>
+    <value>MPExtended es un proyecto de código abierto que tiene como objetivo proveer acceso a MediaPortal desde cualquier parte del mundo, usando clientes para tu navegador de internet, Android, iOS y otros.
+
+Éste es el componente del servicio que provee acceso a las bases de datos y archivos multimedia para todos los clientes.</value>
   </data>
   <data name="NetworkDrives" xml:space="preserve">
     <value>Dispositivos de red</value>
@@ -382,7 +382,7 @@
     <value>¡Código de barras guardado en {0}!</value>
   </data>
   <data name="SaveToFile" xml:space="preserve">
-    <value>Guardar al archivo</value>
+    <value>Guardar como</value>
   </data>
   <data name="ServiceName" xml:space="preserve">
     <value>Nombre del servicio</value>
@@ -403,10 +403,10 @@
     <value>Versión:</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Exportar</value>
+    <value>Guardar</value>
   </data>
   <data name="LogFile" xml:space="preserve">
-    <value>Archivo log:</value>
+    <value>Archivo del log:</value>
   </data>
   <data name="LogFiles" xml:space="preserve">
     <value>Archivos log</value>
@@ -424,16 +424,13 @@
     <value>Sitio</value>
   </data>
   <data name="SocialIntroText" xml:space="preserve">
-    <value>MPextended soporta la sincronización de las películas y series que ves en los clientes para Trakt y follow.it. Puedes configurar tu cuenta para estos sitios aquí.</value>
+    <value>MPExtended permite la sincronización de las películas y series que ves en los clientes con Trakt y follow.it. Puedes configurar tu cuenta para estos sitios aquí.</value>
   </data>
   <data name="LogAndConfigurationArchive" xml:space="preserve">
     <value>Log y archivo de configuración (.zip)</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Navegar</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Seleccionar</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Donar a MPExtended</value>
@@ -445,10 +442,12 @@
     <value>Habilitar HTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>Debido a limitaciones en Windows y IIS Express, sólo puedes usar puertos entre 44300 y 44399 para HTTPS. También tienes que configurar tu firewall manualmente para permitir estas conexiones.⏎ ⏎ Por favor ten en cuenta que no es posible configurar el certificado SSL/TLS usado. Cuando uses HTTPS, obtendrás advertencias en tu navegador acerca de conexiones potencialmente inseguras.</value>
+    <value>Debido a limitaciones en Windows y IIS Express, sólo puedes usar puertos entre 44300 y 44399 para HTTPS. También tienes que configurar tu firewall manualmente para permitir estas conexiones.
+
+Por favor ten en cuenta que no es posible configurar el certificado SSL/TLS usado. Cuando uses HTTPS, obtendrás advertencias en tu navegador acerca de conexiones potencialmente inseguras.</value>
   </data>
   <data name="HTTPSInvalidPort" xml:space="preserve">
-    <value>El puerto que has introducido para HTTPS es inválido. Sólo puedes usar puertos desde el 44300 hasta el 44399 para HTTPS.</value>
+    <value>El puerto que has introducido para HTTPS no es válido. Sólo puedes usar puertos desde el 44300 hasta el 44399 para HTTPS.</value>
   </data>
   <data name="HTTPSPort" xml:space="preserve">
     <value>Puerto HTTPS:</value>
@@ -460,13 +459,13 @@
     <value>Por favor introduce un usuario y contraseña para este usuario.</value>
   </data>
   <data name="BonjourChecking" xml:space="preserve">
-    <value>Comprobando tu instalación de Bonjour...</value>
+    <value>Comprobando la instalación de Bonjour...</value>
   </data>
   <data name="BonjourNotInstalled" xml:space="preserve">
-    <value>Bonjour no está instalado en tu computadora. Para usar esta función,</value>
+    <value>Bonjour no está instalado en tu ordenador. Para usar esta función,</value>
   </data>
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
-    <value>por favor descargue Bonjour.</value>
+    <value>por favor descarga Bonjour.</value>
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Habilitar</value>
@@ -502,6 +501,6 @@
     <value>OK</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Lenguaje</value>
+    <value>Idioma</value>
   </data>
 </root>

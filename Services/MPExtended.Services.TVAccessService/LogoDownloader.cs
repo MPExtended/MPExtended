@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Network;
@@ -47,7 +48,7 @@ namespace MPExtended.Services.TVAccessService
             ServiceState.Started += delegate()
             {
                 logoDownloader = new LogoDownloader();
-                Task.Factory.StartNew(logoDownloader.Init);
+                Task.Factory.StartNew(logoDownloader.Init).LogOnException();
             };
         }
 
@@ -118,7 +119,7 @@ namespace MPExtended.Services.TVAccessService
             {
                 if (set.MASStream == null)
                 {
-                    Log.Trace("Found service set {0} without MAS stream, ignoring...");
+                    Log.Trace("Found service set {0} without MAS stream, ignoring...", set.GetSetIdentifier());
                     continue;
                 }
 
@@ -178,6 +179,11 @@ namespace MPExtended.Services.TVAccessService
             }
             catch (MessageSecurityException)
             {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to download channel logos from {0}", serviceSet), ex);
                 return false;
             }
         }

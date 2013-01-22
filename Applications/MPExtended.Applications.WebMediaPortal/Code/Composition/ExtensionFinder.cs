@@ -33,11 +33,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
             rootDirectory = WebMediaPortalApplication.GetInstallationDirectory();
         }
 
-        public ExtensionFinder(string rootDirectory)
-        {
-            this.rootDirectory = rootDirectory;
-        }
-
         protected abstract string GetExtensionDirectoryName();
 
         public string GetParentDirectory()
@@ -51,13 +46,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                 return new List<string>();
 
             return Directory.GetDirectories(GetParentDirectory());
-        }
-
-        public virtual IEnumerable<string> GetNames()
-        {
-            return GetDirectories()
-                .Select(x => Path.GetFileName(x))
-                .ToList();
         }
     }
 }

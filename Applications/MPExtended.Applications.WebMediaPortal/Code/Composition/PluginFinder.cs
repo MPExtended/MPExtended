@@ -31,11 +31,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
         {
         }
 
-        public PluginFinder(string rootDirectory)
-            : base(rootDirectory)
-        {
-        }
-
         protected override string GetExtensionDirectoryName()
         {
             return "Plugins";

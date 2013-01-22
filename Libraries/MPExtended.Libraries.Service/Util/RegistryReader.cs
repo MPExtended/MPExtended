@@ -25,6 +25,19 @@ namespace MPExtended.Libraries.Service.Util
 {
     public static class RegistryReader
     {
+        public static string[] GetSubKeys(RegistryHive hive, RegistryView view, string key)
+        {
+            RegistryKey rootKey = RegistryKey.OpenBaseKey(hive, view);
+            if (rootKey == null)
+                return null;
+
+            RegistryKey subkey = rootKey.OpenSubKey(key);
+            if (subkey == null)
+                return null;
+
+            return subkey.GetSubKeyNames();
+        }
+
         public static object ReadKey(RegistryHive hive, RegistryView view, string subkey, string name)
         {
             // open root

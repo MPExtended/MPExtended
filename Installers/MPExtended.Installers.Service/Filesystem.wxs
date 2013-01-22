@@ -167,6 +167,11 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
             </Component>
+            <Directory Id="Directory_Configurator_Binaries_enUS" Name="en-US">
+              <Component Id="Component_Configurator_Binaries_enUS" Guid="db310c41-317f-4df5-beed-2398aedd3d16">
+                <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\en-US\MPExtended.Applications.ServiceConfigurator.resources.dll" />
+              </Component>
+            </Directory>
 
             <!-- Configuration -->
             <Directory Id="Directory_DefaultConfig" Name="DefaultConfig">

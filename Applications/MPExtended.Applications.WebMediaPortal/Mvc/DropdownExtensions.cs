@@ -70,24 +70,23 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         public static MvcHtmlString DropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes)
         {
             if(expression.NodeType != ExpressionType.Lambda || expression.Body.NodeType != ExpressionType.MemberAccess)
-            {
                 throw new ArgumentException("Cannot determine dropdown list items - unparsable expression");
-            }
 
-            MemberInfo member = (expression.Body as MemberExpression).Member;
-            var attributes = (ListChoiceAttribute[])member.GetCustomAttributes(typeof(ListChoiceAttribute), true);
+            var memberExpression = expression.Body as MemberExpression;
+            var attributes = (ListChoiceAttribute[])memberExpression.Member.GetCustomAttributes(typeof(ListChoiceAttribute), true);
             if (attributes == null || attributes.Length == 0)
-            {
                 throw new ArgumentException("Cannot determine dropdown list items - no ListChoiceAttribute");
-            }
 
+            // get the object whose member is being accessed by executing the expressions' "base"
+            var lambda = Expression.Lambda(memberExpression.Expression, expression.Parameters);
+            var containingObject = lambda.Compile().DynamicInvoke(htmlHelper.ViewData.Model);
+
+            // finally, get the value of the property
             string propertyName = attributes.First().ListPropertyName;
-            PropertyInfo property = htmlHelper.ViewData.Model.GetType().GetProperty(propertyName);
-            object value = property.GetValue(htmlHelper.ViewData.Model, null);
+            Type declaringType = (expression.Body as MemberExpression).Member.DeclaringType;
+            object value = declaringType.GetProperty(propertyName).GetValue(containingObject, null);
             if (!value.GetType().GetInterfaces().Any(x => x == typeof(IEnumerable<SelectListItem>)))
-            {
                 throw new ArgumentException("Cannot determine dropdown list items - invalid list property specified");
-            }
 
             // do not call on htmlHelper to avoid a stack overflow: apparantly (IEnumerable<SelectListItem>value) is seen as object and we're called again
             return SelectExtensions.DropDownListFor(htmlHelper, expression, (IEnumerable<SelectListItem>)value, htmlAttributes);

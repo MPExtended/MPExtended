@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Tjänsten startad</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Tjänsten stoppar</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Tjänsten stoppad</value>
   </data>
@@ -432,9 +429,6 @@
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Utforska</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Välj</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Donera till MPExtended</value>

@@ -21,6 +21,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using MoreLinq;
+using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Config;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -38,17 +42,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             this.Player = player;
             this.HasVideo = video;
             this.Name = name;
-        }
-
-        public bool ValidForRequest(HttpRequestBase request)
-        {
-            // FIXME: I'm sorry for the uglyness of this. 
-            if (Name == "mobile-hls-video")
-                return request.UserAgent.Contains("iPhone") || request.UserAgent.Contains("iPad") || request.UserAgent.Contains("iPod") || 
-                    request.UserAgent.Contains("Mac OS X") ||
-                    request.UserAgent.Contains("Android");
-
-            return true;
         }
 
         public static List<StreamTarget> GetAudioTargets()
@@ -71,6 +64,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public static List<StreamTarget> GetAllTargets()
         {
             return GetAudioTargets().Concat(GetVideoTargets()).ToList();
+        }
+    }
+
+    public class ProfileModel
+    {
+        public static IEnumerable<WebTranscoderProfile> GetProfilesForTargets(IWebStreamingService service, IEnumerable<string> targets)
+        {
+            return targets.Count() > 2 ?
+                service.GetTranscoderProfiles().Where(x => x.Targets.Intersect(targets).Any()) :
+                targets.SelectMany(target => service.GetTranscoderProfilesForTarget(target)).DistinctBy(x => x.Name);
         }
     }
 
@@ -103,6 +106,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class AlbumPlayerViewModel : PlayerViewModel
     {
+        public static bool EnableAlbumPlayerForUserAgent(string userAgent)
+        {
+            var defaultProfile = Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, userAgent);
+            var profile = Connections.Current.MASStreamControl.GetTranscoderProfileByName(defaultProfile);
+            return Configuration.WebMediaPortal.EnableAlbumPlayer &&
+                StreamTarget.GetAudioTargets().Any(audioTarget => profile.Targets.Contains(audioTarget.Name));
+        }
+
         public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
 
         public AlbumPlayerViewModel()

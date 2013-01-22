@@ -43,11 +43,5 @@ namespace MPExtended.Libraries.Service.Network
             IPAddress network2 = check.GetNetworkAddress(subnetMask);
             return network1.Equals(network2);
         }
-
-        public static bool IsEqual(this IPAddress address, IPAddress check)
-        {
-            return address.AddressFamily == check.AddressFamily &&
-                address.GetAddressBytes().SequenceEqual(check.GetAddressBytes());
-        }
     }
 }

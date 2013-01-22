@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Social.Follwit
         {
             get
             {
-                return VersionUtil.GetUserAgent("FollwitConfig", "1.0");
+                return VersionUtil.GetUserAgent("FollwitPlugin", "1.0");
             }
         }
 

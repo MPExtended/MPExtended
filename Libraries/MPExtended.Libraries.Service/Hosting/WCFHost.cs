@@ -28,7 +28,6 @@ namespace MPExtended.Libraries.Service.Hosting
     internal class WCFHost
     {
         private List<ServiceHost> hosts = new List<ServiceHost>();
-        private Dictionary<string, Type> types = new Dictionary<string, Type>();
 
         public void Start(IEnumerable<Plugin<IWcfService>> availableServices)
         {

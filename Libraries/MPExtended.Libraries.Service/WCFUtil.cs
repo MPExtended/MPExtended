@@ -60,7 +60,7 @@ namespace MPExtended.Libraries.Service
             int port = Configuration.Services.Port;
             if (NetworkInformation.GetIPAddresses().Any())
             {
-                return String.Format("http://{0}:{1}/MPExtended/", NetworkInformation.GetIPAddress(), port);
+                return String.Format("http://{0}:{1}/MPExtended/", Configuration.Services.ServiceAddress ?? NetworkInformation.GetIPAddress(), port);
             }
 
             // last resort: localhost

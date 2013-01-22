@@ -42,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 
         public string Enable()
         {
-            htmlHelper.Assets().AddScript("~/Scripts/jquery-" + JQUERY_VERSION + ".min.js");
+            htmlHelper.Assets().AddScript("~/Scripts/jquery-" + JQUERY_VERSION + ".min.js", 0);
 
             // return empty string so we can just type @Html.jQuery().Enable()
             return String.Empty;
@@ -51,8 +51,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         public string EnableUI()
         {
             Enable();
-            htmlHelper.Assets().AddScript("~/Scripts/jquery-ui-" + JQUERY_UI_VERSION + ".min.js");
-            htmlHelper.Assets().AddStylesheet("~/Content/Themes/base/jquery-ui.css");
+            htmlHelper.Assets().AddScript("~/Scripts/jquery-ui-" + JQUERY_UI_VERSION + ".min.js", 1);
+            htmlHelper.Assets().AddStylesheet("~/Content/Themes/base/jquery-ui.css", 0);
 
             // return empty string so we can just type @Html.jQuery().EnableUI()
             return String.Empty;
@@ -118,8 +118,9 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             options.Add("constrainInput", !hasTimepicker && openOnFocus ? "true" : "false");
             if (hasCalendarIcon)
             {
+                var buttonLink = UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent("Images/calendar.gif"), htmlHelper.ViewContext.HttpContext);
                 options.Add("showOn", openOnFocus ? "'both'" : "'button'");
-                options.Add("buttonImage", "'" + UrlHelper.GenerateContentUrl("~/Content/Images/calendar.gif", htmlHelper.ViewContext.HttpContext) + "'");
+                options.Add("buttonImage", "'" + buttonLink + "'");
                 options.Add("buttonImageOnly", "true");
             }
 

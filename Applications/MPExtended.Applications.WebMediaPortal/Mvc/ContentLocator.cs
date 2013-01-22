@@ -64,8 +64,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             if (currentSkin != null && Directory.Exists(serverUtility.MapPath(String.Format("~/Skins/{0}/Content", currentSkin))))
                 ContentDirectories.Add(String.Format("~/Skins/{0}/Content", currentSkin));
 
-            var pluginFinder = new PluginFinder();
-            foreach (var plugin in pluginFinder.GetNames())
+            var plugins = Composer.Instance.GetInstalledPlugins();
+            foreach (var plugin in plugins)
             {
                 if (Directory.Exists(serverUtility.MapPath(String.Format("~/Plugins/{0}/Views", plugin))))
                     ViewDirectories.Add(String.Format("~/Plugins/{0}/Views", plugin));

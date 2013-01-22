@@ -73,6 +73,14 @@ namespace MPExtended.Services.StreamingService
             };
         }
 
+        private bool IsClientAuthorized()
+        {
+            return _authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) ||
+                        NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()) ||
+                        !Configuration.Authentication.Enabled ||
+                        Configuration.Authentication.UnauthorizedStreams;
+        }
+
         #region Profiles
         public List<WebTranscoderProfile> GetTranscoderProfiles()
         {
@@ -291,7 +299,7 @@ namespace MPExtended.Services.StreamingService
 
         public Stream GetMediaItem(string clientDescription, WebMediaType type, int? provider, string itemId, long? startPosition)
         {
-            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
+            if (!IsClientAuthorized())
             {
                 Log.Warn("Host {0} isn't authorized to call GetMediaItem", WCFUtil.GetClientIPAddress());
                 WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);
@@ -317,7 +325,7 @@ namespace MPExtended.Services.StreamingService
 
         public Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, long startPosition, int? idleTimeout)
         {
-            if (!_authorizedHosts.Contains(WCFUtil.GetClientIPAddress()) && !NetworkInformation.IsLocalAddress(WCFUtil.GetClientIPAddress()))
+            if (!IsClientAuthorized())
             {
                 Log.Warn("Host {0} isn't authorized to call DoStream", WCFUtil.GetClientIPAddress());
                 WCFUtil.SetResponseCode(HttpStatusCode.Unauthorized);

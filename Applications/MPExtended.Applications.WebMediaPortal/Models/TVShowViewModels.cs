@@ -44,7 +44,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Show = Connections.Current.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, showId);
-                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, WebSortField.TVSeasonNumber, WebSortOrder.Asc);
+                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, WebSortField.TVSeasonNumber, WebSortOrder.Asc)
+                    .Where(x => x.SeasonNumber != null);
             }
             catch (Exception ex)
             {
@@ -72,7 +73,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             {
                 Season = Connections.Current.MAS.GetTVSeasonDetailedById(Settings.ActiveSettings.TVShowProvider, seasonId);
                 Show = Connections.Current.MAS.GetTVShowDetailedById(Season.PID, Season.ShowId);
-                Episodes = Connections.Current.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, WebSortField.TVEpisodeNumber, WebSortOrder.Asc);
+                Episodes = Connections.Current.MAS.GetTVEpisodesDetailedForSeason(Season.PID, seasonId, WebSortField.TVEpisodeNumber, WebSortOrder.Asc)
+                    .Where(x => !String.IsNullOrEmpty(x.Title));
             }
             catch (Exception ex)
             {
@@ -83,25 +85,46 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class TVEpisodeViewModel : MediaItemModel
     {
-        // TODO: Lazy-load these
-        public WebTVShowDetailed Show { get; private set; }
-        public WebTVSeasonDetailed Season { get; private set; }
         public WebTVEpisodeDetailed Episode { get; private set; }
+
+        // Lazily load the show and season
+        private WebTVShowDetailed _show;
+        private WebTVSeasonDetailed _season;
+
+        public WebTVShowDetailed Show
+        {
+            get
+            {
+                if (_show == null)
+                    _show = Connections.Current.MAS.GetTVShowDetailedById(Episode.PID, Episode.ShowId);
+
+                return _show;
+            }
+        }
+
+        public WebTVSeasonDetailed Season
+        {
+            get
+            {
+                if (_season == null)
+                    _season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.SeasonId);
+
+                return _season;
+            }
+        }
 
         protected override WebMediaItem Item { get { return Episode; } }
 
         public TVEpisodeViewModel(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
-            Show = show;
-            Season = season;
             Episode = episode;
+            _show = show;
+            _season = season;
         }
 
         public TVEpisodeViewModel(WebTVEpisodeDetailed episode)
         {
             Episode = episode;
-            Season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.SeasonId);
-            Show = Connections.Current.MAS.GetTVShowDetailedById(Episode.PID, Episode.ShowId);
         }
 
         public TVEpisodeViewModel(string episodeId)
@@ -109,8 +132,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Episode = Connections.Current.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, episodeId);
-                Season = Connections.Current.MAS.GetTVSeasonDetailedById(Episode.PID, Episode.SeasonId);
-                Show = Connections.Current.MAS.GetTVShowDetailedById(Episode.PID, Episode.ShowId);
             }
             catch (Exception ex)
             {

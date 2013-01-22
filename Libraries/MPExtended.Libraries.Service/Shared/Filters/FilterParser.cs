@@ -47,15 +47,28 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
             string conjunction;
             FilterSet filter = new FilterAndSet();
-            Filter thisFilter;
+            IFilter thisFilter;
             IFilter last;
             FilterOrSet orSet;
-
 
             while (++pos < tokens.Count)
             {
                 conjunction = pos == -1 ? "," : tokens[pos];
-                thisFilter = new Filter(GetNextToken("field name"), GetNextToken("operator"), GetNextToken("value"));
+
+                var name = GetNextToken("field name");
+                var oper = GetNextToken("operator");
+                var value = GetNextToken("value");
+
+                if (Tokens.IsListStart(value))
+                {
+                    var values = new List<string>();
+                    while (!Tokens.IsListEnd(GetNextToken("value")))
+                        values.Add(tokens[pos]);
+                    thisFilter = new ListFilter(name, oper, values);
+                }
+                else
+                    thisFilter = new Filter(name, oper, value);
+
                 if (conjunction == ",") // and
                     filter.Add(thisFilter);
                 else if (conjunction == "|") // or

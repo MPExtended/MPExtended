@@ -125,7 +125,7 @@ namespace MPExtended.Libraries.SQLitePlugin
                 if (String.IsNullOrEmpty(sval))
                     return 0;
 
-                return Single.Parse(sval, System.Globalization.CultureInfo.InvariantCulture);
+                return Single.Parse(sval.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {

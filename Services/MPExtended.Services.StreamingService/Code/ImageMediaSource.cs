@@ -90,7 +90,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         public override WebFileInfo GetFileInfo()
         {
-            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording) && FileType == WebFileType.Logo)
+            if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording || MediaType == WebMediaType.Radio) && FileType == WebFileType.Logo)
             {
                 if (fileInfoCache != null)
                     return fileInfoCache;
@@ -99,7 +99,7 @@ namespace MPExtended.Services.StreamingService.Code
                     _logos = new ChannelLogos();
 
                 // get display name
-                int idChannel = MediaType == WebMediaType.TV ?
+                int idChannel = MediaType == WebMediaType.TV || MediaType == WebMediaType.Radio ?
                     Int32.Parse(Id) :
                     Connections.TAS.GetRecordingById(Int32.Parse(Id)).ChannelId;
                 var channel = Connections.TAS.GetChannelBasicById(idChannel);

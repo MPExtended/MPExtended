@@ -97,6 +97,7 @@ namespace MPExtended.Services.TVAccessService
                 case WebSortField.Channel:
                     return list.OrderBy(x => x.ChannelId, orderInput);
                 case WebSortField.StartTime:
+                case WebSortField.DateAdded:
                     return list.OrderBy(x => x.StartTime, orderInput);
                 case WebSortField.Title:
                 default:

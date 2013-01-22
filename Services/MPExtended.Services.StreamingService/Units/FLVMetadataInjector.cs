@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.StreamingService.Code;
 
 namespace MPExtended.Services.StreamingService.Units
@@ -85,6 +86,7 @@ namespace MPExtended.Services.StreamingService.Units
 
                 StreamCopy.AsyncStreamCopy(InputStream, pipeServer);
             }, TaskCreationOptions.LongRunning);
+            injectionTask.LogOnException();
             return true;
         }
 

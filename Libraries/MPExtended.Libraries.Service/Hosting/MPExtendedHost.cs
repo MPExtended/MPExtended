@@ -64,6 +64,9 @@ namespace MPExtended.Libraries.Service.Hosting
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
                 // TODO: Set CultureInfo.DefaultThreadCurrent{,UI}Culture when we switch to .NET4.5
 
+                // setup our environment
+                EnvironmentChecks.CheckEnvironment();
+
                 // start watching the configuration files for changes
                 Configuration.Load();
                 Configuration.EnableChangeWatching();

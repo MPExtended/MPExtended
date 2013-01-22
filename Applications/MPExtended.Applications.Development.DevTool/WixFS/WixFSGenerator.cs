@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,39 +24,15 @@ using System.Security.Cryptography;
 using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 
-namespace MPExtended.Applications.Development.DevTool.Tools
+namespace MPExtended.Applications.Development.DevTool.WixFS
 {
-    internal class WixFSGenerator : IDevTool, IQuestioningDevTool
+    internal abstract class WixFSGenerator
     {
-        // these config lines are specific to WebMP and Streaming
-        private static string[] forbiddenFiles = new string[] { "MediaInfo.dll", "start.bat" };
-        private static string[] forbiddenExtensions = new string[] { ".cs", ".csproj", ".user", ".dat" };
-        private static string[] forbiddenDirectories = new string[] { "bin", "obj", "Debug", "Release", "VLCWrapper", "stream" };
+        protected string[] forbiddenFiles;
+        protected string[] forbiddenExtensions;
+        protected string[] forbiddenDirectories;
 
-        public string Name { get { return "Wix FS Generator"; } }
-        public TextWriter OutputStream { get; set; }
-        public Dictionary<string, string> Answers { get; set; }
-
-        public IEnumerable<Question> Questions
-        {
-            get
-            {
-                return new List<Question>() {
-                    new Question("inputDirectory", "Enter directory to include: " + Installation.GetSourceRootDirectory() + @"\"),
-                    new Question("outputFile", "Enter output file: "),
-                    new Question("prefix", "Enter prefix of the directory and component: "),
-                    new Question("parentName", "Enter id of parent directory: "),
-                    new Question("noImmediate", "Skip immediate files (only include subdirectories)? "),
-                };
-            }
-        }
-
-        public void Run()
-        {
-            RunFromInput(Answers["inputDirectory"], Answers["outputFile"], Answers["prefix"], Answers["parentName"], Answers["noImmediate"] == "y");
-        }
-
-        public void RunFromInput(string inputDir, string outputFile, string name, string parentName, bool skipImmediate)
+        protected void RunFromInput(string inputDir, string outputFile, string name, string parentName, bool skipImmediate)
         {
             // setup XML file
             XNamespace ns = "http://schemas.microsoft.com/wix/2006/wi";
@@ -82,7 +57,6 @@ namespace MPExtended.Applications.Development.DevTool.Tools
                 )
             );
             doc.Save(outputFile);
-            OutputStream.WriteLine("Done!");
         }
 
         private bool AddDirectory(string path, string baseComponent, string basePrefix, XNamespace ns, XElement dirNode, XElement componentGroup, bool skipImmediate = false)

@@ -56,6 +56,7 @@ namespace MPExtended.Libraries.Service.Config
     public class Authentication
     {
         public bool Enabled { get; set; }
+        public bool UnauthorizedStreams { get; set; }
 
         [XmlArray(Namespace = "http://mpextended.github.com/schema/config/Users/1", ElementName = "Users")]
         [XmlArrayItem(ElementName = "User")]

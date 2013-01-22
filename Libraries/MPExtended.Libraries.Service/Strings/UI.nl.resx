@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Service gestart</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Service wordt gestopt</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Service gestopt</value>
   </data>
@@ -435,9 +432,6 @@ Dit is de service component, welke toegang tot de databases en de media-bestande
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Bladeren</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Selecteer</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Doneer aan MPExtended</value>

@@ -23,8 +23,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Security;
-using System.Xml;
-using System.Xml.Linq;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 
