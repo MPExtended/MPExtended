@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Služba bola spustená</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Služba sa zastavuje</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Služba zastavená</value>
   </data>
@@ -434,9 +431,6 @@ Toto je komponent služby, ktorý poskytuje prítup do databáz a mediálnych s�
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Prezerať</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Vybrať</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Prispejte na MPExtended</value>

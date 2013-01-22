@@ -73,28 +73,38 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // execute it
-            ProcessStartInfo info = new ProcessStartInfo();
-            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
+            if (source.NeedsImpersonation)
             {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -f image2 {2}", position, source.GetPath(), tempFile);
-                info.FileName = Configuration.StreamingProfiles.FFMpegPath;
-                info.CreateNoWindow = true;
-                info.UseShellExecute = false;
-                Process proc = new Process();
-                proc.StartInfo = info;
-                proc.Start();
-                proc.WaitForExit();
+                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
+                    ExecuteFFMpegExtraction(position, context.RewritePath(source.GetPath()), tempFile);
+            }
+            else
+            {
+                ExecuteFFMpegExtraction(position, source.GetPath(), tempFile);
             }
 
             // log when failed
             if (!File.Exists(tempFile))
             {
-                Log.Warn("Failed to extract image to temporary file {0} with command {1}", tempFile, info.Arguments);
+                Log.Warn("Failed to extract image to temporary file {0} from {1}", tempFile, source.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
 
             return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+        }
+
+        private static void ExecuteFFMpegExtraction(long position, string path, string tempFile)
+        {
+            var info = new ProcessStartInfo();
+            info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, path, tempFile);
+            info.FileName = Configuration.StreamingProfiles.FFMpegPath;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+            Process proc = new Process();
+            proc.StartInfo = info;
+            proc.Start();
+            proc.WaitForExit();
         }
 
         public static Stream GetImage(ImageMediaSource src, string format)
@@ -130,9 +140,16 @@ namespace MPExtended.Services.StreamingService.Code
             string filename = String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format);
             if (cache.Contains(filename))
             {
-                WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
-                WCFUtil.SetContentType(Path.GetExtension(filename));
-                return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
+                if (src.GetFileInfo().LastModifiedTime > cache.GetLastModifiedTime(cache.GetPath(filename)))
+                {
+                    cache.Invalidate(filename);
+                }
+                else
+                {
+                    WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000"); // not really sure why 2 months exactly
+                    WCFUtil.SetContentType(GetMime(Path.GetExtension(filename)));
+                    return new FileStream(cache.GetPath(filename), FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
             }
 
             try
@@ -148,10 +165,13 @@ namespace MPExtended.Services.StreamingService.Code
                 }
 
                 // save image to cache
-                var image = hasToResize ? ResizeImage(src, maxWidth, maxHeight, borders) : Image.FromStream(src.Retrieve());
                 string path = cache.GetPath(String.Format("stream_{0}_{1}_{2}_{3}.{4}", src.GetUniqueIdentifier(), maxWidth, maxHeight, borders, format));
-                SaveImageToFile(image, path, format);
-                image.Dispose();
+                using (var stream = src.Retrieve())
+                {
+                    var image = hasToResize ? ResizeImage(stream, maxWidth, maxHeight, borders) : Image.FromStream(stream);
+                    SaveImageToFile(image, path, format);
+                    image.Dispose();
+                }
 
                 // return image to client
                 WCFUtil.AddHeader(HttpResponseHeader.CacheControl, "public, max-age=5184000, s-maxage=5184000");
@@ -179,9 +199,9 @@ namespace MPExtended.Services.StreamingService.Code
             return commonMimeTypes.ContainsKey(lowerExtension) ? commonMimeTypes[lowerExtension] : "application/octet-stream";
         }
 
-        private static Image ResizeImage(ImageMediaSource src, int? maxWidth, int? maxHeight, string borders)
+        private static Image ResizeImage(Stream stream, int? maxWidth, int? maxHeight, string borders)
         {
-            using (var origImage = Image.FromStream(src.Retrieve()))
+            using (var origImage = Image.FromStream(stream))
             {
                 Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
                 int bitmapWidth = !String.IsNullOrEmpty(borders) ? maxWidth.Value : newSize.Width;

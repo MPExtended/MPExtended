@@ -162,11 +162,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class TVGuideProgramViewModel
     {
-        public int Id { get; private set; }
-        public string Title { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
-        public bool IsScheduled { get; private set; }
+        public WebProgramDetailed Program { get; private set; }
+        public int Id { get { return Program.Id; } }
+        public string Title { get { return String.IsNullOrEmpty(Program.Title) ? UIStrings.Unknown : Program.Title; } }
+        public DateTime StartTime { get { return Program.StartTime; } }
+        public DateTime EndTime { get { return Program.EndTime; } }
+        public bool IsScheduled { get { return Program.IsScheduled; } }
+        
 
         public bool IsCurrent
         {
@@ -176,21 +178,14 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        private WebProgramDetailed program;
         private DateTime guideStart;
         private DateTime guideEnd;
 
         public TVGuideProgramViewModel(WebProgramDetailed program, DateTime guideStart, DateTime guideEnd)
         {
-            Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
-            StartTime = program.StartTime;
-            EndTime = program.EndTime;
-            IsScheduled = program.IsScheduled;
-
+            Program = program;
             this.guideStart = guideStart;
             this.guideEnd = guideEnd;
-            this.program = program;
         }
 
         public double GetPercentageWidth()
@@ -216,7 +211,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             if (IsCurrent)
             {
-                return helper.Action("WatchLiveTV", "Television", new { channelId = program.ChannelId });
+                return helper.Action("WatchLiveTV", "Television", new { channelId = Program.ChannelId });
             }
             else
             {
@@ -227,14 +222,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
     public class ProgramDetailsViewModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public bool IsScheduled { get; set; }
-        public string ChannelName { get; set; }
-        public int ChannelId { get; set; }
+        public WebProgramDetailed Program { get; set; }
+
+        public int Id { get { return Program.Id; } }
+        public string Title { get { return String.IsNullOrEmpty(Program.Title) ? UIStrings.Unknown : Program.Title; } }
+        public string Description { get { return Program.Description; } }
+        public DateTime StartTime { get { return Program.StartTime; } }
+        public DateTime EndTime { get { return Program.EndTime; } }
+        public bool IsScheduled { get { return Program.IsScheduled; } }
+
+        public string ChannelName { get; private set; }
+        public int ChannelId { get; private set; }
 
         public bool CanWatchLive
         {
@@ -246,12 +244,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public ProgramDetailsViewModel(WebProgramDetailed program)
         {
-            Id = program.Id;
-            Title = String.IsNullOrEmpty(program.Title) ? UIStrings.Unknown : program.Title; // creating links with empty text doesn't work
-            Description = program.Description;
-            StartTime = program.StartTime;
-            EndTime = program.EndTime;
-            IsScheduled = program.IsScheduled;
+            Program = program;
 
             var channel = Connections.Current.TAS.GetChannelDetailedById(program.ChannelId);
             ChannelName = channel.Title;

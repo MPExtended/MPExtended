@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StreamingPlatforms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/StreamingPlatforms/1">
+  <StreamingPlatform>
+    <Name>Android</Name>
+    <UserAgentPattern>(Android)</UserAgentPattern>
+    <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
+    <DefaultVideoProfile>HTTP Live Streaming HQ</DefaultVideoProfile>
+    <DefaultTvProfile>HTTP Live Streaming HQ</DefaultTvProfile>
+    <ValidTargets>
+      <Target>pc-flash-audio</Target>
+      <Target>pc-vlc-video</Target>
+      <Target>pc-flash-video</Target>
+      <Target>mobile-hls-video</Target>
+    </ValidTargets>
+  </StreamingPlatform>
+  <StreamingPlatform>
+    <Name>Apple</Name>
+    <UserAgentPattern>(iPhone|iPad|iPod|Mac OS X)</UserAgentPattern>
+    <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
+    <DefaultVideoProfile>HTTP Live Streaming HQ</DefaultVideoProfile>
+    <DefaultTvProfile>HTTP Live Streaming HQ</DefaultTvProfile>
+    <ValidTargets>
+      <Target>pc-flash-audio</Target>
+      <Target>pc-vlc-video</Target>
+      <Target>mobile-hls-video</Target>
+    </ValidTargets>
+  </StreamingPlatform>
+  <StreamingPlatform>
+    <Name>Default</Name>
+    <UserAgentPattern>.*</UserAgentPattern>
+    <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
+    <DefaultVideoProfile>Flash HQ</DefaultVideoProfile>
+    <DefaultTvProfile>Flash HQ</DefaultTvProfile>
+    <ValidTargets>
+      <Target>pc-flash-audio</Target>
+      <Target>pc-vlc-video</Target>
+      <Target>pc-flash-video</Target>
+    </ValidTargets>
+  </StreamingPlatform>
+</StreamingPlatforms>

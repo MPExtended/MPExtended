@@ -27,8 +27,23 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public class AssetManager
     {
+        private enum AssetType
+        {
+            Stylesheet = 1,
+            Script = 2
+        }
+
+        private class ReferencedAsset
+        {
+            public AssetType AssetType { get; set; }
+            public int Position { get; set; }
+            public string Tag { get; set; }
+        }
+
+        private const int DEFAULT_POSITION = 100;
+
         private HtmlHelper htmlHelper;
-        private Dictionary<string, string> tags = new Dictionary<string, string>();
+        private Dictionary<string, ReferencedAsset> assets = new Dictionary<string, ReferencedAsset>();
         private List<object> scriptBlocks = new List<object>();
 
         public AssetManager(HtmlHelper htmlHelper)
@@ -38,29 +53,49 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 
         public MvcHtmlString AddScript(string path)
         {
-            return CreateScript(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
+            return CreateScript(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
+        }
+
+        public MvcHtmlString AddScript(string path, int position)
+        {
+            return CreateScript(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext), position);
         }
 
         public MvcHtmlString AddContentScript(string path)
         {
-            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext));
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
+        }
+
+        public MvcHtmlString AddContentScript(string path, int position)
+        {
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext), position);
         }
 
         public MvcHtmlString AddViewScript(string path)
         {
-            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext));
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
         }
 
-        private MvcHtmlString CreateScript(string resolvedPath)
+        public MvcHtmlString AddViewScript(string path, int position)
         {
-            if (!tags.ContainsKey(resolvedPath))
+            return CreateScript(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext), position);
+        }
+
+        private MvcHtmlString CreateScript(string resolvedPath, int position)
+        {
+            if (!assets.ContainsKey(resolvedPath))
             {
                 var uri = resolvedPath + "?v=" + VersionUtil.GetBuildVersion().GetHashCode().ToString();
-
                 TagBuilder builder = new TagBuilder("script");
                 builder.MergeAttribute("type", "text/javascript");
                 builder.MergeAttribute("src", uri);
-                tags.Add(resolvedPath, builder.ToString(TagRenderMode.Normal));
+
+                assets.Add(resolvedPath, new ReferencedAsset()
+                {
+                    AssetType = AssetType.Script,
+                    Tag = builder.ToString(TagRenderMode.Normal),
+                    Position = position
+                });
             }
 
             // return an empty string so that we can use @Html.Assets().AddScript()
@@ -75,30 +110,50 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 
         public MvcHtmlString AddStylesheet(string path)
         {
-            return CreateStylesheet(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext));
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
+        }
+
+        public MvcHtmlString AddStylesheet(string path, int position)
+        {
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(path, htmlHelper.ViewContext.HttpContext), position);
         }
 
         public MvcHtmlString AddContentStylesheet(string path)
         {
-            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext));
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
+        }
+
+        public MvcHtmlString AddContentStylesheet(string path, int position)
+        {
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateContent(path), htmlHelper.ViewContext.HttpContext), position);
         }
 
         public MvcHtmlString AddViewStylesheet(string path)
         {
-            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext));
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext), DEFAULT_POSITION);
         }
 
-        private MvcHtmlString CreateStylesheet(string resolvedPath)
+        public MvcHtmlString AddViewStylesheet(string path, int position)
         {
-            if (!tags.ContainsKey(resolvedPath))
+            return CreateStylesheet(UrlHelper.GenerateContentUrl(ContentLocator.Current.LocateView(path), htmlHelper.ViewContext.HttpContext), position);
+        }
+
+        private MvcHtmlString CreateStylesheet(string resolvedPath, int position)
+        {
+            if (!assets.ContainsKey(resolvedPath))
             {
                 var uri = resolvedPath + "?v=" + VersionUtil.GetBuildVersion().GetHashCode().ToString();
-
                 TagBuilder builder = new TagBuilder("link");
                 builder.MergeAttribute("rel", "stylesheet");
                 builder.MergeAttribute("type", "text/css");
                 builder.MergeAttribute("href", uri);
-                tags.Add(resolvedPath, builder.ToString(TagRenderMode.SelfClosing));
+
+                assets.Add(resolvedPath, new ReferencedAsset()
+                {
+                    AssetType = AssetType.Stylesheet,
+                    Tag = builder.ToString(TagRenderMode.SelfClosing),
+                    Position = position
+                });
             }
 
             // return an empty string so that we can just use @Html.Assets().AddStylesheet()
@@ -113,15 +168,22 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
                 TagBuilder builder = new TagBuilder("script");
                 builder.MergeAttribute("type", "text/javascript");
                 builder.InnerHtml = String.Join("", scriptBlocks);
-                tags.Add(String.Empty, builder.ToString(TagRenderMode.Normal));
+                assets.Add(String.Empty, new ReferencedAsset()
+                {
+                    AssetType = AssetType.Script,
+                    Tag = builder.ToString(TagRenderMode.Normal),
+                    Position = Int32.MaxValue
+                });
             }
 
-            // first add all standard tags
+
+            // create the HTML
             StringBuilder text = new StringBuilder();
-            foreach (var tag in tags.Values)
-            {
-                text.AppendLine(tag);
-            }
+            var tags = assets.Values
+                .OrderBy(x => x.AssetType)
+                .ThenBy(x => x.Position);
+            foreach (var tag in tags)
+                text.AppendLine(tag.Tag);
 
             return MvcHtmlString.Create(text.ToString());
         }

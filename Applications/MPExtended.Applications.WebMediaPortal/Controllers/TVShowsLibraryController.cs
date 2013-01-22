@@ -36,8 +36,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Series
         public ActionResult Index(string filter = null)
         {
-            IEnumerable<WebTVShowDetailed> series = Connections.Current.MAS.GetTVShowsDetailed(Settings.ActiveSettings.TVShowProvider, filter, WebSortField.Title, WebSortOrder.Asc);
-            return View(series);
+            var shows = Connections.Current.MAS.GetTVShowsDetailed(Settings.ActiveSettings.TVShowProvider, filter, WebSortField.Title, WebSortOrder.Asc)
+                .Where(x => !String.IsNullOrEmpty(x.Title));
+            return View(shows);
         }
 
         public ActionResult ShowInfo(string show)

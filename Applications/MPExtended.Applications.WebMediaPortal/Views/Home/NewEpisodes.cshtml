@@ -16,7 +16,7 @@
                     </a>
                 </div>
                 <div class="row">
-                    @Html.ActionLink(episode.Show.Title + " - " + episode.Episode.SeasonNumber + "x" + episode.Episode.EpisodeNumber, 
+                    @Html.ActionLink(episode.Episode.Show + " - " + episode.Episode.SeasonNumber + "x" + episode.Episode.EpisodeNumber, 
                         "Details", "TVShowsLibrary", new { episode = episode.Id }, null)
                 </div>
             </div>

@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Social;
 using MPExtended.Services.StreamingService.Interfaces;
@@ -104,7 +105,6 @@ namespace MPExtended.Services.StreamingService.Code
                 services.Add(new FollwitSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.FollwitConfiguration });
             if (Configuration.Streaming.WatchSharing.TraktEnabled)
                 services.Add(new TraktSharingProvider() { Configuration = Configuration.Streaming.WatchSharing.TraktConfiguration });
-            services.ExecuteForAll(x => x.MediaService = Connections.MAS);
             enabled = services.Any();
         }
 
@@ -170,13 +170,13 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     if (state.Context.Source.MediaType == WebMediaType.TVEpisode)
                     {
-                        services.ExecuteForAll(s => s.StartWatchingEpisode((WebTVEpisodeDetailed)state.MediaDescriptor));
+                        services.ExecuteForAll(s => CallForEpisode(identifier, s.StartWatchingEpisode));
                     }
                     else if (state.Context.Source.MediaType == WebMediaType.Movie)
                     {
                         services.ExecuteForAll(s => s.StartWatchingMovie((WebMovieDetailed)state.MediaDescriptor));
                     }
-                });
+                }).LogOnException();
 
                 // and start the background timer
                 streams[identifier] = state;
@@ -217,7 +217,7 @@ namespace MPExtended.Services.StreamingService.Code
                     Log.Debug("WatchSharing: seeing {0}% as finished for {1}", progress, identifier);
 
                     // send the finished event in the background thread
-                    Task.Factory.StartNew(delegate ()
+                    Task.Factory.StartNew(delegate()
                     {
                         // Stop the timers. Do this before sending the FinishEpisode() events as we could get a race condition with the service otherwise.
                         foreach (var timer in streams[identifier].BackgroundTimers)
@@ -228,7 +228,7 @@ namespace MPExtended.Services.StreamingService.Code
                         // Send the FinishEpisode event
                         if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
-                            services.ExecuteForAll(s => s.FinishEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor));
+                            services.ExecuteForAll(s => CallForEpisode(identifier, s.FinishEpisode));
                         }
                         else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
@@ -238,7 +238,7 @@ namespace MPExtended.Services.StreamingService.Code
                         // And definitely stop the stream
                         streams.Remove(identifier);
                         Log.Debug("WatchSharing: finished handling {0}", identifier);
-                    });
+                    }).LogOnException();
                     return;
                 }
             }
@@ -255,7 +255,7 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Debug("WatchSharing: killing stream {0} because of forced EndStream", identifier);
                 if (streams[identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                 {
-                    services.ExecuteForAll(s => s.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[identifier].MediaDescriptor));
+                    services.ExecuteForAll(s => CallForEpisode(identifier, s.CancelWatchingEpisode));
                 }
                 else if (streams[identifier].Context.Source.MediaType == WebMediaType.Movie)
                 {
@@ -285,7 +285,7 @@ namespace MPExtended.Services.StreamingService.Code
                         {
                             if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                             {
-                                wst.Service.CancelWatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor);
+                                CallForEpisode(wst.Identifier, wst.Service.CancelWatchingEpisode);
                             }
                             else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                             {
@@ -318,7 +318,7 @@ namespace MPExtended.Services.StreamingService.Code
                     {
                         if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.TVEpisode)
                         {
-                            wst.Service.WatchingEpisode((WebTVEpisodeDetailed)streams[wst.Identifier].MediaDescriptor, CalculateWatchPosition(wst.Identifier));
+                            CallForEpisode(wst.Identifier, (show, season, episode) => wst.Service.WatchingEpisode(show, season, episode, CalculateWatchPosition(wst.Identifier)));
                         }
                         else if (streams[wst.Identifier].Context.Source.MediaType == WebMediaType.Movie)
                         {
@@ -344,6 +344,14 @@ namespace MPExtended.Services.StreamingService.Code
         private string GetIdentifierFromMediaSource(MediaSource source)
         {
             return Enum.GetName(typeof(WebMediaType), source.MediaType) + "_" + source.Id;
+        }
+
+        private TReturn CallForEpisode<TReturn>(string identifier, Func<WebTVShowDetailed, WebTVSeasonDetailed, WebTVEpisodeDetailed, TReturn> action)
+        {
+            var episode = (WebTVEpisodeDetailed)streams[identifier].MediaDescriptor;
+            var show = Connections.MAS.GetTVShowDetailedById(episode.PID, episode.ShowId);
+            var season = Connections.MAS.GetTVSeasonDetailedById(episode.PID, episode.SeasonId);
+            return action.Invoke(show, season, episode);
         }
     }
 }

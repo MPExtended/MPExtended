@@ -42,68 +42,64 @@ namespace MPExtended.PlugIns.MAS.MyFilms
         private string DatabasePath { get; set; }
         private string PicturePath { get; set; }
 
+        private string sourcePrefix;
         private Regex stripActorName;
         private Regex imdbId;
 
         [ImportingConstructor]
         public MyFilms(IPluginData data)
         {
+            Supported = false;
+
             try
             {
-                // load database path
+                // load MyFilms.xml path
                 if (!Mediaportal.HasValidConfigFile())
-                {
-                    Supported = false;
                     return;
-                }
 
                 string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
                 if (!File.Exists(configPath))
+                    return;
+
+                // load current config section
+                XElement configFile;
+                using (var handle = File.Open(configPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    configFile = XElement.Load(handle);
+                var entries = configFile.Elements("section").First(x => x.Attribute("name").Value == "MyFilms").Elements("entry");
+                if (!entries.Any(x => x.Attribute("name").Value == "Default_Config") && !entries.Any(x => x.Attribute("name").Value == "Current_Config"))
                 {
-                    Supported = false;
+                    Log.Info("MyFilms: couldn't find Current_Config or Default_Config value in MyFilms.xml");
+                    return;
+                }
+                var configSectionName = entries.Any(x => x.Attribute("name").Value == "Current_Config") ? 
+                                        entries.First(x => x.Attribute("name").Value == "Current_Config").Value :
+                                        entries.First(x => x.Attribute("name").Value == "Default_Config").Value;
+
+                // look for database path
+                var thisSection = configFile.Elements("section").First(x => x.Attribute("name").Value == configSectionName);
+                if(!thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntCatalog"))
+                {
+                    Log.Info("MyFilms: couldn't find AntCatalog entry in current section ({0})", configSectionName);
                     return;
                 }
 
-                // load config file
-                XElement configFile = XElement.Load(configPath);
-                string currentConfigNode = configFile
-                    .Elements("section")
-                    .First(x => x.Attribute("name").Value == "MyFilms")
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "Current_Config")
-                    .Value;
-                if (currentConfigNode != "pelis")
-                {
-                    Log.Info("MyFilms: currently selected config is {0}, only pelis (Ant Movie Catalog) is supported at the moment", currentConfigNode);
-                    Supported = false;
-                    return;
-                }
-
-                var pelis = configFile
-                    .Elements("section")
-                    .First(x => x.Attribute("name").Value == "pelis");
-
-                DatabasePath = pelis
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "AntCatalog")
-                    .Value;
+                // load database
+                DatabasePath = thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntCatalog").Value;
                 if (!File.Exists(DatabasePath))
                 {
                     Log.Info("MyFilms: cannot find database {0}", DatabasePath);
-                    Supported = false;
                     return;
                 }
 
-                PicturePath = pelis
-                    .Elements("entry")
-                    .First(x => x.Attribute("name").Value == "AntPicture")
-                    .Value;
+                PicturePath = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntPicture") ?
+                    thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntPicture").Value : String.Empty;
+                sourcePrefix = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "PathStorage") ?
+                    thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "PathStorage").Value : String.Empty;
                 Supported = true;
             }
             catch (Exception ex)
             {
                 Log.Warn("MyFilms: failed to load database path", ex);
-                Supported = false;
                 return;
             }
 
@@ -157,23 +153,18 @@ namespace MPExtended.PlugIns.MAS.MyFilms
         {
             WebMovieDetailed movie = NodeToMovie<WebMovieDetailed>(item);
             if (movie == null)
-            {
                 return null;
-            }
 
-            movie.Summary = item.Attribute("Description").Value;
+            if (item.Attribute("Description") != null)
+                movie.Summary = item.Attribute("Description").Value;
 
             // director
             if (item.Attribute("Director") != null)
-            {
                 movie.Directors.Add(item.Attribute("Director").Value);
-            }
 
             // tagline
             if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("TagLine") != null)
-            {
                 movie.Tagline = item.Element("CustomFields").Attribute("TagLine").Value.Trim();
-            }
 
             // writers
             if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Writer") != null)
@@ -193,20 +184,18 @@ namespace MPExtended.PlugIns.MAS.MyFilms
         private T NodeToMovie<T>(XElement item) where T : WebMovieBasic, new()
         {
             if (item.Attribute("Source") == null)
-            {
                 // we ignore movies without a source
                 return null;
-            }
 
             var movie = new T()
             {
                 Id = item.Attribute("Number").Value,
-                Path = new List<string>() { item.Attribute("Source").Value },
+                Path = new List<string>() { sourcePrefix == String.Empty ? item.Attribute("Source").Value : Path.Combine(sourcePrefix, item.Attribute("Source").Value) },
 
                 Title = item.Attribute("OriginalTitle").Value,
-                Year = Int32.Parse(item.Attribute("Year").Value),
-                Runtime = Int32.Parse(item.Attribute("Length").Value),
-                Rating = Single.Parse(item.Attribute("Rating").Value, CultureInfo.InvariantCulture),
+                Year = item.Attribute("Year") != null ? Int32.Parse(item.Attribute("Year").Value) : 0,
+                Runtime = item.Attribute("Length") != null ? Int32.Parse(item.Attribute("Length").Value) : 0,
+                Rating = item.Attribute("Rating") != null ? Single.Parse(item.Attribute("Rating").Value, CultureInfo.InvariantCulture) : 0,
             };
 
             /* I've seen two ways in which the date is saved:
@@ -226,16 +215,18 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                 movie.DateAdded = tmp;
             }
 
-            movie.Genres = item.Attribute("Category").Value
-                .Split(',', '|')
-                .Select(x => x.Trim())
-                .Distinct()
-                .ToList();
+            if (item.Attribute("Category") != null)
+                movie.Genres = item.Attribute("Category").Value
+                    .Split(',', '|')
+                    .Select(x => x.Trim())
+                    .Distinct()
+                    .ToList();
 
-            movie.Actors = item.Attribute("Actors").Value
-                .Split(',', '|')
-                .Select(x => new WebActor() { Title = stripActorName.Replace(x, "$1").Trim() })
-                .ToList();
+            if (item.Attribute("Actors") != null)
+                movie.Actors = item.Attribute("Actors").Value
+                    .Split(',', '|')
+                    .Select(x => new WebActor() { Title = stripActorName.Replace(x, "$1").Trim() })
+                    .ToList();
 
             /* I've seen two (there are probably more...) ways the IMDB ID is saved:
              * - An IMDB_Id childnode, with just the id
@@ -246,7 +237,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
             {
                 movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = item.Element("IMDB_Id").Value });
             }
-            else if ((match = imdbId.Match(item.Attribute("URL").Value)).Success)
+            else if (item.Attribute("URL") != null && (match = imdbId.Match(item.Attribute("URL").Value)).Success)
             {
                 movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = match.Groups[1].Value });
             }
@@ -293,8 +284,9 @@ namespace MPExtended.PlugIns.MAS.MyFilms
         {
             return XElement.Load(DatabasePath)
                 .Element("Catalog").Element("Contents").Elements("Movie")
-                .Select(x => x.Attribute("Category").Value)
-                .SelectMany(x => x.Split(',', '|'))
+                .Select(x => x.Attribute("Category"))
+                .Where(x => x != null)
+                .SelectMany(x => x.Value.Split(',', '|', '/'))
                 .Select(x => x.Trim())
                 .Distinct()
                 .Select(x => new WebGenre() { Title = x });

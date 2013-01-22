@@ -30,56 +30,27 @@ namespace MPExtended.Tests.Libraries.Service.Shared
         public void Tokenizer()
         {
             Tokenizer tokenizer;
-            List<string> tokens;
+            string[] expectedTokens;
 
             tokenizer = new Tokenizer(@"Field=Value,AnotherField    $= 'AnotherValue'| NumericField> 5, DoubleQuoted ^= ""double quoted""");
-            tokens = tokenizer.Tokenize();
-            Assert.Equal("Field", tokens[0]);
-            Assert.Equal("=", tokens[1]);
-            Assert.Equal("Value", tokens[2]);
-            Assert.Equal(",", tokens[3]);
-            Assert.Equal("AnotherField", tokens[4]);
-            Assert.Equal("$=", tokens[5]);
-            Assert.Equal("AnotherValue", tokens[6]);
-            Assert.Equal("|", tokens[7]);
-            Assert.Equal("NumericField", tokens[8]);
-            Assert.Equal(">", tokens[9]);
-            Assert.Equal("5", tokens[10]);
-            Assert.Equal(",", tokens[11]);
-            Assert.Equal("DoubleQuoted", tokens[12]);
-            Assert.Equal("^=", tokens[13]);
-            Assert.Equal("double quoted", tokens[14]);
-            Assert.Equal(15, tokens.Count);
+            expectedTokens = new string[] { "Field", "=", "Value", ",", "AnotherField", "$=", "AnotherValue", "|", "NumericField", ">", "5", ",",
+                                            "DoubleQuoted", "^=", "double quoted" };
+            AssertTokenizer(tokenizer, expectedTokens);
 
             tokenizer = new Tokenizer(@"EscapedField='hoi\'test\\more'    ,ComplicatedField=""test\\\"""" | withoutQuotes=hello\,more");
-            tokens = tokenizer.Tokenize();
-            Assert.Equal("EscapedField", tokens[0]);
-            Assert.Equal("=", tokens[1]);
-            Assert.Equal(@"hoi'test\more", tokens[2]);
-            Assert.Equal(",", tokens[3]);
-            Assert.Equal("ComplicatedField", tokens[4]);
-            Assert.Equal("=", tokens[5]);
-            Assert.Equal(@"test\""", tokens[6]);
-            Assert.Equal("|", tokens[7]);
-            Assert.Equal("withoutQuotes", tokens[8]);
-            Assert.Equal("=", tokens[9]);
-            Assert.Equal("hello,more", tokens[10]);
-            Assert.Equal(11, tokens.Count);
+            expectedTokens = new string[] { "EscapedField", "=", @"hoi'test\more", ",", "ComplicatedField", "=", @"test\""", "|",
+                                            "withoutQuotes", "=", "hello,more" };
+            AssertTokenizer(tokenizer, expectedTokens);
 
             tokenizer = new Tokenizer(@"Field=Name With Whitespace,   AnotherField ^=  Prefixed and Suffixed space   | QuotedField='   Includes space  '");
-            tokens = tokenizer.Tokenize();
-            Assert.Equal("Field", tokens[0]);
-            Assert.Equal("=", tokens[1]);
-            Assert.Equal("Name With Whitespace", tokens[2]);
-            Assert.Equal(",", tokens[3]);
-            Assert.Equal("AnotherField", tokens[4]);
-            Assert.Equal("^=", tokens[5]);
-            Assert.Equal("Prefixed and Suffixed space", tokens[6]);
-            Assert.Equal("|", tokens[7]);
-            Assert.Equal("QuotedField", tokens[8]);
-            Assert.Equal("=", tokens[9]);
-            Assert.Equal("   Includes space  ", tokens[10]);
-            Assert.Equal(11, tokens.Count);
+            expectedTokens = new string[] { "Field", "=", "Name With Whitespace", ",", "AnotherField", "^=", "Prefixed and Suffixed space", "|", 
+                                            "QuotedField", "=", "   Includes space  " };
+            AssertTokenizer(tokenizer, expectedTokens);
+
+            tokenizer = new Tokenizer(@"SomeField    = Contains A Value, FirstList = [ 'hello',another     , more values ], PipeList*=[xyz|abc def|ghi|'quot|ed']");
+            expectedTokens = new string[] { "SomeField", "=", "Contains A Value", ",", "FirstList", "=", "[", "hello", "another", "more values", "]", ",", 
+                                            "PipeList", "*=", "[", "xyz", "abc def", "ghi", "quot|ed", "]" };
+            AssertTokenizer(tokenizer, expectedTokens);
 
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, NoValue=").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, Missing'Operator'").Tokenize());
@@ -91,6 +62,15 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=""test"", Invalid='Quoting""").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"WithoutValue=     ").Tokenize());
             Assert.DoesNotThrow(() => new Tokenizer(@"WithoutValue='        '").Tokenize());
+        }
+
+        private void AssertTokenizer(Tokenizer tokenizer, string[] expected)
+        {
+            var tokens = tokenizer.Tokenize();
+            int i = 0;
+            foreach (var expectedItem in expected)
+                Assert.Equal(expectedItem, tokens[i++]);
+            Assert.Equal(i, tokens.Count);
         }
 
         [Fact]
@@ -150,6 +130,16 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.True(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "test", "hello" } }));
             Assert.False(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "else", "text" } }));
             Assert.True(TestAgainstFilter("Field *= 8", new { Field = new List<int>() { 5, 7, 8 } }));
+
+            Assert.True(TestAgainstFilter("Field = [3, 8]", new { Field = 3 }));
+            Assert.True(TestAgainstFilter("Field = [3, 8]", new { Field = 8 }));
+            Assert.False(TestAgainstFilter("Field = [3, 8]", new { Field = 9L }));
+            Assert.False(TestAgainstFilter("Field != [3, 8]", new { Field = 3L }));
+
+            Assert.True(TestAgainstFilter("Field ~= [abc, def, ghi]", new { Field = "abc" }));
+            Assert.False(TestAgainstFilter("Field *= [klm, nop]", new { Field = "hello" }));
+            Assert.False(TestAgainstFilter("Field ^= [qrst]", new { Field = "uvw" }));
+            Assert.True(TestAgainstFilter("Field $= [uvw, xyz]", new { Field = "abcxyz" }));
         }
 
         private bool TestAgainstFilter(string filterText, object obj)

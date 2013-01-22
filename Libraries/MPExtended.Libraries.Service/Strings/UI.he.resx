@@ -165,9 +165,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>תהליך החל</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>תהליך עוצר...</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>תהליך עצר</value>
   </data>
@@ -386,9 +383,6 @@
   </data>
   <data name="Browse" xml:space="preserve">
     <value>סייר</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>בחר</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>תרום ל MPExtended</value>

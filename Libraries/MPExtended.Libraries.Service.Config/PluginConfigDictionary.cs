@@ -52,24 +52,6 @@ namespace MPExtended.Libraries.Service.Config
             }
         }
 
-        private List<PluginConfigItem> ReadPluginConfig(XElement plugin)
-        {
-            var list = new List<PluginConfigItem>();
-            foreach (var x in plugin.Elements())
-            {
-                ConfigType type = (ConfigType)Enum.Parse(typeof(ConfigType), x.Attribute("type").Value, true);
-                string value = type == ConfigType.File || type == ConfigType.Folder ? Transformations.FolderNames(x.Value) : x.Value;
-                list.Add(new PluginConfigItem()
-                {
-                    DisplayName = x.Attribute("displayname").Value,
-                    Name = x.Name.LocalName,
-                    Type = type,
-                    Value = value
-                });
-            }
-            return list;
-        }
-
         public void WriteXml(XmlWriter writer)
         {
             foreach (var item in this)

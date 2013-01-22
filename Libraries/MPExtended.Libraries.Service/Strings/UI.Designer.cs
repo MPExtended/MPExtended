@@ -232,6 +232,15 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The cache has been cleaned successfully!.
+        /// </summary>
+        public static string CleanCacheSucceeded {
+            get {
+                return ResourceManager.GetString("CleanCacheSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can configure the port on which WebMediaPortal runs here. If you change this value from the default of 8080, you have to configure your firewall manually. .
         /// </summary>
         public static string ConfigureWebMPPort {
@@ -741,11 +750,11 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service stopping.
+        ///   Looks up a localized string similar to Service starting.
         /// </summary>
-        public static string ServiceStarting {
+        public static string ServiceStartingFixed {
             get {
-                return ResourceManager.GetString("ServiceStarting", resourceCulture);
+                return ResourceManager.GetString("ServiceStartingFixed", resourceCulture);
             }
         }
         

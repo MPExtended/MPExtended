@@ -66,6 +66,7 @@ namespace MPExtended.Libraries.Service.Config
         public string BonjourName { get; set; }
         public ExternalAddressConfiguration ExternalAddress { get; set; }
 
+        public string ServiceAddress { get; set; }
         public int Port { get; set; }
         public bool EnableIPv6 { get; set; }
 

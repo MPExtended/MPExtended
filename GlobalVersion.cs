@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 
 // Author information
 [assembly: AssemblyCompany("mpextended.github.com")]
-[assembly: AssemblyCopyright("Copyright © 2011 - 2012 MPExtended")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2013 MPExtended")]
 [assembly: AssemblyTrademark("")]
 
 // BUild type

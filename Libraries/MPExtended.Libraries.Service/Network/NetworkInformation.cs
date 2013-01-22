@@ -112,40 +112,49 @@ namespace MPExtended.Libraries.Service.Network
 
         public static bool IsOnLAN(string address)
         {
-            if (IsLocalAddress(address))
-            {
+            return IsOnLAN(address, Configuration.Services.EnableIPv6);
+        }
+
+        public static bool IsOnLAN(string address, bool enableIPv6)
+        {
+            if (IsLocalAddress(address, enableIPv6))
                 return true;
-            }
 
             return IsOnLAN(IPAddress.Parse(address));
         }
 
         public static bool IsLocalAddress(IPAddress address)
         {
-            return address.ToString() == "127.0.0.1" || address.ToString() == "::1" ||
-                GetIPAddressList(true).Contains(address);
+            return address.ToString() == "127.0.0.1" || address.ToString() == "::1" || GetIPAddressList(true).Contains(address);
         }
 
         public static bool IsLocalAddress(string address)
         {
-            if(address == "localhost" || address == "::1" || address == "127.0.0.1")
-            {
-                return true;
-            }
+            return IsLocalAddress(address, Configuration.Services.EnableIPv6);
+        }
 
-            bool isLocal = Dns.GetHostAddresses(address)
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && Configuration.Services.EnableIPv6)
-                .Any(x => IsLocalAddress(x));
-            if(isLocal)
-            {
+        public static bool IsLocalAddress(string address, bool enableIPv6)
+        {
+            if(address == "localhost" || address == "::1" || address == "127.0.0.1")
                 return true;
+
+            try
+            {
+                bool isLocal = Dns.GetHostAddresses(address)
+                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6)
+                    .Any(x => IsLocalAddress(x));
+                if (isLocal)
+                    return true;
+            }
+            catch (SocketException)
+            {
+                // This can happen for unknown DNS names and things like that, assume they're not local
+                return false;
             }
 
             IPAddress ipAddr;
             if(IPAddress.TryParse(address, out ipAddr))
-            {
                 return IsLocalAddress(ipAddr);
-            }
             return false;
         }
 

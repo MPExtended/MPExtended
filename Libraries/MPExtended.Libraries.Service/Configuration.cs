@@ -24,10 +24,11 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MPExtended.Libraries.Service.Util;
+using Microsoft.Xml.Serialization.GeneratedAssembly;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Config.Upgrade;
-using Microsoft.Xml.Serialization.GeneratedAssembly;
+using MPExtended.Libraries.Service.Extensions;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service
 {
@@ -37,6 +38,7 @@ namespace MPExtended.Libraries.Service
         MediaAccess,
         Streaming,
         StreamingProfiles,
+        StreamingPlatforms, 
         Authentication,
         WebMediaPortal,
         WebMediaPortalHosting
@@ -88,6 +90,14 @@ namespace MPExtended.Libraries.Service
             get
             {
                 return config.Get<Streaming>(ConfigurationFile.Streaming).Get();
+            }
+        }
+
+        public static StreamingPlatforms StreamingPlatforms
+        {
+            get
+            {
+                return config.Get<StreamingPlatforms>(ConfigurationFile.StreamingPlatforms).Get();
             }
         }
 
@@ -162,7 +172,7 @@ namespace MPExtended.Libraries.Service
                         if (Reloaded != null)
                             Reloaded(serializer.ConfigFile);
                     }
-                });
+                }).LogOnException();
             });
 
             // start watching

@@ -214,6 +214,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change profile.
+        /// </summary>
+        public static string ChangeProfile {
+            get {
+                return ResourceManager.GetString("ChangeProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Channel.
         /// </summary>
         public static string Channel {

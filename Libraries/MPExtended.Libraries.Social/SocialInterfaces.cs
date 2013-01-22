@@ -28,7 +28,6 @@ namespace MPExtended.Libraries.Social
     public interface IWatchSharingService
     {
         int UpdateInterval { get; } // in minutes
-        IMediaAccessService MediaService { get; set; }
         Dictionary<string, string> Configuration { get; set;  }
 
         bool TestCredentials(string username, string password);
@@ -39,9 +38,9 @@ namespace MPExtended.Libraries.Social
         bool FinishMovie(WebMovieDetailed movie);
         bool CancelWatchingMovie(WebMovieDetailed movie);
 
-        bool StartWatchingEpisode(WebTVEpisodeDetailed episode);
-        bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress);
-        bool FinishEpisode(WebTVEpisodeDetailed episode);
-        bool CancelWatchingEpisode(WebTVEpisodeDetailed episode);
+        bool StartWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode);
+        bool WatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode, int progress);
+        bool FinishEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode);
+        bool CancelWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode);
     }
 }

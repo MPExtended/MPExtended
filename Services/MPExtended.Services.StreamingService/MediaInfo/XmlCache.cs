@@ -105,6 +105,14 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 
         private void SaveToDisk()
         {
+            // This happens during uninstallation: the Cache directory is already removed, but the service isn't stopped yet. To avoid
+            // a harmless but ugly error in the logs, don't try to write the cache when the directory has already been removed.
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Log.Debug("Not writing MediaInfo cache, because cache directory doesn't exist");
+                return;
+            }
+
             lock (cache)
             {
                 Log.Debug("Writing {0} items to MediaInfo cache", cache.Count);

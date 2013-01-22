@@ -27,6 +27,7 @@ using System.Windows.Documents;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Network;
+using MPExtended.Libraries.Service.Strings;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -111,10 +112,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 string directory = Installation.GetCacheDirectory();
                 Directory.Delete(directory, true);
                 Directory.CreateDirectory(directory);
+
+                MessageBox.Show(UI.CleanCacheSucceeded, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to clean cache", ex);
+                ErrorHandling.OnlyShowError(ex);
             }
         }
     }

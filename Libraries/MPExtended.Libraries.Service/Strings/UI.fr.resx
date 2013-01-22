@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Service démarré</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Arrêt du service</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Service arrêté</value>
   </data>
@@ -434,9 +431,6 @@ C'est ce composant, qui donne accès aux bases de données et aux fichiers multi
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Parcourir</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Sélectionner</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Faire un don à MPExtented</value>

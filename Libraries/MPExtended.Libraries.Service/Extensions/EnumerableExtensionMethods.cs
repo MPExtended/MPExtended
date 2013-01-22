@@ -72,5 +72,11 @@ namespace MPExtended.Libraries.Service.Extensions
             filterInstance.ExpectType(list.GetType().GetGenericArguments().Single());
             return list.Where(x => filterInstance.Matches<T>(x));
         }
+
+        // Easy alias for creating a dictionary
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> list)
+        {
+            return list.ToDictionary(x => x.Key, x => x.Value);
+        }
     }
 }

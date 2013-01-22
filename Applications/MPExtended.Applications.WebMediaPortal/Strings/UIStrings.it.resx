@@ -182,7 +182,7 @@
     <value>Le tue Serie TV</value>
   </data>
   <data name="AlbumBy" xml:space="preserve">
-    <value>0} di {1}</value>
+    <value>{0} di {1}</value>
   </data>
   <data name="AlbumsFromArtist" xml:space="preserve">
     <value>Gli Album di {0}</value>

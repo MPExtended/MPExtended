@@ -98,12 +98,23 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
+        private static XElement LoadConfigurationFile()
+        {
+            // Open the file with FileShare.ReadWrite to make sure that MP can still write to the file. I'm not 100% sure whether this will work correctly
+            // when MP is actually writing to the file while we're reading from it, but worst case it'll throw an exception about invalid XML. Given that
+            // the alternative, prohibiting MP from writing to the file, probably causes all kinds of problems in MP, this seems fair to me.
+            using (var handle = File.Open(GetConfigFilePath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                return XElement.Load(handle);
+            }
+        }
+
         public static bool IsSectionInConfigFile(string sectionName)
         {
             if (!HasValidConfigFile())
                 return false;
 
-            XElement file = XElement.Load(GetConfigFilePath());
+            XElement file = LoadConfigurationFile();
             return file.Elements("section").Any(x => x.Attribute("name").Value == sectionName);
         }
 
@@ -112,11 +123,10 @@ namespace MPExtended.Libraries.Service.Util
             try
             {
                 if (!HasValidConfigFile())
-                {
                     return new Dictionary<string, string>();
-                }
 
-                XElement file = XElement.Load(GetConfigFilePath());
+                // open the file with FileShare.ReadWrite to allow MP to 
+                XElement file = LoadConfigurationFile();
 
                 // find section
                 var elements = file.Elements("section").Where(x => x.Attribute("name").Value == sectionName);
@@ -152,9 +162,7 @@ namespace MPExtended.Libraries.Service.Util
         public static bool HasValidConfigFile()
         {
             if (hasValidConfig.HasValue)
-            {
                 return hasValidConfig.Value;
-            }
 
             hasValidConfig = false;
             try
@@ -166,7 +174,7 @@ namespace MPExtended.Libraries.Service.Util
                     return false;
                 }
 
-                var xml = XElement.Load(path); // try to parse it
+                LoadConfigurationFile(); // try to parse the configuration file
                 hasValidConfig = true;
                 return true;
             }

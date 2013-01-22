@@ -38,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
             if (artistList == null)
                 return new HttpNotFoundResult();
-            return View(artistList);
+            return View(artistList.Where(x => !String.IsNullOrEmpty(x.Title)));
         }
 
         public ActionResult Albums(string artist)
@@ -48,7 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(new ArtistViewModel()
             {
                 Artist = artistObj,
-                Albums = albumList
+                Albums = albumList.Where(x => !String.IsNullOrEmpty(x.Title))
             });
         }
 
@@ -61,17 +61,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var model = new AlbumViewModel()
             {
                 Album = albumObj,
-                Tracks = trackList
+                Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title))
             };
 
-            if (Settings.ActiveSettings.EnableAlbumPlayer)
-            {
-                return View("AlbumPlayer", model);
-            }
-            else
-            {
-                return View("Album", model);
-            }
+            return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
         }
 
         public ActionResult AlbumImage(string album, int width = 0, int height = 0)

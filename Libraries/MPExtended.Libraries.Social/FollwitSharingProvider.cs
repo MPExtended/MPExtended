@@ -29,7 +29,6 @@ namespace MPExtended.Libraries.Social
 {
     public class FollwitSharingProvider : IWatchSharingService
     {
-        public IMediaAccessService MediaService { get; set; }
         public Dictionary<string, string> Configuration { get; set; }
 
         public int UpdateInterval
@@ -111,23 +110,23 @@ namespace MPExtended.Libraries.Social
             return true;
         }
 
-        public bool StartWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool StartWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             return CallFollwitEpisode(episode, FollwitWatchStatus.Watching);
         }
 
-        public bool WatchingEpisode(WebTVEpisodeDetailed episode, int progress)
+        public bool WatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode, int progress)
         {
             // Follw.it doesn't require to send a status each X minutes or something
             return true;
         }
 
-        public bool FinishEpisode(WebTVEpisodeDetailed episode)
+        public bool FinishEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             return CallFollwitEpisode(episode, FollwitWatchStatus.Watched);
         }
 
-        public bool CancelWatchingEpisode(WebTVEpisodeDetailed episode)
+        public bool CancelWatchingEpisode(WebTVShowDetailed show, WebTVSeasonDetailed season, WebTVEpisodeDetailed episode)
         {
             return CallFollwitEpisode(episode, FollwitWatchStatus.CancelWatching);
         }

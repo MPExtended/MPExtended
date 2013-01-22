@@ -36,13 +36,16 @@ namespace MPExtended.Applications.WebMediaPortal.Code
     [SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     public abstract class BaseController : Controller
     {
-        private static AvailabilityModel availabilityModel = new AvailabilityModel();
+        private static AvailabilityModel _availabilityModel;
 
         protected AvailabilityModel ServiceAvailability
         {
             get
             {
-                return availabilityModel;
+                if (_availabilityModel == null)
+                    _availabilityModel = new AvailabilityModel();
+
+                return _availabilityModel;
             }
         }
 

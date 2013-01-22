@@ -168,9 +168,6 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Servizio started</value>
   </data>
-  <data name="ServiceStarting" xml:space="preserve">
-    <value>Servizio stopping</value>
-  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Servizio fermato</value>
   </data>
@@ -431,9 +428,6 @@
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Naviga</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Seleziona</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
     <value>Dona a MPExtended</value>

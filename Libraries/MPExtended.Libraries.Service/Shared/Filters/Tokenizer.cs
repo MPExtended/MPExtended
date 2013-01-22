@@ -35,17 +35,13 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             this.data = data;
         }
 
-        public List<string> GetTokens()
-        {
-            return tokens;
-        }
-
         public List<string> Tokenize()
         {
             tokens = new List<string>();
             value = String.Empty;
             char valueQuoteCharacter = '\0';
             bool valueIsQuoted = false;
+            bool inList = false;
 
             pos = -1;
             while(true)
@@ -64,10 +60,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                     ParseError(true, "operator");
                 tokens.Add(value.Trim());
 
+            startParsingValue:
                 ResetValue();
                 valueIsQuoted = Tokens.IsQuote(GetNextCharacter("value"));
                 if (valueIsQuoted)
                     valueQuoteCharacter = data[pos];
+                else if (!inList && Tokens.IsListStart(data[pos]))
+                {
+                    inList = true;
+                    tokens.Add(data[pos].ToString());
+                    goto startParsingValue;
+                }
                 else
                     value += data[pos];
 
@@ -75,7 +78,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 {
                     if (Tokens.IsEscapeCharacter(data[pos]))
                         value += GetNextCharacter("any character");
-                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && NotExpectToken(Tokens.IsConjunction)))
+                    else if ((valueIsQuoted && data[pos] == valueQuoteCharacter) || (!valueIsQuoted && NotExpectToken(Tokens.IsConjunction)) || (inList && NotExpectToken(Tokens.IsListEnd)))
                         break;
                     else
                         value += data[pos];
@@ -87,6 +90,19 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 tokens.Add(valueIsQuoted ? value : value.Trim());
 
                 ResetValue();
+                if (inList)
+                {
+                    if (Tokens.IsListEnd(GetNextCharacter("conjunction or list end")))
+                    {
+                        tokens.Add(data[pos].ToString());
+                        inList = false;
+                    }
+                    else if (!Tokens.IsConjunction(data[pos]))
+                        ParseError("conjunction");
+                    else
+                        goto startParsingValue;
+                }
+
                 if (++pos < data.Length)
                 {
                     if (Tokens.IsConjunction(data[pos]))

@@ -36,6 +36,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         TV = 12,
         [EnumMember]
-        Recording = 13
+        Recording = 13,
+        [EnumMember]
+        Radio = 14
     }
 }

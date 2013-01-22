@@ -57,31 +57,35 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
             var pluginLoader = new PluginLoader();
 
             var pluginFinder = new PluginFinder();
-            RegisterExtensions(pluginFinder, pluginLoader, "plugins");
-            installedPlugins = pluginFinder.GetNames().ToList();
+            installedPlugins = RegisterExtensions(pluginFinder, pluginLoader, "plugins", true);
 
             var skinFinder = new SkinFinder();
-            RegisterExtensions(skinFinder, pluginLoader, "skins");
-            installedSkins = skinFinder.GetNames().ToList();
+            installedSkins = RegisterExtensions(skinFinder, pluginLoader, "skins", false);
 
             controllers = pluginLoader.GetPlugins<IController>();
             compositionDone = true;
         }
 
-        private static void RegisterExtensions(ExtensionFinder finder, PluginLoader loader, string logName)
+        private static List<string> RegisterExtensions(ExtensionFinder finder, PluginLoader loader, string logName, bool requireBinary)
         {
             var directories = finder.GetDirectories()
-                .Where(dir => Directory.Exists(Path.Combine(dir, "bin")));
+                .Where(dir => !requireBinary || Directory.Exists(Path.Combine(dir, "bin")));
 
             if (directories.Count() > 0)
             {
                 Log.Debug("Installed {0}:", logName);
                 foreach (var dir in directories)
                 {
-                    Log.Debug("- {0}", Path.GetFileName(dir));
-                    loader.AddDirectory(dir);
+					bool hasBinary = Directory.Exists(Path.Combine(dir, "bin"));
+                    Log.Debug("- {0} {1}", Path.GetFileName(dir), hasBinary ? " (with binary)" : "");
+					if(hasBinary)
+						loader.AddDirectory(Path.Combine(dir, "bin"));
                 }
             }
+
+            return directories
+                .Select(x => Path.GetFileName(x))
+                .ToList();
         }
 
         public IEnumerable<Assembly> GetAllAssemblies()

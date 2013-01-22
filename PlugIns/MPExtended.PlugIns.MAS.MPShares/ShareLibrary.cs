@@ -60,6 +60,12 @@ namespace MPExtended.PlugIns.MAS.MPShares
             foreach (string section in sections)
             {
                 IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile(section);
+                if (!list.Any())
+                {
+                    Log.Warn("MPShares: Failed to read section {0} from MediaPortal configuration file, aborting configuration reading", section);
+                    return;
+                }
+
                 string[] extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
                 int count = list.Where(x => x.Key.StartsWith("sharename")).Count();
 

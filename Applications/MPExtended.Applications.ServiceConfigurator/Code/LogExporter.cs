@@ -45,7 +45,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             {
                 // copy log files
                 DirectoryInfo logDir = new DirectoryInfo(Installation.GetLogDirectory());
-                foreach (FileInfo file in logDir.GetFiles("*.log"))
+                foreach (FileInfo file in logDir.GetFiles("*.log").Concat(logDir.GetFiles("*.bak")))
                 {
                     var logPart = zipFile.CreatePart(new Uri("/" + file.Name, UriKind.Relative), "", CompressionOption.Maximum);
                     File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(logPart.GetStream());
