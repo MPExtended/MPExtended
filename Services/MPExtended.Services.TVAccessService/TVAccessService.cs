@@ -527,7 +527,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
         {
-            return Schedule.ListAll().Select(x => GetScheduledRecording(x, date)).Where(x => x != null).ToList();
+            return Schedule.ListAll().Select(x => GetScheduledRecording(x, date)).Where(x => x != null).SortScheduledRecordingList(sort, order).ToList();
         }
 
         public IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
