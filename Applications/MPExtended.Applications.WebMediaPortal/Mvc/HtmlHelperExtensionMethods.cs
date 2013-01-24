@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2012 MPExtended
-// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012-2013 MPExtended
+// Copyright (C) 2012-2013 MPExtended Developers, http://mpextended.github.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -48,6 +48,12 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
                 htmlHelper.ViewContext.HttpContext.Items[jQueryHelperKey] = helper;
             }
             return helper;
+        }
+
+        public static IHtmlString JavaScriptString(this HtmlHelper htmlHelper, string value)
+        {
+            var encoded = HttpUtility.JavaScriptStringEncode(value, true);
+            return htmlHelper.Raw(encoded);
         }
     }
 }
