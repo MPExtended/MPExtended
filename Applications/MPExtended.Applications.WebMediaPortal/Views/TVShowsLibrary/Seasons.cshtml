@@ -12,16 +12,13 @@
 <div>
     @foreach (var season in Model.Seasons)
     {
-        if (!season.SeasonNumber.Equals(0))
-        {
-            <div class="seasonWrap" style="float: left; padding: 10px;">
-                <a href="@Url.Action("Episodes", new { season = season.Id })">
-                    <img class="seasonPoster" src="@Url.Action("SeasonImage", new { season = season.Id, width = 100 })" width="100" alt="No image" />
-                </a>
-                <a style="text-align: center;" href="@Url.Action("Episodes", new { season = season.Id })">
-                    <div class="seasonTitle">@String.Format(UIStrings.Season, season.SeasonNumber)<br />@season.Year</div>
-                </a>
-            </div>
-        }
+        <div class="seasonWrap" style="float: left; padding: 10px;">
+            <a href="@Url.Action("Episodes", new { season = season.Id })">
+                <img class="seasonPoster" src="@Url.Action("SeasonImage", new { season = season.Id, width = 100 })" width="100" alt="No image" />
+            </a>
+            <a style="text-align: center;" href="@Url.Action("Episodes", new { season = season.Id })">
+                <div class="seasonTitle">@String.Format(season.SeasonNumber == 0 ? UIStrings.Specials : UIStrings.Season, season.SeasonNumber)<br />@season.Year</div>
+            </a>
+        </div>
     }
 </div>

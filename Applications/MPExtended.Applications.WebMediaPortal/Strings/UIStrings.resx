@@ -479,4 +479,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Searching" xml:space="preserve">
     <value>Searching</value>
   </data>
+  <data name="Specials" xml:space="preserve">
+    <value>Specials</value>
+  </data>
 </root>
