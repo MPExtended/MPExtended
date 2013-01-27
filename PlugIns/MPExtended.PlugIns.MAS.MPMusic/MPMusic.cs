@@ -532,31 +532,24 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             IPlayListIO factory = PlayListFactory.CreateIO(path);
             if (factory.Load(mpPlaylist, path))
             {
-                List<WebPlaylistItem> retList = new List<WebPlaylistItem>();
-                foreach (PlayListItem i in mpPlaylist)
-                {
-                    WebPlaylistItem webItem = new WebPlaylistItem();
-                    WebMusicTrackBasic track = LoadAllTracks<WebMusicTrackBasic>().FirstOrDefault(x => x.Path.Contains(i.FileName));
+                var tracks = LoadAllTracks<WebMusicTrackBasic>().ToList();
 
-                    webItem.Title = i.Description;
-                    webItem.Duration = i.Duration;
-                    webItem.Path = new List<String>();
-                    webItem.Path.Add(i.FileName);
-
-                    if (track != null)
-                    {
-                        webItem.Id = track.Id;
-                        webItem.Type = track.Type;
-                        webItem.DateAdded = track.DateAdded;
-                    }
-                    else
-                    {
-                        Log.Warn("Couldn't get track information for " + i.FileName);
-                    }
-
-                    retList.Add(webItem);
-                }
-                return retList;
+                return mpPlaylist
+                    .Select(x => 
+                        {
+                            var track = tracks.FirstOrDefault(t => t.Path.Contains(x.FileName));
+                            return new WebPlaylistItem()
+                            {
+                                Title = x.Description,
+                                Duration = x.Duration,
+                                Path = new List<string>() { x.FileName },
+                                Type = WebMediaType.MusicTrack,
+                                Id = track != null ? track.Id : null,
+                                DateAdded = track != null ? track.DateAdded : new DateTime(1970, 1, 1),
+                                Artwork = track != null ? track.Artwork : new List<WebArtwork>(),
+                            };
+                        })
+                    .ToList();
             }
             else if (new FileInfo(path).Length == 0)
             {
