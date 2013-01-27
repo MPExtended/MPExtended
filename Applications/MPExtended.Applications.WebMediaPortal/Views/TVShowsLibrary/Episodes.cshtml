@@ -1,9 +1,12 @@
 ﻿@model TVSeasonViewModel
 @{
-	ViewBag.Title = String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber);
+    var header = Model.Season.SeasonNumber == 0 ? 
+        String.Format("{0} {1}", Model.Show.Title, UIStrings.Specials) : 
+        String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber);
+    ViewBag.Title = header;    
 }
 
-<h2>@String.Format(UIStrings.ShowSeason, Model.Show.Title, Model.Season.SeasonNumber)</h2>
+<h2>@header</h2>
 
 <div class="imageColumn">
     <img src="@Url.Action("SeasonImage", new { season = @Model.Season.Id, width = 500 })" width="500" alt="No image" />

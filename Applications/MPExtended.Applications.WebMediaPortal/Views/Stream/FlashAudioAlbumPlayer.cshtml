@@ -23,12 +23,12 @@
                 @foreach (var track in Model.Tracks.OrderBy(x => x.TrackNumber))
                 {
                     <text>
-                    { 'title': '@Ajax.JavaScriptStringEncode(track.Title)',
-                      'image': '@Ajax.JavaScriptStringEncode(Url.Action("AlbumImage", "MusicLibrary", new { album = Model.Tracks.ElementAt(0).AlbumId }))',
-                      'file': '@Ajax.JavaScriptStringEncode(Url.Action("MusicTrack", "Stream", new { item = track.Id, transcoder = Model.GetTranscoderForTrack(track), continuationId = Model.ContinuationId }))', 
+                    { 'title': @Html.JavaScriptString(track.Title),
+                      'image': @Html.JavaScriptString(Url.Action("AlbumImage", "MusicLibrary", new { album = Model.Tracks.ElementAt(0).AlbumId })),
+                      'file': @Html.JavaScriptString(Url.Action("MusicTrack", "Stream", new { item = track.Id, transcoder = Model.GetTranscoderForTrack(track), continuationId = Model.ContinuationId })),
                       'provider': 'sound',
-                      'duration': '@track.Duration',
-					  'description': '@Ajax.JavaScriptStringEncode(track.Album)',
+                      'duration': @track.Duration,
+					  'description': @Html.JavaScriptString(track.Album),
                     },
                     </text>
                 }

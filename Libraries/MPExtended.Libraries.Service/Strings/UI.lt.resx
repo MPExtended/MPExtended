@@ -168,6 +168,9 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Paslauga paleista</value>
   </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Paslauga paleidžiama</value>
+  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Paslauga sustabdyta</value>
   </data>

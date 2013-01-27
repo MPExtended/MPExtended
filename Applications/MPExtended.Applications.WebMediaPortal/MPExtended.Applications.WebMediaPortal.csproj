@@ -401,6 +401,7 @@
     <EmbeddedResource Include="Strings\FormStrings.fi.resx" />
     <EmbeddedResource Include="Strings\FormStrings.fr.resx" />
     <EmbeddedResource Include="Strings\FormStrings.he.resx" />
+    <EmbeddedResource Include="Strings\FormStrings.id.resx" />
     <EmbeddedResource Include="Strings\FormStrings.it.resx" />
     <EmbeddedResource Include="Strings\FormStrings.lt.resx" />
     <EmbeddedResource Include="Strings\FormStrings.nl.resx" />
@@ -417,6 +418,7 @@
     <EmbeddedResource Include="Strings\UIStrings.fi.resx" />
     <EmbeddedResource Include="Strings\UIStrings.fr.resx" />
     <EmbeddedResource Include="Strings\UIStrings.he.resx" />
+    <EmbeddedResource Include="Strings\UIStrings.id.resx" />
     <EmbeddedResource Include="Strings\UIStrings.it.resx" />
     <EmbeddedResource Include="Strings\UIStrings.lt.resx" />
     <EmbeddedResource Include="Strings\UIStrings.nl.resx" />

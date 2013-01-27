@@ -16,7 +16,6 @@
     <ComponentGroup Id="Component_WebMP">
       <ComponentRef Id="Component_Hosting"/>
       <ComponentRef Id="Component_Config"/>
-      <ComponentRef Id="Component_Logs"/>
       <ComponentRef Id="Component_Registry"/>
       <ComponentRef Id="Component_WWW_Skins"/>
       <ComponentRef Id="Component_WWW_Plugins"/>

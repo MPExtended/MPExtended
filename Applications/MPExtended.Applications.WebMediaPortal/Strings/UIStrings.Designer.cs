@@ -827,6 +827,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specials.
+        /// </summary>
+        public static string Specials {
+            get {
+                return ResourceManager.GetString("Specials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Status {

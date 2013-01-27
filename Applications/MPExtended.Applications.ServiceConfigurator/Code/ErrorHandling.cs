@@ -29,7 +29,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
     {
         public static void ShowError(Exception ex)
         {
-            Log.Warn("Unexpected error happened", ex);
+            Log.Fatal("Unexpected error happened", ex);
             string message = UI.UnexpectedError + "\n\n" + ex.Message;
             MessageBox.Show(message, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
         }

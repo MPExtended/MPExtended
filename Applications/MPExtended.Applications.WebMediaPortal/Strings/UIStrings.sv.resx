@@ -157,7 +157,7 @@
     <value>Dagens scheman</value>
   </data>
   <data name="TVShows" xml:space="preserve">
-    <value>TV-program</value>
+    <value>TV Serier</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Okänd</value>
@@ -236,7 +236,7 @@
     <value>Tyvärr uppstod ett fel när din begäran skulle bearbetas.</value>
   </data>
   <data name="TVGuide" xml:space="preserve">
-    <value>TV-Tablå</value>
+    <value>TV Tablå</value>
   </data>
   <data name="WelcomeUsername" xml:space="preserve">
     <value>Välkommen &lt;strong&gt;{0}&lt;/strong&gt;!</value>
@@ -446,7 +446,7 @@
     <value>Minnesanvändning</value>
   </data>
   <data name="SystemStatus" xml:space="preserve">
-    <value>System status</value>
+    <value>Systemstatus</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Detta är WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
