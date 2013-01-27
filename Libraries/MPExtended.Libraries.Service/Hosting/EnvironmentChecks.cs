@@ -23,11 +23,11 @@ using System.IO;
 using System.Security.Principal;
 using System.Security.AccessControl;
 
-namespace MPExtended.Libraries.Service.Internal
+namespace MPExtended.Libraries.Service.Hosting
 {
-    internal static class EnvironmentChecks
+    public static class EnvironmentSetup
     {
-        public static void CheckEnvironment()
+        public static void SetupEnvironment()
         {
             CallWithExceptionHandling(EnsurePermissionSettings, "setting permissions");
         }
@@ -44,7 +44,7 @@ namespace MPExtended.Libraries.Service.Internal
             }
         }
 
-        public static void EnsurePermissionSettings()
+        private static void EnsurePermissionSettings()
         {
             var rights = FileSystemRights.CreateDirectories | FileSystemRights.CreateFiles | FileSystemRights.ListDirectory | FileSystemRights.Modify | FileSystemRights.DeleteSubdirectoriesAndFiles;
             var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);

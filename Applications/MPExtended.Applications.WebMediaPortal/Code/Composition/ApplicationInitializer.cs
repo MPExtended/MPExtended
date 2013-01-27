@@ -30,12 +30,21 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
     {
         public static void Initialize()
         {
-            // This method is called by the ASP.NET infrastructure using a PreApplicationStartMethodAttribute.
-            LogRotation.Rotate();
-            Log.Setup("WebMediaPortal.log", false);
-            Log.Debug("WebMediaPortal starting!");
-            Installation.Load(MPExtendedProduct.WebMediaPortal);
-            InitializeExtensions();
+            try
+            {
+                // This method is called by the ASP.NET infrastructure using a PreApplicationStartMethodAttribute.
+                LogRotation.Rotate();
+                Log.Setup("WebMediaPortal.log", false);
+                Log.Debug("WebMediaPortal starting!");
+                Installation.Load(MPExtendedProduct.WebMediaPortal);
+                EnvironmentSetup.SetupEnvironment();
+                InitializeExtensions();
+            }
+            catch (Exception ex)
+            {
+                // TODO: Make sure this gets logged somewhere even if we haven't setup logging yet
+                Log.Fatal("Application initialization failed", ex);
+            }
         }
 
         private static void InitializeExtensions()
