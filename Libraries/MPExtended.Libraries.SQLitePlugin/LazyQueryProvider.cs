@@ -115,18 +115,21 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public dynamic ExecuteQuerySmart(MethodCallExpression mce)
         {
-            if (mce.Method.Name == "First" && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
+            var isFirstMethod = mce.Method.Name == "First" || mce.Method.Name == "FirstOrDefault";
+            if (isFirstMethod && mce.Arguments.Count == 2 && mce.Arguments[1] is UnaryExpression)
             {
                 var expr = (mce.Arguments[1] as UnaryExpression).Operand as Expression<Func<T, bool>>;
                 if (expr != null)
-                {
-                    return Query.Where(expr).ToList().First();
-                }
+                    return mce.Method.Name == "FirstOrDefault" ? 
+                        Query.Where(expr).ToList().FirstOrDefault() :
+                        Query.Where(expr).ToList().First();
             }
 
-            if (mce.Method.Name == "First" && mce.Arguments.Count == 1)
+            if (isFirstMethod && mce.Arguments.Count == 1)
             {
-                return Query.GetRange(0, 1).ToList().First();
+                return mce.Method.Name == "FirstOrDefault" ?
+                    Query.GetRange(0, 1).ToList().FirstOrDefault() :
+                    Query.GetRange(0, 1).ToList().First();
             }
 
             if (mce.Method.Name == "Count" && mce.Arguments.Count == 1)
