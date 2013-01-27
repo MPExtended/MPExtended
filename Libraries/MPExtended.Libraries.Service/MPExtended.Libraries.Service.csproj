@@ -183,6 +183,7 @@
     <EmbeddedResource Include="Strings\UI.fi.resx" />
     <EmbeddedResource Include="Strings\UI.fr.resx" />
     <EmbeddedResource Include="Strings\UI.he.resx" />
+    <EmbeddedResource Include="Strings\UI.id.resx" />
     <EmbeddedResource Include="Strings\UI.it.resx" />
     <EmbeddedResource Include="Strings\UI.lt.resx" />
     <EmbeddedResource Include="Strings\UI.nl.resx" />

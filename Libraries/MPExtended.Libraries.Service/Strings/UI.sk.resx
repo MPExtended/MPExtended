@@ -168,6 +168,9 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Služba bola spustená</value>
   </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Služba sa spúšťa</value>
+  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Služba zastavená</value>
   </data>
@@ -358,7 +361,7 @@
 Toto je komponent služby, ktorý poskytuje prítup do databáz a mediálnych súborov všetkých klientov.</value>
   </data>
   <data name="NetworkDrives" xml:space="preserve">
-    <value>Sieťové zložky</value>
+    <value>Sieťové jednotky</value>
   </data>
   <data name="NetworkDrivesText" xml:space="preserve">
     <value>Ak sú vaše mediálne súbory uložené na inom systéme (vyhradený server, alebo NAS), MPExtended potrebuje meno a heslo na prístup k nim. Zvyčajne tie k vášmu účtu vo Windows.</value>
