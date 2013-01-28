@@ -341,6 +341,11 @@ namespace MPExtended.Applications.ServiceConfigurator
                 mServiceController.Refresh();
                 HandleServiceState(mServiceController.Status);
             }
+            catch (Win32Exception ex)
+            {
+                Log.Info("Win32Exception in serviceWatcher_Tick (this can be caused by an upgrade or other normal action): {0}", ex.Message);
+                mServiceWatcher.Stop();
+            }
             catch (Exception ex)
             {
                 ErrorHandling.ShowError(ex);

@@ -494,4 +494,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="ChangeProfile" xml:space="preserve">
     <value>Change profile</value>
   </data>
+  <data name="Specials" xml:space="preserve">
+    <value>Specials</value>
+  </data>
 </root>

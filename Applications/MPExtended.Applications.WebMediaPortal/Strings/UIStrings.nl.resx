@@ -338,7 +338,7 @@
     <value>Zoeken</value>
   </data>
   <data name="SearchFieldPlaceholder" xml:space="preserve">
-    <value>Zoekt...</value>
+    <value>Zoeken...</value>
     <comment>Placeholder in the search field when no text has been entered</comment>
   </data>
   <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">

@@ -200,20 +200,6 @@
         </Directory>
       </Directory>
 
-      <!-- ProgramData -->
-      <Directory Id="CommonAppDataFolder">
-        <Directory Id="ConfigDirectory" Name="MPExtended">
-          <Directory Id="LogDirectory" Name="Logs">
-            <!-- set directory permissions-->
-            <Component Id="Component_General_Logs" Guid="04ae34a1-f0c6-41b0-baa7-6161b48464c2">
-              <CreateFolder Directory="LogDirectory">
-                <Permission User="Everyone" GenericAll="yes" CreateFile="yes" />
-              </CreateFolder>
-            </Component>
-          </Directory>
-        </Directory>
-      </Directory>
-
       <!-- Start menu -->
       <Directory Id="ProgramMenuFolder">
         <Component Id="Component_Configurator_StartMenu" Guid="369aaf32-18db-4562-bc51-7557f0544ebf">

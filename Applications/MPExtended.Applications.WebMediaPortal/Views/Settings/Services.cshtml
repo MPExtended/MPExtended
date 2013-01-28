@@ -1,9 +1,9 @@
 ﻿@model ServiceAddressesViewModel
            
 @Html.jQuery().Enable()
-@Html.jQuery().AddDocumentReadyScript(String.Format("discoverServices('{0}', '{1}', '{2}', 'MediaPortal', 'TV', '{3}');",
-        Ajax.JavaScriptStringEncode(Url.Action("DiscoverServices")), Ajax.JavaScriptStringEncode(Url.ContentLink("Images/logo-mp.png")),
-        Ajax.JavaScriptStringEncode(UIStrings.CopyToForm), Ajax.JavaScriptStringEncode(UIStrings.MultiseatNoServersFound)))
+@Html.jQuery().AddDocumentReadyScript(String.Format("discoverServices({0}, {1}, {2}, 'MediaPortal', 'TV', {3});",
+        Html.JavaScriptString(Url.Action("DiscoverServices")), Html.JavaScriptString(Url.ContentLink("Images/logo-mp.png")),
+        Html.JavaScriptString(UIStrings.CopyToForm), Html.JavaScriptString(UIStrings.MultiseatNoServersFound)))
 @Html.Assets().AddViewStylesheet("Settings/Services.css")
 @Html.Assets().AddViewScript("Settings/Services.js")
 

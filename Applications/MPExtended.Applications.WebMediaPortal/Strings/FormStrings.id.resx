@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ClientService" xml:space="preserve">
+    <value>Layanan klien</value>
+  </data>
+  <data name="DefaultMediaStreamingProfile" xml:space="preserve">
+    <value>Profil baku aliran media</value>
+  </data>
+  <data name="DefaultMusicStreamingProfile" xml:space="preserve">
+    <value>Profil baku aliran musik</value>
+  </data>
+  <data name="DefaultSkinName" xml:space="preserve">
+    <value>baku</value>
+    <comment>Name of the default skin</comment>
+  </data>
+  <data name="DefaultTVGroup" xml:space="preserve">
+    <value>Grup TV Baku</value>
+  </data>
+  <data name="DefaultTVStreamingProfile" xml:space="preserve">
+    <value>Profil baku aliran TV</value>
+  </data>
+  <data name="DirectStreamingProfileDescription" xml:space="preserve">
+    <value>Langsung: kinerja terbaik, hanya bekerja pada jaringan lokal</value>
+  </data>
+  <data name="DirectWhenPossibleDescription" xml:space="preserve">
+    <value>Langsung bila memungkinkan, selain itu gunakan proxy</value>
+  </data>
+  <data name="EnableAlbumPlayer" xml:space="preserve">
+    <value>Aktifkan pemutar album musik?</value>
+  </data>
+  <data name="ErrorNoValidClientService" xml:space="preserve">
+    <value>Silahkan spesifikasikan URL MAS yang benar</value>
+  </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Silahkan pilih bahasa yang benar</value>
+  </data>
+  <data name="ErrorNoValidMediaProfile" xml:space="preserve">
+    <value>Silahkan pilih profil aliran media yang benar</value>
+  </data>
+  <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
+    <value>Silahkan pilih basisdata film yang benar</value>
+  </data>
+  <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
+    <value>Silahkan pilih basisdata musik yang benar</value>
+  </data>
+  <data name="ErrorNoValidMusicProfile" xml:space="preserve">
+    <value>Silahkan pilih profil aliran musik yang benar</value>
+  </data>
+  <data name="ErrorNoValidServerService" xml:space="preserve">
+    <value>Silahkan spesifikasikan URL TAS yang benar</value>
+  </data>
+  <data name="ErrorNoValidSkin" xml:space="preserve">
+    <value>Silahkan pilih skin yang benar</value>
+  </data>
+  <data name="ErrorNoValidTVGroup" xml:space="preserve">
+    <value>Silahkan pilih TVgroup yang benar</value>
+  </data>
+  <data name="ErrorNoValidTVProfile" xml:space="preserve">
+    <value>Silahkan pilih profil aliran TV yang benar</value>
+  </data>
+  <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
+    <value>Silahkan pilih basisdata tayangan TV yang benar</value>
+  </data>
+  <data name="FailedToConnectToClient" xml:space="preserve">
+    <value>Gagal terhubung ke layanan klien yang dispesifikasikan</value>
+  </data>
+  <data name="FailedToConnectToServer" xml:space="preserve">
+    <value>Gagal terhubung ke layanan server yang dispesifikasikan</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>{0} field diperlukan</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+  <data name="LogOnPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LogOnRememberMe" xml:space="preserve">
+    <value>Ingat saya?</value>
+  </data>
+  <data name="LogOnUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="MovieDatabase" xml:space="preserve">
+    <value>Basisdata film</value>
+  </data>
+  <data name="MusicDatabase" xml:space="preserve">
+    <value>Basisdata musik</value>
+  </data>
+  <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
+    <value>Proxied: dapat dengan cepat menghentikan waktu jeda, bekerja melalui internet</value>
+  </data>
+  <data name="ScheduleChannel" xml:space="preserve">
+    <value>Saluran</value>
+  </data>
+  <data name="ScheduleEndTime" xml:space="preserve">
+    <value>Waktu selesai</value>
+  </data>
+  <data name="ScheduleSelectValidChannel" xml:space="preserve">
+    <value>Pilih saluran yang benar</value>
+  </data>
+  <data name="ScheduleSelectValidType" xml:space="preserve">
+    <value>Pilih tipe jadwal yang benar</value>
+  </data>
+  <data name="ScheduleStartTime" xml:space="preserve">
+    <value>Waktu mulai</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Judul</value>
+  </data>
+  <data name="ScheduleType" xml:space="preserve">
+    <value>Tipe jadwal</value>
+  </data>
+  <data name="ScheduleTypeDaily" xml:space="preserve">
+    <value>Harian</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
+    <value>Setiap waktu pada setiap saluran</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
+    <value>Setiap waktu pada saluran ini</value>
+  </data>
+  <data name="ScheduleTypeOnce" xml:space="preserve">
+    <value>Sekali</value>
+  </data>
+  <data name="ScheduleTypeWeekends" xml:space="preserve">
+    <value>Akhir pekan</value>
+  </data>
+  <data name="ScheduleTypeWeekly" xml:space="preserve">
+    <value>Mingguan</value>
+  </data>
+  <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
+    <value>Mingguan pada saluran ini</value>
+  </data>
+  <data name="ScheduleTypeWorkingDays" xml:space="preserve">
+    <value>Hari kerja</value>
+  </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>{0} (album) oleh {1}</value>
+  </data>
+  <data name="SearchResultChannelGroup" xml:space="preserve">
+    <value>{0} (grup saluran)</value>
+  </data>
+  <data name="SearchResultProgram" xml:space="preserve">
+    <value>{0} ({1} pada {2})</value>
+  </data>
+  <data name="SearchResultRecording" xml:space="preserve">
+    <value>{0} (direkam pada {1})</value>
+  </data>
+  <data name="SearchResultSchedule" xml:space="preserve">
+    <value>{0} (jadwal)</value>
+  </data>
+  <data name="SearchResultTrack" xml:space="preserve">
+    <value>{0} oleh {1}</value>
+  </data>
+  <data name="ServerService" xml:space="preserve">
+    <value>Layanan server</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="StateIdle" xml:space="preserve">
+    <value>Jeda</value>
+  </data>
+  <data name="StateRecording" xml:space="preserve">
+    <value>Merekam</value>
+  </data>
+  <data name="StateScanning" xml:space="preserve">
+    <value>Memindai</value>
+  </data>
+  <data name="StateTimeshifting" xml:space="preserve">
+    <value>Waktu alih</value>
+  </data>
+  <data name="StreamType" xml:space="preserve">
+    <value>Tipe aliran</value>
+  </data>
+  <data name="TVShowDatabase" xml:space="preserve">
+    <value>Basisdata Tayangan TV</value>
+  </data>
+  <data name="UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Username atau password yang disediakan salah.</value>
+  </data>
+  <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
+    <value>VLC player: aktifkan deinterlace secara baku?</value>
+  </data>
+</root>

@@ -124,7 +124,7 @@
     <value>Flux actuellement actif</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>Vous pouvez configurer le port avec lequel WebMediaPortal fonctionne, ici. Si vous changer sa valeur (par défaut 8080), vous devrez configurer votre pare-feu manuellement.</value>
+    <value>Vous pouvez configurer le port avec lequel WebMediaPortal fonctionne,. Si vous changer sa valeur (par défaut 8080), vous devrez configurer votre pare-feu manuellement.</value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
     <value>Langue audio par défaut</value>
@@ -304,7 +304,7 @@
     <value>Ajouter un compte</value>
   </data>
   <data name="AuthenticationIntroText" xml:space="preserve">
-    <value>Vous pouvez configurer l'authentification de MPExtended ici. Il est recommandé d'activer l'authentification et de modifier le mot de passe du compte par défaut, admin. Vous ne devez jamais réaliser une installation accessible à partir d'Internet sans utiliser l'authentification et des mots de passe sécurisés.</value>
+    <value>Vous pouvez configurer l'authentification de MPExtended. Il est recommandé d'activer l'authentification et de modifier le mot de passe du compte par défaut, admin. Vous ne devez jamais réaliser une installation accessible à partir d'Internet sans utiliser l'authentification et des mots de passe sécurisés.</value>
   </data>
   <data name="Autodetection" xml:space="preserve">
     <value>Détection automatique</value>
@@ -492,7 +492,7 @@ SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. 
     <value>Personnaliser</value>
   </data>
   <data name="ExternalIpDefault" xml:space="preserve">
-    <value>Détecter automatiquement l'adresse externe</value>
+    <value>Détecter automatiquement l'adresse IP externe</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
     <value>Adresse externe</value>
