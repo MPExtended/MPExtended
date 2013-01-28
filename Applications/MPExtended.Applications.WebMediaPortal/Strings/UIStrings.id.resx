@@ -118,343 +118,343 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountInformation" xml:space="preserve">
-    <value>Account Information</value>
+    <value>Informasi Akun</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Rincian</value>
   </data>
   <data name="LatestEpisodes" xml:space="preserve">
-    <value>Neueste Folgen</value>
+    <value>Episode terbaru</value>
   </data>
   <data name="LatestMovies" xml:space="preserve">
-    <value>Neueste Filme</value>
+    <value>Film terbaru</value>
   </data>
   <data name="LatestRecordings" xml:space="preserve">
-    <value>Neueste Aufnahmen</value>
+    <value>Rekaman terbaru</value>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>Anmelden</value>
+    <value>Masuk</value>
   </data>
   <data name="LogOnFailed" xml:space="preserve">
-    <value>Anmeldung war nicht erfolgreich. Bitte überprüfe die Fehler und versuche es erneut.</value>
+    <value>Gagal masuk. Silahkan perbaiki kesalahannya dan coba lagi.</value>
   </data>
   <data name="Movies" xml:space="preserve">
-    <value>Filme</value>
+    <value>Film</value>
   </data>
   <data name="Music" xml:space="preserve">
     <value>Musik</value>
   </data>
   <data name="Play" xml:space="preserve">
-    <value>Abspielen</value>
+    <value>Mainkan</value>
   </data>
   <data name="PleaseEnterUsernameAndPassword" xml:space="preserve">
-    <value>Bitte gib deinen Benutzernamen und Passwort ein.</value>
+    <value>Masukkan username dan password anda.</value>
   </data>
   <data name="Rating" xml:space="preserve">
-    <value>Bewertung</value>
+    <value>Penilaian</value>
   </data>
   <data name="TodaysSchedules" xml:space="preserve">
-    <value>Heutige geplante Aufnahmen</value>
+    <value>Jadwal hari ini</value>
   </data>
   <data name="TVShows" xml:space="preserve">
-    <value>Serien</value>
+    <value>Tayangan TV</value>
   </data>
   <data name="Unknown" xml:space="preserve">
-    <value>Unbekannt</value>
+    <value>Tidak dikenal</value>
     <comment>Shown when program title is unknown in TVGuide</comment>
   </data>
   <data name="WatchingMovie" xml:space="preserve">
-    <value>Du siehst gerade {0}</value>
+    <value>Menonton {0}</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Willkommen</value>
+    <value>Selamat datang</value>
   </data>
   <data name="YouAreWatchingMovie" xml:space="preserve">
-    <value>Du siehst dir &lt;strong&gt;{0}&lt;/strong&gt; an.</value>
+    <value>Anda sedang menonton &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourArtists" xml:space="preserve">
-    <value>Deine Künstler</value>
+    <value>Artis anda</value>
   </data>
   <data name="YourMovies" xml:space="preserve">
-    <value>Deine Filme</value>
+    <value>Film anda</value>
   </data>
   <data name="YourTVShows" xml:space="preserve">
-    <value>Deine Serien</value>
+    <value>Tayangan TV anda</value>
   </data>
   <data name="AlbumBy" xml:space="preserve">
-    <value>{0} von {1}</value>
+    <value>{0} oleh {1}</value>
   </data>
   <data name="AlbumsFromArtist" xml:space="preserve">
-    <value>Alben von {0}</value>
+    <value>Album {0}</value>
   </data>
   <data name="Aired" xml:space="preserve">
-    <value>Erstaustrahlung {0}</value>
+    <value>Mengudara {0}</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Unduh</value>
   </data>
   <data name="GuestStarring" xml:space="preserve">
-    <value>Schauspieler:</value>
+    <value>Bintang tamu:</value>
   </data>
   <data name="WrittenBy" xml:space="preserve">
-    <value>geschrieben von:</value>
+    <value>Ditulis oleh:</value>
   </data>
   <data name="EpisodeDisplay" xml:space="preserve">
-    <value>Folge {0} - {1}</value>
+    <value>Episode {0} - {1}</value>
   </data>
   <data name="Season" xml:space="preserve">
-    <value>Staffel {0}</value>
+    <value>Musim {0}</value>
   </data>
   <data name="ShowSeason" xml:space="preserve">
-    <value>{0} Staffel {1}</value>
+    <value>{0} musim {1}</value>
   </data>
   <data name="WatchingEpisode" xml:space="preserve">
-    <value>Du siehst gerade {0}</value>
+    <value>Menonton {0}</value>
   </data>
   <data name="YouAreWatchingEpisode" xml:space="preserve">
-    <value>Du siehst gerade &lt;strong&gt;{0} - Staffel {1} Folge {2} - {3}&lt;/strong&gt;.</value>
+    <value>Anda sedang menonton &lt;strong&gt;{0} - Musim {1} Episode {2} - {3}&lt;/strong&gt;.</value>
   </data>
   <data name="ErrorPageText" xml:space="preserve">
-    <value>Bitte gib die folgenden Informationen an, wenn du diesen Fehler meldest.</value>
+    <value>Mohon sertakan informais di bawah ini saat anda melaporkan masalah ini.</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Startseite</value>
+    <value>Beranda</value>
   </data>
   <data name="LogOff" xml:space="preserve">
-    <value>Abmelden</value>
+    <value>Keluar</value>
   </data>
   <data name="Recordings" xml:space="preserve">
-    <value>Aufnahmen</value>
+    <value>Rekaman</value>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>geplante Aufnahmen</value>
+    <value>Jadwal</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Einstellungen</value>
+    <value>Setelan</value>
   </data>
   <data name="SorryAnErrorOccurred" xml:space="preserve">
-    <value>Entschuldigung, während der Bearbeitung deiner Anfrage ist ein Fehler aufgetreten.</value>
+    <value>Maaf, muncul masalah saat memproses permintaan anda.</value>
   </data>
   <data name="TVGuide" xml:space="preserve">
-    <value>TV-Programm</value>
+    <value>Panduan TV</value>
   </data>
   <data name="WelcomeUsername" xml:space="preserve">
-    <value>Willkommen &lt;strong&gt;{0}&lt;/strong&gt;!</value>
+    <value>Selamat datang &lt;strong&gt;{0}&lt;/strong&gt;!</value>
   </data>
   <data name="CancelSchedule" xml:space="preserve">
-    <value>Aufnahme löschen</value>
+    <value>Batalkan jadwal</value>
   </data>
   <data name="CreateSchedule" xml:space="preserve">
-    <value>geplante Aufnahme</value>
+    <value>Jadwal</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Löschen</value>
+    <value>Hapus</value>
   </data>
   <data name="Earlier" xml:space="preserve">
-    <value>Früher</value>
+    <value>Lebih lama</value>
   </data>
   <data name="Later" xml:space="preserve">
-    <value>Später</value>
+    <value>Lebih baru</value>
   </data>
   <data name="LiveTV" xml:space="preserve">
-    <value>Live-TV</value>
+    <value>TV Siaran langsung</value>
   </data>
   <data name="ProgramChannelDetails" xml:space="preserve">
-    <value>&lt;strong&gt;{0}&lt;/strong&gt; bis &lt;strong&gt;{1}&lt;/strong&gt; auf Sender &lt;strong&gt;{2}&lt;/strong&gt;</value>
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; sd &lt;strong&gt;{1}&lt;/strong&gt; pada saluran &lt;strong&gt;{2}&lt;/strong&gt;</value>
   </data>
   <data name="RecordedOn" xml:space="preserve">
-    <value>Aufgenommen am</value>
+    <value>Direkam pada</value>
   </data>
   <data name="ScheduleHeaderEndTime" xml:space="preserve">
-    <value>Endzeit</value>
+    <value>Waktu selesai</value>
   </data>
   <data name="ScheduleHeaderRepetition" xml:space="preserve">
-    <value>Wiederholung</value>
+    <value>Pengulangan</value>
   </data>
   <data name="ScheduleHeaderStartTime" xml:space="preserve">
-    <value>Startzeit</value>
+    <value>Waktu mulai</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Aktualisierung</value>
+    <value>Perbarui</value>
   </data>
   <data name="WatchingProgram" xml:space="preserve">
-    <value>Du siehst gerade {0} auf {1}</value>
+    <value>Menonton {0} pada {1}</value>
   </data>
   <data name="WatchingRecording" xml:space="preserve">
-    <value>Du siehst gerade {0}</value>
+    <value>Menonton {0}</value>
   </data>
   <data name="YouAreWatchingProgram" xml:space="preserve">
-    <value>Du siehst  gerade &lt;strong&gt;{0}&lt;/strong&gt; auf &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+    <value>Anda sedang menonton &lt;strong&gt;{0}&lt;/strong&gt; pada &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
   <data name="YouAreWatchingRecording" xml:space="preserve">
-    <value>Du siehst  gerade &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+    <value>Anda sedang menonton &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourRecordings" xml:space="preserve">
-    <value>Deine Aufnahmen</value>
+    <value>Rekaman anda</value>
   </data>
   <data name="AddSchedule" xml:space="preserve">
-    <value>Aufnahme hinzufügen</value>
+    <value>Tambah jadwal</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Erstellen</value>
+    <value>Buat</value>
   </data>
   <data name="Program" xml:space="preserve">
-    <value>Programm</value>
+    <value>Program</value>
   </data>
   <data name="DownloadPlaylist" xml:space="preserve">
-    <value>Wiedergabeliste (.m3u) zur Nutzung mit externem Player herunterladen </value>
+    <value>Unduh daftar main (.m3u) untuk digunakan dengan pemutar eksternal</value>
   </data>
   <data name="InstallFlashPlayerToUseThisPlayer" xml:space="preserve">
-    <value>Bitte Adobe Flash Player installieren, um diesen Player zu nutzen.</value>
+    <value>Instalasikan Adobe Flash Player pada pemutar ini.</value>
   </data>
   <data name="VLCEnableDeinterlacing" xml:space="preserve">
-    <value>Deinterlacing aktivieren</value>
+    <value>aktifkan deinterlacing</value>
   </data>
   <data name="VLCPause" xml:space="preserve">
-    <value>Pause</value>
+    <value>tunda</value>
   </data>
   <data name="VLCPlay" xml:space="preserve">
-    <value>Abspielen</value>
+    <value>mainkan</value>
   </data>
   <data name="VLCStop" xml:space="preserve">
-    <value>Stopp</value>
+    <value>berhenti</value>
   </data>
   <data name="VLCSwitchFullscreen" xml:space="preserve">
-    <value>Vollbild umschalten</value>
+    <value>alihkan layar penuh</value>
   </data>
   <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
-    <value>Deine VLC version ist zu alt, um De-Interlacing im Browser zu nutzen. Bitte auf Version 1.1.11 oder höher updaten.</value>
+    <value>Versi VLC anda terlalu lama untuk mendukung deinterlacing pada peramban. Perbarui ke versi 1.1.11 atau lebih tinggi.</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Speichern</value>
+    <value>Simpan</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Bearbeiten</value>
+    <value>Edit</value>
   </data>
   <data name="EditSchedule" xml:space="preserve">
-    <value>Aufnahme bearbeiten</value>
+    <value>Edit jadwal</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Suchen</value>
+    <value>Cari</value>
   </data>
   <data name="SearchFieldPlaceholder" xml:space="preserve">
-    <value>Suchen...</value>
+    <value>Cari...</value>
     <comment>Placeholder in the search field when no text has been entered</comment>
   </data>
   <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">
-    <value>Deine Suche lieferte kein Ergebnis.</value>
+    <value>Maaf, pencarian anda tidak menghasilkan apapun.</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="TVServerStatus" xml:space="preserve">
-    <value>TV Server Status</value>
+    <value>Status server TV</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Tuner-Karten</value>
+    <value>Kartu tuner</value>
   </data>
   <data name="Card" xml:space="preserve">
-    <value>Karte</value>
+    <value>Kartu</value>
   </data>
   <data name="CardDetails" xml:space="preserve">
-    <value>Kartendetails</value>
+    <value>Rincian kartu</value>
   </data>
   <data name="CardGrabbingEPG" xml:space="preserve">
-    <value>EPG wird aktualisiert...</value>
+    <value>Mengambil EPG</value>
   </data>
   <data name="CardName" xml:space="preserve">
-    <value>Kartenname</value>
+    <value>Nama kartu</value>
   </data>
   <data name="CardRecordingFile" xml:space="preserve">
-    <value>Aufnahmedatei</value>
+    <value>File rekaman</value>
   </data>
   <data name="CardRTSPStream" xml:space="preserve">
-    <value>RTSP-Stream</value>
+    <value>Aliran RTSP</value>
   </data>
   <data name="CardScrambled" xml:space="preserve">
-    <value>Verschlüsselt</value>
+    <value>Mengacak</value>
   </data>
   <data name="CardState" xml:space="preserve">
-    <value>Zustand</value>
+    <value>Kondisi</value>
   </data>
   <data name="CardTimeshiftingFile" xml:space="preserve">
-    <value>Datei für Timeshifting</value>
+    <value>File waktu alih</value>
   </data>
   <data name="Channel" xml:space="preserve">
-    <value>Sender</value>
+    <value>Saluran</value>
   </data>
   <data name="DiskInfoAvailable" xml:space="preserve">
-    <value>Verfügbar</value>
+    <value>Tersedia</value>
   </data>
   <data name="DiskInfoDisk" xml:space="preserve">
-    <value>Festplatte</value>
+    <value>Cakram</value>
   </data>
   <data name="DiskInformation" xml:space="preserve">
-    <value>Festplatteninformationen</value>
+    <value>Informasi cakram</value>
   </data>
   <data name="DiskInfoSize" xml:space="preserve">
-    <value>Größe</value>
+    <value>Ukuran</value>
   </data>
   <data name="DiskInfoUsed" xml:space="preserve">
-    <value>Benutzt</value>
+    <value>Digunakan</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Nein</value>
+    <value>Tidak</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stopp</value>
+    <value>Berhenti</value>
   </data>
   <data name="StreamingClients" xml:space="preserve">
-    <value>Streaming-Clients</value>
+    <value>Aliran klien</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Benutzername</value>
+    <value>Username</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
+    <value>Ya</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Fehler</value>
+    <value>Masalah</value>
     <comment>Page title on error page</comment>
   </data>
   <data name="PageNotFound" xml:space="preserve">
-    <value>Seite nicht gefunden</value>
+    <value>Halaman tidak ada</value>
     <comment>Page title on 404 page</comment>
   </data>
   <data name="SorryPageNotFound" xml:space="preserve">
-    <value>Entschuldigung, die von dir angefragte Seite existiert nicht.</value>
+    <value>Maaf, halaman yang anda minta tidak ada.</value>
   </data>
   <data name="WatchLive" xml:space="preserve">
-    <value>Live anschauen</value>
+    <value>Tonton langsung</value>
   </data>
   <data name="ListeningTrack" xml:space="preserve">
-    <value>Du hörst gerade {0}</value>
+    <value>Mendengarkan {0}</value>
   </data>
   <data name="YouAreListening" xml:space="preserve">
-    <value>Du hörst gerade &lt;strong&gt;{0}&lt;/strong&gt; auf &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+    <value>Anda sedang mendengarkan &lt;strong&gt;{0}&lt;/strong&gt; oleh &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
   <data name="FailedToStartStream" xml:space="preserve">
-    <value>Starten des Streams fehlgeschlagen. Weitere Details können Sie dem Serverlog entnehmen.</value>
+    <value>Gagal memulai aliran. Silahkan lihat log server untuk rincian lengkapnya.</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>Über</value>
+    <value>Tentang</value>
   </data>
   <data name="CurrentCPUUsage" xml:space="preserve">
-    <value>Aktuelle CPU Auslastung:</value>
+    <value>Penggunaan CPU saat ini:</value>
   </data>
   <data name="CurrentMemoryUsage" xml:space="preserve">
-    <value>Aktuelle Arbeitspeicher Auslastung</value>
+    <value>Penggunaan memori saat ini:</value>
   </data>
   <data name="SystemStatus" xml:space="preserve">
-    <value>Systemstatus</value>
+    <value>Status sistem</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Dies ist WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+    <value>Ini adalah WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="LatestAlbums" xml:space="preserve">
-    <value>Neueste Alben</value>
+    <value>Album terbaru</value>
   </data>
   <data name="LatestTracks" xml:space="preserve">
-    <value>Neuesten Titel</value>
+    <value>Track terbaru</value>
   </data>
 </root>

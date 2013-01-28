@@ -133,7 +133,7 @@
     <value>Standard språk:</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
-    <value>Vissa klienter stöder inte förinställda ljud och textningsspråk på en per-ström basis. Du kan konfigurera standardljud och textningsspråk för dessa klienter här.</value>
+    <value>Vissa klienter stöder inte förinställda ljud och textningsspråk per ström. Du kan konfigurera standardljud och textningsspråk för dessa klienter här.</value>
   </data>
   <data name="DefaultSubtitleLanguage" xml:space="preserve">
     <value>Standard textningsspråk:</value>
@@ -167,6 +167,9 @@
   </data>
   <data name="ServiceStarted" xml:space="preserve">
     <value>Tjänsten startad</value>
+  </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Tjänsten startar</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Tjänsten stoppad</value>

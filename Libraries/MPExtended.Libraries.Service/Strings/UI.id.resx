@@ -118,390 +118,275 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActionNeedsAdmin" xml:space="preserve">
-    <value>Diese Aktion benötigt Administrationsrechte.</value>
+    <value>Aksi ini membutuhkan hak akses administratif.</value>
   </data>
   <data name="ActiveStreams" xml:space="preserve">
-    <value>Aktive Streams</value>
+    <value>Aliran aktif saat ini</value>
   </data>
   <data name="ConfigureWebMPPort" xml:space="preserve">
-    <value>Du kannst den Port für WebMediPortal hier ändern. Falls du den Port vom Standard 8080 änderst, musst du deine Firewall manuell anpassen.</value>
+    <value>Anda dapat mengkonfigurasi port mana yang akan digunakan MediaPortal di sini. Bila anda mengubah nilai ini dari bakunya 8080, anda harus mengkonfigurasi firewall anda secara manual.</value>
   </data>
   <data name="DefaultAudioLanguage" xml:space="preserve">
-    <value>Standardsprache für Tonspuren:</value>
+    <value>Bahasa baku audio:</value>
   </data>
   <data name="DefaultLanguage" xml:space="preserve">
-    <value>Standardsprache</value>
+    <value>Bahasa baku</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
-    <value>Manche Clients unterstützen die Sprachauswahl für Audio und Untertitel nicht auf einer "Pro-Stream-Basis". Für diese Clients kannst du die Vorauswahl der Sprache für Audio und Untertitel hier einstellen.</value>
+    <value>Beberapa klien tidak mendukung pengkonfigurasian audio dan bahasa subtitel pada basis per-alirannya. Anda dapat mengkonfigurasi audio baku dan bahasa subtitel untuk client ini di sini.</value>
   </data>
   <data name="DefaultSubtitleLanguage" xml:space="preserve">
-    <value>Standardsprache für Untertitel:</value>
+    <value>Bahasa baku subtitel:</value>
   </data>
   <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
-    <value>Verwerfen von Änderungen des Social Tab</value>
+    <value>Membuang perubahan cacat yang dibuat pada tab sosial.</value>
   </data>
   <data name="ExportedLogsAndConfig" xml:space="preserve">
-    <value>Die Protokolle und Konfigurationsdaten wurden nach {0} exportiert</value>
+    <value>Log dan data konfigurasi diekspor ke {0}</value>
   </data>
   <data name="ExportLogsAndConfiguration" xml:space="preserve">
-    <value>Exportierte Logs und Konfigurationen</value>
+    <value>Ekspor log dan konfigurasi</value>
   </data>
   <data name="LoginFailed" xml:space="preserve">
-    <value>Anmeldung fehlgeschlagen.</value>
+    <value>Gagal masuk.</value>
   </data>
   <data name="LoginSuccessful" xml:space="preserve">
-    <value>Anmeldung erfolgreich!</value>
+    <value>Berhasil masuk!</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Medien</value>
+    <value>Media</value>
   </data>
   <data name="Port" xml:space="preserve">
     <value>Port:</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
-    <value>Nicht installiert</value>
+    <value>Tidak diinstalasikan</value>
   </data>
   <data name="ServiceNotInstalledPopup" xml:space="preserve">
-    <value>Der MPExtended-Dienst ist nicht installiert. Bitte überprüfe deine Installation.</value>
+    <value>Layanan MPExtended tidak diinstalasikan. Pastikan instalasi anda sudha benar.</value>
   </data>
   <data name="ServiceStarted" xml:space="preserve">
-    <value>Dienst gestartet</value>
+    <value>Layanan dinyalakan</value>
   </data>
   <data name="ServiceStartingFixed" xml:space="preserve">
-    <value>Dienst wird gestartet</value>
+    <value>Layanan menyala</value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
-    <value>Dienst angehalten</value>
+    <value>Layanan dihentikan</value>
   </data>
   <data name="ServiceUnknown" xml:space="preserve">
-    <value>Dienststatus unbekannt</value>
+    <value>Status layanan tidak dikenal</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Mulai</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Anhalten</value>
+    <value>Berhenti</value>
   </data>
   <data name="Streaming" xml:space="preserve">
-    <value>Streaming</value>
+    <value>Aliran</value>
   </data>
   <data name="StreamingClient" xml:space="preserve">
-    <value>Client</value>
+    <value>Klien</value>
   </data>
   <data name="StreamingFile" xml:space="preserve">
-    <value>Datei</value>
+    <value>File</value>
   </data>
   <data name="StreamingIPAddress" xml:space="preserve">
-    <value>IP Adresse</value>
+    <value>Alamat IP</value>
   </data>
   <data name="StreamingKickSession" xml:space="preserve">
-    <value>Sitzung beenden</value>
+    <value>Kick session</value>
   </data>
   <data name="StreamingProfile" xml:space="preserve">
     <value>Profil</value>
   </data>
   <data name="StreamingProgress" xml:space="preserve">
-    <value>Fortschritt</value>
+    <value>Perkembangan</value>
   </data>
   <data name="SubtitlesDisabled" xml:space="preserve">
-    <value>Untertitel deaktivieren</value>
+    <value>Nonaktifkan subtitel</value>
   </data>
   <data name="SubtitlesExternal" xml:space="preserve">
-    <value>Benutze externe .srt Datei</value>
+    <value>Gunakan file .srt eksternal</value>
   </data>
   <data name="SubtitlesFirstStream" xml:space="preserve">
-    <value>Erster Stream in Datei</value>
+    <value>Aliran pertama dalam file</value>
   </data>
   <data name="TabAuthentication" xml:space="preserve">
-    <value>Authentisierung</value>
+    <value>Autentikasi</value>
   </data>
   <data name="TabConfiguration" xml:space="preserve">
-    <value>Konfiguration</value>
+    <value>Konfigurasi</value>
   </data>
   <data name="TabLogs" xml:space="preserve">
-    <value>Logs</value>
+    <value>Log</value>
   </data>
   <data name="TabPlugins" xml:space="preserve">
-    <value>Plugins</value>
+    <value>Plugin</value>
   </data>
   <data name="TabProject" xml:space="preserve">
-    <value>Projekt</value>
+    <value>Proyek</value>
   </data>
   <data name="TabQRCode" xml:space="preserve">
     <value>QR-Code</value>
   </data>
   <data name="TabSocial" xml:space="preserve">
-    <value>Sozial</value>
+    <value>Sosial</value>
   </data>
   <data name="TabStreaming" xml:space="preserve">
-    <value>Streaming</value>
+    <value>Aliran</value>
   </data>
   <data name="TabTroubleshooting" xml:space="preserve">
-    <value>Fehlerbehebung</value>
+    <value>Pemecahan masalah</value>
   </data>
   <data name="TabWebMediaPortal" xml:space="preserve">
     <value>WebMediaPortal</value>
   </data>
   <data name="TestingCredentials" xml:space="preserve">
-    <value>Überprüfe Zugangsdaten, bitte warten...</value>
+    <value>Uji kredensial, mohon tunggu...</value>
   </data>
   <data name="TestLinksFor" xml:space="preserve">
-    <value>Test Links für</value>
+    <value>Uji tautan untuk</value>
   </data>
   <data name="TrayCloseMediaPortal" xml:space="preserve">
-    <value>MediaPortal schließen</value>
+    <value>Tutup MediaPortal</value>
   </data>
   <data name="TrayExit" xml:space="preserve">
-    <value>Schließen</value>
+    <value>Keluar</value>
   </data>
   <data name="TrayHibernate" xml:space="preserve">
-    <value>Ruhezustand</value>
+    <value>Hibernasi</value>
   </data>
   <data name="TrayLock" xml:space="preserve">
-    <value>Sperren</value>
+    <value>Kunci</value>
   </data>
   <data name="TrayLogOff" xml:space="preserve">
-    <value>Abmelden</value>
+    <value>Keluar</value>
   </data>
   <data name="TrayMonitorOff" xml:space="preserve">
-    <value>Bildschirm ausschalten</value>
+    <value>Monitor mati</value>
   </data>
   <data name="TrayOpenConfigurator" xml:space="preserve">
-    <value>Öffne MPExtended Konfiguration</value>
+    <value>Buka Konfigurator MPExtended</value>
   </data>
   <data name="TrayOpenWebMP" xml:space="preserve">
-    <value>Öffne WebMediaPortal</value>
+    <value>Buka WebMediaPortal</value>
   </data>
   <data name="TrayPowermodes" xml:space="preserve">
-    <value>Energieeinstellungen</value>
+    <value>Powermode</value>
   </data>
   <data name="TrayReboot" xml:space="preserve">
-    <value>Neustarten</value>
+    <value>Reboot</value>
   </data>
   <data name="TrayScreensaver" xml:space="preserve">
-    <value>Bildschirmschoner</value>
+    <value>Screensaver</value>
   </data>
   <data name="TrayShutdown" xml:space="preserve">
-    <value>Herunterfahren</value>
+    <value>Matikan</value>
   </data>
   <data name="TrayStartMediaPortal" xml:space="preserve">
-    <value>Starte MediaPortal</value>
+    <value>Nyalakan MediaPortal</value>
   </data>
   <data name="TraySuspend" xml:space="preserve">
-    <value>Pausieren -suspend-</value>
+    <value>Tangguhkan</value>
   </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
-    <value>Um die Gültigkeit des angeforderten Contents zu überprüfen, benutze bitte die folgenden Links... Ist der Dienst auf dem lokalen Rechner installiert, kann "localhost" verwendet werden. Wähle eine der IPs aus der Dropdown Liste, um von anderen PCs zu testen (um etwa Firewall Probleme auszuschließen).</value>
+    <value>Untuk memeriksa validitas dari permintaan konten silahkan gunakan tautan berikut ini... Anda dapat menggunakan localhost untuk menguji layanan tersebut pada mesin yang sama. Pilih salah satu IP menu dropdown untuk mendapatkan url pengujian pada PC lainnya di jaringan (misalnya untuk memeriksa isu firewall).</value>
   </data>
   <data name="TVServer" xml:space="preserve">
     <value>TVServer</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Unerwarteter Fehler. Bitte sende eine Fehlerbeschreibung mit angehängten Log-Dateien des Dienstes.</value>
+    <value>Telah muncul masalah yang tidak terduga. Silahkan berkaskan sebuah laporan gangguan dengan melampirkan file log layanannya.</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
-    <value>MPExtended Konfigurator</value>
+    <value>Konfigurator MPExtended</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Konto hinzufügen</value>
-  </data>
-  <data name="AuthenticationIntroText" xml:space="preserve">
-    <value>Du kannst die Benutzer-Authentifizierung von MPExtended hier konfigurieren. Es wird empfohlen, die Authentifizierung einzuschalten und das Passwort des Default-Kontos "admin" zu ändern (oder zu löschen). Nutze NIE eine aus dem Internet erreichbare Installation, ohne die Authentifizierung und sichere Passwörter zu nutzen.</value>
-  </data>
-  <data name="Autodetection" xml:space="preserve">
-    <value>Automatische Erkennung</value>
-  </data>
-  <data name="AutodetectionText" xml:space="preserve">
-    <value>Die Dienste unterstützen die automatische Erkennung via Bonjour/Zeroconf; dies erlaubt Clients im lokalen Netzwerk, die Dienste automatisch zu finden und sich selbst zu konfigurieren.</value>
-  </data>
-  <data name="CheckForUpdates" xml:space="preserve">
-    <value>Nach Updates suchen</value>
-  </data>
-  <data name="CheckingForUpdates" xml:space="preserve">
-    <value>Suche nach Updates...</value>
-  </data>
-  <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Die eingegebenen Netzwerk-Einstellungen sind ungültig.</value>
-  </data>
-  <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Netzwerk-Einstellungen erfolgreich geprüft.</value>
-  </data>
-  <data name="DeleteAccount" xml:space="preserve">
-    <value>Konto löschen</value>
-  </data>
-  <data name="Documentation" xml:space="preserve">
-    <value>Dokumentation:</value>
-  </data>
-  <data name="EnableAuthentication" xml:space="preserve">
-    <value>Authentifizierung einschalten (empfohlen!).</value>
-  </data>
-  <data name="EnableAutodetection" xml:space="preserve">
-    <value>Automatische Erkennung einschalten</value>
-  </data>
-  <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
-    <value>Konnte Update Information nicht laden</value>
-  </data>
-  <data name="Forum" xml:space="preserve">
-    <value>Forum:</value>
-  </data>
-  <data name="Homepage" xml:space="preserve">
-    <value>Homepage:</value>
-  </data>
-  <data name="IncludeAuthentication" xml:space="preserve">
-    <value>Zugangsdaten für Benutzer einbeziehen:</value>
-  </data>
-  <data name="IRCText" xml:space="preserve">
-    <value>IRC:
-irc.freenode.net / Kanal #mp-extended</value>
-  </data>
-  <data name="MPExtendedIntroduction" xml:space="preserve">
-    <value>MPExtended ist ein Open Source Projekt das den Zugriff auf MediaPortal von überall auf der Welt ermöglicht. Es bietet neben dem Zugriff über Webbrowser eine Schnittstelle für externe Programme, etwa Android/iOS apps.</value>
-  </data>
-  <data name="NetworkDrives" xml:space="preserve">
-    <value>Netzlaufwerke</value>
-  </data>
-  <data name="NetworkDrivesText" xml:space="preserve">
-    <value>Falls deine Media-Dateien auf einem Fremdsystem liegen (z.B. Server oder NAS), benötigt MPExtended die Zugangsdaten für diese Laufwerk, um darauf zugreifen zu können. Normalerweise sind dies die Zugangsdaten deines Windows-Kontos.</value>
-  </data>
-  <data name="NoUpdateAvailable" xml:space="preserve">
-    <value>Kein Update verfügbar</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
-  </data>
-  <data name="PortText" xml:space="preserve">
-    <value>Hier kannst du einstellen, welchen Port für die Dienste benutzen.</value>
-  </data>
-  <data name="QRCodeIntroText" xml:space="preserve">
-    <value>Du kannst den QR-Code scannen, um diese MPExtended-Installation automatisch hinzuzufügen.</value>
-  </data>
-  <data name="SaveBarcodeAsImageFile" xml:space="preserve">
-    <value>Speichere Barcode als Bild</value>
-  </data>
-  <data name="SavedBarcodeTo" xml:space="preserve">
-    <value>Der Barcode wurde in {0} gespeichert!</value>
-  </data>
-  <data name="SaveToFile" xml:space="preserve">
-    <value>Speichern als Datei</value>
-  </data>
-  <data name="ServiceName" xml:space="preserve">
-    <value>Service Name</value>
-  </data>
-  <data name="Services" xml:space="preserve">
-    <value>Dienste</value>
-  </data>
-  <data name="Test" xml:space="preserve">
-    <value>Test</value>
-  </data>
-  <data name="UpdateAvailable" xml:space="preserve">
-    <value>Update verfügbar: Version {0}, veröffentlicht am {1}</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Benutzername</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Version:</value>
-  </data>
-  <data name="Export" xml:space="preserve">
-    <value>Exportieren</value>
-  </data>
-  <data name="LogFile" xml:space="preserve">
-    <value>Protokolldatei:</value>
-  </data>
-  <data name="LogFiles" xml:space="preserve">
-    <value>Protokolldateien</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>Keine</value>
-  </data>
-  <data name="Plugin" xml:space="preserve">
-    <value>Plug-in</value>
-  </data>
-  <data name="ScrollToEnd" xml:space="preserve">
-    <value>An das Ende scrollen</value>
+    <value>Tambah akun</value>
   </data>
   <data name="Site" xml:space="preserve">
-    <value>Site</value>
+    <value>Situs</value>
   </data>
   <data name="SocialIntroText" xml:space="preserve">
-    <value>MPExtended unterstützt die Synchronisierung der von dir angeschauten Filme und Serien mit Trakt und follw.it.  Du kannst dein Konto für diese Dienste hier konfigurieren.</value>
+    <value>MPExtended mendukung sinkronisasi film dan menampilkan yang anda tonton pada klien untuk Trakt dan follw.it. Anda dapat mengkonfigurasi akun anda untuk situs ini di sini.</value>
   </data>
   <data name="LogAndConfigurationArchive" xml:space="preserve">
-    <value>Protokoll- und Konfigurationsarchiv (.zip)</value>
+    <value>Arsip log dan konfigurasi (.zip)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Durchsuchen</value>
+    <value>Ramban</value>
   </data>
   <data name="DonateToMPExtended" xml:space="preserve">
-    <value>Für MPExtended spenden</value>
+    <value>Donasi ke MPExtended</value>
   </data>
   <data name="CleanCaches" xml:space="preserve">
-    <value>Cache löschen</value>
+    <value>Bersihkan cache</value>
   </data>
   <data name="EnableHTTPS" xml:space="preserve">
-    <value>HTTPS aktivieren</value>
+    <value>Aktifkan HTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>Wegen Einschränkungen in Windows and IIS Express kannst du nur Ports zwischen 44300 und 44399 für HTTPS benutzen. Ausserdem muss dann die Firewall manuell konfiguriert werden.
+    <value>Berkenaan dengan keterbatasan dalam Windows dan IIS Express, anda hanya dapat menggunakan port antara 44300 dan 44399 untuk HTTPS. Anda juga harus mengkonfigurasi firewall anda secara manual untuk memperkenankan koneksi ini.
 
-Bitte beachte, dass das benutzte SSL/TLS Zertifikat nicht konfiguriert werden kann. Wenn du HTTPS benutzt, wird dein Browser dich warnen, dass du möglicherweise unsichere Verbindungen nutzt.</value>
+Mohon dicatat bahwa tidaklah mungkin untuk mengkonfigurasi sertifikat SSL/TLS. Saat anda menggunakan HTTPS, anda akan mendapat peringatan pada peramban anda tentang sebuah koneksi yang berpotensi tidak dipercaya. </value>
   </data>
   <data name="HTTPSInvalidPort" xml:space="preserve">
-    <value>Der für HTTPS angegebene Port ist ungültig.  Du kannst nur Ports zwischen 44300 und 44399 für HTTPS beutzen.</value>
+    <value>Port yang anda masukkan untuk HTTPS salah. Anda hanya dapat menggunakan port 44300 hingga 44399 untuk HTTPS. </value>
   </data>
   <data name="HTTPSPort" xml:space="preserve">
-    <value>HTTPS Port:</value>
+    <value>Port HTTPS:</value>
   </data>
   <data name="TabActivity" xml:space="preserve">
-    <value>Aktivität</value>
+    <value>Aktivitas</value>
   </data>
   <data name="UserMustHaveNameAndPassword" xml:space="preserve">
-    <value>Bitte gib einen einen Benutzernamen und ein Passwort für diesen Beutzer an.</value>
+    <value>Masukkan username dan password untuk pengguna ini.</value>
   </data>
   <data name="BonjourChecking" xml:space="preserve">
-    <value>Überprüfe die Installation von Bonjour...</value>
+    <value>Memeriksa instalasi  Bonjour anda...</value>
   </data>
   <data name="BonjourNotInstalled" xml:space="preserve">
-    <value>Bonjour ist auf diesem System nicht installiert. Um diese Funktion zu nutzen,</value>
+    <value>Bonjour tidak diinstalasikan pada komputer anda. Untuk menggunakan fitur ini, </value>
   </data>
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
-    <value>lade bitte Bonjour herunter.</value>
+    <value>silahkan unduh Bonjour. </value>
   </data>
   <data name="Enable" xml:space="preserve">
-    <value>Aktivieren</value>
+    <value>Aktif</value>
   </data>
   <data name="AccessRequest" xml:space="preserve">
-    <value>Wollen Sie der Anwendung '{0}' (mit der IP-Adresse {1}) vollen Zugriff auf den MPExtended Dienst geben?</value>
+    <value>Apakah anda ingin memberikan aplikasi '{0}' (dengan alamat IP {1}) akses penuh ke layanan MPExtended?</value>
   </data>
   <data name="AccessRequestDenyAccess" xml:space="preserve">
-    <value>Verweigern</value>
+    <value>Tolak</value>
   </data>
   <data name="AccessRequestGrantAccess" xml:space="preserve">
-    <value>Zugriff gewähren</value>
+    <value>Berikan akses</value>
   </data>
   <data name="AccessRequestSelectUser" xml:space="preserve">
-    <value>Benutzer auswählen:</value>
+    <value>Pilih pengguna:</value>
   </data>
   <data name="AccessRequestWifiRemote" xml:space="preserve">
-    <value>Wollen Sie '{0}' Zugriff gewähren? (Falls ja, weisen Sie im nächsten Schritt einen Benutzer zu)</value>
+    <value>Apakah anda akan mengizinkan akses '{0}'? (Bila demikian, tetapkan seorang pengguna pada langkah berikutnya)</value>
   </data>
   <data name="AccessRequestEnable" xml:space="preserve">
-    <value>Aktivieren von Zugriffsanfragen der Clients</value>
+    <value>Aktifkan permintaan akses klien</value>
   </data>
   <data name="ExternalIpCustom" xml:space="preserve">
-    <value>Benutzerdefiniert</value>
+    <value>Sesuaian</value>
   </data>
   <data name="ExternalIpDefault" xml:space="preserve">
-    <value>Externe IP automatisch erkennen</value>
+    <value>Otomatis deteksi IP eksternal</value>
   </data>
   <data name="ExternalIpLabel" xml:space="preserve">
-    <value>Externe Adresse</value>
+    <value>Alamat eksternal</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Sprache</value>
+    <value>Bahasa</value>
   </data>
 </root>

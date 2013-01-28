@@ -182,6 +182,8 @@ namespace MPExtended.Libraries.SQLitePlugin
             return null;
         }
 
+        [AllowSQLCompare]
+        [AllowSQLSort]
         public static object ReadStringAsList(SQLiteDataReader reader, int idx)
         {
             string data = (string)ReadString(reader, idx);

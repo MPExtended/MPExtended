@@ -65,7 +65,7 @@ namespace MPExtended.Libraries.Service.Hosting
                 // TODO: Set CultureInfo.DefaultThreadCurrent{,UI}Culture when we switch to .NET4.5
 
                 // setup our environment
-                EnvironmentChecks.CheckEnvironment();
+                EnvironmentSetup.SetupEnvironment();
 
                 // start watching the configuration files for changes
                 Configuration.Load();

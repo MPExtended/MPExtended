@@ -167,9 +167,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     StartTimeFormatted = StartTime.Value.ToString("g");
                     EndTimeFormatted = EndTime.Value.ToString("g");
                     break;
+                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
+                    StartTimeFormatted = StartTime.Value.ToString("dddd");
+                    break;
                 case WebScheduleType.EveryTimeOnEveryChannel:
                 case WebScheduleType.EveryTimeOnThisChannel:
-                case WebScheduleType.WeeklyEveryTimeOnThisChannel:
                     // they don't have a time associated with them
                     break;
             }

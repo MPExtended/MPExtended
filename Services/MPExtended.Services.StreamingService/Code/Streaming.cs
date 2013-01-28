@@ -321,7 +321,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (!Streams.ContainsKey(identifier))
             {
-                Log.Warn("Client called CustomTranscoderData() for non-existing identifier", identifier);
+                Log.Warn("Client called CustomTranscoderData() for non-existing identifier {0}", identifier);
                 WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
                 return Stream.Null;
             }

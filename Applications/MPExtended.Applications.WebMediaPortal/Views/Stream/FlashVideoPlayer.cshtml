@@ -1,5 +1,5 @@
 ﻿@model PlayerViewModel
-           
+@using MPExtended.Services.Common.Interfaces
 
 @Html.Assets().AddScript("~/Scripts/dragdealer.js")
 @Html.Assets().AddScript("~/Content/jwplayer/jwplayer.js")
@@ -54,7 +54,15 @@
 
     function play(startPos, autoStart) {
         jwplayer().stop();
-        jwplayer().load({ provider: 'http', file: '@Html.Raw(@Model.URL)' + '&starttime=' + startPos.toString() });
+        jwplayer().load({ 
+            provider: 'http',
+            file: '@Html.Raw(Model.URL)' + '&starttime=' + startPos.toString(),
+            @if(Model.MediaType == WebMediaType.Movie) {
+                @: 'image': '@Url.Action("Cover", "MovieLibrary", new { movie = Model.MediaId })',
+            } else if (Model.MediaType == WebMediaType.TVEpisode) {
+                @: 'image': '@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = Model.MediaId })',
+            }
+           });
         if (autoStart == true) {
             jwplayer().play();
         }

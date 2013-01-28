@@ -26,15 +26,22 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
     public class MenuModel
     {
+        private static IEnumerable<string> movieGenresCache;
+        private static IEnumerable<string> tvShowGenresCache;
+
         public IEnumerable<string> MovieGenres
         {
             get
             {
+                if (movieGenresCache != null)
+                    return movieGenresCache;
+
                 try
                 {
-                    return Connections.Current.MAS.GetMovieGenres(Settings.ActiveSettings.MovieProvider)
+                    movieGenresCache = Connections.Current.MAS.GetMovieGenres(Settings.ActiveSettings.MovieProvider)
                         .Select(x => x.Title)
                         .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                    return movieGenresCache;
                 }
                 catch (Exception ex)
                 {
@@ -48,11 +55,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get
             {
+                if (tvShowGenresCache != null)
+                    return tvShowGenresCache;
+
                 try
                 {
-                    return Connections.Current.MAS.GetTVShowGenres(Settings.ActiveSettings.TVShowProvider)
+                    tvShowGenresCache = Connections.Current.MAS.GetTVShowGenres(Settings.ActiveSettings.TVShowProvider)
                         .Select(x => x.Title)
                         .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                    return tvShowGenresCache;
                 }
                 catch (Exception ex)
                 {
