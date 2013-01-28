@@ -26,6 +26,7 @@ using System.Linq;
 using System.Net;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -73,25 +74,45 @@ namespace MPExtended.Services.StreamingService.Code
             }
 
             // execute it
+            string path;
             if (source.NeedsImpersonation)
             {
                 using (NetworkShareImpersonator context = new NetworkShareImpersonator())
-                    ExecuteFFMpegExtraction(position, context.RewritePath(source.GetPath()), tempFile);
+                    path = CreateThumbnailIfNeeded(source, context.RewritePath(source.GetPath()), position, tempFile);
             }
             else
             {
-                ExecuteFFMpegExtraction(position, source.GetPath(), tempFile);
+                path = CreateThumbnailIfNeeded(source, source.GetPath(), position, tempFile);
             }
 
-            // log when failed
+            return path != null ? StreamPostprocessedImage(new ImageMediaSource(path), maxWidth, maxHeight, borders, format) : Stream.Null;
+        }
+
+        private static string CreateThumbnailIfNeeded(MediaSource source, string path, long position, string tempFile)
+        {
+            // try to stream existing thumbnail if possible
+            string thumbnailFilename = GetThumbnailFilename(source, path);
+            if (thumbnailFilename != null)
+                return thumbnailFilename;
+
+            ExecuteFFMpegExtraction(position, path, tempFile);
             if (!File.Exists(tempFile))
             {
                 Log.Warn("Failed to extract image to temporary file {0} from {1}", tempFile, source.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
-                return Stream.Null;
+                return null;
             }
 
-            return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
+            return tempFile;
+        }
+
+        private static string GetThumbnailFilename(MediaSource source, string path)
+        {
+            if (source.MediaType != WebMediaType.Recording || Path.GetExtension(path).ToLower() != ".ts")
+                return null;
+
+            var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(path, ".jpg"));
+            return thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0 ? thumbnailFileInfo.FullName : null;
         }
 
         private static void ExecuteFFMpegExtraction(long position, string path, string tempFile)
