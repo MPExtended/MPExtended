@@ -33,25 +33,24 @@ namespace MPExtended.Services.StreamingService.MediaInfo
     internal class XmlCache : IMediaInfoCache
     {
         private DataContractSerializer serializer;
-        private Dictionary<string, WebMediaInfo> cache;
+        private Dictionary<string, CachedInfoWrapper> cache;
         private bool isDirty = false;
         private string path;
         private Timer flushTimer;
 
         public XmlCache()
         {
-            serializer = new DataContractSerializer(typeof(Dictionary<string, WebMediaInfo>));
+            serializer = new DataContractSerializer(typeof(Dictionary<string, CachedInfoWrapper>));
             path = Path.Combine(Installation.GetCacheDirectory(), "MediaInfo.xml");
-            cache = new Dictionary<string, WebMediaInfo>();
+            cache = new Dictionary<string, CachedInfoWrapper>();
             if (File.Exists(path))
             {
                 try
                 {
                     Stopwatch timer = new Stopwatch();
                     timer.Start();
-                    Stream inputStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    cache = (Dictionary<string, WebMediaInfo>)serializer.ReadObject(inputStream);
-                    inputStream.Close();
+                    using (Stream inputStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        cache = (Dictionary<string, CachedInfoWrapper>)serializer.ReadObject(inputStream);
                     timer.Stop();
                     Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
                 }
@@ -89,12 +88,12 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             return cache.ContainsKey(src.GetUniqueIdentifier());
         }
 
-        public WebMediaInfo GetForSource(MediaSource src)
+        public CachedInfoWrapper GetForSource(MediaSource src)
         {
             return cache[src.GetUniqueIdentifier()];
         }
 
-        public void Save(MediaSource src, WebMediaInfo info)
+        public void Save(MediaSource src, CachedInfoWrapper info)
         {
             lock (cache)
             {
