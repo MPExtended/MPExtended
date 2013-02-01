@@ -19,14 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Timers;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Services.StreamingService.Code;
-using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.MediaInfo
 {
@@ -41,18 +39,14 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         public XmlCache()
         {
             serializer = new DataContractSerializer(typeof(Dictionary<string, CachedInfoWrapper>));
-            path = Path.Combine(Installation.GetCacheDirectory(), "MediaInfo.xml");
+            path = Path.Combine(Installation.GetCacheDirectory(), "MediaInfo-v2.xml");
             cache = new Dictionary<string, CachedInfoWrapper>();
             if (File.Exists(path))
             {
                 try
                 {
-                    Stopwatch timer = new Stopwatch();
-                    timer.Start();
                     using (Stream inputStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                         cache = (Dictionary<string, CachedInfoWrapper>)serializer.ReadObject(inputStream);
-                    timer.Stop();
-                    Log.Debug("MediaInfo cache loading took {0} ms for {1} items", timer.ElapsedMilliseconds, cache.Count);
                 }
                 catch (Exception ex)
                 {
@@ -60,27 +54,12 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 }
             }
 
-            // save every minute
-            flushTimer = new Timer()
-            {
-                Interval = 60 * 1000,
-                AutoReset = true
-            };
-            flushTimer.Elapsed += delegate(object sender, ElapsedEventArgs e)
-            {
-                if(isDirty)
-                {
-                    isDirty = false;
-                    SaveToDisk();
-                }
-            };
+            // save every minute and on exit
+            flushTimer = new Timer(60 * 1000);
+            flushTimer.AutoReset = true;
+            flushTimer.Elapsed += (object sender, ElapsedEventArgs e) => SaveToDisk();
             flushTimer.Start();
-
-            // also save on exit
-            ServiceState.Stopping += delegate()
-            {
-                SaveToDisk();
-            };
+            ServiceState.Stopping += SaveToDisk;
         }
 
         public bool HasForSource(MediaSource src)
@@ -96,14 +75,16 @@ namespace MPExtended.Services.StreamingService.MediaInfo
         public void Save(MediaSource src, CachedInfoWrapper info)
         {
             lock (cache)
-            {
                 cache[src.GetUniqueIdentifier()] = info;
-            }
+
             isDirty = true;
         }
 
         private void SaveToDisk()
         {
+            if(!isDirty)
+                return;
+
             // This happens during uninstallation: the Cache directory is already removed, but the service isn't stopped yet. To avoid
             // a harmless but ugly error in the logs, don't try to write the cache when the directory has already been removed.
             if (!Directory.Exists(Path.GetDirectoryName(path)))
@@ -112,12 +93,20 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 return;
             }
 
-            lock (cache)
+            try
             {
-                Log.Debug("Writing {0} items to MediaInfo cache", cache.Count);
-                Stream outputStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-                serializer.WriteObject(outputStream, cache);
-                outputStream.Close();
+                lock (cache)
+                {
+                    Log.Debug("Writing {0} items to MediaInfo cache", cache.Count);
+                    using (Stream outputStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                        serializer.WriteObject(outputStream, cache);
+                }
+
+                isDirty = false;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to serialize MediaInfo to file", ex);
             }
         }
     }
