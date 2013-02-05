@@ -509,4 +509,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="CleanCacheSucceeded" xml:space="preserve">
     <value>The cache has been cleaned successfully!</value>
   </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>There already exists a user with this username.</value>
+  </data>
 </root>
