@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 
@@ -28,6 +29,13 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         private static IEnumerable<string> movieGenresCache;
         private static IEnumerable<string> tvShowGenresCache;
+
+        private RouteData routeData;
+
+        public MenuModel(RouteData routeData)
+        {
+            this.routeData = routeData;
+        }
 
         public IEnumerable<string> MovieGenres
         {
@@ -71,6 +79,16 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     return new List<string>();
                 }
             }
+        }
+
+        public bool IsActive(string controller)
+        {
+            return routeData.Values["controller"].ToString() == controller;
+        }
+
+        public bool IsActive(string action, string controller)
+        {
+            return routeData.Values["controller"].ToString() == controller && routeData.Values["action"].ToString() == action;
         }
     }
 }

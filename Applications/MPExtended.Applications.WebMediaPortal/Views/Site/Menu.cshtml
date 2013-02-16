@@ -2,10 +2,14 @@
 <div class="navigation">
     <ul id="navlist">
 
-        <li class="first">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
-        @if (ViewBag.Availability.Music) { <li>@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> }
+        <li class="first @(Model.IsActive("Home") ? "active" : "")">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
+
+        @if (ViewBag.Availability.Music) { 
+            <li class="@(Model.IsActive("MusicLibrary") ? "active" : "")">@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> 
+        }
+                                                                                                                
         @if (ViewBag.Availability.Movies) { 
-            <li class="dropdown">
+            <li class="dropdown @(Model.IsActive("MovieLibrary") ? "active" : "")">
                 @Html.ActionLink(UIStrings.Movies, "Index", "MovieLibrary") 
                 <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
                 <ul style="min-width: 117px;">
@@ -17,7 +21,7 @@
         }
                 
         @if (ViewBag.Availability.TVShows) { 
-            <li class="dropdown">
+            <li class="dropdown @(Model.IsActive("TVShowsLibrary") ? "active" : "")">
                 @Html.ActionLink(UIStrings.TVShows, "Index", "TVShowsLibrary") 
                 <img src="@Url.ContentLink("Images/down-arrow.png")" alt="^" />
                 <ul style="min-width: 141px;">
@@ -30,12 +34,12 @@
                 
         @if (ViewBag.Availability.TAS)
         {
-            <li>@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
-            <li>@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
-            <li>@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
-            <li>@Html.ActionLink(UIStrings.Status, "Index", "Status")</li>
+            <li class="@(Model.IsActive("TVGuide", "Television") ? "active" : "")">@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
+            <li class="@(Model.IsActive("Recordings", "Television") ? "active" : "")">@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
+            <li class="@(Model.IsActive("Schedule") ? "active" : "")">@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
+            <li class="@(Model.IsActive("Status") ? "active" : "")">@Html.ActionLink(UIStrings.Status, "Index", "Status")</li>
         }
                 
-        <li>@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
+        <li class="@(Model.IsActive("Settings") ? "active" : "")">@Html.ActionLink(UIStrings.Settings, "Index", "Settings") </li>
     </ul>
 </div>
