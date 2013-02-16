@@ -160,6 +160,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string fullUrl = String.Format("http://{0}/MPExtended/StreamingService/stream/GetMediaItem?{1}", address, queryString.ToString());
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
+            // If we can access the file without any problems, let IIS stream it; that is a lot faster
+            if (NetworkInformation.IsLocalAddress(fullUri.Host, false) && type != WebMediaType.TV)
+            {
+                var path = type == WebMediaType.Recording ?
+                    Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
+                    Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
+                if (System.IO.File.Exists(path))
+                    return File(path, MIME.GetFromFilename(path, "application/octet-stream"), Path.GetFileName(path));
+            }
+
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (NetworkInformation.IsLocalAddress(fullUri.Host, false))
                 fullUri.Host = NetworkInformation.GetIPAddress(false);
