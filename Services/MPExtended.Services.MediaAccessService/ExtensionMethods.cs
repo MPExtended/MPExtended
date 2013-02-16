@@ -21,6 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -86,6 +87,8 @@ namespace MPExtended.Services.MediaAccessService
                     // generic
                     case WebSortField.Title:
                         return list.OrderBy(x => ((ITitleSortable)x).Title, order);
+                    case WebSortField.NaturalTitle:
+                        return list.OrderByNatural(x => ((ITitleSortable)x).Title, order);
                     case WebSortField.DateAdded:
                         return list.OrderBy(x => ((IDateAddedSortable)x).DateAdded, order);
                     case WebSortField.Year:

@@ -33,6 +33,8 @@ namespace MPExtended.Services.TVAccessService
             {
                 case WebSortField.Title:
                     return list.OrderBy(x => x.Title, orderInput);
+                case WebSortField.NaturalTitle:
+                    return list.OrderByNatural(x => x.Title, orderInput);
                 case WebSortField.User:
                 default:
                     // There are two ways to order channels in MediaPortal:
@@ -56,6 +58,8 @@ namespace MPExtended.Services.TVAccessService
             {
                 case WebSortField.Title:
                     return list.OrderBy(x => x.GroupName, orderInput);
+                case WebSortField.NaturalTitle:
+                    return list.OrderByNatural(x => x.GroupName, orderInput);
                 case WebSortField.User:
                 default:
                     return list.OrderBy(x => x.SortOrder, orderInput);
@@ -70,6 +74,8 @@ namespace MPExtended.Services.TVAccessService
                     return list.OrderBy(x => x.ChannelId, orderInput);
                 case WebSortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
+                case WebSortField.NaturalTitle:
+                    return list.OrderByNatural(x => x.Title, orderInput);
                 case WebSortField.Title:
                 default:
                     return list.OrderBy(x => x.Title, orderInput);
@@ -84,6 +90,8 @@ namespace MPExtended.Services.TVAccessService
                     return list.OrderBy(x => x.ChannelId, orderInput);
                 case WebSortField.StartTime:
                     return list.OrderBy(x => x.StartTime, orderInput);
+                case WebSortField.NaturalTitle:
+                    return list.OrderByNatural(x => x.Title, orderInput);
                 case WebSortField.Title:
                 default:
                     return list.OrderBy(x => x.Title, orderInput);
@@ -99,6 +107,8 @@ namespace MPExtended.Services.TVAccessService
                 case WebSortField.StartTime:
                 case WebSortField.DateAdded:
                     return list.OrderBy(x => x.StartTime, orderInput);
+                case WebSortField.NaturalTitle:
+                    return list.OrderByNatural(x => x.Title, orderInput);
                 case WebSortField.Title:
                 default:
                     return list.OrderBy(x => x.Title, orderInput);
