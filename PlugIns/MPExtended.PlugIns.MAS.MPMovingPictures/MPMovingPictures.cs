@@ -103,10 +103,13 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
-                            "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, m.tagline, s.identifier " +
+                            "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, m.tagline, s.identifier, " +
+                            "w.id OR u.watched AS watched " + 
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
+                         "LEFT JOIN watched_history w ON w.movie = m.id " + 
+                         "LEFT JOIN user_movie_settings u ON u.id = m.id " + 
                          "LEFT JOIN " +
                                 "(SELECT smi.identifier AS identifier, smi.movie AS movie " +
                                 " FROM " +
@@ -140,7 +143,8 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("m", "language", "Language", DataReaders.ReadString),
                 new SQLFieldMapping("m", "tagline", "Tagline", DataReaders.ReadString),
                 new SQLFieldMapping("m", "imdb_id", "ExternalId", ExternalIdReader, "IMDB"),
-                new SQLFieldMapping("s", "identifier", "ExternalId", ExternalIdReader, "TMDB")
+                new SQLFieldMapping("s", "identifier", "ExternalId", ExternalIdReader, "TMDB"),
+                new SQLFieldMapping("", "watched", "Watched", DataReaders.ReadBoolean),
             });
         }
 
