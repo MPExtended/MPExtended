@@ -43,9 +43,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             WebVideoStream vidStream = info.VideoStreams.First();
 
             if (vidStream.Width >= 1920 || vidStream.Height >= 1080)
-                return "1080p";
+                return vidStream.Interlaced ? "1080i" : "1080p";
             if (vidStream.Width >= 1280 || vidStream.Height >= 720)
-                return "720p";
+                return vidStream.Interlaced ? "720i" : "720p";
             return "SD";
         }
 
