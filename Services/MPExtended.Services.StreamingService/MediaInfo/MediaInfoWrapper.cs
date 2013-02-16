@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended, 2005-2011 Team MediaPortal
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended, 2005-2011 Team MediaPortal
+// Copyright (C) 2011-2013 MPExtended Developers, http://mpextended.github.com/
 // Copyright (C) 2005-2011 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
@@ -33,67 +33,62 @@ namespace MPExtended.Services.StreamingService.MediaInfo
 {
     internal static class MediaInfoWrapper
     {
-        private static IMediaInfoCache persistentCache = new XmlCache();
-        private static Dictionary<string, WebMediaInfo> memoryCache = new Dictionary<string, WebMediaInfo>();
-        private static Dictionary<string, Tuple<DateTime, WebMediaInfo>> tvCache = new Dictionary<string, Tuple<DateTime, WebMediaInfo>>();
+        private static IMediaInfoCache persistentCache;
+        private static Dictionary<string, Tuple<DateTime, WebMediaInfo>> tvCache;
 
         public static void LoadCache()
         {
-            // just a noop-method to make sure the static private variables are initialized
+            persistentCache = new XmlCache();
+            tvCache = new Dictionary<string, Tuple<DateTime, WebMediaInfo>>();
         }
 
         public static WebMediaInfo GetMediaInfo(MediaSource source)
         {
-            // we can't use our persistent cache for TV unfortunately, but we do cache them in memory for 60 seconds
+            // Timeshiftings are a special case, as they can't be cached and need an additional path resolving step
             if (source.MediaType == WebMediaType.TV)
             {
                 if (tvCache.ContainsKey(source.Id) && DateTime.Now - tvCache[source.Id].Item1 > TimeSpan.FromSeconds(60))
-                {
                     return tvCache[source.Id].Item2;
-                }
 
-                // save it to our memory cache for a while
-                TsBuffer buf = new TsBuffer(source.Id);
-                string path = buf.GetCurrentFilePath();
-                Log.Debug("Using path {0} from TS buffer {1} as source for {2}", path, source.Id, source.GetDebugName());
-                WebMediaInfo info = DoLoadMediaInfo(buf.GetCurrentFilePath(), true);
+                TsBuffer tsBuffer = new TsBuffer(source.Id);
+                Log.Debug("Using path {0} from TS buffer {1} as source for {2}", tsBuffer.GetCurrentFilePath(), source.Id, source.GetDebugName());
+                WebMediaInfo info = LoadMediaInfo(tsBuffer.GetCurrentFilePath());
                 tvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
                 return info;
             }
 
-            // load this item from persistent disk cache, if possible
-            if (persistentCache.HasForSource(source))
+            using (var impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
             {
-                return persistentCache.GetForSource(source);
-            }
+                // verify the file actually exists and is accessible over the local file system
+                if (!source.Exists)
+                {
+                    Log.Warn("Trying to load MediaInfo for {0}, which does not exist or is inaccessible", source.GetDebugName());
+                    return null;
+                }
+                else if (!source.SupportsDirectAccess)
+                {
+                    Log.Warn("Loading MediaInfo for non-direct access source {0} isn't supported yet", source.GetDebugName());
+                    return null;
+                }
 
-            // some checks that only matter when we are actually going to load it from disk
-            if (!source.Exists)
-            {
-                Log.Warn("Trying to load mediainfo for {0}, which doesn't seem to exist", source.GetDebugName());
-                return null;
+                // if we got the file in the cache, return it if we have it and the file hasn't been changed
+                var fileInfo = source.GetFileInfo();
+                if (source.MediaType != WebMediaType.TV && persistentCache.HasForSource(source))
+                {
+                    var cachedItem = persistentCache.GetForSource(source);
+                    if (cachedItem.Size == fileInfo.Size && cachedItem.CachedDate >= fileInfo.LastModifiedTime)
+                        return cachedItem.Info;
+                }
+
+                var info = LoadMediaInfo(source.GetPath());
+                if (info != null)
+                    persistentCache.Save(source, new CachedInfoWrapper(info, fileInfo));
+
+                return info;
             }
-            else if (!source.SupportsDirectAccess)
-            {
-                // not (yet?) supported
-                Log.Warn("Loading mediainfo for non-direct access source {0} isn't supported yet", source.GetDebugName());
-                return null;
-            }
-        
-            // actually load it
-            WebMediaInfo outInfo;
-            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
-            {
-                outInfo = DoLoadMediaInfo(source.GetPath(), false);
-            }
-            if (outInfo != null)
-            {
-                persistentCache.Save(source, outInfo);
-            }
-            return outInfo;
         }
 
-        private static WebMediaInfo DoLoadMediaInfo(string source, bool ignoreMemoryCache)
+        private static WebMediaInfo LoadMediaInfo(string source)
         {
             try
             {
@@ -102,10 +97,6 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     Log.Warn("GetMediaInfo: File {0} doesn't exist or is not accessible", source);
                     return null;
                 }
-
-                // check cache
-                if (!ignoreMemoryCache && memoryCache.ContainsKey(source))
-                    return memoryCache[source];
 
                 /* Loosely based upon MediaInfoWrapper.cs (mediaportal/Core/Player) from MediaPortal trunk r27491 as of 15 June 2011
                  * 
@@ -219,16 +210,6 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 
                 // return
                 info.Close();
-
-                if (!memoryCache.ContainsKey(source))
-                {
-                    memoryCache.Add(source, retinfo);
-                }
-                else
-                {
-                    memoryCache[source] = retinfo;
-                }
-
                 return retinfo;
             }
             catch (Exception ex)

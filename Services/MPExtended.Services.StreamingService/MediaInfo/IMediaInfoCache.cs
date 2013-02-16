@@ -19,15 +19,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.MediaInfo
 {
+    [Serializable]
+    internal class CachedInfoWrapper
+    {
+        public DateTime CachedDate { get; set; }
+        public long Size { get; set; }
+        public WebMediaInfo Info { get; set; }
+
+        public CachedInfoWrapper(WebMediaInfo mediaInfo, WebFileInfo fileInfo)
+        {
+            CachedDate = DateTime.Now;
+            Size = fileInfo.Size;
+            Info = mediaInfo;
+        }
+    }
+
     interface IMediaInfoCache
     {
         bool HasForSource(MediaSource src);
-        WebMediaInfo GetForSource(MediaSource src);
-        void Save(MediaSource src, WebMediaInfo info);
+        CachedInfoWrapper GetForSource(MediaSource src);
+        void Save(MediaSource src, CachedInfoWrapper info);
     }
 }
