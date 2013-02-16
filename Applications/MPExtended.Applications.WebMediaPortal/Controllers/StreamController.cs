@@ -180,7 +180,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebMediaType type, string itemId, string transcoder, int starttime, string continuationId)
+        private ActionResult GenerateStream(WebMediaType type, string itemId, int fileindex, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
             if (!IsUserAuthenticated())
@@ -208,7 +208,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Check stream mode, generate timeout setting and dump all info we got
             StreamType streamMode = GetStreamMode();
             int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
-            Log.Debug("Starting stream type={0}; itemId={1}; transcoder={2}; starttime={3}; continuationId={4}", type, itemId, transcoder, starttime, continuationId);
+            Log.Debug("Starting stream type={0}; itemId={1}; index={2}; transcoder={3}; starttime={4}; continuationId={5}", 
+                type, itemId, fileindex, transcoder, starttime, continuationId);
             Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s",
                 HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
 
@@ -217,7 +218,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
                 WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, timeout))
+                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, fileindex, clientDescription, identifier, timeout))
                 {
                     Log.Error("InitStream failed");
                     return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -448,29 +449,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult TV(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.TV, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TV, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Movie(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult Movie(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.Movie, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Movie, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.TVEpisode, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TVEpisode, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Recording(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult Recording(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.Recording, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Recording, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.MusicTrack, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.MusicTrack, item, fileindex, transcoder, starttime, continuationId);
         }
 
         //
@@ -499,7 +500,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Player(WebMediaType type, string itemId)
+        public ActionResult Player(WebMediaType type, string itemId, int fileindex = 0)
         {
             PlayerViewModel model = new PlayerViewModel();
             model.MediaType = type;
@@ -529,6 +530,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
+            parameters["fileindex"] = fileindex;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = model.ContinuationId;
             model.URL = Url.Action(Enum.GetName(typeof(WebMediaType), type), parameters);
