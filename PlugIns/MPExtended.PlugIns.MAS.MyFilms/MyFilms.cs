@@ -277,6 +277,13 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                 });
             }
 
+            // Never actually seen this, but let's assume it works this way
+            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Watched") != null)
+            {
+                movie.Watched = item.Element("CustomFields").Attribute("Watched").Value == "1" || 
+                    item.Element("CustomFields").Attribute("Watched").Value.Equals("true", StringComparison.CurrentCultureIgnoreCase);
+            }
+
             return movie;
         }
 
