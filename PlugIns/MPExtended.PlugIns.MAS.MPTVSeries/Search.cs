@@ -87,7 +87,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
                 // execute
                 string episodeSql =
-                    "SELECT e.EpisodeID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.SeriesID, e.GuestStars, os.Pretty_Name, MIN(ls.Parsed_Name) AS Parsed_Name " +
+                    "SELECT e.CompositeID, e.EpisodeName, e.EpisodeIndex, e.SeasonIndex, e.SeriesID, e.GuestStars, os.Pretty_Name, MIN(ls.Parsed_Name) AS Parsed_Name " +
                     "FROM online_episodes e " +
                     "INNER JOIN online_series os ON os.ID = e.SeriesID " +
                     "INNER JOIN local_series ls ON ls.ID = e.SeriesID " +
@@ -104,12 +104,12 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         Id = reader.ReadIntAsString(0),
                         Title = title,
                         Details = new WebDictionary<string>()
-                    {
-                        { "EpisodeNumber", reader.ReadIntAsString(2) },
-                        { "SeasonNumber", reader.ReadIntAsString(3) },
-                        { "ShowId", reader.ReadIntAsString(4) },
-                        { "ShowName", !String.IsNullOrEmpty(showTitle) ? showTitle : reader.ReadString(7) }
-                    }
+                        {
+                            { "EpisodeNumber", reader.ReadIntAsString(2) },
+                            { "SeasonNumber", reader.ReadIntAsString(3) },
+                            { "ShowId", reader.ReadIntAsString(4) },
+                            { "ShowName", !String.IsNullOrEmpty(showTitle) ? showTitle : reader.ReadString(7) }
+                        }
                     };
 
                     // title
