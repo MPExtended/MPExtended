@@ -35,7 +35,7 @@
         @if (ViewBag.Availability.TAS)
         {
             <li class="@(Model.IsActive("TVGuide", "Television") ? "active" : "")">@Html.ActionLink(UIStrings.TVGuide, "TVGuide", "Television")</li>
-            <li class="@(Model.IsActive("Recordings", "Television") ? "active" : "")">@Html.ActionLink(UIStrings.Recordings, "Recordings", "Television")</li>
+            <li class="@(Model.IsActive("Recording") ? "active" : "")">@Html.ActionLink(UIStrings.Recordings, "Index", "Recording")</li>
             <li class="@(Model.IsActive("Schedule") ? "active" : "")">@Html.ActionLink(UIStrings.Schedules, "Index", "Schedule")</li>
             <li class="@(Model.IsActive("Status") ? "active" : "")">@Html.ActionLink(UIStrings.Status, "Index", "Status")</li>
         }

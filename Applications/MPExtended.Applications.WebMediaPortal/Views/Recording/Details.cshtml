@@ -7,7 +7,7 @@
 <h2>@Model.Title</h2>
 
 <div class="imageColumn">
-    <img src="@Url.Action("RecordingPreview", "Television", new { id = @Model.Id, width = 300 })" width="300" alt="No image" />
+    <img src="@Url.Action("PreviewImage", new { id = @Model.Id, width = 300 })" width="300" alt="No image" />
 </div>
 
 <div class="dataColumn">
@@ -15,7 +15,7 @@
         <li>@UIStrings.RecordedOn: @Model.StartTime.ToShortDateString()</li>
         <li>@Model.Genre</li>
         <li>@ViewBag.Quality</li>
-        <li>@Html.ActionLink(UIStrings.Play, "WatchRecording", new { id = Model.Id })</li>
+        <li>@Html.ActionLink(UIStrings.Play, "Watch", new { id = Model.Id })</li>
         <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = WebMediaType.Recording }, new { })</li>
     </ul>
 </div>

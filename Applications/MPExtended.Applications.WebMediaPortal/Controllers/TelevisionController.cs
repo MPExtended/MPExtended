@@ -87,37 +87,5 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return HttpNotFound();
             return View(channel);
         }
-
-        public ActionResult Recordings()
-        {
-            var recordings = Connections.Current.TAS.GetRecordings();
-            if (recordings == null)
-                return HttpNotFound();
-            return View(recordings);
-        }
-
-        public ActionResult Recording(int id)
-        {
-            var rec = Connections.Current.TAS.GetRecordingById(id);
-            if (rec == null)
-                return HttpNotFound();
-
-            var fileInfo = Connections.Current.TAS.GetRecordingFileInfo(rec.Id);
-            var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString(), 0);
-            ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
-            return View(rec);
-        }
-
-        public ActionResult RecordingPreview(int id, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.Recording, id.ToString(), WebFileType.Content, width, height, "Images/default/recording.png");
-        }
-
-
-        public ActionResult WatchRecording(int id)
-        {
-            var rec = Connections.Current.TAS.GetRecordingById(id);
-            return View(rec);
-        }
     }
 }
