@@ -141,6 +141,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                         Codec = info.Get(StreamKind.Video, i, "Codec/String"),
                         DisplayAspectRatio = StringToDecimal(info.Get(StreamKind.Video, i, "DisplayAspectRatio")),
                         DisplayAspectRatioString = info.Get(StreamKind.Video, i, "DisplayAspectRatio/String"),
+                        Interlaced = info.Get(StreamKind.Video, i, "ScanType") == "Interlaced", 
                         Width = StringToInt(info.Get(StreamKind.Video, i, "Width")),
                         Height = StringToInt(info.Get(StreamKind.Video, i, "Height")),
                         ID = StringToInt(info.Get(StreamKind.Video, i, "ID")),
