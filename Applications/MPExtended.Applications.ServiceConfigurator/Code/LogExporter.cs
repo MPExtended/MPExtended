@@ -51,6 +51,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                     File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(logPart.GetStream());
                 }
 
+                // copy WebMediaPortal configuration (these don't contain any passwords, so we can copy them literally if they exist)
+                CopyConfigurationFile(zipFile, "WebMediaPortal.xml");
+                CopyConfigurationFile(zipFile, "StreamingPlatforms.xml");
+
                 // copy literal config files
                 WriteConfigFile(zipFile, (IConfigurationSerializer<MediaAccess>)Configuration.GetSerializer(ConfigurationFile.MediaAccess));
                 WriteConfigFile(zipFile, (IConfigurationSerializer<StreamingProfiles>)Configuration.GetSerializer(ConfigurationFile.StreamingProfiles));
@@ -80,10 +84,20 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             Configuration.Reset();
         }
 
+        private static void CopyConfigurationFile(Package zipFile, string name)
+        {
+            var path = Path.Combine(Installation.GetConfigurationDirectory(), name);
+            if (File.Exists(path))
+            {
+                var part = zipFile.CreatePart(new Uri("/" + name, UriKind.Relative), String.Empty, CompressionOption.Maximum);
+                File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).CopyTo(part.GetStream());
+            }
+        }
+
         private static void WriteConfigFile<T>(Package file, IConfigurationSerializer<T> serializer) where T : class, new()
         {
             var fileName = serializer.Filename;
-            var part = file.CreatePart(new Uri("/" + fileName, UriKind.Relative), "", CompressionOption.Maximum);
+            var part = file.CreatePart(new Uri("/" + fileName, UriKind.Relative), String.Empty, CompressionOption.Maximum);
             serializer.Save(serializer.Get(), part.GetStream());
         }
 
