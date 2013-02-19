@@ -43,34 +43,37 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             WebVideoStream vidStream = info.VideoStreams.First();
 
             if (vidStream.Width >= 1920 || vidStream.Height >= 1080)
-                return "1080p";
+                return vidStream.Interlaced ? "1080i" : "1080p";
             if (vidStream.Width >= 1280 || vidStream.Height >= 720)
-                return "720p";
+                return vidStream.Interlaced ? "720i" : "720p";
             return "SD";
         }
 
         public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebFileInfo fileInfo)
         {
-            return accessible ? GetFullInfoString(info, fileInfo) : UIStrings.FileInaccessible;
+            return GetFullInfoString(accessible, info, fileInfo.Size);
         }
 
         public static string GetFullInfoString(WebMediaInfo info, WebFileInfo fileInfo)
         {
-            return GetFullInfoString(info, fileInfo.Size);
+            return GetFullInfoString(fileInfo.Exists, info, fileInfo.Size);
         }
 
         public static string GetFullInfoString(bool accessible, WebMediaInfo info, WebRecordingFileInfo fileInfo)
         {
-            return accessible ? GetFullInfoString(info, fileInfo) : UIStrings.FileInaccessible;
+            return GetFullInfoString(accessible, info, fileInfo.Size);
         }
 
         public static string GetFullInfoString(WebMediaInfo info, WebRecordingFileInfo fileInfo)
         {
-            return GetFullInfoString(info, fileInfo.Size);
+            return GetFullInfoString(fileInfo.Exists, info, fileInfo.Size);
         }
 
-        private static string GetFullInfoString(WebMediaInfo info, long fileSize)
+        private static string GetFullInfoString(bool accessible, WebMediaInfo info, long fileSize)
         {
+            if (!accessible)
+                return UIStrings.FileInaccessible;
+
             int index = 0;
             double realSize = fileSize;
             while(realSize > 1024)

@@ -84,6 +84,7 @@
     <Compile Include="Code\Composition\ExtensionFinder.cs" />
     <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Code\Connections.cs" />
+    <Compile Include="Controllers\RecordingController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
     <Compile Include="Models\MediaItemModel.cs" />
@@ -332,8 +333,8 @@
     <Content Include="Views\Television\WatchLiveTV.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\Recordings.cshtml" />
-    <Content Include="Views\Television\WatchRecording.cshtml" />
+    <Content Include="Views\Recording\Index.cshtml" />
+    <Content Include="Views\Recording\Watch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Index.cshtml" />
@@ -378,7 +379,7 @@
     <Content Include="Views\Schedule\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Television\Recording.cshtml" />
+    <Content Include="Views\Recording\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stream\Player.cshtml" />

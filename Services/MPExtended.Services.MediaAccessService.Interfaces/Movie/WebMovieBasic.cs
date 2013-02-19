@@ -24,6 +24,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public float Rating { get; set; }
         public int Runtime { get; set; }
 
+        public bool Watched { get; set; }
+
         public override WebMediaType Type 
         {
             get
