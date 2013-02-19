@@ -10,6 +10,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public string Codec { get; set; }
         public decimal DisplayAspectRatio { get; set; }
         public string DisplayAspectRatioString { get; set; }
+        public bool Interlaced { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public int ID { get; set; }

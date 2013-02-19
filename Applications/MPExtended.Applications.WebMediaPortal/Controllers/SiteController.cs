@@ -29,7 +29,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Menu()
         {
-            return PartialView(new MenuModel());
+            return PartialView(new MenuModel(Request.RequestContext.RouteData));
         }
     }
 }

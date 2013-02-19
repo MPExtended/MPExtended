@@ -404,6 +404,7 @@ namespace MPExtended.Services.TVAccessService
         {
             try
             {
+                Log.Debug("Canceling schedule for programId {0}", programId);
                 var program = Program.Retrieve(programId);
                 foreach (Schedule schedule in Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(program, true)))
                 {
@@ -432,29 +433,18 @@ namespace MPExtended.Services.TVAccessService
 
         public WebBoolResult DeleteSchedule(int scheduleId)
         {
-            // TODO: the workflow in this method doesn't make any sense at all
             try
             {
+                Log.Debug("Deleting schedule with id {0}", scheduleId);
                 Schedule schedule = Schedule.Retrieve(scheduleId);
+                _tvControl.StopRecordingSchedule(schedule.IdSchedule);
 
-                // first cancel all of the episodes of this program for this schedule
-                foreach (Program program in Program.ListAll().Where(program => program.Title == schedule.ProgramName))
-                {
-                    if (schedule.IsRecordingProgram(program, true))
-                    {
-                        CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, program.IdChannel, program.StartTime);
-                        canceledSchedule.Persist();
-                        _tvControl.OnNewSchedule();
-                    }
-                }
+                // delete canceled schedules first
+                foreach (var cs in CanceledSchedule.ListAll().Where(x => x.IdSchedule == schedule.IdSchedule))
+                    cs.Remove();
 
-                // now remove existing CanceledSchedule for this schedule
-                foreach (CanceledSchedule canceled in CanceledSchedule.ListAll().Where(canceled => canceled.IdSchedule == schedule.IdSchedule))
-                {
-                    canceled.Remove();
-                }
                 schedule.Remove();
-                _tvControl.OnNewSchedule();
+                _tvControl.OnNewSchedule(); // I don't think this is needed, but doesn't hurt either
                 return true;
             }
             catch (Exception ex)

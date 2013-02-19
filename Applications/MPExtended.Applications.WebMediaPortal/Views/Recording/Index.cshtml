@@ -8,7 +8,7 @@
 <ul class="list">
     @foreach (var recording in Model)
     {
-        <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", new { id = recording.Id })</li>
+        <li>@Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Details", new { id = recording.Id })</li>
     }
 </ul>
 
