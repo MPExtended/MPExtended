@@ -89,7 +89,7 @@ namespace MPExtended.Services.StreamingService.Code
             // log when failed
             if (!File.Exists(tempFile))
             {
-                Log.Warn("Failed to extract image to temporary file {0} with command {1}", tempFile, info.Arguments);
+                Log.Warn("Failed to extract image to temporary file {0} with executable={1} arguments={2}", tempFile, info.FileName, info.Arguments);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
                 return Stream.Null;
             }
