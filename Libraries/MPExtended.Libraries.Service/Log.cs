@@ -26,21 +26,22 @@ namespace MPExtended.Libraries.Service
 {
     public static class Log
     {
+        public static string Filename { get; set; }
+        public static bool ConsoleLogging { get; set; }
+        public static bool TraceLogging { get; set; }
+
         private static Logger logger;
 
-        static Log()
+        public static void Setup()
         {
-            logger = new Logger();
-        }
+            if (logger != null)
+                logger.Dispose();
 
-        public static void Setup(string fileName, bool consoleLogging)
-        {
             List<ILogDestination> destination = new List<ILogDestination>();
-            destination.Add(new FileDestination(LogLevel.Debug, Path.Combine(Installation.GetLogDirectory(), fileName)));
-            if (consoleLogging)
-            {
+            LogLevel minimalFileLevel = TraceLogging ? LogLevel.Trace : LogLevel.Debug;
+            destination.Add(new FileDestination(minimalFileLevel, Path.Combine(Installation.GetLogDirectory(), Filename)));
+            if (ConsoleLogging)
                 destination.Add(new ConsoleDestination(LogLevel.Trace));
-            }
             logger = new Logger(destination.ToArray());
         }
 

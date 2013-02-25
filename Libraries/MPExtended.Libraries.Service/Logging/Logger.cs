@@ -34,13 +34,22 @@ namespace MPExtended.Libraries.Service.Logging
         Fatal = 6
     }
 
-    internal class Logger
+    internal class Logger : IDisposable
     {
         private ILogDestination[] destinations;
 
         public Logger(params ILogDestination[] destinations)
         {
             this.destinations = destinations;
+        }
+
+        public void Dispose()
+        {
+            foreach (var destination in destinations)
+            {
+                if (destination is IDisposable)
+                    (destination as IDisposable).Dispose();
+            }
         }
 
         public bool IsEnabled(LogLevel level)

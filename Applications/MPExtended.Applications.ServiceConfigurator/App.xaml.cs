@@ -40,7 +40,10 @@ namespace MPExtended.Applications.ServiceConfigurator
         private void OnStartup(object sender, StartupEventArgs e)
         {
             // setup logging
-            Log.Setup("ServiceConfigurator.log", false);
+            Log.Filename = "ServiceConfigurator.log";
+            Log.TraceLogging = false;
+            Log.ConsoleLogging = false;
+            Log.Setup();
             AppDomain.CurrentDomain.UnhandledException += delegate(object unhandledSender, UnhandledExceptionEventArgs unhandledEvent)
             {
                 Log.Error("Unhandled exception", (Exception)unhandledEvent.ExceptionObject);
@@ -100,6 +103,10 @@ namespace MPExtended.Applications.ServiceConfigurator
             //   is running for a long time.
             Configuration.Load();
             Configuration.EnableChangeWatching();
+
+            // reload logging configuration, now that we can read the Diagnostic configuration node
+            Log.TraceLogging = Configuration.Services.Diagnostic.EnableTraceLogging;
+            Log.Setup();
 
             // set language
             if (Configuration.Services.DefaultLanguage != null)
