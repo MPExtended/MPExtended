@@ -44,6 +44,11 @@ namespace MPExtended.Libraries.Service
             logger = new Logger(destination.ToArray());
         }
 
+        public static bool IsEnabled(LogLevel level)
+        {
+            return logger.IsEnabled(level);
+        }
+
         public static void Flush()
         {
             logger.Flush();
