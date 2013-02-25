@@ -67,7 +67,14 @@ namespace MPExtended.Services.StreamingService.Code
 
         public void Invalidate(string filename)
         {
-            File.Delete(GetPath(filename));
+            try
+            {
+                File.Delete(GetPath(filename));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(String.Format("ImageCache: Failed to invalidate item {0}", filename), ex);
+            }
         }
 
         public DateTime GetLastModifiedTime(string filename)
