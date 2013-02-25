@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Logging;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 
@@ -122,9 +123,18 @@ namespace MPExtended.Services.StreamingService.Code
             info.FileName = Configuration.StreamingProfiles.FFMpegPath;
             info.CreateNoWindow = true;
             info.UseShellExecute = false;
+            info.RedirectStandardError = Log.IsEnabled(LogLevel.Trace);
+            info.RedirectStandardOutput = Log.IsEnabled(LogLevel.Trace);
             Process proc = new Process();
             proc.StartInfo = info;
             proc.Start();
+			
+            if (Log.IsEnabled(LogLevel.Trace))
+            {
+                Log.Trace("ExtractImage: exec: {0} {1}", info.FileName, info.Arguments);
+	            StreamCopy.AsyncStreamRead(proc.StandardError, l => Log.Trace("ExtractImage: stderr: {0}", l));
+	            StreamCopy.AsyncStreamRead(proc.StandardOutput, l => Log.Trace("ExtractImage: stdout: {0}", l));
+            }
             proc.WaitForExit();
         }
 
