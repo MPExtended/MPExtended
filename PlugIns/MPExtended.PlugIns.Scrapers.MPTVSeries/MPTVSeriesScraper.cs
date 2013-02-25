@@ -670,7 +670,10 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public WebBoolResult ShowConfig()
         {
-            throw new NotImplementedException();
+            ConfigurationForm form = new ConfigurationForm();
+            form.Show();
+
+            return true;
         }
     }
 }

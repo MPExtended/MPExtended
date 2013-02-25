@@ -31,6 +31,7 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
+using System.Threading;
 
 namespace MPExtended.Services.StreamingService
 {
@@ -245,6 +246,7 @@ namespace MPExtended.Services.StreamingService
                         itemId = card.TimeShiftFileName;
                     }
                 }
+                Thread.Sleep(5000);
             }
 
             Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; offset={3}; clientDescription={4}; identifier={5}; idleTimeout={6}", 
