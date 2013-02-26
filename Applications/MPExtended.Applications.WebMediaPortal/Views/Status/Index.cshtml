@@ -75,28 +75,31 @@
 </table>
 <br />
 
-<h2>@UIStrings.SystemStatus</h2>
-<ul>
-    <li>@UIStrings.CurrentCPUUsage <span id="cpuUsage">0</span>%</li>
-    <li>@UIStrings.CurrentMemoryUsage <span id="memoryUsage">0</span>MB / @Model.TotalMemoryMegaBytes MB</li>
-</ul>
+@if (Model.HasSystemInformation)
+{
+    <text>
+    <h2>@UIStrings.SystemStatus</h2>
+    <ul>
+        <li>@UIStrings.CurrentCPUUsage <span id="cpuUsage">@Model.CpuUsage</span>%</li>
+        <li>@UIStrings.CurrentMemoryUsage <span id="memoryUsage">@Model.UsedMemoryMegaBytes</span>MB / @Model.TotalMemoryMegaBytes MB</li>
+    </ul>
 
-<script type="text/javascript">
-$(function () {
-    var updateCounters = function (url) {
-        $.ajax({ // cannot use $.getJSON() here because it doesn't support setting cache to false
-            url: '@Url.Action("GetPerformanceCounters", "Status")',
-            dataType: "json",
-            cache: false,
-            success: function (result) {
-                if (!('Error' in result)) {
-                    $("#cpuUsage").html(Math.round(result.CPU));
-                    $("#memoryUsage").html(Math.round(result.Memory));
+    <script type="text/javascript">
+    $(function () {
+        var updateCounters = function (url) {
+            $.ajax({ // cannot use $.getJSON() here because it doesn't support setting cache to false
+                url: '@Url.Action("GetPerformanceCounters", "Status")',
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    $("#cpuUsage").html(result.CPU);
+                    $("#memoryUsage").html(result.Memory);
                 }
-            }
-        });
-    };
-    setInterval(updateCounters, 5000);
-    updateCounters();
-});
-</script>
+            });
+        };
+        setInterval(updateCounters, 5000);
+        updateCounters();
+    });
+    </script>
+    </text>
+}

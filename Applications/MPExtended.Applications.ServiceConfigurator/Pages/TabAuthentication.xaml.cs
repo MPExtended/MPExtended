@@ -65,9 +65,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            txtUsername.Text = txtUsername.Text.Trim(); // we don't like usernames starting or ending with spaces
+
             if (String.IsNullOrEmpty(txtUsername.Text) || String.IsNullOrEmpty(txtPassword.Password))
             {
                 MessageBox.Show(UI.UserMustHaveNameAndPassword, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (users.Any(x => x.Username == txtUsername.Text))
+            {
+                MessageBox.Show(UI.UserAlreadyExists, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -84,7 +92,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void txtUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
-            btnAdd.IsEnabled = !users.Any(x => x.Username == txtUsername.Text);
+            btnAdd.IsEnabled = !users.Any(x => x.Username == txtUsername.Text.Trim());
         }
 
         private void cbEnable_CheckedChanged(object sender, RoutedEventArgs e)

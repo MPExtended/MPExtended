@@ -39,8 +39,18 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            // setup
+            // setup logging
             Log.Setup("ServiceConfigurator.log", false);
+            AppDomain.CurrentDomain.UnhandledException += delegate(object unhandledSender, UnhandledExceptionEventArgs unhandledEvent)
+            {
+                Log.Error("Unhandled exception", (Exception)unhandledEvent.ExceptionObject);
+                if (unhandledEvent.IsTerminating)
+                {
+                    Log.Fatal("Terminating because of previous exception");
+                }
+            };
+
+            // load the installation
             Installation.Load(MPExtendedProduct.Service);
 
             // make sure to start only once
