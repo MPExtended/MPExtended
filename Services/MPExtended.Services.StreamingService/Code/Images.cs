@@ -74,17 +74,18 @@ namespace MPExtended.Services.StreamingService.Code
 
             // execute it
             ProcessStartInfo info = new ProcessStartInfo();
-            using (NetworkShareImpersonator impersonator = new NetworkShareImpersonator(source.NeedsImpersonation))
-            {
-                info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, source.GetPath(), tempFile);
-                info.FileName = Configuration.StreamingProfiles.FFMpegPath;
-                info.CreateNoWindow = true;
-                info.UseShellExecute = false;
-                Process proc = new Process();
-                proc.StartInfo = info;
+            info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, source.GetPath(), tempFile);
+            info.FileName = Configuration.StreamingProfiles.FFMpegPath;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+
+            TranscoderProcess proc = new TranscoderProcess();
+            proc.StartInfo = info;
+            if (source.NeedsImpersonation)
+                proc.StartAsUser(Configuration.Services.NetworkImpersonation.Domain, Configuration.Services.NetworkImpersonation.Username, Configuration.Services.NetworkImpersonation.GetPassword());
+            else
                 proc.Start();
-                proc.WaitForExit();
-            }
+            proc.WaitForExit();
 
             // log when failed
             if (!File.Exists(tempFile))
