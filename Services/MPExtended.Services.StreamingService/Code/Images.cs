@@ -74,49 +74,44 @@ namespace MPExtended.Services.StreamingService.Code
                 }
             }
 
-            // execute it
-            string path;
+            // stream a pre-existing thumbnail, if possible
+            bool checkThumbnails = source.MediaType == WebMediaType.Recording && Path.GetExtension(source.GetPath()).ToLower() == ".ts";
+            if (checkThumbnails && !source.NeedsImpersonation)
+            {
+                var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(source.GetPath(), ".jpg"));
+                if (thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0)
+                    return StreamPostprocessedImage(new ImageMediaSource(thumbnailFileInfo.FullName), maxWidth, maxHeight, borders, format);
+            }
+            else if (checkThumbnails)
+            {
+                using (var context = new NetworkShareImpersonator())
+                {
+                    var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(context.RewritePath(source.GetPath()), ".jpg"));
+                    if (thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0)
+                        return StreamPostprocessedImage(new ImageMediaSource(thumbnailFileInfo.FullName), maxWidth, maxHeight, borders, format);
+                }
+            }
+
+            // extract the image using ffmpeg
+            string fullPath;
             if (source.NeedsImpersonation)
-            {
-                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
-                    path = CreateThumbnailIfNeeded(source, context.RewritePath(source.GetPath()), position, tempFile);
-            }
+                using (var context = new NetworkShareImpersonator())
+                    fullPath = context.RewritePath(source.GetPath());
             else
+                fullPath = source.GetPath();
+
+            // extract the image with ffmpeg
+            bool extractResult = ExecuteFFMpegExtraction(source, fullPath, position, tempFile);
+            if (!extractResult)
             {
-                path = CreateThumbnailIfNeeded(source, source.GetPath(), position, tempFile);
-            }
-
-            return path != null ? StreamPostprocessedImage(new ImageMediaSource(path), maxWidth, maxHeight, borders, format) : Stream.Null;
-        }
-
-        private static string CreateThumbnailIfNeeded(MediaSource source, string path, long position, string tempFile)
-        {
-            // try to stream existing thumbnail if possible
-            string thumbnailFilename = GetThumbnailFilename(source, path);
-            if (thumbnailFilename != null)
-                return thumbnailFilename;
-
-            ExecuteFFMpegExtraction(position, path, tempFile);
-            if (!File.Exists(tempFile))
-            {
-                Log.Warn("Failed to extract image to temporary file {0} from {1}", tempFile, source.GetDebugName());
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.InternalServerError);
-                return null;
+                return Stream.Null;
             }
 
-            return tempFile;
+            return StreamPostprocessedImage(new ImageMediaSource(tempFile), maxWidth, maxHeight, borders, format);
         }
 
-        private static string GetThumbnailFilename(MediaSource source, string path)
-        {
-            if (source.MediaType != WebMediaType.Recording || Path.GetExtension(path).ToLower() != ".ts")
-                return null;
-
-            var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(path, ".jpg"));
-            return thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0 ? thumbnailFileInfo.FullName : null;
-        }
-
-        private static void ExecuteFFMpegExtraction(long position, string path, string tempFile)
+        private static bool ExecuteFFMpegExtraction(MediaSource source, string path, long position, string tempFile)
         {
             var info = new ProcessStartInfo();
             info.Arguments = String.Format("-ss {0} -i \"{1}\" -vframes 1 -vf \"yadif,scale=ih*dar:ih\" -f image2 \"{2}\"", position, path, tempFile);
@@ -125,17 +120,29 @@ namespace MPExtended.Services.StreamingService.Code
             info.UseShellExecute = false;
             info.RedirectStandardError = Log.IsEnabled(LogLevel.Trace);
             info.RedirectStandardOutput = Log.IsEnabled(LogLevel.Trace);
-            Process proc = new Process();
+
+            TranscoderProcess proc = new TranscoderProcess();
             proc.StartInfo = info;
-            proc.Start();
-			
+            if (source.NeedsImpersonation)
+                proc.StartAsUser(Configuration.Services.NetworkImpersonation.Domain, Configuration.Services.NetworkImpersonation.Username, Configuration.Services.NetworkImpersonation.GetPassword());
+            else
+                proc.Start();
+
             if (Log.IsEnabled(LogLevel.Trace))
             {
-                Log.Trace("ExtractImage: exec: {0} {1}", info.FileName, info.Arguments);
-	            StreamCopy.AsyncStreamRead(proc.StandardError, l => Log.Trace("ExtractImage: stderr: {0}", l));
-	            StreamCopy.AsyncStreamRead(proc.StandardOutput, l => Log.Trace("ExtractImage: stdout: {0}", l));
+                Log.Trace("ExtractImage: executing path={0} arguments={1}", info.FileName, info.Arguments);
+                StreamCopy.AsyncStreamRead(proc.StandardError, l => Log.Trace("ExtractImage: stderr: {0}", l));
+                StreamCopy.AsyncStreamRead(proc.StandardOutput, l => Log.Trace("ExtractImage: stdout: {0}", l));
             }
             proc.WaitForExit();
+
+            if (!File.Exists(tempFile))
+            {
+                Log.Warn("Failed to extract image from {0} with {1} {2}", source.GetDebugName(), info.FileName, info.Arguments);
+                return false;
+            }
+
+            return true;
         }
 
         public static Stream GetImage(ImageMediaSource src, string format)
