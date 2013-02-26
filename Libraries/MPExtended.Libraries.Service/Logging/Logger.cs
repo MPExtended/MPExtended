@@ -24,7 +24,7 @@ using System.Threading;
 
 namespace MPExtended.Libraries.Service.Logging
 {
-    internal enum LogLevel
+    public enum LogLevel
     {
         Trace = 1,
         Debug = 2,
@@ -34,13 +34,27 @@ namespace MPExtended.Libraries.Service.Logging
         Fatal = 6
     }
 
-    internal class Logger
+    internal class Logger : IDisposable
     {
         private ILogDestination[] destinations;
 
         public Logger(params ILogDestination[] destinations)
         {
             this.destinations = destinations;
+        }
+
+        public void Dispose()
+        {
+            foreach (var destination in destinations)
+            {
+                if (destination is IDisposable)
+                    (destination as IDisposable).Dispose();
+            }
+        }
+
+        public bool IsEnabled(LogLevel level)
+        {
+            return destinations.Any(dest => level >= dest.MinimumLevel);
         }
 
         public void LogLine(LogLevel level, string text, params object[] parameters)

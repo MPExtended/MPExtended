@@ -22,17 +22,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Services.StreamingService.Code
 {
     internal class StreamCopy
     {
-        private const int _defaultBufferSize = 0x10000;
+        private const int DEFAULT_BUFFER_SIZE = 0x10000;
+
         private byte[] buffer;
+        private int bufferSize;
         private Stream source;
         private Stream destination;
-        private int bufferSize;
         private string log;
 
         private StreamCopy(Stream source, Stream destination, int bufferSize, string log)
@@ -43,9 +45,8 @@ namespace MPExtended.Services.StreamingService.Code
             this.log = log;
         }
 
-        private void CopyStream(bool retry)
+        private void StartCopy(bool retry)
         {
-            // do a parallel read
             buffer = new byte[bufferSize];
             try
             {
@@ -53,26 +54,27 @@ namespace MPExtended.Services.StreamingService.Code
             }
             catch (NotSupportedException e)
             {
-                // we only do a workaround for TsBuffer here, nothing for other errors
+                // we only diagnose problems with TsBuffer, other streams are supposed to work correctly
                 if (!(source is TsBuffer))
                     throw;
 
+                // TODO: is this still needed or are the TsBuffer problems solved?
                 TsBuffer stream = (TsBuffer)source;
                 Log.Error(string.Format("StreamCopy {0}: NotSupportedException when trying to read from TsBuffer", log), e);
-                Log.Info("StreamCopy {0}: TsBuffer dump: CanRead {1}, CanWrite {2}", log, stream.CanRead, stream.CanWrite);
-                Log.Info("StreamCopy {0}:\r\n{1}", log, stream.DumpStatus());
+                Log.Debug("StreamCopy {0}: TsBuffer dump: CanRead {1}, CanWrite {2}", log, stream.CanRead, stream.CanWrite);
+                Log.Debug("StreamCopy {0}:\r\n{1}", log, stream.DumpStatus());
                 if (retry)
                 {
                     Thread.Sleep(500);
                     Log.Info("StreamCopy {0}: Trying to recover", log);
-                    CopyStream(false);
+                    StartCopy(false);
                 }
             }
         }
 
         private void CopyStream()
         {
-            CopyStream(true);
+            StartCopy(true);
         }
 
         private void MediaReadAsyncCallback(IAsyncResult ar)
@@ -80,11 +82,10 @@ namespace MPExtended.Services.StreamingService.Code
             try
             {
                 int read = source.EndRead(ar);
-                if (read == 0) // we're done
+                if (read == 0) // empty result indicates end-of-stream
                     return;
 
-                // write it to the destination
-                //Log.Info("StreamCopy {0}: writing {1} bytes", log, read);
+                // write read bytes to the destination
                 destination.BeginWrite(buffer, 0, read, writeResult =>
                 {
                     try
@@ -112,29 +113,40 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (e is IOException)
             {
-                // end of pipe etc
+                // usually end-of-pipe error
                 Log.Info("StreamCopy {0}: IOException in {1} stream copy, is usually ok: {2}", log, type, e.Message);
             }
             else
             {
-                Log.Error(string.Format("StreamCopy {0}: Failure in {1} stream copy", log, type), e);
+                Log.Error(String.Format("StreamCopy {0}: Failure in {1} stream copy", log, type), e);
             }
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier, int bufferSize)
+        public static void AsyncStreamCopy(Stream source, Stream destination, string logIdentifier, int bufferSize)
         {
-            StreamCopy copy = new StreamCopy(original, destination, bufferSize, logIdentifier);
+            StreamCopy copy = new StreamCopy(source, destination, bufferSize, logIdentifier);
             copy.CopyStream();
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination, string logIdentifier)
+        public static void AsyncStreamCopy(Stream source, Stream destination, string logIdentifier)
         {
-            AsyncStreamCopy(original, destination, logIdentifier, _defaultBufferSize);
+            AsyncStreamCopy(source, destination, logIdentifier, DEFAULT_BUFFER_SIZE);
         }
 
-        public static void AsyncStreamCopy(Stream original, Stream destination)
+        public static void AsyncStreamCopy(Stream source, Stream destination)
         {
-            AsyncStreamCopy(original, destination, "", _defaultBufferSize);
+            AsyncStreamCopy(source, destination, "", DEFAULT_BUFFER_SIZE);
+        }
+
+
+        public static void AsyncStreamRead(StreamReader input, Action<string> lineHandler)
+        {
+            Task.Factory.StartNew(delegate()
+            {
+                string line;
+                while ((line = input.ReadLine()) != null)
+                    lineHandler.Invoke(line);
+            });
         }
     }
 }

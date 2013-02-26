@@ -57,6 +57,12 @@ namespace MPExtended.Libraries.Service.Config
         public string Custom { get; set; }
     }
 
+    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    public class DiagnosticConfiguration
+    {
+        public bool EnableTraceLogging { get; set; }
+    }
+
     [XmlRoot(Namespace="http://mpextended.github.com/schema/config/Services/1")]
     public class Services
     {
@@ -74,11 +80,14 @@ namespace MPExtended.Libraries.Service.Config
 
         public NetworkImpersonation NetworkImpersonation { get; set; }
 
+        public DiagnosticConfiguration Diagnostic { get; set; }
+
         public Services()
         {
             Port = 4322;
             ExternalAddress = new ExternalAddressConfiguration();
             NetworkImpersonation = new NetworkImpersonation();
+            Diagnostic = new DiagnosticConfiguration();
         }
 
         public string GetServiceName()
