@@ -57,45 +57,35 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                 return info;
             }
 
-            if (source.NeedsImpersonation)
+            using (var context = source.CreateNetworkContext())
             {
-                using (var context = new NetworkShareImpersonator())
-                    return PerformHandling(source, context.RewritePath(source.GetPath()));
-            }
-            else
-            {
-                return PerformHandling(source, source.GetPath());
-            }
-        }
+                // verify the file actually exists and is accessible over the local file system
+                if (!source.Exists)
+                {
+                    Log.Warn("Trying to load MediaInfo for {0}, which does not exist or is inaccessible", source.GetDebugName());
+                    return null;
+                }
+                else if (!source.SupportsDirectAccess)
+                {
+                    Log.Warn("Loading MediaInfo for non-direct access source {0} isn't supported yet", source.GetDebugName());
+                    return null;
+                }
 
-        private static WebMediaInfo PerformHandling(MediaSource source, string path)
-        {
-            // verify the file actually exists and is accessible over the local file system
-            if (!source.Exists)
-            {
-                Log.Warn("Trying to load MediaInfo for {0}, which does not exist or is inaccessible", source.GetDebugName());
-                return null;
-            }
-            else if (!source.SupportsDirectAccess)
-            {
-                Log.Warn("Loading MediaInfo for non-direct access source {0} isn't supported yet", source.GetDebugName());
-                return null;
-            }
+                // if we got the file in the cache, return it if we have it and the file hasn't been changed
+                var fileInfo = source.GetFileInfo();
+                if (source.MediaType != WebMediaType.TV && persistentCache.HasForSource(source))
+                {
+                    var cachedItem = persistentCache.GetForSource(source);
+                    if (cachedItem.Size == fileInfo.Size && cachedItem.CachedDate >= fileInfo.LastModifiedTime)
+                        return cachedItem.Info;
+                }
 
-            // if we got the file in the cache, return it if we have it and the file hasn't been changed
-            var fileInfo = source.GetFileInfo();
-            if (source.MediaType != WebMediaType.TV && persistentCache.HasForSource(source))
-            {
-                var cachedItem = persistentCache.GetForSource(source);
-                if (cachedItem.Size == fileInfo.Size && cachedItem.CachedDate >= fileInfo.LastModifiedTime)
-                    return cachedItem.Info;
+                var info = LoadMediaInfo(context.RewritePath(source.GetPath()));
+                if (info != null)
+                    persistentCache.Save(source, new CachedInfoWrapper(info, fileInfo));
+
+                return info;
             }
-
-            var info = LoadMediaInfo(path);
-            if (info != null)
-                persistentCache.Save(source, new CachedInfoWrapper(info, fileInfo));
-
-            return info;
         }
 
         private static WebMediaInfo LoadMediaInfo(string source)

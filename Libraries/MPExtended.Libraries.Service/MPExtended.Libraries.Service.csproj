@@ -152,7 +152,6 @@
     <Compile Include="Network\Impersonator.cs" />
     <Compile Include="Installation.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Util\NetworkShareImpersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\ActivityServiceBehavior.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />
