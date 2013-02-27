@@ -70,5 +70,21 @@ namespace MPExtended.Libraries.Service.Util
         {
             return Path.GetFullPath(Path.Combine(basePath, relativePath));
         }
+
+        public static bool MightBeOnNetworkDrive(string path)
+        {
+            var uri = new Uri(path);
+            if (uri.IsUnc)
+                return true;
+
+            var driveLetter = Path.GetPathRoot(path);
+            foreach (var drive in DriveInfo.GetDrives())
+            {
+                if (drive.Name.Equals(driveLetter, StringComparison.OrdinalIgnoreCase))
+                    return drive.DriveType == DriveType.Network;
+            }
+
+            return false;
+        }
     }
 }

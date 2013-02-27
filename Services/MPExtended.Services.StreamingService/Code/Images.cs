@@ -74,33 +74,25 @@ namespace MPExtended.Services.StreamingService.Code
                 }
             }
 
-            // stream a pre-existing thumbnail, if possible
-            bool checkThumbnails = source.MediaType == WebMediaType.Recording && Path.GetExtension(source.GetPath()).ToLower() == ".ts";
-            if (checkThumbnails && !source.NeedsImpersonation)
+            // We need to impersonate to access the network drive and check if the thumbnail already exists. However, because
+            // impersonation is lost when starting a process, we can't start ffmpeg from in here. We need to check whether the 
+            // file is accessible from outside the impersonation context again, and start the ffmpeg process as a different user 
+            // if that is the case.
+            string fullPath;
+            using (var context = source.CreateNetworkContext())
             {
-                var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(source.GetPath(), ".jpg"));
-                if (thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0)
-                    return StreamPostprocessedImage(new ImageMediaSource(thumbnailFileInfo.FullName), maxWidth, maxHeight, borders, format);
-            }
-            else if (checkThumbnails)
-            {
-                using (var context = new NetworkShareImpersonator())
+                fullPath = context.RewritePath(source.GetPath());
+
+                // stream a pre-existing thumbnail, if possible
+                if (source.MediaType == WebMediaType.Recording && Path.GetExtension(fullPath).ToLower() == ".ts")
                 {
-                    var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(context.RewritePath(source.GetPath()), ".jpg"));
+                    var thumbnailFileInfo = new FileInfo(Path.ChangeExtension(fullPath, ".jpg"));
                     if (thumbnailFileInfo.Exists && thumbnailFileInfo.Length > 0)
                         return StreamPostprocessedImage(new ImageMediaSource(thumbnailFileInfo.FullName), maxWidth, maxHeight, borders, format);
                 }
             }
 
-            // extract the image using ffmpeg
-            string fullPath;
-            if (source.NeedsImpersonation)
-                using (var context = new NetworkShareImpersonator())
-                    fullPath = context.RewritePath(source.GetPath());
-            else
-                fullPath = source.GetPath();
-
-            // extract the image with ffmpeg
+            // finally, extract the image with ffmpeg if everything else has failed
             bool extractResult = ExecuteFFMpegExtraction(source, fullPath, position, tempFile);
             if (!extractResult)
             {

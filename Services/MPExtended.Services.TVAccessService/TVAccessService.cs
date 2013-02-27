@@ -25,6 +25,7 @@ using System.ServiceModel;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
@@ -813,17 +814,27 @@ namespace MPExtended.Services.TVAccessService
             try
             {
                 filename = GetRecordingById(id).FileName;
+
+                bool tryImpersonation = false;
                 try
                 {
-                    return new WebRecordingFileInfo(new FileInfo(filename));
+                    var fileInfo = new WebRecordingFileInfo(new FileInfo(filename));
+                    if (fileInfo != null && fileInfo.Exists)
+                        return fileInfo;
+
+                    tryImpersonation = PathUtil.MightBeOnNetworkDrive(filename);
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    // access denied, try impersonation
-                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
+                    tryImpersonation = true;
+                }
+
+                if (tryImpersonation && Configuration.Services.NetworkImpersonation.IsEnabled())
+                {
+                    using (var context = NetworkContextFactory.CreateImpersonationContext())
                     {
                         var ret = new WebRecordingFileInfo(context.RewritePath(filename));
-                        ret.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
+                        ret.IsLocalFile = true;
                         ret.OnNetworkDrive = true;
                         return ret;
                     }
@@ -847,23 +858,19 @@ namespace MPExtended.Services.TVAccessService
             {
                 WebRecordingFileInfo info = GetRecordingFileInfo(id);
 
-                // return it as a simple file
-                if (info.IsLocalFile && File.Exists(info.Path))
-                {
+                // read it as a regular file
+                if (info.Exists && info.IsLocalFile && !info.OnNetworkDrive && File.Exists(info.Path))
                     return new FileStream(info.Path, FileMode.Open, FileAccess.Read);
-                }
 
                 // try to load it from a network drive
-                if (info.OnNetworkDrive && info.Exists)
+                if (info.Exists && info.IsLocalFile && info.OnNetworkDrive)
                 {
-                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
-                    {
+                    using (var context = NetworkContextFactory.Create())
                         return new FileStream(context.RewritePath(info.Path), FileMode.Open, FileAccess.Read);
-                    }
                 }
 
                 // failed
-                Log.Warn("No method to read file for recording {0}", id);
+                Log.Warn("No method to read file for recording {0} with path {1}", id, info.Path);
                 WCFUtil.SetResponseCode(System.Net.HttpStatusCode.NotFound);
                 return Stream.Null;
             }

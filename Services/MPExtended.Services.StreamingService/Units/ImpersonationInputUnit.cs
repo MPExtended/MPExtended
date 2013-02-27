@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 
@@ -46,7 +47,7 @@ namespace MPExtended.Services.StreamingService.Units
         {
             try
             {
-                using (var context = new NetworkShareImpersonator())
+                using (var context = NetworkContextFactory.CreateImpersonationContext())
                 {
                     DataOutputStream = new FileStream(context.RewritePath(source), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
