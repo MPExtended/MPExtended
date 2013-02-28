@@ -78,8 +78,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code.Composition
                 {
 					bool hasBinary = Directory.Exists(Path.Combine(dir, "bin"));
                     Log.Debug("- {0} {1}", Path.GetFileName(dir), hasBinary ? " (with binary)" : "");
-					if(hasBinary)
-						loader.AddDirectory(Path.Combine(dir, "bin"));
+                    if (hasBinary)
+                        loader.AddDirectory(Path.Combine(dir, "bin"), true);
                 }
             }
 

@@ -35,7 +35,7 @@ namespace MPExtended.Libraries.Service.Composition
             get { return aggregateCatalog.Parts; }
         }
 
-        public SafeDirectoryCatalog(string directory, string searchPattern)
+        public SafeDirectoryCatalog(string directory, string searchPattern, bool recursive)
         {
             if (searchPattern == null)
                 searchPattern = "*.dll";
@@ -46,7 +46,7 @@ namespace MPExtended.Libraries.Service.Composition
             // because the interface library might already have been loaded from another location (via the MPExtended.Libraries.Service ->
             // MPExtended.Libraries.Client -> Interface dependency), even though that shouldn't matter. Whatever, it's 1:25 am and it works
             // this way.
-            var files = Directory.EnumerateFiles(directory, searchPattern, SearchOption.AllDirectories)
+            var files = Directory.EnumerateFiles(directory, searchPattern, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
                                  .OrderByDescending(x => x.EndsWith(".Interfaces.dll"))
                                  .ThenBy(x => x);
             foreach (var file in files)
@@ -79,8 +79,13 @@ namespace MPExtended.Libraries.Service.Composition
             }
         }
 
+        public SafeDirectoryCatalog(string directory, string searchPattern)
+            : this (directory, searchPattern, true)
+        {
+        }
+
         public SafeDirectoryCatalog(string directory)
-            : this (directory, null)
+            : this(directory, null, true)
         {
         }
     }
