@@ -58,7 +58,7 @@ namespace MPExtended.Libraries.Service.Hosting
         private void LoadServices()
         {
             var loader = new PluginLoader();
-            loader.AddDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            loader.AddDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), false);
             loader.AddFromTreeMatch(@"Services\MPExtended.Services.*", "MPExtended.Services.*.dll", @"Plugins\Services");
             loader.AddRequiredMetadata("ServiceName");
             services = loader.GetPlugins<IService>();
