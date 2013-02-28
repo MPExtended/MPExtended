@@ -105,6 +105,7 @@
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
     <Compile Include="Mvc\AssetManager.cs" />
+    <Compile Include="Mvc\CustomWebViewPage.cs" />
     <Compile Include="Mvc\HtmlHelperExtensionMethods.cs" />
     <Compile Include="Mvc\JQueryDocumentReadyScript.cs" />
     <Compile Include="Mvc\JQueryHelper.cs" />
@@ -206,6 +207,7 @@
     <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />
     <Content Include="Views\Stream\HLSPlayer.js" />
+    <Compile Include="Mvc\SkinHelper.cs" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
