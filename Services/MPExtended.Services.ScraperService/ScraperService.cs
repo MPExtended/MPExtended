@@ -27,11 +27,11 @@ namespace MPExtended.Services.ScraperService
         public ScraperService()
         {
             scrapers = new Dictionary<int, Plugin<IScraperPlugin>>();
-
             var pluginLoader = new PluginLoader();
             pluginLoader.AddRequiredMetadata("Name");
             // first argument is directory name in source tree, second one in installed tree
-            pluginLoader.AddFromTree("PlugIns", "Extensions");
+            //pluginLoader.AddFromTree("PlugIns", "Extensions");
+            pluginLoader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.Scrapers.*", @"Plugins\Scrapers");
             var plugins = pluginLoader.GetPlugins<IScraperPlugin>();
 
             foreach (var plugin in plugins)
