@@ -37,6 +37,11 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// </summary>
         public int Progress { get; set; }
 
+        /// <summary>
+        /// Input request if user input is needed on this item
+        /// </summary>
+        public WebScraperInputRequest InputRequest { get; set; }
+
         public DateTime LastUpdated { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.ScraperService.Interfaces
 {
-    public class WebScraperStatus
+    public class WebScraperInfo
     {
         public String CurrentAction { get; set; }
         public int CurrentProgress { get; set; }

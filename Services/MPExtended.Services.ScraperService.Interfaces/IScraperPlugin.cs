@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Services.Common.Interfaces;
+using System.Windows.Forms;
 
 namespace MPExtended.Services.ScraperService.Interfaces
 {
@@ -17,14 +18,16 @@ namespace MPExtended.Services.ScraperService.Interfaces
         WebResult PauseScraper();
         WebResult ResumeScraper();
         WebResult TriggerUpdate();
-        WebScraperStatus GetScraperStatus();
-        WebScraperInputRequest GetScraperInputRequest(int index);
+        WebScraperInfo GetScraperStatus();
         IList<WebScraperInputRequest> GetAllScraperInputRequests();
         WebResult SetScraperInputRequest(String requestId, String matchId, String text);
         WebResult AddItemToScraper(String title, WebMediaType type, int? provider, string itemId, int? offset);
         List<WebScraperItem> GetScraperItems();
+        List<WebScraperItem> GetUpdatedScraperItems(DateTime updated);
+        WebScraperItem GetScraperItem(string itemId);
         List<WebScraperAction> GetScraperActions();
         WebBoolResult InvokeScraperAction(string itemId, string actionId);
-        WebBoolResult ShowConfig();
+        Form CreateConfig();
+        WebConfigResult GetConfig();
     }
 }

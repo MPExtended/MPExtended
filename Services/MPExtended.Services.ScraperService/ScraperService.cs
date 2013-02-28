@@ -11,9 +11,15 @@ using System.IO;
 using System.Reflection;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Libraries.Service.Composition;
+using System.Windows.Forms;
 
 namespace MPExtended.Services.ScraperService
 {
+    /// <summary>
+    /// ScraperService is a service for running scrapers. A scraper is a process that updates
+    /// the data while the service is running. The scraper service allows start/stop scrapers and
+    /// a limited interaction. 
+    /// </summary>
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.Single)]
     public class ScraperService : IScraperService
     {
@@ -36,11 +42,21 @@ namespace MPExtended.Services.ScraperService
             }
         }
 
+
+        /// <summary>
+        /// Return scraper by id
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>Scraper objects</returns>
         private IScraperPlugin GetScraper(int? scraperId)
         {
             return scrapers[(int)scraperId].Value;
         }
 
+        /// <summary>
+        /// Get all available scraper of this system
+        /// </summary>
+        /// <returns>Available scrapers</returns>
         public IList<WebScraper> GetAvailableScrapers()
         {
             IList<WebScraper> returnList = new List<WebScraper>();
@@ -56,6 +72,11 @@ namespace MPExtended.Services.ScraperService
             return returnList;
         }
 
+        /// <summary>
+        /// Start a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>true if scraper could be started, false otherwise</returns>
         public WebResult StartScraper(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -63,6 +84,11 @@ namespace MPExtended.Services.ScraperService
             return service.StartScraper();
         }
 
+        /// <summary>
+        /// Stop a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>true if scraper could be stopped, false otherwise</returns>
         public WebResult StopScraper(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -70,6 +96,11 @@ namespace MPExtended.Services.ScraperService
             return service.StopScraper();
         }
 
+        /// <summary>
+        /// Pause a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>true if scraper could be paused, false otherwise</returns>
         public WebResult PauseScraper(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -77,6 +108,11 @@ namespace MPExtended.Services.ScraperService
             return service.PauseScraper();
         }
 
+        /// <summary>
+        /// Resume a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>true if scraper could be resumed, false otherwise</returns>
         public WebResult ResumeScraper(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -84,6 +120,11 @@ namespace MPExtended.Services.ScraperService
             return service.ResumeScraper();
         }
 
+        /// <summary>
+        /// Trigger an update on a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>true if scraper update could be triggered, false otherwise</returns>
         public WebResult TriggerUpdate(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -91,18 +132,16 @@ namespace MPExtended.Services.ScraperService
             return service.TriggerUpdate();
         }
 
-        public WebScraperStatus GetScraperStatus(int? scraperId)
+        /// <summary>
+        /// Get current state of a scraper
+        /// </summary>
+        /// <param name="scraperId">id of scraper</param>
+        /// <returns>State of scraper</returns>
+        public WebScraperInfo GetScraperState(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperStatus();
-        }
-
-        public WebScraperInputRequest GetScraperInputRequest(int? scraperId, int index)
-        {
-            IScraperPlugin service = GetScraper(scraperId);
-
-            return service.GetScraperInputRequest(index);
         }
 
         public IList<WebScraperInputRequest> GetAllScraperInputRequests(int? scraperId)
@@ -119,7 +158,6 @@ namespace MPExtended.Services.ScraperService
             return service.SetScraperInputRequest(requestId, matchId, text);
         }
 
-
         public WebResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -127,12 +165,25 @@ namespace MPExtended.Services.ScraperService
             return service.AddItemToScraper(title, type, provider, itemId, offset);
         }
 
-
         public List<WebScraperItem> GetScraperItems(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperItems();
+        }
+
+        public WebScraperItem GetScraperItem(int? scraperId, string itemId)
+        {
+            IScraperPlugin service = GetScraper(scraperId);
+
+            return service.GetScraperItem(itemId);
+        }
+
+        public List<WebScraperItem> GetUpdatedScraperItems(int? scraperId, DateTime updated)
+        {
+            IScraperPlugin service = GetScraper(scraperId);
+
+            return service.GetUpdatedScraperItems(updated);
         }
 
         public List<WebScraperAction> GetScraperActions(int? scraperId)
@@ -142,7 +193,6 @@ namespace MPExtended.Services.ScraperService
             return service.GetScraperActions();
         }
 
-
         public WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -150,12 +200,11 @@ namespace MPExtended.Services.ScraperService
             return service.InvokeScraperAction(itemId, actionId);
         }
 
-
-        public WebBoolResult ShowConfig(int? scraperId)
+        public WebConfigResult GetConfig(int? scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
-            return service.ShowConfig();
+            return service.GetConfig();
         }
     }
 }
