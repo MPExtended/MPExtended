@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -55,11 +56,11 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 if (MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording)
                 {
-                    return Exists && Connections.IsTASLocal && GetFileInfo().IsLocalFile;
+                    return Exists && Connections.IsTASLocal && Configuration.Services.NetworkImpersonation.ReadInStreamingService && GetFileInfo().IsLocalFile;
                 }
                 else
                 {
-                    return Exists && Connections.IsMASLocal && GetFileInfo().IsLocalFile;
+                    return Exists && Connections.IsMASLocal && Configuration.Services.NetworkImpersonation.ReadInStreamingService && GetFileInfo().IsLocalFile;
                 }
             }
         }
@@ -77,7 +78,7 @@ namespace MPExtended.Services.StreamingService.Code
             get
             {
                 bool impersonationEnabled = Configuration.Services.NetworkImpersonation.IsEnabled();
-                return impersonationEnabled && SupportsDirectAccess && GetFileInfo().OnNetworkDrive && !FileUtil.IsAccessible(GetPath());
+                return SupportsDirectAccess && GetFileInfo().OnNetworkDrive && !FileUtil.IsAccessible(GetPath()) && impersonationEnabled;
             }
         }
 
@@ -121,9 +122,7 @@ namespace MPExtended.Services.StreamingService.Code
         public virtual WebFileInfo GetFileInfo()
         {
             if (fileInfoCache != null)
-            {
                 return fileInfoCache;
-            }
 
             if (MediaType == WebMediaType.Recording && FileType == WebFileType.Content)
             {
@@ -181,22 +180,21 @@ namespace MPExtended.Services.StreamingService.Code
             }
         }
 
+        public INetworkContext CreateNetworkContext()
+        {
+            return NetworkContextFactory.Create(NeedsImpersonation);
+        }
+
         public Stream Retrieve()
         {
             if (MediaType == WebMediaType.TV && FileType == WebFileType.Content)
             {
                 return new TsBuffer(Id);
             }
-            else if (SupportsDirectAccess && !NeedsImpersonation)
+            else if (SupportsDirectAccess)
             {
-                return new FileStream(GetPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            }
-            else if (SupportsDirectAccess && NeedsImpersonation)
-            {
-                using (NetworkShareImpersonator context = new NetworkShareImpersonator())
-                {
+                using (var context = CreateNetworkContext())
                     return new FileStream(context.RewritePath(GetPath()), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                }
             }
             else if (MediaType == WebMediaType.Recording)
             {

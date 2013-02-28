@@ -39,8 +39,21 @@ namespace MPExtended.Applications.ServiceConfigurator
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            // setup
-            Log.Setup("ServiceConfigurator.log", false);
+            // setup logging
+            Log.Filename = "ServiceConfigurator.log";
+            Log.TraceLogging = false;
+            Log.ConsoleLogging = false;
+            Log.Setup();
+            AppDomain.CurrentDomain.UnhandledException += delegate(object unhandledSender, UnhandledExceptionEventArgs unhandledEvent)
+            {
+                Log.Error("Unhandled exception", (Exception)unhandledEvent.ExceptionObject);
+                if (unhandledEvent.IsTerminating)
+                {
+                    Log.Fatal("Terminating because of previous exception");
+                }
+            };
+
+            // load the installation
             Installation.Load(MPExtendedProduct.Service);
 
             // make sure to start only once
@@ -90,6 +103,10 @@ namespace MPExtended.Applications.ServiceConfigurator
             //   is running for a long time.
             Configuration.Load();
             Configuration.EnableChangeWatching();
+
+            // reload logging configuration, now that we can read the Diagnostic configuration node
+            Log.TraceLogging = Configuration.Services.Diagnostic.EnableTraceLogging;
+            Log.Setup();
 
             // set language
             if (Configuration.Services.DefaultLanguage != null)

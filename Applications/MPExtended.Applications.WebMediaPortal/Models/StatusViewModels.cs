@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management;
 using System.Web;
 using MoreLinq;
 using MPExtended.Applications.WebMediaPortal.Code;
@@ -36,11 +35,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public IEnumerable<TVCardViewModel> Cards { get; private set; }
         public IEnumerable<WebDiskSpaceInformation> DiskInformation { get; private set; }
-        public long TotalMemoryMegaBytes { get; private set; }
+
+        public bool HasSystemInformation { get; set; }
+        public long TotalMemoryMegaBytes { get; set; }
+        public long UsedMemoryMegaBytes { get; set; }
+        public int CpuUsage { get; set; }
 
         public StatusViewModel()
         {
-            TotalMemoryMegaBytes = GetTotalMemoryBytes() / 1024 / 1024;
+            DiskInformation = new List<WebDiskSpaceInformation>();
         }
 
         public void SetCardList(IEnumerable<WebCard> cards, IEnumerable<WebVirtualCard> activeCards)
@@ -68,18 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public void AddDiskInfo(IEnumerable<WebDiskSpaceInformation> diskInfo)
         {
-            DiskInformation = DiskInformation == null ?
-                diskInfo.DistinctBy(x => x.Disk) :
-                DiskInformation.Concat(diskInfo).DistinctBy(x => x.Disk);
-        }
-
-        internal static long GetTotalMemoryBytes()
-        {
-            ObjectQuery objectQuery = new ObjectQuery("SELECT TotalPhysicalMemory from Win32_ComputerSystem");
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(objectQuery);
-            var enumerator = searcher.Get().GetEnumerator();
-            if (!enumerator.MoveNext()) return 0;
-            return Convert.ToInt64(enumerator.Current["TotalPhysicalMemory"]);
+            DiskInformation = DiskInformation.Concat(diskInfo).DistinctBy(x => x.Disk);
         }
     }
 

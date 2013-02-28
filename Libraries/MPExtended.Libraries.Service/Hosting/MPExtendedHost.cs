@@ -71,6 +71,10 @@ namespace MPExtended.Libraries.Service.Hosting
                 Configuration.Load();
                 Configuration.EnableChangeWatching();
 
+                // reload logger configuration, now that we can load the diagnostic section from the configuration
+                Log.TraceLogging = Configuration.Services.Diagnostic.EnableTraceLogging;
+                Log.Setup();
+				
                 // load and host all services
                 foreach (var service in ServiceInstallation.Instance.GetServices())
                     Task.Factory.StartNew(CreateServiceHost, (object)service);

@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
@@ -33,16 +34,25 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         private static PerformanceCounter cpuCounter = new PerformanceCounter();
         private static PerformanceCounter memoryCounter = new PerformanceCounter();
-        private static float totalMemory;
+        private static int totalMemory;
 
         static StatusController()
         {
+            totalMemory = (int)(GetTotalMemoryBytes() / 1024 / 1024);
             cpuCounter.CategoryName = "Processor";
             cpuCounter.CounterName = "% Processor Time";
             cpuCounter.InstanceName = "_Total";
-            totalMemory = StatusViewModel.GetTotalMemoryBytes() / 1024 / 1024;
             memoryCounter.CategoryName = "Memory";
             memoryCounter.CounterName = "Available MBytes";
+        }
+
+        private static long GetTotalMemoryBytes()
+        {
+            ObjectQuery objectQuery = new ObjectQuery("SELECT TotalPhysicalMemory from Win32_ComputerSystem");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(objectQuery);
+            var enumerator = searcher.Get().GetEnumerator();
+            if (!enumerator.MoveNext()) return 0;
+            return Convert.ToInt64(enumerator.Current["TotalPhysicalMemory"]);
         }
 
         //
@@ -61,6 +71,24 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (Connections.Current.HasMASConnection)
             {
                 model.AddDiskInfo(Connections.Current.MAS.GetLocalDiskInformation());
+            }
+
+            try
+            {
+                model.CpuUsage = (int)Math.Round(cpuCounter.NextValue());
+                model.TotalMemoryMegaBytes = totalMemory;
+                model.UsedMemoryMegaBytes = (int)Math.Round(totalMemory - memoryCounter.NextValue());
+                model.HasSystemInformation = true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Log.Info("Failed to read performance counters, got UnauthorizedAccessException");
+                model.HasSystemInformation = false;
+            }
+            catch (Exception ex)
+            {
+                Log.Info("Failed to read performance counters", ex);
+                model.HasSystemInformation = false;
             }
 
             return View(model);
@@ -87,20 +115,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         public JsonResult GetPerformanceCounters()
         {
-            try
+            // No exception handling needed anymore, because we already check whether performance counters work in Index()
+            var returnObject = new
             {
-                var returnObject = new
-                {
-                    CPU = cpuCounter.NextValue(),
-                    Memory = totalMemory - memoryCounter.NextValue()
-                };
-                return Json(returnObject, JsonRequestBehavior.AllowGet);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Log.Info("Failed to read performance counters, got UnauthorizedAccessException");
-                return Json(new { Error = true }, JsonRequestBehavior.AllowGet);
-            }
+                CPU = (int)Math.Round(cpuCounter.NextValue()),
+                Memory = (int)Math.Round(totalMemory - memoryCounter.NextValue())
+            };
+            return Json(returnObject, JsonRequestBehavior.AllowGet);
         } 
     }
 }

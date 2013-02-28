@@ -23,6 +23,7 @@ using System.ServiceModel;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
+using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Libraries.Service.Util;
@@ -723,7 +724,7 @@ namespace MPExtended.Services.MediaAccessService
                 {
                     // first try it the usual way
                     retVal = GetLibrary(provider, mediatype).GetFileInfo(path).Finalize(provider, mediatype);
-                    tryImpersonation = retVal == null || !retVal.Exists;
+                    tryImpersonation = PathUtil.MightBeOnNetworkDrive(path) && (retVal == null || !retVal.Exists);
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -731,12 +732,12 @@ namespace MPExtended.Services.MediaAccessService
                     tryImpersonation = true;
                 }
 
-                if (tryImpersonation && !FileUtil.IsAccessible(path))
+                if (tryImpersonation && Configuration.Services.NetworkImpersonation.IsEnabled())
                 {
-                    using (var context = new NetworkShareImpersonator())
+                    using (var context = NetworkContextFactory.CreateImpersonationContext())
                     {
                         retVal = new WebFileInfo(context.RewritePath(path));
-                        retVal.IsLocalFile = Configuration.Services.NetworkImpersonation.ReadInStreamingService;
+                        retVal.IsLocalFile = true;
                         retVal.OnNetworkDrive = true;
                     }
                 }
@@ -781,25 +782,19 @@ namespace MPExtended.Services.MediaAccessService
                 string path = GetPathList(provider, mediatype, filetype, id).ElementAt(offset);
                 WebFileInfo info = GetFileInfo(provider, mediatype, filetype, id, offset);
 
-                // first try to read the file
-                if (info.IsLocalFile && File.Exists(path))
-                {
+                // first try to read the file from the filesystem
+                if (info.Exists && info.IsLocalFile && !info.OnNetworkDrive && File.Exists(path))
                     return new FileStream(path, FileMode.Open, FileAccess.Read);
-                }
 
                 // maybe the plugin has some magic
-                if (!info.IsLocalFile && info.Exists && !info.OnNetworkDrive)
-                {
+                if (info.Exists && !info.IsLocalFile)
                     return GetLibrary(provider, mediatype).GetFile(path);
-                }
 
                 // try to load it from a network drive
-                if (info.OnNetworkDrive && info.Exists)
+                if (info.Exists && info.IsLocalFile && info.OnNetworkDrive)
                 {
-                    using (NetworkShareImpersonator context = new NetworkShareImpersonator())
-                    {
+                    using (var context = NetworkContextFactory.Create())
                         return new FileStream(context.RewritePath(path), FileMode.Open, FileAccess.Read);
-                    }
                 }
 
                 // fail

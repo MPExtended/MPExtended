@@ -40,7 +40,11 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
         protected override void OnStart(string[] args)
         {
             LogRotation.Rotate();
-            Log.Setup("WebMediaPortalHosting.log", false);
+            Log.Filename = "WebMediaPortalHosting.log";
+            Log.ConsoleLogging = false;
+            Log.TraceLogging = false;
+            Log.Setup();
+
             Installation.Load(MPExtendedProduct.WebMediaPortal);
             host = new IISExpressHost();
             Action start = host.Start;

@@ -41,7 +41,11 @@ namespace MPExtended.ServiceHosts.CoreService
         protected override void OnStart(string[] args)
         {
             LogRotation.Rotate();
-            Log.Setup("Service.log", false);
+            Log.Filename = "Service.log";
+            Log.ConsoleLogging = false;
+            Log.TraceLogging = false;
+            Log.Setup();
+
             Installation.Load(MPExtendedProduct.Service);
             host = new MPExtendedHost();
             host.Open();
