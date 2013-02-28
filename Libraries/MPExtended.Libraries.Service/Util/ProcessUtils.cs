@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace MPExtended.Libraries.Service.Util
 {
-    public class ProcessesUtils
+    public class ProcessUtils
     {
         /// <summary>
         /// Check if one of the given processes is running

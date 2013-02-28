@@ -31,7 +31,6 @@ using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.TVAccessService.Interfaces;
-using System.Threading;
 
 namespace MPExtended.Services.StreamingService
 {
