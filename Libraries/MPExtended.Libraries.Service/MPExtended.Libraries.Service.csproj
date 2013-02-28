@@ -120,6 +120,7 @@
     <Compile Include="Util\Encryption.cs" />
     <Compile Include="Util\EqualityComparer.cs" />
     <Compile Include="Network\ExternalAddress.cs" />
+    <Compile Include="Util\IniFile.cs" />
     <Compile Include="Util\TranscoderProcess.cs">
       <SubType>Component</SubType>
     </Compile>

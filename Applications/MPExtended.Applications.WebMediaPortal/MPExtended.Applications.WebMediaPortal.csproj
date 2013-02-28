@@ -210,6 +210,7 @@
     <Content Include="Views\Stream\HLSPlayer.js" />
     <Compile Include="Mvc\SkinConfiguration.cs" />
     <Compile Include="Mvc\SkinHelper.cs" />
+    <Compile Include="Mvc\SkinTranslations.cs" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

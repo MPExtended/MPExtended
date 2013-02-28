@@ -29,6 +29,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         private ViewContext viewContext;
 
         public string Name { get; set; }
+        public SkinTranslations Translations { get; set; }
         public SkinConfiguration Configuration { get; set; }
 
         public SkinHelper(ViewContext context)
@@ -36,6 +37,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             viewContext = context;
 
             Name = Settings.ActiveSettings.Skin;
+            Translations = new SkinTranslations(viewContext, this);
             Configuration = new SkinConfiguration();
         }
     }
