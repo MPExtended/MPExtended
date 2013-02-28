@@ -306,22 +306,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                     {
                         if (i.ItemId == filename)
                         {
-                            DBSeries corrSeries = null;
-                            // it is the case
-                            if ((corrSeries = cache.getSeries(e[DBEpisode.cSeriesID])) == null)
-                            {
-                                corrSeries = DBSeries.Get(e[DBEpisode.cSeriesID]);
-                                cache.addChangeSeries(corrSeries);
-                            }
-                            if (corrSeries == null)
-                            {
-                                i.Title = corrSeries[DBSeries.cOutName] + e.ToString();
-                            }
-                            else
-                            {
-                                i.Title = e.ToString();
-                            }
-
+                            i.Title = e.ToString();
                             i.Description = e.onlineEpisode[DBOnlineEpisode.cEpisodeSummary];
                             i.LastUpdated = DateTime.Now;
                             i.Progress = 100;
