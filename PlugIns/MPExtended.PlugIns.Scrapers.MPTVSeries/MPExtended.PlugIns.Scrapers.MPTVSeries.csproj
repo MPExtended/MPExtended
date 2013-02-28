@@ -31,10 +31,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Utils">
+      <HintPath>..\..\Libraries\Scrapers\Common.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\..\Libraries\Scrapers\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
     <Reference Include="Core">
       <HintPath>..\..\Libraries\Scrapers\Core.dll</HintPath>
     </Reference>
-    <Reference Include="MP-TVSeries">
+    <Reference Include="Databases">
+      <HintPath>..\..\Libraries\Scrapers\Databases.dll</HintPath>
+    </Reference>
+    <Reference Include="Dialogs">
+      <HintPath>..\..\Libraries\Scrapers\Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="FollwitApi">
+      <HintPath>..\..\Libraries\Scrapers\FollwitApi.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\Libraries\Scrapers\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MP-TVSeries, Version=3.4.1.2008, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Scrapers\MP-TVSeries.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -46,6 +65,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="taglib-sharp, Version=2.0.3.7, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\Scrapers\taglib-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="Utils">
       <HintPath>..\..\Libraries\Scrapers\Utils.dll</HintPath>
     </Reference>
@@ -56,6 +79,10 @@
     <Compile Include="TvSeriesMatch.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
+      <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
+      <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
       <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
       <Name>MPExtended.Services.Common.Interfaces</Name>
@@ -64,6 +91,15 @@
       <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
       <Name>MPExtended.Services.ScraperService.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="MediaInfo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlite.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

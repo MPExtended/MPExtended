@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using MPExtended.Services.Common.Interfaces;
+using System.Windows.Forms;
 
 namespace MPExtended.Services.ScraperService.Interfaces
 {
@@ -37,15 +38,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebScraperStatus GetScraperStatus(int? scraperId);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebScraperInputRequest GetScraperInputRequest(int? scraperId, int index);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScraperInputRequest> GetAllScraperInputRequests(int? scraperId);
+        WebScraperInfo GetScraperState(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -61,6 +54,14 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        List<WebScraperItem> GetUpdatedScraperItems(int? scraperId, DateTime updated);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebScraperItem GetScraperItem(int? scraperId, string itemId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         List<WebScraperAction> GetScraperActions(int? scraperId);
 
         [OperationContract]
@@ -69,6 +70,6 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult ShowConfig(int? scraperId);
+        WebConfigResult GetConfig(int? scraperId);
     }
 }
