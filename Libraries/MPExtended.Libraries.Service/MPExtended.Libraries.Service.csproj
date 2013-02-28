@@ -82,6 +82,10 @@
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
     <Compile Include="Util\ProcessesUtils.cs" />
+    <Compile Include="Network\ImpersonationContext.cs" />
+    <Compile Include="Network\INetworkContext.cs" />
+    <Compile Include="Network\LocalMachineContext.cs" />
+    <Compile Include="Network\NetworkContextFactory.cs" />    
     <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
@@ -146,10 +150,9 @@
     <Compile Include="Hosting\LogRotation.cs" />
     <Compile Include="Hosting\MPExtendedHost.cs" />
     <Compile Include="Hosting\WCFHost.cs" />
-    <Compile Include="Util\Impersonator.cs" />
+    <Compile Include="Network\Impersonator.cs" />
     <Compile Include="Installation.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Util\NetworkShareImpersonator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WCF\ActivityServiceBehavior.cs" />
     <Compile Include="WCF\SoapBehavior.cs" />

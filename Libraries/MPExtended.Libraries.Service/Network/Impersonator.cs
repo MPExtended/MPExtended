@@ -22,9 +22,9 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 
-namespace MPExtended.Libraries.Service.Util
+namespace MPExtended.Libraries.Service.Network
 {
-    public class Impersonator : IDisposable
+    internal class Impersonator : IDisposable
     {
         [DllImport("advapi32.dll")]
         private static extern int LogonUserA(string lpszUserName, string lpszDomain, string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
@@ -45,6 +45,11 @@ namespace MPExtended.Libraries.Service.Util
 
         public Impersonator(string domain, string username, string password)
         {
+            if (String.IsNullOrEmpty(username))
+                throw new ArgumentException("Username cannot be empty", "username");
+            if (String.IsNullOrEmpty(password))
+                throw new ArgumentException("Password cannot be empty", "password");
+
             if (!DoImpersonation(domain, username, password))
             {
                 throw new Exception("Failed to impersonate");

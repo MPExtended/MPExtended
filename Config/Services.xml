@@ -23,4 +23,8 @@
   <EnableIPv6>false</EnableIPv6>
 
   <DefaultLanguage />
+
+  <Diagnostic>
+    <EnableTraceLogging>false</EnableTraceLogging>
+  </Diagnostic>
 </Services>

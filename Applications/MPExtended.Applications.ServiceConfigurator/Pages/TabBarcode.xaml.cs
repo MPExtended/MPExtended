@@ -51,7 +51,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             InitializeComponent();
 
-            Users = Configuration.Authentication.Users.ToDictionary(x => x.Username, x => x);
+            // The GroupBy() here is needed because apparantly people manage to create duplicate accounts
+            Users = Configuration.Authentication.Users.GroupBy(x => x.Username).ToDictionary(x => x.Key, x => x.First());
             cbUser.DataContext = Users;
             cbUser.DisplayMemberPath = "Key";
             cbUser.SelectedValuePath = "Value";

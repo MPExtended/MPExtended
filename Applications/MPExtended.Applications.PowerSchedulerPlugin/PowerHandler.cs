@@ -60,7 +60,7 @@ namespace MPExtended.Applications.PowerSchedulerPlugin
                     else
                     {
                         Log.Debug("MPExtendedPowerHandler.DisAllowShutdown: failed to load last activity, returning false (allowing shutdown)");
-                        cachedResult = true;
+                        cachedResult = false;
                     }
 
                     return cachedResult;

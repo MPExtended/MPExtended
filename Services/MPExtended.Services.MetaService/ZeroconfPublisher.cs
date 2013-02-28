@@ -76,8 +76,8 @@ namespace MPExtended.Services.MetaService
                 Log.Debug("Publishing service set {0}", set);
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
                 additionalData["mac"] = String.Join(";", NetworkInformation.GetMACAddresses());
-                additionalData["netbios-name"] = System.Environment.MachineName;
-                additionalData["external-ip"] = ExternalAddress.GetAddress();
+                additionalData["netbios-name"] = Environment.MachineName != null ? Environment.MachineName : String.Empty;
+                additionalData["external-ip"] = ExternalAddress.GetAddress() != null ? ExternalAddress.GetAddress() : String.Empty;
                 additionalData["mas"] = set.MAS != null ? set.MAS : String.Empty;
                 additionalData["masstream"] = set.MASStream != null ? set.MASStream : String.Empty;
                 additionalData["tas"] = set.TAS != null ? set.TAS : String.Empty;
