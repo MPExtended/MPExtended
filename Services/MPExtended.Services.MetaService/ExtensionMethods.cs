@@ -33,7 +33,8 @@ namespace MPExtended.Services.MetaService
             { "TVAccessService", WebService.TVAccessService },
             { "UserSessionService", WebService.UserSessionService },
             { "MetaService", WebService.MetaService },
-            { "WifiRemote", WebService.WifiRemote }
+            { "WifiRemote", WebService.WifiRemote },
+            { "ScraperService", WebService.ScraperService }
         };
 
         public static bool IsKnownService(this ServiceConfiguration service)

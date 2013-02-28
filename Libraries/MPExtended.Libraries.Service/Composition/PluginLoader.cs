@@ -41,9 +41,16 @@ namespace MPExtended.Libraries.Service.Composition
 
         public void AddDirectory(string directory, string searchPattern, bool recursive)
         {
-            if (container != null)
-                throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
-            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory, searchPattern, recursive));
+            if (Directory.Exists(directory))
+            {
+                if (container != null)
+                    throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
+                catalog.Catalogs.Add(new SafeDirectoryCatalog(directory, searchPattern, recursive));
+            }
+            else
+            {
+                Log.Warn("PluginLoader: Directory " + directory + " doesn't exist or can't be accessed");
+            }
         }
 
         public void AddDirectory(string directory, string searchPattern)
