@@ -45,7 +45,7 @@ namespace MPExtended.Services.MetaService
         {
             if (knownServices.ContainsKey(service.Service))
                 return knownServices[service.Service];
-            throw new ArgumentException();
+            return null;
         }
     }
 }
