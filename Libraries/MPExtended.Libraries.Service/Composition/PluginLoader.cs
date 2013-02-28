@@ -39,18 +39,26 @@ namespace MPExtended.Libraries.Service.Composition
             requiredMetadata = new List<string>();
         }
 
-        public void AddDirectory(string directory, string searchPattern)
+        public void AddDirectory(string directory, string searchPattern, bool recursive)
         {
             if (container != null)
                 throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
-            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory, searchPattern));
+            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory, searchPattern, recursive));
+        }
+
+        public void AddDirectory(string directory, string searchPattern)
+        {
+            AddDirectory(directory, searchPattern, true);
+        }
+
+        public void AddDirectory(string directory, bool recursive)
+        {
+            AddDirectory(directory, null, recursive);
         }
 
         public void AddDirectory(string directory)
         {
-            if (container != null)
-                throw new InvalidOperationException("Sources cannot be added after plugins have been loaded or exports are added");
-            catalog.Catalogs.Add(new SafeDirectoryCatalog(directory));
+            AddDirectory(directory, null, true);
         }
 
         public void AddFromTree(string sourceDirectory, string installedDirectory)
@@ -61,19 +69,7 @@ namespace MPExtended.Libraries.Service.Composition
             }
             else
             {
-                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
-            }
-        }
-
-        public void AddFromTreeMatch(string sourceDirectoryGlob, string installedDirectory)
-        {
-            if (Installation.GetFileLayoutType() == FileLayoutType.Source)
-            {
-                AddFromSourceDirectoryList(Directory.EnumerateDirectories(Installation.GetSourceRootDirectory(), sourceDirectoryGlob), null);
-            }
-            else
-            {
-                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
+                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory), null, true);
             }
         }
 
@@ -85,8 +81,13 @@ namespace MPExtended.Libraries.Service.Composition
             }
             else
             {
-                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory));
+                AddDirectory(Path.Combine(Installation.GetInstallDirectory(), installedDirectory), null, true);
             }
+        }
+
+        public void AddFromTreeMatch(string sourceDirectoryGlob, string installedDirectory)
+        {
+            AddFromTreeMatch(sourceDirectoryGlob, null, installedDirectory);
         }
 
         private void AddFromSourceDirectoryList(IEnumerable<string> directories, string searchPattern)
@@ -95,7 +96,7 @@ namespace MPExtended.Libraries.Service.Composition
             {
                 string dir = Path.Combine(pluginDirectory, "bin", Installation.GetSourceBuildDirectoryName());
                 if (Directory.Exists(dir))
-                    AddDirectory(dir, searchPattern);
+                    AddDirectory(dir, searchPattern, false);
             }
         }
 
