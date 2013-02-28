@@ -59,7 +59,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             {
                 if (!mImporterPausedManually)
                 {
-                    bool conflictingRunning = ProcessesUtils.IsProcessRunning(conflicting);
+                    bool conflictingRunning = ProcessUtils.IsProcessRunning(conflicting);
 
                     if (conflictingRunning && mScraperState != WebScraperState.Paused)
                     {

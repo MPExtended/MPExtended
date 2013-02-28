@@ -81,7 +81,7 @@
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
-    <Compile Include="Util\ProcessesUtils.cs" />
+    <Compile Include="Util\ProcessUtils.cs" />
     <Compile Include="Network\ImpersonationContext.cs" />
     <Compile Include="Network\INetworkContext.cs" />
     <Compile Include="Network\LocalMachineContext.cs" />

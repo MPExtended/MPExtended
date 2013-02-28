@@ -35,7 +35,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             {
                 if (!mImporterPausedManually)
                 {
-                    bool conflictingRunning = ProcessesUtils.IsProcessRunning(conflicting);
+                    bool conflictingRunning = ProcessUtils.IsProcessRunning(conflicting);
 
                     if (conflictingRunning && mScraperState != WebScraperState.Paused)
                     {
