@@ -71,6 +71,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalVersion.cs">
@@ -207,6 +208,7 @@
     <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />
     <Content Include="Views\Stream\HLSPlayer.js" />
+    <Compile Include="Mvc\SkinConfiguration.cs" />
     <Compile Include="Mvc\SkinHelper.cs" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
