@@ -61,6 +61,8 @@
                 @: 'image': '@Url.Action("Cover", "MovieLibrary", new { movie = Model.MediaId })',
             } else if (Model.MediaType == WebMediaType.TVEpisode) {
                 @: 'image': '@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = Model.MediaId })',
+            } else if (Model.MediaType == WebMediaType.TV) {
+                @: 'image': '@Url.Action("ChannelLogo", "Television", new { channelId = Model.MediaId })',
             }
            });
         if (autoStart == true) {
