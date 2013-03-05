@@ -41,7 +41,7 @@ namespace MPExtended.Services.MetaService
             return knownServices.ContainsKey(service.Service);
         }
 
-        public static WebService ToWebService(this ServiceConfiguration service)
+        public static WebService? ToWebService(this ServiceConfiguration service)
         {
             if (knownServices.ContainsKey(service.Service))
                 return knownServices[service.Service];

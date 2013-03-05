@@ -52,7 +52,7 @@ namespace MPExtended.Services.MetaService
             // old style services
             foreach (var srv in Installation.GetInstalledServices())
             {
-                if (srv.ToWebService() == null || !ZeroconfDiscoverer.serviceTypes.ContainsKey(srv.ToWebService()))
+                if (srv.ToWebService() == null || !ZeroconfDiscoverer.serviceTypes.ContainsKey(srv.ToWebService().Value))
                     continue;
 
                 Dictionary<string, string> additionalData = new Dictionary<string, string>();
@@ -61,7 +61,7 @@ namespace MPExtended.Services.MetaService
                 if (ExternalAddress.GetAddress() != null)
                     additionalData["external-ip"] = ExternalAddress.GetAddress();
 
-                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService()], Configuration.Services.GetServiceName(), srv.Port);
+                NetService net = new NetService(ZeroconfDiscoverer.DOMAIN, ZeroconfDiscoverer.serviceTypes[srv.ToWebService().Value], Configuration.Services.GetServiceName(), srv.Port);
                 net.AllowMultithreadedCallbacks = true;
                 net.TXTRecordData = NetService.DataFromTXTRecordDictionary(additionalData);
                 net.DidPublishService += new NetService.ServicePublished(PublishedService);
