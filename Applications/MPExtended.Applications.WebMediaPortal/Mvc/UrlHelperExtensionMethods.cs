@@ -21,12 +21,21 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
+        public static string AbsoluteAction(this UrlHelper helper, string actionName, string controllerName = null, RouteValueDictionary routeValues = null)
+        {
+            var request = helper.RequestContext.HttpContext.Request;
+            var path = helper.Action(actionName, controllerName, routeValues);
+            return String.Format("{0}://{1}{2}", ExternalUrl.GetScheme(request), ExternalUrl.GetHost(request), path);
+        }
+
         public static string ContentLink(this UrlHelper helper, string contentPath)
         {
             try

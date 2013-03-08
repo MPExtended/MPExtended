@@ -93,6 +93,7 @@
     <Compile Include="Code\Composition\ExtensionFinder.cs" />
     <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Code\Connections.cs" />
+    <Compile Include="Code\ExternalUrl.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
     <Compile Include="Models\ServiceSetModel.cs" />
