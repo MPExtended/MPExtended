@@ -28,6 +28,13 @@ namespace MPExtended.Libraries.Service.Config
         Proxied,
     }
 
+    public enum UrlScheme
+    {
+        Default,
+        Http,
+        Https
+    }
+
     [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortal/1")]
     public class WebMediaPortal
     {
@@ -51,7 +58,10 @@ namespace MPExtended.Libraries.Service.Config
         public string TASUrl { get; set; }
         public string ServiceUsername { get; set; }
         public string ServicePassword { get; set; }
-        
+
+        public UrlScheme ExternalUrlScheme { get; set; }
+        public string ExternalUrlHost { get; set; }
+
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }
 
@@ -61,6 +71,8 @@ namespace MPExtended.Libraries.Service.Config
             MASUrl = "127.0.0.1:4322";
             TASUrl = "127.0.0.1:4322";
             Skin = "default";
+            ExternalUrlScheme = UrlScheme.Default;
+            ExternalUrlHost = null;
         }
     }
 }
