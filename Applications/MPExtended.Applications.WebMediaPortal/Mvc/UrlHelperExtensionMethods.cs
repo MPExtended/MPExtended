@@ -22,6 +22,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
@@ -50,6 +51,35 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             {
                 Log.Warn(String.Format("Failed to create URL for ViewContentLink('{0}')", viewContentPath), e);
                 return String.Empty;
+            }
+        }
+
+        public static string Artwork(this UrlHelper helper, WebMediaType mediaType, string id)
+        {
+            switch (mediaType)
+            {
+                case WebMediaType.Movie:
+                    return helper.Action("Cover", "MovieLibrary", new { movie = id });
+                case WebMediaType.MusicAlbum:
+                    return helper.Action("AlbumImage", "MusicLibrary", new { album = id });
+                case WebMediaType.MusicArtist:
+                    return helper.Action("ArtistImage", "MusicLibrary", new { artist = id });
+                case WebMediaType.MusicTrack:
+                    return helper.Action("TrackImage", "MusicLibrary", new { track = id });
+                case WebMediaType.Radio:
+                case WebMediaType.TV:
+                    return helper.Action("ChannelLogo", "Television", new { channelId = id });
+                case WebMediaType.Recording:
+                    // TODO: Make width configurable with a parameter (object attributes or something like it)
+                    return helper.Action("PreviewImage", "Recording", new { id = id, width = 640 });
+                case WebMediaType.TVEpisode:
+                    return helper.Action("EpisodeImage", "TVShowsLibrary", new { episode = id });
+                case WebMediaType.TVSeason:
+                    return helper.Action("SeasonImage", "TVShowsLibrary", new { season = id });
+                case WebMediaType.TVShow:
+                    return helper.Action("SeriesPoster", "TVShowsLibrary", new { season = id });
+                default:
+                    return String.Empty;
             }
         }
     }
