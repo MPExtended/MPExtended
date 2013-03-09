@@ -808,6 +808,23 @@ namespace MPExtended.Services.TVAccessService
             return Recording.Retrieve(id).ToWebRecording();
         }
 
+        public WebBoolResult DeleteRecording(int id)
+        {
+            Log.Info("Deleting recording {0}, as requested by client {1}", id, WCFUtil.GetClientIPAddress());
+            try
+            {
+                bool retVal = _tvControl.DeleteRecording(id);
+                if (!retVal)
+                    Log.Warn("Failed to delete recording, TV Server returned false");
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to delete recoding", ex);
+                return false;
+            }
+        }
+
         public WebRecordingFileInfo GetRecordingFileInfo(int id)
         {
             string filename = String.Empty;

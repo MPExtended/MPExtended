@@ -142,6 +142,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult DeleteRecording(int id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebRecordingFileInfo GetRecordingFileInfo(int id);
 
         [OperationContract]
