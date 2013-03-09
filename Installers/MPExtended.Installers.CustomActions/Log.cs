@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 //
 // The use and distribution terms for this software are covered by the
 // Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
