@@ -417,7 +417,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                                     identifier = identifier,
                                     ctdAction = queryString["action"],
                                     parameters = queryString["parameters"]
-                                }), ExternalUrl.GetScheme(Request.Url.Scheme), ExternalUrl.GetHost(Request.Url.Host));
+                                }), ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                             })
                             .Join(Environment.NewLine);
 
@@ -580,7 +580,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         parameters["transcoder"] = profile.Name;
                         parameters["continuationId"] = continuationId;
                         m3u.AppendLine(String.Format("#EXTINF:{0},{1}", track.Duration, track.Title));
-                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, ExternalUrl.GetScheme(Request.Url.Scheme), ExternalUrl.GetHost(Request.Url.Host));
+                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                         m3u.AppendLine(url);
                     }
                     break;
@@ -590,7 +590,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     parameters["item"] = itemId;
                     parameters["transcoder"] = profile.Name;
                     parameters["continuationId"] = continuationId;
-                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url.Scheme), ExternalUrl.GetHost(Request.Url.Host));
+                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                     m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
                     m3u.AppendLine(url);
                     break;
