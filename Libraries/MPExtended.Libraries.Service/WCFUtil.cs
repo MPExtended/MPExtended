@@ -45,16 +45,17 @@ namespace MPExtended.Libraries.Service
             // if a service address is configured, use that
             if (!String.IsNullOrEmpty(Configuration.Services.ServiceAddress))
             {
-                return String.Format("http://{0}:{1}/MPExtended/", Configuration.Services.ServiceAddress, Configuration.Services.Port);
+                return Configuration.Services.ServiceAddress;
             }
 
             // then try the HTTP host header
             try
             {
-                string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
-                if (val != null)
+                if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(HttpRequestHeader.Host.ToString()))
                 {
-                    return "http://" + val + "/MPExtended/";
+                    string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
+                    if (val != null)
+                        return String.Format("http://{0}/MPExtended/", val);
                 }
             }
             catch (InvalidOperationException)

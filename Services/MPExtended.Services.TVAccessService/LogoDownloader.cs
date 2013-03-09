@@ -124,8 +124,8 @@ namespace MPExtended.Services.TVAccessService
                 }
 
                 Log.Trace("Found service set {0} with MAS streams at {1}", set.GetSetIdentifier(), set.MASStream);
-                string ipAddress = set.MASStream.Substring(0, set.MASStream.IndexOf(':'));
-                if (!alreadyHandledClients.Contains(set.MASStream) && !NetworkInformation.IsLocalAddress(ipAddress))
+                var uri = new Uri(set.MASStream);
+                if (!alreadyHandledClients.Contains(set.MASStream) && !NetworkInformation.IsLocalAddress(uri.Host))
                 {
                     Log.Debug("Going to download channel logos from MAS installation at {0}", set.MASStream);
                     if(!DownloadChannelLogos(logos, set.Connect()))
