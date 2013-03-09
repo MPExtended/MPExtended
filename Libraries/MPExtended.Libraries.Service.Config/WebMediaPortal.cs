@@ -65,6 +65,8 @@ namespace MPExtended.Libraries.Service.Config
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }
 
+        public ConfigDictionary SkinConfiguration { get; set; }
+
         public WebMediaPortal()
         {
             StreamType = StreamType.DirectWhenPossible;
@@ -73,6 +75,7 @@ namespace MPExtended.Libraries.Service.Config
             Skin = "default";
             ExternalUrlScheme = UrlScheme.Default;
             ExternalUrlHost = null;
+            SkinConfiguration = new ConfigDictionary();
         }
     }
 }
