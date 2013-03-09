@@ -26,13 +26,12 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
-using MPExtended.Libraries.Service.Util;
-using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -323,7 +322,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
-                return Json(new { Success = true, URL = url }, JsonRequestBehavior.AllowGet);
+                return Json(new { Success = true, URL = url, Poster = Url.Artwork(type, itemId) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
