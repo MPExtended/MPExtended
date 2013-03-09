@@ -150,7 +150,7 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelDetailed
             {
                 CurrentProgram = ch.CurrentProgram != null ? ch.CurrentProgram.ToWebProgramDetailed() : null,
-                Title = ch.DisplayName,
+                Title = ch.DisplayName.Trim(),
                 EpgHasGaps = ch.EpgHasGaps,
                 ExternalId = ch.ExternalId,
                 FreeToAir = GetFreeToAirInformation(ch),
@@ -208,7 +208,7 @@ namespace MPExtended.Services.TVAccessService
 
             return new WebChannelBasic
             {
-                Title = ch.DisplayName,
+                Title = ch.DisplayName.Trim(),
                 Id = ch.IdChannel,
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,

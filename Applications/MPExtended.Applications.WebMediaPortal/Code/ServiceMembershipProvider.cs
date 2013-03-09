@@ -164,7 +164,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
         #region Find users
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            return FindUsersByCondition(u => u.Username == usernameToMatch, pageIndex, pageSize, out totalRecords);
+            return FindUsersByCondition(u => String.Compare(u.Username, usernameToMatch, true) == 0, pageIndex, pageSize, out totalRecords);
         }
 
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
@@ -215,12 +215,12 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            return GetMembershipUser(u => u.Username == username, userIsOnline);
+            return GetMembershipUser(u => String.Compare(u.Username, username, true) == 0, userIsOnline);
         }
 
         public override bool ValidateUser(string username, string password)
         {
-            var list = Configuration.Authentication.Users.Where(u => u.Username == username);
+            var list = Configuration.Authentication.Users.Where(u => String.Compare(u.Username, username, true) == 0);
             return list.Count() > 0 && list.First().ValidatePassword(password);
         }
         #endregion
