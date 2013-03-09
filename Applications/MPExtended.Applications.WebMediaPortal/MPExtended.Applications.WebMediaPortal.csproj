@@ -117,6 +117,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Mvc\SkinTranslationsFactory.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
     <Compile Include="Controllers\HomeController.cs" />

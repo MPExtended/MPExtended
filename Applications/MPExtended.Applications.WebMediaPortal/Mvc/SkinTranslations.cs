@@ -34,14 +34,13 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         private const string SECTION_NAME = "translations";
         private Dictionary<string, string> translations;
 
-        public SkinTranslations(ViewContext context, SkinHelper skinHelper)
+        internal SkinTranslations(HttpServerUtilityBase serverUtility, string skin, CultureInfo culture)
         {
-            CultureInfo culture = Thread.CurrentThread.CurrentUICulture;
-            string path = context.HttpContext.Server.MapPath(String.Format("~/Skins/{0}/config/translations.{1}.ini", skinHelper.Name, culture.TwoLetterISOLanguageName));
+            string path = serverUtility.MapPath(String.Format("~/Skins/{0}/config/translations.{1}.ini", skin, culture.TwoLetterISOLanguageName));
             while (!File.Exists(path) && culture.Parent != null && culture.Parent != culture)
             {
                 culture = culture.Parent;
-                path = context.HttpContext.Server.MapPath(String.Format("~/Skins/{0}/config/translations.{1}.ini", skinHelper.Name, culture.TwoLetterISOLanguageName));
+                path = serverUtility.MapPath(String.Format("~/Skins/{0}/config/translations.{1}.ini", skin, culture.TwoLetterISOLanguageName));
             }
 
             if (File.Exists(path))
@@ -58,6 +57,11 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             }
 
             translations = new Dictionary<string, string>();
+        }
+
+        internal SkinTranslations(ViewContext context, SkinHelper skinHelper)
+            : this (context.HttpContext.Server, skinHelper.Name, Thread.CurrentThread.CurrentUICulture)
+        {
         }
 
         public string Get(string key)
