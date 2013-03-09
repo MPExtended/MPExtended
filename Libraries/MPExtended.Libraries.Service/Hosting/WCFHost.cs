@@ -72,6 +72,7 @@ namespace MPExtended.Libraries.Service.Hosting
             {
                 var type = plugin.Value.GetServiceType();
                 Log.Debug("Loading service {0}", type.Name);
+                plugin.Value.Start();
 
                 ServiceHost host;
                 if (plugin.Value is ISingleInstanceWcfService)
