@@ -93,11 +93,11 @@ namespace MPExtended.Libraries.Client
             if(Zeroconf.CheckAvailability())
             {
                 zc = new Zeroconf();
-                zc.StartDiscovery(delegate(string ip, int port)
+                zc.StartDiscovery(delegate(string ip, int port, string meta)
                 {
                     lock (waitingTasks)
                     {
-                        waitingTasks.Add(Task.Factory.StartNew(() => FoundAddress(ip, port)));
+                        waitingTasks.Add(Task.Factory.StartNew(() => FoundAddress(meta)));
                     }
                 });
             }
@@ -107,18 +107,18 @@ namespace MPExtended.Libraries.Client
             {
                 foreach (string ip in hintedAddresses)
                 {
-                    waitingTasks.Add(Task.Factory.StartNew(() => FoundAddress(ip, DEFAULT_PORT)));
+                    waitingTasks.Add(Task.Factory.StartNew(() => FoundAddress(String.Format("http://{0}:{1}/", ip, DEFAULT_PORT))));
                 }
             }
         }
 
-        private void FoundAddress(string address, int port)
+        private void FoundAddress(string metaAddress)
         {
             // establish a meta connection and load all sets, if possible
             IEnumerable<WebServiceSet> sets;
             try
             {
-                IMetaService meta = CreateMeta(address, port);
+                IMetaService meta = CreateMeta(metaAddress);
                 if (meta == null)
                 {
                     return;
@@ -175,8 +175,9 @@ namespace MPExtended.Libraries.Client
             }
         }
 
-        private IMetaService CreateMeta(string ip, int port)
+        private IMetaService CreateMeta(string rootAddress)
         {
+            Console.WriteLine("Creating meta for {0}", rootAddress);
             try
             {
                 BasicHttpBinding binding = new BasicHttpBinding()
@@ -191,7 +192,7 @@ namespace MPExtended.Libraries.Client
 
                 ChannelFactory<IMetaService> factory = new ChannelFactory<IMetaService>(
                     binding,
-                    new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/MetaService", ip, port))
+                    new EndpointAddress(rootAddress + "MPExtended/MetaService")
                 );
 
                 IMetaService channel = factory.CreateChannel();
