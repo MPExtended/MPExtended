@@ -45,7 +45,7 @@ namespace MPExtended.Libraries.Service
             // if a service address is configured, use that
             if (!String.IsNullOrEmpty(Configuration.Services.ServiceAddress))
             {
-                return Configuration.Services.ServiceAddress;
+                return Configuration.Services.ServiceAddress + "MPExtended/";
             }
 
             // then try the HTTP host header
