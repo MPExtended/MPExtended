@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,7 +42,13 @@ namespace MPExtended.Libraries.Service
 
         public static string GetCurrentRoot()
         {
-            // first try the HTTP host header
+            // if a service address is configured, use that
+            if (!String.IsNullOrEmpty(Configuration.Services.ServiceAddress))
+            {
+                return String.Format("http://{0}:{1}/MPExtended/", Configuration.Services.ServiceAddress, Configuration.Services.Port);
+            }
+
+            // then try the HTTP host header
             try
             {
                 string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
@@ -56,15 +62,14 @@ namespace MPExtended.Libraries.Service
                 // probably a net.pipe binding, ignore that
             }
 
-            // then try current IP address
-            int port = Configuration.Services.Port;
+            // then try the current IP address
             if (NetworkInformation.GetIPAddresses().Any())
             {
-                return String.Format("http://{0}:{1}/MPExtended/", Configuration.Services.ServiceAddress ?? NetworkInformation.GetIPAddress(), port);
+                return String.Format("http://{0}:{1}/MPExtended/", NetworkInformation.GetIPAddress(), Configuration.Services.Port);
             }
 
             // last resort: localhost
-            return String.Format("http://localhost:{0}/MPExtended/", port);
+            return String.Format("http://localhost:{0}/MPExtended/", Configuration.Services.Port);
         }
 
         public static string GetCurrentHostname()

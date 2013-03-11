@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2012 MPExtended
-// Copyright (C) 2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2012-2013 MPExtended
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
 // Copyright (C) 2011 - 2012, WifiRemote Developers, http://code.google.com/p/wifiremote/
 // 
 // MPExtended is free software: you can redistribute it and/or modify

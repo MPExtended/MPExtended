@@ -20,7 +20,9 @@
   <TASUrl>127.0.0.1:4322</TASUrl>
   <ServiceUsername>admin</ServiceUsername>
   <ServicePassword>admin</ServicePassword>
+
+  <DefaultLanguage xsi:nil="true" />
   
   <Skin>default</Skin>
-  <DefaultLanguage xsi:nil="true" />
+  <SkinConfiguration />
 </WebMediaPortal>

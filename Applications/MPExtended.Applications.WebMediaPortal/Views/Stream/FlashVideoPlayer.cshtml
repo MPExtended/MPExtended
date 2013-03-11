@@ -57,11 +57,7 @@
         jwplayer().load({ 
             provider: 'http',
             file: '@Html.Raw(Model.URL)' + '&starttime=' + startPos.toString(),
-            @if(Model.MediaType == WebMediaType.Movie) {
-                @: 'image': '@Url.Action("Cover", "MovieLibrary", new { movie = Model.MediaId })',
-            } else if (Model.MediaType == WebMediaType.TVEpisode) {
-                @: 'image': '@Url.Action("EpisodeImage", "TVShowsLibrary", new { episode = Model.MediaId })',
-            }
+            image: '@Url.Artwork(Model.MediaType, Model.MediaId)',
            });
         if (autoStart == true) {
             jwplayer().play();

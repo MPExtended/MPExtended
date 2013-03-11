@@ -1,6 +1,6 @@
-﻿#region Copyright (C) 2011-2012 MPExtended, 2010-2011 TV4Home
+﻿#region Copyright (C) 2011-2013 MPExtended, 2010-2011 TV4Home
 // Copyright (C) 2010-2011 TV4Home, http://tv4home.codeplex.com/
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ namespace MPExtended.Services.TVAccessService
             return new WebChannelDetailed
             {
                 CurrentProgram = ch.CurrentProgram != null ? ch.CurrentProgram.ToWebProgramDetailed() : null,
-                Title = ch.DisplayName,
+                Title = ch.DisplayName.Trim(),
                 EpgHasGaps = ch.EpgHasGaps,
                 ExternalId = ch.ExternalId,
                 FreeToAir = GetFreeToAirInformation(ch),
@@ -208,7 +208,7 @@ namespace MPExtended.Services.TVAccessService
 
             return new WebChannelBasic
             {
-                Title = ch.DisplayName,
+                Title = ch.DisplayName.Trim(),
                 Id = ch.IdChannel,
                 IsRadio = ch.IsRadio,
                 IsTv = ch.IsTv,

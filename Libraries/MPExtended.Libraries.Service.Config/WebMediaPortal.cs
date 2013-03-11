@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,6 +28,13 @@ namespace MPExtended.Libraries.Service.Config
         Proxied,
     }
 
+    public enum UrlScheme
+    {
+        Default,
+        Http,
+        Https
+    }
+
     [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortal/1")]
     public class WebMediaPortal
     {
@@ -51,9 +58,14 @@ namespace MPExtended.Libraries.Service.Config
         public string TASUrl { get; set; }
         public string ServiceUsername { get; set; }
         public string ServicePassword { get; set; }
-        
+
+        public UrlScheme ExternalUrlScheme { get; set; }
+        public string ExternalUrlHost { get; set; }
+
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }
+
+        public ConfigDictionary SkinConfiguration { get; set; }
 
         public WebMediaPortal()
         {
@@ -61,6 +73,9 @@ namespace MPExtended.Libraries.Service.Config
             MASUrl = "127.0.0.1:4322";
             TASUrl = "127.0.0.1:4322";
             Skin = "default";
+            ExternalUrlScheme = UrlScheme.Default;
+            ExternalUrlHost = null;
+            SkinConfiguration = new ConfigDictionary();
         }
     }
 }

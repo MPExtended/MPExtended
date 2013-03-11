@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,7 +55,10 @@ namespace MPExtended.Services.MetaService
 
         public IList<WebService> GetInstalledServices()
         {
-            return Installation.GetInstalledServices().Select(x => x.ToWebService()).Where(x => x != null).ToList();
+            return Installation.GetInstalledServices()
+                               .Where(x => x.ToWebService() != null)
+                               .Select(x => x.ToWebService().Value)
+                               .ToList();
         }
 
         public IList<WebService> GetActiveServices()

@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2012-2013 MPExtended
-// Copyright (C) 2012-2013 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

@@ -1,3 +1,45 @@
+Note: everything included in the first section above the dashed line
+below is purely informational and is not legally binding.
+
+For the biggest part, MPExtended is distributed under the GNU GPL,
+version 2 or later. Everything in the Installers directory is covered
+by the Common Public License 1.0. Included libraries in the Libraries
+directory may have a different license, see Libraries/LICENSE.txt for
+more information. 
+
+Each source code file includes a summary of its license terms at the 
+top of the file. For files lacking such a summary, the GNU GPL is used.
+The copyright holders indicated at the top of the file are approximate,
+the real copyright holders can be found by using the git blame tool. A
+list of all MPExtended Developers and their contact addresses can be
+found with the following git command:
+   git log "--pretty=%an <%ae>" | sort -u
+
+The full, legal terms of the GNU General Public License, version 2, can
+be found below.
+
+
+=======================================================================
+
+
+MPExtended includes a Service Interface. This interface is contained
+in the following directories:
+- Services/MPExtended.Services.MediaAccessService.Interfaces
+- Services/MPExtended.Services.TVAccessService.Interfaces
+- Services/MPExtended.Services.StreamingService.Interfaces
+- Services/MPExtended.Services.MetaService.Interfaces
+- Services/MPExtended.Services.UserSessionService.Interfaces
+- Services/MPExtended.Services.Common.Interfaces
+The Service Interface is not bound by copyright law in most countries,
+and can thus be used without prior permission. If the applicable law in
+your country does not grant you these rights, you are hereby granted 
+the right to use, copy, modify, distribute and redistribute the Service
+Interface, all without asking permission.
+
+
+=======================================================================
+
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 

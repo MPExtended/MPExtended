@@ -71,6 +71,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalVersion.cs">
@@ -84,6 +85,7 @@
     <Compile Include="Code\Composition\ExtensionFinder.cs" />
     <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Code\Connections.cs" />
+    <Compile Include="Code\ExternalUrl.cs" />
     <Compile Include="Controllers\RecordingController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Models\TVShowViewModels.cs" />
     <Compile Include="Models\MusicViewModels.cs" />
     <Compile Include="Mvc\AssetManager.cs" />
+    <Compile Include="Mvc\CustomWebViewPage.cs" />
     <Compile Include="Mvc\HtmlHelperExtensionMethods.cs" />
     <Compile Include="Mvc\JQueryDocumentReadyScript.cs" />
     <Compile Include="Mvc\JQueryHelper.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Mvc\ListChoiceAttribute.cs" />
     <Compile Include="Mvc\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Mvc\SkinTranslationsFactory.cs" />
     <Compile Include="Mvc\UrlHelperExtensionMethods.cs" />
     <Compile Include="Code\SkinnableViewEngine.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -205,6 +209,9 @@
     <Content Include="Views\Settings\Services.js" />
     <Content Include="Views\Stream\HLSPlayer.css" />
     <Content Include="Views\Stream\HLSPlayer.js" />
+    <Compile Include="Mvc\SkinConfiguration.cs" />
+    <Compile Include="Mvc\SkinHelper.cs" />
+    <Compile Include="Mvc\SkinTranslations.cs" />
     <Compile Include="Strings\FormStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
