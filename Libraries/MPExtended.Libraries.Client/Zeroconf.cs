@@ -26,7 +26,7 @@ namespace MPExtended.Libraries.Client
 {
     internal class Zeroconf
     {
-        public delegate void EntryFoundCallback(string address, int port);
+        public delegate void EntryFoundCallback(string address, int port, string metaService);
 
         private static int TIMEOUT = 10;
         private static string DOMAIN = "";
@@ -74,12 +74,16 @@ namespace MPExtended.Libraries.Client
 
         private void ZeroconfDiscoverResolvedService(NetService service)
         {
+            var data = NetService.DictionaryFromTXTRecordData(service.TXTRecordData);
+
             foreach (var address in service.Addresses)
             {
                 IPEndPoint endpoint = (IPEndPoint)address;
                 if (service.Type == SET_SERVICE_TYPE)
                 {
-                    foundCallback.Invoke(endpoint.Address.ToString(), endpoint.Port);
+                    var meta = data.Contains("meta") ? Encoding.ASCII.GetString((byte[])data["meta"]) : 
+                                                       String.Format("http://{0}:{1}/", endpoint.Address, endpoint.Port);
+                    foundCallback.Invoke(endpoint.Address.ToString(), endpoint.Port, meta);
                 }
             }
         }

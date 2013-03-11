@@ -78,6 +78,7 @@ namespace MPExtended.Services.MetaService
                 additionalData["mac"] = String.Join(";", NetworkInformation.GetMACAddresses());
                 additionalData["netbios-name"] = Environment.MachineName != null ? Environment.MachineName : String.Empty;
                 additionalData["external-ip"] = ExternalAddress.GetAddress() != null ? ExternalAddress.GetAddress() : String.Empty;
+                additionalData["meta"] = WCFUtil.GetCurrentRoot().Remove(WCFUtil.GetCurrentRoot().LastIndexOf("/MPExtended/") + 1);
                 additionalData["mas"] = set.MAS != null ? set.MAS : String.Empty;
                 additionalData["masstream"] = set.MASStream != null ? set.MASStream : String.Empty;
                 additionalData["tas"] = set.TAS != null ? set.TAS : String.Empty;
