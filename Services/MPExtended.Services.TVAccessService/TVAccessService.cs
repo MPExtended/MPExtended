@@ -1,6 +1,6 @@
-﻿#region Copyright (C) 2011-2012 MPExtended, 2010-2011 TV4Home
+﻿#region Copyright (C) 2011-2013 MPExtended, 2010-2011 TV4Home
 // Copyright (C) 2010-2011 TV4Home, http://tv4home.codeplex.com/
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -806,6 +806,23 @@ namespace MPExtended.Services.TVAccessService
         public WebRecordingBasic GetRecordingById(int id)
         {
             return Recording.Retrieve(id).ToWebRecording();
+        }
+
+        public WebBoolResult DeleteRecording(int id)
+        {
+            Log.Info("Deleting recording {0}, as requested by client {1}", id, WCFUtil.GetClientIPAddress());
+            try
+            {
+                bool retVal = _tvControl.DeleteRecording(id);
+                if (!retVal)
+                    Log.Warn("Failed to delete recording, TV Server returned false");
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed to delete recoding", ex);
+                return false;
+            }
         }
 
         public WebRecordingFileInfo GetRecordingFileInfo(int id)

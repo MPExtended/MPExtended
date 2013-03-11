@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ namespace MPExtended.Libraries.Service.Hosting
             {
                 var type = plugin.Value.GetServiceType();
                 Log.Debug("Loading service {0}", type.Name);
+                plugin.Value.Start();
 
                 ServiceHost host;
                 if (plugin.Value is ISingleInstanceWcfService)

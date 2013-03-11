@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,13 +26,12 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
+using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
-using MPExtended.Libraries.Service.Util;
-using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -323,7 +322,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
-                return Json(new { Success = true, URL = url }, JsonRequestBehavior.AllowGet);
+                return Json(new { Success = true, URL = url, Poster = Url.Artwork(type, itemId) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -417,7 +416,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                                     identifier = identifier,
                                     ctdAction = queryString["action"],
                                     parameters = queryString["parameters"]
-                                }), Request.Url.Scheme, Request.Url.Host);
+                                }), ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                             })
                             .Join(Environment.NewLine);
 
@@ -580,7 +579,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         parameters["transcoder"] = profile.Name;
                         parameters["continuationId"] = continuationId;
                         m3u.AppendLine(String.Format("#EXTINF:{0},{1}", track.Duration, track.Title));
-                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                         m3u.AppendLine(url);
                     }
                     break;
@@ -590,7 +589,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     parameters["item"] = itemId;
                     parameters["transcoder"] = profile.Name;
                     parameters["continuationId"] = continuationId;
-                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, Request.Url.Scheme, Request.Url.Host);
+                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
                     m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
                     m3u.AppendLine(url);
                     break;

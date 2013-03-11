@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2011-2012 MPExtended
-// Copyright (C) 2011-2012 MPExtended Developers, http://mpextended.github.com/
+﻿#region Copyright (C) 2011-2013 MPExtended
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ namespace MPExtended.Libraries.Service.Hosting
 				
                 // load and host all services
                 foreach (var service in ServiceInstallation.Instance.GetServices())
-                    Task.Factory.StartNew(CreateServiceHost, (object)service);
+                    Task.Factory.StartNew(StartService, (object)service);
                 wcfHost = new WCFHost();
                 wcfHost.Start(ServiceInstallation.Instance.GetWcfServices());
 				
@@ -100,7 +100,7 @@ namespace MPExtended.Libraries.Service.Hosting
             }
         }
 
-        private void CreateServiceHost(object passedService)
+        private void StartService(object passedService)
         {
             var plugin = (Plugin<IService>)passedService;
             Log.Debug("Loading service {0}", plugin.Metadata["ServiceName"]);
