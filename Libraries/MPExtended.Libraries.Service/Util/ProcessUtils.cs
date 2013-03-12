@@ -23,7 +23,7 @@ namespace MPExtended.Libraries.Service.Util
 
                 if (match != null && match.MainWindowTitle != null)
                 {
-                        return true;
+                    return true;
                 }
             }
 
@@ -53,7 +53,7 @@ namespace MPExtended.Libraries.Service.Util
             {
                 foreach (Process p in running)
                 {
-                    if (p.ProcessName.Contains(name))
+                    if (p.ProcessName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
                     {
                         //process is found
                         return p;

@@ -1,0 +1,32 @@
+﻿<Page x:Class="MPExtended.Applications.ServiceConfigurator.Pages.TabScraperConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="387" d:DesignWidth="380"
+      xmlns:strings="clr-namespace:MPExtended.Libraries.Service.Strings;assembly=MPExtended.Libraries.Service"
+	  Title="TabScraperConfig">
+
+    <Grid>
+        <ListView AlternationCount="1" HorizontalAlignment="Stretch" Margin="12,46,12,64" Name="lvScrapers" VerticalAlignment="Stretch" ContextMenuOpening="lvScrapers_ContextMenuOpening">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Start Scraper" Name="miStartScraper" Click="miStartScraper_Click"/>
+                    <MenuItem Header="Pause Scraper" Name="miPauseResumeScraper" Click="miPauseResumeScraper_Click"/>
+                    <MenuItem Header="Stop Scraper" Name="miStopScraper" Click="miStopScraper_Click"  />
+                    <MenuItem Header="Open Config" Name="miOpenConfig" Click="miOpenConfig_Click" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ScraperName}" Header="Name" Width="300"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ScraperInfo}" Header="State" Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Stop All Scapers" Height="23" HorizontalAlignment="Left" Margin="209,12,0,0" Name="btnStopAllScrapers" VerticalAlignment="Top" Width="159" Click="btnStopAllScrapers_Click" />
+        <Button Content="Start All Scapers" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btnStartAllScrapers" VerticalAlignment="Top" Width="159" Click="btnStartAllScrapers_Click" />
+        <TextBlock Height="44" Margin="12,0,12,12" Name="label1" Text="Scrapers help you keep your media library up-to-date even when MediaPortal isn't running. Click here to get more scrapers." TextWrapping="Wrap" VerticalAlignment="Bottom" />
+    </Grid>
+</Page>
