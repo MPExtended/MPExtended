@@ -77,6 +77,7 @@
     <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
       <Link>Code\WindowsServiceHandler.cs</Link>
     </Compile>
+    <Compile Include="Code\WpfScraperConfig.cs" />
     <Compile Include="Code\Zeroconf.cs" />
     <Compile Include="Pages\SelectUserDialog.xaml.cs">
       <DependentUpon>SelectUserDialog.xaml</DependentUpon>
@@ -144,6 +145,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\TabScraperConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TabServerLogs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +188,9 @@
     </Compile>
     <Compile Include="Pages\TabPluginConfig.xaml.cs">
       <DependentUpon>TabPluginConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TabScraperConfig.xaml.cs">
+      <DependentUpon>TabScraperConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TabServerLogs.xaml.cs">
       <DependentUpon>TabServerLogs.xaml</DependentUpon>
@@ -233,6 +241,10 @@
     <ProjectReference Include="..\..\Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj">
       <Project>{14102199-B29C-4DA0-AD52-361BAE8C9BB8}</Project>
       <Name>MPExtended.Services.MetaService.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.ScraperService.Interfaces\MPExtended.Services.ScraperService.Interfaces.csproj">
+      <Project>{3A8E8E38-5B89-4739-8777-D2D93507DBC2}</Project>
+      <Name>MPExtended.Services.ScraperService.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj">
       <Project>{3533C60C-F466-43A4-A7EE-633E7A7C3018}</Project>

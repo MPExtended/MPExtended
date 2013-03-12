@@ -65,7 +65,8 @@ namespace MPExtended.Services.ScraperService
                 returnList.Add(new WebScraper()
                 {
                     ScraperId = (int)s.Metadata["Id"],
-                    ScraperName = (string)s.Metadata["Name"]
+                    ScraperName = (string)s.Metadata["Name"],
+                    ScraperInfo = s.Value.GetScraperStatus()
                 });
             }
 

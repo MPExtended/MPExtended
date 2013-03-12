@@ -15,5 +15,6 @@ namespace MPExtended.Services.ScraperService.Interfaces
         public int ScraperId { get; set; }
         public String ScraperName { get; set; }
         public String ScraperDescription { get; set; }
+        public WebScraperInfo ScraperInfo { get; set; }
     }
 }

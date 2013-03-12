@@ -87,6 +87,8 @@
             </TabItem>
             <TabItem Header="{x:Static strings:UI.TabPlugins}" Width="160" Name="tiPlugin" Tag="Pages/TabPluginConfig.xaml">
             </TabItem>
+            <TabItem Header="Scraper" Width="160" Name="tiScraperConfig" Tag="Pages/TabScraperConfig.xaml">
+            </TabItem>
             <TabItem Header="{x:Static strings:UI.TabSocial}" Width="160" Name="tiSocial" Tag="Pages/TabSocial.xaml">
             </TabItem>
             <TabItem Header="{x:Static strings:UI.TabAuthentication}" Width="160" Name="tiAuthentication" Tag="Pages/TabAuthentication.xaml">
