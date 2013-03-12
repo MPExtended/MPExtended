@@ -74,29 +74,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                 if (recreateChannel)
                 {
-                    BasicHttpBinding binding = new BasicHttpBinding()
+                    var binding = new NetNamedPipeBinding()
                     {
-                        MaxReceivedMessageSize = Int32.MaxValue,
-                        ReceiveTimeout = new TimeSpan(1, 0, 0),
-                        SendTimeout = new TimeSpan(1, 0, 0),
+                        MaxReceivedMessageSize = Int32.MaxValue
                     };
 
-                    binding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
-                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Basic;
+                    binding.ReaderQuotas.MaxArrayLength = Int32.MaxValue;
+                    binding.ReaderQuotas.MaxStringContentLength = Int32.MaxValue;
 
-                    var endpointAddress = new EndpointAddress(String.Format("http://{0}:{1}/MPExtended/ScraperService", "localhost", Configuration.Services.Port));
+                    var endpointAddress = new EndpointAddress(String.Format("net.pipe://127.0.0.1/{0}", "MPExtended/ScraperService"));
                     var factory = new ChannelFactory<IScraperService>(binding, endpointAddress);
-
-                    //TODO: is it wise to just select the first user?
-                    if (Configuration.Authentication.Users != null && Configuration.Authentication.Users.Count > 0)
-                    {
-                        factory.Credentials.UserName.UserName = Configuration.Authentication.Users[0].Username;
-                        factory.Credentials.UserName.Password = Configuration.Authentication.Users[0].GetPassword();
-                    }
-                    else
-                    {
-                        Log.Warn("No user credentials available for connecting to the scraper service");
-                    }
 
                     proxyChannel = factory.CreateChannel();
 
