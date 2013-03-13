@@ -85,6 +85,7 @@
     <Compile Include="Network\INetworkContext.cs" />
     <Compile Include="Network\LocalMachineContext.cs" />
     <Compile Include="Network\NetworkContextFactory.cs" />
+    <Compile Include="Extensions\NaturalSorting.cs" />
     <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
     <Compile Include="Hosting\ISingleInstanceWcfService.cs" />
