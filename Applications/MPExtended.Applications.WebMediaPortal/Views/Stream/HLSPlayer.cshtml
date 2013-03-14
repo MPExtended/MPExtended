@@ -7,6 +7,7 @@
 <div id="hlsplayer" style="width: @(Model.Size.Width)px; height: @(Model.Size.Height)px;"
                     data-url="@Url.Action("StartHttpLiveStream", "Stream", new { type = Model.MediaType, 
                                                                                  itemId = Model.MediaId, 
+                                                                                 fileindex = 0,
                                                                                  transcoder = Model.TranscoderProfile.Name, 
                                                                                  continuationId = Model.ContinuationId })">
     <div id="loader">

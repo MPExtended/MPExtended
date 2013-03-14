@@ -40,6 +40,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Channel = 16,
         [EnumMember]
-        StartTime = 17
+        StartTime = 17,
+        [EnumMember]
+        NaturalTitle = 18
     }
 }
