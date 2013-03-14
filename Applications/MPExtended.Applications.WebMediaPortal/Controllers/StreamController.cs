@@ -32,6 +32,7 @@ using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
@@ -159,6 +160,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string fullUrl = String.Format("http://{0}/MPExtended/StreamingService/stream/GetMediaItem?{1}", address, queryString.ToString());
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
+            // If we can access the file without any problems, let IIS stream it; that is a lot faster
+            if (NetworkInformation.IsLocalAddress(fullUri.Host, false) && type != WebMediaType.TV)
+            {
+                var path = type == WebMediaType.Recording ?
+                    Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
+                    Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
+                if (System.IO.File.Exists(path))
+                    return File(path, MIME.GetFromFilename(path, "application/octet-stream"), Path.GetFileName(path));
+            }
+
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (NetworkInformation.IsLocalAddress(fullUri.Host, false))
                 fullUri.Host = NetworkInformation.GetIPAddress(false);
@@ -179,7 +190,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return new EmptyResult();
         }
 
-        private ActionResult GenerateStream(WebMediaType type, string itemId, string transcoder, int starttime, string continuationId)
+        private ActionResult GenerateStream(WebMediaType type, string itemId, int fileindex, string transcoder, int starttime, string continuationId)
         {
             // Check if there is actually a player requested for this stream
             if (!IsUserAuthenticated())
@@ -191,7 +202,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Delegate to HLS streaming if needed
             WebTranscoderProfile profile = GetStreamControl(type).GetTranscoderProfileByName(transcoder);
             if (profile.HasVideoStream && StreamTarget.GetVideoTargets().First(x => profile.Targets.Contains(x.Name)).Player == VideoPlayer.HLS)
-                return GenerateHttpLiveStream(type, itemId, profile, starttime, continuationId);
+                return GenerateHttpLiveStream(type, itemId, fileindex, profile, starttime, continuationId);
 
             // Generate random identifier, and continuationId if needed
             string identifier = "webmediaportal-" + randomGenerator.Next(10000, 99999);
@@ -207,7 +218,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // Check stream mode, generate timeout setting and dump all info we got
             StreamType streamMode = GetStreamMode();
             int timeout = streamMode == StreamType.Direct ? STREAM_TIMEOUT_DIRECT : STREAM_TIMEOUT_PROXY;
-            Log.Debug("Starting stream type={0}; itemId={1}; transcoder={2}; starttime={3}; continuationId={4}", type, itemId, transcoder, starttime, continuationId);
+            Log.Debug("Starting stream type={0}; itemId={1}; index={2}; transcoder={3}; starttime={4}; continuationId={5}", 
+                type, itemId, fileindex, transcoder, starttime, continuationId);
             Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and is using mode {3} with timeout {4}s",
                 HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, streamMode, timeout);
 
@@ -216,7 +228,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
             {
                 WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, timeout))
+                if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, fileindex, clientDescription, identifier, timeout))
                 {
                     Log.Error("InitStream failed");
                     return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -304,7 +316,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // HTTP Live Streaming
-        public ActionResult StartHttpLiveStream(WebMediaType type, string itemId, string transcoder, string continuationId)
+        public ActionResult StartHttpLiveStream(WebMediaType type, string itemId, int fileindex, string transcoder, string continuationId)
         {
             if (!IsUserAuthenticated())
             {
@@ -313,12 +325,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             var profile = GetProfile(GetStreamControl(type), transcoder);
-            string identifier = ActuallyStartHttpLiveStream(type, itemId, profile, 0, continuationId);
+            string identifier = ActuallyStartHttpLiveStream(type, itemId, fileindex, profile, 0, continuationId);
             if (identifier != null)
             {
                 string url = GetStreamMode() == StreamType.Direct ? HttpLiveUrls[identifier] :
                     Url.Action(Enum.GetName(typeof(WebMediaType), type), new RouteValueDictionary() { 
                         { "item", itemId },
+                        { "fileindex", fileindex },
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
@@ -330,9 +343,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        private ActionResult GenerateHttpLiveStream(WebMediaType type, string itemId, WebTranscoderProfile profile, int starttime, string continuationId)
+        private ActionResult GenerateHttpLiveStream(WebMediaType type, string itemId, int fileindex, WebTranscoderProfile profile, int starttime, string continuationId)
         {
-            string identifier = ActuallyStartHttpLiveStream(type, itemId, profile, starttime, continuationId);
+            string identifier = ActuallyStartHttpLiveStream(type, itemId, fileindex, profile, starttime, continuationId);
             if (identifier == null)
                 return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
 
@@ -350,7 +363,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
         }
 
-        private string ActuallyStartHttpLiveStream(WebMediaType type, string itemId, WebTranscoderProfile profile, int starttime, string continuationId)
+        private string ActuallyStartHttpLiveStream(WebMediaType type, string itemId, int fileindex, WebTranscoderProfile profile, int starttime, string continuationId)
         {
             // Get identifier and continuationId
             continuationId = continuationId ?? "hls-" + randomGenerator.Next(10000, 99999).ToString();
@@ -362,8 +375,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string url;
             if (!alreadyRunning)
             {
-                Log.Debug("Starting HLS stream type={0}; itemId={1}; profile={2}; starttime={3}; continuationId={4}; identifier={5}",
-                    type, itemId, profile.Name, starttime, continuationId, identifier);
+                Log.Debug("Starting HLS stream type={0}; itemId={1}; offset={2}; profile={3}; starttime={4}; continuationId={5}; identifier={6}",
+                    type, itemId, fileindex, profile.Name, starttime, continuationId, identifier);
                 Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and timeout {3}s",
                     HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, STREAM_TIMEOUT_HTTPLIVE);
 
@@ -372,7 +385,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 using (var scope = WCFClient.EnterOperationScope(GetStreamControl(type)))
                 {
                     WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
-                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
+                    if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, fileindex, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
                     {
                         Log.Error("InitStream for HLS failed");
                         return null;
@@ -447,29 +460,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Stream wrapper URLs
-        public ActionResult TV(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult TV(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.TV, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TV, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Movie(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult Movie(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.Movie, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Movie, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult TVEpisode(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.TVEpisode, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.TVEpisode, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult Recording(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult Recording(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.Recording, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.Recording, item, fileindex, transcoder, starttime, continuationId);
         }
 
-        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, string continuationId = null)
+        public ActionResult MusicTrack(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
         {
-            return GenerateStream(WebMediaType.MusicTrack, item, transcoder, starttime, continuationId);
+            return GenerateStream(WebMediaType.MusicTrack, item, fileindex, transcoder, starttime, continuationId);
         }
 
         //
@@ -498,7 +511,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         [ServiceAuthorize]
-        public ActionResult Player(WebMediaType type, string itemId)
+        public ActionResult Player(WebMediaType type, string itemId, int fileindex = 0)
         {
             PlayerViewModel model = new PlayerViewModel();
             model.MediaType = type;
@@ -528,6 +541,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // generate url
             RouteValueDictionary parameters = new RouteValueDictionary();
             parameters["item"] = itemId;
+            parameters["fileindex"] = fileindex;
             parameters["transcoder"] = profile.Name;
             parameters["continuationId"] = model.ContinuationId;
             model.URL = Url.Action(Enum.GetName(typeof(WebMediaType), type), parameters);
