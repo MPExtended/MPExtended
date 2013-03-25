@@ -12,16 +12,16 @@ namespace MPExtended.Services.ScraperService.Interfaces
     [ServiceContract(Namespace = "http://mpextended.github.com")]
     public interface IScraperPlugin
     {
-        WebResult StartScraper();
+        WebBoolResult StartScraper();
 
-        WebResult StopScraper();
-        WebResult PauseScraper();
-        WebResult ResumeScraper();
-        WebResult TriggerUpdate();
+        WebBoolResult StopScraper();
+        WebBoolResult PauseScraper();
+        WebBoolResult ResumeScraper();
+        WebBoolResult TriggerUpdate();
         WebScraperInfo GetScraperStatus();
         IList<WebScraperInputRequest> GetAllScraperInputRequests();
-        WebResult SetScraperInputRequest(String requestId, String matchId, String text);
-        WebResult AddItemToScraper(String title, WebMediaType type, int? provider, string itemId, int? offset);
+        WebBoolResult SetScraperInputRequest(String requestId, String matchId, String text);
+        WebBoolResult AddItemToScraper(String title, WebMediaType type, int? provider, string itemId, int? offset);
         List<WebScraperItem> GetScraperItems();
         List<WebScraperItem> GetUpdatedScraperItems(DateTime updated);
         WebScraperItem GetScraperItem(string itemId);

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPExtended.Services.ScraperService.Interfaces
 {
-    public class WebScraperInputRequest : WebObject
+    public class WebScraperInputRequest
     {
         public String Id { get; set; }
         public String Title { get; set; }

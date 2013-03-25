@@ -62,7 +62,7 @@ namespace MPExtended.Libraries.Service.Util
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Log.Warn("Error getting process", ex);
             }
             //process not found -> return null
             return null;

@@ -66,6 +66,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Composition\IndexedPluginLoader.cs" />
+    <Compile Include="Composition\NativeAssemblyLoader.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginLoader.cs" />
     <Compile Include="Composition\SafeDirectoryCatalog.cs" />
