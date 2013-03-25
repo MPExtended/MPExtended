@@ -93,8 +93,6 @@
     <Compile Include="IScraperService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebConfigResult.cs" />
-    <Compile Include="WebObject.cs" />
-    <Compile Include="WebResult.cs" />
     <Compile Include="WebScraper.cs" />
     <Compile Include="WebScraperAction.cs" />
     <Compile Include="WebScraperInputMatch.cs" />

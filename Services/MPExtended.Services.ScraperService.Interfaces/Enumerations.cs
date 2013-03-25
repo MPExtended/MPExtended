@@ -10,25 +10,25 @@ namespace MPExtended.Services.ScraperService.Interfaces
     public enum WebInputTypes
     {
         /// <summary>
-        /// Shuts down all processes running in the security context of the process that called the ExitWindowsEx function. Then it logs the user off.
+        /// The scraper is expecting a text input
         /// </summary>
         [EnumMember]
         TextInput = 0,
 
         /// <summary>
-        /// Shuts down the system and turns off the power. The system must support the power-off feature.
+        /// The scraper is expecting a numeric input
         /// </summary>
         [EnumMember]
         NumberInput = 1,
 
         /// <summary>
-        /// Shuts down the system and then restarts the system.
+        /// A item is to be selected from a list of possible results
         /// </summary>
         [EnumMember]
         ItemSelect = 2,
 
         /// <summary>
-        /// Shuts down the system to a point at which it is safe to turn off the power. All file buffers have been flushed to disk, and all running processes have stopped. If the system supports the power-off feature, the power is also turned off.
+        /// A yes/no/cancel choice
         /// </summary>
         [EnumMember]
         YesNoCancel = 3

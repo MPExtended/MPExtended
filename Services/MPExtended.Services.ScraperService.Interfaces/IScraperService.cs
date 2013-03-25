@@ -18,23 +18,23 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult StartScraper(int? scraperId);
+        WebBoolResult StartScraper(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult StopScraper(int? scraperId);
+        WebBoolResult StopScraper(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult PauseScraper(int? scraperId);
+        WebBoolResult PauseScraper(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult ResumeScraper(int? scraperId);
+        WebBoolResult ResumeScraper(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult TriggerUpdate(int? scraperId);
+        WebBoolResult TriggerUpdate(int? scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -42,11 +42,11 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult SetScraperInputRequest(int? scraperId, String requestId, String matchId, String text);
+        WebBoolResult SetScraperInputRequest(int? scraperId, String requestId, String matchId, String text);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset);
+        WebBoolResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Windows.Forms;
 using MPExtended.Libraries.Service.Config;
+using MPExtended.Libraries.Service.Composition;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -31,20 +32,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabScraperConfig : Page, ITabCloseCallback
     {
-        #region external calls
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AddDllDirectory(string lpPathName);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetDllDirectory(string lpPathName);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern int GetDllDirectory(int bufsize, StringBuilder buf);
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr LoadLibrary(string librayName);
-        #endregion
-
         private DispatcherTimer _sessionWatcher;
         private ObservableCollection<WpfScraperConfig> _scrapers = new ObservableCollection<WpfScraperConfig>();
         private IScraperService proxyChannel;
@@ -95,16 +82,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private class ProxyDomain : MarshalByRefObject
         {
-            public Assembly GetAssembly(string AssemblyPath)
+            public Assembly GetAssembly(string assemblyPath)
             {
                 try
                 {
-                    return Assembly.LoadFrom(AssemblyPath);
+                    return Assembly.LoadFrom(assemblyPath);
                 }
                 catch (Exception ex)
                 {
-                    throw new InvalidOperationException(ex.ToString());
+                    Log.Warn("Error on loading assembly " + assemblyPath, ex);
                 }
+                return null;
             }
         }
 
@@ -134,10 +122,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 IList<WebScraper> tmp = Proxy.GetAvailableScrapers();
-
                 if (tmp != null)
                 {
-                    //_scrapers.Upda
                     _scrapers.UpdateScraperList(tmp);
                 }
             }
@@ -145,6 +131,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             {
                 _scrapers.Clear();
                 Log.Warn("No connection to service");
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error updating scapers", ex);
             }
         }
 
@@ -171,10 +161,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void miStartScraper_Click(object sender, RoutedEventArgs e)
         {
-            WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
-            if (scraper != null)
+            try
             {
-                bool success = Proxy.StartScraper(scraper.ScraperId);
+                WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
+                if (scraper != null)
+                {
+                    bool success = Proxy.StartScraper(scraper.ScraperId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error starting scraper", ex);
             }
         }
 
@@ -185,17 +182,24 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void miPauseResumeScraper_Click(object sender, RoutedEventArgs e)
         {
-            WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
-            if (scraper != null)
+            try
             {
-                if (scraper.ScraperInfo.ScraperState == WebScraperState.Paused)
+                WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
+                if (scraper != null)
                 {
-                    Proxy.ResumeScraper(scraper.ScraperId);
+                    if (scraper.ScraperInfo.ScraperState == WebScraperState.Paused)
+                    {
+                        Proxy.ResumeScraper(scraper.ScraperId);
+                    }
+                    else
+                    {
+                        Proxy.PauseScraper(scraper.ScraperId);
+                    }
                 }
-                else
-                {
-                    Proxy.PauseScraper(scraper.ScraperId);
-                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error pausing/resuming scraper", ex);
             }
         }
 
@@ -206,10 +210,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void miStopScraper_Click(object sender, RoutedEventArgs e)
         {
-            WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
-            if (scraper != null)
+            try
             {
-                bool success = Proxy.StopScraper(scraper.ScraperId);
+                WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
+                if (scraper != null)
+                {
+                    bool success = Proxy.StopScraper(scraper.ScraperId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error stopping scraper", ex);
             }
         }
 
@@ -222,16 +233,16 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void miOpenConfig_Click(object sender, RoutedEventArgs e)
         {
-            WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
-            if (scraper != null)
+            try
             {
-                System.Windows.Forms.Application.EnableVisualStyles();
-                WebConfigResult scraperDll = Proxy.GetConfig(scraper.ScraperId);
-
-
-                if (File.Exists(scraperDll.DllPath))
+                WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
+                if (scraper != null)
                 {
-                    try
+                    System.Windows.Forms.Application.EnableVisualStyles();
+                    WebConfigResult scraperDll = Proxy.GetConfig(scraper.ScraperId);
+
+
+                    if (File.Exists(scraperDll.DllPath))
                     {
                         //System.Reflection.Assembly myDllAssembly = System.Reflection.Assembly.LoadFile(formDll);
                         ProxyDomain pd = new ProxyDomain();
@@ -239,7 +250,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                         String assemblyName = scraperDll.PluginAssemblyName;
 
                         IScraperPlugin plugin = (IScraperPlugin)assembly.CreateInstance(assemblyName);
-                        SetDllDirectory(new FileInfo(scraperDll.DllPath).Directory.FullName);
+                        NativeAssemblyLoader.SetDllDirectory(new FileInfo(scraperDll.DllPath).Directory.FullName);
 
                         Form config = plugin.CreateConfig();
 
@@ -257,16 +268,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                         {
                             bool result = Proxy.ResumeScraper(scraper.ScraperId);
                         }
+
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Log.Error("Error starting scraper config", ex);
+                        Log.Warn("Couldn't load scraper config, {0} doesn't exist", scraperDll.DllPath);
                     }
                 }
-                else
-                {
-                    Log.Warn("Couldn't load scraper config, {0} doesn't exist", scraperDll.DllPath);
-                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error starting scraper config", ex);
             }
         }
 
@@ -277,10 +289,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void btnStartAllScrapers_Click(object sender, RoutedEventArgs e)
         {
-            IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
-            foreach (WebScraper s in scrapers)
+            try
             {
-                Proxy.StartScraper(s.ScraperId);
+                IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
+                foreach (WebScraper s in scrapers)
+                {
+                    Proxy.StartScraper(s.ScraperId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error starting scrapers", ex);
             }
         }
 
@@ -291,10 +310,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         /// <param name="e"></param>
         private void btnStopAllScrapers_Click(object sender, RoutedEventArgs e)
         {
-            IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
-            foreach (WebScraper s in scrapers)
+
+            try
             {
-                Proxy.StopScraper(s.ScraperId);
+                IList<WebScraper> scrapers = Proxy.GetAvailableScrapers();
+                foreach (WebScraper s in scrapers)
+                {
+                    Proxy.StopScraper(s.ScraperId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error stopping scrapers", ex);
             }
         }
     }

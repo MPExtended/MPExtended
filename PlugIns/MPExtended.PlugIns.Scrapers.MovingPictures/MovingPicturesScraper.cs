@@ -20,18 +20,40 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
 {
     [Export(typeof(IScraperPlugin))]
     [ExportMetadata("Name", "MovingPictures Scraper")]
-    [ExportMetadata("Id", 100)]
+    [ExportMetadata("Id", 1)]
     public class MovingPicturesScraper : IScraperPlugin
     {
 
         private static int SCRAPER_ID = 1;
         private static String SCRAPER_NAME = "MovingPictures Importer";
         private static String SCRAPER_LOG_PREFIX = SCRAPER_NAME + ": ";
-        private static String[] conflicting = new String[] { "Configuration", "MediaPortal", "MPExtended.Scrapers.MovingPictures.Config" };
+        private static String[] conflicting = new String[] { "Configuration", "MediaPortal" };
 
-        private void CheckConflictingProgramsRunning()
+
+
+        private Thread initThread;
+        private List<MovieMatch> matches = new List<MovieMatch>();
+        private Thread conflictingCheckThread;
+        private string mCurrentAction;
+        private int mCurrentPercentage;
+        private bool mImporterPausedManually;
+        private WebScraperState mScraperState = WebScraperState.Stopped;
+
+        private Dictionary<MovieMatch, WebScraperItem> scraperItems;
+        private System.Timers.Timer _conflictingChecker;
+
+        public MovingPicturesScraper()
         {
-            while (mScraperState != WebScraperState.Stopped)
+            scraperItems = new Dictionary<MovieMatch, WebScraperItem>();
+
+            _conflictingChecker = new System.Timers.Timer(1000);
+            _conflictingChecker.AutoReset = true;
+            _conflictingChecker.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+        }
+
+        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            try
             {
                 if (!mImporterPausedManually)
                 {
@@ -48,54 +70,48 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
                         ResumeMopiScraper();
                     }
                 }
-
-                Thread.Sleep(1000);
             }
-        }
-
-        private Thread initThread;
-        private List<MovieMatch> matches = new List<MovieMatch>();
-        private Thread conflictingCheckThread;
-        private string mCurrentAction;
-        private int mCurrentPercentage;
-        private bool mImporterPausedManually;
-        private WebScraperState mScraperState = WebScraperState.Stopped;
-
-        private Dictionary<MovieMatch, WebScraperItem> scraperItems;
-
-        public MovingPicturesScraper()
-        {
-            scraperItems = new Dictionary<MovieMatch, WebScraperItem>();
+            catch (Exception ex)
+            {
+                Log.Warn("Error in conflicting-check", ex);
+            }
         }
 
         void Importer_MovieStatusChanged(MovieMatch obj, MovieImporterAction action)
         {
-            if (obj != null)
+            try
             {
-                WebScraperItem item = null;
-                if (scraperItems.ContainsKey(obj))
+                if (obj != null)
                 {
-                    item = scraperItems[obj];
+                    WebScraperItem item = null;
+                    if (scraperItems.ContainsKey(obj))
+                    {
+                        item = scraperItems[obj];
+                    }
+                    else
+                    {
+                        item = new WebScraperItem();
+                        item.ItemId = obj.Signature.MovieHash;
+                        scraperItems.Add(obj, item);
+                    }
+
+                    List<WebScraperAction> actions = new List<WebScraperAction>();
+                    actions.Add(new WebScraperAction() { ActionId = "send_importer", Title = "Send to Importer", Description = "Send this item to the importer", Enabled = (obj.Selected != null && action != MovieImporterAction.NEED_INPUT) });
+                    item.ItemActions = actions;
+
+                    item.State = action.ToString();
+
+                    item.Title = obj.Signature.Title;
+
+                    item.InputRequest = CreateInputRequest(obj);
+                    item.LastUpdated = DateTime.Now;
+
+                    Log.Info("Set {0} to {1}", item.Title, item.State);
                 }
-                else
-                {
-                    item = new WebScraperItem();
-                    item.ItemId = obj.Signature.MovieHash;
-                    scraperItems.Add(obj, item);
-                }
-
-                List<WebScraperAction> actions = new List<WebScraperAction>();
-                actions.Add(new WebScraperAction() { ActionId = "send_importer", Title = "Send to Importer", Description = "Send this item to the importer", Enabled = (obj.Selected != null && action != MovieImporterAction.NEED_INPUT) });
-                item.ItemActions = actions;
-
-                item.State = action.ToString();
-    
-                item.Title = obj.Signature.Title;
-
-                item.InputRequest = CreateInputRequest(obj);
-                item.LastUpdated = DateTime.Now;
-
-                Log.Info("Set {0} to {1}", item.Title, item.State);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error in movingpictures Importer_MovieStatusChanged", ex);
             }
         }
 
@@ -108,7 +124,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             if (match.PossibleMatches != null && match.PossibleMatches.Count > 0)
             {
                 inputRequest.InputType = WebInputTypes.ItemSelect;
-                inputRequest.InputOptions = new List<WebScraperInputMatch>();   
+                inputRequest.InputOptions = new List<WebScraperInputMatch>();
                 foreach (PossibleMatch m in match.PossibleMatches)
                 {
                     inputRequest.InputOptions.Add(new WebScraperInputMatch()
@@ -131,19 +147,33 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
 
         void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription)
         {
-            Log.Info(taskDescription + ", " + percentDone + "%");
-            mCurrentAction = taskDescription;
-            mCurrentPercentage = percentDone;
+            try
+            {
+                Log.Info(taskDescription + ", " + percentDone + "%");
+                mCurrentAction = taskDescription;
+                mCurrentPercentage = percentDone;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error in movingpictures Importer_Progress", ex);
+            }
         }
 
         void MovingPicturesCore_InitializeProgress(string actionName, int percentDone)
         {
-            Log.Debug(actionName + ", " + percentDone + "%");
-            mCurrentAction = actionName;
-            mCurrentPercentage = percentDone;
-            if (percentDone == 100)
+            try
             {
-                MovingPicturesCore.Importer.Start();
+                Log.Debug(actionName + ", " + percentDone + "%");
+                mCurrentAction = actionName;
+                mCurrentPercentage = percentDone;
+                if (percentDone == 100)
+                {
+                    MovingPicturesCore.Importer.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error in movingpictures MovingPicturesCore_InitializeProgress", ex);
             }
         }
 
@@ -160,9 +190,6 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
             initThread.Start();
-
-            conflictingCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
-            conflictingCheckThread.Start();
         }
 
         public WebScraper GetScraperDescription()
@@ -174,13 +201,14 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             };
         }
 
-        public WebResult StartScraper()
+        public WebBoolResult StartScraper()
         {
             if (mScraperState == WebScraperState.Stopped)
             {
+                _conflictingChecker.Start();
                 Log.Debug(SCRAPER_LOG_PREFIX + "Starting Scraper");
                 scraperItems.Clear();
-           
+
                 matches = new List<MovieMatch>();
                 mScraperState = WebScraperState.Running;
                 InitialiseScraper();
@@ -197,15 +225,17 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             }
         }
 
-        public WebResult StopScraper()
+        public WebBoolResult StopScraper()
         {
             if (mScraperState == WebScraperState.Running)
             {
+                _conflictingChecker.Stop();
                 Log.Debug(SCRAPER_LOG_PREFIX + "Stopping Scraper");
                 mScraperState = WebScraperState.Stopped;
                 //Stopping scraper importer
                 MovingPicturesCore.Importer.Stop();
                 MovingPicturesCore.Shutdown();
+
                 return true;
             }
             else
@@ -216,7 +246,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
 
         }
 
-        public WebResult PauseScraper()
+        public WebBoolResult PauseScraper()
         {
             if (mScraperState == WebScraperState.Running)
             {
@@ -231,7 +261,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             }
         }
 
-        private WebResult PauseMopiScraper()
+        private WebBoolResult PauseMopiScraper()
         {
             Log.Info("Pausing Scraper: " + SCRAPER_NAME);
             mScraperState = WebScraperState.Paused;
@@ -239,7 +269,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             return true;
         }
 
-        public WebResult ResumeScraper()
+        public WebBoolResult ResumeScraper()
         {
             if (mScraperState == WebScraperState.Paused)
             {
@@ -254,7 +284,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             }
         }
 
-        private WebResult ResumeMopiScraper()
+        private WebBoolResult ResumeMopiScraper()
         {
             mScraperState = WebScraperState.Running;
             MovingPicturesCore.Importer.Start();
@@ -266,7 +296,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             Log.Info("Updated: " + obj.ToString());
         }
 
-        public WebResult TriggerUpdate()
+        public WebBoolResult TriggerUpdate()
         {
             if (mScraperState == WebScraperState.Running)
             {
@@ -292,7 +322,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             };
         }
 
-        public WebResult SetScraperInputRequest(String requestId, String matchId, String text)
+        public WebBoolResult SetScraperInputRequest(String requestId, String matchId, String text)
         {
             MovieMatch m = scraperItems.Where(x => x.Value.ItemId == requestId).First().Key;
 
@@ -329,7 +359,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
         }
 
 
-        public WebResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
+        public WebBoolResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
         {
             return true;
         }
@@ -365,7 +395,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
 
         public List<WebScraperAction> GetScraperActions()
         {
-            return null;
+            return new List<WebScraperAction>();
         }
 
 
@@ -393,7 +423,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
                 DllPath = path.FullName,
                 PluginAssemblyName = this.GetType().FullName,
                 ExternalPaths = new List<String> { path.Directory.FullName }
-                
+
             };
         }
 

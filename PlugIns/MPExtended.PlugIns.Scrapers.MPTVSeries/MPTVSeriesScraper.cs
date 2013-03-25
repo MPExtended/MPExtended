@@ -19,12 +19,12 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 {
     [Export(typeof(IScraperPlugin))]
     [ExportMetadata("Name", "MPTVSeries Scraper")]
-    [ExportMetadata("Id", 101)]
+    [ExportMetadata("Id", 2)]
     public class MPTVSeriesScraper : IScraperPlugin, IFeedback
     {
-        private static int SCRAPER_ID = 0;
+        private static int SCRAPER_ID = 2;
         private static String SCRAPER_NAME = "MP-TvSeries Importer";
-        private static String[] conflicting = new String[] { "Configuration", "MediaPortal", "MPExtended.Scrapers.MovingPictures.Config" };
+        private static String[] conflicting = new String[] { "Configuration", "MediaPortal" };
         private static String SCRAPER_LOG_PREFIX = SCRAPER_NAME + ": ";
 
         class FeedBacker : IFeedback
@@ -53,34 +53,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             }
         }
 
-        private void CheckConflictingProgramsRunning()
-        {
-            while (mScraperState != WebScraperState.Stopped)
-            {
-                if (!mImporterPausedManually)
-                {
-                    bool conflictingRunning = ProcessUtils.IsProcessRunning(conflicting);
-
-                    if (conflictingRunning && mScraperState != WebScraperState.Paused)
-                    {
-                        Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process running, pausing scraper");
-
-                        PauseTvSeriesScraper();
-                    }
-                    else if (!conflictingRunning && mScraperState == WebScraperState.Paused)
-                    {
-                        Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process no longer running, resuming scraper");
-                        ResumeTvSeriesScraper();
-                    }
-                }
-
-                Thread.Sleep(1000);
-            }
-        }
-
         private Thread initThread;
-        private Thread conflictingCheckThread;
-
         private string mCurrentStatus;
         private int mCurrentPercentage;
         private OnlineParsing m_parserUpdater;
@@ -102,6 +75,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
         public Dictionary<String, String> mPendingTextResults = new Dictionary<String, String>();
 
         private List<WebScraperItem> scraperItems;
+        private System.Timers.Timer _conflictingChecker;
 
         public MPTVSeriesScraper()
         {
@@ -112,25 +86,11 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             mCachedItems = new Dictionary<String, CItem>();
 
             scraperItems = new List<WebScraperItem>();
-        }
 
-        public Process GetProcess(string name)
-        {
-            //here we're going to get a list of all running processes on
-            //the computer
-            foreach (Process clsProcess in Process.GetProcesses())
-            {
-                //now we're going to see if any of the running processes
-                //match the currently running processes.
-                if (clsProcess.ProcessName.Contains(name))
-                {
-                    //if the process is found to be running then we
-                    //return a true
-                    return clsProcess;
-                }
-            }
-            //otherwise we return a false
-            return null;
+            _conflictingChecker = new System.Timers.Timer(1000);
+            _conflictingChecker.AutoReset = true;
+            _conflictingChecker.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+
         }
 
         public void InitialiseScraper()
@@ -142,10 +102,34 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             InitImporter();
             #endregion
 
-            conflictingCheckThread = new Thread(new ThreadStart(CheckConflictingProgramsRunning));
-            conflictingCheckThread.Start();
-
             mScraperState = WebScraperState.Running;
+        }
+
+        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                if (!mImporterPausedManually)
+                {
+                    bool conflictingRunning = ProcessUtils.IsProcessRunning(conflicting);
+
+                    if (conflictingRunning && mScraperState != WebScraperState.Paused)
+                    {
+                        Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process running, pausing scraper");
+
+                        PauseTvSeriesScraper();
+                    }
+                    else if (!conflictingRunning && mScraperState == WebScraperState.Paused)
+                    {
+                        Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process no longer running, resuming scraper");
+                        ResumeTvSeriesScraper();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error in conflicting-check", ex);
+            }
         }
 
         private void InitImporter()
@@ -343,10 +327,11 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             };
         }
 
-        public WebResult StartScraper()
+        public WebBoolResult StartScraper()
         {
             if (mScraperState == WebScraperState.Stopped)
             {
+                _conflictingChecker.Start();
                 Log.Debug(SCRAPER_LOG_PREFIX + "Starting Scraper");
                 InitialiseScraper();
                 mScraperState = WebScraperState.Running;
@@ -362,11 +347,12 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             }
         }
 
-        public WebResult StopScraper()
+        public WebBoolResult StopScraper()
         {
             if (mScraperState == WebScraperState.Running)
             {
                 Log.Debug(SCRAPER_LOG_PREFIX + "Stopping Scraper");
+                _conflictingChecker.Stop();
                 //Stopping scraper importer
                 stopFolderWatches();
                 m_parserUpdater.Cancel();
@@ -380,7 +366,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             }
         }
 
-        public WebResult PauseScraper()
+        public WebBoolResult PauseScraper()
         {
             if (mScraperState == WebScraperState.Running)
             {
@@ -402,7 +388,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             return true;
         }
 
-        public WebResult ResumeScraper()
+        public WebBoolResult ResumeScraper()
         {
             if (mScraperState == WebScraperState.Paused)
             {
@@ -425,7 +411,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         }
 
-        public WebResult TriggerUpdate()
+        public WebBoolResult TriggerUpdate()
         {
             if (mScraperState == WebScraperState.Running)
             {
@@ -457,7 +443,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             };
         }
 
-        public WebResult SetScraperInputRequest(String requestId, String matchId, String text)
+        public WebBoolResult SetScraperInputRequest(String requestId, String matchId, String text)
         {
             if (text != null && !text.Equals(""))
             {
@@ -630,7 +616,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             return ReturnCode.Cancel;
         }
 
-        public WebResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
+        public WebBoolResult AddItemToScraper(string title, WebMediaType type, int? provider, string itemId, int? offset)
         {
             return true;
         }
