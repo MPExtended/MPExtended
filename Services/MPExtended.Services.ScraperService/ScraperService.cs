@@ -29,6 +29,7 @@ namespace MPExtended.Services.ScraperService
             scrapers = new Dictionary<int, Plugin<IScraperPlugin>>();
             var pluginLoader = new PluginLoader();
             pluginLoader.AddRequiredMetadata("Name");
+
             // first argument is directory name in source tree, second one in installed tree
             //pluginLoader.AddFromTree("PlugIns", "Extensions");
             pluginLoader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.Scrapers.*", @"Plugins\Scrapers");
@@ -39,9 +40,49 @@ namespace MPExtended.Services.ScraperService
                 Log.Debug("Loaded scraper plugin {0}", plugin.Metadata["Name"]);
                 int id = (int)plugin.Metadata["Id"];
                 scrapers.Add(id, plugin);
+
+                if (Configuration.Scraper.AutoStart != null &&
+                    Configuration.Scraper.AutoStart.Contains(id))
+                {
+                    Log.Debug("Auto-Starting plugin " + plugin.Metadata["Name"]);
+                    plugin.Value.StartScraper();
+                }
             }
         }
 
+        public WebBoolResult SetAutoStart(int scraperId, bool autoStart)
+        {
+            if (autoStart && !Configuration.Scraper.AutoStart.Contains(scraperId))
+            {
+                Configuration.Scraper.AutoStart.Add(scraperId);
+                return Configuration.Save();
+            }
+            else if (!autoStart && Configuration.Scraper.AutoStart.Contains(scraperId))
+            {
+                Configuration.Scraper.AutoStart.Remove(scraperId);
+                return Configuration.Save(); ;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get 
+        /// </summary>
+        /// <param name="scraperId"></param>
+        /// <returns></returns>
+        public WebBoolResult GetIsAutoStart(int scraperId)
+        {
+            return Configuration.Scraper.AutoStart.Contains(scraperId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<int> GetAutoStartPlugins()
+        {
+            return Configuration.Scraper.AutoStart;
+        }
 
         /// <summary>
         /// Return scraper by id
@@ -78,7 +119,7 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>true if scraper could be started, false otherwise</returns>
-        public WebBoolResult StartScraper(int? scraperId)
+        public WebBoolResult StartScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -90,7 +131,7 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>true if scraper could be stopped, false otherwise</returns>
-        public WebBoolResult StopScraper(int? scraperId)
+        public WebBoolResult StopScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -102,7 +143,7 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>true if scraper could be paused, false otherwise</returns>
-        public WebBoolResult PauseScraper(int? scraperId)
+        public WebBoolResult PauseScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -114,7 +155,7 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>true if scraper could be resumed, false otherwise</returns>
-        public WebBoolResult ResumeScraper(int? scraperId)
+        public WebBoolResult ResumeScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -126,7 +167,7 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>true if scraper update could be triggered, false otherwise</returns>
-        public WebBoolResult TriggerUpdate(int? scraperId)
+        public WebBoolResult TriggerUpdate(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -138,70 +179,70 @@ namespace MPExtended.Services.ScraperService
         /// </summary>
         /// <param name="scraperId">id of scraper</param>
         /// <returns>State of scraper</returns>
-        public WebScraperInfo GetScraperState(int? scraperId)
+        public WebScraperInfo GetScraperState(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperStatus();
         }
 
-        public IList<WebScraperInputRequest> GetAllScraperInputRequests(int? scraperId)
+        public IList<WebScraperInputRequest> GetAllScraperInputRequests(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetAllScraperInputRequests();
         }
 
-        public WebBoolResult SetScraperInputRequest(int? scraperId, string requestId, string matchId, string text)
+        public WebBoolResult SetScraperInputRequest(int scraperId, string requestId, string matchId, string text)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.SetScraperInputRequest(requestId, matchId, text);
         }
 
-        public WebBoolResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset)
+        public WebBoolResult AddItemToScraper(int scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.AddItemToScraper(title, type, provider, itemId, offset);
         }
 
-        public List<WebScraperItem> GetScraperItems(int? scraperId)
+        public List<WebScraperItem> GetScraperItems(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperItems();
         }
 
-        public WebScraperItem GetScraperItem(int? scraperId, string itemId)
+        public WebScraperItem GetScraperItem(int scraperId, string itemId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperItem(itemId);
         }
 
-        public List<WebScraperItem> GetUpdatedScraperItems(int? scraperId, DateTime updated)
+        public List<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetUpdatedScraperItems(updated);
         }
 
-        public List<WebScraperAction> GetScraperActions(int? scraperId)
+        public List<WebScraperAction> GetScraperActions(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetScraperActions();
         }
 
-        public WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId)
+        public WebBoolResult InvokeScraperAction(int scraperId, string itemId, string actionId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.InvokeScraperAction(itemId, actionId);
         }
 
-        public WebConfigResult GetConfig(int? scraperId)
+        public WebConfigResult GetConfig(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 

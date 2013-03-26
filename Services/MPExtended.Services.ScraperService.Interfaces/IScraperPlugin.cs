@@ -13,7 +13,6 @@ namespace MPExtended.Services.ScraperService.Interfaces
     public interface IScraperPlugin
     {
         WebBoolResult StartScraper();
-
         WebBoolResult StopScraper();
         WebBoolResult PauseScraper();
         WebBoolResult ResumeScraper();

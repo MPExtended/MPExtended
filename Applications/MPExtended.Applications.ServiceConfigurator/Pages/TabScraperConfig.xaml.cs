@@ -35,6 +35,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private DispatcherTimer _sessionWatcher;
         private ObservableCollection<WpfScraperConfig> _scrapers = new ObservableCollection<WpfScraperConfig>();
         private IScraperService proxyChannel;
+        private List<int> _autostart = new List<int>();
 
         private IScraperService Proxy
         {
@@ -122,6 +123,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             try
             {
                 IList<WebScraper> tmp = Proxy.GetAvailableScrapers();
+                _autostart = Proxy.GetAutoStartPlugins();
                 if (tmp != null)
                 {
                     _scrapers.UpdateScraperList(tmp);
@@ -151,6 +153,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 miStartScraper.IsEnabled = (scraper.ScraperInfo.ScraperState == WebScraperState.Stopped);
                 miPauseResumeScraper.Header = (scraper.ScraperInfo.ScraperState == WebScraperState.Paused ? "Resume" : "Pause");
                 miStopScraper.IsEnabled = (scraper.ScraperInfo.ScraperState != WebScraperState.Stopped);
+
+                if(_autostart.Contains(scraper.ScraperId))
+                {
+                    miScraperAutostart.Header = "Disable Autostart";
+                }
+                else
+                {
+                    miScraperAutostart.Header = "Enable Autostart";
+                }
             }
         }
 
@@ -224,6 +235,37 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void miScraperAutostart_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                WebScraper scraper = (WebScraper)lvScrapers.SelectedItem;
+                if (scraper != null)
+                {
+                    bool auto = !_autostart.Contains(scraper.ScraperId);
+                    if (Proxy.SetAutoStart(scraper.ScraperId, auto))
+                    {
+                        if (auto)
+                        {
+                            _autostart.Add(scraper.ScraperId);
+                        }
+                        else
+                        {
+                            _autostart.Remove(scraper.ScraperId);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error stopping scraper", ex);
+            }
+        }
 
         /// <summary>
         /// Open a scraper config. We get the scraper information about the config form from the service, then use

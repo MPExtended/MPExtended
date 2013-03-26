@@ -15,6 +15,7 @@
                     <MenuItem Header="Start Scraper" Name="miStartScraper" Click="miStartScraper_Click"/>
                     <MenuItem Header="Pause Scraper" Name="miPauseResumeScraper" Click="miPauseResumeScraper_Click"/>
                     <MenuItem Header="Stop Scraper" Name="miStopScraper" Click="miStopScraper_Click"  />
+                    <MenuItem Header="Enable Autostart" Name="miScraperAutostart" Click="miScraperAutostart_Click" />
                     <MenuItem Header="Open Config" Name="miOpenConfig" Click="miOpenConfig_Click" />
                 </ContextMenu>
             </ListView.ContextMenu>

@@ -53,28 +53,28 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             }
         }
 
-        private Thread initThread;
-        private string mCurrentStatus;
-        private int mCurrentPercentage;
-        private OnlineParsing m_parserUpdater;
-        private bool m_parserUpdaterWorking;
-        private int m_nUpdateScanLapse;
-        private DateTime m_LastUpdateScan;
-        private List<CParsingParameters> m_parserUpdaterQueue = new List<CParsingParameters>();
-        private System.Threading.Timer m_scanTimer;
-        private TimerCallback m_timerDelegate = null;
-        private Watcher m_watcherUpdater;
+        private Thread _initThread;
+        private string _currentStatus;
+        private int _currentPercentage;
+        private OnlineParsing _parserUpdater;
+        private bool _parserUpdaterWorking;
+        private int _updateScanLapse;
+        private DateTime _lastUpdateScan;
+        private List<CParsingParameters> _parserUpdaterQueue = new List<CParsingParameters>();
+        private System.Threading.Timer _scanTimer;
+        private TimerCallback _timerDelegate = null;
+        private Watcher _watcherUpdater;
 
-        private List<WebScraperInputRequest> mPendingRequests;
-        private Dictionary<String, CItem> mCachedItems;
+        private List<WebScraperInputRequest> _pendingRequests;
+        private Dictionary<String, CItem> _cachedItems;
 
-        private WebScraperState mScraperState = WebScraperState.Stopped;
-        private bool mImporterPausedManually = false;
+        private WebScraperState _scraperState = WebScraperState.Stopped;
+        private bool _importerPausedManually = false;
 
-        public Dictionary<String, String> mPendingListSelections = new Dictionary<String, String>();
-        public Dictionary<String, String> mPendingTextResults = new Dictionary<String, String>();
+        public Dictionary<String, String> _pendingListSelections = new Dictionary<String, String>();
+        public Dictionary<String, String> _pendingTextResults = new Dictionary<String, String>();
 
-        private List<WebScraperItem> scraperItems;
+        private List<WebScraperItem> _scraperItems;
         private System.Timers.Timer _conflictingChecker;
 
         public MPTVSeriesScraper()
@@ -82,10 +82,10 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             OnlineParsing.OnlineParsingProgress += new OnlineParsing.OnlineParsingProgressHandler(parserUpdater_OnlineParsingProgress);
             OnlineParsing.OnlineParsingCompleted += new OnlineParsing.OnlineParsingCompletedHandler(parserUpdater_OnlineParsingCompleted);
 
-            mPendingRequests = new List<WebScraperInputRequest>();
-            mCachedItems = new Dictionary<String, CItem>();
+            _pendingRequests = new List<WebScraperInputRequest>();
+            _cachedItems = new Dictionary<String, CItem>();
 
-            scraperItems = new List<WebScraperItem>();
+            _scraperItems = new List<WebScraperItem>();
 
             _conflictingChecker = new System.Timers.Timer(1000);
             _conflictingChecker.AutoReset = true;
@@ -102,24 +102,24 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             InitImporter();
             #endregion
 
-            mScraperState = WebScraperState.Running;
+            _scraperState = WebScraperState.Running;
         }
 
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             try
             {
-                if (!mImporterPausedManually)
+                if (!_importerPausedManually)
                 {
                     bool conflictingRunning = ProcessUtils.IsProcessRunning(conflicting);
 
-                    if (conflictingRunning && mScraperState != WebScraperState.Paused)
+                    if (conflictingRunning && _scraperState != WebScraperState.Paused)
                     {
                         Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process running, pausing scraper");
 
                         PauseTvSeriesScraper();
                     }
-                    else if (!conflictingRunning && mScraperState == WebScraperState.Paused)
+                    else if (!conflictingRunning && _scraperState == WebScraperState.Paused)
                     {
                         Log.Debug(SCRAPER_LOG_PREFIX + "Conflicting process no longer running, resuming scraper");
                         ResumeTvSeriesScraper();
@@ -134,17 +134,17 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         private void InitImporter()
         {
-            m_parserUpdater = new OnlineParsing(this);
+            _parserUpdater = new OnlineParsing(this);
 
             DBOption.SetOptions(DBOption.cImportDelay, 5);
             int importDelay = DBOption.GetOptions(DBOption.cImportDelay);
             Log.Debug(SCRAPER_LOG_PREFIX + String.Format("Starting initial import scan in: {0} secs", importDelay));
 
             // Get Last Time Update Scan was run and how often it should be run
-            DateTime.TryParse(DBOption.GetOptions(DBOption.cImport_OnlineUpdateScanLastTime).ToString(), out m_LastUpdateScan);
+            DateTime.TryParse(DBOption.GetOptions(DBOption.cImport_OnlineUpdateScanLastTime).ToString(), out _lastUpdateScan);
             if (DBOption.GetOptions(DBOption.cImport_AutoUpdateOnlineData))
             {
-                m_nUpdateScanLapse = DBOption.GetOptions(DBOption.cImport_AutoUpdateOnlineDataLapse);
+                _updateScanLapse = DBOption.GetOptions(DBOption.cImport_AutoUpdateOnlineDataLapse);
             }
 
             // do a local scan when starting up the app if enabled - later on the watcher will monitor changes            
@@ -152,12 +152,12 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             {
                 // if online updates are required then this will be picked up 
                 // in ImporterQueueMonitor where last update time is compared
-                m_parserUpdaterQueue.Add(new CParsingParameters(true, false));
+                _parserUpdaterQueue.Add(new CParsingParameters(true, false));
             }
 
             // timer check every second to check for queued parsing parameters
-            if (m_timerDelegate == null) m_timerDelegate = new TimerCallback(ImporterQueueMonitor);
-            m_scanTimer = new System.Threading.Timer(m_timerDelegate, null, importDelay * 1000, 1000);
+            if (_timerDelegate == null) _timerDelegate = new TimerCallback(ImporterQueueMonitor);
+            _scanTimer = new System.Threading.Timer(_timerDelegate, null, importDelay * 1000, 1000);
 
             // Setup Disk Watcher (DeviceManager) and Folder/File Watcher
             if (DBOption.GetOptions(DBOption.cImport_FolderWatch))
@@ -181,15 +181,15 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                 }
             }
 
-            m_watcherUpdater = new Watcher(importFolders, DBOption.GetOptions(DBOption.cImport_ScanRemoteShareLapse));
-            m_watcherUpdater.WatcherProgress += new Watcher.WatcherProgressHandler(watcherUpdater_WatcherProgress);
+            _watcherUpdater = new Watcher(importFolders, DBOption.GetOptions(DBOption.cImport_ScanRemoteShareLapse));
+            _watcherUpdater.WatcherProgress += new Watcher.WatcherProgressHandler(watcherUpdater_WatcherProgress);
         }
 
         private void stopFolderWatches()
         {
-            m_watcherUpdater.StopFolderWatch();
-            m_watcherUpdater.WatcherProgress -= new Watcher.WatcherProgressHandler(watcherUpdater_WatcherProgress);
-            m_watcherUpdater = null;
+            _watcherUpdater.StopFolderWatch();
+            _watcherUpdater.WatcherProgress -= new Watcher.WatcherProgressHandler(watcherUpdater_WatcherProgress);
+            _watcherUpdater = null;
             DeviceManager.StopMonitor();
         }
 
@@ -205,7 +205,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                 {
                     case WatcherItemType.Added:
                         filesAdded.Add(new PathPair(item.m_sParsedFileName, item.m_sFullPathFileName));
-                        scraperItems.Add(new WebScraperItem() { ItemId = item.m_sFullPathFileName, Title = item.m_sParsedFileName, State = "FileAdded" });
+                        _scraperItems.Add(new WebScraperItem() { ItemId = item.m_sFullPathFileName, Title = item.m_sParsedFileName, State = "FileAdded" });
                         break;
 
                     case WatcherItemType.Deleted:
@@ -218,55 +218,55 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             if (filesAdded.Count > 0)
             {
                 // queue it
-                lock (m_parserUpdaterQueue)
+                lock (_parserUpdaterQueue)
                 {
-                    m_parserUpdaterQueue.Add(new CParsingParameters(ParsingAction.List_Add, filesAdded, false, false));
+                    _parserUpdaterQueue.Add(new CParsingParameters(ParsingAction.List_Add, filesAdded, false, false));
                 }
             }
 
             if (filesRemoved.Count > 0)
             {
                 // queue it
-                lock (m_parserUpdaterQueue)
+                lock (_parserUpdaterQueue)
                 {
-                    m_parserUpdaterQueue.Add(new CParsingParameters(ParsingAction.List_Remove, filesRemoved, false, false));
+                    _parserUpdaterQueue.Add(new CParsingParameters(ParsingAction.List_Remove, filesRemoved, false, false));
                 }
             }
         }
 
         public void ImporterQueueMonitor(Object stateInfo)
         {
-            if (!m_parserUpdaterWorking)
+            if (!_parserUpdaterWorking)
             {
                 // need to not be doing something yet (we don't want to accumulate parser objects !)
                 bool bUpdateScanNeeded = false;
 
-                if (m_nUpdateScanLapse > 0)
+                if (_updateScanLapse > 0)
                 {
-                    TimeSpan tsUpdate = DateTime.Now - m_LastUpdateScan;
-                    if ((int)tsUpdate.TotalHours > m_nUpdateScanLapse)
+                    TimeSpan tsUpdate = DateTime.Now - _lastUpdateScan;
+                    if ((int)tsUpdate.TotalHours > _updateScanLapse)
                     {
-                        Log.Debug(SCRAPER_LOG_PREFIX + String.Format("Online Update Scan needed, last scan run @ {0}", m_LastUpdateScan));
-                        m_LastUpdateScan = DateTime.Now;
+                        Log.Debug(SCRAPER_LOG_PREFIX + String.Format("Online Update Scan needed, last scan run @ {0}", _lastUpdateScan));
+                        _lastUpdateScan = DateTime.Now;
                         bUpdateScanNeeded = true;
                     }
                 }
                 if (bUpdateScanNeeded)
                 {
                     // queue scan
-                    lock (m_parserUpdaterQueue)
+                    lock (_parserUpdaterQueue)
                     {
-                        m_parserUpdaterQueue.Add(new CParsingParameters(false, bUpdateScanNeeded));
+                        _parserUpdaterQueue.Add(new CParsingParameters(false, bUpdateScanNeeded));
                     }
                 }
 
-                lock (m_parserUpdaterQueue)
+                lock (_parserUpdaterQueue)
                 {
-                    if (m_parserUpdaterQueue.Count > 0)
+                    if (_parserUpdaterQueue.Count > 0)
                     {
-                        m_parserUpdaterWorking = true;
-                        m_parserUpdater.Start(m_parserUpdaterQueue[0]);
-                        m_parserUpdaterQueue.RemoveAt(0);
+                        _parserUpdaterWorking = true;
+                        _parserUpdater.Start(_parserUpdaterQueue[0]);
+                        _parserUpdaterQueue.RemoveAt(0);
                     }
                 }
             }
@@ -275,10 +275,10 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
         void parserUpdater_OnlineParsingCompleted(bool newEpisodes)
         {
             Log.Debug(SCRAPER_LOG_PREFIX + "Online parsing complete, new episodes: " + newEpisodes);
-            m_parserUpdaterWorking = false;
+            _parserUpdaterWorking = false;
 
-            mCurrentStatus = "Online parsing complete";
-            mCurrentPercentage = 100;
+            _currentStatus = "Online parsing complete";
+            _currentPercentage = 100;
 
             if (newEpisodes)
             {
@@ -286,7 +286,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                 foreach (DBEpisode e in eps)
                 {
                     string filename = e[DBEpisode.cFilename];
-                    foreach (WebScraperItem i in scraperItems)
+                    foreach (WebScraperItem i in _scraperItems)
                     {
                         if (i.ItemId == filename)
                         {
@@ -308,8 +308,8 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                 String status = String.Format("progress received: {0} [{1}/{2}] {3}", progress.CurrentAction, progress.CurrentItem, progress.TotalItems, progress.CurrentProgress);
                 Log.Debug(SCRAPER_LOG_PREFIX + status);
 
-                mCurrentStatus = status;
-                mCurrentPercentage = nProgress;
+                _currentStatus = status;
+                _currentPercentage = nProgress;
 
                 if (progress.CurrentAction == ParsingAction.IdentifyNewEpisodes)
                 {
@@ -329,14 +329,14 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public WebBoolResult StartScraper()
         {
-            if (mScraperState == WebScraperState.Stopped)
+            if (_scraperState == WebScraperState.Stopped)
             {
                 _conflictingChecker.Start();
                 Log.Debug(SCRAPER_LOG_PREFIX + "Starting Scraper");
                 InitialiseScraper();
-                mScraperState = WebScraperState.Running;
+                _scraperState = WebScraperState.Running;
                 //Starting scraper importer
-                m_watcherUpdater.StartFolderWatch();
+                _watcherUpdater.StartFolderWatch();
 
                 return true;
             }
@@ -349,14 +349,14 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public WebBoolResult StopScraper()
         {
-            if (mScraperState == WebScraperState.Running)
+            if (_scraperState == WebScraperState.Running)
             {
                 Log.Debug(SCRAPER_LOG_PREFIX + "Stopping Scraper");
                 _conflictingChecker.Stop();
                 //Stopping scraper importer
                 stopFolderWatches();
-                m_parserUpdater.Cancel();
-                mScraperState = WebScraperState.Stopped;
+                _parserUpdater.Cancel();
+                _scraperState = WebScraperState.Stopped;
                 return true;
             }
             else
@@ -368,10 +368,10 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public WebBoolResult PauseScraper()
         {
-            if (mScraperState == WebScraperState.Running)
+            if (_scraperState == WebScraperState.Running)
             {
                 Log.Debug(SCRAPER_LOG_PREFIX + "Pausing Scraper");
-                mImporterPausedManually = true;
+                _importerPausedManually = true;
                 return PauseTvSeriesScraper();
             }
             else
@@ -383,17 +383,17 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         private bool PauseTvSeriesScraper()
         {
-            m_watcherUpdater.StopFolderWatch();
-            mScraperState = WebScraperState.Paused;
+            _watcherUpdater.StopFolderWatch();
+            _scraperState = WebScraperState.Paused;
             return true;
         }
 
         public WebBoolResult ResumeScraper()
         {
-            if (mScraperState == WebScraperState.Paused)
+            if (_scraperState == WebScraperState.Paused)
             {
                 Log.Debug(SCRAPER_LOG_PREFIX + "Resuming Scraper");
-                mImporterPausedManually = false;
+                _importerPausedManually = false;
                 return ResumeTvSeriesScraper();
             }
             else
@@ -405,23 +405,23 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         private bool ResumeTvSeriesScraper()
         {
-            m_watcherUpdater.StartFolderWatch();
-            mScraperState = WebScraperState.Running;
+            _watcherUpdater.StartFolderWatch();
+            _scraperState = WebScraperState.Running;
             return true;
 
         }
 
         public WebBoolResult TriggerUpdate()
         {
-            if (mScraperState == WebScraperState.Running)
+            if (_scraperState == WebScraperState.Running)
             {
                 Log.Debug(SCRAPER_LOG_PREFIX + "Scraper trigger update");
-                lock (m_parserUpdaterQueue)
+                lock (_parserUpdaterQueue)
                 {
-                    m_parserUpdaterQueue.Add(new CParsingParameters(true, false));
+                    _parserUpdaterQueue.Add(new CParsingParameters(true, false));
                 }
                 // Start Import if delayed
-                m_scanTimer.Change(1000, 1000);
+                _scanTimer.Change(1000, 1000);
 
                 return true;
             }
@@ -436,10 +436,10 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
         {
             return new WebScraperInfo()
             {
-                CurrentAction = mCurrentStatus,
-                CurrentProgress = mCurrentPercentage,
-                InputNeeded = mPendingRequests.Count,
-                ScraperState = mScraperState
+                CurrentAction = _currentStatus,
+                CurrentProgress = _currentPercentage,
+                InputNeeded = _pendingRequests.Count,
+                ScraperState = _scraperState
             };
         }
 
@@ -454,18 +454,18 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                 }
 
                 DBOnlineSeries series = OnlineParsing.SearchForSeries(text, true, new FeedBacker(requestId, this));
-                mPendingTextResults[requestId] = text;
+                _pendingTextResults[requestId] = text;
             }
             else
             {
-                mPendingListSelections.Add(requestId, matchId);
+                _pendingListSelections.Add(requestId, matchId);
 
-                lock (m_parserUpdaterQueue)
+                lock (_parserUpdaterQueue)
                 {
-                    m_parserUpdaterQueue.Add(new CParsingParameters(true, false));
+                    _parserUpdaterQueue.Add(new CParsingParameters(true, false));
                 }
                 // Start Import if delayed
-                m_scanTimer.Change(1000, 1000);
+                _scanTimer.Change(1000, 1000);
             }
 
             return false;
@@ -482,9 +482,9 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             req.Title = _title;
             req.Id = _title;
 
-            if (mPendingListSelections.ContainsKey(req.Id))
+            if (_pendingListSelections.ContainsKey(req.Id))
             {
-                CItem selectedMatch = mCachedItems[mPendingListSelections[req.Id]];
+                CItem selectedMatch = _cachedItems[_pendingListSelections[req.Id]];
                 //the user already sent a reply for this
                 RemovePendingRequest(req);
                 selected = selectedMatch;
@@ -495,7 +495,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             {
                 if (descriptor.m_List[0].m_Tag == null)
                 {
-                    if (mPendingTextResults.ContainsKey(req.Id))
+                    if (_pendingTextResults.ContainsKey(req.Id))
                     {
                         selected = descriptor.m_List[0];
                         return ReturnCode.OK;
@@ -518,7 +518,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
                         match.Title = i.m_sName;
                         match.Description = i.m_sDescription;
                         //match.Tag = i;
-                        mCachedItems[match.Id] = i;
+                        _cachedItems[match.Id] = i;
 
                         if (i.m_Tag != null && i.m_Tag.GetType() == typeof(DBTable))
                         {
@@ -538,7 +538,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         private WebScraperInputMatch GetRequestMatchItem(string _requestId, string _matchId)
         {
-            foreach (WebScraperInputRequest r in mPendingRequests)
+            foreach (WebScraperInputRequest r in _pendingRequests)
             {
                 if (r.Id.Equals(_requestId))
                 {
@@ -556,13 +556,13 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         private void RemovePendingRequest(WebScraperInputRequest req)
         {
-            foreach (WebScraperInputRequest r in mPendingRequests)
+            foreach (WebScraperInputRequest r in _pendingRequests)
             {
                 if (r.Id.Equals(req.Id))
                 {
                     RemoveCachedItems(r);
                     //request already added
-                    mPendingRequests.Remove(r);
+                    _pendingRequests.Remove(r);
                     return;
                 }
             }
@@ -574,28 +574,28 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             {
                 foreach (WebScraperInputMatch m in req.InputOptions)
                 {
-                    mCachedItems.Remove(m.Id);
+                    _cachedItems.Remove(m.Id);
                 }
             }
         }
 
         private void AddPendingRequest(WebScraperInputRequest req)
         {
-            foreach (WebScraperInputRequest r in mPendingRequests)
+            foreach (WebScraperInputRequest r in _pendingRequests)
             {
                 if (r.Id.Equals(req.Id))
                 {
                     //request already added
-                    mPendingRequests.Remove(r);
+                    _pendingRequests.Remove(r);
                     break;
                 }
             }
-            mPendingRequests.Add(req);
+            _pendingRequests.Add(req);
         }
 
         private WebScraperInputRequest GetPendingRequest(String reqId)
         {
-            foreach (WebScraperInputRequest r in mPendingRequests)
+            foreach (WebScraperInputRequest r in _pendingRequests)
             {
                 if (r.Id.Equals(reqId))
                 {
@@ -624,12 +624,12 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public List<WebScraperItem> GetScraperItems()
         {
-            return scraperItems;
+            return _scraperItems;
         }
 
         public IList<WebScraperInputRequest> GetAllScraperInputRequests()
         {
-            List<WebScraperItem> updated = scraperItems.Where(x => x.InputRequest != null).ToList();
+            List<WebScraperItem> updated = _scraperItems.Where(x => x.InputRequest != null).ToList();
             IList<WebScraperInputRequest> inputRequests = new List<WebScraperInputRequest>();
 
             foreach (WebScraperItem i in updated)
@@ -643,7 +643,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
 
         public List<WebScraperItem> GetUpdatedScraperItems(DateTime updated)
         {
-            return scraperItems.Where(x => x.LastUpdated > updated).ToList();
+            return _scraperItems.Where(x => x.LastUpdated > updated).ToList();
         }
 
         public WebScraperItem GetScraperItem(string itemId)
