@@ -18,58 +18,70 @@ namespace MPExtended.Services.ScraperService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult StartScraper(int? scraperId);
+        WebBoolResult StartScraper(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult StopScraper(int? scraperId);
+        WebBoolResult StopScraper(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult PauseScraper(int? scraperId);
+        WebBoolResult PauseScraper(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult ResumeScraper(int? scraperId);
+        WebBoolResult ResumeScraper(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult TriggerUpdate(int? scraperId);
+        WebBoolResult TriggerUpdate(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebScraperInfo GetScraperState(int? scraperId);
+        WebScraperInfo GetScraperState(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult SetScraperInputRequest(int? scraperId, String requestId, String matchId, String text);
+        WebBoolResult SetScraperInputRequest(int scraperId, String requestId, String matchId, String text);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult AddItemToScraper(int? scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset);
+        WebBoolResult AddItemToScraper(int scraperId, string title, WebMediaType type, int? provider, string itemId, int? offset);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperItem> GetScraperItems(int? scraperId);
+        List<WebScraperItem> GetScraperItems(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperItem> GetUpdatedScraperItems(int? scraperId, DateTime updated);
+        List<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebScraperItem GetScraperItem(int? scraperId, string itemId);
+        WebScraperItem GetScraperItem(int scraperId, string itemId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperAction> GetScraperActions(int? scraperId);
+        List<WebScraperAction> GetScraperActions(int scraperId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult InvokeScraperAction(int? scraperId, string itemId, string actionId);
+        WebBoolResult InvokeScraperAction(int scraperId, string itemId, string actionId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebConfigResult GetConfig(int? scraperId);
+        WebConfigResult GetConfig(int scraperId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetAutoStart(int scraperId, bool autoStart);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult GetIsAutoStart(int scraperId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        List<int> GetAutoStartPlugins();
     }
 }

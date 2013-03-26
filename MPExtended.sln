@@ -108,6 +108,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D6
 	ProjectSection(SolutionItems) = preProject
 		Config\Authentication.xml = Config\Authentication.xml
 		Config\MediaAccess.xml = Config\MediaAccess.xml
+		Config\Scraper.xml = Config\Scraper.xml
 		Config\Services.xml = Config\Services.xml
 		Config\Streaming.xml = Config\Streaming.xml
 		Config\StreamingPlatforms.xml = Config\StreamingPlatforms.xml
