@@ -27,8 +27,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public class JQueryHelper
     {
-        private const string JQUERY_VERSION = "1.7.2";
-        private const string JQUERY_UI_VERSION = "1.8.22";
+        private const string JQUERY_VERSION = "1.9.1";
+        private const string JQUERY_UI_VERSION = "1.10.2";
 
         private HtmlHelper htmlHelper;
         private bool datePickerDefaultOptionsAdded = false;
@@ -52,7 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         {
             Enable();
             htmlHelper.Assets().AddScript("~/Scripts/jquery-ui-" + JQUERY_UI_VERSION + ".min.js", 1);
-            htmlHelper.Assets().AddStylesheet("~/Content/Themes/base/jquery-ui.css", 0);
+            htmlHelper.Assets().AddStylesheet("~/Content/themes/base/jquery-ui.css", 0);
 
             // return empty string so we can just type @Html.jQuery().EnableUI()
             return String.Empty;
