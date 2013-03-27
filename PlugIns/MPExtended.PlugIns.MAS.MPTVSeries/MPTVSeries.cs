@@ -118,14 +118,16 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             string sql = 
                     "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, STRFTIME('%Y', s.FirstAired) AS year, s.Actors, s.Rating, s.ContentRating, " +
                         "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
-                        "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, s.fanart, " +
+                        "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, " +
+                        "GROUP_CONCAT(f.LocalPath || '?' || f.Rating, '|') AS fanart_list, " + // it's ugly, I feel guilty. ? is used because it can't be used in a filename.
                         "COUNT(e.ID) AS season_count " + 
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 " +
+                    "LEFT JOIN Fanart AS f ON s.ID = f.seriesID AND f.LocalPath != '' AND f.SeriesName = 'false' " + 
                     "LEFT JOIN season AS e ON s.ID = e.SeriesID " + 
                     "WHERE s.ID != 0 AND %where " +
                     "GROUP BY s.ID, s.Pretty_Name, s.Genre, s.BannerFileNames, s.FirstAired, " +
-                        "s.PosterFileNames, s.fanart, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
+                        "s.PosterFileNames, s.Actors, s.Summary, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.Rating, s.ContentRating, s.Status, " +
                         "s.IMDB_ID, s.added " +
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -147,7 +149,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("s", "added", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
                 new SQLFieldMapping("s", "PosterFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Poster, configuration["banner"])),
-                new SQLFieldMapping("s", "fanart", "Artwork", CustomReaders.ArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
+                new SQLFieldMapping("", "fanart_list", "Artwork", CustomReaders.FanartArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
                 new SQLFieldMapping("", "season_count", "SeasonCount", DataReaders.ReadInt32)
             }, delegate (T obj) 
             {
