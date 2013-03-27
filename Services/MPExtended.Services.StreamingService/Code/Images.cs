@@ -156,9 +156,9 @@ namespace MPExtended.Services.StreamingService.Code
                 return Stream.Null;
             }
 
-            if (borders != null && !maxWidth.HasValue && !maxHeight.HasValue)
+            if (borders != null && (!maxWidth.HasValue || !maxHeight.HasValue))
             {
-                Log.Error("ResizeImage() called with a broders value but width or height is null");
+                Log.Error("ResizeImage() called with a borders value but width or height is null");
                 WCFUtil.SetResponseCode(HttpStatusCode.BadRequest);
                 return Stream.Null;
             }
@@ -231,11 +231,13 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static Image ResizeImage(Stream stream, int? maxWidth, int? maxHeight, string borders)
         {
+            bool doBorders = !String.IsNullOrEmpty(borders) && borders != "stretch";
+
             using (var origImage = Image.FromStream(stream))
             {
                 Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
-                int bitmapWidth = !String.IsNullOrEmpty(borders) ? maxWidth.Value : newSize.Width;
-                int bitmapHeight = !String.IsNullOrEmpty(borders) ? maxHeight.Value : newSize.Height;
+                int bitmapWidth = String.IsNullOrEmpty(borders) ? newSize.Width : maxWidth.Value;
+                int bitmapHeight = String.IsNullOrEmpty(borders) ? newSize.Height : maxHeight.Value;
 
                 Bitmap newImage = new Bitmap(bitmapWidth, bitmapHeight, PixelFormat.Format32bppArgb);
                 using (Graphics graphic = Graphics.FromImage(newImage))
@@ -246,12 +248,14 @@ namespace MPExtended.Services.StreamingService.Code
                     graphic.CompositingMode = CompositingMode.SourceCopy;
                     graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                    if (!String.IsNullOrEmpty(borders))
+                    if (doBorders && (1.0 * maxWidth.Value / newSize.Width) != (1.0 * maxHeight.Value / newSize.Height))
                         graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapWidth, bitmapHeight);
 
-                    int leftOffset = !String.IsNullOrEmpty(borders) ? (maxWidth.Value - newSize.Width) / 2 : 0;
-                    int heightOffset = !String.IsNullOrEmpty(borders) ? (maxHeight.Value - newSize.Height) / 2 : 0;
-                    graphic.DrawImage(origImage, leftOffset, heightOffset, newSize.Width, newSize.Height);
+                    int leftOffset = doBorders ? (maxWidth.Value - newSize.Width) / 2 : 0;
+                    int heightOffset = doBorders ? (maxHeight.Value - newSize.Height) / 2 : 0;
+                    graphic.DrawImage(origImage, leftOffset, heightOffset, 
+                        borders == "stretch" ? maxWidth.Value  : newSize.Width, 
+                        borders == "stretch" ? maxHeight.Value : newSize.Height);
                 }
 
                 return newImage;
