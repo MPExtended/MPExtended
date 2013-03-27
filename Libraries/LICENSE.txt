@@ -37,12 +37,6 @@ Misc\Newtonsoft.Json.dll:
 - Source code available from http://json.codeplex.com/
 - Version 4.5 release 8, build 4.5.8.15203
 
-Misc\zxing.dll:
-- Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://code.google.com/p/zxing/
-- Version 1.0.4145.29580
-
 Misc\ZeroconfService.dll:
 - Copyright unknown
 - Licensed under the 2-clause BSD license, available on http://www.opensource.org/licenses/BSD-2-Clause
@@ -85,9 +79,3 @@ TVEngine3\log4net.dll:
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
 - Source code available from http://logging.apache.org/log4net/
 - Version 1.2.10.0 (version from MediaPortal)
-
-UI\Hardcodet.Wpf.TaskbarNotification:
-- Copyright (C) 2009 Philipp Sumi, http://www.hardcodet.net/projects/wpf-notifyicon
-- Licensed under Code Project Open License, version 1, available on http://www.codeproject.com/info/cpol10.aspx
-- Source code available from http://www.hardcodet.net/projects/wpf-notifyicon
-- Version 1.0.4
