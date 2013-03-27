@@ -60,6 +60,16 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MoreLinq.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\Newtonsoft.Json.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\ZeroconfService.dll" />
+
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\Microsoft.Web.Infrastructure.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.ApplicationServices.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.Helpers.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.Mvc.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.Razor.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.WebPages.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.WebPages.Deployment.dll" />
+                  <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\System.Web.WebPages.Razor.dll" />
                   
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.pdb" />
