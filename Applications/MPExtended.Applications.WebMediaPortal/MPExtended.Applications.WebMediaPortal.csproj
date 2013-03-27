@@ -40,8 +40,8 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\Libraries\Misc\MoreLinq.dll</HintPath>
+    <Reference Include="MoreLinq, Version=1.0.11522.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\morelinq.1.0\lib\net35\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />

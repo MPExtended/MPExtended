@@ -31,12 +31,6 @@ Misc\Deusty.Net.dll:
 - Source code available from http://code.google.com/p/dotnetasyncsocket/
 - Version 1.1.0.0 (build from source revision r15)
 
-Misc\MoreLinq.dll:
-- Copyright (C) 2008 - 2011 Jonathan Skeet, http://code.google.com/p/morelinq/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://code.google.com/p/morelinq/
-- Version 1.0-beta
-
 Misc\Newtonsoft.Json.dll:
 - Copyright (C) 2008 - 2012 James Newton-King, http://james.newtonking.com/projects/json-net.aspx
 - Licensed under MIT license, available on http://opensource.org/licenses/mit-license.php and http://json.codeplex.com/license
