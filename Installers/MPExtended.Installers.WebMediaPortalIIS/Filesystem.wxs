@@ -60,6 +60,7 @@
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MoreLinq.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\Newtonsoft.Json.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\ZeroconfService.dll" />
+                  
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.dll" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\WebMediaPortal.pdb" />
                   <File Source="$(var.MPExtended.Applications.WebMediaPortal.TargetDir)\MPExtended.Libraries.Client.dll" />

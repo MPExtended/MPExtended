@@ -55,12 +55,6 @@ Misc\ZeroconfService.dll:
 - Source code available from http://code.google.com/p/zeroconfignetservices/
 - Version 0.6.0.0
 
-MVC:
-- Copyright (C) Microsoft Corporation. All rights reserved.
-- Licensed under Microsoft Public License (Ms-PL), available on http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
-- Downloaded from http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=22079
-- Version 3.0.0.0
-
 Streaming\ffmpeg.exe:
 - Copyright (C) 2000-2012 the FFmpeg developers, http://ffmpeg.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
