@@ -10,12 +10,6 @@ Database\MySql.Data.dll:
 - Source code available from http://www.mysql.com/
 - Version 5.1.7 (version from MediaPortal)
 
-Database\System.Data.SQLite:
-- Public domain
-- Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-- Source file is sqlite-netFx40-static-binary-bundle-Win32-2010-1.0.80.0.zip 
-- Version 1.0.80.0, SQLite 3.7.11
-
 Installer\WifiRemote_0.6.1.mpe1:
 - Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
@@ -30,12 +24,6 @@ Misc\Deusty.Net.dll:
 - Public domain
 - Source code available from http://code.google.com/p/dotnetasyncsocket/
 - Version 1.1.0.0 (build from source revision r15)
-
-Misc\Newtonsoft.Json.dll:
-- Copyright (C) 2008 - 2012 James Newton-King, http://james.newtonking.com/projects/json-net.aspx
-- Licensed under MIT license, available on http://opensource.org/licenses/mit-license.php and http://json.codeplex.com/license
-- Source code available from http://json.codeplex.com/
-- Version 4.5 release 8, build 4.5.8.15203
 
 Misc\ZeroconfService.dll:
 - Copyright unknown

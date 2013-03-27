@@ -36,9 +36,9 @@
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\Deusty.Net.dll" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\Newtonsoft.Json.dll" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\Deusty.Net.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\Newtonsoft.Json.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
 
             <!-- General interfaces -->
