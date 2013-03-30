@@ -50,6 +50,7 @@
     <Compile Include="Config\Tests\Upgrading.cs" />
     <Compile Include="Config\Tests\Features.cs" />
     <Compile Include="Config\Tests\Parsing.cs" />
+    <Compile Include="Extensions\NaturalSorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\FilterTests.cs" />
     <Compile Include="TestEnvironment.cs" />
@@ -71,6 +72,10 @@
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj">
       <Project>{CEA12075-6DD2-442D-96F8-88A77EDCC16D}</Project>
       <Name>MPExtended.Libraries.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MPExtended.Services.Common.Interfaces\MPExtended.Services.Common.Interfaces.csproj">
+      <Project>{251AC131-5AFC-4B27-ACF1-9E943CABA872}</Project>
+      <Name>MPExtended.Services.Common.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

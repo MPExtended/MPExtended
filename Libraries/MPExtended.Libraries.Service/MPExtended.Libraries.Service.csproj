@@ -95,6 +95,7 @@
     <Compile Include="Extensions\TaskExtensionMethods.cs" />
     <Compile Include="Network\MappedDriveConverter.cs" />
     <Compile Include="Hosting\EnvironmentSetup.cs" />
+    <Compile Include="Util\EnumerableComparer.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />

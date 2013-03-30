@@ -20,15 +20,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Libraries.Service.Extensions
 {
     public static class NaturalSorting
     {
-        // TODO: Implement support for real natural sorting, i.e. "27 Test" > "8 Test"
+        private class StringsAndIntComparer : IComparer<object>
+        {
+            public int Compare(object x, object y)
+            {
+                bool xInt = x is int;
+                bool yInt = y is int;
+                if (xInt && yInt) return Comparer<int>.Default.Compare((int)x, (int)y);
+                if (xInt && !yInt) return -1;
+                if (!xInt && yInt) return 1;
 
-        private static Regex _naturalSortRegex;
+                return StringComparer.CurrentCultureIgnoreCase.Compare(x.ToString(), y.ToString());
+            }
+        }
+
+        // Inspired by an algorithm from Ian Griffiths, http://www.interact-sw.co.uk/iangblog/2007/12/13/natural-sorting
+        // and Jeff Atwood, http://www.codinghorror.com/blog/2007/12/sorting-for-humans-natural-sort-order.html
+        //
+        // TODO: Correct handling of Roman Numerals.
+        //
+        // IMPORTANT: If you update this code, please check if the unit tests still work. You can very easily break this code in
+        // a subtle way without even noticing it. Also, please add new unit tests if you add features.
+
+        private static Regex _stripPrefixRegex = new Regex(@"^\s*((a|an|the)\s+)?(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex _splitNumerals = new Regex(@"([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static IComparer<IEnumerable<object>> _objectComparer = new EnumerableComparer<object>(new StringsAndIntComparer());
+
+        private static Func<TSource, IEnumerable<object>> GetSortFunction<TSource>(Func<TSource, string> keySelector)
+        {
+            return inputValue =>
+                {
+                    string strippedValue = _stripPrefixRegex.Match(keySelector(inputValue)).Groups[3].Value;
+                    return _splitNumerals.Split(strippedValue).Select(x =>
+                    {
+                        int val;
+                        return Int32.TryParse(x, out val) ? (object)val : (object)x;
+                    });
+                };
+        }
 
         public static IOrderedEnumerable<TSource> OrderByNatural<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector, WebSortOrder? order)
         {
@@ -37,12 +73,9 @@ namespace MPExtended.Libraries.Service.Extensions
 
         public static IOrderedEnumerable<TSource> OrderByNatural<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector, WebSortOrder order)
         {
-            if (_naturalSortRegex == null)
-                _naturalSortRegex = new Regex(@"^\s*((a|an|the)\s+)?(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
             if (order == WebSortOrder.Asc)
-                return Enumerable.OrderBy(source, x => _naturalSortRegex.Match(keySelector(x)).Groups[3].Value);
-            return Enumerable.OrderByDescending(source, x => _naturalSortRegex.Match(keySelector(x)).Groups[3].Value);
+                return Enumerable.OrderBy(source, GetSortFunction(keySelector), _objectComparer);
+            return Enumerable.OrderByDescending(source, GetSortFunction(keySelector), _objectComparer);
         }
 
         public static IOrderedQueryable<TSource> OrderByNatural<TSource>(this IQueryable<TSource> source, Func<TSource, string> keySelector, WebSortOrder? order)
@@ -52,12 +85,10 @@ namespace MPExtended.Libraries.Service.Extensions
 
         public static IOrderedQueryable<TSource> OrderByNatural<TSource>(this IQueryable<TSource> source, Func<TSource, string> keySelector, WebSortOrder order)
         {
-            if (_naturalSortRegex == null)
-                _naturalSortRegex = new Regex(@"^\s*((a|an|the)\s+)?(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
+            var sortFunction = GetSortFunction(keySelector);
             if (order == WebSortOrder.Asc)
-                return Queryable.OrderBy(source, x => _naturalSortRegex.Match(keySelector(x)).Groups[3].Value);
-            return Queryable.OrderByDescending(source, x => _naturalSortRegex.Match(keySelector(x)).Groups[3].Value);
+                return Queryable.OrderBy(source, x => sortFunction(x), _objectComparer);
+            return Queryable.OrderByDescending(source, x => sortFunction(x), _objectComparer);
         }
     }
 }
