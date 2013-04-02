@@ -39,6 +39,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         private int intValue;
         private long longValue;
+        private bool boolValue;
 
         public Filter(string field, string oper, string value)
         {
@@ -66,6 +67,8 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 return GetIntMatchDelegate();
             if (property.PropertyType == typeof(long))
                 return GetLongMatchDelegate();
+            if (property.PropertyType == typeof(bool))
+                return GetBoolMatchDelegate();
             if (property.PropertyType.GetInterfaces().Any(x => x == typeof(IEnumerable)))
                 return GetListMatchDelegate();
 
@@ -143,6 +146,24 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                     return x => (long)x <= longValue;
                 default:
                     throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
+            }
+        }
+
+        private MatchDelegate GetBoolMatchDelegate()
+        {
+            boolValue = Value == "true" || Value == "1";
+            if (!boolValue && Value != "false" && Value != "0")
+                throw new ArgumentException("Filter: Invalid value '{0}' for boolean field", Value);
+
+            switch (Operator)
+            {
+                case "=":
+                case "==":
+                    return x => (bool)x == boolValue;
+                case "!=":
+                    return x => (bool)x != boolValue;
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for boolean field", Operator);
             }
         }
 
