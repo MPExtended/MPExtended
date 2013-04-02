@@ -150,6 +150,15 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.True(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "test", "hello" } }));
             Assert.False(TestAgainstFilter("Field *= hello", new { Field = new List<string>() { "else", "text" } }));
             Assert.True(TestAgainstFilter("Field *= 8", new { Field = new List<int>() { 5, 7, 8 } }));
+
+            Assert.True(TestAgainstFilter("Field = true", new { Field = true }));
+            Assert.False(TestAgainstFilter("Field == false", new { Field = true }));
+            Assert.True(TestAgainstFilter("Field != 0", new { Field = true }));
+            Assert.True(TestAgainstFilter("Field != 1", new { Field = false }));
+
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != 2", new { Field = true }));
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != abc", new { Field = 3 }));
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != abc", new { Field = 8L }));
         }
 
         private bool TestAgainstFilter(string filterText, object obj)
