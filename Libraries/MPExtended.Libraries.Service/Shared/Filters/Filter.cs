@@ -32,7 +32,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         public string Operator { get; private set; }
         public string Value { get; private set; }
 
-        private delegate bool MatchDelegate(object x);
+        private delegate bool MatchDelegate(object value);
 
         private PropertyInfo property;
         private MatchDelegate matcher;
@@ -55,7 +55,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         public bool Matches<T>(T obj)
         {
-            return matcher(obj);
+            return matcher(property.GetValue(obj, null));
         }
 
         private MatchDelegate GetMatchDelegate()
@@ -79,17 +79,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (string)property.GetValue(x, null) == Value;
+                    return x => (string)x == Value;
                 case "~=":
-                    return x => ((string)property.GetValue(x, null)).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "!=":
-                    return x => (string)property.GetValue(x, null) != Value;
+                    return x => (string)x != Value;
                 case "*=":
-                    return x => ((string)property.GetValue(x, null)).Contains(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).Contains(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "^=":
-                    return x => ((string)property.GetValue(x, null)).StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "$=":
-                    return x => ((string)property.GetValue(x, null)).EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
 
                 default:
                     throw new ParseException("Filter: Invalid operator '{0}' for string field", Operator);
@@ -105,17 +105,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (int)property.GetValue(x, null) == intValue;
+                    return x => (int)x == intValue;
                 case "!=":
-                    return x => (int)property.GetValue(x, null) != intValue;
+                    return x => (int)x != intValue;
                 case ">":
-                    return x => (int)property.GetValue(x, null) > intValue;
+                    return x => (int)x > intValue;
                 case ">=":
-                    return x => (int)property.GetValue(x, null) >= intValue;
+                    return x => (int)x >= intValue;
                 case "<":
-                    return x => (int)property.GetValue(x, null) < intValue;
+                    return x => (int)x < intValue;
                 case "<=":
-                    return x => (int)property.GetValue(x, null) <= intValue;
+                    return x => (int)x <= intValue;
                 default:
                     throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
             }
@@ -130,17 +130,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (long)property.GetValue(x, null) == longValue;
+                    return x => (long)x == longValue;
                 case "!=":
-                    return x => (long)property.GetValue(x, null) != longValue;
+                    return x => (long)x != longValue;
                 case ">":
-                    return x => (long)property.GetValue(x, null) > longValue;
+                    return x => (long)x > longValue;
                 case ">=":
-                    return x => (long)property.GetValue(x, null) >= longValue;
+                    return x => (long)x >= longValue;
                 case "<":
-                    return x => (long)property.GetValue(x, null) < longValue;
+                    return x => (long)x < longValue;
                 case "<=":
-                    return x => (long)property.GetValue(x, null) <= longValue;
+                    return x => (long)x <= longValue;
                 default:
                     throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
             }
@@ -153,7 +153,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 case "*=":
                     return delegate(object x)
                         {
-                            foreach(var item in (IEnumerable)property.GetValue(x, null))
+                            foreach(var item in (IEnumerable)x)
                             {
                                 if (item.ToString() == Value)
                                     return true;
