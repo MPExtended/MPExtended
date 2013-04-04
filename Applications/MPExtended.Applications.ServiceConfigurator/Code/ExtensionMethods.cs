@@ -68,7 +68,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
         }
 
-        public static void UpdateStreamingList(this ObservableCollection<WpfStreamingSession> oldList, List<WebStreamingSession> newList)
+        public static void UpdateStreamingList(this ObservableCollection<WpfStreamingSession> oldList, IList<WebStreamingSession> newList)
         {
             //update/add entries
             foreach (WebStreamingSession sNew in newList)

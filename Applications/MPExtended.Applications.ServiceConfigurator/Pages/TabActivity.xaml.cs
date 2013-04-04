@@ -73,7 +73,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                List<WebStreamingSession> tmp = _services.MASStreamControl.GetStreamingSessions();
+                IList<WebStreamingSession> tmp = _services.MASStreamControl.GetStreamingSessions();
 
                 if (tmp != null)
                 {
