@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var albumObj = Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
             if (albumObj == null)
                 return new HttpNotFoundResult();
-            var trackList = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, WebSortField.Title, WebSortOrder.Asc);
+            var trackList = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, null, WebSortField.Title, WebSortOrder.Asc);
             var model = new AlbumViewModel()
             {
                 Album = albumObj,
