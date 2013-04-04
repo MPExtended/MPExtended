@@ -17,11 +17,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebTranscoderProfile> GetTranscoderProfiles(string filter = null);
+        IList<WebTranscoderProfile> GetTranscoderProfiles(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target, string filter = null);
+        IList<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -60,7 +60,7 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebStreamingSession> GetStreamingSessions(string filter = null);
+        IList<WebStreamingSession> GetStreamingSessions(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

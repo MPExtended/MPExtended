@@ -83,14 +83,14 @@ namespace MPExtended.Services.StreamingService
         }
 
         #region Profiles
-        public List<WebTranscoderProfile> GetTranscoderProfiles(string filter = null)
+        public IList<WebTranscoderProfile> GetTranscoderProfiles(string filter = null)
         {
             return Configuration.StreamingProfiles.Transcoders
                 .Filter(filter)
                 .Select(x => x.ToWebTranscoderProfile()).ToList();
         }
 
-        public List<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target, string filter = null)
+        public IList<WebTranscoderProfile> GetTranscoderProfilesForTarget(string target, string filter = null)
         {
             return GetTranscoderProfiles(filter).Where(x => x.Targets.Contains(target)).ToList();
         }
@@ -133,7 +133,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.GetEncodingInfo(identifier);
         }
 
-        public List<WebStreamingSession> GetStreamingSessions(string filter = null)
+        public IList<WebStreamingSession> GetStreamingSessions(string filter = null)
         {
             return _stream.GetStreamingSessions()
                 .Concat(_downloads.GetActiveSessions())
