@@ -124,8 +124,9 @@ namespace MPExtended.Services.MediaAccessService
             }
             catch (Exception ex)
             {
-                Log.Warn(String.Format("Tried to do invalid sorting; actual values SortBy={0}, OrderBy={1}", sort, order), ex);
-                throw new Exception("Sorting on this property is not supported for this media type");
+                Log.Warn(String.Format("Executing OrderBy(sortBy={0}, orderBy={1}) on list failed, sort parameters are invalid or list iterator failed " + 
+                                       "(might be caused by an invalid or unexpected database or a broken query).", sort, order), ex);
+                throw new Exception("Failed to load data from source, please see the log file for more details.");
             }
         }
     }
