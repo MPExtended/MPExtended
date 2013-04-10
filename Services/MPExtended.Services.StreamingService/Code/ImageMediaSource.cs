@@ -122,10 +122,13 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            if (Offset == -1)
+            if (Offset < 0)
             {
                 var artwork = Connections.MAS.GetArtwork(Provider, MediaType, Id);
-                var preferedItem = artwork.OrderByDescending(x => x.Rating).FirstOrDefault(x => x.Type == FileType);
+                var preferedItem = artwork.Where(x => x.Type == FileType)
+                                          .OrderByDescending(x => x.Rating)
+                                          .Skip(-1 - Offset)
+                                          .FirstOrDefault();
                 if (preferedItem == null)
                 {
                     Log.Debug("Requested prefered artwork item for provider={0} mediatype={1} filetype={2} id={3}, but no artwork found", 
