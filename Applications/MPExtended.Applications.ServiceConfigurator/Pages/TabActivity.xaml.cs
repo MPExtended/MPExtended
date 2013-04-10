@@ -80,10 +80,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     mStreamingSessions.UpdateStreamingList(tmp);
                 }
             }
-            catch (CommunicationException)
+            catch (Exception ex)
             {
                 mStreamingSessions.Clear();
-                Log.Warn("No connection to service");
+                Log.Warn("Failed to load active streaming sessions", ex);
             }
         }
 
