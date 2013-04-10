@@ -44,21 +44,45 @@ namespace MPExtended.Libraries.Service.Extensions
         // Inspired by an algorithm from Ian Griffiths, http://www.interact-sw.co.uk/iangblog/2007/12/13/natural-sorting
         // and Jeff Atwood, http://www.codinghorror.com/blog/2007/12/sorting-for-humans-natural-sort-order.html
         //
-        // TODO: Correct handling of Roman Numerals.
-        //
         // IMPORTANT: If you update this code, please check if the unit tests still work. You can very easily break this code in
         // a subtle way without even noticing it. Also, please add new unit tests if you add features.
 
+        private static Dictionary<char, int> _romanNumerals = new Dictionary<char,int>()
+            {
+                { 'I', 1 },
+                { 'V', 5 },
+                { 'X', 10 },
+                { 'L', 50 },
+                { 'C', 100 },
+                { 'D', 500 },
+                { 'M', 1000 }
+            };
+
         private static Regex _stripPrefixRegex = new Regex(@"^\s*((a|an|the)\s+)?(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex _changeRoman = new Regex(@"(\s+|^)([IVXLCDM]+)(\s+|$)", RegexOptions.Compiled);
         private static Regex _splitNumerals = new Regex(@"([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static IComparer<IEnumerable<object>> _objectComparer = new EnumerableComparer<object>(new StringsAndIntComparer());
+
+        private static int RomanToDecimal(string roman)
+        {
+            int maxValue = 0, outValue = 0;
+            var reversedValues = roman.ToCharArray().Select(x => _romanNumerals[x]).Reverse();
+            foreach (var thisValue in reversedValues)
+            {
+                outValue += thisValue >= maxValue ? thisValue : -thisValue;
+                maxValue = Math.Max(thisValue, maxValue);
+            }
+
+            return outValue;
+        }
 
         private static Func<TSource, IEnumerable<object>> GetSortFunction<TSource>(Func<TSource, string> keySelector)
         {
             return inputValue =>
                 {
                     string strippedValue = _stripPrefixRegex.Match(keySelector(inputValue)).Groups[3].Value;
-                    return _splitNumerals.Split(strippedValue).Select(x =>
+                    string sortableValue = _changeRoman.Replace(strippedValue, m => String.Format("{0}{1}{2}", m.Groups[1], RomanToDecimal(m.Groups[2].Value), m.Groups[3]));
+                    return _splitNumerals.Split(sortableValue).Select(x =>
                     {
                         int val;
                         return Int32.TryParse(x, out val) ? (object)val : (object)x;
