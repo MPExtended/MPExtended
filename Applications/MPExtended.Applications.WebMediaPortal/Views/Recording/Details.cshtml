@@ -16,7 +16,7 @@
         <li>@Model.Genre</li>
         <li>@ViewBag.Quality</li>
         <li>@Html.ActionLink(UIStrings.Play, "Watch", new { id = Model.Id })</li>
-        <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Id, type = WebMediaType.Recording }, new { })</li>
+        <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", Skin.GetDownloadArguments(WebMediaType.Recording, Model.Id.ToString()), new { })</li>
     </ul>
 </div>
 

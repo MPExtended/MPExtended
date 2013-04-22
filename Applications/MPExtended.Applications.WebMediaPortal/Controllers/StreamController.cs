@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -147,13 +148,28 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        [ServiceAuthorize]
-        public ActionResult Download(WebMediaType type, string item)
+        public ActionResult Download(WebMediaType type, string item, string token = null)
         {
+            // Check authentication
+            if (!IsUserAuthenticated())
+            {
+                string expectedData = String.Format("{0}_{1}_{2}", type, item, HttpContext.Application["randomToken"]);
+                byte[] expectedBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(expectedData));
+                string expectedToken = BitConverter.ToString(expectedBytes).Replace("-", "").ToLower();
+                if (token == null || expectedToken != token)
+                {
+                    Log.Error("Denying download type={0}, item={1}, token={2}, ip={3}: user is not logged in and token is invalid", type, item, token, Request.UserHostAddress);
+                    return new HttpUnauthorizedResult();
+                }
+            }
+
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
-            queryString["clientDescription"] = String.Format("WebMediaPortal download (user {0})", HttpContext.User.Identity.Name);
+            var userDescription = !String.IsNullOrEmpty(HttpContext.User.Identity.Name) ? String.Format(" (user {0})", HttpContext.User.Identity) : 
+                                  // TODO: also grab the user from the Authorization header here
+                                  !String.IsNullOrEmpty(token) ? " (token-based download)" : String.Empty;
+            queryString["clientDescription"] = "WebMediaPortal download" + userDescription;
             queryString["type"] = ((int)type).ToString();
             queryString["itemId"] = item;
             string address = type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.Addresses.TAS : Connections.Current.Addresses.MAS;
