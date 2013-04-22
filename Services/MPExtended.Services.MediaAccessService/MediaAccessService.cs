@@ -119,7 +119,8 @@ namespace MPExtended.Services.MediaAccessService
                 case WebMediaType.File:
                     return GetFileSystemFileBasicById(provider, id).Finalize(provider, ProviderType.Filesystem).ToWebMediaItem();
                 default:
-                    throw new ArgumentException();
+                    Log.Warn("Requested media item for mediatype {0} which isn't a media item", type);
+                    throw new ArgumentException("No mediaitem available for this mediatype", "mediatype");
             }
         }
 
@@ -681,45 +682,48 @@ namespace MPExtended.Services.MediaAccessService
         #endregion
 
         #region Files
+        private IList<WebArtwork> GetOriginalArtworkList(int? provider, WebMediaType type, string id)
+        {
+            switch (type)
+            {
+                case WebMediaType.Movie:
+                    return MovieLibraries[provider].GetMovieDetailedById(id).Artwork;
+                case WebMediaType.MusicAlbum:
+                    return MusicLibraries[provider].GetAlbumBasicById(id).Artwork;
+                case WebMediaType.MusicArtist:
+                    return MusicLibraries[provider].GetArtistDetailedById(id).Artwork;
+                case WebMediaType.MusicTrack:
+                    return MusicLibraries[provider].GetTrackDetailedById(id).Artwork;
+                case WebMediaType.TVEpisode:
+                    return TVShowLibraries[provider].GetEpisodeDetailed(id).Artwork;
+                case WebMediaType.TVSeason:
+                    return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork;
+                case WebMediaType.TVShow:
+                    return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork;
+                default:
+                    Log.Warn("Requested artwork for mediatype {0} which does not have artwork", type);
+                    throw new ArgumentException("No artwork available for this mediatype", "type");
+            }
+        }
+
+        public IList<WebArtwork> GetArtwork(int? provider, WebMediaType type, string id)
+        {
+            return GetOriginalArtworkList(provider, type, id).Select(x => new WebArtwork()
+            {
+                Filetype = x.Filetype,
+                Id = x.Id,
+                Offset = x.Offset,
+                Rating = x.Rating,
+                Type = x.Type
+            }).ToList();
+        }
+
         public IList<string> GetPathList(int? provider, WebMediaType mediatype, WebFileType filetype, string id)
         {
-            if (mediatype == WebMediaType.File && filetype == WebFileType.Content)
-                return FileSystemLibraries[provider].GetFileBasic(id).Path;
-            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Content)
-                return MovieLibraries[provider].GetMovieDetailedById(id).Path;
-            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Backdrop)
-                return MovieLibraries[provider].GetMovieDetailedById(id).Artwork.Where(x => x.Type == WebFileType.Backdrop).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.Movie && filetype == WebFileType.Cover)
-                return MovieLibraries[provider].GetMovieDetailedById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Banner)
-                return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork.Where(x => x.Type == WebFileType.Banner).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Backdrop)
-                return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork.Where(x => x.Type == WebFileType.Backdrop).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVShow && filetype == WebFileType.Poster)
-                return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork.Where(x => x.Type == WebFileType.Poster).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Backdrop)
-                return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork.Where(x => x.Type == WebFileType.Backdrop).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Banner)
-                return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork.Where(x => x.Type == WebFileType.Banner).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVSeason && filetype == WebFileType.Poster)
-                return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork.Where(x => x.Type == WebFileType.Poster).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.TVEpisode && filetype == WebFileType.Content)
-                return TVShowLibraries[provider].GetEpisodeBasic(id).Path;
-            else if (mediatype == WebMediaType.TVEpisode && filetype == WebFileType.Banner)
-                return TVShowLibraries[provider].GetEpisodeDetailed(id).Artwork.Where(x => x.Type == WebFileType.Banner).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.Picture && filetype == WebFileType.Content)
-                return PictureLibraries[provider].GetPictureDetailed(id).Path;
-            else if (mediatype == WebMediaType.MusicArtist && filetype == WebFileType.Cover)
-                return MusicLibraries[provider].GetArtistBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.MusicAlbum && filetype == WebFileType.Cover)
-                return MusicLibraries[provider].GetAlbumBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Cover)
-                return MusicLibraries[provider].GetTrackBasicById(id).Artwork.Where(x => x.Type == WebFileType.Cover).Select(x => ((WebArtworkDetailed)x).Path).ToList();
-            else if (mediatype == WebMediaType.MusicTrack && filetype == WebFileType.Content)
-                return MusicLibraries[provider].GetTrackBasicById(id).Path;
-
-            Log.Warn("Invalid combination of filetype {0} and mediatype {1} requested", filetype, mediatype);
-            return null;
+            if (filetype != WebFileType.Content)
+                return GetOriginalArtworkList(provider, mediatype, id).Where(x => x.Type == filetype).Select(x => ((WebArtworkDetailed)x).Path).ToList();
+            else
+                return GetMediaItem(provider, mediatype, id).Path;
         }
 
         public WebFileInfo GetFileInfo(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset)

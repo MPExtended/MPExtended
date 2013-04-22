@@ -477,6 +477,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         #region Files
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebArtwork> GetArtwork(int? provider, WebMediaType type, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<string> GetPathList(int? provider, WebMediaType mediatype, WebFileType filetype, string id);
 
         [OperationContract]

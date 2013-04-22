@@ -52,6 +52,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         private List<WebArtworkDetailed> CoverReader(SQLiteDataReader reader, int idx)
         {
             int i = 0;
+            var preferred = (string)DataReaders.ReadString(reader, idx + 1);
             return (DataReaders.ReadPipeList(reader, idx) as List<string>).Select(x => new WebArtworkDetailed()
             {
                 Offset = i++,
@@ -59,7 +60,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 Path = x,
                 Id = x.GetHashCode().ToString(),
                 Filetype = Path.GetExtension(x).Substring(1),
-                Rating = 1
+                Rating = x == preferred ? 2 : 1
             }).ToList();
         }
 
@@ -101,9 +102,10 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
         {
-            string sql = "SELECT DISTINCT m.id, m.date_added, m.backdropfullpath, m.alternatecovers, m.genres, m.score, m.runtime, m.title, m.year, " +
+            string sql = "SELECT DISTINCT m.id, m.date_added, m.genres, m.score, m.runtime, m.title, m.year, " +
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
                             "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, m.tagline, s.identifier, " +
+                            "m.backdropfullpath, m.alternatecovers, m.coverfullpath," +
                             "u.watched " +
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
