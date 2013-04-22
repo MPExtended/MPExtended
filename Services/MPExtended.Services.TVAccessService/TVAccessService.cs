@@ -90,8 +90,12 @@ namespace MPExtended.Services.TVAccessService
         private IUser GetUserByUserName(string userName)
         {
             return Card.ListAll()
-                .Where(c => c.Enabled)
-                .SelectMany(c => _tvControl.GetUsersForCard(c.IdCard))
+                .Where(c => c != null && c.Enabled)
+                .SelectMany(c =>
+                {
+                    var users = _tvControl.GetUsersForCard(c.IdCard);
+                    return users != null ? users : new IUser[] { };
+                })
                 .Where(u => u.Name == userName)
                 .FirstOrDefault();
         }
