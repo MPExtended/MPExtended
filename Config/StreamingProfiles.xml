@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StreamingProfiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/StreamingProfiles/1">
   <!--
-      WARNING: Please note that changes to this file will be overwritten on a MPExtended update.
+      WARNING: When you change this file, set <Customized> to true below. If you don't do that, changes WILL be overwritten by MPExtended.
+      
+               If you've set <Customized> to true, you've to manually put new profiles here on MPExtended upgrades. 
   -->
+  <Customized>false</Customized>
+  
+  <ProfilesVersion>0</ProfilesVersion>
   <FFMpegPath>%mpextended-streaming%\ffmpeg.exe</FFMpegPath>
 
   <Transcoders>
