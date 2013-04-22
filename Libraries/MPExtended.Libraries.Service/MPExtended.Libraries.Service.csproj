@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
+    <Compile Include="Config\ProfilesConfigurationSerializer.cs" />
     <Compile Include="Config\TransformationCallbacks.cs" />
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\ConfigUpgrader.cs" />
