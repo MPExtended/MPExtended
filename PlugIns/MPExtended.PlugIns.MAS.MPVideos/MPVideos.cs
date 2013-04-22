@@ -61,7 +61,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             string mp13Fields = VersionUtil.GetMediaPortalVersion() >= VersionUtil.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
             string sql =
-                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, " + mp13Fields +
+                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres " +
@@ -89,6 +89,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "IMDBID", "IMDBId", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strPlot", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strCredits", "Writers", CreditsReader),
+                new SQLFieldMapping("i", "iswatched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
             });
