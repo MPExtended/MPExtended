@@ -90,11 +90,17 @@ namespace MPExtended.Services.StreamingService.Code
 
         public override WebFileInfo GetFileInfo()
         {
+            if (fileInfoCache != null)
+                return fileInfoCache;
+
+            if (path != null)
+            {
+                fileInfoCache = new WebFileInfo(path);
+                return fileInfoCache;
+            }
+
             if ((MediaType == WebMediaType.TV || MediaType == WebMediaType.Recording || MediaType == WebMediaType.Radio) && FileType == WebFileType.Logo)
             {
-                if (fileInfoCache != null)
-                    return fileInfoCache;
-
                 if (_logos == null)
                     _logos = new ChannelLogos();
 
@@ -116,7 +122,29 @@ namespace MPExtended.Services.StreamingService.Code
                 return fileInfoCache;
             }
 
-            return path != null ? new WebFileInfo(path) : base.GetFileInfo();
+            if (Offset < 0)
+            {
+                var artwork = Connections.MAS.GetArtwork(Provider, MediaType, Id);
+                var preferedItem = artwork.Where(x => x.Type == FileType)
+                                          .OrderByDescending(x => x.Rating)
+                                          .Skip(-1 - Offset)
+                                          .FirstOrDefault();
+                if (preferedItem == null)
+                {
+                    Log.Debug("Requested prefered artwork item for provider={0} mediatype={1} filetype={2} id={3}, but no artwork found", 
+                        Provider, MediaType, FileType, Id);
+                    fileInfoCache = new WebFileInfo()
+                    {
+                        Exists = false
+                    };
+                    return fileInfoCache;
+                }
+
+                fileInfoCache = Connections.MAS.GetFileInfo(Provider, MediaType, FileType, Id, preferedItem.Offset);
+                return fileInfoCache;
+            }
+
+            return base.GetFileInfo();
         }
     }
 }

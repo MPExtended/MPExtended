@@ -51,6 +51,8 @@ namespace MPExtended.Libraries.Service.Config
         [XmlIgnore]
         private string _ffmpegPath;
 
+        public int ProfilesVersion { get; set; }
+        public bool Customized { get; set; }
         public List<TranscoderProfile> Transcoders { get; set; }
         
         public string FFMpegPath

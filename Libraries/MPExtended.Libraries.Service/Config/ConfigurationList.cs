@@ -36,7 +36,7 @@ namespace MPExtended.Libraries.Service.Config
                 this[ConfigurationFile.MediaAccess] = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>(ConfigurationFile.MediaAccess, "MediaAccess.xml");
                 this[ConfigurationFile.Services] = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>(ConfigurationFile.Services, "Services.xml");
                 this[ConfigurationFile.Streaming] = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>(ConfigurationFile.Streaming, "Streaming.xml");
-                this[ConfigurationFile.StreamingProfiles] = new ConfigurationSerializer<StreamingProfiles, StreamingProfilesSerializer>(ConfigurationFile.StreamingProfiles, "StreamingProfiles.xml");
+                this[ConfigurationFile.StreamingProfiles] = new ProfilesConfigurationSerializer();
                 this[ConfigurationFile.Scraper] = new ConfigurationSerializer<Scraper, ScraperSerializer, ScraperUpgrader>(ConfigurationFile.Scraper, "Scraper.xml");
             }
 

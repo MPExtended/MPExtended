@@ -136,10 +136,19 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.False(TestAgainstFilter("Field = [3, 8]", new { Field = 9L }));
             Assert.False(TestAgainstFilter("Field != [3, 8]", new { Field = 3L }));
 
+            Assert.True(TestAgainstFilter("Field = true", new { Field = true }));
+            Assert.False(TestAgainstFilter("Field == false", new { Field = true }));
+            Assert.True(TestAgainstFilter("Field != 0", new { Field = true }));
+            Assert.True(TestAgainstFilter("Field != 1", new { Field = false }));
+
             Assert.True(TestAgainstFilter("Field ~= [abc, def, ghi]", new { Field = "abc" }));
             Assert.False(TestAgainstFilter("Field *= [klm, nop]", new { Field = "hello" }));
             Assert.False(TestAgainstFilter("Field ^= [qrst]", new { Field = "uvw" }));
             Assert.True(TestAgainstFilter("Field $= [uvw, xyz]", new { Field = "abcxyz" }));
+
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != 2", new { Field = true }));
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != abc", new { Field = 3 }));
+            Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != abc", new { Field = 8L }));
         }
 
         private bool TestAgainstFilter(string filterText, object obj)

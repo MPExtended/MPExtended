@@ -32,7 +32,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebDiskSpaceInformation> GetLocalDiskInformation();
+        IList<WebDiskSpaceInformation> GetLocalDiskInformation(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -50,23 +50,23 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region Cards
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebCard> GetCards();
+        IList<WebCard> GetCards(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebVirtualCard> GetActiveCards();
+        IList<WebVirtualCard> GetActiveCards(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebUser> GetActiveUsers();
+        IList<WebUser> GetActiveUsers(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebRtspClient> GetStreamingClients();
+        IList<WebRtspClient> GetStreamingClients(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation();
+        IList<WebDiskSpaceInformation> GetAllRecordingDiskInformation(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -88,15 +88,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetScheduleCount();
+        WebIntResult GetScheduleCount(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduleBasic> GetSchedules(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduleBasic> GetSchedules(string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduleBasic> GetSchedulesByRange(int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -116,25 +116,25 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduledRecording> GetScheduledRecordingsForDate(DateTime date, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebScheduledRecording> GetScheduledRecordingsForToday(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebScheduledRecording> GetScheduledRecordingsForToday(string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
         #endregion
 
         #region Recordings
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetRecordingCount();
+        WebIntResult GetRecordingCount(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebRecordingBasic> GetRecordings(WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebRecordingBasic> GetRecordings(string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebRecordingBasic> GetRecordingsByRange(int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -157,15 +157,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region TV
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetGroupCount();
+        WebIntResult GetGroupCount(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelGroup> GetGroups(WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelGroup> GetGroups(string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelGroup> GetGroupsByRange(int start, int end, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelGroup> GetGroupsByRange(int start, int end, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -174,41 +174,41 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetChannelCount(int? groupId = null);
+        WebIntResult GetChannelCount(int? groupId = null, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelBasic> GetChannelsBasic(int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelBasic> GetChannelsBasic(int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelBasic> GetChannelsBasicByRange(int start, int end, int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelBasic> GetChannelsBasicByRange(int start, int end, int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelDetailed> GetChannelsDetailed(int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelDetailed> GetChannelsDetailed(int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelDetailed> GetChannelsDetailedByRange(int start, int end, int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelDetailed> GetChannelsDetailedByRange(int start, int end, int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName);
+        IList<WebChannelState> GetAllChannelStatesForGroup(int groupId, string userName, string filter = null);
         #endregion
 
         #region Radio specific
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetRadioGroupCount();
+        WebIntResult GetRadioGroupCount(string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelGroup> GetRadioGroups(WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelGroup> GetRadioGroups(string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelGroup> GetRadioGroupsByRange(int start, int end, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelGroup> GetRadioGroupsByRange(int start, int end, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -217,27 +217,27 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebIntResult GetRadioChannelCount(int? groupId = null);
+        WebIntResult GetRadioChannelCount(int? groupId = null, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelBasic> GetRadioChannelsBasic(int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelBasic> GetRadioChannelsBasic(int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelBasic> GetRadioChannelsBasicByRange(int start, int end, int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelBasic> GetRadioChannelsBasicByRange(int start, int end, int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelDetailed> GetRadioChannelsDetailed(int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelDetailed> GetRadioChannelsDetailed(int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int start, int end, int? groupId = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
+        IList<WebChannelDetailed> GetRadioChannelsDetailedByRange(int start, int end, int? groupId = null, string filter = null, WebSortField? sort = WebSortField.User, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName);
+        IList<WebChannelState> GetAllRadioChannelStatesForGroup(int groupId, string userName, string filter = null);
         #endregion
 
 
@@ -279,19 +279,19 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         #region EPG
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime);
+        IList<WebProgramBasic> GetProgramsBasicForChannel(int channelId, DateTime startTime, DateTime endTime, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime);
+        IList<WebProgramDetailed> GetProgramsDetailedForChannel(int channelId, DateTime startTime, DateTime endTime, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int groupId, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramBasic>> GetProgramsBasicForGroup(int groupId, DateTime startTime, DateTime endTime, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int groupId, DateTime startTime, DateTime endTime);
+        IList<WebChannelPrograms<WebProgramDetailed>> GetProgramsDetailedForGroup(int groupId, DateTime startTime, DateTime endTime, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -308,28 +308,28 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramBasic> SearchProgramsBasic(string searchTerm);
+        IList<WebProgramBasic> SearchProgramsBasic(string searchTerm, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramBasic> SearchProgramsBasicByRange(string searchTerm, int start, int end);
+        IList<WebProgramBasic> SearchProgramsBasicByRange(string searchTerm, int start, int end, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm);
+        IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end);
+        IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end, string filter = null);
 
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId);
+        IList<WebProgramBasic> GetNowNextWebProgramBasicForChannel(int channelId, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId);
+        IList<WebProgramDetailed> GetNowNextWebProgramDetailedForChannel(int channelId, string filter = null);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

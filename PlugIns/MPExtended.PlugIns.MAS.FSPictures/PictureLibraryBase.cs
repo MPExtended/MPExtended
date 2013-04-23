@@ -149,20 +149,21 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image data
-            BitmapSource img = BitmapFrame.Create(new Uri(path));
-            pic.Mpixel = (img.PixelHeight * img.PixelWidth) / (double)1000000;
-            pic.Width = Convert.ToString(img.PixelWidth);
-            pic.Height = Convert.ToString(img.PixelHeight);
-            pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
-
-            // Image metadata
-            BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
+                BitmapSource img = BitmapFrame.Create(new Uri(path));
+                pic.Mpixel = (img.PixelHeight * img.PixelWidth) / (double)1000000;
+                pic.Width = Convert.ToString(img.PixelWidth);
+                pic.Height = Convert.ToString(img.PixelHeight);
+                pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
+
+                // Image metadata
+                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
                 if (!String.IsNullOrWhiteSpace(meta.Title))
                     pic.Title = meta.Title.Trim();
+                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
                 pic.Comment = meta.Comment;
-                pic.DateTaken = DateTime.Parse(meta.DateTaken);
                 pic.CameraManufacturer = meta.CameraManufacturer;
                 pic.CameraModel = meta.CameraModel;
                 pic.Copyright = meta.Copyright;
@@ -170,7 +171,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
+                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
             }
 
             // Set title to file name if non-existant
@@ -188,13 +189,15 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image metadata
-            BitmapSource img = BitmapFrame.Create(new Uri(path));
-            BitmapMetadata meta = (BitmapMetadata)img.Metadata;
             try
             {
+                BitmapSource img = BitmapFrame.Create(new Uri(path));
+                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
+
                 if (!String.IsNullOrWhiteSpace(meta.Title))
                     pic.Title = meta.Title.Trim();
-                pic.DateTaken = DateTime.Parse(meta.DateTaken);
+                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
             }
             catch (Exception ex)
             {
