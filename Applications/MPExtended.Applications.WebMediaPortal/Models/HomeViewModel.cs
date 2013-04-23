@@ -84,7 +84,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.DateAdded, WebSortOrder.Desc)
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
                     .Select(ep => new TVEpisodeViewModel(ep))
                     .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title));
             }
@@ -98,7 +98,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, WebSortField.TVDateAired, WebSortOrder.Desc)
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.TVDateAired, order: WebSortOrder.Desc)
                     .Select(ep => new TVEpisodeViewModel(ep))
                     .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title));
             }
@@ -112,7 +112,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.TAS.GetRecordingsByRange(0, count - 1, WebSortField.StartTime, WebSortOrder.Desc)
+                return Connections.Current.TAS.GetRecordingsByRange(0, count - 1, sort: WebSortField.StartTime, order: WebSortOrder.Desc)
                     .Where(rec => rec.Title != null);
             }
             catch (Exception)
@@ -125,7 +125,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             try
             {
-                return Connections.Current.TAS.GetScheduledRecordingsForToday(WebSortField.StartTime, WebSortOrder.Desc);
+                return Connections.Current.TAS.GetScheduledRecordingsForToday(sort: WebSortField.StartTime, order: WebSortOrder.Desc);
             }
             catch (Exception)
             {

@@ -586,7 +586,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 case WebMediaType.MusicAlbum:
                     // add all album tracks
-                    foreach (WebMusicTrackBasic track in Connections.Current.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, itemId, WebSortField.MusicTrackNumber))
+                    foreach (WebMusicTrackBasic track in Connections.Current.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, itemId, sort: WebSortField.MusicTrackNumber))
                     {
                         parameters = new RouteValueDictionary();
                         parameters["item"] = track.Id;

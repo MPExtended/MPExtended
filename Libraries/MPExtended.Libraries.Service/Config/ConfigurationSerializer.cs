@@ -70,7 +70,7 @@ namespace MPExtended.Libraries.Service.Config
                 CreateInstance();
         }
 
-        public TModel Get()
+        public virtual TModel Get()
         {
             return CreateInstance();
         }
@@ -92,7 +92,7 @@ namespace MPExtended.Libraries.Service.Config
             return _instance;
         }
 
-        private TModel ReadFromDisk()
+        protected virtual TModel ReadFromDisk()
         {
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
 
