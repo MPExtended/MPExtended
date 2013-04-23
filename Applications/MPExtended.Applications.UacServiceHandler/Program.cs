@@ -32,12 +32,12 @@ namespace MPExtended.Applications.UacServiceHandler
         {
             try
             {
-                switch (GetArgument(args, "/command"))
+                switch (GetArgument(args, "/service"))
                 {
-                    case "service":
+                    case "MPExtended Service":
                         new WindowsServiceHandler("MPExtended Service").Execute(GetArgument(args, "/action"));
                         break;
-                    case "webmphosting":
+                    case "MPExtended WebMediaPortal":
                         new WindowsServiceHandler("MPExtended WebMediaPortal").Execute(GetArgument(args, "/action"));
                         break;
                     default:
@@ -82,7 +82,7 @@ namespace MPExtended.Applications.UacServiceHandler
 
         private static void DieWithUsage()
         {
-            Console.WriteLine("Usage: UacServiceHelper.exe /command:(service) [/action:(start|stop|restart)]");
+            Console.WriteLine("Usage: UacServiceHelper.exe /service:(MPExtended Service|MPExtended WebMediaPortal) /action:(start|stop|restart)");
             Environment.Exit(1);
         }
     }
