@@ -37,6 +37,7 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
+using MPExtended.Applications.WebMediaPortal.Code.ActionResults;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -183,7 +184,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
                     Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
                 if (System.IO.File.Exists(path))
-                    return File(path, MIME.GetFromFilename(path, "application/octet-stream"), Path.GetFileName(path));
+                {
+                    return new RangeFilePathResult(MIME.GetFromFilename(path, "application/octet-stream"), new FileInfo(path));
+                }
+
             }
 
             // If we connect to the services at localhost, actually give the extern IP address to users
