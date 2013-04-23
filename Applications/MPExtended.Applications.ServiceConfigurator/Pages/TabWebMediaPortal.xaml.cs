@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -41,6 +42,29 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabWebMediaPortal : Page, ITabCloseCallback
     {
+        private static bool? _isServiceAvailable;
+        public static bool IsServiceAvailable
+        {
+            get
+            {
+                if (_isServiceAvailable.HasValue)
+                    return _isServiceAvailable.Value;
+
+                try
+                {
+                    ServiceController controller = new ServiceController("MPExtended WebMediaPortal");
+                    string tmp = controller.DisplayName;
+                    _isServiceAvailable = true;
+                    return true;
+                }
+                catch (InvalidOperationException)
+                {
+                    _isServiceAvailable = false;
+                    return false;
+                }
+            }
+        }
+
         public TabWebMediaPortal()
         {
             InitializeComponent();
@@ -68,7 +92,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);
             Configuration.Save();
 
-            // restart
+            if (!IsServiceAvailable)
+                return;
+
+            // restart (TODO: should we show a message or something?)
             if (UacServiceHelper.IsAdmin())
             {
                 Task.Factory.StartNew(() =>

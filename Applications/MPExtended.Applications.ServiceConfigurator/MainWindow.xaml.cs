@@ -29,6 +29,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Applications.ServiceConfigurator.Pages;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Composition;
 using MPExtended.Libraries.Service.Strings;
@@ -76,7 +77,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);
             }
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal) || !IsWebMediaPortalServiceAvailable())
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal) || !TabWebMediaPortal.IsServiceAvailable)
             {
                 tcMainTabs.Items.Remove(tiWebMediaPortal);
             }
@@ -138,20 +139,6 @@ namespace MPExtended.Applications.ServiceConfigurator
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             CommonEventHandlers.NavigateHyperlink(sender, e);
-        }
-
-        private bool IsWebMediaPortalServiceAvailable()
-        {
-            try
-            {
-                ServiceController controller = new ServiceController("MPExtended WebMediaPortal");
-                string tmp = controller.DisplayName;
-                return true;
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
         }
 
 
