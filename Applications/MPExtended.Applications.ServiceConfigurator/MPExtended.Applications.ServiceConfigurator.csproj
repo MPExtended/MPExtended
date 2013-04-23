@@ -74,9 +74,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
-      <Link>Code\WindowsServiceHandler.cs</Link>
-    </Compile>
     <Compile Include="Code\ServiceControlInterface.cs" />
     <Compile Include="Code\Zeroconf.cs" />
     <Compile Include="Pages\SelectUserDialog.xaml.cs">

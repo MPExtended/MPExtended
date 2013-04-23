@@ -58,11 +58,6 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             HandleMediaPortalState(UserServices.USS.IsMediaPortalRunning());
 
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
-            {
-                taskbarItemContextMenu.Items.Remove(MenuOpenWebMP);
-            }
-
             // service control interface
             sci = new ServiceControlInterface("MPExtended Service", lblServiceState, btnStartStopService);
             if (!sci.IsServiceAvailable && Installation.GetFileLayoutType() == FileLayoutType.Installed)
@@ -75,7 +70,7 @@ namespace MPExtended.Applications.ServiceConfigurator
                 sci.StartServiceWatcher();
             }
 
-            // hide tabs not applicable for current situation
+            // hide tabs and context menu items not applicable for current situation
             if (!Installation.IsServiceInstalled("MediaAccessService"))
             {
                 tcMainTabs.Items.Remove(tiPlugin);
@@ -86,9 +81,10 @@ namespace MPExtended.Applications.ServiceConfigurator
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);
             }
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal) || !TabWebMediaPortal.IsServiceAvailable)
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
             {
-                //tcMainTabs.Items.Remove(tiWebMediaPortal);
+                tcMainTabs.Items.Remove(tiWebMediaPortal);
+                taskbarItemContextMenu.Items.Remove(MenuOpenWebMP);
             }
 
             // initialize some tabs

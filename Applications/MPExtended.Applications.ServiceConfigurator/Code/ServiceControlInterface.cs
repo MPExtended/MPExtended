@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -31,6 +32,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     internal class ServiceControlInterface
     {
+        private const int _restartTimeout = 10000;
+
         public string ServiceName { get; private set; }
         public bool IsServiceAvailable { get; private set; }
 
@@ -64,6 +67,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 IsServiceAvailable = false;
 
                 stateLabel.Content = UI.ServiceNotInstalled;
+                stateLabel.Foreground = Brushes.Red;
                 triggerButton.IsEnabled = false;
             }
         }
@@ -89,7 +93,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 }
                 catch (Exception ex)
                 {
-                    ErrorHandling.ShowError(ex); // TODO: is this correct
+                    ErrorHandling.ShowError(ex); // TODO: is this correct?
                     serviceWatcher.Stop();
                 }
             };
@@ -100,7 +104,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
         {
             if (!UacServiceHelper.IsAdmin())
             {
-                Log.Debug("StartStopService: no admin rights, use UacServiceHandler");
+                Log.Debug("TriggerButtonClick: no admin rights, use UacServiceHandler for service '{0}'", ServiceName);
                 switch (serviceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:
@@ -113,7 +117,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             }
             else
             {
-                Log.Debug("StartStopService: have admin rights, start/stop ourselves");
+                Log.Debug("TriggerButtonClick: have admin rights, start or stop service '{0}' ourselves", ServiceName);
                 switch (serviceController.Status)
                 {
                     case ServiceControllerStatus.Stopped:
@@ -125,6 +129,54 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 
                 }
             }
+        }
+
+        public void RestartService()
+        {
+            RestartService(false);
+        }
+
+        public void RestartService(bool background)
+        {
+            if (!UacServiceHelper.IsAdmin())
+            {
+                Log.Debug("RestartService: no admin rights, use UacServiceHandler to restart service '{0}'", ServiceName);
+                UacServiceHelper.RestartService(ServiceName);
+            }
+            else
+            {
+                Log.Debug("RestartService: have admin rights, restart service '{0}' ourselves", ServiceName);
+                var task = Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            PerformRestart(_restartTimeout);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warn(String.Format("RestartService: failed to restart service '{0}'", ServiceName), ex);
+                        }
+                    });
+                if (!background)
+                    task.Wait();
+            }
+        }
+
+        private void PerformRestart(int timeoutMilliseconds)
+        {
+            // The timeout is the total timeout for two operations, so we reduce the timeout with the elapsed time after the first operation.
+            int startTime = Environment.TickCount;
+            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+            if (serviceController.Status == ServiceControllerStatus.Running)
+            {
+                serviceController.Stop();
+                serviceController.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+            }
+
+            timeout -= TimeSpan.FromTicks(Environment.TickCount - startTime);
+            serviceController.Start();
+            serviceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
         }
 
         private void HandleServiceState(ServiceControllerStatus _status)

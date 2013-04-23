@@ -759,6 +759,15 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service status.
+        /// </summary>
+        public static string ServiceStatus {
+            get {
+                return ResourceManager.GetString("ServiceStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service stopped.
         /// </summary>
         public static string ServiceStopped {
