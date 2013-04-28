@@ -51,6 +51,7 @@ namespace MPExtended.Libraries.Service
             MP1_1 = 3,
             MP1_2 = 4,
             MP1_3 = 5,
+            MP1_4 = 6,
         }
 
         public static Version GetVersion()
@@ -133,15 +134,19 @@ namespace MPExtended.Libraries.Service
             {
                 return MediaPortalVersion.NotAvailable;
             }
-            else if ((v.Major == 1 && v.Minor == 3) || (v.Major == 1 && v.Minor == 2 && v.Build >= 100)) // MP1.3 Alpha used 1.2.100.0 as version number
+            else if (v >= new Version(1, 3, 100)) // MP1.4 pre-release uses 1.3.100.0 as version number, see http://git.io/akz_PQ
+            {
+                return MediaPortalVersion.MP1_4;
+            }
+            else if (v >= new Version(1, 2, 100)) // MP1.3 Alpha used 1.2.100.0 as version number
             {
                 return MediaPortalVersion.MP1_3;
             }
-            else if (v.Major == 1 && v.Minor == 2) // Not sure about the alpha versions, but those are so ancient...
+            else if (v >= new Version(1, 2)) // Not sure about the alpha versions, but those are so ancient...
             {
                 return MediaPortalVersion.MP1_2;
             }
-            else if (v.Major == 1 && v.Minor == 1) // We don't even support this anymore, but whatever... 
+            else if (v >= new Version(1, 1)) // We don't even support this anymore, but whatever... 
             {
                 return MediaPortalVersion.MP1_1;
             }
