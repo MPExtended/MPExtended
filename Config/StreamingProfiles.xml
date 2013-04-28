@@ -7,7 +7,7 @@
   -->
   <Customized>false</Customized>
   
-  <ProfilesVersion>0</ProfilesVersion>
+  <ProfilesVersion>1</ProfilesVersion>
   <FFMpegPath>%mpextended-streaming%\ffmpeg.exe</FFMpegPath>
 
   <Transcoders>
@@ -707,6 +707,62 @@
         <encoder>vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>
-    </TranscoderProfile>   
+    </TranscoderProfile>
+    
+    <!-- WP8 Streaming Profiles for native app (http://www.windowsphone.com/s?appid=2f4333f1-fd97-44d6-b234-1da04fd4f05b) -->
+    <TranscoderProfile>
+      <Name>WP8 FFmpeg WVGA</Name>
+      <Description>WVGA Profile for WP8</Description>
+      <Bandwidth>2280</Bandwidth>
+      <Targets>
+        <Target>windows-phone-ts</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>800</MaxOutputWidth>
+      <MaxOutputHeight>480</MaxOutputHeight>
+      
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>WP8 FFmpeg WXGA</Name>
+      <Description>WXGA  Profile for WP8</Description>
+      <Bandwidth>2280</Bandwidth>
+      <Targets>
+        <Target>windows-phone-ts</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>768</MaxOutputHeight>
+      
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
+    <TranscoderProfile>
+      <Name>WP8 FFmpeg 720p</Name>
+      <Description>720p Profile for WP8</Description>
+      <Bandwidth>2280</Bandwidth>
+      <Targets>
+        <Target>windows-phone-ts</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
+      
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
   </Transcoders>
 </StreamingProfiles>
