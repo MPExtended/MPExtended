@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,7 +31,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MPExtended.Applications.ServiceConfigurator.Code;
-using MPExtended.Applications.UacServiceHandler;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Strings;
 
@@ -41,6 +41,8 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabWebMediaPortal : Page, ITabCloseCallback
     {
+        private ServiceControlInterface sci;
+
         public TabWebMediaPortal()
         {
             InitializeComponent();
@@ -49,6 +51,10 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             txtHTTPSPort.Text = Configuration.WebMediaPortalHosting.PortTLS.ToString();
             cbHTTPS.IsChecked = Configuration.WebMediaPortalHosting.EnableTLS;
             txtHTTPSPort.IsEnabled = Configuration.WebMediaPortalHosting.EnableTLS;
+
+            sci = new ServiceControlInterface("MPExtended WebMediaPortal", lblStatusInfo, btnStartStop);
+            if (sci.IsServiceAvailable)
+                sci.StartServiceWatcher();
         }
 
         public void TabClosed()
@@ -68,26 +74,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             Configuration.WebMediaPortalHosting.PortTLS = Int32.Parse(txtHTTPSPort.Text);
             Configuration.Save();
 
-            // restart
-            if (UacServiceHelper.IsAdmin())
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        var wsh = new WindowsServiceHandler("MPExtended WebMediaPortal");
-                        wsh.Execute(ServiceCommand.Restart);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warn("Failed to restart WebMediaPortal hosting process", ex);
-                    }
-                });
-            }
-            else
-            {
-                UacServiceHelper.RunUacServiceHandler("/command:webmphosting /action:restart");
-            }
+            if (!sci.IsServiceAvailable)
+                return;
+            sci.RestartService();
+        }
+
+        private void btnStartStop_Click(object sender, RoutedEventArgs e)
+        {
+            sci.TriggerButtonClick();
         }
 
         private void ChangeHTTPSCheckbox(object sender, RoutedEventArgs e)

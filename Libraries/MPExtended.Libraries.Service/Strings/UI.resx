@@ -515,4 +515,7 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>There already exists a user with this username.</value>
   </data>
+  <data name="ServiceStatus" xml:space="preserve">
+    <value>Service status</value>
+  </data>
 </root>
