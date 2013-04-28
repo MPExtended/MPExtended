@@ -21,7 +21,6 @@ using System.ComponentModel.Composition;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
@@ -59,7 +58,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
-            string mp13Fields = VersionUtil.GetMediaPortalVersion() >= VersionUtil.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
+            string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
             string sql =
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
