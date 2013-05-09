@@ -4,12 +4,6 @@ Database\Gentle:
 - Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
 - Version 1.5.0.29112 (custom build from MediaPortal)
 
-Database\MySql.Data.dll:
-- Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
-- Licensed under General Public License, version 2, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
-- Source code available from http://www.mysql.com/
-- Version 5.1.7 (version from MediaPortal)
-
 Installer\WifiRemote_0.6.1.mpe1:
 - Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
