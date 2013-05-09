@@ -4,12 +4,6 @@ Database\Gentle:
 - Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
 - Version 1.5.0.29112 (custom build from MediaPortal)
 
-Installer\WifiRemote_0.6.1.mpe1:
-- Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
-- Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
-- Source code available from http://code.google.com/p/wifiremote/
-- Version 0.5.0
-
 Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
