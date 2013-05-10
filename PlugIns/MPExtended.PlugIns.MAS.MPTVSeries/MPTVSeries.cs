@@ -179,46 +179,31 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
 
         private LazyQuery<T> GetAllSeasons<T>() where T : WebTVSeasonBasic, new()
         {
-            // preload watched count
-            string csql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
-                          "FROM online_episodes e " +
-                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
-                          "WHERE e.Hidden = 0 " + 
-                          "GROUP BY e.SeriesID, e.SeasonIndex ";
-            var episodeCountTable = ReadList<KeyValuePair<string, int>>(csql, delegate(SQLiteDataReader reader)
-            {
-                return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
-            }).ToDictionary(x => x.Key, x => x.Value);
-
-            string wsql = "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS count " +
-                          "FROM online_episodes e " +
-                          "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
-                          "WHERE e.Hidden = 0 AND e.Watched = 0 " +
-                          "GROUP BY e.SeriesID, e.SeasonIndex ";
-            var episodeUnwatchedCountTable = ReadList<KeyValuePair<string, int>>(wsql, delegate(SQLiteDataReader reader)
-            {
-                return new KeyValuePair<string, int>(reader.ReadIntAsString(0) + "_s" + reader.ReadIntAsString(1), reader.ReadInt32(2));
-            }).ToDictionary(x => x.Key, x => x.Value);
-
             // and load seasons
             string sql = 
-                    "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, STRFTIME('%Y', MIN(e.FirstAired)) AS year, " +
-                        "s.BannerFileNames, s.CurrentBannerFileName " +
+                    "SELECT DISTINCT s.ID, s.SeriesID, s.SeasonIndex, s.BannerFileNames, s.CurrentBannerFileName, " +
+                        "c.episodes, c.unwatched, STRFTIME('%Y', MIN(e.FirstAired)) AS year " +
                     "FROM season s " +
+                    "INNER JOIN (" +
+                            "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS episodes, COUNT(NULLIF(e.Watched, 1)) AS unwatched " +
+                            "FROM online_episodes e " +
+                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                            "WHERE e.Hidden = 0 " +
+                            "GROUP BY e.SeriesID, e.SeasonIndex" +
+                        ") AS c ON s.SeriesID = c.SeriesID AND s.SeasonIndex = c.SeasonIndex " +
                     "LEFT JOIN online_episodes e ON e.SeasonIndex = s.SeasonIndex AND e.SeriesID = s.SeriesID " +
                     "WHERE %where " +
-                    "GROUP BY s.ID, s.SeriesID, s.SeasonIndex " + 
+                    "GROUP BY s.ID, s.SeriesID, s.SeasonIndex, s.BannerFileNames, s.CurrentBannerFileName, c.episodes, c.unwatched " + 
+                    "HAVING c.episodes > 0 " + 
                     "%order";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadString),
                 new SQLFieldMapping("s", "SeasonIndex", "SeasonNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("s", "SeriesID", "ShowId", DataReaders.ReadIntAsString),
+                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"])),
+                new SQLFieldMapping("c", "episodes", "EpisodeCount", DataReaders.ReadInt32),
+                new SQLFieldMapping("c", "unwatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadStringAsInt),
-                new SQLFieldMapping("s", "BannerFileNames", "Artwork", CustomReaders.PreferedArtworkReader, new ArtworkReaderParameters(WebFileType.Banner, configuration["banner"]))
-            }, delegate (T obj) {
-                obj.EpisodeCount = episodeCountTable.ContainsKey(obj.Id) ? episodeCountTable[obj.Id] : 0;
-                obj.UnwatchedEpisodeCount = episodeUnwatchedCountTable.ContainsKey(obj.Id) ? episodeUnwatchedCountTable[obj.Id] : 0;
-                return obj;
             });
         }
 
