@@ -111,7 +111,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 AND l.DuplicateLocalName = 0 " +
                     "INNER JOIN (" +
                             // this subquery is so ugly, that every time it's executed a kitten dies.
-                            "SELECT seriesID, GROUP_CONCAT(LocalPath || '?' || Rating, '|') AS fanart_list " + // the question mark is used because it's forbidden in paths
+                            "SELECT seriesID, GROUP_CONCAT(LocalPath || '?' || Rating || '?' || id, '|') AS fanart_list " + // the question mark is used because it's forbidden in paths
                             "FROM Fanart " +
                             "WHERE LocalPath != '' " + // there used to be "AND f.SeriesName = 'false'" appended here, but that doesn't seem to make any sense
                             "GROUP BY seriesID " +
