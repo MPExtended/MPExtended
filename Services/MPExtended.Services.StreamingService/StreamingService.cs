@@ -224,6 +224,16 @@ namespace MPExtended.Services.StreamingService
 
             return new WebItemSupportStatus() { Supported = true };
         }
+
+        public WebStreamLogs GetStreamLogs(string identifier)
+        {
+            var slh = StreamLog.GetStreamLogDetails(identifier);
+            return new WebStreamLogs()
+            {
+                LastError = slh.LastError,
+                FullLogs = slh.FullLog.ToString()
+            };
+        }
         #endregion
 
         #region Streaming

@@ -77,5 +77,9 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebItemSupportStatus GetItemSupportStatus(WebMediaType type, int? provider, string itemId, int? offset);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebStreamLogs GetStreamLogs(string identifier);
     }
 }
