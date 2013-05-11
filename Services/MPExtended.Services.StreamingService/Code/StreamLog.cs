@@ -53,7 +53,7 @@ namespace MPExtended.Services.StreamingService.Code
                 streamLogs[streamIdentifier] = new StreamLogDetails();
             else
                 streamLogs[streamIdentifier].FullLog.AppendLine();
-            streamLogs[streamIdentifier].FullLog.AppendFormat("{0:HH:mm:ss.fffff} {1} ", DateTime.Now, Enum.GetName(typeof(LogLevel), level).ToUpperInvariant());
+            streamLogs[streamIdentifier].FullLog.AppendFormat("{0:HH:mm:ss.fffff} {1,5}: ", DateTime.Now, Enum.GetName(typeof(LogLevel), level).ToUpperInvariant());
 
             if (level >= LogLevel.Error)
                 streamLogs[streamIdentifier].LastError = String.Format(message, args);
@@ -63,14 +63,14 @@ namespace MPExtended.Services.StreamingService.Code
         {
             WriteLogHeader(streamIdentifier, level, message, args);
             streamLogs[streamIdentifier].FullLog.AppendFormat(message, args);
-            Log.Write(level, String.Format("[{0}] {1}", streamIdentifier, message), args);
+            Log.Write(level, String.Format("[{0,30}] {1}", streamIdentifier, message), args);
         }
 
         private static void WriteLog(string streamIdentifier, LogLevel level, string message, Exception ex)
         {
             WriteLogHeader(streamIdentifier, level, message);
             streamLogs[streamIdentifier].FullLog.Append(message);
-            Log.Write(level, String.Format("[{0}] {1}", streamIdentifier, message), ex);
+            Log.Write(level, String.Format("[{0,30}] {1}", streamIdentifier, message), ex);
         }
 
         public static void Debug(string identifier, string message, params object[] args)

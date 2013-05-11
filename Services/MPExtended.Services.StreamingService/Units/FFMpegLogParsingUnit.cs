@@ -64,7 +64,7 @@ namespace MPExtended.Services.StreamingService.Units
                     Log.Error("FFMpegLogParsing brutally came to an end", ex);
                 }
             });
-            processThread.Name = "FFMpegLogParsing";
+            processThread.Name = "FFMpegLog";
             processThread.Start();
             return true;
         }
