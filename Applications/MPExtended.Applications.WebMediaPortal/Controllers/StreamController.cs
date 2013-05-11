@@ -566,22 +566,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         [ServiceAuthorize]
         public ActionResult Playlist(WebMediaType type, string itemId, string transcoder = null)
         {
-            // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
-            {
                 PlayerOpenedBy.Add(Request.UserHostAddress);
-            }
 
-            // get profile
             var profile = GetProfile(GetStreamControl(type), transcoder ?? GetDefaultProfile(type));
-
-            // create playlist
             StringBuilder m3u = new StringBuilder();
             m3u.AppendLine("#EXTM3U");
 
             RouteValueDictionary parameters;
-            String url;
-            String continuationId = "playlist-" + randomGenerator.Next(10000, 99999);
+            string continuationId = "playlist-" + randomGenerator.Next(10000, 99999);
+            string url;
+            int filecount = 1;
             switch (type)
             {
                 case WebMediaType.MusicAlbum:
@@ -597,15 +592,30 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         m3u.AppendLine(url);
                     }
                     break;
+
+                case WebMediaType.MusicTrack:
+                case WebMediaType.TVEpisode:
+                case WebMediaType.Movie:
+                    var mediaItem = Connections.Current.MAS.GetMediaItem(GetProvider(type), type, itemId);
+                    filecount = mediaItem.Path.Count;
+                    goto case WebMediaType.Recording; // really, Microsoft? Fall-through cases are useful. 
+                case WebMediaType.TV:
+                case WebMediaType.Recording:
+                    for (int i = 0; i < filecount; i++)
+                    {
+                        parameters = new RouteValueDictionary();
+                        parameters["item"] = itemId;
+                        parameters["transcoder"] = profile.Name;
+                        parameters["continuationId"] = continuationId;
+                        parameters["fileindex"] = i;
+                        url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                        m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
+                        m3u.AppendLine(url);
+                    }
+                    break;
+
                 default:
-                    // add default streaming url
-                    parameters = new RouteValueDictionary();
-                    parameters["item"] = itemId;
-                    parameters["transcoder"] = profile.Name;
-                    parameters["continuationId"] = continuationId;
-                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
-                    m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
-                    m3u.AppendLine(url);
+                    Log.Error("Requested playlist for non-supported media type {0} with id {1}", type, itemId);
                     break;
             }
 
