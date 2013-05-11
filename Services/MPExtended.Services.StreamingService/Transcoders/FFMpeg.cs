@@ -67,7 +67,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // setup output parsing
             var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
-            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, Context.StartPosition);
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(Context.Identifier, einfo, Context.StartPosition);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
             Context.Pipeline.AddLogUnit(logunit, 6);

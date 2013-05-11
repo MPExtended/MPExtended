@@ -32,15 +32,18 @@ namespace MPExtended.Services.StreamingService.Units
     internal class VLCWrapperParsingUnit : ILogProcessingUnit
     {
         public Stream InputStream { get; set; }
+
+        private string identifier;
         private Reference<WebTranscodingInfo> data;
         private WebMediaInfo info;
         private Thread processThread;
         private bool vlcIsStarted;
         private long position;
 
-        public VLCWrapperParsingUnit(Reference<WebTranscodingInfo> save, WebMediaInfo info, long position)
+        public VLCWrapperParsingUnit(string identifier, Reference<WebTranscodingInfo> save, WebMediaInfo info, long position)
         {
-            data = save;
+            this.identifier = identifier;
+            this.data = save;
             this.info = info;
             this.position = position;
         }
@@ -60,7 +63,7 @@ namespace MPExtended.Services.StreamingService.Units
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("VLCLogParsing failed with exception", ex);
+                    StreamLog.Error(identifier, "VLCLogParsing failed with exception", ex);
                 }
             });
             processThread.Name = "VLCLogParsing";
@@ -93,7 +96,7 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     try
                     {
-                        Log.Trace("VLCWrapperParsing: read line {0}", line);
+                        StreamLog.Trace(identifier, "VLCWrapperParsing: read line {0}", line);
 
                         // just for debugging of the wrapper tool
                         if (line.StartsWith("A") || line.StartsWith("I") || line == "S started" || line == "S null")
@@ -133,7 +136,7 @@ namespace MPExtended.Services.StreamingService.Units
                             continue;
                         }
 
-                        Log.Warn("VLCWrapperParsing: encountered unknown line {0}", line);
+                        StreamLog.Warn(identifier, "VLCWrapperParsing: encountered unknown line {0}", line);
                     }
                     catch (ThreadAbortException)
                     {
@@ -143,7 +146,7 @@ namespace MPExtended.Services.StreamingService.Units
                     }
                     catch (Exception e)
                     {
-                        Log.Error("Failure during parsing of VLC output", e);
+                        StreamLog.Error(identifier, "Failure during parsing of VLC output", e);
                     }
                 }
             }

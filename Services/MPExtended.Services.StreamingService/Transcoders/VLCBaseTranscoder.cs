@@ -131,7 +131,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
             else
             {
-                Log.Warn("VLC streaming without audio track is not implemented yet");
+                StreamLog.Warn(Identifier, "VLC streaming without audio track is not implemented yet");
             }
 
             // subtitle selection

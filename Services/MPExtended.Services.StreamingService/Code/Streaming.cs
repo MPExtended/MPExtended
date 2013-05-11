@@ -157,6 +157,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.LastActivity = DateTime.Now;
             stream.UseActivityForTimeout = false;
             stream.Context = new StreamContext();
+            stream.Context.Identifier = identifier;
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebMediaType.TV;
 
@@ -249,7 +250,7 @@ namespace MPExtended.Services.StreamingService.Code
                     StreamLog.Debug(identifier, "Final stream selection: audioId={0}, subtitleId={1}", stream.Context.AudioTrackId, stream.Context.SubtitleTrackId);
 
                     // build the pipeline
-                    stream.Context.Pipeline = new Pipeline();
+                    stream.Context.Pipeline = new Pipeline(identifier);
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
                     stream.Transcoder.BuildPipeline();
 

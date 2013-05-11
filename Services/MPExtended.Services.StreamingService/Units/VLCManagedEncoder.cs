@@ -78,15 +78,15 @@ namespace MPExtended.Services.StreamingService.Units
             // setup output named pipe
             DataOutputStream = new NamedPipe();
             string output = ((NamedPipe)DataOutputStream).Url;
-            Log.Info("VLCManagedEncoder: starting output named pipe {0}", output);
+            StreamLog.Info(context.Identifier, "VLCManagedEncoder: starting output named pipe {0}", output);
             ((NamedPipe)DataOutputStream).Start(false);
 
             // prepare sout, needs some trickery for vlc
             string realSout = sout.Replace("#OUT#", @"\" + output);
 
             // debug
-            Log.Debug("VLCManagedEncoder: sout {0}", realSout);
-            Log.Debug("VLCManagedEncoder: arguments {0}", String.Join("|", arguments));
+            StreamLog.Debug(context.Identifier, "VLCManagedEncoder: sout {0}", realSout);
+            StreamLog.Debug(context.Identifier, "VLCManagedEncoder: arguments {0}", String.Join("|", arguments));
 
             // start vlc
             transcoder = new VLCTranscoder();
@@ -98,11 +98,11 @@ namespace MPExtended.Services.StreamingService.Units
             if (inputMethod == InputMethod.NamedPipe)
             {
                 transcoderInputStream = new NamedPipe();
-                Log.Info("VLCManagedEncoder: starting input named pipe {0}", transcoderInputStream);
+                StreamLog.Info(context.Identifier, "VLCManagedEncoder: starting input named pipe {0}", transcoderInputStream);
                 ((NamedPipe)transcoderInputStream).Start(false);
                 inputPath = "stream://" + transcoderInputStream.Url; // use special syntax for VLC to pick up named pipe
             }
-            Log.Debug("VLCManagedEncoder: input {0}", inputPath);
+            StreamLog.Debug(context.Identifier, "VLCManagedEncoder: input {0}", inputPath);
             transcoder.SetInput(inputPath);
 
             // start transcoding
@@ -120,12 +120,12 @@ namespace MPExtended.Services.StreamingService.Units
             if (inputMethod == InputMethod.NamedPipe)
             {
                 ((NamedPipe)transcoderInputStream).WaitTillReady();
-                Log.Info("VLCManagedEncoder: Copy stream of type {0} into transcoder input pipe", InputStream.ToString());
+                StreamLog.Info(context.Identifier, "VLCManagedEncoder: Copy stream of type {0} into transcoder input pipe", InputStream.ToString());
                 StreamCopy.AsyncStreamCopy(InputStream, transcoderInputStream, "transinput");
             }
 
             // delay start of next unit till our output stream is ready
-            Log.Info("VLCManagedEncoder: Waiting till output named pipe is ready");
+            StreamLog.Info(context.Identifier, "VLCManagedEncoder: Waiting till output named pipe is ready");
             ((NamedPipe)DataOutputStream).WaitTillReady();
 
             // TODO: wait for state machine
@@ -134,12 +134,12 @@ namespace MPExtended.Services.StreamingService.Units
             infoReference = new Reference<WebTranscodingInfo>(() => context.TranscodingInfo, x => { context.TranscodingInfo = x; });
             if (context.MediaInfo.Duration > 0)
             {
-                Log.Trace("VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
+                StreamLog.Trace(context.Identifier, "VLCManagedInfo: duration known; is {0}", context.MediaInfo.Duration);
                 calculator = new TranscodingInfoCalculator(context.StartPosition, 25, POLL_DATA_TIME, context.MediaInfo.Duration);
             }
             else
             {
-                Log.Trace("VLCManagedInfo: duration unknown");
+                StreamLog.Trace(context.Identifier, "VLCManagedInfo: duration unknown");
                 calculator = new TranscodingInfoCalculator(context.StartPosition, 25, POLL_DATA_TIME);
             }
 
@@ -156,21 +156,21 @@ namespace MPExtended.Services.StreamingService.Units
 
         public bool Stop()
         {
-            Log.Debug("VLCManagedEncoder: Stopping transcoding");
+            StreamLog.Debug(context.Identifier, "VLCManagedEncoder: Stopping transcoding");
             try
             {
                 DataOutputStream.Close();
             }
             catch (Exception e)
             {
-                Log.Info("VLCManagedEncoder: Failed to close data output stream", e);
+                StreamLog.Info(context.Identifier, "VLCManagedEncoder: Failed to close data output stream", e);
             }
 
             inputTimer.Enabled = false;
-            Log.Trace("VLCManagedEncoder: Trying to stop vlc");
+            StreamLog.Trace(context.Identifier, "VLCManagedEncoder: Trying to stop vlc");
             transcoder.StopTranscoding();
             transcoder = null;
-            Log.Debug("VLCManagedEncoder: Stopped transcoding");
+            StreamLog.Debug(context.Identifier, "VLCManagedEncoder: Stopped transcoding");
 
             return true;
         }
@@ -183,13 +183,13 @@ namespace MPExtended.Services.StreamingService.Units
                 {
                     // let's ignore the time here, for reasons detailed in VLCWrapperParsingUnit.cs around line 115
                     float position = transcoder.GetPosition();
-                    Log.Trace("VLCManagedInfo: calling NewPercentage with position {0}", position);
+                    StreamLog.Trace(context.Identifier, "VLCManagedInfo: calling NewPercentage with position {0}", position);
                     calculator.NewPercentage(position);
                     calculator.SaveStats(infoReference);
                 }
                 catch (Exception ex)
                 {
-                    Log.Warn("Failed to get VLC data", ex);
+                    StreamLog.Warn(context.Identifier, "Failed to get VLC data", ex);
                 }
             }
         }

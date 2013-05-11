@@ -58,7 +58,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // add unit
             EncoderUnit.TransportMethod input = Context.Source.NeedsInputReaderUnit ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
-            EncoderUnit unit = new EncoderUnit(program, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.None);
+            EncoderUnit unit = new EncoderUnit(program, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.None, Context);
             unit.DebugOutput = false; // change this for debugging
             Context.Pipeline.AddDataUnit(unit, 5);
 

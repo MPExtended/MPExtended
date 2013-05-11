@@ -30,6 +30,8 @@ namespace MPExtended.Services.StreamingService.Code
         // time in milliseconds for which a client player sync position is valid
         private const int CLIENT_SYNC_VALID_DURATION = 120000;
 
+        public string Identifier { get; set; }
+
         public MediaSource Source { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
         public bool IsTv { get; set; }

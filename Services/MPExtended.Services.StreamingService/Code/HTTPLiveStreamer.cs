@@ -135,7 +135,7 @@ namespace MPExtended.Services.StreamingService.Code
             string removeFileName = Path.Combine(TemporaryDirectory, filename);
             if (File.Exists(removeFileName))
             {
-                Log.Trace("HTTPLiveStreamer: Remove old segment {0} during request for {1}", filename, currentRequest);
+                StreamLog.Trace(Identifier, "HTTPLiveStreamer: Remove old segment {0} during request for {1}", filename, currentRequest);
                 File.Delete(removeFileName);
             }
         }

@@ -73,6 +73,16 @@ namespace MPExtended.Services.StreamingService.Code
             Log.Write(level, String.Format("[{0,30}] {1}", streamIdentifier, message), ex);
         }
 
+        public static void Trace(string identifier, string message, params object[] args)
+        {
+            WriteLog(identifier, LogLevel.Trace, message, args);
+        }
+
+        public static void Trace(string identifier, string message, Exception ex)
+        {
+            WriteLog(identifier, LogLevel.Trace, message, ex);
+        }
+
         public static void Debug(string identifier, string message, params object[] args)
         {
             WriteLog(identifier, LogLevel.Debug, message, args);
