@@ -518,4 +518,13 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="ServiceStatus" xml:space="preserve">
     <value>Service status</value>
   </data>
+  <data name="WebMediaPortalResetSkinButton" xml:space="preserve">
+    <value>Revert to default skin</value>
+  </data>
+  <data name="WebMediaPortalResetSkinSuccess" xml:space="preserve">
+    <value>The WebMediaPortal skin has been reset to the default skin!</value>
+  </data>
+  <data name="WebMediaPortalResetSkinText" xml:space="preserve">
+    <value>If you've installed and configured a broken skin in WebMediaPortal which has rendered the application useless, you can reset it to the default skin here.</value>
+  </data>
 </root>

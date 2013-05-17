@@ -1245,6 +1245,33 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revert to default skin.
+        /// </summary>
+        public static string WebMediaPortalResetSkinButton {
+            get {
+                return ResourceManager.GetString("WebMediaPortalResetSkinButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The WebMediaPortal skin has been reset to the default skin!.
+        /// </summary>
+        public static string WebMediaPortalResetSkinSuccess {
+            get {
+                return ResourceManager.GetString("WebMediaPortalResetSkinSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you&apos;ve installed and configured a broken skin in WebMediaPortal which has rendered the application useless, you can reset it to the default skin here..
+        /// </summary>
+        public static string WebMediaPortalResetSkinText {
+            get {
+                return ResourceManager.GetString("WebMediaPortalResetSkinText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MPExtended Configurator.
         /// </summary>
         public static string WindowTitle {

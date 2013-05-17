@@ -100,5 +100,12 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 MessageBox.Show(UI.HTTPSInvalidPort, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void btnResetSkin_Click(object sender, RoutedEventArgs e)
+        {
+            Configuration.WebMediaPortal.Skin = "default";
+            Configuration.Save();
+            MessageBox.Show(UI.WebMediaPortalResetSkinSuccess, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
