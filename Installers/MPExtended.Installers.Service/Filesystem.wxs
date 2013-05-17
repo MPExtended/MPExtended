@@ -167,6 +167,14 @@
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
             </Component>
+            
+            <Component Id="Component_Configurator_Registry" Guid="5a4072a3-32c2-4482-af07-b9af4e463eaa">
+              <RegistryKey Root="HKLM" Key="Software\MPExtended" Action="createAndRemoveOnUninstall">
+                <RegistryValue Type="string" Name="ConfiguratorInstallLocation" Value="[MPEXTENDEDDIRECTORY]Service" />
+              </RegistryKey>
+              <RemoveRegistryKey Root="HKLM" Key="Software\MPExtended" Action="removeOnUninstall" />
+            </Component>
+            
             <Directory Id="Directory_Configurator_Binaries_enUS" Name="en-US">
               <Component Id="Component_Configurator_Binaries_enUS" Guid="db310c41-317f-4df5-beed-2398aedd3d16">
                 <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\en-US\MPExtended.Applications.ServiceConfigurator.resources.dll" />
