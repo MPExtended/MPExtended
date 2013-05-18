@@ -12,8 +12,8 @@
   <MusicProvider xsi:nil="true" />
   <PicturesProvider xsi:nil="true" />
   <FileSystemProvider xsi:nil="true" />
-  <MASUrl>192.168.0.105:4322</MASUrl>
-  <TASUrl>192.168.0.105:4322</TASUrl>
+  <MASUrl>127.0.0.1:4322</MASUrl>
+  <TASUrl>127.0.0.1:4322</TASUrl>
   <ServiceUsername>admin</ServiceUsername>
   <ServicePassword>admin</ServicePassword>
   <ExternalUrlScheme>Default</ExternalUrlScheme>
