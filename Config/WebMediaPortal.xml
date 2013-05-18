@@ -1,28 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WebMediaPortal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/WebMediaPortal/1">
   <StreamType>DirectWhenPossible</StreamType>
-  
   <DefaultGroup xsi:nil="true" />
-
   <DefaultMediaProfile>Direct</DefaultMediaProfile>
   <DefaultTVProfile>Direct</DefaultTVProfile>
   <EnableDeinterlace>true</EnableDeinterlace>
   <DefaultAudioProfile>Audio-only (MP3)</DefaultAudioProfile>
   <EnableAlbumPlayer>true</EnableAlbumPlayer>
-  
   <TVShowProvider xsi:nil="true" />
   <MovieProvider xsi:nil="true" />
   <MusicProvider xsi:nil="true" />
   <PicturesProvider xsi:nil="true" />
   <FileSystemProvider xsi:nil="true" />
-  
-  <MASUrl>127.0.0.1:4322</MASUrl>
-  <TASUrl>127.0.0.1:4322</TASUrl>
+  <MASUrl>192.168.0.105:4322</MASUrl>
+  <TASUrl>192.168.0.105:4322</TASUrl>
   <ServiceUsername>admin</ServiceUsername>
   <ServicePassword>admin</ServicePassword>
-
-  <DefaultLanguage xsi:nil="true" />
-  
+  <ExternalUrlScheme>Default</ExternalUrlScheme>
   <Skin>default</Skin>
+  <DefaultLanguage />
   <SkinConfiguration />
 </WebMediaPortal>
