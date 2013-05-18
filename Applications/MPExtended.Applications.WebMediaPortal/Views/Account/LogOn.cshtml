@@ -9,9 +9,6 @@
     @UIStrings.PleaseEnterUsernameAndPassword
 </p>
 
-@Html.Assets().AddScript("~/Scripts/jquery.validate.min.js")
-@Html.Assets().AddScript("~/Scripts/jquery.validate.unobtrusive.min.js")
-
 @Html.ValidationSummary(true, UIStrings.LogOnFailed)
 
 @using (Html.BeginForm()) {
