@@ -29,29 +29,24 @@ namespace MPExtended.Libraries.Service.WCF
     {
         public override bool CanConvert(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
+            if (Nullable.GetUnderlyingType(type) != null)
                 return true;
-            }
 
             if (type == typeof(DateTime))
-            {
                 return true;
-            }
 
             return base.CanConvert(type);
         }
 
         public override object ConvertStringToValue(string parameter, Type parameterType)
         {
-            if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            var underlyingType = Nullable.GetUnderlyingType(parameterType);
+            if (underlyingType != null)
             {
                 if (String.IsNullOrWhiteSpace(parameter))
-                {
                     return null;
-                }
 
-                parameterType = parameterType.GetGenericArguments().First();
+                parameterType = underlyingType;
             }
 
             if (parameterType == typeof(DateTime))
@@ -87,14 +82,13 @@ namespace MPExtended.Libraries.Service.WCF
 
         public override string ConvertValueToString(object parameter, Type parameterType)
         {
-            if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            var underlyingType = Nullable.GetUnderlyingType(parameterType);
+            if (underlyingType != null)
             {
                 if (parameter == null)
-                {
-                    return "";
-                }
+                    return String.Empty;
 
-                parameterType = parameterType.GetGenericArguments().First();
+                parameterType = underlyingType;
             }
 
             return base.ConvertValueToString(parameter, parameterType);
