@@ -119,7 +119,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "LEFT JOIN (" +
                             "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS episodes, COUNT(NULLIF(e.Watched, 1)) AS unwatched " +
                             "FROM online_episodes e " +
-                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID OR e.CompositeID = l.CompositeID2 " +
                             "WHERE e.Hidden = 0 " +
                             "GROUP BY e.SeriesID, e.SeasonIndex " +
                         ") AS c ON s.ID = c.SeriesID " +
@@ -187,7 +187,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     "INNER JOIN (" +
                             "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS episodes, COUNT(NULLIF(e.Watched, 1)) AS unwatched " +
                             "FROM online_episodes e " +
-                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID OR e.CompositeID = l.CompositeID2 " +
                             "WHERE e.Hidden = 0 " +
                             "GROUP BY e.SeriesID, e.SeasonIndex" +
                         ") AS c ON s.SeriesID = c.SeriesID AND s.SeasonIndex = c.SeasonIndex " +
@@ -237,7 +237,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "CASE WHEN LENGTH(TRIM(e.EpisodeName)) > 0 THEN e.EpisodeName ELSE l.LocalEpisodeName END AS name, " + 
                         "MIN(ls.Parsed_Name) AS parsed_name, os.Pretty_Name AS pretty_name " + 
                     "FROM online_episodes e " +
-                    "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID " +
+                    "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID OR e.CompositeID = l.CompositeID2 " +
                     "INNER JOIN online_series os ON os.ID = e.SeriesID " +
                     "INNER JOIN local_series ls ON ls.ID = e.SeriesID " +
                     "WHERE e.Hidden = 0 AND %where " +
