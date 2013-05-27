@@ -402,9 +402,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                             })
                             .Join(Environment.NewLine);
 
-            Response.ContentType = response.ContentType;
-            Response.Write(newPlaylist);
-            Response.Flush();
+            try
+            {
+                Response.ContentType = response.ContentType;
+                Response.Write(newPlaylist);
+                Response.Flush();
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Exception while proxying HLS playlist from {0}", source), ex);
+            }
         }
 
         public ActionResult ProxyHttpLiveSegment(string identifier, string ctdAction, string parameters)
