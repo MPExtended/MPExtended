@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MPExtended.Services.MediaAccessService.Interfaces</id>
+    <version>$version$</version>
+    <authors>MPExtended Developers</authors>
+    <owners>MPExtended Developers</owners>
+    <projectUrl>http://www.mpextended.com/</projectUrl>
+    <iconUrl>http://www.mpextended.com/logo_200.png</iconUrl>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>$copyright$</copyright>
+    <summary>Interfaces for the MPExtended MediaAccessService (MAS)</summary>
+    <description>MPExtended aims at providing access to MediaPortal from all over the world, using WCF services to create an easy-to-use API. This package contains the interfaces for the MediaAccessService, which gives access to MediaPortal's client databases.</description>
+    <dependencies>
+      <dependency id="MPExtended.Services.Common.Interfaces" version="$version$" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" />
+      <frameworkAssembly assemblyName="System.ServiceModel" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web"  />
+    </frameworkAssemblies>
+  </metadata>
+</package>
