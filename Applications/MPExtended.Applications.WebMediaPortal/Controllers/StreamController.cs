@@ -335,7 +335,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
-                return Json(new { Success = true, URL = url, Poster = Url.Artwork(type, itemId) }, JsonRequestBehavior.AllowGet);
+                // iOS does not display poster images with relative paths
+                string posterUrl = Url.Artwork(type, itemId, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                return Json(new { Success = true, URL = url, Poster = posterUrl }, JsonRequestBehavior.AllowGet);
             }
             else
             {
