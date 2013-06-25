@@ -153,7 +153,12 @@ namespace MPExtended.Services.StreamingService.Code
                     IsLocalFile = true,
                     IsReadOnly = true,
                     OnNetworkDrive = false,
-                    PID = -1
+                    PID = -1,
+                    // This field should not be read for the TV mediatype, since we can't know the size of timeshiftings. However, since
+                    // there might slip a usage through and this has broken live TV streaming over WAN in the Direct profile for months
+                    // in the past, let's assume they're infinitely large for practical purposes here.
+                    // TODO: Maybe use a childclass of WebFileInfo that throws in the Size.get accessor? At least we get clear logs then.
+                    Size = Int64.MaxValue
                 };
                 fileInfoCache.Path = PathUtil.StripFileProtocolPrefix(fileInfoCache.Path);
                 return fileInfoCache;

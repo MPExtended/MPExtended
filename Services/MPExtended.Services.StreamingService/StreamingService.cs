@@ -193,7 +193,7 @@ namespace MPExtended.Services.StreamingService
 
                 return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
             }
-            if (fileinfo.Size == 0)
+            if (type != WebMediaType.TV && fileinfo.Size == 0)
             {
                 return new WebItemSupportStatus(false, "This file has a size of 0KB");
             }
