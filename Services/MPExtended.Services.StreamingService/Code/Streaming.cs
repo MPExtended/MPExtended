@@ -129,8 +129,8 @@ namespace MPExtended.Services.StreamingService.Code
                             }
                             else
                             {
-                                Log.Info("Stream {0} had last read {1} milliseconds ago and last service activity at {2}, so cancel it", 
-                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                                Log.Info("Stream {0} had last read {1} milliseconds ago (read {2} bytes in total) and last service activity at {3}, so cancel it", 
+                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].OutputStream.ReadBytes, Streams[key].LastActivity);
                             }
                             service.FinishStream(key);
                         }
