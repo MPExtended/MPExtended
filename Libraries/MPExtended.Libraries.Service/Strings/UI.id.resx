@@ -306,6 +306,123 @@
   <data name="AddAccount" xml:space="preserve">
     <value>Tambah akun</value>
   </data>
+  <data name="AuthenticationIntroText" xml:space="preserve">
+    <value>Anda dapat mengkonfigurasi autentikasi untuk MPExtended di sini. Direkomendasikan anda mengaktifkan autentikasi dan ubah (atau hapus) password pada akun baku, admin. Jangan pernah menjadikan sebuah instalasi dapat diakses dari internet tanpa menggunakan autentikasi dan password yang aman.</value>
+  </data>
+  <data name="Autodetection" xml:space="preserve">
+    <value>Autodeteksi</value>
+  </data>
+  <data name="AutodetectionText" xml:space="preserve">
+    <value>Layanan tersebut mendukung autodeteksi via Bonjour/Zeroconf, yang memperkenankan klien di jaringan lokal untuk secara otomatis menemukan layanan tersebut dan mengkonfigurasinya sendiri.</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>periksa perbaruan</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>memeriksa perbaruan...</value>
+  </data>
+  <data name="CredentialValidationFailed" xml:space="preserve">
+    <value>Maaf, data kredensial jaringan yang anda masukkan cacat.</value>
+  </data>
+  <data name="CredentialValidationSuccessful" xml:space="preserve">
+    <value>Berhasil memvalidasi data kredensial jaringan.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hapus akun</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Dokumentasi:</value>
+  </data>
+  <data name="EnableAuthentication" xml:space="preserve">
+    <value>Aktifkan autentikasi (direkomendasikan!)</value>
+  </data>
+  <data name="EnableAutodetection" xml:space="preserve">
+    <value>Aktifkan autodeteksi</value>
+  </data>
+  <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
+    <value>gagal menerima informasi perbaruan</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Forum:</value>
+  </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>Homepage:</value>
+  </data>
+  <data name="IncludeAuthentication" xml:space="preserve">
+    <value>Sertakan autentikasi untuk pengguna:</value>
+  </data>
+  <data name="IRCText" xml:space="preserve">
+    <value>IRC:
+   irc.freenode.net / channel #mp-extended</value>
+  </data>
+  <data name="MPExtendedIntroduction" xml:space="preserve">
+    <value>MPExtended adalah proyek open source yang bertujuan untuk menyediakan akses ke MediaPortal dari seluruh dunia, menggunakan klien untuk peramban web anda, Android, iOS dan banyak lagi.
+
+Ini adalah komponen layanan, yang menyediakan ke basisdata dan file media untuk semua klien.</value>
+  </data>
+  <data name="NetworkDrives" xml:space="preserve">
+    <value>Network drives</value>
+  </data>
+  <data name="NetworkDrivesText" xml:space="preserve">
+    <value>Bila anda menempatkan file media anda pada sistem berbeda (seperti pada dedicated server atau NAS), MPExtended membutuhkan data kredensial untuk drive ini guna mengakses mereka. Biasanya ini adalah data kredensial dari akun Windows anda.</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>tidak ada perbaruan tersedia</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PortText" xml:space="preserve">
+    <value>Anda dapat mengkonfigurasi port yang akan didengarkan layanan tersebut di sini.</value>
+  </data>
+  <data name="QRCodeIntroText" xml:space="preserve">
+    <value>Anda dapat memindai kode QR yang mendukung klien untuk menambahkan instalasi MPExtended ini secara otomatis.</value>
+  </data>
+  <data name="SaveBarcodeAsImageFile" xml:space="preserve">
+    <value>Simpan barcode sebagai file gambar</value>
+  </data>
+  <data name="SavedBarcodeTo" xml:space="preserve">
+    <value>Simpan barcode ke {0}!</value>
+  </data>
+  <data name="SaveToFile" xml:space="preserve">
+    <value>Simpan ke file</value>
+  </data>
+  <data name="ServiceName" xml:space="preserve">
+    <value>Nama Layanan</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Layanan</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Tes</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>perbaruan tersedia: versi {0}, dirilis pada {1}</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versi:</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Ekspor</value>
+  </data>
+  <data name="LogFile" xml:space="preserve">
+    <value>File log:</value>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>File log</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Nihil</value>
+  </data>
+  <data name="Plugin" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="ScrollToEnd" xml:space="preserve">
+    <value>Gulung untuk ke akhir</value>
+  </data>
   <data name="Site" xml:space="preserve">
     <value>Situs</value>
   </data>
