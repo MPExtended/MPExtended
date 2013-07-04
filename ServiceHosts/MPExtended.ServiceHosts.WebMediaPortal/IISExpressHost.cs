@@ -65,6 +65,10 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                 generator.GenerateConfigFile(tempConfigFile);
                 Log.Debug("Saved IIS Express configuration file to {0}, using {1} as www directory", tempConfigFile, generator.PhysicalSitePath);
 
+                // fixup web.config
+                var wcf = new WebConfigFixer(Path.Combine(generator.PhysicalSitePath, "Web.config"));
+                wcf.WriteFixedVersionIfNeeded();
+
                 // lookup IIS Express installation path from registry
                 object iisExpressLocation = null;
                 foreach (var version in new string[] { "7.5" })
