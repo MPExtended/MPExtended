@@ -64,7 +64,7 @@ namespace MPExtended.Libraries.Service.Config
 
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }
-
+        public string MusicLayout { get; set; }
         public ConfigDictionary SkinConfiguration { get; set; }
 
         public WebMediaPortal()
@@ -76,6 +76,7 @@ namespace MPExtended.Libraries.Service.Config
             ExternalUrlScheme = UrlScheme.Default;
             ExternalUrlHost = null;
             SkinConfiguration = new ConfigDictionary();
+            MusicLayout = "Artist";
         }
     }
 }

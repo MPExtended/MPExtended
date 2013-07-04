@@ -497,4 +497,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Specials" xml:space="preserve">
     <value>Specials</value>
   </data>
+  <data name="AllAlbums" xml:space="preserve">
+    <value>All Albums</value>
+  </data>
 </root>

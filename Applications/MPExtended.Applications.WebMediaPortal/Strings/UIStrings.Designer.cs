@@ -115,6 +115,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Albums.
+        /// </summary>
+        public static string AllAlbums {
+            get {
+                return ResourceManager.GetString("AllAlbums", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel schedule.
         /// </summary>
         public static string CancelSchedule {

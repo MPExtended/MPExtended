@@ -105,6 +105,15 @@
                         @Html.ValidationMessageFor(x => x.MusicProvider)
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(x => x.MusicLayout)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(x => x.MusicLayout)
+                        @Html.ValidationMessageFor(x => x.MusicLayout)
+                    </td>
+                </tr>
             }
         }
 

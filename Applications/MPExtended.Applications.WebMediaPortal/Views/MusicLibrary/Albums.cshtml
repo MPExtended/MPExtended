@@ -1,12 +1,13 @@
 ﻿@model ArtistViewModel
 @{
-	ViewBag.Title = Model.Artist.Title;
+    var isAllAlbums = Model.Artist == null || string.IsNullOrEmpty(Model.Artist.Title);
+    ViewBag.Title = isAllAlbums ? UIStrings.AllAlbums : Model.Artist.Title;
 }
 @Html.Assets().AddViewStylesheet("MusicLibrary/Albums.css")
 
-<h3>@String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title)</h3>
+<h3>@Html.Label(isAllAlbums ? UIStrings.AllAlbums : String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title))</h3>
 
-@foreach (var album in Model.Albums)
+@foreach (var album in Model.Albums.OrderBy(x => x.Title).ThenBy(x => x.AlbumArtist))
 {
     <div style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
         <div>
@@ -15,7 +16,7 @@
             </a>
         </div>
         <div style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">
-            @Html.ActionLink(album.Title, "Album", new { album = album.Id })
+            @Html.ActionLink((isAllAlbums ? album.AlbumArtist + " - " : "") + album.Title, "Album", new { album = album.Id })
         </div>
     </div>
 }

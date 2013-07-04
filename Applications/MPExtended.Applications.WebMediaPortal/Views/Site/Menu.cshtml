@@ -5,7 +5,7 @@
         <li class="first @(Model.IsActive("Home") ? "active" : "")">@Html.ActionLink(UIStrings.Home, "Index", "Home")</li>
 
         @if (ViewBag.Availability.Music) { 
-            <li class="@(Model.IsActive("MusicLibrary") ? "active" : "")">@Html.ActionLink(UIStrings.Music, "Index", "MusicLibrary") </li> 
+            <li class="@(Model.IsActive("MusicLibrary") ? "active" : "")">@Html.ActionLink(UIStrings.Music, Model.MusicControllerMethod, "MusicLibrary") </li> 
         }
                                                                                                                 
         @if (ViewBag.Availability.Movies) { 

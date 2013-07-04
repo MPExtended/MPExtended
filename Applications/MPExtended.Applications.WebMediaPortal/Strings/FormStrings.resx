@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AvailableMusicViews" xml:space="preserve">
+    <value>Artist/Artist,Album/Albums</value>
+  </data>
   <data name="ClientService" xml:space="preserve">
     <value>Client service</value>
   </data>
@@ -162,6 +165,9 @@
   </data>
   <data name="ErrorNoValidMusicProfile" xml:space="preserve">
     <value>Please select a valid music streaming profile</value>
+  </data>
+  <data name="ErrorNoValidMusicView" xml:space="preserve">
+    <value>Please select a valid music layout</value>
   </data>
   <data name="ErrorNoValidServerService" xml:space="preserve">
     <value>Please specify a valid TAS URL</value>
@@ -210,6 +216,9 @@
   </data>
   <data name="MusicDatabase" xml:space="preserve">
     <value>Music database</value>
+  </data>
+  <data name="MusicView" xml:space="preserve">
+    <value>Music layout</value>
   </data>
   <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
     <value>Proxied: instantly stops timeshiftings, works over the internet</value>

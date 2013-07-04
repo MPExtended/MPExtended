@@ -61,6 +61,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Artist/Artist,Album/Albums.
+        /// </summary>
+        public static string AvailableMusicViews {
+            get {
+                return ResourceManager.GetString("AvailableMusicViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client service.
         /// </summary>
         public static string ClientService {
@@ -192,6 +201,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string ErrorNoValidMusicProfile {
             get {
                 return ResourceManager.GetString("ErrorNoValidMusicProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a valid music layout.
+        /// </summary>
+        public static string ErrorNoValidMusicView {
+            get {
+                return ResourceManager.GetString("ErrorNoValidMusicView", resourceCulture);
             }
         }
         
@@ -336,6 +354,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string MusicDatabase {
             get {
                 return ResourceManager.GetString("MusicDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Music layout.
+        /// </summary>
+        public static string MusicView {
+            get {
+                return ResourceManager.GetString("MusicView", resourceCulture);
             }
         }
         
