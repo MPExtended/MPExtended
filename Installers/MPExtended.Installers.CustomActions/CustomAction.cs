@@ -57,9 +57,11 @@ namespace MPExtended.Installers.CustomActions
 
             try
             {
-                DataFiles.Remove("Services.xml");
+                DataFiles.Remove("Authentication.xml");
                 DataFiles.Remove("MediaAccess.xml");
+                DataFiles.Remove("Services.xml");
                 DataFiles.Remove("Streaming.xml");
+                DataFiles.Remove("StreamingProfiles.xml");
                 DataFiles.RemoveDirectory("Cache");
                 DataFiles.Remove(@"Logs/Service.log");
                 DataFiles.Remove(@"Logs/ServiceConfigurator.log");
