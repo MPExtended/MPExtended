@@ -39,7 +39,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public string MusicControllerMethod
         {
-            get { return Configuration.WebMediaPortal.MusicLayout; }
+            get { return Configuration.WebMediaPortal.MusicLayout.ToString(); }
         }
 
         public IEnumerable<string> MovieGenres

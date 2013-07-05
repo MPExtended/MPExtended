@@ -498,6 +498,6 @@ sure to install the MPExtended Services on all computers referenced here, and th
     <value>Specials</value>
   </data>
   <data name="AllAlbums" xml:space="preserve">
-    <value>All Albums</value>
+    <value>All albums</value>
   </data>
 </root>

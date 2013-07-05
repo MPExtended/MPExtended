@@ -28,6 +28,12 @@ namespace MPExtended.Libraries.Service.Config
         Proxied,
     }
 
+    public enum MusicLayoutType
+    {
+        Artist,
+        Albums
+    }
+
     public enum UrlScheme
     {
         Default,
@@ -64,7 +70,7 @@ namespace MPExtended.Libraries.Service.Config
 
         public string Skin { get; set; }
         public string DefaultLanguage { get; set; }
-        public string MusicLayout { get; set; }
+        public MusicLayoutType MusicLayout { get; set; }
         public ConfigDictionary SkinConfiguration { get; set; }
 
         public WebMediaPortal()
@@ -76,7 +82,7 @@ namespace MPExtended.Libraries.Service.Config
             ExternalUrlScheme = UrlScheme.Default;
             ExternalUrlHost = null;
             SkinConfiguration = new ConfigDictionary();
-            MusicLayout = "Artist";
+            MusicLayout = MusicLayoutType.Artist;
         }
     }
 }

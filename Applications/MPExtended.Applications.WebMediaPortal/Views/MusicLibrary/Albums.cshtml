@@ -5,7 +5,7 @@
 }
 @Html.Assets().AddViewStylesheet("MusicLibrary/Albums.css")
 
-<h3>@Html.Label(isAllAlbums ? UIStrings.AllAlbums : String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title))</h3>
+<h3>@(isAllAlbums ? UIStrings.AllAlbums : String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title))</h3>
 
 @foreach (var album in Model.Albums.OrderBy(x => x.Title).ThenBy(x => x.AlbumArtist))
 {

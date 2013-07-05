@@ -47,6 +47,15 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Proxied,
     }
 
+    public enum MusicLayoutTypeWithDescription
+    {
+        [LocalizedDescription(typeof(FormStrings), "ArtistLayoutDescription")]
+        Artist,
+
+        [LocalizedDescription(typeof(FormStrings), "AlbumLayoutDescription")]
+        Albums
+    }
+
     public class PlatformViewModel
     {
         public string Name { get; set; }
@@ -139,19 +148,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<SelectListItem> MusicLayouts
-        {
-            get
-            {
-                var items = FormStrings.AvailableMusicViews.Split(',')
-                    .Where(x => x.Contains('/'))
-                    .Select(x => new SelectListItem() { Text = x.Split('/')[0], Value = x.Split('/')[1], Selected = (x.Split('/')[1] == MusicLayout) })
-                    .ToList();
-
-                return items;
-            }
-        }
-
         public bool ShowMASConfiguration
         {
             get
@@ -203,10 +199,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("Languages", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
         public string Language { get; set; }
 
-        [LocalizedDisplayName(typeof(FormStrings), "MusicView")]
-        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicView")]
-        [ListChoice("MusicLayouts", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidMusicView")]
-        public string MusicLayout { get; set; }
+        [LocalizedDisplayName(typeof(FormStrings), "MusicLayout")]
+        public MusicLayoutTypeWithDescription MusicLayout { get; set; }
 
 
         public List<PlatformViewModel> Platforms { get; set; }
@@ -227,7 +221,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EnableDeinterlace = model.EnableDeinterlace;
             EnableAlbumPlayer = model.EnableAlbumPlayer;
             SelectedGroup = model.DefaultGroup;
-            MusicLayout = model.MusicLayout;
+            MusicLayout = (MusicLayoutTypeWithDescription)model.MusicLayout;
 
             if (ShowMASConfiguration)
             {
@@ -249,7 +243,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Configuration.WebMediaPortal.MovieProvider = MovieProvider;
             Configuration.WebMediaPortal.Skin = Skin;
             Configuration.WebMediaPortal.DefaultLanguage = Language;
-            Configuration.WebMediaPortal.MusicLayout = MusicLayout;
+            Configuration.WebMediaPortal.MusicLayout = (Config.MusicLayoutType)MusicLayout;
 
             var profileTypes = new Dictionary<StreamingProfileType, Func<PlatformViewModel, string>>()
             {
