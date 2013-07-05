@@ -26,6 +26,7 @@ using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
@@ -35,16 +36,30 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
         public ActionResult Index()
         {
+            return Artist();
+        }
+
+        public ActionResult Artist()
+        {
             var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
             if (artistList == null)
                 return new HttpNotFoundResult();
-            return View(artistList.Where(x => !String.IsNullOrEmpty(x.Title)));
+            return View("Index", artistList.Where(x => !String.IsNullOrEmpty(x.Title)));        
         }
 
         public ActionResult Albums(string artist)
         {
-            var artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
-            var albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
+            WebMusicArtistDetailed artistObj = new WebMusicArtistDetailed(); 
+            IList<WebMusicAlbumBasic> albumList;
+
+            if (string.IsNullOrEmpty(artist))
+                albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider);
+            else
+            {
+                artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
+                albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
+            }
+
             return View(new ArtistViewModel()
             {
                 Artist = artistObj,

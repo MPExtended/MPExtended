@@ -26,5 +26,6 @@
   <DefaultLanguage xsi:nil="true" />
   
   <Skin>default</Skin>
+  <MusicLayout>Artist</MusicLayout>
   <SkinConfiguration />
 </WebMediaPortal>
