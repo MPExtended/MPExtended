@@ -37,6 +37,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             this.routeData = routeData;
         }
 
+        public string MusicControllerMethod
+        {
+            get { return Configuration.WebMediaPortal.MusicLayout.ToString(); }
+        }
+
         public IEnumerable<string> MovieGenres
         {
             get
