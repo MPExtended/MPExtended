@@ -114,6 +114,15 @@
                         @Html.ValidationMessageFor(x => x.MusicLayout)
                     </td>
                 </tr>
+            <tr>
+                    <td>
+                        @Html.LabelFor(x => x.PageSize)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x.PageSize)
+                        @Html.ValidationMessageFor(x => x.PageSize)
+                    </td>
+                </tr>
             }
         }
 

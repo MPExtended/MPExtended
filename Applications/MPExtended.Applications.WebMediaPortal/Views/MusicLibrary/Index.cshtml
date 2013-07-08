@@ -5,13 +5,26 @@
 
 <h2>@UIStrings.YourArtists</h2>
 
-<div>
+<div id="slider" style="clear:both;float:left"></div>
+
+@{ 
+    var count = 0;
+    var pages = 1;
+}
+
+<div class="paged-data-container">
     @foreach (var artist in Model)
     {
-        <div id="MusicBox" style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
+        if ((count % MPExtended.Applications.WebMediaPortal.Code.Settings.ActiveSettings.PageSize) == 0)
+        {
+            if (count > 0) { pages++; }
+        }
+        count++;
+
+        <div id="MusicBox" class="@("page" + pages.ToString())" style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
             <div>
                 <a href="@Url.Action("Albums", new { artist = artist.Id })">
-                    <img class="img" width="150" src="@Url.Action("ArtistImage", "MusicLibrary", new { artist = artist.Id, width = 150 })" alt="No image" /> 
+                    <span style="width:150px;height:150px" class="async-image-display" data-src="@Url.Action("ArtistImage", "MusicLibrary", new { artist = artist.Id, width = 150 })"></span>
                 </a>
             </div>
             <div id="musicText" style="padding-top: 5px; overflow: hidden; width: 150px; text-align: center;">
@@ -20,3 +33,6 @@
         </div>
     }
 </div>
+
+@Html.jQuery().EnableRangeSlider(pages, "#slider", UIStrings.SelectPage)
+@Html.jQuery().EnableImageLoading();

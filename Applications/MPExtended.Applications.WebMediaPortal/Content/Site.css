@@ -393,3 +393,33 @@ input[type=text], input[type=password], select
     margin-bottom: 2px;
     vertical-align: middle;
 }
+
+/******************** Paging ************************/
+
+.paged-data-container
+{
+    width: 99%;
+    float: left;
+    padding: 10px 0 0 0;
+}
+
+.pager-label
+{
+    float:left;
+    margin:50px 50px 0px 10px;
+    text-align:right;
+}
+
+.pager
+{
+    float:left;
+    width:400px;
+}
+
+/******************** Loading image ************************/
+
+.async-image-display
+{
+    display: block;
+    background:url(Images/ajax-loader.gif) no-repeat center center;
+}

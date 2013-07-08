@@ -791,6 +791,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Page selection:.
+        /// </summary>
+        public static string SelectPage {
+            get {
+                return ResourceManager.GetString("SelectPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {

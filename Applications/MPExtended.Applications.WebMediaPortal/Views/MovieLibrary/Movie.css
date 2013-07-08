@@ -1,15 +1,44 @@
-﻿.movie
+﻿.movieContainer
 {
-    height: 200px;
-    width: 170px;
-    margin: 8px 8px 8px 8px;
+    height: 215px;
+    width: 190px;
+    margin: 4px 8px 8px 8px;
     float: left;
-    
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #8DC4D6;
+}
+.movieImage
+{
+    width:110px;
+    float:left;
+    margin: 3px 2px 2px 3px;
+    padding-top:2px;
 }
 
-.movieDetails
+.movieControls
 {
-    height: 55px;
-    width:  60px;
-    margin: 2px 2px 2px 2px;
+    height: 25px;
+    width:  70px;
+    padding-top:2px;
+    margin: 3px 2px 2px 3px;
+    float:left;
 }
+
+.movieTitle
+{
+    width: 188px;
+    height: 50px;
+    float: left;
+    text-align: center;
+    padding: 0px 0px 0px 0px;
+    margin-top:-1px;
+    clear: both;
+    background-color: #FBF9EF;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border: 1px solid #8DC4D6;
+}
+

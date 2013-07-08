@@ -22,6 +22,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -161,6 +165,7 @@
     <Content Include="Content\Images\down-arrow.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\slider-button.png" />
+    <Content Include="Content\iThing.css" />
     <Content Include="Content\jwplayer\jwplayer.js" />
     <Content Include="Content\jwplayer\license.txt" />
     <Content Include="Content\jwplayer\player.swf" />
@@ -205,11 +210,14 @@
     <Content Include="Content\Themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\Themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\Themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Scripts\asyncImageLoad.js" />
+    <Content Include="Scripts\jQRangeSlider-min.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Scripts\pageSlider.js" />
     <Content Include="Views\Settings\Index.js" />
     <Content Include="Views\Settings\Services.css" />
     <Content Include="Views\Settings\Services.js" />
