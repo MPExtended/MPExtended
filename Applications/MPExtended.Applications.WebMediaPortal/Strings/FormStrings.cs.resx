@@ -118,187 +118,187 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ClientService" xml:space="preserve">
-    <value>Client</value>
+    <value>Služba klienta</value>
   </data>
   <data name="DefaultMediaStreamingProfile" xml:space="preserve">
-    <value>Profil des flux médias par défaut</value>
+    <value>Výchozí profil "streamování" médií</value>
   </data>
   <data name="DefaultMusicStreamingProfile" xml:space="preserve">
-    <value>Profil des flux musicaux par défaut</value>
+    <value>Výchozí profil "streamování" hudby</value>
   </data>
   <data name="DefaultSkinName" xml:space="preserve">
-    <value>Par défaut</value>
+    <value>výchozí</value>
     <comment>Name of the default skin</comment>
   </data>
   <data name="DefaultTVGroup" xml:space="preserve">
-    <value>Groupe TV par défaut</value>
+    <value>Výchozí TV skupina</value>
   </data>
   <data name="DefaultTVStreamingProfile" xml:space="preserve">
-    <value>Profil des flux TV par défaut</value>
+    <value>Výchozí profil "streamování" TV</value>
   </data>
   <data name="DirectStreamingProfileDescription" xml:space="preserve">
-    <value>Direct : meilleur performance, mais fonctionne seulement sur le réseau local </value>
+    <value>Přímo: nejvyšší výkon, funguje jen na lokální síti</value>
   </data>
   <data name="DirectWhenPossibleDescription" xml:space="preserve">
-    <value>Utiliser Direct dès que possible</value>
+    <value>Pokud možno přímo, jinak přes proxy</value>
   </data>
   <data name="EnableAlbumPlayer" xml:space="preserve">
-    <value>Activer le lecteur pour la musique</value>
+    <value>Povolit prehrávání celých hudebních alb?</value>
   </data>
   <data name="ErrorNoValidClientService" xml:space="preserve">
-    <value>SVP, définir une url MAS </value>
+    <value>Zadejte funkční MAS URL</value>
   </data>
   <data name="ErrorNoValidLanguage" xml:space="preserve">
-    <value>SVP, sélectionner une langue</value>
+    <value>Vyberte podporovaný jazyk</value>
   </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux média</value>
+    <value>Vyberte vhodný profil "streamování" médií</value>
   </data>
   <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour les films</value>
+    <value>Vyberte vhodnou databázi filmů</value>
   </data>
   <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour la musique</value>
+    <value>Vyberte vhodnou databázi hudby</value>
   </data>
   <data name="ErrorNoValidMusicProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux musical</value>
+    <value>Vyberte vhodný profil "streamování" hudby</value>
   </data>
   <data name="ErrorNoValidServerService" xml:space="preserve">
-    <value>SVP, définir  une url TAS </value>
+    <value>Zadejte funkční TAS URL</value>
   </data>
   <data name="ErrorNoValidSkin" xml:space="preserve">
-    <value>SVP, sélectionner un skin</value>
+    <value>Vyberte prosím vhodný skin</value>
   </data>
   <data name="ErrorNoValidTVGroup" xml:space="preserve">
-    <value>SVP, sélectionner un groupe TV</value>
+    <value>Vyberte prosím vhodnou skupinu TV kanálů</value>
   </data>
   <data name="ErrorNoValidTVProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux TV</value>
+    <value>Vyberte vhodný profil "streamování" TV</value>
   </data>
   <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour les séries</value>
+    <value>Vyberte vhodnou databázi TV seriálů</value>
   </data>
   <data name="FailedToConnectToClient" xml:space="preserve">
-    <value>Erreur lors de la connexion au client</value>
+    <value>Nepodařilo se spojit se zadanou klientskou službou</value>
   </data>
   <data name="FailedToConnectToServer" xml:space="preserve">
-    <value>Erreur lors de la connexion au serveur</value>
+    <value>Nepodařilo se spojit se zadanou službou serveru</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
-    <value>Le champ {0} est requis</value>
+    <value>{0} je nutné zadat</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Langue</value>
+    <value>Jazyk</value>
   </data>
   <data name="LogOnPassword" xml:space="preserve">
-    <value>Mot de passe</value>
+    <value>Heslo</value>
   </data>
   <data name="LogOnRememberMe" xml:space="preserve">
-    <value>Se souvenir de moi ?</value>
+    <value>Pamatovat si mě?</value>
   </data>
   <data name="LogOnUsername" xml:space="preserve">
-    <value>Nom de l'utilisateur</value>
+    <value>Login</value>
   </data>
   <data name="MovieDatabase" xml:space="preserve">
-    <value>Base de données concernant les films</value>
+    <value>Databáze filmů</value>
   </data>
   <data name="MusicDatabase" xml:space="preserve">
-    <value>Base de données concernant la musique</value>
+    <value>Databáza hudby</value>
   </data>
   <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
-    <value>Proxied : arrêt immédiat du timeshifting, session sur internet</value>
+    <value>Přes proxy: okamžitě zastaví přehrávání s možností pozastavení, funguje přes internet</value>
   </data>
   <data name="ScheduleChannel" xml:space="preserve">
-    <value>Chaine</value>
+    <value>Kanál</value>
   </data>
   <data name="ScheduleEndTime" xml:space="preserve">
-    <value>Heure de fin</value>
+    <value>Konec</value>
   </data>
   <data name="ScheduleSelectValidChannel" xml:space="preserve">
-    <value>Sélectionner un chaîne </value>
+    <value>Vyberte vhodný kanál</value>
   </data>
   <data name="ScheduleSelectValidType" xml:space="preserve">
-    <value>Sélectionner une plage horaire</value>
+    <value>Vyberte vhodný typ plánu nahrávaní</value>
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
-    <value>Heure de début</value>
+    <value>Začátek</value>
   </data>
   <data name="ScheduleTitle" xml:space="preserve">
-    <value>Titre</value>
+    <value>Název</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
-    <value>Plage horaire</value>
+    <value>Typ plánu</value>
   </data>
   <data name="ScheduleTypeDaily" xml:space="preserve">
-    <value>Quotidien</value>
+    <value>Denně</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
-    <value>Chaque fois sur toutes les chaînes</value>
+    <value>Vždy na všech kanálech</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
-    <value>Chaque fois sur cette chaîne</value>
+    <value>Vždy na tomto kanále</value>
   </data>
   <data name="ScheduleTypeOnce" xml:space="preserve">
-    <value>Une fois</value>
+    <value>Jednou</value>
   </data>
   <data name="ScheduleTypeWeekends" xml:space="preserve">
-    <value>Week End</value>
+    <value>Přes víkendy</value>
   </data>
   <data name="ScheduleTypeWeekly" xml:space="preserve">
-    <value>Hebdomadaire</value>
+    <value>Týdně</value>
   </data>
   <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
-    <value>Chaque semaine sur cette chaîne</value>
+    <value>Týdně na tomto kanálu</value>
   </data>
   <data name="ScheduleTypeWorkingDays" xml:space="preserve">
-    <value>Jours ouvrés</value>
+    <value>V pracovní dny</value>
   </data>
   <data name="SearchResultAlbum" xml:space="preserve">
-    <value>{0} (album) par {1}</value>
+    <value>{0} (album) od {1}</value>
   </data>
   <data name="SearchResultChannelGroup" xml:space="preserve">
-    <value>{0} (groupe de chaines)</value>
+    <value>{0} (skupina kanálů)</value>
   </data>
   <data name="SearchResultProgram" xml:space="preserve">
-    <value>{0} ({1} sur {2})</value>
+    <value>{0} ({1} na {2})</value>
   </data>
   <data name="SearchResultRecording" xml:space="preserve">
-    <value>{0} (enregistré sur {1})</value>
+    <value>{0} (nahrané z {1})</value>
   </data>
   <data name="SearchResultSchedule" xml:space="preserve">
-    <value>{0} (horaire)</value>
+    <value>{0} (plán nahrávání)</value>
   </data>
   <data name="SearchResultTrack" xml:space="preserve">
-    <value>{0} par {1}</value>
+    <value>{0} od {1}</value>
   </data>
   <data name="ServerService" xml:space="preserve">
-    <value>Serveur</value>
+    <value>Služba serveru</value>
   </data>
   <data name="Skin" xml:space="preserve">
     <value>Skin</value>
   </data>
   <data name="StateIdle" xml:space="preserve">
-    <value>Ralenti</value>
+    <value>Nečinný</value>
   </data>
   <data name="StateRecording" xml:space="preserve">
-    <value>Enregistrement</value>
+    <value>Nahrávám</value>
   </data>
   <data name="StateScanning" xml:space="preserve">
-    <value>Balayage</value>
+    <value>Skenuji</value>
   </data>
   <data name="StateTimeshifting" xml:space="preserve">
-    <value>Timeshifting (contrôle du direct)</value>
+    <value>Přehrávám</value>
   </data>
   <data name="StreamType" xml:space="preserve">
-    <value>Type de Flux</value>
+    <value>Typ streamu</value>
   </data>
   <data name="TVShowDatabase" xml:space="preserve">
-    <value>Base de données concernant les séries</value>
+    <value>Databáze TV seriálů</value>
   </data>
   <data name="UsernamePasswordIncorrect" xml:space="preserve">
-    <value>Le nom d'utilisateur ou le mot de passe est incorrect</value>
+    <value>Zadané jméno nebo heslo je nesprávné.</value>
   </data>
   <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
-    <value>Lecteur VLC : autoriser le désentrelacement par défaut?</value>
+    <value>VLC player: zvolit "deinterlacing"?</value>
   </data>
 </root>

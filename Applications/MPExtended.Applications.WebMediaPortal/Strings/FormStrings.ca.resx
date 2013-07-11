@@ -118,187 +118,187 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ClientService" xml:space="preserve">
-    <value>Client</value>
+    <value>Servei de client</value>
   </data>
   <data name="DefaultMediaStreamingProfile" xml:space="preserve">
-    <value>Profil des flux médias par défaut</value>
+    <value>Perfil de flux de media per defecte</value>
   </data>
   <data name="DefaultMusicStreamingProfile" xml:space="preserve">
-    <value>Profil des flux musicaux par défaut</value>
+    <value>Perfil de flux de música per defecte</value>
   </data>
   <data name="DefaultSkinName" xml:space="preserve">
-    <value>Par défaut</value>
+    <value>Per defecte</value>
     <comment>Name of the default skin</comment>
   </data>
   <data name="DefaultTVGroup" xml:space="preserve">
-    <value>Groupe TV par défaut</value>
+    <value>Grup de TV per defecte</value>
   </data>
   <data name="DefaultTVStreamingProfile" xml:space="preserve">
-    <value>Profil des flux TV par défaut</value>
+    <value>Perfil de flux de TV per defecte</value>
   </data>
   <data name="DirectStreamingProfileDescription" xml:space="preserve">
-    <value>Direct : meilleur performance, mais fonctionne seulement sur le réseau local </value>
+    <value>Directe: millor rendiment, només funciona en xarxa local</value>
   </data>
   <data name="DirectWhenPossibleDescription" xml:space="preserve">
-    <value>Utiliser Direct dès que possible</value>
+    <value>Directe quan es pugui, i si no a través del proxy </value>
   </data>
   <data name="EnableAlbumPlayer" xml:space="preserve">
-    <value>Activer le lecteur pour la musique</value>
+    <value>Voleu habilitar el reproductor d'àlbums per la música?</value>
   </data>
   <data name="ErrorNoValidClientService" xml:space="preserve">
-    <value>SVP, définir une url MAS </value>
+    <value>Especifiqueu una URL MAS vàlida</value>
   </data>
   <data name="ErrorNoValidLanguage" xml:space="preserve">
-    <value>SVP, sélectionner une langue</value>
+    <value>Seleccioneu un idioma vàlid</value>
   </data>
   <data name="ErrorNoValidMediaProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux média</value>
+    <value>Seleccioneu un flux de media vàlid</value>
   </data>
   <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour les films</value>
+    <value>Seleccioneu una base de dades de pel·lícules vàlida</value>
   </data>
   <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour la musique</value>
+    <value>Seleccioneu una base de dades de música vàlida</value>
   </data>
   <data name="ErrorNoValidMusicProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux musical</value>
+    <value>Seleccioneu una base de dades de flux de música vàlida</value>
   </data>
   <data name="ErrorNoValidServerService" xml:space="preserve">
-    <value>SVP, définir  une url TAS </value>
+    <value>Especifiqueu una URL TAS vàlida</value>
   </data>
   <data name="ErrorNoValidSkin" xml:space="preserve">
-    <value>SVP, sélectionner un skin</value>
+    <value>Seleccioneu una aparença vàlida</value>
   </data>
   <data name="ErrorNoValidTVGroup" xml:space="preserve">
-    <value>SVP, sélectionner un groupe TV</value>
+    <value>Seleccioneu un grup de TV vàlid</value>
   </data>
   <data name="ErrorNoValidTVProfile" xml:space="preserve">
-    <value>SVP, sélectionner un profil de flux TV</value>
+    <value>Seleccioneu un flux de TV vàlid</value>
   </data>
   <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
-    <value>SVP, sélectionner une base de données pour les séries</value>
+    <value>Seleccioneu una base de dades de TV vàlida</value>
   </data>
   <data name="FailedToConnectToClient" xml:space="preserve">
-    <value>Erreur lors de la connexion au client</value>
+    <value>No s'ha pogut connectar al servei de client demanat</value>
   </data>
   <data name="FailedToConnectToServer" xml:space="preserve">
-    <value>Erreur lors de la connexion au serveur</value>
+    <value>No s'ha pogut connectar al servei de servidor demanat</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
-    <value>Le champ {0} est requis</value>
+    <value>Cal el camp {0}</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Langue</value>
+    <value>Idioma</value>
   </data>
   <data name="LogOnPassword" xml:space="preserve">
-    <value>Mot de passe</value>
+    <value>Contrasenya</value>
   </data>
   <data name="LogOnRememberMe" xml:space="preserve">
-    <value>Se souvenir de moi ?</value>
+    <value>Em recordeu?</value>
   </data>
   <data name="LogOnUsername" xml:space="preserve">
-    <value>Nom de l'utilisateur</value>
+    <value>Nom d'usuari</value>
   </data>
   <data name="MovieDatabase" xml:space="preserve">
-    <value>Base de données concernant les films</value>
+    <value>Base de dades de pel·lícules</value>
   </data>
   <data name="MusicDatabase" xml:space="preserve">
-    <value>Base de données concernant la musique</value>
+    <value>Base de dades de música</value>
   </data>
   <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
-    <value>Proxied : arrêt immédiat du timeshifting, session sur internet</value>
+    <value>A través del proxy: s'aturen els timeshiftings a l'instant, funciona sobre internet</value>
   </data>
   <data name="ScheduleChannel" xml:space="preserve">
-    <value>Chaine</value>
+    <value>Canal</value>
   </data>
   <data name="ScheduleEndTime" xml:space="preserve">
-    <value>Heure de fin</value>
+    <value>Hora de final</value>
   </data>
   <data name="ScheduleSelectValidChannel" xml:space="preserve">
-    <value>Sélectionner un chaîne </value>
+    <value>Seleccioneu un canal vàlid</value>
   </data>
   <data name="ScheduleSelectValidType" xml:space="preserve">
-    <value>Sélectionner une plage horaire</value>
+    <value>Seleccioneu un tipus de planificació vàlida</value>
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
-    <value>Heure de début</value>
+    <value>Hora d'inici</value>
   </data>
   <data name="ScheduleTitle" xml:space="preserve">
-    <value>Titre</value>
+    <value>Títol</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
-    <value>Plage horaire</value>
+    <value>Tipus de planificació</value>
   </data>
   <data name="ScheduleTypeDaily" xml:space="preserve">
-    <value>Quotidien</value>
+    <value>Diàriament</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
-    <value>Chaque fois sur toutes les chaînes</value>
+    <value>Cada cop a tots els canals</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
-    <value>Chaque fois sur cette chaîne</value>
+    <value>Cada cop en aquest canal</value>
   </data>
   <data name="ScheduleTypeOnce" xml:space="preserve">
-    <value>Une fois</value>
+    <value>Un cop</value>
   </data>
   <data name="ScheduleTypeWeekends" xml:space="preserve">
-    <value>Week End</value>
+    <value>Caps de setmana</value>
   </data>
   <data name="ScheduleTypeWeekly" xml:space="preserve">
-    <value>Hebdomadaire</value>
+    <value>Setmanalment</value>
   </data>
   <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
-    <value>Chaque semaine sur cette chaîne</value>
+    <value>Setmanalment en aquest canal</value>
   </data>
   <data name="ScheduleTypeWorkingDays" xml:space="preserve">
-    <value>Jours ouvrés</value>
+    <value>Laborables</value>
   </data>
   <data name="SearchResultAlbum" xml:space="preserve">
-    <value>{0} (album) par {1}</value>
+    <value>{0} (àlbum) de {1}</value>
   </data>
   <data name="SearchResultChannelGroup" xml:space="preserve">
-    <value>{0} (groupe de chaines)</value>
+    <value>{0} (grup de canals)</value>
   </data>
   <data name="SearchResultProgram" xml:space="preserve">
-    <value>{0} ({1} sur {2})</value>
+    <value>{0} ({1} a {2})</value>
   </data>
   <data name="SearchResultRecording" xml:space="preserve">
-    <value>{0} (enregistré sur {1})</value>
+    <value>{0} (enregistrat a {1})</value>
   </data>
   <data name="SearchResultSchedule" xml:space="preserve">
-    <value>{0} (horaire)</value>
+    <value>{0} (planificació)</value>
   </data>
   <data name="SearchResultTrack" xml:space="preserve">
-    <value>{0} par {1}</value>
+    <value>{0} de {1}</value>
   </data>
   <data name="ServerService" xml:space="preserve">
-    <value>Serveur</value>
+    <value>Servei de servidor</value>
   </data>
   <data name="Skin" xml:space="preserve">
-    <value>Skin</value>
+    <value>Aparença</value>
   </data>
   <data name="StateIdle" xml:space="preserve">
-    <value>Ralenti</value>
+    <value>Inactiu</value>
   </data>
   <data name="StateRecording" xml:space="preserve">
-    <value>Enregistrement</value>
+    <value>Enregistrament</value>
   </data>
   <data name="StateScanning" xml:space="preserve">
-    <value>Balayage</value>
+    <value>Escaneig</value>
   </data>
   <data name="StateTimeshifting" xml:space="preserve">
-    <value>Timeshifting (contrôle du direct)</value>
+    <value>Timeshifting</value>
   </data>
   <data name="StreamType" xml:space="preserve">
-    <value>Type de Flux</value>
+    <value>Tipus de flux</value>
   </data>
   <data name="TVShowDatabase" xml:space="preserve">
-    <value>Base de données concernant les séries</value>
+    <value>Base de dades de programes</value>
   </data>
   <data name="UsernamePasswordIncorrect" xml:space="preserve">
-    <value>Le nom d'utilisateur ou le mot de passe est incorrect</value>
+    <value>El nom d'usuari o la contrasenya són incorrectes.</value>
   </data>
   <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
-    <value>Lecteur VLC : autoriser le désentrelacement par défaut?</value>
+    <value>Reproductor VLC: voleu habilitar per defecte el desentrellaçat?</value>
   </data>
 </root>

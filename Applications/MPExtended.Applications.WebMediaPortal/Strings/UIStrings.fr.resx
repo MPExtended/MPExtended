@@ -197,7 +197,7 @@
     <value>Invité</value>
   </data>
   <data name="WrittenBy" xml:space="preserve">
-    <value>Ecrit par:</value>
+    <value>Ecrit par :</value>
   </data>
   <data name="EpisodeDisplay" xml:space="preserve">
     <value>Episode {0} - {1}</value>
@@ -227,7 +227,7 @@
     <value>Enregistrements</value>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>Horaires des programmes</value>
+    <value>Enregistrements programmés</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Réglages</value>
@@ -440,16 +440,16 @@
     <value>A propos</value>
   </data>
   <data name="CurrentCPUUsage" xml:space="preserve">
-    <value>CPU utilisé:</value>
+    <value>CPU utilisé :</value>
   </data>
   <data name="CurrentMemoryUsage" xml:space="preserve">
-    <value>Memoire utilisée:</value>
+    <value>Mémoire utilisée :</value>
   </data>
   <data name="SystemStatus" xml:space="preserve">
     <value>Statut du système</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version: WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Version : WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="LatestAlbums" xml:space="preserve">
     <value>Derniers albums</value>

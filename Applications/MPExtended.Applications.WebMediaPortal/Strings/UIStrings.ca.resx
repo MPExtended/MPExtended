@@ -118,343 +118,343 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountInformation" xml:space="preserve">
-    <value>מידע חשבון</value>
+    <value>Informació del compte</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>פרטים</value>
+    <value>Detalls</value>
   </data>
   <data name="LatestEpisodes" xml:space="preserve">
-    <value>פרקים אחרונים</value>
+    <value>Darrers episodis</value>
   </data>
   <data name="LatestMovies" xml:space="preserve">
-    <value>סרטים אחרונים</value>
+    <value>Darreres pel·lícules</value>
   </data>
   <data name="LatestRecordings" xml:space="preserve">
-    <value>הקלטות אחרונות</value>
+    <value>Darrers enregistraments</value>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>התחבר</value>
+    <value>Entrada</value>
   </data>
   <data name="LogOnFailed" xml:space="preserve">
-    <value>התחברות נכשלה! תקן את השגיאות ונסה שוב.</value>
+    <value>L'entrada ha fallat. Corregiu els erros i proveu-ho de nou.</value>
   </data>
   <data name="Movies" xml:space="preserve">
-    <value>סרטים</value>
+    <value>Pel·lícules</value>
   </data>
   <data name="Music" xml:space="preserve">
-    <value>מוזיקה</value>
+    <value>Música</value>
   </data>
   <data name="Play" xml:space="preserve">
-    <value>נגן</value>
+    <value>Reprodueix</value>
   </data>
   <data name="PleaseEnterUsernameAndPassword" xml:space="preserve">
-    <value>נא הכנס שם משתמש וסיסמה</value>
+    <value>Introduïu el nom d'usuari i la contrasenya.</value>
   </data>
   <data name="Rating" xml:space="preserve">
-    <value>דירוג</value>
+    <value>Valoració</value>
   </data>
   <data name="TodaysSchedules" xml:space="preserve">
-    <value>לו"ז היום</value>
+    <value>Planificat per avui</value>
   </data>
   <data name="TVShows" xml:space="preserve">
-    <value>תוכניות טלויזיה</value>
+    <value>Programes de TV</value>
   </data>
   <data name="Unknown" xml:space="preserve">
-    <value>לא ידוע</value>
+    <value>Desconegut</value>
     <comment>Shown when program title is unknown in TVGuide</comment>
   </data>
   <data name="WatchingMovie" xml:space="preserve">
-    <value>צופה ב {0}</value>
+    <value>S'està veient {0}</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>ברוך הבא</value>
+    <value>Us donem la benvinguda</value>
   </data>
   <data name="YouAreWatchingMovie" xml:space="preserve">
-    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+    <value>Esteu veient &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourArtists" xml:space="preserve">
-    <value>האמנים שלך</value>
+    <value>Els vostres artistes</value>
   </data>
   <data name="YourMovies" xml:space="preserve">
-    <value>הסרטים שלך</value>
+    <value>Les vostres pel·lícules</value>
   </data>
   <data name="YourTVShows" xml:space="preserve">
-    <value>תוכניות הטלויזיה שלך</value>
+    <value>Els vostres programes de televisió</value>
   </data>
   <data name="AlbumBy" xml:space="preserve">
-    <value>{0} מאת {1}</value>
+    <value>{0} de {1}</value>
   </data>
   <data name="AlbumsFromArtist" xml:space="preserve">
-    <value>האלבומים של {0}</value>
+    <value>Els àlbums de {0}</value>
   </data>
   <data name="Aired" xml:space="preserve">
-    <value>עלה לאויר {0}</value>
+    <value>Emès {0}</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>הורד</value>
+    <value>Baixa</value>
   </data>
   <data name="GuestStarring" xml:space="preserve">
-    <value>כוכב אורח:</value>
+    <value>Artistes convidats</value>
   </data>
   <data name="WrittenBy" xml:space="preserve">
-    <value>נכתב ע"י:</value>
+    <value>Escrit per:</value>
   </data>
   <data name="EpisodeDisplay" xml:space="preserve">
-    <value>פרק {0} - {1}</value>
+    <value>Episodi {0} - {1}</value>
   </data>
   <data name="Season" xml:space="preserve">
-    <value>עונה {0}</value>
+    <value>Temporada {0}</value>
   </data>
   <data name="ShowSeason" xml:space="preserve">
-    <value>{0} עונה {1}</value>
+    <value>{0} temporada {1}</value>
   </data>
   <data name="WatchingEpisode" xml:space="preserve">
-    <value>צופה ב {0}</value>
+    <value>S'està veient {0}</value>
   </data>
   <data name="YouAreWatchingEpisode" xml:space="preserve">
-    <value>אתה צופה ב &lt;strong&gt;{0} - עונה {1} פרק {2} - {3}&lt;/strong&gt;.</value>
+    <value>Esteu veient &lt;strong&gt;{0} - Temporada {1} Episodi {2} - {3}&lt;/strong&gt;.</value>
   </data>
   <data name="ErrorPageText" xml:space="preserve">
-    <value>נא צרף את המידע הנ"ל בעת הדיווח על שגיאה זו.</value>
+    <value>Incloïu la informació següent en informar de l'error.</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>בית</value>
+    <value>Inici</value>
   </data>
   <data name="LogOff" xml:space="preserve">
-    <value>התחבר </value>
+    <value>Sortida</value>
   </data>
   <data name="Recordings" xml:space="preserve">
-    <value>הקלטות</value>
+    <value>Enregistraments</value>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>לוחות זמנים</value>
+    <value>Planificacions</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>הגדרות</value>
+    <value>Configuració</value>
   </data>
   <data name="SorryAnErrorOccurred" xml:space="preserve">
-    <value>שגיאה בעיבוד הבקשה</value>
+    <value>S'ha produït un error en processar la vostra sol·licitud</value>
   </data>
   <data name="TVGuide" xml:space="preserve">
-    <value>מדריך טלויזיה</value>
+    <value>Guia de TV</value>
   </data>
   <data name="WelcomeUsername" xml:space="preserve">
-    <value>ברוך הבא &lt;strong&gt;{0}&lt;/strong&gt;!</value>
+    <value>Benvingut/da &lt;strong&gt;{0}&lt;/strong&gt;!</value>
   </data>
   <data name="CancelSchedule" xml:space="preserve">
-    <value>בטל לוח זמנים</value>
+    <value>Cancel·la la planificació</value>
   </data>
   <data name="CreateSchedule" xml:space="preserve">
-    <value>לוח זמנים</value>
+    <value>Planificació</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>מחק</value>
+    <value>Suprimeix</value>
   </data>
   <data name="Earlier" xml:space="preserve">
-    <value>מוקדם יותר</value>
+    <value>Més d'hora</value>
   </data>
   <data name="Later" xml:space="preserve">
-    <value>מאוחר יותר</value>
+    <value>Més tard</value>
   </data>
   <data name="LiveTV" xml:space="preserve">
-    <value>שידור חי</value>
+    <value>TV en directe</value>
   </data>
   <data name="ProgramChannelDetails" xml:space="preserve">
-    <value>&lt;strong&gt;{0}&lt;/strong&gt; עד &lt;strong&gt;{1}&lt;/strong&gt; בערוץ &lt;strong&gt;{2}&lt;/strong&gt;</value>
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; fins &lt;strong&gt;{1}&lt;/strong&gt; al canal &lt;strong&gt;{2}&lt;/strong&gt;</value>
   </data>
   <data name="RecordedOn" xml:space="preserve">
-    <value>הוקלט ב</value>
+    <value>Enregistrat a</value>
   </data>
   <data name="ScheduleHeaderEndTime" xml:space="preserve">
-    <value>זמן סיום</value>
+    <value>Hora de final</value>
   </data>
   <data name="ScheduleHeaderRepetition" xml:space="preserve">
-    <value>חזרות</value>
+    <value>Repetició</value>
   </data>
   <data name="ScheduleHeaderStartTime" xml:space="preserve">
-    <value>זמן התחלה</value>
+    <value>Hora d'inici</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>עדכן</value>
+    <value>Actualització</value>
   </data>
   <data name="WatchingProgram" xml:space="preserve">
-    <value>אתה צופה ב {0} על {1}</value>
+    <value>S'està veient {0} a {1}</value>
   </data>
   <data name="WatchingRecording" xml:space="preserve">
-    <value>צופה ב {0} </value>
+    <value>S'està veient {0}</value>
   </data>
   <data name="YouAreWatchingProgram" xml:space="preserve">
-    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt; ב &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+    <value>Esteu veient &lt;strong&gt;{0}&lt;/strong&gt; a &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
   <data name="YouAreWatchingRecording" xml:space="preserve">
-    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Esteu veient &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="YourRecordings" xml:space="preserve">
-    <value>ההקלטות שלך</value>
+    <value>Els vostres enregistraments</value>
   </data>
   <data name="AddSchedule" xml:space="preserve">
-    <value>הוסף תיזמון</value>
+    <value>Afegeix una planificació</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>צור</value>
+    <value>Crea</value>
   </data>
   <data name="Program" xml:space="preserve">
-    <value>תכנן</value>
+    <value>Programa</value>
   </data>
   <data name="DownloadPlaylist" xml:space="preserve">
-    <value>הורד רשימת השמעה (m3u.) לשימוש בנגן חיצוני</value>
+    <value>Baixa la llista (.m3u) per utilitzar-la en un reproductor extern</value>
   </data>
   <data name="InstallFlashPlayerToUseThisPlayer" xml:space="preserve">
-    <value>אתה צריך להתקין Adobe Flash Player על מנת להשתמש בנגן זה</value>
+    <value>Instal·leu l'Adobe Flash Player per a utilitzar aquest reproductor.</value>
   </data>
   <data name="VLCEnableDeinterlacing" xml:space="preserve">
-    <value>הפעל deinterlacing</value>
+    <value>habilita el desentrellaçat</value>
   </data>
   <data name="VLCPause" xml:space="preserve">
-    <value>עצור לרגע</value>
+    <value>pausa</value>
   </data>
   <data name="VLCPlay" xml:space="preserve">
-    <value>נגן</value>
+    <value>reprodueix</value>
   </data>
   <data name="VLCStop" xml:space="preserve">
-    <value>עצור</value>
+    <value>atura</value>
   </data>
   <data name="VLCSwitchFullscreen" xml:space="preserve">
-    <value>החלף למסך מלא</value>
+    <value>canvia a pantalla completa</value>
   </data>
   <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
-    <value>גרסת VLC שמותקנת אצלך ישנה מדי ולא תומכת ב deinterlacing בתוך הדפדפן. עדכן לגרסה 1.1.11 ומעלה.</value>
+    <value>La versió del VLC és massa antiga i no disposa de desentrellaçat dins el navegador. Actualitzeu-la a la versió 1.1.11 o posteriors.</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>שמור</value>
+    <value>Desa</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>ערוך</value>
+    <value>Edita</value>
   </data>
   <data name="EditSchedule" xml:space="preserve">
-    <value>ערוך תיזמון</value>
+    <value>Edita la planificació</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>חפש</value>
+    <value>Cerca</value>
   </data>
   <data name="SearchFieldPlaceholder" xml:space="preserve">
-    <value>חפש...</value>
+    <value>Cerca...</value>
     <comment>Placeholder in the search field when no text has been entered</comment>
   </data>
   <data name="SorryYourSearchDidNotYieldAnyResults" xml:space="preserve">
-    <value>לא נמצאו תוצאות חיפוש</value>
+    <value>La cerca no ha produït cap resultat.</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>מצב</value>
+    <value>Estat</value>
   </data>
   <data name="TVServerStatus" xml:space="preserve">
-    <value>מצב שירות הטלויזיה</value>
+    <value>Estat del TV Server</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>כרטיסי טלויזיה</value>
+    <value>Targetes sintonitxzadores</value>
   </data>
   <data name="Card" xml:space="preserve">
-    <value>כרטיס</value>
+    <value>Targeta</value>
   </data>
   <data name="CardDetails" xml:space="preserve">
-    <value>פרטי כרטיס</value>
+    <value>Detalls de la targeta</value>
   </data>
   <data name="CardGrabbingEPG" xml:space="preserve">
-    <value>מושך לוח שידורים EPG</value>
+    <value>S'està captant l'EPG</value>
   </data>
   <data name="CardName" xml:space="preserve">
-    <value>שם כרטיס</value>
+    <value>Nom de la targeta</value>
   </data>
   <data name="CardRecordingFile" xml:space="preserve">
-    <value>שם קובץ הקלטה</value>
+    <value>S'està enregistrant el fitxer</value>
   </data>
   <data name="CardRTSPStream" xml:space="preserve">
-    <value>זרם RTSP</value>
+    <value>Flux RTSP</value>
   </data>
   <data name="CardScrambled" xml:space="preserve">
-    <value>מוצפן</value>
+    <value>Codificat</value>
   </data>
   <data name="CardState" xml:space="preserve">
-    <value>מצב</value>
+    <value>Estat</value>
   </data>
   <data name="CardTimeshiftingFile" xml:space="preserve">
-    <value>קובץ ל Time-shift</value>
+    <value>Fitxer de Timeshifting</value>
   </data>
   <data name="Channel" xml:space="preserve">
-    <value>ערוץ</value>
+    <value>Canal</value>
   </data>
   <data name="DiskInfoAvailable" xml:space="preserve">
-    <value>פנוי</value>
+    <value>Disponible</value>
   </data>
   <data name="DiskInfoDisk" xml:space="preserve">
-    <value>כונן</value>
+    <value>Disc</value>
   </data>
   <data name="DiskInformation" xml:space="preserve">
-    <value>מידע על כונן</value>
+    <value>Informació del disc</value>
   </data>
   <data name="DiskInfoSize" xml:space="preserve">
-    <value>נפח</value>
+    <value>Mida</value>
   </data>
   <data name="DiskInfoUsed" xml:space="preserve">
-    <value>בשימוש</value>
+    <value>Utilitzat</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>לא</value>
+    <value>No</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>עצור</value>
+    <value>Atura</value>
   </data>
   <data name="StreamingClients" xml:space="preserve">
-    <value>שידור ללקוחות </value>
+    <value>Clients del flux</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>שם משתמש</value>
+    <value>Nom d'usuari</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>כן</value>
+    <value>Sí</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>שגיאה</value>
+    <value>Error</value>
     <comment>Page title on error page</comment>
   </data>
   <data name="PageNotFound" xml:space="preserve">
-    <value>נתיב לא נמצא</value>
+    <value>No s'ha trobat la pàgina</value>
     <comment>Page title on 404 page</comment>
   </data>
   <data name="SorryPageNotFound" xml:space="preserve">
-    <value>העמוד המבוקש לא נמצא.</value>
+    <value>La pàgina que heu demanat no existeix.</value>
   </data>
   <data name="WatchLive" xml:space="preserve">
-    <value>צפה בשידור חי</value>
+    <value>Mira el directe</value>
   </data>
   <data name="ListeningTrack" xml:space="preserve">
-    <value>מאזין ל {0}</value>
+    <value>S'està escoltant {0}</value>
   </data>
   <data name="YouAreListening" xml:space="preserve">
-    <value>אתה מקשיב ל &lt;strong&gt;{0}&lt;/strong&gt; של &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+    <value>Esteu escoltant &lt;strong&gt;{0}&lt;/strong&gt; de &lt;strong&gt;{1}&lt;/strong&gt;.</value>
   </data>
   <data name="FailedToStartStream" xml:space="preserve">
-    <value>התחלת הזרמה נכשלה. בדוק לוגים של סרבר לפרטים נוספים.</value>
+    <value>No s'ha pogut iniciar el flux. Trobareu més informació als registres del servidor.</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>אודות</value>
+    <value>Quant a</value>
   </data>
   <data name="CurrentCPUUsage" xml:space="preserve">
-    <value>שימוש נוכחי במעבד:</value>
+    <value>Utilització actual de la CPU:</value>
   </data>
   <data name="CurrentMemoryUsage" xml:space="preserve">
-    <value>שימוש נוכחי בזיכרון:</value>
+    <value>Utilització actual de la memòria:</value>
   </data>
   <data name="SystemStatus" xml:space="preserve">
-    <value>מצב מערכת</value>
+    <value>Estat del sistema</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>WebMediaPortal גרסה &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+    <value>Aquest és el WebMediaPortal &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="LatestAlbums" xml:space="preserve">
-    <value>אלבומים אחרונים</value>
+    <value>Darrers àlbums</value>
   </data>
   <data name="LatestTracks" xml:space="preserve">
-    <value>רצועות אחרונות</value>
+    <value>Darreres peces</value>
   </data>
 </root>

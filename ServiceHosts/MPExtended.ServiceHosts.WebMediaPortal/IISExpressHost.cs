@@ -52,6 +52,9 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
                     }
                 }
 
+                // some environment setup
+                EnvironmentSetup.SetupAspDotNet();
+
                 // generate IIS Express config file
                 var generator = new IISConfigGenerator();
                 

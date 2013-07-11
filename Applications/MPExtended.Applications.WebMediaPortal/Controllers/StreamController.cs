@@ -121,9 +121,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected StreamType GetStreamMode()
         {
-            return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
-                Settings.ActiveSettings.StreamType :
-                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
+            if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
+                return Settings.ActiveSettings.StreamType;
+
+            return NetworkInformation.IsLocalAddress(HttpContext.Request.Url.Host) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
+                ? StreamType.Direct : StreamType.Proxied;
         }
 
         private string GetDefaultProfile(WebMediaType type)
@@ -335,8 +337,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
+
                 // iOS does not display poster images with relative paths
                 string posterUrl = Url.Artwork(type, itemId, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
                 return Json(new { Success = true, URL = url, Poster = posterUrl }, JsonRequestBehavior.AllowGet);
             }
             else
