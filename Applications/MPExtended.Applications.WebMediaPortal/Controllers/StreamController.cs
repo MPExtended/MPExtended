@@ -119,9 +119,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected StreamType GetStreamMode()
         {
-            return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
-                Settings.ActiveSettings.StreamType :
-                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
+            if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
+                return Settings.ActiveSettings.StreamType;
+
+            return NetworkInformation.IsLocalAddress(HttpContext.Request.Url.Host) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
+                ? StreamType.Direct : StreamType.Proxied;
         }
 
         //
