@@ -44,7 +44,7 @@ namespace MPExtended.Libraries.Service.Network
 
             IPAddress network1 = address.GetNetworkAddress(subnetMask);
             IPAddress network2 = check.GetNetworkAddress(subnetMask);
-            return network1.IsEqual(network2);
+            return network1.Equals(network2);
         }
 
         public static bool IsInSameSubnet(this IPAddress address, IPAddress check, IPAddress subnetMask)
