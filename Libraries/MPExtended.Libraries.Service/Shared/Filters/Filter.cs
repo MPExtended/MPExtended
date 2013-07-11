@@ -32,13 +32,14 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         public string Operator { get; private set; }
         public string Value { get; private set; }
 
-        private delegate bool MatchDelegate(object x);
+        private delegate bool MatchDelegate(object value);
 
         private PropertyInfo property;
         private MatchDelegate matcher;
 
         private int intValue;
         private long longValue;
+        private bool boolValue;
 
         public Filter(string field, string oper, string value)
         {
@@ -55,7 +56,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
         public bool Matches<T>(T obj)
         {
-            return matcher(obj);
+            return matcher(property.GetValue(obj, null));
         }
 
         private MatchDelegate GetMatchDelegate()
@@ -66,6 +67,8 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 return GetIntMatchDelegate();
             if (property.PropertyType == typeof(long))
                 return GetLongMatchDelegate();
+            if (property.PropertyType == typeof(bool))
+                return GetBoolMatchDelegate();
             if (property.PropertyType.GetInterfaces().Any(x => x == typeof(IEnumerable)))
                 return GetListMatchDelegate();
 
@@ -79,17 +82,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (string)property.GetValue(x, null) == Value;
+                    return x => (string)x == Value;
                 case "~=":
-                    return x => ((string)property.GetValue(x, null)).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).Equals(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "!=":
-                    return x => (string)property.GetValue(x, null) != Value;
+                    return x => (string)x != Value;
                 case "*=":
-                    return x => ((string)property.GetValue(x, null)).Contains(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).Contains(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "^=":
-                    return x => ((string)property.GetValue(x, null)).StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).StartsWith(Value, StringComparison.InvariantCultureIgnoreCase);
                 case "$=":
-                    return x => ((string)property.GetValue(x, null)).EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
+                    return x => ((string)x).EndsWith(Value, StringComparison.InvariantCultureIgnoreCase);
 
                 default:
                     throw new ParseException("Filter: Invalid operator '{0}' for string field", Operator);
@@ -105,17 +108,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (int)property.GetValue(x, null) == intValue;
+                    return x => (int)x == intValue;
                 case "!=":
-                    return x => (int)property.GetValue(x, null) != intValue;
+                    return x => (int)x != intValue;
                 case ">":
-                    return x => (int)property.GetValue(x, null) > intValue;
+                    return x => (int)x > intValue;
                 case ">=":
-                    return x => (int)property.GetValue(x, null) >= intValue;
+                    return x => (int)x >= intValue;
                 case "<":
-                    return x => (int)property.GetValue(x, null) < intValue;
+                    return x => (int)x < intValue;
                 case "<=":
-                    return x => (int)property.GetValue(x, null) <= intValue;
+                    return x => (int)x <= intValue;
                 default:
                     throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
             }
@@ -130,19 +133,37 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             {
                 case "=":
                 case "==":
-                    return x => (long)property.GetValue(x, null) == longValue;
+                    return x => (long)x == longValue;
                 case "!=":
-                    return x => (long)property.GetValue(x, null) != longValue;
+                    return x => (long)x != longValue;
                 case ">":
-                    return x => (long)property.GetValue(x, null) > longValue;
+                    return x => (long)x > longValue;
                 case ">=":
-                    return x => (long)property.GetValue(x, null) >= longValue;
+                    return x => (long)x >= longValue;
                 case "<":
-                    return x => (long)property.GetValue(x, null) < longValue;
+                    return x => (long)x < longValue;
                 case "<=":
-                    return x => (long)property.GetValue(x, null) <= longValue;
+                    return x => (long)x <= longValue;
                 default:
                     throw new ArgumentException("Filter: Invalid operator '{0}' for integer field", Operator);
+            }
+        }
+
+        private MatchDelegate GetBoolMatchDelegate()
+        {
+            boolValue = Value == "true" || Value == "1";
+            if (!boolValue && Value != "false" && Value != "0")
+                throw new ArgumentException("Filter: Invalid value '{0}' for boolean field", Value);
+
+            switch (Operator)
+            {
+                case "=":
+                case "==":
+                    return x => (bool)x == boolValue;
+                case "!=":
+                    return x => (bool)x != boolValue;
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for boolean field", Operator);
             }
         }
 
@@ -153,7 +174,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 case "*=":
                     return delegate(object x)
                         {
-                            foreach(var item in (IEnumerable)property.GetValue(x, null))
+                            foreach(var item in (IEnumerable)x)
                             {
                                 if (item.ToString() == Value)
                                     return true;

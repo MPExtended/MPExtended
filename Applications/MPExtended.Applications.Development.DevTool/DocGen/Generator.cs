@@ -198,10 +198,10 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
                 if (param.IsOptional && param.RawDefaultValue == null)
                 {
                     Output.WriteLine("<li><strong>{0}</strong> (nullable {1})", param.Name, GenerateTypeNameLink(method, param.ParameterType));
-                } 
-                else if (param.ParameterType.IsGenericType && param.ParameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                }
+                else if (Nullable.GetUnderlyingType(param.ParameterType) != null)
                 {
-                    Type realType = param.ParameterType.GetGenericArguments().First();
+                    Type realType = Nullable.GetUnderlyingType(param.ParameterType);
                     Output.WriteLine("<li><strong>{0}</strong> (nullable {1})", param.Name, GenerateTypeNameLink(method, realType));
                 }
                 else

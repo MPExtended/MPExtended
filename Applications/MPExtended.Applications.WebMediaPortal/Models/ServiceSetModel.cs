@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Web;
 using MPExtended.Libraries.Client;
 
@@ -52,11 +53,19 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             if (address.Contains(':'))
                 address = address.Substring(0, address.IndexOf(':'));
 
-            var entry = Dns.GetHostEntry(address);
-            if (entry != null && entry.HostName != null)
-                return entry.HostName;
-            if (entry != null && entry.Aliases.Count() > 0)
-                return entry.Aliases.First();
+            try 
+            {
+                var entry = Dns.GetHostEntry(address);
+                if (entry != null && entry.HostName != null)
+                    return entry.HostName;
+                if (entry != null && entry.Aliases.Count() > 0)
+                    return entry.Aliases.First();
+            }
+            catch (SocketException) 
+            {
+                // There's probably no DNS entry available, we can ignore that and just show the
+                // IP address.
+            }
 
             return address;
         }

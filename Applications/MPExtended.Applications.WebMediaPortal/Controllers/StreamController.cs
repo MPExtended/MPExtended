@@ -121,9 +121,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected StreamType GetStreamMode()
         {
-            return Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible ?
-                Settings.ActiveSettings.StreamType :
-                (NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, false) ? StreamType.Direct : StreamType.Proxied);
+            if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
+                return Settings.ActiveSettings.StreamType;
+
+            return NetworkInformation.IsLocalAddress(HttpContext.Request.Url.Host) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
+                ? StreamType.Direct : StreamType.Proxied;
         }
 
         private string GetDefaultProfile(WebMediaType type)
@@ -335,7 +337,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
-                return Json(new { Success = true, URL = url, Poster = Url.Artwork(type, itemId) }, JsonRequestBehavior.AllowGet);
+
+                // iOS does not display poster images with relative paths
+                string posterUrl = Url.Artwork(type, itemId, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
+                return Json(new { Success = true, URL = url, Poster = posterUrl }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -433,9 +439,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                             })
                             .Join(Environment.NewLine);
 
-            Response.ContentType = response.ContentType;
-            Response.Write(newPlaylist);
-            Response.Flush();
+            try
+            {
+                Response.ContentType = response.ContentType;
+                Response.Write(newPlaylist);
+                Response.Flush();
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Exception while proxying HLS playlist from {0}", source), ex);
+            }
         }
 
         public ActionResult ProxyHttpLiveSegment(string identifier, string ctdAction, string parameters)
@@ -566,27 +579,22 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         [ServiceAuthorize]
         public ActionResult Playlist(WebMediaType type, string itemId, string transcoder = null)
         {
-            // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
-            {
                 PlayerOpenedBy.Add(Request.UserHostAddress);
-            }
 
-            // get profile
             var profile = GetProfile(GetStreamControl(type), transcoder ?? GetDefaultProfile(type));
-
-            // create playlist
             StringBuilder m3u = new StringBuilder();
             m3u.AppendLine("#EXTM3U");
 
             RouteValueDictionary parameters;
-            String url;
-            String continuationId = "playlist-" + randomGenerator.Next(10000, 99999);
+            string continuationId = "playlist-" + randomGenerator.Next(10000, 99999);
+            string url;
+            int filecount = 1;
             switch (type)
             {
                 case WebMediaType.MusicAlbum:
                     // add all album tracks
-                    foreach (WebMusicTrackBasic track in Connections.Current.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, itemId, WebSortField.MusicTrackNumber))
+                    foreach (WebMusicTrackBasic track in Connections.Current.MAS.GetMusicTracksBasicForAlbum(Settings.ActiveSettings.MusicProvider, itemId, sort: WebSortField.MusicTrackNumber))
                     {
                         parameters = new RouteValueDictionary();
                         parameters["item"] = track.Id;
@@ -597,15 +605,30 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         m3u.AppendLine(url);
                     }
                     break;
+
+                case WebMediaType.MusicTrack:
+                case WebMediaType.TVEpisode:
+                case WebMediaType.Movie:
+                    var mediaItem = Connections.Current.MAS.GetMediaItem(GetProvider(type), type, itemId);
+                    filecount = mediaItem.Path.Count;
+                    goto case WebMediaType.Recording; // really, Microsoft? Fall-through cases are useful. 
+                case WebMediaType.TV:
+                case WebMediaType.Recording:
+                    for (int i = 0; i < filecount; i++)
+                    {
+                        parameters = new RouteValueDictionary();
+                        parameters["item"] = itemId;
+                        parameters["transcoder"] = profile.Name;
+                        parameters["continuationId"] = continuationId;
+                        parameters["fileindex"] = i;
+                        url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                        m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
+                        m3u.AppendLine(url);
+                    }
+                    break;
+
                 default:
-                    // add default streaming url
-                    parameters = new RouteValueDictionary();
-                    parameters["item"] = itemId;
-                    parameters["transcoder"] = profile.Name;
-                    parameters["continuationId"] = continuationId;
-                    url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
-                    m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
-                    m3u.AppendLine(url);
+                    Log.Error("Requested playlist for non-supported media type {0} with id {1}", type, itemId);
                     break;
             }
 

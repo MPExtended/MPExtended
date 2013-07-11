@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -70,7 +69,7 @@ namespace MPExtended.Libraries.Service.Config
                 CreateInstance();
         }
 
-        public TModel Get()
+        public virtual TModel Get()
         {
             return CreateInstance();
         }
@@ -92,7 +91,7 @@ namespace MPExtended.Libraries.Service.Config
             return _instance;
         }
 
-        private TModel ReadFromDisk()
+        protected virtual TModel ReadFromDisk()
         {
             string path = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
 
@@ -119,11 +118,7 @@ namespace MPExtended.Libraries.Service.Config
             File.Copy(Path.Combine(Installation.Properties.DefaultConfigurationDirectory, Filename), path);
 
             // allow everyone to write to the config
-            var acl = File.GetAccessControl(path);
-            SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-            FileSystemAccessRule rule = new FileSystemAccessRule(everyone, FileSystemRights.FullControl, AccessControlType.Allow);
-            acl.AddAccessRule(rule);
-            File.SetAccessControl(path, acl);
+            FilePermissions.SetAclForUserOnFile(path, FilePermissions.EveryoneIdentity, FileSystemRights.FullControl, AccessControlType.Allow);
         }
 
         protected TModel UnsafeParse(string path)

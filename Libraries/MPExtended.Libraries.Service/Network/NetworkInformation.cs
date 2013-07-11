@@ -96,18 +96,27 @@ namespace MPExtended.Libraries.Service.Network
         public static bool IsOnLAN(IPAddress address)
         {
             if (IsLocalAddress(address))
-            {
                 return true;
+
+            var systemAddresses = NetworkInterface.GetAllNetworkInterfaces()
+                    .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                    .SelectMany(x => x.GetIPProperties().UnicastAddresses);
+
+            if (address.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return systemAddresses
+                    .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Where(x => x.IPv4Mask != null)
+                    .Any(x => address.IsInSameSubnet(x.Address, x.IPv4Mask.GetAddressBytes()));
             }
-
-            var info = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                .SelectMany(x => x.GetIPProperties().UnicastAddresses)
-                .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork) // TODO: IPv6 support
-                .Where(x => x.IPv4Mask != null)
-                .First();
-
-            return address.IsInSameSubnet(info.Address, info.IPv4Mask);
+            else
+            {
+                // TODO: Get the IPv6 subnet mask from the .NET framework
+                byte[] subnetMask = new byte[16] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                return systemAddresses
+                    .Where(x => x.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                    .Any(x => address.IsInSameSubnet(x.Address, subnetMask));
+            }
         }
 
         public static bool IsOnLAN(string address)

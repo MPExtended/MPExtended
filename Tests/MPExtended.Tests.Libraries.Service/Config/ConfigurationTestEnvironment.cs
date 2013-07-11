@@ -44,6 +44,8 @@ namespace MPExtended.Tests.Libraries.Service.Config
             properties.DefaultConfigurationDirectory = tempDirectory;
             properties.ConfigurationBackupDirectory = Path.Combine(tempDirectory, "Backup");
             Installation.Properties = properties;
+
+            Log.Disable();
         }
 
         protected void AddConfigurationFile(string name, string path)

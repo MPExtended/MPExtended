@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // GET: /Schedule/
         public ActionResult Index()
         {
-            var list = Connections.Current.TAS.GetSchedules(WebSortField.Title, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
+            var list = Connections.Current.TAS.GetSchedules(null, WebSortField.Title, WebSortOrder.Asc).Select(x => new ScheduleViewModel(x));
             return View(list);
         }
 

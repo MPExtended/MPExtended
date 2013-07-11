@@ -29,6 +29,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Applications.ServiceConfigurator.Pages;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Composition;
 using MPExtended.Libraries.Service.Strings;
@@ -42,7 +43,7 @@ namespace MPExtended.Applications.ServiceConfigurator
     public partial class MainWindow : Window
     {
         private bool mIsAppExiting = false;
-        private ServiceController mServiceController;
+        private ServiceControlInterface sci;
         private DispatcherTimer mServiceWatcher;
         private int lastTabIndex = -1;
 
@@ -57,15 +58,19 @@ namespace MPExtended.Applications.ServiceConfigurator
 
             HandleMediaPortalState(UserServices.USS.IsMediaPortalRunning());
 
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
+            // service control interface
+            sci = new ServiceControlInterface("MPExtended Service", lblServiceState, btnStartStopService);
+            if (!sci.IsServiceAvailable && Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {
-                taskbarItemContextMenu.Items.Remove(MenuOpenWebMP);
+                Log.Error("MPExtended Service not installed");
+                MessageBox.Show(UI.ServiceNotInstalledPopup, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else if (sci.IsServiceAvailable)
+            {
+                sci.StartServiceWatcher();
             }
 
-            // service controller
-            InitServiceController();
-
-            // hide tabs not applicable for current situation
+            // hide tabs and context menu items not applicable for current situation
             if (!Installation.IsServiceInstalled("MediaAccessService"))
             {
                 tcMainTabs.Items.Remove(tiPlugin);
@@ -76,15 +81,15 @@ namespace MPExtended.Applications.ServiceConfigurator
                 tcMainTabs.Items.Remove(tiStreaming);
                 tcMainTabs.Items.Remove(tiSocial);
             }
-            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal) || !IsWebMediaPortalServiceAvailable())
+            if (!Installation.IsProductInstalled(MPExtendedProduct.WebMediaPortal))
             {
                 tcMainTabs.Items.Remove(tiWebMediaPortal);
+                taskbarItemContextMenu.Items.Remove(MenuOpenWebMP);
             }
 
             // initialize some tabs
             Pages.TabConfiguration.StartLoadingTranslations();
         }
-
 
         private void SetupUSS()
         {
@@ -140,20 +145,10 @@ namespace MPExtended.Applications.ServiceConfigurator
             CommonEventHandlers.NavigateHyperlink(sender, e);
         }
 
-        private bool IsWebMediaPortalServiceAvailable()
+        private void btnStartStopService_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ServiceController controller = new ServiceController("MPExtended WebMediaPortal");
-                string tmp = controller.DisplayName;
-                return true;
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
+            sci.TriggerButtonClick();
         }
-
 
         #region Tray application
         protected override void OnStateChanged(EventArgs e)
@@ -298,117 +293,6 @@ namespace MPExtended.Applications.ServiceConfigurator
         private void MenuOpenWebMP_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo("http://localhost:" + Configuration.WebMediaPortalHosting.Port));
-        }
-        #endregion
-
-        #region Service controller
-        /// <summary>
-        /// Initialize the service watcher.
-        /// </summary>
-        private void InitServiceController()
-        {
-            // try to load service
-            try
-            {
-                mServiceController = new ServiceController("MPExtended Service");
-                HandleServiceState(mServiceController.Status);
-
-                // start service watcher
-                btnStartStopService.IsEnabled = true;
-                mServiceWatcher = new DispatcherTimer();
-                mServiceWatcher.Interval = TimeSpan.FromSeconds(2);
-                mServiceWatcher.Tick += serviceWatcher_Tick;
-                mServiceWatcher.Start();
-            }
-            catch (InvalidOperationException)
-            {
-                // service not installed
-                mServiceController = null;
-                lblServiceState.Content = UI.ServiceNotInstalled;
-                btnStartStopService.IsEnabled = false;
-                if (Installation.GetFileLayoutType() != FileLayoutType.Source)
-                {
-                    Log.Error("MPExtended Service not installed");
-                    MessageBox.Show(UI.ServiceNotInstalledPopup, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        private void serviceWatcher_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                mServiceController.Refresh();
-                HandleServiceState(mServiceController.Status);
-            }
-            catch (Win32Exception ex)
-            {
-                Log.Info("Win32Exception in serviceWatcher_Tick (this can be caused by an upgrade or other normal action): {0}", ex.Message);
-                mServiceWatcher.Stop();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ShowError(ex);
-                mServiceWatcher.Stop();
-            }
-        }
-
-        private void HandleServiceState(ServiceControllerStatus _status)
-        {
-            switch (_status)
-            {
-                case ServiceControllerStatus.Stopped:
-                    btnStartStopService.Content = UI.Start;
-                    lblServiceState.Content = UI.ServiceStopped;
-                    lblServiceState.Foreground = Brushes.Red;
-                    break;
-                case ServiceControllerStatus.Running:
-                    btnStartStopService.Content = UI.Stop;
-                    lblServiceState.Content = UI.ServiceStarted;
-                    lblServiceState.Foreground = Brushes.Green;
-                    break;
-                case ServiceControllerStatus.StartPending:
-                    btnStartStopService.Content = UI.Stop;
-                    lblServiceState.Content = UI.ServiceStartingFixed;
-                    lblServiceState.Foreground = Brushes.Teal;
-                    break;
-                default:
-                    lblServiceState.Foreground = Brushes.Teal;
-                    lblServiceState.Content = UI.ServiceUnknown;
-                    break;
-            }
-        }
-
-        private void btnStartStopService_Click(object sender, RoutedEventArgs e)
-        {
-            Log.Debug("StartStopService: inside btnStartStopService_Click()");
-            if (!UacServiceHelper.IsAdmin())
-            {
-                Log.Debug("StartStopService: no admin rights, use UacServiceHandler");
-                switch (mServiceController.Status)
-                {
-                    case ServiceControllerStatus.Stopped:
-                        UacServiceHelper.StartService();
-                        break;
-                    case ServiceControllerStatus.Running:
-                        UacServiceHelper.StopService();
-                        break;
-                }
-            }
-            else
-            {
-                Log.Debug("StartStopService: have admin rights, start/stop ourselves");
-                switch (mServiceController.Status)
-                {
-                    case ServiceControllerStatus.Stopped:
-                        mServiceController.Start();
-                        break;
-                    case ServiceControllerStatus.Running:
-                        mServiceController.Stop();
-                        break;
-
-                }
-            }
         }
         #endregion
     }

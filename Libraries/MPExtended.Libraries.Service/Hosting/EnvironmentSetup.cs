@@ -17,11 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Security.Principal;
+using System.Linq;
 using System.Security.AccessControl;
+using System.Text;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.Libraries.Service.Hosting
 {
@@ -47,33 +47,17 @@ namespace MPExtended.Libraries.Service.Hosting
         private static void EnsurePermissionSettings()
         {
             var rights = FileSystemRights.CreateDirectories | FileSystemRights.CreateFiles | FileSystemRights.ListDirectory | FileSystemRights.Modify | FileSystemRights.DeleteSubdirectoriesAndFiles;
-            var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+            var everyone = FilePermissions.EveryoneIdentity;
 
             if (Installation.GetFileLayoutType() == FileLayoutType.Installed)
             {
-                AddAclRuleOnDirectory(Installation.GetConfigurationDirectory(), everyone, rights, AccessControlType.Allow);
+                FilePermissions.SetAclForUserOnDirectory(Installation.GetConfigurationDirectory(), everyone, rights, AccessControlType.Allow);
                 foreach (var file in Directory.GetFiles(Installation.GetConfigurationDirectory(), "*.xml"))
-                    AddAclRuleOnFile(file, everyone, rights, AccessControlType.Allow);
+                    FilePermissions.SetAclForUserOnFile(file, everyone, rights, AccessControlType.Allow);
             }
 
-            AddAclRuleOnDirectory(Installation.GetCacheDirectory(), everyone, rights, AccessControlType.Allow);
-            AddAclRuleOnDirectory(Installation.GetLogDirectory(), everyone, rights, AccessControlType.Allow);
-        }
-
-        private static void AddAclRuleOnFile(string file, IdentityReference identity, FileSystemRights rights, AccessControlType type)
-        {
-            var acl = File.GetAccessControl(file);
-            acl.PurgeAccessRules(identity);
-            acl.AddAccessRule(new FileSystemAccessRule(identity, rights, type));
-            File.SetAccessControl(file, acl);
-        }
-
-        private static void AddAclRuleOnDirectory(string directory, IdentityReference identity, FileSystemRights rights, AccessControlType type)
-        {
-            var acl = Directory.GetAccessControl(directory);
-            acl.PurgeAccessRules(identity);
-            acl.AddAccessRule(new FileSystemAccessRule(identity, rights, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, type));
-            Directory.SetAccessControl(directory, acl);
+            FilePermissions.SetAclForUserOnDirectory(Installation.GetCacheDirectory(), everyone, rights, AccessControlType.Allow);
+            FilePermissions.SetAclForUserOnDirectory(Installation.GetLogDirectory(), everyone, rights, AccessControlType.Allow);
         }
     }
 }

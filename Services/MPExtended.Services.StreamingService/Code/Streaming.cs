@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,7 @@ namespace MPExtended.Services.StreamingService.Code
 
         private WatchSharing sharing;
         private StreamingService service;
-        private static Dictionary<string, ActiveStream> Streams = new Dictionary<string, ActiveStream>();
+        private static IDictionary<string, ActiveStream> Streams = new ConcurrentDictionary<string, ActiveStream>();
         private Timer timeoutTimer;
 
         private class ActiveStream
@@ -115,25 +116,22 @@ namespace MPExtended.Services.StreamingService.Code
 
                 if (toDelete.Count > 0)
                 {
-                    lock (Streams)
+                    foreach (string key in toDelete)
                     {
-                        foreach (string key in toDelete)
-                        {
-                            // The stream could've been terminated between the moment we decide it should be terminated and we get here. 
-                            if (!Streams.ContainsKey(key))
-                                continue;
+                        // The stream could've been terminated between the moment we decide it should be terminated and we get here. 
+                        if (!Streams.ContainsKey(key))
+                            continue;
 
-                            if (Streams[key].UseActivityForTimeout)
-                            {
-                                Log.Info("Stream {0} had last service activity at {1}, so cancel it", key, Streams[key].LastActivity);
-                            }
-                            else
-                            {
-                                Log.Info("Stream {0} had last read {1} milliseconds ago and last service activity at {2}, so cancel it", 
-                                    key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
-                            }
-                            service.FinishStream(key);
+                        if (Streams[key].UseActivityForTimeout)
+                        {
+                            Log.Info("Stream {0} had last service activity at {1}, so cancel it", key, Streams[key].LastActivity);
                         }
+                        else
+                        {
+                            Log.Info("Stream {0} had last read {1} milliseconds ago (read {2} bytes in total) and last service activity at {2}, so cancel it", 
+                                key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].OutputStream.ReadBytes, Streams[key].LastActivity);
+                        }
+                        service.FinishStream(key);
                     }
                 }
             }
@@ -168,10 +166,7 @@ namespace MPExtended.Services.StreamingService.Code
             string realIp = WCFUtil.GetHeaderValue("forwardedFor", "X-Forwarded-For");
             stream.ClientIP = realIp == null ? WCFUtil.GetClientIPAddress() : String.Format("{0} (via {1})", realIp, WCFUtil.GetClientIPAddress());
 
-            lock (Streams)
-            {
-                Streams[identifier] = stream;
-            }
+            Streams[identifier] = stream;
             return true;
         }
 
@@ -360,34 +355,29 @@ namespace MPExtended.Services.StreamingService.Code
         public void KillStream(string identifier)
         {
             EndStream(identifier);
-            lock (Streams)
-            {
-                Streams.Remove(identifier);
-            }
+            Streams.Remove(identifier);
             Log.Debug("Killed stream with identifier {0}", identifier);
         }
 
         public List<WebStreamingSession> GetStreamingSessions()
         {
-            lock (Streams)
+            return Streams.Select(s => s.Value).Select(s => new WebStreamingSession()
             {
-                return Streams.Select(s => s.Value).Select(s => new WebStreamingSession()
-                {
-                    ClientDescription = s.ClientDescription,
-                    ClientIPAddress = s.ClientIP,
-                    Identifier = s.Identifier,
-                    SourceType = s.Context.Source.MediaType,
-                    SourceId = s.Context.Source.Id,
-                    Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
-                    StartTime = s.StartTime,
-                    DisplayName = s.Context.Source.GetMediaDisplayName(),
+                ClientDescription = s.ClientDescription,
+                ClientIPAddress = s.ClientIP,
+                Identifier = s.Identifier,
+                SourceType = s.Context.Source.MediaType,
+                SourceId = s.Context.Source.Id,
+                Profile = s.Context.Profile != null ? s.Context.Profile.Name : null,
+                StartTime = s.StartTime,
+                DisplayName = s.Context.Source.GetMediaDisplayName(),
 
-                    StartPosition = s.Context.StartPosition,
-                    PlayerPosition = s.Context.GetPlayerPosition(),
-                    PercentageProgress = (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
-                    TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
-                }).ToList();
-            }
+                StartPosition = s.Context.StartPosition,
+                PlayerPosition = s.Context.GetPlayerPosition(),
+                PercentageProgress = s.Context.MediaInfo == null ? 0 :
+                                        (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
+                TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
+            }).ToList();
         }
 
         public void SetPlayerPosition(string identifier, long playerPosition)

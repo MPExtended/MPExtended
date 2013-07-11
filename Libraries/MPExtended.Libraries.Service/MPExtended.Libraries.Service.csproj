@@ -73,6 +73,7 @@
     <Compile Include="Composition\SafeDirectoryCatalog.cs" />
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
+    <Compile Include="Config\ProfilesConfigurationSerializer.cs" />
     <Compile Include="Config\TransformationCallbacks.cs" />
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\ConfigUpgrader.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Extensions\TaskExtensionMethods.cs" />
     <Compile Include="Network\MappedDriveConverter.cs" />
     <Compile Include="Hosting\EnvironmentSetup.cs" />
+    <Compile Include="Util\EnumerableComparer.cs" />
+    <Compile Include="Util\FilePermissions.cs" />
     <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Extensions\QueryableExtensionMethods.cs" />
     <Compile Include="Extensions\EnumerableExtensionMethods.cs" />

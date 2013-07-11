@@ -45,6 +45,11 @@ namespace MPExtended.Libraries.Service
             logger = new Logger(destination.ToArray());
         }
 
+        public static void Disable()
+        {
+            logger = new Logger();
+        }
+
         public static bool IsEnabled(LogLevel level)
         {
             return logger.IsEnabled(level);

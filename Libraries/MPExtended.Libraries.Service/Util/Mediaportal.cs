@@ -17,12 +17,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 using System.Xml.Linq;
+using System.Reflection;
 using Microsoft.Win32;
-using System.Diagnostics;
 
 namespace MPExtended.Libraries.Service.Util
 {
@@ -37,20 +38,43 @@ namespace MPExtended.Libraries.Service.Util
 
     public static class Mediaportal
     {
+        public enum MediaPortalVersion
+        {
+            NotAvailable = 1,
+            Unknown = 2,
+            MP1_1 = 3,
+            MP1_2 = 4,
+            MP1_3 = 5,
+            MP1_4 = 6,
+        }
+
         private static bool? hasValidConfig = null;
         private static bool? hasMpDirs = null;
 
         public static string GetClientInstallationDirectory()
         {
             object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
-            if (res != null)
-            {
-                return res.ToString();
-            }
-            else
-            {
-                return null;
-            }
+            return res != null ? res.ToString() : null;
+        }
+
+        public static string GetServerInstallationDirectory()
+        {
+            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server", "InstallPath");
+            return res != null ? res.ToString() : null;
+        }
+
+        private static string GetAssemblyPath()
+        {
+            string tv = GetServerInstallationDirectory();
+            if (tv != null && File.Exists(Path.Combine(tv, "TvService.exe")))
+                return Path.Combine(tv, "TvService.exe");
+
+            string client = GetClientInstallationDirectory();
+            if (client != null && File.Exists(Path.Combine(client, "MediaPortal.exe")))
+                return Path.Combine(tv, "MediaPortal.exe");
+
+            Log.Error("Cannot find installed TvService.exe or MediaPortal.exe");
+            return null;
         }
 
         public static string GetLocation(MediaportalDirectory type)
@@ -185,23 +209,51 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
+        public static Version GetBuildVersion()
+        {
+            var assemblyPath = GetAssemblyPath();
+            return assemblyPath != null ? AssemblyName.GetAssemblyName(assemblyPath).Version : null;
+        }
+
+        public static MediaPortalVersion GetVersion()
+        {
+            var minimumVersions = new Dictionary<MediaPortalVersion, Version>()
+            {
+                { MediaPortalVersion.MP1_4, new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
+                { MediaPortalVersion.MP1_3, new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
+                { MediaPortalVersion.MP1_2, new Version(1, 2) },        // not sure about alpha versions, but those are ancient
+                { MediaPortalVersion.MP1_1, new Version(1, 1) }         // unsupported, so whatever
+            };
+
+            Version build = GetBuildVersion();
+            if (build == null)
+                return MediaPortalVersion.NotAvailable;
+
+            foreach (var mpVersion in minimumVersions)
+            {
+                if (build >= mpVersion.Value)
+                    return mpVersion.Key;
+            }
+
+            return MediaPortalVersion.Unknown;
+        }
 
         public static void LogVersionDetails()
         {
             try
             {
-                var version = VersionUtil.GetMediaPortalVersion();
-                if (version == VersionUtil.MediaPortalVersion.NotAvailable)
+                var version = GetVersion();
+                if (version == MediaPortalVersion.NotAvailable)
                 {
                     Log.Info("No MediaPortal installed");
                 }
-                else if (version >= VersionUtil.MediaPortalVersion.MP1_2)
+                else if (version >= MediaPortalVersion.MP1_2)
                 {
-                    Log.Debug("Found supported MediaPortal installation ({0}, build {1})", version, VersionUtil.GetMediaPortalBuildVersion());
+                    Log.Debug("Found supported MediaPortal installation ({0}, build {1})", version, GetBuildVersion());
                 }
                 else
                 {
-                    Log.Warn("Installed MediaPortal version is not supported! ({0}, build {1})", version, VersionUtil.GetMediaPortalBuildVersion());
+                    Log.Warn("Installed MediaPortal version is not supported! ({0}, build {1})", version, GetBuildVersion());
                 }
             }
             catch (Exception ex)
@@ -210,10 +262,6 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
-        /// <summary>
-        /// Return the MediaPortal path
-        /// </summary>
-        /// <returns>MediaPortal path</returns>
         public static string GetMediaPortalPath()
         {
             string mpdir = Mediaportal.GetClientInstallationDirectory();
@@ -224,10 +272,6 @@ namespace MPExtended.Libraries.Service.Util
             return Path.Combine(mpdir, "MediaPortal.exe");
         }
 
-        /// <summary>
-        /// Check if MediaPortal is running
-        /// </summary>
-        /// <returns></returns>
         public static bool IsMediaPortalRunning()
         {
             return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GetMediaPortalPath())).Length > 0;

@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 
@@ -54,30 +55,30 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             }
         }
 
-        public static string Artwork(this UrlHelper helper, WebMediaType mediaType, string id)
+        public static string Artwork(this UrlHelper helper, WebMediaType mediaType, string id, string protocol = null, string hostName = null)
         {
             switch (mediaType)
             {
                 case WebMediaType.Movie:
-                    return helper.Action("Cover", "MovieLibrary", new { movie = id });
+                    return helper.Action("Cover", "MovieLibrary", new RouteValueDictionary(new { movie = id }), protocol, hostName);
                 case WebMediaType.MusicAlbum:
-                    return helper.Action("AlbumImage", "MusicLibrary", new { album = id });
+                    return helper.Action("AlbumImage", "MusicLibrary", new RouteValueDictionary(new { album = id }), protocol, hostName);
                 case WebMediaType.MusicArtist:
-                    return helper.Action("ArtistImage", "MusicLibrary", new { artist = id });
+                    return helper.Action("ArtistImage", "MusicLibrary", new RouteValueDictionary(new { artist = id }), protocol, hostName);
                 case WebMediaType.MusicTrack:
-                    return helper.Action("TrackImage", "MusicLibrary", new { track = id });
+                    return helper.Action("TrackImage", "MusicLibrary", new RouteValueDictionary(new { track = id }), protocol, hostName);
                 case WebMediaType.Radio:
                 case WebMediaType.TV:
-                    return helper.Action("ChannelLogo", "Television", new { channelId = id });
+                    return helper.Action("ChannelLogo", "Television", new RouteValueDictionary(new { channelId = id }), protocol, hostName);
                 case WebMediaType.Recording:
                     // TODO: Make width configurable with a parameter (object attributes or something like it)
-                    return helper.Action("PreviewImage", "Recording", new { id = id, width = 640 });
+                    return helper.Action("PreviewImage", "Recording", new RouteValueDictionary(new { id = id, width = 640 }), protocol, hostName);
                 case WebMediaType.TVEpisode:
-                    return helper.Action("EpisodeImage", "TVShowsLibrary", new { episode = id });
+                    return helper.Action("EpisodeImage", "TVShowsLibrary", new RouteValueDictionary(new { episode = id }), protocol, hostName);
                 case WebMediaType.TVSeason:
-                    return helper.Action("SeasonImage", "TVShowsLibrary", new { season = id });
+                    return helper.Action("SeasonImage", "TVShowsLibrary", new RouteValueDictionary(new { season = id }), protocol, hostName);
                 case WebMediaType.TVShow:
-                    return helper.Action("SeriesPoster", "TVShowsLibrary", new { season = id });
+                    return helper.Action("SeriesPoster", "TVShowsLibrary", new RouteValueDictionary(new { season = id }), protocol, hostName);
                 default:
                     return String.Empty;
             }

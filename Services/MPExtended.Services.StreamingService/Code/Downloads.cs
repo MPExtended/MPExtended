@@ -81,7 +81,8 @@ namespace MPExtended.Services.StreamingService.Code
 
             // set headers for downloading
             WCFUtil.AddHeader("Content-Disposition", "attachment; filename=\"" + source.GetFileInfo().Name + "\"");
-            WCFUtil.SetContentLength(source.GetFileInfo().Size);
+            if (source.MediaType != WebMediaType.TV)
+                WCFUtil.SetContentLength(source.GetFileInfo().Size);
 
             // FIXME: there has to be a better way to do this
             string mime = MIME.GetFromFilename(source.GetFileInfo().Name);
@@ -105,7 +106,8 @@ namespace MPExtended.Services.StreamingService.Code
             return runningDownloads
                 .Where(context => context.Stream.TimeSinceLastRead < IDLE_TIMEOUT)
                 .Select(context => {
-                    double percentage = 1.0 * context.Stream.ReadBytes / context.Source.GetFileInfo().Size;
+                    double percentage = context.Source.MediaType == WebMediaType.TV ? 0.0 :                         
+                        1.0 * context.Stream.ReadBytes / context.Source.GetFileInfo().Size;
                     return new WebStreamingSession()
                     {
                         ClientDescription = String.IsNullOrEmpty(context.ClientDescription) ? "Download" : context.ClientDescription,

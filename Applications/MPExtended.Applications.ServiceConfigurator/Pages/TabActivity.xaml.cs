@@ -73,17 +73,17 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         {
             try
             {
-                List<WebStreamingSession> tmp = _services.MASStreamControl.GetStreamingSessions();
+                IList<WebStreamingSession> tmp = _services.MASStreamControl.GetStreamingSessions();
 
                 if (tmp != null)
                 {
                     mStreamingSessions.UpdateStreamingList(tmp);
                 }
             }
-            catch (CommunicationException)
+            catch (Exception ex)
             {
                 mStreamingSessions.Clear();
-                Log.Warn("No connection to service");
+                Log.Warn("Failed to load active streaming sessions", ex);
             }
         }
 

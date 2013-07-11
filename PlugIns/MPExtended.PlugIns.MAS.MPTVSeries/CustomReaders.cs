@@ -22,6 +22,7 @@ using System.Text;
 using System.IO;
 using System.Data.SQLite;
 using MPExtended.Libraries.SQLitePlugin;
+using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
@@ -93,6 +94,32 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     Id = path.GetHashCode().ToString()
                 };
             }).ToList();
+        }
+
+        [MergeListReader]
+        public static List<WebArtworkDetailed> FanartArtworkReader(SQLiteDataReader reader, int index, object param)
+        {
+            ArtworkReaderParameters args = (ArtworkReaderParameters)param;
+            var list = ((IEnumerable<string>)DataReaders.ReadPipeList(reader, index)).Select(x =>
+            {
+                string[] parts = x.Split('?'); // ? is used as separator between filename and rating
+                string path = Path.Combine(args.DirectoryName, parts[0].Replace('/', '\\'));
+                return new WebArtworkDetailed()
+                {
+                    Type = args.FileType,
+                    Path = path,
+                    Offset = 0,
+                    Filetype = Path.GetExtension(path).Substring(1),
+                    Rating = String.IsNullOrEmpty(parts[1]) ? 1 :
+                                (int)Math.Round(Single.Parse(parts[1].Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture) * 10),
+                    Id = parts[2]
+                };
+            }).ToList();
+
+            list.Sort(AnonymousComparer.FromLambda<WebArtworkDetailed>((x, y) => y.Rating - x.Rating));
+            for (int i = 0; i < list.Count; i++)
+                list[i].Offset = i;
+            return list;
         }
 
         [MergeListReader]
