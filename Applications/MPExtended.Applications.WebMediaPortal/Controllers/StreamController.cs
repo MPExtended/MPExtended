@@ -180,8 +180,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we can access the file without any problems, let IIS stream it; that is a lot faster
-            if (false && NetworkInformation.IsLocalAddress(fullUri.Host, false) && type != WebMediaType.TV)
+            if (NetworkInformation.IsLocalAddress(fullUri.Host, false) && type != WebMediaType.TV)
             {
+                Log.Debug("Host download directly through IIS");
                 var path = type == WebMediaType.Recording ?
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
                     Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];

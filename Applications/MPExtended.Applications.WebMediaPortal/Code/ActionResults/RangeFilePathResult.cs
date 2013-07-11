@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.IO;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 {
@@ -35,7 +36,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
     public class RangeFilePathResult : RangeFileResult
     {
         #region Fields
-        private const int _bufferSize = 0x1000;
+        private const int _bufferSize = 100000;
         #endregion
 
         #region Constructor
@@ -47,7 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         /// <param name="modificationDate">The file modification date to use for the response.</param>
         /// <param name="fileLength">The file length to use for the response.</param>
         public RangeFilePathResult(string contentType, FileInfo file)
-            : base(contentType, file.FullName, file.LastWriteTime, file.Length, file.Name)
+            : base(contentType, file.FullName, file.LastWriteTime, file.Length, Path.GetFileName(file.FullName))
         {
 
         }
@@ -71,21 +72,31 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         /// <param name="rangeEndIndex">Range end index</param>
         protected override void WriteEntityRange(HttpResponseBase response, long rangeStartIndex, long rangeEndIndex)
         {
-            using (FileStream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+            try
             {
+                Log.Debug("WriteEntityRange: {0} - {1}", rangeStartIndex, rangeEndIndex);
+                response.BufferOutput = false;
+                FileStream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read);
                 stream.Seek(rangeStartIndex, SeekOrigin.Begin);
 
                 int bytesRemaining = Convert.ToInt32(rangeEndIndex - rangeStartIndex) + 1;
                 byte[] buffer = new byte[_bufferSize];
 
-                while (bytesRemaining > 0)
+                while (bytesRemaining > 0 && response.IsClientConnected)
                 {
                     int bytesRead = stream.Read(buffer, 0, _bufferSize < bytesRemaining ? _bufferSize : bytesRemaining);
                     response.OutputStream.Write(buffer, 0, bytesRead);
+                    
                     bytesRemaining -= bytesRead;
+                    //response.OutputStream.Flush();
                 }
 
                 stream.Close();
+                stream.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Error in WriteEntityRange: " + ex.Message);
             }
         }
         #endregion

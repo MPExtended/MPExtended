@@ -29,6 +29,7 @@ using System.Web.Mvc;
 using System.Text;
 using System.Security.Cryptography;
 using System.Globalization;
+using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 {
@@ -91,7 +92,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         {
             if (String.IsNullOrEmpty(contentType))
                 throw new ArgumentNullException("contentType");
-
+            Log.Debug("Download name: " + downloadName);
             ContentType = contentType;
             FileName = fileName;
             FileModificationDate = modificationDate;
@@ -134,6 +135,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         /// <param name="context">The context within which the result is executed.</param>
         public override void ExecuteResult(ControllerContext context)
         {
+            Log.Debug("ExecuteResult");
             EntityTag = GenerateEntityTag(context);
             GetRanges(context.HttpContext.Request);
 
@@ -142,7 +144,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
                 context.HttpContext.Response.AddHeader("Last-Modified", FileModificationDate.ToString("r"));
                 context.HttpContext.Response.AddHeader("ETag", String.Format("\"{0}\"", EntityTag));
                 context.HttpContext.Response.AddHeader("Accept-Ranges", "bytes");
-                context.HttpContext.Response.AddHeader("Content-Disposition", String.Format("attachment; filename={0}", DownloadName));
+                context.HttpContext.Response.AddHeader("Content-Disposition", String.Format("attachment; filename=\"{0}\"", DownloadName));
 
                 if (!RangeRequest)
                 {
@@ -180,8 +182,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
                             {
                                 WriteEntityRange(context.HttpContext.Response, RangesStartIndexes[i], RangesEndIndexes[i]);
                                 if (MultipartRequest)
+                                {
                                     context.HttpContext.Response.Write("\r\n");
-                                //context.HttpContext.Response.Flush();
+                                    context.HttpContext.Response.Flush();
+                                }
                             }
                             else
                                 return;
@@ -261,16 +265,18 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 
         private bool ValidateRanges(HttpResponseBase response)
         {
-            if (FileLength > Int32.MaxValue)
-            {
-                response.StatusCode = 413;
-                return false;
-            }
+            //if (FileLength > Int64.MaxValue)
+            //{
+            //    Log.Info("ValidateRanges: FileLength > Int32.MaxValue");
+            //    response.StatusCode = 413;
+            //    return false;
+            //}
 
             for (int i = 0; i < RangesStartIndexes.Length; i++)
             {
                 if (RangesStartIndexes[i] > FileLength - 1 || RangesEndIndexes[i] > FileLength - 1 || RangesStartIndexes[i] < 0 || RangesEndIndexes[i] < 0 || RangesEndIndexes[i] < RangesStartIndexes[i])
                 {
+                    Log.Info("Couldn't validate ranges");
                     response.StatusCode = 400;
                     return false;
                 }
@@ -281,6 +287,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 
         private bool ValidateModificationDate(HttpRequestBase request, HttpResponseBase response)
         {
+            return true;
             string modifiedSinceHeader = GetHeader(request, "If-Modified-Since");
             if (!String.IsNullOrEmpty(modifiedSinceHeader))
             {
@@ -289,6 +296,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 
                 if (HttpModificationDate <= modifiedSinceDate)
                 {
+                    Log.Info("If-Modified-Since check failed");
                     response.StatusCode = 304;
                     return false;
                 }
@@ -298,10 +306,15 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
             if (!String.IsNullOrEmpty(unmodifiedSinceHeader))
             {
                 DateTime unmodifiedSinceDate;
-                bool unmodifiedSinceDateParsed = DateTime.TryParseExact(unmodifiedSinceHeader, _httpDateFormats, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out unmodifiedSinceDate);
-
-                if (HttpModificationDate > unmodifiedSinceDate)
+                bool unmodifiedSinceDateParsed = DateTime.TryParse(unmodifiedSinceHeader, out unmodifiedSinceDate);
+                if (unmodifiedSinceDateParsed)
                 {
+                    Log.Warn("Couldn't parse: " + unmodifiedSinceHeader);
+                }
+
+                if (unmodifiedSinceDateParsed && HttpModificationDate > unmodifiedSinceDate)
+                {
+                    Log.Info("If-Unmodified-Since check failed (" + unmodifiedSinceDate.ToString() + " vs " + HttpModificationDate.ToString());
                     response.StatusCode = 412;
                     return false;
                 }
@@ -325,6 +338,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 
                 if (entitieTagIndex >= entitiesTags.Length)
                 {
+                    Log.Info("If-Match failed");
                     response.StatusCode = 412;
                     return false;
                 }
@@ -344,6 +358,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
                 {
                     if (EntityTag == entityTag)
                     {
+                        Log.Info("If-None-Match failed");
                         response.AddHeader("ETag", String.Format("\"{0}\"", entityTag));
                         response.StatusCode = 304;
                         return false;
