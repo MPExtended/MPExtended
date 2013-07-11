@@ -8,11 +8,6 @@ Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
 
-Misc\Deusty.Net.dll:
-- Public domain
-- Source code available from http://code.google.com/p/dotnetasyncsocket/
-- Version 1.1.0.0 (build from source revision r15)
-
 Misc\ZeroconfService.dll:
 - Copyright unknown
 - Licensed under the 2-clause BSD license, available on http://www.opensource.org/licenses/BSD-2-Clause

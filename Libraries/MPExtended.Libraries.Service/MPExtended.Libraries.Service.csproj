@@ -39,11 +39,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Deusty.Net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\AsyncSocket.0.0.15\lib\net20\Deusty.Net.dll</HintPath>
+    </Reference>
     <Reference Include="MPExtended.Libraries.Service.Config.XmlSerializers">
       <HintPath>..\MPExtended.Libraries.Service.Config\bin\$(ConfigurationName)\MPExtended.Libraries.Service.Config.XmlSerializers.dll</HintPath>
-    </Reference>
-    <Reference Include="Deusty.Net">
-      <HintPath>..\Misc\Deusty.Net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
