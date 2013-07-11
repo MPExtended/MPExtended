@@ -206,12 +206,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (type == WebMediaType.Recording)
                 {
                     WebRecordingFileInfo fileInfo = Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item));
-                    return new WSSFileResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
                 }
                 else
                 {
                     WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(GetProvider(type), type, WebFileType.Content, item, 0);
-                    return new WSSFileResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
 
                 }
             }

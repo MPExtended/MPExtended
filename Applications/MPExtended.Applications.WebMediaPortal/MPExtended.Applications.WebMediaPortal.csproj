@@ -79,8 +79,7 @@
     </Compile>
     <Compile Include="Code\ActionResults\RangeFilePathResult.cs" />
     <Compile Include="Code\ActionResults\RangeFileResult.cs" />
-    <Compile Include="Code\ActionResults\RangeFileStreamResult.cs" />
-    <Compile Include="Code\ActionResults\WSSFileResult.cs" />
+    <Compile Include="Code\ActionResults\RangeWSSResult.cs" />
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\Composition\ApplicationInitializer.cs" />
     <Compile Include="Code\Composition\Composer.cs" />

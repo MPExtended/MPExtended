@@ -13,7 +13,7 @@ using MPExtended.Libraries.Service;
 
 namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 {
-    public class WSSFileResult : RangeFileResult
+    public class RangeWSSResult : RangeFileResult
     {
         #region Fields
         private const int _bufferSize = 100000;
@@ -23,7 +23,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         private int? _provider;
         #endregion
 
-        public WSSFileResult(WebRecordingFileInfo fileInfo, string clientDescription, WebMediaType type, int? provider, string itemId)
+        public RangeWSSResult(WebRecordingFileInfo fileInfo, string clientDescription, WebMediaType type, int? provider, string itemId)
             : base(MIME.GetFromFilename(fileInfo.Path, "application/octet-stream"), fileInfo.Path, fileInfo.LastModifiedTime, fileInfo.Size, fileInfo.Name)
         {
             _itemId = itemId;
@@ -32,7 +32,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
             _type = type;
         }
 
-        public WSSFileResult(WebFileInfo fileInfo, string clientDescription, WebMediaType type, int? provider, string itemId)
+        public RangeWSSResult(WebFileInfo fileInfo, string clientDescription, WebMediaType type, int? provider, string itemId)
             : base(MIME.GetFromFilename(fileInfo.Path, "application/octet-stream"), fileInfo.Path, fileInfo.LastModifiedTime, fileInfo.Size, fileInfo.Name)
         {
             _itemId = itemId;
