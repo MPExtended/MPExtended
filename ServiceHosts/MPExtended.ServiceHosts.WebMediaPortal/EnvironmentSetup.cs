@@ -24,6 +24,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Util;
 
 namespace MPExtended.ServiceHosts.WebMediaPortal
 {
@@ -58,24 +59,13 @@ namespace MPExtended.ServiceHosts.WebMediaPortal
             try
             {
                 Log.Info("Going to give the current user write access on ASP.NET temporary directory '{0}'", tempDir);
-                var rights = FileSystemRights.CreateDirectories | FileSystemRights.CreateFiles | FileSystemRights.ListDirectory |
-                    FileSystemRights.Modify | FileSystemRights.DeleteSubdirectoriesAndFiles;
                 var currentUser = WindowsIdentity.GetCurrent().User;
-                AddAclRuleOnDirectory(tempDir, currentUser, rights, AccessControlType.Allow);
+                FilePermissions.SetAclForUserOnDirectory(tempDir, currentUser, FileSystemRights.FullControl, AccessControlType.Allow);
             }
             catch (Exception ex)
             {
                 Log.Error("Failed to set permissions on ASP.NET temporary directory", ex);
             }
-        }
-
-        // FIXME: Copied from Libraries/MPExtended.Libraries.Service/Hosting/EnvironmentSetup.cs
-        private static void AddAclRuleOnDirectory(string directory, IdentityReference identity, FileSystemRights rights, AccessControlType type)
-        {
-            var acl = Directory.GetAccessControl(directory);
-            acl.PurgeAccessRules(identity);
-            acl.AddAccessRule(new FileSystemAccessRule(identity, rights, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, type));
-            Directory.SetAccessControl(directory, acl);
         }
     }
 }
