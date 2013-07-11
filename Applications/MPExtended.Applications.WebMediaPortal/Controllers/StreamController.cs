@@ -304,6 +304,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
+                Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
                 return Json(new { Success = true, URL = url }, JsonRequestBehavior.AllowGet);
             }
             else
