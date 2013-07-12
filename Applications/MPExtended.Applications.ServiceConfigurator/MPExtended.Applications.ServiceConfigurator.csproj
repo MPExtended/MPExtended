@@ -67,8 +67,12 @@
     <Reference Include="ZeroconfService">
       <HintPath>..\..\Libraries\Misc\ZeroconfService.dll</HintPath>
     </Reference>
-    <Reference Include="zxing">
-      <HintPath>..\..\packages\ZXing.2.1.0\lib\net20\zxing.dll</HintPath>
+    <Reference Include="zxing, Version=0.11.0.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Packages\ZXing.Net.0.11.0.1\lib\net40\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\..\Packages\ZXing.Net.0.11.0.1\lib\net40\zxing.presentation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +106,6 @@
     <Compile Include="Code\ITabCloseCallback.cs" />
     <Compile Include="Code\LogExporter.cs" />
     <Compile Include="Code\PrivateUserSessionService.cs" />
-    <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
     <Compile Include="Code\StartupArguments.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />

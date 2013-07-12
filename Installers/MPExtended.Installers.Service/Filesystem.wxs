@@ -166,6 +166,7 @@
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.presentation.dll" />
             </Component>
             
             <Component Id="Component_Configurator_Registry" Guid="5a4072a3-32c2-4482-af07-b9af4e463eaa">
