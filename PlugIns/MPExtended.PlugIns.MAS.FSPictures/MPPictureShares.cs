@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces;
 
@@ -50,7 +51,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 return;
             }
 
-            IEnumerable<KeyValuePair<string, string>> list = Mediaportal.ReadSectionFromConfigFile("pictures");
+            Dictionary<string, string> list = Mediaportal.ReadSectionFromConfigFile("pictures");
+            if (list.Count == 0 || !list.ContainsKey("extensions"))
+            {
+                Log.Info("MPPictureShares: configuration is invalid, disabling plugin");
+                Supported = false;
+                return;
+            }
 
             Extensions = list.Where(x => x.Key == "extensions").Select(x => x.Value).First().Split(',');
 
