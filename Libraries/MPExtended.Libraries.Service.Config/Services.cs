@@ -74,7 +74,6 @@ namespace MPExtended.Libraries.Service.Config
 
         public string ServiceAddress { get; set; }
         public int Port { get; set; }
-        public bool EnableIPv6 { get; set; }
 
         public string DefaultLanguage { get; set; }
 

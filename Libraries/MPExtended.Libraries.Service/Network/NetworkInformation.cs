@@ -27,24 +27,17 @@ namespace MPExtended.Libraries.Service.Network
 {
     public static class NetworkInformation
     {
-        private static string _ip4Address;
-        private static string _ipBothAddress;
+        private static string[] _localhostNames = new string[] { "127.0.0.1", "::1", "localhost" };
+        private static string _ipAddress;
 
         public static string GetIPAddress()
         {
-            return GetIPAddress(Configuration.Services.EnableIPv6);
+            if (_ipAddress == null)
+                _ipAddress = LoadIPAddress();
+            return _ipAddress;
         }
 
-        public static string GetIPAddress(bool enableIPv6)
-        {
-            if (enableIPv6 && _ipBothAddress == null)
-                _ipBothAddress = LoadIPAddress(true);
-            if (!enableIPv6 && _ip4Address == null)
-                _ip4Address = LoadIPAddress(false);
-            return enableIPv6 ? _ipBothAddress : _ip4Address;
-        }
-
-        private static string LoadIPAddress(bool enableIPv6)
+        private static string LoadIPAddress()
         {
             var interfaces = NetworkInterface.GetAllNetworkInterfaces()
                 .Where(x => x.OperationalStatus == OperationalStatus.Up);
@@ -52,34 +45,35 @@ namespace MPExtended.Libraries.Service.Network
             string[] preferedInterfaces = new string[] { "Local Area Connection" };
             var lanAddresses = interfaces.Where(x => preferedInterfaces.Contains(x.Name))
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (enableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
+                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
                     .Select(x => x.ToString());
             if (lanAddresses.Any())
                 return lanAddresses.First();
 
             var addresses = interfaces
                 .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (enableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
                 .Select(x => x.ToString());
-            if (addresses.Any(x => x != "127.0.0.1"))
-                return addresses.First(x => x != "127.0.0.1");
+            if (addresses.Any(x => !_localhostNames.Contains(x)))
+                return addresses.First(x => !_localhostNames.Contains(x));
             if (addresses.Any())
                 return addresses.First();
+
             return "127.0.0.1";
         }
 
-        private static IEnumerable<IPAddress> GetIPAddressList(bool enableIPv6)
+        private static IEnumerable<IPAddress> GetIPAddressList()
         {
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || (enableIPv6 && x.AddressFamily == AddressFamily.InterNetworkV6))
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
                 .Distinct()
                 .ToArray();
         }
 
         public static IEnumerable<string> GetIPAddresses()
         {
-            return GetIPAddressList(Configuration.Services.EnableIPv6).Select(x => x.ToString()).ToList();
+            return GetIPAddressList().Select(x => x.ToString()).ToList();
         }
 
         public static IEnumerable<string> GetMACAddresses()
@@ -111,7 +105,7 @@ namespace MPExtended.Libraries.Service.Network
             }
             else
             {
-                // TODO: Get the IPv6 subnet mask from the .NET framework
+                // TODO: Get the current IPv6 subnet mask from the .NET framework instead of hardcoding it to the first 64-bits
                 byte[] subnetMask = new byte[16] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 return systemAddresses
                     .Where(x => x.Address.AddressFamily == AddressFamily.InterNetworkV6)
@@ -121,12 +115,7 @@ namespace MPExtended.Libraries.Service.Network
 
         public static bool IsOnLAN(string address)
         {
-            return IsOnLAN(address, Configuration.Services.EnableIPv6);
-        }
-
-        public static bool IsOnLAN(string address, bool enableIPv6)
-        {
-            if (IsLocalAddress(address, enableIPv6))
+            if (IsLocalAddress(address))
                 return true;
 
             return IsOnLAN(IPAddress.Parse(address));
@@ -134,23 +123,18 @@ namespace MPExtended.Libraries.Service.Network
 
         public static bool IsLocalAddress(IPAddress address)
         {
-            return address.ToString() == "127.0.0.1" || address.ToString() == "::1" || GetIPAddressList(true).Contains(address);
+            return _localhostNames.Contains(address.ToString()) || GetIPAddressList().Contains(address);
         }
 
         public static bool IsLocalAddress(string address)
         {
-            return IsLocalAddress(address, Configuration.Services.EnableIPv6);
-        }
-
-        public static bool IsLocalAddress(string address, bool enableIPv6)
-        {
-            if(address == "localhost" || address == "::1" || address == "127.0.0.1")
+            if (_localhostNames.Contains(address))
                 return true;
 
             try
             {
                 bool isLocal = Dns.GetHostAddresses(address)
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6)
+                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
                     .Any(x => IsLocalAddress(x));
                 if (isLocal)
                     return true;
@@ -167,15 +151,14 @@ namespace MPExtended.Libraries.Service.Network
             return false;
         }
 
-        public static Dictionary<string, string> GetNetworkInterfaces(bool enableIPv6)
+        public static Dictionary<string, string> GetNetworkInterfaces()
         {
             Dictionary<string, string> ifaces = new Dictionary<string, string>();
             foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
             {
                 foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
                 {
-                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork ||
-                       (unicast.Address.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6))
+                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork || unicast.Address.AddressFamily == AddressFamily.InterNetworkV6)
                     {
                         ifaces.Add(iface.Name, unicast.Address.ToString());
                     }
@@ -185,15 +168,9 @@ namespace MPExtended.Libraries.Service.Network
             return ifaces;
         }
 
-        public static Dictionary<string, string> GetNetworkInterfaces()
+        public static bool IsValid(IPAddress address)
         {
-            return GetNetworkInterfaces(Configuration.Services.EnableIPv6);
-        }
-
-        public static bool IsValid(IPAddress address, bool enableIPv6)
-        {
-            return address.AddressFamily == AddressFamily.InterNetwork ||
-                (address.AddressFamily == AddressFamily.InterNetworkV6 && enableIPv6);
+            return address.AddressFamily == AddressFamily.InterNetwork || address.AddressFamily == AddressFamily.InterNetworkV6;
         }
     }
 }

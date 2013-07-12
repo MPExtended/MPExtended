@@ -163,7 +163,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we can access the file without any problems, let IIS stream it; that is a lot faster
-            if (NetworkInformation.IsLocalAddress(fullUri.Host, false) && type != WebMediaType.TV)
+            if (NetworkInformation.IsLocalAddress(fullUri.Host) && type != WebMediaType.TV)
             {
                 var path = type == WebMediaType.Recording ?
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
@@ -173,8 +173,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
 
             // If we connect to the services at localhost, actually give the extern IP address to users
-            if (NetworkInformation.IsLocalAddress(fullUri.Host, false))
-                fullUri.Host = NetworkInformation.GetIPAddress(false);
+            if (NetworkInformation.IsLocalAddress(fullUri.Host))
+                fullUri.Host = NetworkInformation.GetIPAddress();
 
             // Do the actual streaming
             if (GetStreamMode() == StreamType.Proxied)
