@@ -42,7 +42,10 @@ namespace MPExtended.Libraries.Service.Config
                 if (!currentInstance.Customized && currentInstance.ProfilesVersion < newInstance.ProfilesVersion)
                 {
                     Log.Info("Replacing uncustomized current StreamingProfiles.xml version {0} with version {1}", currentInstance.ProfilesVersion, newInstance.ProfilesVersion);
-                    File.Copy(defaultPath, Path.Combine(Installation.Properties.ConfigurationDirectory, Filename));
+                    var filePath = Path.Combine(Installation.Properties.ConfigurationDirectory, Filename);
+                    if (File.Exists(filePath))
+                        File.Copy(filePath, Path.ChangeExtension(filePath, "xml.bak"), true);
+                    File.Copy(defaultPath, Path.Combine(Installation.Properties.ConfigurationDirectory, Filename), true);
                     return newInstance;
                 }
             }
