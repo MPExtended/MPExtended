@@ -73,6 +73,8 @@ namespace MPExtended.Libraries.Service.Config
         public MusicLayoutType MusicLayout { get; set; }
         public ConfigDictionary SkinConfiguration { get; set; }
 
+        public int? PageSize { get; set; }
+
         public WebMediaPortal()
         {
             StreamType = StreamType.DirectWhenPossible;
@@ -83,6 +85,7 @@ namespace MPExtended.Libraries.Service.Config
             ExternalUrlHost = null;
             SkinConfiguration = new ConfigDictionary();
             MusicLayout = MusicLayoutType.Artist;
+            PageSize = 20;
         }
     }
 }

@@ -500,4 +500,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="AllAlbums" xml:space="preserve">
     <value>All albums</value>
   </data>
+  <data name="SelectPage" xml:space="preserve">
+    <value>Page selection:</value>
+  </data>
 </root>

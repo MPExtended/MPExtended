@@ -58,6 +58,27 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             return String.Empty;
         }
 
+        public string EnableRangeSlider(int totalPages, string sliderSelector, string sliderLabel)
+        {
+            EnableUI();
+            htmlHelper.Assets().AddScript("~/Scripts/jQRangeSlider-min.js", 2);
+            htmlHelper.Assets().AddScript("~/Scripts/pageSlider.js", 3);
+            htmlHelper.Assets().AddStylesheet("~/Content/iThing.css", 0);
+            
+            AddDocumentReadyScript("InitSlider(" + totalPages + ",'" + sliderSelector + "','" + sliderLabel +  "');");
+            // return empty string so we can just type @Html.jQuery().EnableRangeSlider()
+            return String.Empty;
+        }
+
+        public string EnableImageLoading()
+        {
+            Enable();
+            htmlHelper.Assets().AddScript("~/Scripts/asyncImageLoad.js", 2);
+            AddDocumentReadyScript("LoadAllImages();");
+            // return empty string so we can just type @Html.jQuery().EnableRangeSlider()
+            return String.Empty;
+        }
+
         public string AddDocumentReadyScript(string script)
         {
             if (documentReadyScript == null)

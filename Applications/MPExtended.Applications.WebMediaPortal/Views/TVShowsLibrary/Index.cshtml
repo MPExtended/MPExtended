@@ -5,16 +5,34 @@
 
 <h2>@UIStrings.YourTVShows</h2>
 
-<div>
+<div id="slider" style="clear:both;float:left"></div>
+
+@{ 
+    var count = 0;
+    var pages = 1;
+}
+
+<div class="paged-data-container">
+
     @foreach (var show in Model)
     {
-        <div style="float: left;">
+        if ((count % MPExtended.Applications.WebMediaPortal.Code.Settings.ActiveSettings.PageSize) == 0)
+        {
+            if (count > 0) { pages++; }
+        }
+        count++;
+        
+        <div class="@("page" + pages.ToString())"  style="float: left;">
             <div style="padding: 0px 5px 0px 5px;">
                 <a href="@Url.Action("Seasons", "TVShowsLibrary", new { show = show.Id })">
-                    <img width="300" src="@Url.Action("SeriesBanner", new { show = @show.Id, width = 300 })" alt="No image" />
+                    <span style="width:300px;height:150px" class="async-image-display" data-src="@Url.Action("SeriesBanner", new { show = @show.Id, width = 300 })"></span>
                 </a>
             </div>
             <div style="text-align: center; padding-bottom: 20px;">@Html.ActionLink(show.Title, "Seasons", new { show = show.Id })</div>       
         </div>
     }
 </div>
+
+
+@Html.jQuery().EnableRangeSlider(pages, "#slider", UIStrings.SelectPage)
+@Html.jQuery().EnableImageLoading();

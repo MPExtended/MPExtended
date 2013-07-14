@@ -214,6 +214,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid number.
+        /// </summary>
+        public static string ErrorNoValidPageSize {
+            get {
+                return ResourceManager.GetString("ErrorNoValidPageSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify a valid TAS URL.
         /// </summary>
         public static string ErrorNoValidServerService {
@@ -363,6 +372,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string MusicLayout {
             get {
                 return ResourceManager.GetString("MusicLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items per page.
+        /// </summary>
+        public static string PageSize {
+            get {
+                return ResourceManager.GetString("PageSize", resourceCulture);
             }
         }
         

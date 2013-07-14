@@ -7,16 +7,34 @@
 
 <h3>@(isAllAlbums ? UIStrings.AllAlbums : String.Format(UIStrings.AlbumsFromArtist, Model.Artist.Title))</h3>
 
-@foreach (var album in Model.Albums.OrderBy(x => x.Title).ThenBy(x => x.AlbumArtist))
-{
-    <div style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
-        <div>
-            <a href="@Url.Action("Album", new { album = album.Id })">
-                <img height="150" width="150" src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })" />
-            </a>
-        </div>
-        <div style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">
-            @Html.ActionLink((isAllAlbums ? album.AlbumArtist + " - " : "") + album.Title, "Album", new { album = album.Id })
-        </div>
-    </div>
+<div id="slider" style="clear:both;float:left"></div>
+
+@{ 
+    var count = 0;
+    var pages = 1;
 }
+
+<div class="paged-data-container">
+    @foreach (var album in Model.Albums.OrderBy(x => x.Title).ThenBy(x => x.AlbumArtist))
+    {
+        if ((count % MPExtended.Applications.WebMediaPortal.Code.Settings.ActiveSettings.PageSize) == 0)
+        {
+            if (count > 0) { pages++; }
+        }
+        count++;
+    
+        <div class="@("page" + pages.ToString())" style="padding: 10px 10px 20px 10px; float: left; height: 200px;">
+            <div>
+                <a href="@Url.Action("Album", new { album = album.Id })">
+                    <span style="width:150px;height:150px" class="async-image-display" data-src="@Url.Action("AlbumImage", "MusicLibrary", new { album = album.Id, width = 150 })"></span>
+                </a>
+            </div>
+            <div style="padding-top: 5px; overflow: hidden; width:  150px; text-align: center;">
+                @Html.ActionLink((isAllAlbums ? album.AlbumArtist + " - " : "") + album.Title, "Album", new { album = album.Id })
+            </div>
+        </div>
+    }
+</div>
+
+@Html.jQuery().EnableRangeSlider(pages, "#slider", UIStrings.SelectPage)
+@Html.jQuery().EnableImageLoading();

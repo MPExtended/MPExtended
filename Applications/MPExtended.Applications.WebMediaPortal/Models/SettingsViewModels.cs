@@ -199,6 +199,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         [ListChoice("Languages", AllowNull = false, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidLanguage")]
         public string Language { get; set; }
 
+        [LocalizedDisplayName(typeof(FormStrings), "PageSize")]
+        [Required(ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidPageSize")]
+        [Range(0, int.MaxValue, ErrorMessageResourceType = typeof(FormStrings), ErrorMessageResourceName = "ErrorNoValidPageSize") ]
+        public int? PageSize { get; set; }
+
         [LocalizedDisplayName(typeof(FormStrings), "MusicLayout")]
         public MusicLayoutTypeWithDescription MusicLayout { get; set; }
 
@@ -222,6 +227,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             EnableAlbumPlayer = model.EnableAlbumPlayer;
             SelectedGroup = model.DefaultGroup;
             MusicLayout = (MusicLayoutTypeWithDescription)model.MusicLayout;
+            PageSize = model.PageSize;
 
             if (ShowMASConfiguration)
             {
@@ -244,6 +250,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Configuration.WebMediaPortal.Skin = Skin;
             Configuration.WebMediaPortal.DefaultLanguage = Language;
             Configuration.WebMediaPortal.MusicLayout = (Config.MusicLayoutType)MusicLayout;
+            Configuration.WebMediaPortal.PageSize = PageSize;
 
             var profileTypes = new Dictionary<StreamingProfileType, Func<PlatformViewModel, string>>()
             {

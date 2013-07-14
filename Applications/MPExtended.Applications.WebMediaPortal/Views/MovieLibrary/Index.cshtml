@@ -5,24 +5,45 @@
 @Html.Assets().AddViewStylesheet("MovieLibrary/Movie.css")
 
 <h2>@UIStrings.YourMovies</h2>
-@foreach (var movie in Model)
-{
-    <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })">
-        <div class="movie">
-            <img alt="@movie.Movie.Title Cover" width="100" src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 100 })" />
-            <div class="movieDetails" style="float: right">
-                <div class="movieControls">
-                <a href="@Url.Action("Play", "MovieLibrary", new { movie = movie.Id })">
-                    <img height="16" width="12" src="@Url.ContentLink("Images/btnPlay.png")" />
-                </a>
-                </div>
-                <p style="margin: 2px;">@movie.Movie.Genres.FirstOrDefault()</p>
-                <p style="margin: 2px;">@movie.Movie.Runtime min.</p>
-            </div>
-            <p style="float: none"></p>
-            <p style="float: left;">
-                @movie.Movie.Title
-            </p>
-        </div>
-    </a>
+
+
+<div id="slider" style="clear:both;float:left"></div>
+
+@{ 
+    var count = 0;
+    var pages = 1;
 }
+
+<div class="paged-data-container">
+
+    @foreach (var movie in Model)
+    {
+        if ((count % MPExtended.Applications.WebMediaPortal.Code.Settings.ActiveSettings.PageSize) == 0)
+        {
+            if (count > 0) { pages++; }
+        }
+        count++;
+    
+        <div class="movieContainer @("page" + pages.ToString())" >
+            <div>
+            <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })" class="movieTitle">
+                <p>@( movie.Movie.Title.Length > 62 ? movie.Movie.Title.Substring(0, 61) + "..." : movie.Movie.Title)</p>
+            </a>
+            <a href="@Url.Action("Details", "MovieLibrary", new { movie = movie.Id })" class="movieImage">
+                <span style="width:100px;height:155px" class="async-image-display" data-alt="@movie.Movie.Title Cover" data-src="@Url.Action("Cover", "MovieLibrary", new { movie = movie.Id, width = 100 })"></span>
+            </a>
+            <a href="@Url.Action("Play", "MovieLibrary", new { movie = movie.Id })" class="movieControls">
+                <img height="16" width="12" src="@Url.ContentLink("Images/btnPlay.png")" />
+            </a>                
+            <p style="margin: 2px;">@movie.Movie.Genres.FirstOrDefault()</p>
+            <p style="margin: 2px;">@movie.Movie.Runtime min.</p>
+                </div>
+        </div>
+    
+    }
+
+</div>
+
+@Html.jQuery().EnableRangeSlider(pages, "#slider", UIStrings.SelectPage)
+@Html.jQuery().EnableImageLoading()
+
