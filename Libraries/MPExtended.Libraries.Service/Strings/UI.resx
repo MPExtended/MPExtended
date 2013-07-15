@@ -321,11 +321,11 @@
   <data name="CheckingForUpdates" xml:space="preserve">
     <value>checking for updates...</value>
   </data>
-  <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Sorry, the network credentials you entered are invalid. </value>
+  <data name="CredentialsValid" xml:space="preserve">
+    <value>Credentials validated</value>
   </data>
-  <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Successfully validated the network credentials.</value>
+  <data name="CredentialsInvalid" xml:space="preserve">
+    <value>Invalid credentials</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Delete account</value>

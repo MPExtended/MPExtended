@@ -39,12 +39,13 @@
                 <TextBlock Height="124" HorizontalAlignment="Left" Margin="6,6,0,0" Name="tbNetwork" VerticalAlignment="Top" Width="276" TextWrapping="Wrap" Text="{x:Static strings:UI.NetworkDrivesText}" />
 
                 <Label Content="{x:Static strings:UI.Username}" FontWeight="Bold" Name="lblUsername" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,130,0,0" Width="161" Height="28" />
-                <TextBox Name="txtNetworkUser"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,132,6,0" Width="115" Height="23" />
+                <TextBox Name="txtNetworkUser"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,132,6,0" Width="115" Height="23" TextChanged="txtNetwork_Changed" />
 
                 <Label Content="{x:Static strings:UI.Password}" FontWeight="Bold" Name="lblPassword" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,156,0,0" Width="155" Height="28" />
-                <PasswordBox Name="txtNetworkPassword" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,159,6,0" Width="115" Height="23" />
+                <PasswordBox Name="txtNetworkPassword" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,159,6,0" Width="115" Height="23" PasswordChanged="txtNetwork_Changed" />
                 
-                <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="134,187,0,0" Name="btnTestCredentials" VerticalAlignment="Top" Width="148" Click="btnTestCredentials_Click" />
+                <Button Content="{x:Static strings:UI.Test}" Height="23" HorizontalAlignment="Left" Margin="167,187,0,0" Name="btnTestCredentials" VerticalAlignment="Top" Width="115" Click="btnTestCredentials_Click" />
+                <Label Content="Credentials invalid!" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="0,186,0,0" Name="lblCredentialResults" VerticalAlignment="Top" Width="155" />
             </Grid>
         </GroupBox>
 
