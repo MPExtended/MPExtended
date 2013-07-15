@@ -41,7 +41,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
         {
             // we ignore our arguments :)
             Context.TranscodingInfo.Supported = false;
-            Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
+            Context.Pipeline.AddDataUnit(Context.GetInputReaderUnit(), 1);
             return;
         }
 

@@ -47,9 +47,9 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 .Replace("#STARTPOSITION#", Math.Round((decimal)Context.StartPosition / 1000).ToString());
 
             // add input reader
-            if (Context.Source.NeedsInputReaderUnit)
+            if (Context.NeedsInputReaderUnit)
             {
-                Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
+                Context.Pipeline.AddDataUnit(Context.GetInputReaderUnit(), 1);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
 
             // add unit
-            EncoderUnit.TransportMethod input = Context.Source.NeedsInputReaderUnit ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
+            EncoderUnit.TransportMethod input = Context.NeedsInputReaderUnit ? EncoderUnit.TransportMethod.NamedPipe : EncoderUnit.TransportMethod.Other;
             EncoderUnit unit = new EncoderUnit(program, arguments, input, EncoderUnit.TransportMethod.NamedPipe, EncoderUnit.LogStream.None, Context);
             unit.DebugOutput = false; // change this for debugging
             Context.Pipeline.AddDataUnit(unit, 5);
