@@ -172,8 +172,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            // Delegate to HLS streaming if needed
+            // Load and validate profile
             WebTranscoderProfile profile = GetStreamControl(type).GetTranscoderProfileByName(transcoder);
+            if (profile == null)
+            {
+                Log.Error("Requested stream for non-existing profile '{0}', other parameters type={1}; itemId={2}; starttime={3}; continuationId={4}", transcoder, type, itemId, starttime, continuationId);
+                return new HttpNotFoundResult();
+            }
+
+            // Delegate to HLS streaming if needed
             if (profile.HasVideoStream && StreamTarget.GetVideoTargets().First(x => profile.Targets.Contains(x.Name)).Player == VideoPlayer.HLS)
                 return GenerateHttpLiveStream(type, itemId, profile, starttime, continuationId);
 
