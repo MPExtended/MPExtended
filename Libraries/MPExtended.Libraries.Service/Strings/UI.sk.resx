@@ -265,7 +265,7 @@
     <value>Odhlásiť sa</value>
   </data>
   <data name="TrayMonitorOff" xml:space="preserve">
-    <value>Monitor off</value>
+    <value>Monitor vyp.</value>
   </data>
   <data name="TrayOpenConfigurator" xml:space="preserve">
     <value>Otvoriť MPExtended konfiguráciu</value>
@@ -465,10 +465,10 @@ Tiež nie je možné nastaviť použitie SSL/TLS certifikátu. Pri použiti HTTP
     <value>Kontrolujem vašu inštaláciu Bonjour...</value>
   </data>
   <data name="BonjourNotInstalled" xml:space="preserve">
-    <value>Bonjour nie je na vašom počítači inštalovaný.</value>
+    <value>Bonjour nie je na vašom počítači inštalovaný,</value>
   </data>
   <data name="BonjourNotInstalledDownload" xml:space="preserve">
-    <value>Prosím, stiahnite si Bonjour.</value>
+    <value>stiahnite si Bonjour, prosím.</value>
   </data>
   <data name="Enable" xml:space="preserve">
     <value>Povoliť</value>

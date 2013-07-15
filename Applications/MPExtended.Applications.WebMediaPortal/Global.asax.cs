@@ -65,6 +65,9 @@ namespace MPExtended.Applications.WebMediaPortal
 
             // automatically reload changes to the configuration files, mainly so that we instantly pick up new/deleted users. 
             Configuration.EnableChangeWatching();
+
+            // generate a random token, which we can use for security stuff
+            Context.Application["randomToken"] = Guid.NewGuid();
         }
 
         protected void Application_Error()

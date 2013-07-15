@@ -1,21 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService.Interfaces", "Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj", "{26CCB930-9F47-4956-B7E9-5B36AC285663}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService", "Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj", "{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
-		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
-		{D08E4B27-E77C-4258-B050-333D42AA7362} = {D08E4B27-E77C-4258-B050-333D42AA7362}
-		{456F3244-967E-4732-A2C4-0219B85521DC} = {456F3244-967E-4732-A2C4-0219B85521DC}
-		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
-		{BFEDFC9C-43C8-44EE-8482-42BCA28C03AE} = {BFEDFC9C-43C8-44EE-8482-42BCA28C03AE}
-		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
-		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
-		{486855C1-9B6A-4ECD-9337-2916AF999873} = {486855C1-9B6A-4ECD-9337-2916AF999873}
-	EndProjectSection
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{064D2043-948C-4009-BE37-167B600698DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MediaAccessService", "MediaAccessService", "{4A68B836-6611-4C76-AA66-F0DF5E5E036F}"
@@ -23,14 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StreamingService", "StreamingService", "{A21BF20B-9C8D-468C-B829-D27CB76B0EF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TVAccessService", "TVAccessService", "{5759CDAD-BD6E-4388-ACB5-F4A2CA4B8D17}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.StreamingService", "Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj", "{DA449FFD-88D4-42FE-A83A-166C7097D825}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.StreamingService.Interfaces", "Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj", "{3533C60C-F466-43A4-A7EE-633E7A7C3018}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.TVAccessService", "Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj", "{5F3A6BBC-96D8-483B-A246-1DD5118465A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.TVAccessService.Interfaces", "Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj", "{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceHosts", "ServiceHosts", "{33EA78E8-93C9-4801-A023-A5639993F342}"
 EndProject
@@ -48,11 +25,54 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.txt = LICENSE.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlugIns", "PlugIns", "{714FAF3E-26F8-4495-8BA5-D40333C4FC56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserSessionService", "UserSessionService", "{91B3A941-4E1F-4F9A-8005-1BA11303E829}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D67F-77EE-408D-A6B1-FBCADBFA8732}"
+	ProjectSection(SolutionItems) = preProject
+		Config\Authentication.xml = Config\Authentication.xml
+		Config\MediaAccess.xml = Config\MediaAccess.xml
+		Config\Services.xml = Config\Services.xml
+		Config\Streaming.xml = Config\Streaming.xml
+		Config\StreamingPlatforms.xml = Config\StreamingPlatforms.xml
+		Config\StreamingProfiles.xml = Config\StreamingProfiles.xml
+		Config\WebMediaPortal.xml = Config\WebMediaPortal.xml
+		Config\WebMediaPortalHosting.xml = Config\WebMediaPortalHosting.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetaService", "MetaService", "{AA75682E-6266-4043-9337-E8C05E5AAB98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAS", "MAS", "{9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FED78D01-894B-4CA1-915E-24EBE6F9FCB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService.Interfaces", "Services\MPExtended.Services.MediaAccessService.Interfaces\MPExtended.Services.MediaAccessService.Interfaces.csproj", "{26CCB930-9F47-4956-B7E9-5B36AC285663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MediaAccessService", "Services\MPExtended.Services.MediaAccessService\MPExtended.Services.MediaAccessService.csproj", "{B7E31CD0-1494-4E60-8AC1-2B4656B44E8C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {B2D5800A-85CE-45CD-AFAA-492B52AD67BB}
+		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {243E120B-20C2-4D9C-9874-196C8B120E9D}
+		{D08E4B27-E77C-4258-B050-333D42AA7362} = {D08E4B27-E77C-4258-B050-333D42AA7362}
+		{456F3244-967E-4732-A2C4-0219B85521DC} = {456F3244-967E-4732-A2C4-0219B85521DC}
+		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {7304D17F-85F1-4C5A-8D55-B3599B4B2759}
+		{BFEDFC9C-43C8-44EE-8482-42BCA28C03AE} = {BFEDFC9C-43C8-44EE-8482-42BCA28C03AE}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {EFE0F9B5-D937-44F5-9293-9C6A82C15747}
+		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {77C38FB8-C17E-444E-A3AE-1F8B713875CC}
+		{486855C1-9B6A-4ECD-9337-2916AF999873} = {486855C1-9B6A-4ECD-9337-2916AF999873}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.StreamingService", "Services\MPExtended.Services.StreamingService\MPExtended.Services.StreamingService.csproj", "{DA449FFD-88D4-42FE-A83A-166C7097D825}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.StreamingService.Interfaces", "Services\MPExtended.Services.StreamingService.Interfaces\MPExtended.Services.StreamingService.Interfaces.csproj", "{3533C60C-F466-43A4-A7EE-633E7A7C3018}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.TVAccessService", "Services\MPExtended.Services.TVAccessService\MPExtended.Services.TVAccessService.csproj", "{5F3A6BBC-96D8-483B-A246-1DD5118465A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.TVAccessService.Interfaces", "Services\MPExtended.Services.TVAccessService.Interfaces\MPExtended.Services.TVAccessService.Interfaces.csproj", "{9FB7E014-F37F-4EFF-BD72-95B1DFD7CB67}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.WebMediaPortal", "Applications\MPExtended.Applications.WebMediaPortal\MPExtended.Applications.WebMediaPortal.csproj", "{93F758FE-66B6-4C5D-B15D-7B31BC4964A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Service", "Libraries\MPExtended.Libraries.Service\MPExtended.Libraries.Service.csproj", "{CEA12075-6DD2-442D-96F8-88A77EDCC16D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlugIns", "PlugIns", "{714FAF3E-26F8-4495-8BA5-D40333C4FC56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.PlugIns.MAS.MPMovingPictures", "PlugIns\MPExtended.PlugIns.MAS.MPMovingPictures\MPExtended.PlugIns.MAS.MPMovingPictures.csproj", "{EFE0F9B5-D937-44F5-9293-9C6A82C15747}"
 EndProject
@@ -73,8 +93,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.ServiceConfigurator", "Applications\MPExtended.Applications.ServiceConfigurator\MPExtended.Applications.ServiceConfigurator.csproj", "{EDD71CEF-C318-4229-9427-DD822C6EDEB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.StreamingService", "Applications\MPExtended.Applications.Development.StreamingService\MPExtended.Applications.Development.StreamingService.csproj", "{1E43D575-56AE-4F75-8FA0-D0EDC8501933}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserSessionService", "UserSessionService", "{91B3A941-4E1F-4F9A-8005-1BA11303E829}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.UserSessionService", "Services\MPExtended.Services.UserSessionService\MPExtended.Services.UserSessionService.csproj", "{26B34D42-CA8B-44BF-A282-E516E2C22588}"
 EndProject
@@ -105,18 +123,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.ServiceHosts.Con
 		{DA449FFD-88D4-42FE-A83A-166C7097D825} = {DA449FFD-88D4-42FE-A83A-166C7097D825}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D67F-77EE-408D-A6B1-FBCADBFA8732}"
-	ProjectSection(SolutionItems) = preProject
-		Config\Authentication.xml = Config\Authentication.xml
-		Config\MediaAccess.xml = Config\MediaAccess.xml
-		Config\Services.xml = Config\Services.xml
-		Config\Streaming.xml = Config\Streaming.xml
-		Config\StreamingPlatforms.xml = Config\StreamingPlatforms.xml
-		Config\StreamingProfiles.xml = Config\StreamingProfiles.xml
-		Config\WebMediaPortal.xml = Config\WebMediaPortal.xml
-		Config\WebMediaPortalHosting.xml = Config\WebMediaPortalHosting.xml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Development.USSTest", "Applications\MPExtended.Applications.Development.USSTest\MPExtended.Applications.Development.USSTest.csproj", "{B4064E77-5558-4932-BBD2-88B02E8F1F6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Installers.CustomActions", "Installers\MPExtended.Installers.CustomActions\MPExtended.Installers.CustomActions.csproj", "{1CEFD1EA-2EFF-4B98-8022-C59003E4234A}"
@@ -137,13 +143,9 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MPExtended.Installers.WebMe
 		{1D0293A1-5E32-4FAC-8A12-F99579A75134} = {1D0293A1-5E32-4FAC-8A12-F99579A75134}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MetaService", "MetaService", "{AA75682E-6266-4043-9337-E8C05E5AAB98}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MetaService.Interfaces", "Services\MPExtended.Services.MetaService.Interfaces\MPExtended.Services.MetaService.Interfaces.csproj", "{14102199-B29C-4DA0-AD52-361BAE8C9BB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Services.MetaService", "Services\MPExtended.Services.MetaService\MPExtended.Services.MetaService.csproj", "{11B46BC9-331A-45CC-9F1D-2EC580197B36}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAS", "MAS", "{9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Client", "Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj", "{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63}"
 EndProject
@@ -161,8 +163,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Applications.Pow
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Service.Config", "Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj", "{1641D28D-E923-425F-8332-10CC9C98C653}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FED78D01-894B-4CA1-915E-24EBE6F9FCB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Tests.Libraries.Service", "Tests\MPExtended.Tests.Libraries.Service\MPExtended.Tests.Libraries.Service.csproj", "{5482E3E3-FBCC-4B12-9B1C-30795FFEE43D}"
 EndProject
@@ -366,19 +366,19 @@ Global
 		{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{1641D28D-E923-425F-8332-10CC9C98C653} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{9885CC92-C6D3-487E-BE29-24FFE4DC5D5C} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
+		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
+		{CC3525EA-0721-4299-991B-1C7E01A15E6B} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
+		{14102199-B29C-4DA0-AD52-361BAE8C9BB8} = {AA75682E-6266-4043-9337-E8C05E5AAB98}
+		{11B46BC9-331A-45CC-9F1D-2EC580197B36} = {AA75682E-6266-4043-9337-E8C05E5AAB98}
+		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{243E120B-20C2-4D9C-9874-196C8B120E9D} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{7304D17F-85F1-4C5A-8D55-B3599B4B2759} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{77C38FB8-C17E-444E-A3AE-1F8B713875CC} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{456F3244-967E-4732-A2C4-0219B85521DC} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{B2D5800A-85CE-45CD-AFAA-492B52AD67BB} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{D08E4B27-E77C-4258-B050-333D42AA7362} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
-		{EFE0F9B5-D937-44F5-9293-9C6A82C15747} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{BFEDFC9C-43C8-44EE-8482-42BCA28C03AE} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
 		{486855C1-9B6A-4ECD-9337-2916AF999873} = {9885CC92-C6D3-487E-BE29-24FFE4DC5D5C}
-		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
-		{CC3525EA-0721-4299-991B-1C7E01A15E6B} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
-		{14102199-B29C-4DA0-AD52-361BAE8C9BB8} = {AA75682E-6266-4043-9337-E8C05E5AAB98}
-		{11B46BC9-331A-45CC-9F1D-2EC580197B36} = {AA75682E-6266-4043-9337-E8C05E5AAB98}
 		{5482E3E3-FBCC-4B12-9B1C-30795FFEE43D} = {FED78D01-894B-4CA1-915E-24EBE6F9FCB0}
 	EndGlobalSection
 EndGlobal

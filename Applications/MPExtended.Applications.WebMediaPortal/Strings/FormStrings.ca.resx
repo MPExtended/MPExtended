@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ClientService" xml:space="preserve">
+    <value>Servei de client</value>
+  </data>
+  <data name="DefaultMediaStreamingProfile" xml:space="preserve">
+    <value>Perfil de flux de media per defecte</value>
+  </data>
+  <data name="DefaultMusicStreamingProfile" xml:space="preserve">
+    <value>Perfil de flux de música per defecte</value>
+  </data>
+  <data name="DefaultSkinName" xml:space="preserve">
+    <value>Per defecte</value>
+    <comment>Name of the default skin</comment>
+  </data>
+  <data name="DefaultTVGroup" xml:space="preserve">
+    <value>Grup de TV per defecte</value>
+  </data>
+  <data name="DefaultTVStreamingProfile" xml:space="preserve">
+    <value>Perfil de flux de TV per defecte</value>
+  </data>
+  <data name="DirectStreamingProfileDescription" xml:space="preserve">
+    <value>Directe: millor rendiment, només funciona en xarxa local</value>
+  </data>
+  <data name="DirectWhenPossibleDescription" xml:space="preserve">
+    <value>Directe quan es pugui, i si no a través del proxy </value>
+  </data>
+  <data name="EnableAlbumPlayer" xml:space="preserve">
+    <value>Voleu habilitar el reproductor d'àlbums per la música?</value>
+  </data>
+  <data name="ErrorNoValidClientService" xml:space="preserve">
+    <value>Especifiqueu una URL MAS vàlida</value>
+  </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Seleccioneu un idioma vàlid</value>
+  </data>
+  <data name="ErrorNoValidMediaProfile" xml:space="preserve">
+    <value>Seleccioneu un flux de media vàlid</value>
+  </data>
+  <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
+    <value>Seleccioneu una base de dades de pel·lícules vàlida</value>
+  </data>
+  <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
+    <value>Seleccioneu una base de dades de música vàlida</value>
+  </data>
+  <data name="ErrorNoValidMusicProfile" xml:space="preserve">
+    <value>Seleccioneu una base de dades de flux de música vàlida</value>
+  </data>
+  <data name="ErrorNoValidServerService" xml:space="preserve">
+    <value>Especifiqueu una URL TAS vàlida</value>
+  </data>
+  <data name="ErrorNoValidSkin" xml:space="preserve">
+    <value>Seleccioneu una aparença vàlida</value>
+  </data>
+  <data name="ErrorNoValidTVGroup" xml:space="preserve">
+    <value>Seleccioneu un grup de TV vàlid</value>
+  </data>
+  <data name="ErrorNoValidTVProfile" xml:space="preserve">
+    <value>Seleccioneu un flux de TV vàlid</value>
+  </data>
+  <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
+    <value>Seleccioneu una base de dades de TV vàlida</value>
+  </data>
+  <data name="FailedToConnectToClient" xml:space="preserve">
+    <value>No s'ha pogut connectar al servei de client demanat</value>
+  </data>
+  <data name="FailedToConnectToServer" xml:space="preserve">
+    <value>No s'ha pogut connectar al servei de servidor demanat</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Cal el camp {0}</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LogOnPassword" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="LogOnRememberMe" xml:space="preserve">
+    <value>Em recordeu?</value>
+  </data>
+  <data name="LogOnUsername" xml:space="preserve">
+    <value>Nom d'usuari</value>
+  </data>
+  <data name="MovieDatabase" xml:space="preserve">
+    <value>Base de dades de pel·lícules</value>
+  </data>
+  <data name="MusicDatabase" xml:space="preserve">
+    <value>Base de dades de música</value>
+  </data>
+  <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
+    <value>A través del proxy: s'aturen els timeshiftings a l'instant, funciona sobre internet</value>
+  </data>
+  <data name="ScheduleChannel" xml:space="preserve">
+    <value>Canal</value>
+  </data>
+  <data name="ScheduleEndTime" xml:space="preserve">
+    <value>Hora de final</value>
+  </data>
+  <data name="ScheduleSelectValidChannel" xml:space="preserve">
+    <value>Seleccioneu un canal vàlid</value>
+  </data>
+  <data name="ScheduleSelectValidType" xml:space="preserve">
+    <value>Seleccioneu un tipus de planificació vàlida</value>
+  </data>
+  <data name="ScheduleStartTime" xml:space="preserve">
+    <value>Hora d'inici</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Títol</value>
+  </data>
+  <data name="ScheduleType" xml:space="preserve">
+    <value>Tipus de planificació</value>
+  </data>
+  <data name="ScheduleTypeDaily" xml:space="preserve">
+    <value>Diàriament</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
+    <value>Cada cop a tots els canals</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
+    <value>Cada cop en aquest canal</value>
+  </data>
+  <data name="ScheduleTypeOnce" xml:space="preserve">
+    <value>Un cop</value>
+  </data>
+  <data name="ScheduleTypeWeekends" xml:space="preserve">
+    <value>Caps de setmana</value>
+  </data>
+  <data name="ScheduleTypeWeekly" xml:space="preserve">
+    <value>Setmanalment</value>
+  </data>
+  <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
+    <value>Setmanalment en aquest canal</value>
+  </data>
+  <data name="ScheduleTypeWorkingDays" xml:space="preserve">
+    <value>Laborables</value>
+  </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>{0} (àlbum) de {1}</value>
+  </data>
+  <data name="SearchResultChannelGroup" xml:space="preserve">
+    <value>{0} (grup de canals)</value>
+  </data>
+  <data name="SearchResultProgram" xml:space="preserve">
+    <value>{0} ({1} a {2})</value>
+  </data>
+  <data name="SearchResultRecording" xml:space="preserve">
+    <value>{0} (enregistrat a {1})</value>
+  </data>
+  <data name="SearchResultSchedule" xml:space="preserve">
+    <value>{0} (planificació)</value>
+  </data>
+  <data name="SearchResultTrack" xml:space="preserve">
+    <value>{0} de {1}</value>
+  </data>
+  <data name="ServerService" xml:space="preserve">
+    <value>Servei de servidor</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Aparença</value>
+  </data>
+  <data name="StateIdle" xml:space="preserve">
+    <value>Inactiu</value>
+  </data>
+  <data name="StateRecording" xml:space="preserve">
+    <value>Enregistrament</value>
+  </data>
+  <data name="StateScanning" xml:space="preserve">
+    <value>Escaneig</value>
+  </data>
+  <data name="StateTimeshifting" xml:space="preserve">
+    <value>Timeshifting</value>
+  </data>
+  <data name="StreamType" xml:space="preserve">
+    <value>Tipus de flux</value>
+  </data>
+  <data name="TVShowDatabase" xml:space="preserve">
+    <value>Base de dades de programes</value>
+  </data>
+  <data name="UsernamePasswordIncorrect" xml:space="preserve">
+    <value>El nom d'usuari o la contrasenya són incorrectes.</value>
+  </data>
+  <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
+    <value>Reproductor VLC: voleu habilitar per defecte el desentrellaçat?</value>
+  </data>
+</root>

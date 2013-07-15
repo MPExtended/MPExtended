@@ -321,11 +321,11 @@
   <data name="CheckingForUpdates" xml:space="preserve">
     <value>checking for updates...</value>
   </data>
-  <data name="CredentialValidationFailed" xml:space="preserve">
-    <value>Sorry, the network credentials you entered are invalid. </value>
+  <data name="CredentialsValid" xml:space="preserve">
+    <value>Credentials validated</value>
   </data>
-  <data name="CredentialValidationSuccessful" xml:space="preserve">
-    <value>Successfully validated the network credentials.</value>
+  <data name="CredentialsInvalid" xml:space="preserve">
+    <value>Invalid credentials</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Delete account</value>
@@ -517,5 +517,14 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   </data>
   <data name="ServiceStatus" xml:space="preserve">
     <value>Service status</value>
+  </data>
+  <data name="WebMediaPortalResetSkinButton" xml:space="preserve">
+    <value>Revert to default skin</value>
+  </data>
+  <data name="WebMediaPortalResetSkinSuccess" xml:space="preserve">
+    <value>The WebMediaPortal skin has been reset to the default skin!</value>
+  </data>
+  <data name="WebMediaPortalResetSkinText" xml:space="preserve">
+    <value>If you've installed and configured a broken skin in WebMediaPortal which has rendered the application useless, you can reset it to the default skin here.</value>
   </data>
 </root>

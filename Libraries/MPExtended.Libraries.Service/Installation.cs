@@ -32,7 +32,8 @@ namespace MPExtended.Libraries.Service
     public enum MPExtendedProduct
     {
         Service,
-        WebMediaPortal
+        WebMediaPortal,
+        Configurator
     }
 
     public enum FileLayoutType

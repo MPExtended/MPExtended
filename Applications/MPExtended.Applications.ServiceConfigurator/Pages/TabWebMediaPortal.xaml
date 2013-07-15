@@ -36,5 +36,13 @@
                 </Label>
             </Grid>
         </GroupBox>
+        
+        <GroupBox Header="Skin" Height="100" HorizontalAlignment="Stretch" Margin="6,377,6,0" Name="gbSkin" VerticalAlignment="Top" Width="Auto">
+            <Grid Height="74" Margin="0,0,0,0">
+                <TextBlock Height="40" Margin="11,6,11,0" Name="tbResetSkin" TextWrapping="Wrap" Text="{x:Static strings:UI.WebMediaPortalResetSkinText}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                
+                <Button Content="{x:Static strings:UI.WebMediaPortalResetSkinButton}" Height="23" HorizontalAlignment="Right" Margin="0,40,12,0" Name="btnResetSkin" VerticalAlignment="Top" Width="150" Click="btnResetSkin_Click"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>

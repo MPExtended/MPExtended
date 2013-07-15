@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnvironmentSetup.cs" />
     <Compile Include="HostService.cs">
       <SubType>Component</SubType>
     </Compile>

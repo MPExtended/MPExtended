@@ -116,10 +116,8 @@ namespace MPExtended.Services.MetaService
             foreach (var address in service.Addresses)
             {
                 IPEndPoint endpoint = (IPEndPoint)address;
-                if (NetworkInformation.IsLocalAddress(endpoint.Address) || !NetworkInformation.IsValid(endpoint.Address, Configuration.Services.EnableIPv6))
-                {
+                if (NetworkInformation.IsLocalAddress(endpoint.Address) || !NetworkInformation.IsValid(endpoint.Address))
                     continue;
-                }
 
                 if (serviceTypes.ContainsValue(service.Type))
                 {

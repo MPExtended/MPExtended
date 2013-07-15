@@ -122,15 +122,14 @@ namespace MPExtended.Libraries.Service.Config
             string keyname = String.Format("{0}InstallLocation", Enum.GetName(typeof(MPExtendedProduct), product));
             object regLocation = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"Software\MPExtended", keyname);
             if (regLocation != null)
-            {
                 return regLocation.ToString();
-            }
 
             // try default installation location
             string location = null;
             switch (product)
             {
                 case MPExtendedProduct.Service:
+                case MPExtendedProduct.Configurator:
                     location = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "MPExtended", "Service");
                     break;
                 case MPExtendedProduct.WebMediaPortal:
@@ -138,14 +137,13 @@ namespace MPExtended.Libraries.Service.Config
                     break;
             }
             if (Directory.Exists(location))
-            {
                 return location;
-            }
 
             // Fallback to dynamic detection based upon the current execution location
             switch(product)
             {
                 case MPExtendedProduct.Service:
+                case MPExtendedProduct.Configurator:
                     return Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 case MPExtendedProduct.WebMediaPortal:
                     DirectoryInfo currentDir = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));

@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionNeedsAdmin" xml:space="preserve">
+    <value>Calen drets d'administrador per aquesta acció .</value>
+  </data>
+  <data name="ActiveStreams" xml:space="preserve">
+    <value>Fluxos en actiu</value>
+  </data>
+  <data name="ConfigureWebMPPort" xml:space="preserve">
+    <value>Aquí hi podeu configurar el port on s'executa el MediaPortal. Si canvieu el valor per defecte, 8080, haureu de configurar manualment el tallafocs.</value>
+  </data>
+  <data name="DefaultAudioLanguage" xml:space="preserve">
+    <value>Idioma d'audio per defecte:</value>
+  </data>
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Idioma per defecte</value>
+  </data>
+  <data name="DefaultLanguageExplanation" xml:space="preserve">
+    <value>Alguns clients no permeten d'inici la configuració de l'idioma d'audio i dels subtítols. Aquí les hi podreu configurar.</value>
+  </data>
+  <data name="DefaultSubtitleLanguage" xml:space="preserve">
+    <value>Idioma de subtítol per defecte:</value>
+  </data>
+  <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
+    <value>S'estan descartant els canvis realitzats a la pestanya social.</value>
+  </data>
+  <data name="ExportedLogsAndConfig" xml:space="preserve">
+    <value>Registres i dades de configuració exportats a {0}</value>
+  </data>
+  <data name="ExportLogsAndConfiguration" xml:space="preserve">
+    <value>Exporta registres i dades de configuració</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>L'entrada ha fallat.</value>
+  </data>
+  <data name="LoginSuccessful" xml:space="preserve">
+    <value>S'ha entrat correctament!</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="ServiceNotInstalled" xml:space="preserve">
+    <value>No s'ha instal·lat</value>
+  </data>
+  <data name="ServiceNotInstalledPopup" xml:space="preserve">
+    <value>L'MPExtended Service no s'ha instal·lat. Assegureu-vos que la instal·lació és correcta.</value>
+  </data>
+  <data name="ServiceStarted" xml:space="preserve">
+    <value>S'ha iniciat el servei</value>
+  </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>S'està iniciant el servei</value>
+  </data>
+  <data name="ServiceStopped" xml:space="preserve">
+    <value>S'ha aturat el servei</value>
+  </data>
+  <data name="ServiceUnknown" xml:space="preserve">
+    <value>Es desconeix l'estat del servei</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Inicia</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Atura</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Fluxos</value>
+  </data>
+  <data name="StreamingClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="StreamingFile" xml:space="preserve">
+    <value>Fitxer</value>
+  </data>
+  <data name="StreamingIPAddress" xml:space="preserve">
+    <value>Adreça IP</value>
+  </data>
+  <data name="StreamingKickSession" xml:space="preserve">
+    <value>Acaba amb la sessió</value>
+  </data>
+  <data name="StreamingProfile" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="StreamingProgress" xml:space="preserve">
+    <value>Curs</value>
+  </data>
+  <data name="SubtitlesDisabled" xml:space="preserve">
+    <value>Desactiva els subtítols</value>
+  </data>
+  <data name="SubtitlesExternal" xml:space="preserve">
+    <value>Utilitza un fitxer extern .srt</value>
+  </data>
+  <data name="SubtitlesFirstStream" xml:space="preserve">
+    <value>Primer flux del fitxer</value>
+  </data>
+  <data name="TabAuthentication" xml:space="preserve">
+    <value>Autenticació</value>
+  </data>
+  <data name="TabConfiguration" xml:space="preserve">
+    <value>Configuració</value>
+  </data>
+  <data name="TabLogs" xml:space="preserve">
+    <value>Registres</value>
+  </data>
+  <data name="TabPlugins" xml:space="preserve">
+    <value>Connectors</value>
+  </data>
+  <data name="TabProject" xml:space="preserve">
+    <value>Projecte</value>
+  </data>
+  <data name="TabQRCode" xml:space="preserve">
+    <value>Codi QR</value>
+  </data>
+  <data name="TabSocial" xml:space="preserve">
+    <value>Social</value>
+  </data>
+  <data name="TabStreaming" xml:space="preserve">
+    <value>Fluxos</value>
+  </data>
+  <data name="TabTroubleshooting" xml:space="preserve">
+    <value>Resolució de problemes</value>
+  </data>
+  <data name="TabWebMediaPortal" xml:space="preserve">
+    <value>WebMediaPortal</value>
+  </data>
+  <data name="TestingCredentials" xml:space="preserve">
+    <value>Espereu mentre es comproven les credencials...</value>
+  </data>
+  <data name="TestLinksFor" xml:space="preserve">
+    <value>Comprova els enllaços de</value>
+  </data>
+  <data name="TrayCloseMediaPortal" xml:space="preserve">
+    <value>Tanca el MediaPortal</value>
+  </data>
+  <data name="TrayExit" xml:space="preserve">
+    <value>Surt</value>
+  </data>
+  <data name="TrayHibernate" xml:space="preserve">
+    <value>Hiberna</value>
+  </data>
+  <data name="TrayLock" xml:space="preserve">
+    <value>Bloca</value>
+  </data>
+  <data name="TrayLogOff" xml:space="preserve">
+    <value>Surt</value>
+  </data>
+  <data name="TrayMonitorOff" xml:space="preserve">
+    <value>Apaga el monitor</value>
+  </data>
+  <data name="TrayOpenConfigurator" xml:space="preserve">
+    <value>Obre el Configurador del MPExtended</value>
+  </data>
+  <data name="TrayOpenWebMP" xml:space="preserve">
+    <value>Obre el WebMediaPortal</value>
+  </data>
+  <data name="TrayPowermodes" xml:space="preserve">
+    <value>Modes d'energia</value>
+  </data>
+  <data name="TrayReboot" xml:space="preserve">
+    <value>Engega de nou</value>
+  </data>
+  <data name="TrayScreensaver" xml:space="preserve">
+    <value>Estalvi de pantalla</value>
+  </data>
+  <data name="TrayShutdown" xml:space="preserve">
+    <value>Atura</value>
+  </data>
+  <data name="TrayStartMediaPortal" xml:space="preserve">
+    <value>Inicia el MediaPortal</value>
+  </data>
+  <data name="TraySuspend" xml:space="preserve">
+    <value>Suspèn</value>
+  </data>
+  <data name="TroubleshootingHeaderText" xml:space="preserve">
+    <value>Utilitzeu els següents enllaços per a verificar la validesa dels continugts que heu sol·licitat... Comproveu el servei a la mateixa màquina utilitzant el localhost. Comproveu altres ordinadors de la xarxa seleccionant una IP del desplegable (p. ex. descartar problemes del tallafocs)</value>
+  </data>
+  <data name="TVServer" xml:space="preserve">
+    <value>TVServer</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>S'ha produït un error imprevist. Si us plau, envieu un informe d'error incloent-hi els fitxers del registre.</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>Configurador de l'MPExtended</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Afegeix un compte</value>
+  </data>
+  <data name="AuthenticationIntroText" xml:space="preserve">
+    <value>Aquí podeu configurar l'autenticació per l'MPExtended. Us recomenem d'habilitar l'autenticació i canviar  la contrasenya (o suprimir-la) del compte per defecte, «admin». No deixeu que cap insta·lació sigui accessible des d'internet sense utilitzar l'autenticació i contrasenyes segures.</value>
+  </data>
+  <data name="Autodetection" xml:space="preserve">
+    <value>Detecció automàtica</value>
+  </data>
+  <data name="AutodetectionText" xml:space="preserve">
+    <value>Els serveis admeten la detecció automàtica mitjançant Bonjour/Zeroconf, que permeten trobar i configurar els serveis als clients a la xarxa local.</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>comprova les actualitzacions</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>s'estan comprovant les actualitzacions</value>
+  </data>
+  <data name="CredentialValidationFailed" xml:space="preserve">
+    <value>Les credencials que heu introduït no són vàlides.</value>
+  </data>
+  <data name="CredentialValidationSuccessful" xml:space="preserve">
+    <value>S'han validat correctament les credencials de xarxa.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Suprimeix el compte</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentació:</value>
+  </data>
+  <data name="EnableAuthentication" xml:space="preserve">
+    <value>Habilita l'autenticació (us ho recomanem!)</value>
+  </data>
+  <data name="EnableAutodetection" xml:space="preserve">
+    <value>Habilita la detecció automàtica</value>
+  </data>
+  <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
+    <value>La recuperació d'informació d'actualitzacions ha fallat</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Fòrum:</value>
+  </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>Pàgina d'inici:</value>
+  </data>
+  <data name="IncludeAuthentication" xml:space="preserve">
+    <value>Inclou l'autenticació per l'usuari:</value>
+  </data>
+  <data name="IRCText" xml:space="preserve">
+    <value>IRC:
+   irc.freenode.net / channel #mp-extended</value>
+  </data>
+  <data name="MPExtendedIntroduction" xml:space="preserve">
+    <value>L'MPExtended és un projecte de codi obert per a accedir al MediaPortal des de qualsevol lloc del món, en utilitzar clients des dels navegadors, Android, iOS i d'altres.
+
+Aquest és el component de servei, que facilita l'accés a les bases de dades i fitxers de media per a tots els clients.</value>
+  </data>
+  <data name="NetworkDrives" xml:space="preserve">
+    <value>Unitats de xarxa</value>
+  </data>
+  <data name="NetworkDrivesText" xml:space="preserve">
+    <value>A l'MPExtended li calen credencials a l'unitat, per a accedir als fitxers de media en altres sistemes (com en servidors dedicats o una NAS). Aquestes credencials acostumen a ser les del compte del Windows.</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>no hi han actualitzacions disponibles</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="PortText" xml:space="preserve">
+    <value>Configureu aquí el port que utilitzen els serveis.</value>
+  </data>
+  <data name="QRCodeIntroText" xml:space="preserve">
+    <value>Per a realitzar la instal·lació automàtica de l'MPExtended en clients compatibles, escanegeu el codi QR.</value>
+  </data>
+  <data name="SaveBarcodeAsImageFile" xml:space="preserve">
+    <value>Desa el codi de barres en un fitxer d'imatge</value>
+  </data>
+  <data name="SavedBarcodeTo" xml:space="preserve">
+    <value>Desa el codi de barres a {0}!</value>
+  </data>
+  <data name="SaveToFile" xml:space="preserve">
+    <value>Desa en un fitxer</value>
+  </data>
+  <data name="ServiceName" xml:space="preserve">
+    <value>Nom del servei</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Serveis</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Comprova</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>actualització disponible: versió {0}, llençada el {1}</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Nom d'usuari</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versió:</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exporta</value>
+  </data>
+  <data name="LogFile" xml:space="preserve">
+    <value>Fitxer de registre:</value>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>Fitxers de registre</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="Plugin" xml:space="preserve">
+    <value>Connector</value>
+  </data>
+  <data name="ScrollToEnd" xml:space="preserve">
+    <value>Desplaça al final</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Lloc web</value>
+  </data>
+  <data name="SocialIntroText" xml:space="preserve">
+    <value>L'MPExtended pot sincronitzar les pel·lícules que veieu als clients de Trakt i follw.it. Configureu aquí els comptes per aquests llocs web.</value>
+  </data>
+  <data name="LogAndConfigurationArchive" xml:space="preserve">
+    <value>Arxiu de registre i configuració (.zip)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Explora</value>
+  </data>
+  <data name="DonateToMPExtended" xml:space="preserve">
+    <value>Doneu per l'MPExtended</value>
+  </data>
+  <data name="CleanCaches" xml:space="preserve">
+    <value>Buida la memòria cau</value>
+  </data>
+  <data name="EnableHTTPS" xml:space="preserve">
+    <value>Habilita l'HTTPS</value>
+  </data>
+  <data name="HTTPSDisclaimer" xml:space="preserve">
+    <value>Només es poden utilitzar els ports entre 44300 i 44399 per l'HTTPS, per limitacions del Windows i de l'IIS Express. Haureu de configurar maualment el tallafocs per a permetre aquestes connexions.
+
+Tingueu present que no es pot configurar el certificat SSL/TLS utilitzat. Rebreu alertes del navegador referides a conexions potencialment insegures, quan s'utilitzi l'HTTPS.</value>
+  </data>
+  <data name="HTTPSInvalidPort" xml:space="preserve">
+    <value>El port per l'HTTPS que heu introduït no és vàlid. Utilitzeu ports del 44300 al 44399.</value>
+  </data>
+  <data name="HTTPSPort" xml:space="preserve">
+    <value>Port per l'HTTPS:</value>
+  </data>
+  <data name="TabActivity" xml:space="preserve">
+    <value>Activitat</value>
+  </data>
+  <data name="UserMustHaveNameAndPassword" xml:space="preserve">
+    <value>Per aquest usuari, Introduïu tant el nom com la contrasenya.</value>
+  </data>
+  <data name="BonjourChecking" xml:space="preserve">
+    <value>S'està comprovant la instal·lació del Bonjour...</value>
+  </data>
+  <data name="BonjourNotInstalled" xml:space="preserve">
+    <value>El Bonjour no hi és instal·lat. Per a utilitzar aquesta funció,</value>
+  </data>
+  <data name="BonjourNotInstalledDownload" xml:space="preserve">
+    <value>baixeu-vos el Bonjour.</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Habilita</value>
+  </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Voleu permetre que l'aplicació '{0}' (d'adreça IP {1}) tingui accés complet als serveis de l'MPExtended?</value>
+  </data>
+  <data name="AccessRequestDenyAccess" xml:space="preserve">
+    <value>Denega</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Permet l'accés</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Seleccioneu l'usuari:</value>
+  </data>
+  <data name="AccessRequestWifiRemote" xml:space="preserve">
+    <value>Voleu permetre l'accés a '{0}'? (Si és així, assigneu-li un usuari en el proper pas)</value>
+  </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Habilita les sol·licituds d'accés dels clinets</value>
+  </data>
+  <data name="ExternalIpCustom" xml:space="preserve">
+    <value>Personalització</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Detecta la IP externa automàticament</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>Adreça externa</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>D'acord</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+</root>

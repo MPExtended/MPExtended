@@ -437,7 +437,7 @@
     <value>Virran toistaminen epäonnistui. Ole hyvä ja tarkista palvelun loki tiedot.</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>Noin</value>
+    <value>Tietoja</value>
   </data>
   <data name="CurrentCPUUsage" xml:space="preserve">
     <value>Prosessorin käyttö:</value>

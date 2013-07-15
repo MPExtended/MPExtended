@@ -128,8 +128,8 @@ namespace MPExtended.Services.StreamingService.Code
                         }
                         else
                         {
-                            StreamLog.Info(key, "Stream had last read {0} milliseconds ago and last service activity at {1}, so cancel it", 
-                                Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                            StreamLog.Info(key, "Stream had last read {0} milliseconds ago (read {1} bytes in total) and last service activity at {2}, so cancel it", 
+                                Streams[key].OutputStream.TimeSinceLastRead, Streams[key].OutputStream.ReadBytes, Streams[key].LastActivity);
                         }
                         service.FinishStream(key);
                     }
@@ -375,7 +375,8 @@ namespace MPExtended.Services.StreamingService.Code
 
                 StartPosition = s.Context.StartPosition,
                 PlayerPosition = s.Context.GetPlayerPosition(),
-                PercentageProgress = (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
+                PercentageProgress = s.Context.MediaInfo == null ? 0 :
+                                        (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
                 TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
             }).ToList();
         }

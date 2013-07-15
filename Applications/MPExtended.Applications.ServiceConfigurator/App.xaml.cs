@@ -54,7 +54,7 @@ namespace MPExtended.Applications.ServiceConfigurator
             };
 
             // load the installation
-            Installation.Load(MPExtendedProduct.Service);
+            Installation.Load(MPExtendedProduct.Configurator);
 
             // make sure to start only once
             if (!mutex.WaitOne(TimeSpan.Zero, true))
