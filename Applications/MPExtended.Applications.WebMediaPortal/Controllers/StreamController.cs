@@ -190,7 +190,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (NetworkInformation.IsLocalAddress(fullUri.Host))
-                fullUri.Host = NetworkInformation.GetIPAddress();
+                fullUri.Host = NetworkInformation.GetIPAddressForUri();
 
             // Do the actual streaming
             if (GetStreamMode() == StreamType.Proxied)

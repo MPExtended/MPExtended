@@ -28,26 +28,25 @@ namespace MPExtended.Libraries.Service.Network
     public static class NetworkInformation
     {
         private static string[] _localhostNames = new string[] { "127.0.0.1", "::1", "localhost" };
-        private static string _ipAddress;
+        private static IPAddress _ipAddress;
 
-        public static string GetIPAddress()
+        public static string GetIPAddressForUri()
         {
             if (_ipAddress == null)
                 _ipAddress = LoadIPAddress();
-            return _ipAddress;
+            return _ipAddress.AddressFamily == AddressFamily.InterNetworkV6 ? String.Format("[{0}]", _ipAddress) : _ipAddress.ToString();
         }
 
-        private static string LoadIPAddress()
+        private static IPAddress LoadIPAddress()
         {
             var interfaces = NetworkInterface.GetAllNetworkInterfaces()
                                              .Where(x => x.OperationalStatus == OperationalStatus.Up);
 
-            Func<IEnumerable<NetworkInterface>, IEnumerable<string>> getAddresses = interfaceList =>
+            Func<IEnumerable<NetworkInterface>, IEnumerable<IPAddress>> getAddresses = interfaceList =>
                 interfaceList
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
                     .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
-                    .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork) // Prefer IPv4 until we've found a reliable way to determine working IPv6
-                    .Select(x => x.ToString());
+                    .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork); // Prefer IPv4 until we've found a reliable way to determine working IPv6
             
             // Even though the docs say that NetworkIntereface.Type only returns a subset of these types, I've seen some others
             // (for example Tunnel) in the wild, so let's just list all acceptable types.
@@ -62,12 +61,12 @@ namespace MPExtended.Libraries.Service.Network
                 return lanAddresses.First();
 
             var addresses = getAddresses(interfaces);
-            if (addresses.Any(x => !_localhostNames.Contains(x)))
-                return addresses.First(x => !_localhostNames.Contains(x));
+            if (addresses.Any(x => !_localhostNames.Contains(x.ToString())))
+                return addresses.First(x => !_localhostNames.Contains(x.ToString()));
             if (addresses.Any())
                 return addresses.First();
 
-            return "127.0.0.1";
+            return IPAddress.Parse("127.0.0.1");
         }
 
         private static IEnumerable<IPAddress> GetIPAddressList()
