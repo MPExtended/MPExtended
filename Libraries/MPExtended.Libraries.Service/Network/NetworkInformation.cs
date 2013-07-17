@@ -40,20 +40,28 @@ namespace MPExtended.Libraries.Service.Network
         private static string LoadIPAddress()
         {
             var interfaces = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(x => x.OperationalStatus == OperationalStatus.Up);
-            
-            string[] preferedInterfaces = new string[] { "Local Area Connection" };
-            var lanAddresses = interfaces.Where(x => preferedInterfaces.Contains(x.Name))
+                                             .Where(x => x.OperationalStatus == OperationalStatus.Up);
+
+            Func<IEnumerable<NetworkInterface>, IEnumerable<string>> getAddresses = interfaceList =>
+                interfaceList
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
                     .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
+                    .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork) // Prefer IPv4 until we've found a reliable way to determine working IPv6
                     .Select(x => x.ToString());
+            
+            // Even though the docs say that NetworkIntereface.Type only returns a subset of these types, I've seen some others
+            // (for example Tunnel) in the wild, so let's just list all acceptable types.
+            var preferedTypes = new NetworkInterfaceType[] {
+                NetworkInterfaceType.Ethernet,
+                NetworkInterfaceType.FastEthernetFx,
+                NetworkInterfaceType.FastEthernetT,
+                NetworkInterfaceType.GigabitEthernet,
+            };
+            var lanAddresses = getAddresses(interfaces.Where(x => preferedTypes.Contains(x.NetworkInterfaceType)));
             if (lanAddresses.Any())
                 return lanAddresses.First();
 
-            var addresses = interfaces
-                .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
-                .Select(x => x.ToString());
+            var addresses = getAddresses(interfaces);
             if (addresses.Any(x => !_localhostNames.Contains(x)))
                 return addresses.First(x => !_localhostNames.Contains(x));
             if (addresses.Any())
