@@ -61,15 +61,23 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static void WriteLog(string streamIdentifier, LogLevel level, string message, params object[] args)
         {
-            WriteLogHeader(streamIdentifier, level, message, args);
-            streamLogs[streamIdentifier].FullLog.AppendFormat(message, args);
+            if (level > LogLevel.Trace || Configuration.Services.Diagnostic.EnableTraceLogging)
+            {
+                WriteLogHeader(streamIdentifier, level, message, args);
+                streamLogs[streamIdentifier].FullLog.AppendFormat(message, args);
+            }
+
             Log.Write(level, String.Format("[{0,30}] {1}", streamIdentifier, message), args);
         }
 
         private static void WriteLog(string streamIdentifier, LogLevel level, string message, Exception ex)
         {
-            WriteLogHeader(streamIdentifier, level, message);
-            streamLogs[streamIdentifier].FullLog.Append(message);
+            if (level > LogLevel.Trace || Configuration.Services.Diagnostic.EnableTraceLogging)
+            {
+                WriteLogHeader(streamIdentifier, level, message);
+                streamLogs[streamIdentifier].FullLog.Append(message);
+            }
+
             Log.Write(level, String.Format("[{0,30}] {1}", streamIdentifier, message), ex);
         }
 
