@@ -27,7 +27,6 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.StreamingService.Interfaces;
-using MPExtended.Services.StreamingService.Units;
 using MPExtended.Services.TVAccessService.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
@@ -62,14 +61,6 @@ namespace MPExtended.Services.StreamingService.Code
                 {
                     return Exists && Connections.IsMASLocal && Configuration.Services.NetworkImpersonation.ReadInStreamingService && GetFileInfo().IsLocalFile;
                 }
-            }
-        }
-
-        public virtual bool NeedsInputReaderUnit
-        {
-            get
-            {
-                return (MediaType == WebMediaType.TV && FileType == WebFileType.Content) || !SupportsDirectAccess;
             }
         }
 
@@ -170,19 +161,6 @@ namespace MPExtended.Services.StreamingService.Code
         public string GetPath()
         {
             return MediaType == WebMediaType.TV && FileType == WebFileType.Content ? PathUtil.StripFileProtocolPrefix(Id) : GetFileInfo().Path;
-        }
-
-        public IProcessingUnit GetInputReaderUnit()
-        {
-            if (SupportsDirectAccess)
-            {
-                // TV always has NeedsImpersonation = false and SupportsDirectAccess = true, so gets redirect to InputUnit
-                return NeedsImpersonation ? (IProcessingUnit)(new ImpersonationInputUnit(GetPath())) : (IProcessingUnit)(new InputUnit(GetPath()));
-            }
-            else
-            {
-                return new InjectStreamUnit(Retrieve());
-            }
         }
 
         public INetworkContext CreateNetworkContext()

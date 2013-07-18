@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.Service.Logging
 
         public string LogFormat
         {
-            get { return "{0:yyyy-MM-dd HH:mm:ss.fffff} [{1}({2})] {3}: "; }
+            get { return "{0:yyyy-MM-dd HH:mm:ss.fffff} [{1,15}({2,2})] {3,5}: "; }
         }
 
         public FileDestination(LogLevel level, string filename)

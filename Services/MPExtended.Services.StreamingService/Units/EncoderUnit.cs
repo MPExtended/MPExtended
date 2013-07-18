@@ -66,18 +66,13 @@ namespace MPExtended.Services.StreamingService.Units
 
         private StreamContext context;
 
-        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream)
+        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, StreamContext context)
         {
             this.transcoderPath = transcoder;
             this.arguments = arguments;
             this.inputMethod = inputMethod;
             this.outputMethod = outputMethod;
             this.logStream = logStream;
-        }
-
-        public EncoderUnit(string transcoder, string arguments, TransportMethod inputMethod, TransportMethod outputMethod, LogStream logStream, StreamContext context)
-            : this(transcoder, arguments, inputMethod, outputMethod, logStream)
-        {
             this.context = context;
         }
 
@@ -94,7 +89,7 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 transcoderInputStream = new NamedPipe();
                 input = ((NamedPipe)transcoderInputStream).Url;
-                Log.Info("Encoding: starting input named pipe {0}", input);
+                StreamLog.Info(context.Identifier, "Encoding: starting input named pipe {0}", input);
                 ((NamedPipe)transcoderInputStream).Start(false);
                 doInputCopy = true;
             }
@@ -109,7 +104,7 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 DataOutputStream = new NamedPipe();
                 output = ((NamedPipe)DataOutputStream).Url;
-                Log.Info("Encoding: starting output named pipe {0}", output);
+                StreamLog.Info(context.Identifier, "Encoding: starting output named pipe {0}", output);
                 ((NamedPipe)DataOutputStream).Start(false);
             }
             else if (outputMethod == TransportMethod.StandardOut)
@@ -157,10 +152,10 @@ namespace MPExtended.Services.StreamingService.Units
             start.WindowStyle = DebugOutput ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden;
             start.CreateNoWindow = !DebugOutput;
 
-            Log.Info("Encoder: Transcoder configuration dump");
-            Log.Info("Encoder:   hasStdin {0}, hasStdout {1}, hasStderr {2}", start.RedirectStandardInput, start.RedirectStandardOutput, start.RedirectStandardError);
-            Log.Info("Encoder:   path {0}", transcoderPath);
-            Log.Info("Encoder:   arguments {0}", arguments);
+            StreamLog.Info(context.Identifier, "Encoder: Transcoder configuration dump");
+            StreamLog.Info(context.Identifier, "Encoder:   hasStdin {0}, hasStdout {1}, hasStderr {2}", start.RedirectStandardInput, start.RedirectStandardOutput, start.RedirectStandardError);
+            StreamLog.Info(context.Identifier, "Encoder:   path {0}", transcoderPath);
+            StreamLog.Info(context.Identifier, "Encoder:   arguments {0}", arguments);
 
             try
             {
@@ -173,7 +168,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
             catch (Win32Exception e)
             {
-                Log.Error("Encoding: Failed to start transcoder", e);
+                StreamLog.Error(context.Identifier, "Encoding: Failed to start transcoder", e);
                 return false;
             }
             return true;
@@ -188,15 +183,15 @@ namespace MPExtended.Services.StreamingService.Units
             // copy the inputStream to the transcoderInputStream
             if (doInputCopy)
             {
-                Log.Info("Encoding: Copy stream of type {0} into transcoder input stream of type {1}", InputStream.ToString(), transcoderInputStream.ToString());
+                StreamLog.Info(context.Identifier, "Encoding: Copy stream of type {0} into transcoder input stream of type {1}", InputStream.ToString(), transcoderInputStream.ToString());
                 StreamCopy.AsyncStreamCopy(InputStream, transcoderInputStream, "transinput");
             }
 
             // delay start of next unit till our output stream is ready
             if (DataOutputStream is NamedPipe && (outputMethod == TransportMethod.NamedPipe || outputMethod == TransportMethod.StandardOut))
             {
-                Log.Trace("Transcoder running: {0}", !transcoderApplication.HasExited);
-                Log.Info("Encoding: Waiting till output named pipe is ready");
+                StreamLog.Trace(context.Identifier, "Transcoder running: {0}", !transcoderApplication.HasExited);
+                StreamLog.Info(context.Identifier, "Encoding: Waiting till output named pipe is ready");
 
                 var pipe = (NamedPipe)DataOutputStream;
                 var checkFailed = context != null && context.TranscodingInfo != null;
@@ -205,7 +200,7 @@ namespace MPExtended.Services.StreamingService.Units
 
                 if (checkFailed && context.TranscodingInfo.Failed)
                 {
-                    Log.Warn("Encoding: Aborting wait because transcoder application failed and will never setup output named pipe.");
+                    StreamLog.Warn(context.Identifier, "Encoding: Aborting wait because transcoder application failed and will never setup output named pipe.");
                     return false;
                 }
             }
@@ -224,13 +219,13 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 if (transcoderApplication != null && !transcoderApplication.HasExited)
                 {
-                    Log.Debug("Encoding: Killing transcoder");
+                    StreamLog.Debug(context.Identifier, "Encoding: Killing transcoder");
                     transcoderApplication.Stop();
                 }
             }
             catch (Exception e)
             {
-                Log.Error("Encoding: Failed to kill transcoder", e);
+                StreamLog.Error(context.Identifier, "Encoding: Failed to kill transcoder", e);
             }
 
             return true;
@@ -244,7 +239,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
             catch (Exception e)
             {
-                Log.Info("Encoding: Failed to close {0} stream: {1}", logName, e.Message);
+                StreamLog.Info(context.Identifier, "Encoding: Failed to close {0} stream: {1}", logName, e.Message);
             }
         }
     }

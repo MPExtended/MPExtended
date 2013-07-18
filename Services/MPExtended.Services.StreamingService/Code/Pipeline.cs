@@ -27,14 +27,18 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Pipeline
     {
+        private string identifier;
         private Dictionary<int, IProcessingUnit> dataUnits = new Dictionary<int, IProcessingUnit>();
         private Dictionary<int, ILogProcessingUnit> logUnits = new Dictionary<int, ILogProcessingUnit>();
+
         public bool IsAssembled { get; private set; }
         public bool IsStarted { get; private set; }
         public bool IsStopped { get; private set; }
 
-        public Pipeline()
+        public Pipeline(string streamIdentifier)
         {
+            identifier = streamIdentifier;
+
             IsAssembled = false;
             IsStarted = false;
             IsStopped = false;
@@ -100,28 +104,28 @@ namespace MPExtended.Services.StreamingService.Code
             dataUnits[dataUnits.Keys.Max()].IsDataStreamConnected = true;
 
             // dump out the pipeline for debugging
-            Log.Info("Assembling following pipeline:");
+            StreamLog.Info(identifier, "Assembling following pipeline:");
             foreach (int i in dataUnits.Keys.OrderBy(k => k))
-                Log.Info("   data {0}: {1} (input {2}, data {3}, log {4})", i, dataUnits[i].ToString(), dataUnits[i].IsInputStreamConnected, dataUnits[i].IsDataStreamConnected, dataUnits[i].IsLogStreamConnected);
+                StreamLog.Info(identifier, "   data {0}: {1} (input {2}, data {3}, log {4})", i, dataUnits[i].ToString(), dataUnits[i].IsInputStreamConnected, dataUnits[i].IsDataStreamConnected, dataUnits[i].IsLogStreamConnected);
             foreach (KeyValuePair<int, int> conn in dataConnections)
-                Log.Info("   dataconn {0} -> {1}", conn.Key, conn.Value);
+                StreamLog.Info(identifier, "   dataconn {0} -> {1}", conn.Key, conn.Value);
             foreach (int i in logUnits.Keys.OrderBy(k => k))
-                Log.Info("   log  {0}: {1}", i, logUnits[i].ToString());
+                StreamLog.Info(identifier, "   log  {0}: {1}", i, logUnits[i].ToString());
             foreach (KeyValuePair<int, int> conn in logConnections)
-                Log.Info("   logconn {0} -> {1}", conn.Value, conn.Key);
+                StreamLog.Info(identifier, "   logconn {0} -> {1}", conn.Value, conn.Key);
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k))
             {
                 if (!dataUnits[i].Setup())
                 {
                     // it failed, stop and break out
-                    Log.Error("Setting up data unit {0} failed", i);
+                    StreamLog.Error(identifier, "Setting up data unit {0} failed", i);
                     Stop(true);
                     return false;
                 }
                 else
                 {
-                    Log.Debug("Setup data unit {0}", i);
+                    StreamLog.Debug(identifier, "Setup data unit {0}", i);
                 }
 
                 if (dataConnections.ContainsKey(i))
@@ -133,10 +137,10 @@ namespace MPExtended.Services.StreamingService.Code
                 if (logConnections.ContainsKey(i))
                     logUnits[i].InputStream = dataUnits[logConnections[i]].LogOutputStream;
                 logUnits[i].Setup();
-                Log.Debug("Setup log unit {0}", i);
+                StreamLog.Debug(identifier, "Setup log unit {0}", i);
             }
 
-            Log.Info("Pipeline assembled");
+            StreamLog.Info(identifier, "Pipeline assembled");
             return true;
         }
 
@@ -148,16 +152,16 @@ namespace MPExtended.Services.StreamingService.Code
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k))
             {
-                Log.Info("Starting data unit {0}", i);
+                StreamLog.Info(identifier, "Starting data unit {0}", i);
                 if (!dataUnits[i].Start())
                 {
-                    Log.Error("Starting data unit {0} failed", i);
+                    StreamLog.Error(identifier, "Starting data unit {0} failed", i);
                     Stop(true);
                     return false;
                 }
             }
 
-            Log.Info("All data units started!");
+            StreamLog.Info(identifier, "All data units started!");
             foreach (int i in logUnits.Keys.OrderBy(k => k))
             {
                 logUnits[i].Start();
@@ -175,7 +179,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             foreach (int i in dataUnits.Keys.OrderBy(k => k))
             {
-                Log.Info("Stopping data unit {0}", i);
+                StreamLog.Info(identifier, "Stopping data unit {0}", i);
                 dataUnits[i].Stop();
             }
 
@@ -184,7 +188,7 @@ namespace MPExtended.Services.StreamingService.Code
                 logUnits[i].Stop();
             }
 
-            Log.Debug("Pipeline stopped");
+            StreamLog.Debug(identifier, "Pipeline stopped");
             IsStopped = true;
             return true;
         }

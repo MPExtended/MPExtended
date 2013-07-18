@@ -57,6 +57,7 @@
     <Compile Include="WebItemSupportStatus.cs" />
     <Compile Include="WebMediaInfo.cs" />
     <Compile Include="WebResolution.cs" />
+    <Compile Include="WebStreamLogs.cs" />
     <Compile Include="WebStreamServiceDescription.cs" />
     <Compile Include="WebStreamingSession.cs" />
     <Compile Include="WebTranscoderProfile.cs" />

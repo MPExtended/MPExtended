@@ -47,10 +47,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public virtual void BuildPipeline()
         {
             // add input
-            bool doInputReader = Context.Source.NeedsInputReaderUnit;
+            bool doInputReader = Context.NeedsInputReaderUnit;
             if (doInputReader)
             {
-                Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
+                Context.Pipeline.AddDataUnit(Context.GetInputReaderUnit(), 1);
             }
 
             string arguments = GenerateArguments();
@@ -67,7 +67,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // setup output parsing
             var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
-            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(einfo, Context.StartPosition);
+            FFMpegLogParsingUnit logunit = new FFMpegLogParsingUnit(Context.Identifier, einfo, Context.StartPosition);
             logunit.LogMessages = true;
             logunit.LogProgress = true;
             Context.Pipeline.AddLogUnit(logunit, 6);
