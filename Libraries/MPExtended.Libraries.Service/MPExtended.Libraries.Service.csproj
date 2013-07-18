@@ -220,7 +220,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)Libraries\Tools\write-git-version.bat" "$(ProjectDir)" "$(ProjectDir)Properties\GitVersion.cs"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)Tools\write-git-version.bat" "$(ProjectDir)" "$(ProjectDir)Properties\GitVersion.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
