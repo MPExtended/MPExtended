@@ -348,15 +348,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             continuationId = continuationId ?? "hls-" + randomGenerator.Next(10000, 99999).ToString();
             bool alreadyRunning = RunningStreams.ContainsKey(continuationId);
             string identifier = alreadyRunning ? RunningStreams[continuationId] : "webmediaportal-" + randomGenerator.Next(10000, 99999);
-            Log.Debug("Requested HLS file for continuationId={0}; running={1}; identifier={2}", continuationId, alreadyRunning, identifier);
+            Log.Debug("HLS: Requested stream start for continuationId={0}; running={1}; identifier={2}", continuationId, alreadyRunning, identifier);
 
             // We only need to start the stream if this is the first request for this file
             string url;
             if (!alreadyRunning)
             {
-                Log.Debug("Starting HLS stream type={0}; itemId={1}; profile={2}; starttime={3}; continuationId={4}; identifier={5}",
+                Log.Debug("HLS: Starting stream type={0}; itemId={1}; profile={2}; starttime={3}; continuationId={4}; identifier={5}",
                     type, itemId, profile.Name, starttime, continuationId, identifier);
-                Log.Debug("Stream is for user {0} from host {1}, has identifier {2} and timeout {3}s",
+                Log.Debug("HLS: Stream is for user {0} from host {1}, has identifier {2} and timeout {3}s",
                     HttpContext.User.Identity.Name, Request.UserHostAddress, identifier, STREAM_TIMEOUT_HTTPLIVE);
 
                 // Start the stream
@@ -366,7 +366,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     WCFClient.SetHeader("forwardedFor", HttpContext.Request.UserHostAddress);
                     if (!GetStreamControl(type).InitStream((WebMediaType)type, GetProvider(type), itemId, 0, clientDescription, identifier, STREAM_TIMEOUT_HTTPLIVE))
                     {
-                        Log.Error("InitStream for HLS failed");
+                        Log.Error("HLS: InitStream failed");
                         return null;
                     }
                 }
@@ -375,10 +375,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 url = GetStreamControl(type).StartStream(identifier, profile.Name, starttime);
                 if (String.IsNullOrEmpty(url))
                 {
-                    Log.Error("StartStream for HLS failed");
+                    Log.Error("HLS: StartStream failed");
                     return null;
                 }
-                Log.Debug("Started HLS stream successfully at {0}", url);
+                Log.Debug("HLS: Started stream successfully at {0}", url);
                 RunningStreams[continuationId] = identifier;
                 HttpLiveUrls[identifier] = url;
             }
@@ -388,8 +388,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         private void ProxyHttpLiveIndex(string identifier, string source)
         {
-            Log.Debug("HLS: Using Proxied streaming mode with playlist at {0}", source);
-
             WebRequest request = WebRequest.Create(source);
             request.Headers.Add("X-Forwarded-For", HttpContext.Request.UserHostAddress);
             WebResponse response = request.GetResponse();
@@ -397,20 +395,28 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             string playlistContents = reader.ReadToEnd();
 
             string prefix = HttpLiveUrls[identifier].Substring(0, HttpLiveUrls[identifier].IndexOf("/stream/") + 8);
-            string newPlaylist = playlistContents.Split('\n')
-                            .Select(line => {
-                                if(!line.Trim().StartsWith(prefix))
-                                    return line.Trim();
+            string[] lines = playlistContents.Split('\n');
+            var newPlaylist = new StringBuilder();
+            string segmentUrl = String.Empty;
+            foreach (var line in lines)
+            {
+                if (!line.Trim().StartsWith(prefix))
+                {
+                    newPlaylist.AppendLine(line.Trim());
+                    continue;
+                }
 
-                                var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
-                                return Url.Action("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
-                                {
-                                    identifier = identifier,
-                                    ctdAction = queryString["action"],
-                                    parameters = queryString["parameters"]
-                                }), Request.Url.Scheme, Request.Url.Host);
-                            })
-                            .Join(Environment.NewLine);
+                var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
+                segmentUrl = Url.Action("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
+                {
+                    identifier = identifier,
+                    ctdAction = queryString["action"],
+                    parameters = queryString["parameters"]
+                }), Request.Url.Scheme, Request.Url.Host);
+                newPlaylist.AppendLine(segmentUrl);
+            }
+
+            Log.Debug("HLS: Proxying playlist for identifier={0} with source={1}; prefix={2}; lastSegment={3}", identifier, source, prefix, segmentUrl);
 
             try
             {
@@ -439,6 +445,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var uri = new UriBuilder(HttpLiveUrls[identifier].Substring(0, HttpLiveUrls[identifier].IndexOf("/stream/") + 8));
             uri.Path += "CustomTranscoderData";
             uri.Query = queryString.ToString();
+            Log.Trace("HLS: Proxying segment for identifier={0}; ctdAction={1}; parameters={2} and uri={3}", identifier, ctdAction, parameters, uri);
 
             ProxyStream(uri.ToString());
             return new EmptyResult();
