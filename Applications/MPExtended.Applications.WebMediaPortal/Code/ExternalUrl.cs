@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -28,7 +29,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
 {
     public class ExternalUrl
     {
-        public static string GetScheme(string requestScheme)
+        public static string GetScheme(HttpRequestBase request)
         {
             switch (Configuration.WebMediaPortal.ExternalUrlScheme)
             {
@@ -37,23 +38,28 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 case UrlScheme.Https:
                     return "https";
                 default:
-                    return requestScheme;
+                    return request.Url.Scheme;
             }
         }
 
-        public static string GetScheme(Uri requestUri)
+        public static string GetHost(HttpRequestBase request)
         {
-            return GetScheme(requestUri.Scheme);
-        }
+            if (!String.IsNullOrWhiteSpace(Configuration.WebMediaPortal.ExternalUrlHost))
+                return Configuration.WebMediaPortal.ExternalUrlHost;
 
-        public static string GetHost(string requestHost)
-        {
-            return String.IsNullOrWhiteSpace(Configuration.WebMediaPortal.ExternalUrlHost) ? requestHost : Configuration.WebMediaPortal.ExternalUrlHost;
-        }
+            // Now, this is tricky. When port forwards (or another complex setup) is in use, we want to return the host
+            // that the user entered in the address bar (because we can be pretty sure that one is working from the
+            // location where the user currently is), which is send in the HTTP/1.1 Host: header. However, .NET rewrites
+            // the host in Request.Url for unknown reasons, so we need to access the header directly.
+            if (request.Headers["Host"] != null)
+                return request.Headers["Host"];
 
-        public static string GetHost(Uri requestUri)
-        {
-            return GetHost(requestUri.Host);
+            // Request.Url.Host only contains the hostname, not the port, which we want to include if the default port
+            // isn't being used. Request.Url.Authority also does some DNS-lookups according to a StackOverflow answer,
+            // so we combine host and port ourselves.
+            return request.Url.IsDefaultPort 
+                ? request.Url.Host
+                : String.Format("{0}:{1}", request.Url.Host, request.Url.Port);
         }
     }
 }

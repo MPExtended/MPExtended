@@ -355,7 +355,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     });
 
                 // iOS does not display poster images with relative paths
-                string posterUrl = Url.Artwork(type, itemId, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                string posterUrl = Url.AbsoluteArtwork(type, itemId);
                 Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
                 return Json(new { Success = true, URL = url, Poster = posterUrl }, JsonRequestBehavior.AllowGet);
             }
@@ -446,12 +446,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                                     return line.Trim();
 
                                 var queryString = HttpUtility.ParseQueryString(new Uri(line.Trim()).Query);
-                                return Url.Action("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
+                                return Url.AbsoluteAction("ProxyHttpLiveSegment", "Stream", new RouteValueDictionary(new
                                 {
                                     identifier = identifier,
                                     ctdAction = queryString["action"],
                                     parameters = queryString["parameters"]
-                                }), ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                                }));
                             })
                             .Join(Environment.NewLine);
 
@@ -617,7 +617,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         parameters["transcoder"] = profile.Name;
                         parameters["continuationId"] = continuationId;
                         m3u.AppendLine(String.Format("#EXTINF:{0},{1}", track.Duration, track.Title));
-                        url = Url.Action(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                        url = Url.AbsoluteAction(Enum.GetName(typeof(WebMediaType), WebMediaType.MusicTrack), "Stream", parameters);
                         m3u.AppendLine(url);
                     }
                     break;
@@ -637,7 +637,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         parameters["transcoder"] = profile.Name;
                         parameters["continuationId"] = continuationId;
                         parameters["fileindex"] = i;
-                        url = Url.Action(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters, ExternalUrl.GetScheme(Request.Url), ExternalUrl.GetHost(Request.Url));
+                        url = Url.AbsoluteAction(Enum.GetName(typeof(WebMediaType), type), "Stream", parameters);
                         m3u.AppendLine("#EXTINF:-1, " + MediaName.GetMediaName(type, itemId));
                         m3u.AppendLine(url);
                     }
