@@ -50,5 +50,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 ? request.Url.Host
                 : String.Format("{0}:{1}", request.Url.Host, request.Url.Port);
         }
+
+        public static string GetOnlyHostname(HttpRequestBase request)
+        {
+            // Same as GetHost(), but returns hostname without port.
+            return request.Headers["Host"] ?? request.Url.Host;
+        }
     }
 }

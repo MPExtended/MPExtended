@@ -123,7 +123,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
                 return Settings.ActiveSettings.StreamType;
 
-            return NetworkInformation.IsLocalAddress(HttpContext.Request.Url.Host, true) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, true)
+            return NetworkInformation.IsLocalAddress(ExternalUrl.GetOnlyHostname(Request), true) 
+                    && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress, true)
                 ? StreamType.Direct : StreamType.Proxied;
         }
 
