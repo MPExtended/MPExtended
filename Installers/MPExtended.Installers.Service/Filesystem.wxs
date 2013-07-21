@@ -36,9 +36,9 @@
               <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\MPExtended.Libraries.Service.pdb" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.dll" />
               <File Source="$(var.MPExtended.Libraries.Client.TargetDir)\MPExtended.Libraries.Client.pdb" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\Deusty.Net.dll" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\Newtonsoft.Json.dll" />
-              <File Source="$(var.SolutionDir)\Libraries\Misc\ZeroconfService.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\Deusty.Net.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\Newtonsoft.Json.dll" />
+              <File Source="$(var.MPExtended.Libraries.Service.TargetDir)\Libraries\Misc\ZeroconfService.dll" />
             </Component>
 
             <!-- General interfaces -->
@@ -166,6 +166,7 @@
               <File Source="$(var.MPExtended.Applications.UacServiceHandler.TargetDir)\MPExtended.Applications.UacServiceHandler.pdb" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\Hardcodet.Wpf.TaskbarNotification.dll" />
               <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.dll" />
+              <File Source="$(var.MPExtended.Applications.ServiceConfigurator.TargetDir)\zxing.presentation.dll" />
             </Component>
             
             <Component Id="Component_Configurator_Registry" Guid="5a4072a3-32c2-4482-af07-b9af4e463eaa">

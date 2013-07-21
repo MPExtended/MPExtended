@@ -60,12 +60,6 @@ README.md            text
 *.swf                binary
 *.zip                binary
 
-# Some exceptions, mostly imported stuff. 
-Applications/MPExtended.Applications.WebMediaPortal/Content/Themes/base/*.css				binary
-Applications/MPExtended.Applications.WebMediaPortal/Content/Themes/base/minified/*.css 		binary
-Applications/MPExtended.Applications.WebMediaPortal/Scripts/jquery-*.js 					binary
-Applications/MPExtended.Applications.WebMediaPortal/Scripts/Microsoft*.js 					binary
-
 # I generated the list of extensions by searching for all files in my current working directory and typing it over manually:
 # $ find . -type f | grep -vE '^./.git/' | sed 's#^.*\.\([a-zA-Z0-9]*\)$#\1#' | sort -u
 #

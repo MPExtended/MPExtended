@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		GlobalVersion.cs = GlobalVersion.cs
 		LICENSE.txt = LICENSE.txt
+		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlugIns", "PlugIns", "{714FAF3E-26F8-4495-8BA5-D40333C4FC56}"
@@ -165,6 +166,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Libraries.Service.Config", "Libraries\MPExtended.Libraries.Service.Config\MPExtended.Libraries.Service.Config.csproj", "{1641D28D-E923-425F-8332-10CC9C98C653}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPExtended.Tests.Libraries.Service", "Tests\MPExtended.Tests.Libraries.Service\MPExtended.Tests.Libraries.Service.csproj", "{5482E3E3-FBCC-4B12-9B1C-30795FFEE43D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{234490F2-E866-4B27-85D0-D2DD7E3C596D}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -365,6 +372,7 @@ Global
 		{504A098A-8141-418A-9FC5-C7870C68C716} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{9D78FC9A-A66C-48AC-B528-1CCEAE5AAA63} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
 		{1641D28D-E923-425F-8332-10CC9C98C653} = {B4291E4B-FA7F-4750-9D00-7B7E4CDC5EE4}
+		{234490F2-E866-4B27-85D0-D2DD7E3C596D} = {8A5C6C0B-85A5-4B95-9359-96C98476229F}
 		{9885CC92-C6D3-487E-BE29-24FFE4DC5D5C} = {714FAF3E-26F8-4495-8BA5-D40333C4FC56}
 		{26B34D42-CA8B-44BF-A282-E516E2C22588} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
 		{CC3525EA-0721-4299-991B-1C7E01A15E6B} = {91B3A941-4E1F-4F9A-8005-1BA11303E829}
