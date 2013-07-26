@@ -210,39 +210,39 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Transcoder.Context = stream.Context;
 
                     // get audio and subtitle id
-                    if (stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
+                    if (stream.Context.MediaInfo.AudioStreams.Any(x => x.ID == audioId))
                     {
-                        stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().ID;
+                        stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.ID == audioId).ID;
                     }
                     else if (audioId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Configuration.Streaming.DefaultAudioStream;
-                        if (stream.Context.MediaInfo.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.AudioStreams.Any(x => x.Language == preferredLanguage))
                         {
                             stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage != "none" && stream.Context.MediaInfo.AudioStreams.Count() > 0)
+                        else if (preferredLanguage != "none" && stream.Context.MediaInfo.AudioStreams.Any())
                         {
                             stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First().ID;
                         }
                     }
 
-                    if (stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).Count() > 0)
+                    if (stream.Context.MediaInfo.SubtitleStreams.Any(x => x.ID == subtitleId))
                     {
-                        stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
+                        stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.ID == subtitleId).ID;
                     }
                     else if (subtitleId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Configuration.Streaming.DefaultSubtitleStream;
-                        if (stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.SubtitleStreams.Any(x => x.Language == preferredLanguage))
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage == "external" && stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Filename != null) > 0)
+                        else if (preferredLanguage == "external" && stream.Context.MediaInfo.SubtitleStreams.Any(x => x.Filename != null))
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Filename != null).ID;
                         }
-                        else if (preferredLanguage == "first" && stream.Context.MediaInfo.SubtitleStreams.Count() > 0)
+                        else if (preferredLanguage == "first" && stream.Context.MediaInfo.SubtitleStreams.Any())
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First().ID;
                         }
