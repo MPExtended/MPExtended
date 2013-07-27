@@ -46,6 +46,7 @@ namespace MPExtended.Libraries.Service.Network
                 interfaceList
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
                     .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
+                    .Where(x => !x.IsIPv6LinkLocal && !x.IsIPv6Multicast)
                     .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork); // Prefer IPv4 until we've found a reliable way to determine working IPv6
             
             // Even though the docs say that NetworkIntereface.Type only returns a subset of these types, I've seen some others
@@ -74,6 +75,7 @@ namespace MPExtended.Libraries.Service.Network
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
                 .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
+                .Where(x => !x.IsIPv6LinkLocal && !x.IsIPv6Multicast)
                 .Distinct()
                 .ToArray();
         }
