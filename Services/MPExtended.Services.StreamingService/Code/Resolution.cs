@@ -29,7 +29,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             get
             {
-                return Width / Height;
+                return (double)Width / Height;
             }
         }
 
