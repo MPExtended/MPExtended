@@ -252,7 +252,7 @@ namespace MPExtended.Services.StreamingService.Code
                     graphic.CompositingMode = CompositingMode.SourceCopy;
                     graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                    if (addBorders && borders != "transparant")
+                    if (addBorders && borders != "transparent")
                         graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapSize.Width, bitmapSize.Height);
 
                     // We center the graphic in the canvas. If we should stretch the image, newImageSize is equal to the canvas, so 
