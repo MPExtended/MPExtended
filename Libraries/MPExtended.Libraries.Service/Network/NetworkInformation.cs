@@ -27,8 +27,46 @@ namespace MPExtended.Libraries.Service.Network
 {
     public static class NetworkInformation
     {
+        public struct NetworkInterfaceData
+        {
+            public string Name { get; set; }
+            public NetworkInterfaceType Type { get; set; }
+            public PhysicalAddress PhysicalAddress { get; set; }
+            public IList<IPAddress> Addresses { get; set; }
+        }
+
         private static string[] _localhostNames = new string[] { "127.0.0.1", "::1", "localhost" };
         private static IPAddress _ipAddress;
+        private static IList<NetworkInterfaceData> _interfaces;
+
+        public static IList<NetworkInterfaceData> GetNetworkInterfaces()
+        {
+            if (_interfaces != null)
+                return _interfaces;
+
+            _interfaces = new List<NetworkInterfaceData>();
+            foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
+            {
+                var data = new NetworkInterfaceData()
+                {
+                    Name = iface.Name,
+                    Type = iface.NetworkInterfaceType,
+                    PhysicalAddress = iface.GetPhysicalAddress(),
+                    Addresses = new List<IPAddress>()
+                };
+
+                foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
+                {
+                    if ((unicast.Address.AddressFamily == AddressFamily.InterNetwork || unicast.Address.AddressFamily == AddressFamily.InterNetworkV6) &&
+                        !unicast.Address.IsIPv6LinkLocal && !unicast.Address.IsIPv6Multicast)
+                        data.Addresses.Add(unicast.Address);
+                }
+
+                _interfaces.Add(data);
+            }
+
+            return _interfaces;
+        }
 
         public static string GetIPAddressForUri()
         {
@@ -39,15 +77,10 @@ namespace MPExtended.Libraries.Service.Network
 
         private static IPAddress LoadIPAddress()
         {
-            var interfaces = NetworkInterface.GetAllNetworkInterfaces()
-                                             .Where(x => x.OperationalStatus == OperationalStatus.Up);
-
-            Func<IEnumerable<NetworkInterface>, IEnumerable<IPAddress>> getAddresses = interfaceList =>
-                interfaceList
-                    .SelectMany(x => x.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-                    .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
-                    .Where(x => !x.IsIPv6LinkLocal && !x.IsIPv6Multicast)
-                    .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork); // Prefer IPv4 until we've found a reliable way to determine working IPv6
+            var interfaces = GetNetworkInterfaces();
+            Func<IEnumerable<NetworkInterfaceData>, IEnumerable<IPAddress>> getAddresses = interfaceList =>
+                interfaceList.SelectMany(x => x.Addresses)
+                             .OrderBy(x => x.AddressFamily != AddressFamily.InterNetwork); // Prefer IPv4 until working IPv6 detection is reliable
             
             // Even though the docs say that NetworkIntereface.Type only returns a subset of these types, I've seen some others
             // (for example Tunnel) in the wild, so let's just list all acceptable types.
@@ -57,7 +90,7 @@ namespace MPExtended.Libraries.Service.Network
                 NetworkInterfaceType.FastEthernetT,
                 NetworkInterfaceType.GigabitEthernet,
             };
-            var lanAddresses = getAddresses(interfaces.Where(x => preferedTypes.Contains(x.NetworkInterfaceType)));
+            var lanAddresses = getAddresses(interfaces.Where(x => preferedTypes.Contains(x.Type)));
             if (lanAddresses.Any())
                 return lanAddresses.First();
 
@@ -72,28 +105,20 @@ namespace MPExtended.Libraries.Service.Network
 
         private static IEnumerable<IPAddress> GetIPAddressList()
         {
-            return Dns.GetHostEntry(Dns.GetHostName())
-                .AddressList
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork || x.AddressFamily == AddressFamily.InterNetworkV6)
-                .Where(x => !x.IsIPv6LinkLocal && !x.IsIPv6Multicast)
-                .Distinct()
-                .ToArray();
+            return GetNetworkInterfaces().SelectMany(x => x.Addresses).Distinct();
         }
 
         public static IEnumerable<string> GetIPAddresses()
         {
-            return GetIPAddressList().Select(x => x.ToString()).ToList();
+            return GetIPAddressList().Select(x => x.ToString());
         }
 
         public static IEnumerable<string> GetMACAddresses()
         {
-            return NetworkInterface.GetAllNetworkInterfaces()
-                .Where(x => x.OperationalStatus == OperationalStatus.Up)
-                .Where(x => x.GetPhysicalAddress() != null)
-                .Select(x => x.GetPhysicalAddress().ToString())
-                .Where(x => x.Length == 12)
-                .Distinct()
-                .ToList();
+            return GetNetworkInterfaces()
+                .Where(x => x.PhysicalAddress != null && x.PhysicalAddress.GetAddressBytes().Length == 6)
+                .Select(x => x.PhysicalAddress.ToString())
+                .Distinct();
         }
 
         public static bool IsOnLAN(IPAddress address)
@@ -101,6 +126,7 @@ namespace MPExtended.Libraries.Service.Network
             if (IsLocalAddress(address))
                 return true;
 
+            // TODO: Can't use GetNetworkInterfaces() here because we need the IPv4Mask property
             var systemAddresses = NetworkInterface.GetAllNetworkInterfaces()
                     .Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                     .SelectMany(x => x.GetIPProperties().UnicastAddresses);
@@ -158,23 +184,6 @@ namespace MPExtended.Libraries.Service.Network
             if(IPAddress.TryParse(address, out ipAddr))
                 return IsLocalAddress(ipAddr);
             return false;
-        }
-
-        public static Dictionary<string, string> GetNetworkInterfaces()
-        {
-            Dictionary<string, string> ifaces = new Dictionary<string, string>();
-            foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
-            {
-                foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
-                {
-                    if (unicast.Address.AddressFamily == AddressFamily.InterNetwork || unicast.Address.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        ifaces.Add(iface.Name, unicast.Address.ToString());
-                    }
-                }
-            }
-
-            return ifaces;
         }
 
         public static bool IsValid(IPAddress address)

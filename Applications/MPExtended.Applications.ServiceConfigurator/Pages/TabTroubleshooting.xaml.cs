@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,7 +38,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabTroubleshooting : Page
     {
-        private Dictionary<string, string> networkAddresses;
+        private struct NetworkInterface
+        {
+            public string InterfaceName { get; set; }
+            public IPAddress Address { get; set; }
+
+            public override string ToString()
+            {
+                return String.Format("{0} ({1})", InterfaceName, Address);
+            }
+        }
+
+        private IEnumerable<NetworkInterface> networkAddresses;
 
         public TabTroubleshooting()
         {
@@ -47,29 +60,24 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private void SetNetworkInterfaces()
         {
             networkAddresses = NetworkInformation.GetNetworkInterfaces()
-                .ToDictionary(x => x.Value, x => x.Value + " (" + x.Key + ")");
+                .SelectMany(x => x.Addresses.Select(y => new NetworkInterface() { InterfaceName = x.Name, Address = y }));
             cbNetworkInterfaces.DataContext = networkAddresses;
-            cbNetworkInterfaces.SelectedValuePath = "Key";
-            cbNetworkInterfaces.DisplayMemberPath = "Value";
 
-            if (networkAddresses.Count > 0)
-            {
-                cbNetworkInterfaces.SelectedValue = networkAddresses.First().Key;
-            }
+            if (networkAddresses.Count() > 0)
+                cbNetworkInterfaces.SelectedIndex = 0;
         }
 
         private void cbNetworkInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string val = (string)cbNetworkInterfaces.SelectedValue;
-            if (val != null)
-            {
-                SetTestLinks(val, Configuration.Services.Port);
-            }
+            if (cbNetworkInterfaces.SelectedItem != null)
+                SetTestLinks(((NetworkInterface)cbNetworkInterfaces.SelectedItem).Address, Configuration.Services.Port);
         }
 
-        private void SetTestLinks(string _address, int _port)
+        private void SetTestLinks(IPAddress _address, int _port)
         {
-            string baseAdress = "http://{0}:{1}/MPExtended/{2}/json/{3}";
+            string baseAdress = _address.AddressFamily == AddressFamily.InterNetworkV6 ? 
+                "http://[{0}]:{1}/MPExtended/{2}/json/{3}" : 
+                "http://{0}:{1}/MPExtended/{2}/json/{3}";
 
             var items = new List<Tuple<string, int, Hyperlink, TextBlock>>
             {
