@@ -258,7 +258,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
                     stream.Transcoder.BuildPipeline();
 
-                    // start the pipeline, but imm
+                    // start the pipeline
                     bool assembleResult = stream.Context.Pipeline.Assemble();
                     bool startResult = assembleResult ? stream.Context.Pipeline.Start() : true;
                     if (!assembleResult || !startResult)
@@ -274,9 +274,10 @@ namespace MPExtended.Services.StreamingService.Code
                         Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(finalStream);
                     }
 
-                    Log.Info("Started stream with identifier '{0}'", identifier);
-                    Streams[identifier].LastActivity = DateTime.Now;
-                    return stream.Transcoder.GetStreamURL();
+                    stream.LastActivity = DateTime.Now;
+                    var streamUrl = stream.Transcoder.GetStreamURL();
+                    Log.Info("Started stream with identifier '{0}' with stream at '{1}'", identifier, streamUrl);
+                    return streamUrl;
                 }
             }
             catch (Exception ex)
