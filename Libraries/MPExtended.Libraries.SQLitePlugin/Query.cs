@@ -41,7 +41,15 @@ namespace MPExtended.Libraries.SQLitePlugin
             cmd.CommandText = query;
             foreach (SQLiteParameter param in parameters)
                 cmd.Parameters.Add(param);
-            Reader = cmd.ExecuteReader();
+
+            try
+            {
+                Reader = cmd.ExecuteReader();
+            }
+            catch (SQLiteException ex)
+            {
+                throw new QueryException("Failed to execute query", query, db.Path, ex);
+            }
         }
 
         public Query(DatabaseConnection database, string query)

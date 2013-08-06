@@ -32,7 +32,7 @@
 
         @if(ViewBag.ShowPlay) {
             <li>@Model.FullQuality</li>
-            <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", new { item = Model.Episode.Id, type = Model.Episode.Type }, new { })</li>
+            <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", Skin.GetDownloadArguments(Model.Episode.Type, Model.Episode.Id), new { })</li>
             <li>@Html.ActionLink(UIStrings.Play, "Play", new { episode = Model.Episode.Id })</li>
         }
     </ul>

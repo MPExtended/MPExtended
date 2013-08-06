@@ -231,15 +231,19 @@ namespace MPExtended.Services.StreamingService.Code
 
         private static Image ResizeImage(Stream stream, int? maxWidth, int? maxHeight, string borders)
         {
-            bool doBorders = !String.IsNullOrEmpty(borders) && borders != "stretch";
-
             using (var origImage = Image.FromStream(stream))
             {
-                Resolution newSize = Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1);
-                int bitmapWidth = String.IsNullOrEmpty(borders) ? newSize.Width : maxWidth.Value;
-                int bitmapHeight = String.IsNullOrEmpty(borders) ? newSize.Height : maxHeight.Value;
+                // newImageSize is the size of the actual graphic, which might not be the size of the canvas (bitmap). Unless
+                // we're instructed to stretch the image, it's a proportional resize of the source graphic. Borders will be
+                // added when we're instructed to and the aspect ratio of the image isn't equal to the aspect ratio of the 
+                // bitmap.
+                Resolution newImageSize = borders != "stretch" ? 
+                    Resolution.Calculate(origImage.Width, origImage.Height, maxWidth, maxHeight, 1) :
+                    Resolution.Create(maxWidth.Value, maxHeight.Value);
+                bool addBorders = !String.IsNullOrEmpty(borders) && borders != "stretch" && newImageSize.AspectRatio != (double)maxWidth / maxHeight;
 
-                Bitmap newImage = new Bitmap(bitmapWidth, bitmapHeight, PixelFormat.Format32bppArgb);
+                Resolution bitmapSize = addBorders ? Resolution.Create(maxWidth.Value, maxHeight.Value) : newImageSize;
+                Bitmap newImage = new Bitmap(bitmapSize.Width, bitmapSize.Height, PixelFormat.Format32bppArgb);
                 using (Graphics graphic = Graphics.FromImage(newImage))
                 {
                     graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -248,14 +252,14 @@ namespace MPExtended.Services.StreamingService.Code
                     graphic.CompositingMode = CompositingMode.SourceCopy;
                     graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                    if (doBorders && (1.0 * maxWidth.Value / newSize.Width) != (1.0 * maxHeight.Value / newSize.Height))
-                        graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapWidth, bitmapHeight);
+                    if (addBorders && borders != "transparent")
+                        graphic.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#" + borders)), 0, 0, bitmapSize.Width, bitmapSize.Height);
 
-                    int leftOffset = doBorders ? (maxWidth.Value - newSize.Width) / 2 : 0;
-                    int heightOffset = doBorders ? (maxHeight.Value - newSize.Height) / 2 : 0;
-                    graphic.DrawImage(origImage, leftOffset, heightOffset, 
-                        borders == "stretch" ? maxWidth.Value  : newSize.Width, 
-                        borders == "stretch" ? maxHeight.Value : newSize.Height);
+                    // We center the graphic in the canvas. If we should stretch the image, newImageSize is equal to the canvas, so 
+                    // the graphic is pasted at the top-left corner, which is fine.
+                    int leftOffset = (bitmapSize.Width - newImageSize.Width) / 2;
+                    int heightOffset = (bitmapSize.Height - newImageSize.Height) / 2;
+                    graphic.DrawImage(origImage, leftOffset, heightOffset, newImageSize.Width, newImageSize.Height);
                 }
 
                 return newImage;

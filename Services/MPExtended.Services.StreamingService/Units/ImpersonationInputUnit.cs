@@ -36,10 +36,12 @@ namespace MPExtended.Services.StreamingService.Units
         public bool IsDataStreamConnected { get; set; }
         public bool IsLogStreamConnected { get; set; }
 
+        private string identifier;
         private string source;
 
-        public ImpersonationInputUnit(string source)
+        public ImpersonationInputUnit(string identifier, string source)
         {
+            this.identifier = identifier;
             this.source = source;
         }
 
@@ -54,7 +56,7 @@ namespace MPExtended.Services.StreamingService.Units
             }
             catch (Exception e)
             {
-                Log.Error("Failed to setup ImpersonationInputUnit", e);
+                StreamLog.Error(identifier, "Failed to setup ImpersonationInputUnit", e);
                 return false;
             }
             return true;

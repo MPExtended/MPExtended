@@ -22,6 +22,8 @@ using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.StreamingService.Units;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -29,6 +31,8 @@ namespace MPExtended.Services.StreamingService.Code
     {
         // time in milliseconds for which a client player sync position is valid
         private const int CLIENT_SYNC_VALID_DURATION = 120000;
+
+        public string Identifier { get; set; }
 
         public MediaSource Source { get; set; }
         public WebMediaInfo MediaInfo { get; set; }
@@ -48,6 +52,14 @@ namespace MPExtended.Services.StreamingService.Code
         public int? AudioTrackId { get; set; }
         public int? SubtitleTrackId { get; set; }
 
+        public virtual bool NeedsInputReaderUnit
+        {
+            get
+            {
+                return (Source.MediaType == WebMediaType.TV && Source.FileType == WebFileType.Content) || !Source.SupportsDirectAccess;
+            }
+        }
+
         /// <summary>
         /// Get the approximate player position of the client. This value comes from the client, transcoder and clock.
         /// </summary>
@@ -65,6 +77,21 @@ namespace MPExtended.Services.StreamingService.Code
             else
             {
                 return 0;
+            }
+        }
+
+        public IProcessingUnit GetInputReaderUnit()
+        {
+            if (Source.SupportsDirectAccess)
+            {
+                // TV always has NeedsImpersonation = false and SupportsDirectAccess = true, so gets redirect to InputUnit
+                return Source.NeedsImpersonation
+                    ? (IProcessingUnit)(new ImpersonationInputUnit(Identifier, Source.GetPath()))
+                    : (IProcessingUnit)(new InputUnit(Identifier, Source.GetPath()));
+            }
+            else
+            {
+                return new InjectStreamUnit(Source.Retrieve());
             }
         }
     }

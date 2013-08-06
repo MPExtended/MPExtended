@@ -21,8 +21,11 @@
   <ServiceUsername>admin</ServiceUsername>
   <ServicePassword>admin</ServicePassword>
 
+  <ExternalUrlScheme>Default</ExternalUrlScheme>
+
   <DefaultLanguage xsi:nil="true" />
   
   <Skin>default</Skin>
+  <MusicLayout>Artist</MusicLayout>
   <SkinConfiguration />
 </WebMediaPortal>

@@ -37,7 +37,6 @@ namespace MPExtended.Libraries.Service.Config.Upgrade
             model.BonjourName = file.Element("bonjour").Element("pcname").Value;
 
             model.Port = Int32.Parse(file.Element("port").Value);
-            model.EnableIPv6 = file.Element("enableIPv6").Value == "true";
 
             // Do not upgrade these, as the password has been encrypted with a different key in MPExtended 0.4.3
             model.NetworkImpersonation = new NetworkImpersonation()

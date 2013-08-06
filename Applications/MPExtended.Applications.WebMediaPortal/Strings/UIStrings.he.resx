@@ -169,6 +169,9 @@
   <data name="Welcome" xml:space="preserve">
     <value>ברוך הבא</value>
   </data>
+  <data name="YouAreWatchingMovie" xml:space="preserve">
+    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
   <data name="YourArtists" xml:space="preserve">
     <value>האמנים שלך</value>
   </data>
@@ -235,6 +238,9 @@
   <data name="TVGuide" xml:space="preserve">
     <value>מדריך טלויזיה</value>
   </data>
+  <data name="WelcomeUsername" xml:space="preserve">
+    <value>ברוך הבא &lt;strong&gt;{0}&lt;/strong&gt;!</value>
+  </data>
   <data name="CancelSchedule" xml:space="preserve">
     <value>בטל לוח זמנים</value>
   </data>
@@ -253,11 +259,17 @@
   <data name="LiveTV" xml:space="preserve">
     <value>שידור חי</value>
   </data>
+  <data name="ProgramChannelDetails" xml:space="preserve">
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; עד &lt;strong&gt;{1}&lt;/strong&gt; בערוץ &lt;strong&gt;{2}&lt;/strong&gt;</value>
+  </data>
   <data name="RecordedOn" xml:space="preserve">
     <value>הוקלט ב</value>
   </data>
   <data name="ScheduleHeaderEndTime" xml:space="preserve">
     <value>זמן סיום</value>
+  </data>
+  <data name="ScheduleHeaderRepetition" xml:space="preserve">
+    <value>חזרות</value>
   </data>
   <data name="ScheduleHeaderStartTime" xml:space="preserve">
     <value>זמן התחלה</value>
@@ -271,6 +283,12 @@
   <data name="WatchingRecording" xml:space="preserve">
     <value>צופה ב {0} </value>
   </data>
+  <data name="YouAreWatchingProgram" xml:space="preserve">
+    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt; ב &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+  </data>
+  <data name="YouAreWatchingRecording" xml:space="preserve">
+    <value>אתה צופה ב &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
   <data name="YourRecordings" xml:space="preserve">
     <value>ההקלטות שלך</value>
   </data>
@@ -283,8 +301,14 @@
   <data name="Program" xml:space="preserve">
     <value>תכנן</value>
   </data>
+  <data name="DownloadPlaylist" xml:space="preserve">
+    <value>הורד רשימת השמעה (m3u.) לשימוש בנגן חיצוני</value>
+  </data>
   <data name="InstallFlashPlayerToUseThisPlayer" xml:space="preserve">
     <value>אתה צריך להתקין Adobe Flash Player על מנת להשתמש בנגן זה</value>
+  </data>
+  <data name="VLCEnableDeinterlacing" xml:space="preserve">
+    <value>הפעל deinterlacing</value>
   </data>
   <data name="VLCPause" xml:space="preserve">
     <value>עצור לרגע</value>
@@ -297,6 +321,9 @@
   </data>
   <data name="VLCSwitchFullscreen" xml:space="preserve">
     <value>החלף למסך מלא</value>
+  </data>
+  <data name="VLCTooOldToSupportDeinterlacing" xml:space="preserve">
+    <value>גרסת VLC שמותקנת אצלך ישנה מדי ולא תומכת ב deinterlacing בתוך הדפדפן. עדכן לגרסה 1.1.11 ומעלה.</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>שמור</value>
@@ -343,6 +370,9 @@
   </data>
   <data name="CardRTSPStream" xml:space="preserve">
     <value>זרם RTSP</value>
+  </data>
+  <data name="CardScrambled" xml:space="preserve">
+    <value>מוצפן</value>
   </data>
   <data name="CardState" xml:space="preserve">
     <value>מצב</value>
@@ -399,5 +429,32 @@
   </data>
   <data name="ListeningTrack" xml:space="preserve">
     <value>מאזין ל {0}</value>
+  </data>
+  <data name="YouAreListening" xml:space="preserve">
+    <value>אתה מקשיב ל &lt;strong&gt;{0}&lt;/strong&gt; של &lt;strong&gt;{1}&lt;/strong&gt;.</value>
+  </data>
+  <data name="FailedToStartStream" xml:space="preserve">
+    <value>התחלת הזרמה נכשלה. בדוק לוגים של סרבר לפרטים נוספים.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>אודות</value>
+  </data>
+  <data name="CurrentCPUUsage" xml:space="preserve">
+    <value>שימוש נוכחי במעבד:</value>
+  </data>
+  <data name="CurrentMemoryUsage" xml:space="preserve">
+    <value>שימוש נוכחי בזיכרון:</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>מצב מערכת</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>WebMediaPortal גרסה &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
+  <data name="LatestAlbums" xml:space="preserve">
+    <value>אלבומים אחרונים</value>
+  </data>
+  <data name="LatestTracks" xml:space="preserve">
+    <value>רצועות אחרונות</value>
   </data>
 </root>

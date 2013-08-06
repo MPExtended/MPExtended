@@ -4,50 +4,9 @@ Database\Gentle:
 - Source code available from http://sourceforge.net/projects/gopf/ and http://www.team-mediaportal.com/
 - Version 1.5.0.29112 (custom build from MediaPortal)
 
-Database\MySql.Data.dll:
-- Copyright (C) 2004 - 2007, MySQL AB, http://www.mysql.com/
-- Licensed under General Public License, version 2, available in ..\LICENSE.txt and on http://www.gnu.org/licenses/gpl-2.0.html
-- Source code available from http://www.mysql.com/
-- Version 5.1.7 (version from MediaPortal)
-
-Database\System.Data.SQLite:
-- Public domain
-- Source code available from http://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-- Source file is sqlite-netFx40-static-binary-bundle-Win32-2010-1.0.80.0.zip 
-- Version 1.0.80.0, SQLite 3.7.11
-
-Installer\WifiRemote_0.6.1.mpe1:
-- Copyright (C) 2011 WifiRemote developers, http://code.google.com/p/wifiremote/
-- Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
-- Source code available from http://code.google.com/p/wifiremote/
-- Version 0.5.0
-
 Installer\Microsoft_VC100_CRT_x86.msm:
 - Copyright (C) Microsoft Corporation. All rights reserved.
 - Rights granted to be redistributed unmodified. 
-
-Misc\Deusty.Net.dll:
-- Public domain
-- Source code available from http://code.google.com/p/dotnetasyncsocket/
-- Version 1.1.0.0 (build from source revision r15)
-
-Misc\MoreLinq.dll:
-- Copyright (C) 2008 - 2011 Jonathan Skeet, http://code.google.com/p/morelinq/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://code.google.com/p/morelinq/
-- Version 1.0-beta
-
-Misc\Newtonsoft.Json.dll:
-- Copyright (C) 2008 - 2012 James Newton-King, http://james.newtonking.com/projects/json-net.aspx
-- Licensed under MIT license, available on http://opensource.org/licenses/mit-license.php and http://json.codeplex.com/license
-- Source code available from http://json.codeplex.com/
-- Version 4.5 release 8, build 4.5.8.15203
-
-Misc\zxing.dll:
-- Copyright (C) 2007 - 2011 ZXing Authors, http://code.google.com/p/zxing/
-- Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
-- Source code available from http://code.google.com/p/zxing/
-- Version 1.0.4145.29580
 
 Misc\ZeroconfService.dll:
 - Copyright unknown
@@ -55,36 +14,11 @@ Misc\ZeroconfService.dll:
 - Source code available from http://code.google.com/p/zeroconfignetservices/
 - Version 0.6.0.0
 
-MVC:
-- Copyright (C) Microsoft Corporation. All rights reserved.
-- Licensed under Microsoft Public License (Ms-PL), available on http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
-- Downloaded from http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=22079
-- Version 3.0.0.0
-
-Streaming\ffmpeg.exe:
-- Copyright (C) 2000-2012 the FFmpeg developers, http://ffmpeg.org/
-- Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
-- Source code available from http://ffmpeg.org/, http://git.videolan.org/ffmpeg.git and http://ffmpeg.zeranoe.com/builds/source/ffmpeg/
-- Compiled for Windows by Kyle Schwarz, http://ffmpeg.zeranoe.com/
-- Revision git-c995644 (2012-11-05), static 32-bit build
-
-Streaming\MediaInfo.dll:
-- Copyright (C) 2002-2010 MediaArea.net SARL, Info@MediaArea.net
-- Licensed under Lesser General Public License, version 3, available on http://www.gnu.org/licenses/lgpl-3.0.html
-- Source code available from http://mediainfo.sourceforge.net/
-- Version 0.7.59, 32-bit build
-
 Streaming\vlc-2.0.2:
 - Copyright (C) 1996-2011 the VideoLAN team, http://videolan.org/
 - Licensed under General Public License, version 3, available on http://www.gnu.org/licenses/gpl-3.0.html
 - Source code available from http://www.videolan.org/
 - Version 2.0.2, 32-bit, stripped from non-used components for size
-
-Tests\*:
-- Copyright (C) 2007-2012 Microsoft Corporation, http://xunit.codeplex.com/
-- Licensed under Microsoft Public License (Ms-PL), available on http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
-- Source code available from http://xunit.codeplex.com/
-- Version 1.9.1, stripped from non-used components for size reduction
 
 TVEngine3:
 - Copyright (C) 2005 - 2011 Team MediaPortal, http://www.team-mediaportal.com/
@@ -97,9 +31,3 @@ TVEngine3\log4net.dll:
 - Licensed under Apache License 2.0, available on http://www.apache.org/licenses/LICENSE-2.0.txt
 - Source code available from http://logging.apache.org/log4net/
 - Version 1.2.10.0 (version from MediaPortal)
-
-UI\Hardcodet.Wpf.TaskbarNotification:
-- Copyright (C) 2009 Philipp Sumi, http://www.hardcodet.net/projects/wpf-notifyicon
-- Licensed under Code Project Open License, version 1, available on http://www.codeproject.com/info/cpol10.aspx
-- Source code available from http://www.hardcodet.net/projects/wpf-notifyicon
-- Version 1.0.4

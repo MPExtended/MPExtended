@@ -78,7 +78,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 foreach (var identifier in Streams.Select(x => x.Value.Identifier).ToList())
                 {
-                    Log.Warn("Killing stream {0} because of service stop", identifier);
+                    StreamLog.Warn(identifier, "Killing stream because of service stop");
                     KillStream(identifier);
                 }
             };
@@ -124,12 +124,12 @@ namespace MPExtended.Services.StreamingService.Code
 
                         if (Streams[key].UseActivityForTimeout)
                         {
-                            Log.Info("Stream {0} had last service activity at {1}, so cancel it", key, Streams[key].LastActivity);
+                            StreamLog.Info(key, "Stream had last service activity at {0}, so cancel it", Streams[key].LastActivity);
                         }
                         else
                         {
-                            Log.Info("Stream {0} had last read {1} milliseconds ago and last service activity at {2}, so cancel it", 
-                                key, Streams[key].OutputStream.TimeSinceLastRead, Streams[key].LastActivity);
+                            StreamLog.Info(key, "Stream had last read {0} milliseconds ago (read {1} bytes in total) and last service activity at {2}, so cancel it", 
+                                Streams[key].OutputStream.TimeSinceLastRead, Streams[key].OutputStream.ReadBytes, Streams[key].LastActivity);
                         }
                         service.FinishStream(key);
                     }
@@ -145,7 +145,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             if (!source.Exists)
             {
-                Log.Warn("Tried to start stream for non-existing file {0}", source.GetDebugName());
+                StreamLog.Warn(identifier, "Tried to start stream for non-existing file {0}", source.GetDebugName());
                 return false;
             }
 
@@ -157,6 +157,7 @@ namespace MPExtended.Services.StreamingService.Code
             stream.LastActivity = DateTime.Now;
             stream.UseActivityForTimeout = false;
             stream.Context = new StreamContext();
+            stream.Context.Identifier = identifier;
             stream.Context.Source = source;
             stream.Context.IsTv = source.MediaType == WebMediaType.TV;
 
@@ -182,7 +183,7 @@ namespace MPExtended.Services.StreamingService.Code
 
             if (profile == null)
             {
-                Log.Warn("Stream requested for non-existent profile");
+                StreamLog.Warn(identifier, "Stream requested for non-existent profile");
                 return null;
             }
 
@@ -190,7 +191,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier])
                 {
-                    Log.Debug("StartStream with identifier {0} for file {1}", identifier, Streams[identifier].Context.Source.GetDebugName());
+                    StreamLog.Debug(identifier, "StartStream for file {0}", Streams[identifier].Context.Source.GetDebugName());
 
                     // initialize stream and context
                     ActiveStream stream = Streams[identifier];
@@ -199,7 +200,7 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.UseActivityForTimeout = profile.Transport == "httplive";
                     stream.Context.MediaInfo = MediaInfoHelper.LoadMediaInfoOrSurrogate(stream.Context.Source);
                     stream.Context.OutputSize = CalculateSize(stream.Context);
-                    Log.Debug("Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
+                    StreamLog.Debug(identifier, "Using {0} as output size for stream {1}", stream.Context.OutputSize, identifier);
                     Reference<WebTranscodingInfo> infoRef = new Reference<WebTranscodingInfo>(() => stream.Context.TranscodingInfo, x => { stream.Context.TranscodingInfo = x; });
                     sharing.StartStream(stream.Context, infoRef);
 
@@ -209,47 +210,47 @@ namespace MPExtended.Services.StreamingService.Code
                     stream.Transcoder.Context = stream.Context;
 
                     // get audio and subtitle id
-                    if (stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).Count() > 0)
+                    if (stream.Context.MediaInfo.AudioStreams.Any(x => x.ID == audioId))
                     {
-                        stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.Where(x => x.ID == audioId).First().ID;
+                        stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.ID == audioId).ID;
                     }
                     else if (audioId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Configuration.Streaming.DefaultAudioStream;
-                        if (stream.Context.MediaInfo.AudioStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.AudioStreams.Any(x => x.Language == preferredLanguage))
                         {
                             stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage != "none" && stream.Context.MediaInfo.AudioStreams.Count() > 0)
+                        else if (preferredLanguage != "none" && stream.Context.MediaInfo.AudioStreams.Any())
                         {
                             stream.Context.AudioTrackId = stream.Context.MediaInfo.AudioStreams.First().ID;
                         }
                     }
 
-                    if (stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).Count() > 0)
+                    if (stream.Context.MediaInfo.SubtitleStreams.Any(x => x.ID == subtitleId))
                     {
-                        stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.Where(x => x.ID == subtitleId).First().ID;
+                        stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.ID == subtitleId).ID;
                     }
                     else if (subtitleId == STREAM_DEFAULT)
                     {
                         string preferredLanguage = Configuration.Streaming.DefaultSubtitleStream;
-                        if (stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Language == preferredLanguage) > 0)
+                        if (stream.Context.MediaInfo.SubtitleStreams.Any(x => x.Language == preferredLanguage))
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Language == preferredLanguage).ID;
                         }
-                        else if (preferredLanguage == "external" && stream.Context.MediaInfo.SubtitleStreams.Count(x => x.Filename != null) > 0)
+                        else if (preferredLanguage == "external" && stream.Context.MediaInfo.SubtitleStreams.Any(x => x.Filename != null))
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First(x => x.Filename != null).ID;
                         }
-                        else if (preferredLanguage == "first" && stream.Context.MediaInfo.SubtitleStreams.Count() > 0)
+                        else if (preferredLanguage == "first" && stream.Context.MediaInfo.SubtitleStreams.Any())
                         {
                             stream.Context.SubtitleTrackId = stream.Context.MediaInfo.SubtitleStreams.First().ID;
                         }
                     }
-                    Log.Debug("Final stream selection: audioId={0}, subtitleId={1}", stream.Context.AudioTrackId, stream.Context.SubtitleTrackId);
+                    StreamLog.Debug(identifier, "Final stream selection: audioId={0}, subtitleId={1}", stream.Context.AudioTrackId, stream.Context.SubtitleTrackId);
 
                     // build the pipeline
-                    stream.Context.Pipeline = new Pipeline();
+                    stream.Context.Pipeline = new Pipeline(identifier);
                     stream.Context.TranscodingInfo = new WebTranscodingInfo();
                     stream.Transcoder.BuildPipeline();
 
@@ -258,7 +259,7 @@ namespace MPExtended.Services.StreamingService.Code
                     bool startResult = assembleResult ? stream.Context.Pipeline.Start() : true;
                     if (!assembleResult || !startResult)
                     {
-                        Log.Warn("Starting pipeline for stream '{0}' failed", identifier);
+                        StreamLog.Warn(identifier, "Starting pipeline failed");
                         return null;
                     }
 
@@ -269,14 +270,14 @@ namespace MPExtended.Services.StreamingService.Code
                         Streams[identifier].OutputStream = new ReadTrackingStreamWrapper(finalStream);
                     }
 
-                    Log.Info("Started stream with identifier '{0}'", identifier);
+                    StreamLog.Info(identifier, "Started stream");
                     Streams[identifier].LastActivity = DateTime.Now;
                     return stream.Transcoder.GetStreamURL();
                 }
             }
             catch (Exception ex)
             {
-                Log.Error("Failed to start stream " + identifier, ex);
+                StreamLog.Error(identifier, "Failed to start stream", ex);
                 return null;
             }
         }
@@ -295,7 +296,7 @@ namespace MPExtended.Services.StreamingService.Code
                 WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
                 if (Streams[identifier].OutputStream == null)
                 {
-                    Log.Warn("Encountered null stream in RetrieveStream for identifier {0}", identifier);
+                    StreamLog.Warn(identifier, "Encountered null stream in RetrieveStream");
                     WCFUtil.SetResponseCode(HttpStatusCode.NotFound);
                     return Stream.Null;
                 }
@@ -340,7 +341,7 @@ namespace MPExtended.Services.StreamingService.Code
             {
                 lock (Streams[identifier])
                 {
-                    Log.Debug("Stopping stream with identifier " + identifier);
+                    StreamLog.Debug(identifier, "Stopping stream");
                     sharing.EndStream(Streams[identifier].Context.Source);
                     Streams[identifier].Context.Pipeline.Stop();
                     Streams[identifier].Context.Pipeline = null;
@@ -348,7 +349,7 @@ namespace MPExtended.Services.StreamingService.Code
             }
             catch (Exception ex)
             {
-                Log.Error("Failed to stop stream " + identifier, ex);
+                StreamLog.Error(identifier, "Failed to stop stream", ex);
             }
         }
 
@@ -356,7 +357,7 @@ namespace MPExtended.Services.StreamingService.Code
         {
             EndStream(identifier);
             Streams.Remove(identifier);
-            Log.Debug("Killed stream with identifier {0}", identifier);
+            StreamLog.Debug(identifier, "Killed stream");
         }
 
         public List<WebStreamingSession> GetStreamingSessions()
@@ -374,7 +375,8 @@ namespace MPExtended.Services.StreamingService.Code
 
                 StartPosition = s.Context.StartPosition,
                 PlayerPosition = s.Context.GetPlayerPosition(),
-                PercentageProgress = (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
+                PercentageProgress = s.Context.MediaInfo == null ? 0 :
+                                        (int)Math.Round(100.0 * s.Context.GetPlayerPosition() / s.Context.MediaInfo.Duration),
                 TranscodingInfo = s.Context.TranscodingInfo != null ? s.Context.TranscodingInfo : null,
             }).ToList();
         }

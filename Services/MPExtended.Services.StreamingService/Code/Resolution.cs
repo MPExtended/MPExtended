@@ -25,6 +25,14 @@ namespace MPExtended.Services.StreamingService.Code
 {
     internal class Resolution : WebResolution
     {
+        public double AspectRatio
+        {
+            get
+            {
+                return (double)Width / Height;
+            }
+        }
+
         public Resolution(int width, int height)
         {
             Width = width;
@@ -44,6 +52,11 @@ namespace MPExtended.Services.StreamingService.Code
         public Resolution CalculateResize(Resolution maxOutputSize, int framesizeMultipleOff)
         {
             return Calculate(Width, Height, maxOutputSize.Width, maxOutputSize.Height, framesizeMultipleOff);
+        }
+
+        public static Resolution Create(int width, int height)
+        {
+            return new Resolution(width, height);
         }
 
         public static Resolution Calculate(decimal destinationAspectRatio, Resolution maxOutput)

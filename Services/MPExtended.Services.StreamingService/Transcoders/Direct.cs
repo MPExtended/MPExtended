@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 
@@ -41,13 +42,16 @@ namespace MPExtended.Services.StreamingService.Transcoders
         {
             // we ignore our arguments :)
             Context.TranscodingInfo.Supported = false;
-            Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
+            Context.Pipeline.AddDataUnit(Context.GetInputReaderUnit(), 1);
             return;
         }
 
         public void RetrieveStreamCalled()
         {
-            WCFUtil.SetContentLength(Context.Source.GetFileInfo().Size);
+            // Don't return a length when we're streaming TV, as we don't know the full length of the stream, since we are
+            // reading from a timeshifting buffer. See dicussion in bug #394 and #319. 
+            if (Context.Source.MediaType != WebMediaType.TV)
+                WCFUtil.SetContentLength(Context.Source.GetFileInfo().Size);
 
             // there has to be a better way to do this
             object mime = RegistryReader.ReadKey(Microsoft.Win32.RegistryHive.ClassesRoot, Path.GetExtension(Context.Source.GetFileInfo().Name), "Content Type");

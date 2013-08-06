@@ -34,13 +34,16 @@ namespace MPExtended.Services.StreamingService.Units
         public Stream InputStream { get; set; }
         public bool LogMessages { get; set; }
         public bool LogProgress { get; set; }
+
+        private string identifier;
         private Reference<WebTranscodingInfo> data;
         private Thread processThread;
         private long startPosition;
 
-        public FFMpegLogParsingUnit(Reference<WebTranscodingInfo> save, long startPosition)
+        public FFMpegLogParsingUnit(string identifier, Reference<WebTranscodingInfo> save, long startPosition)
         {
-            data = save;
+            this.identifier = identifier;
+            this.data = save;
             this.startPosition = startPosition;
         }
 
@@ -53,7 +56,7 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 try
                 {
-                    ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress);
+                    ParseOutputStream(InputStream, data, startPosition, LogMessages, LogProgress, identifier);
                 }
                 catch (ThreadAbortException)
                 {
@@ -61,10 +64,10 @@ namespace MPExtended.Services.StreamingService.Units
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("FFMpegLogParsing brutally came to an end", ex);
+                    StreamLog.Error(identifier, "FFMpegLogParsing brutally came to an end", ex);
                 }
             });
-            processThread.Name = "FFMpegLogParsing";
+            processThread.Name = "FFMpegLog";
             processThread.Start();
             return true;
         }
@@ -80,7 +83,7 @@ namespace MPExtended.Services.StreamingService.Units
             return true;
         }
 
-        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, long startPosition, bool logMessages, bool logProgress)
+        private static void ParseOutputStream(Stream outputStream, Reference<WebTranscodingInfo> saveData, long startPosition, bool logMessages, bool logProgress, string identifier)
         {
             StreamReader reader = new StreamReader(outputStream);
 
@@ -124,7 +127,7 @@ namespace MPExtended.Services.StreamingService.Units
 
                     // show error messages
                     if (logMessages && canBeErrorLine)
-                        Log.Trace("ffmpeg: " + line);
+                        StreamLog.Trace(identifier, "ffmpeg: " + line);
                 }
                 catch (ThreadAbortException)
                 {
@@ -135,7 +138,7 @@ namespace MPExtended.Services.StreamingService.Units
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Failure during parsing of ffmpeg output", e);
+                    StreamLog.Error(identifier, "Failure during parsing of ffmpeg output", e);
                 }
             }
 

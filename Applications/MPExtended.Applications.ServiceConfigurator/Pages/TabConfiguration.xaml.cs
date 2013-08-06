@@ -27,6 +27,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Documents;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using MPExtended.Applications.ServiceConfigurator.Code;
 using MPExtended.Libraries.Service;
@@ -34,7 +35,6 @@ using MPExtended.Libraries.Service.Hosting;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Network;
-using WpfMessageBox = System.Windows.MessageBox;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -62,6 +62,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                 Configuration.Services.NetworkImpersonation.Username :
                 Configuration.Services.NetworkImpersonation.Domain + "\\" + Configuration.Services.NetworkImpersonation.Username;
             txtNetworkPassword.Password = Configuration.Services.NetworkImpersonation.GetPassword();
+            lblCredentialResults.Content = String.Empty;
             cbAccessRequestEnabled.IsChecked = Configuration.Services.AccessRequestEnabled;
 
             // if autodetection is enabled, setting this property fires the _Checked event which loads the address
@@ -218,12 +219,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
             var domuser = GetDomainAndUsername(txtNetworkUser.Text);
             if (CredentialTester.TestCredentials(domuser.Item1, domuser.Item2, txtNetworkPassword.Password))
             {
-                WpfMessageBox.Show(UI.CredentialValidationSuccessful, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Information);
+                lblCredentialResults.Content = UI.CredentialsValid;
+                lblCredentialResults.Foreground = Brushes.Green;
             }
             else
             {
-                WpfMessageBox.Show(UI.CredentialValidationFailed, "MPExtended", MessageBoxButton.OK, MessageBoxImage.Error);
+                lblCredentialResults.Content = UI.CredentialsInvalid;
+                lblCredentialResults.Foreground = Brushes.Red;
             }
+        }
+
+        private void txtNetwork_Changed(object sender, EventArgs e)
+        {
+            lblCredentialResults.Content = String.Empty;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
