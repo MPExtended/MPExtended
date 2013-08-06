@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ClientService" xml:space="preserve">
+    <value>Služba klienta</value>
+  </data>
+  <data name="DefaultMediaStreamingProfile" xml:space="preserve">
+    <value>Výchozí profil "streamování" médií</value>
+  </data>
+  <data name="DefaultMusicStreamingProfile" xml:space="preserve">
+    <value>Výchozí profil "streamování" hudby</value>
+  </data>
+  <data name="DefaultSkinName" xml:space="preserve">
+    <value>výchozí</value>
+    <comment>Name of the default skin</comment>
+  </data>
+  <data name="DefaultTVGroup" xml:space="preserve">
+    <value>Výchozí TV skupina</value>
+  </data>
+  <data name="DefaultTVStreamingProfile" xml:space="preserve">
+    <value>Výchozí profil "streamování" TV</value>
+  </data>
+  <data name="DirectStreamingProfileDescription" xml:space="preserve">
+    <value>Přímo: nejvyšší výkon, funguje jen na lokální síti</value>
+  </data>
+  <data name="DirectWhenPossibleDescription" xml:space="preserve">
+    <value>Pokud možno přímo, jinak přes proxy</value>
+  </data>
+  <data name="EnableAlbumPlayer" xml:space="preserve">
+    <value>Povolit prehrávání celých hudebních alb?</value>
+  </data>
+  <data name="ErrorNoValidClientService" xml:space="preserve">
+    <value>Zadejte funkční MAS URL</value>
+  </data>
+  <data name="ErrorNoValidLanguage" xml:space="preserve">
+    <value>Vyberte podporovaný jazyk</value>
+  </data>
+  <data name="ErrorNoValidMediaProfile" xml:space="preserve">
+    <value>Vyberte vhodný profil "streamování" médií</value>
+  </data>
+  <data name="ErrorNoValidMovieDatabase" xml:space="preserve">
+    <value>Vyberte vhodnou databázi filmů</value>
+  </data>
+  <data name="ErrorNoValidMusicDatabase" xml:space="preserve">
+    <value>Vyberte vhodnou databázi hudby</value>
+  </data>
+  <data name="ErrorNoValidMusicProfile" xml:space="preserve">
+    <value>Vyberte vhodný profil "streamování" hudby</value>
+  </data>
+  <data name="ErrorNoValidServerService" xml:space="preserve">
+    <value>Zadejte funkční TAS URL</value>
+  </data>
+  <data name="ErrorNoValidSkin" xml:space="preserve">
+    <value>Vyberte prosím vhodný skin</value>
+  </data>
+  <data name="ErrorNoValidTVGroup" xml:space="preserve">
+    <value>Vyberte prosím vhodnou skupinu TV kanálů</value>
+  </data>
+  <data name="ErrorNoValidTVProfile" xml:space="preserve">
+    <value>Vyberte vhodný profil "streamování" TV</value>
+  </data>
+  <data name="ErrorNoValidTVShowDatabase" xml:space="preserve">
+    <value>Vyberte vhodnou databázi TV seriálů</value>
+  </data>
+  <data name="FailedToConnectToClient" xml:space="preserve">
+    <value>Nepodařilo se spojit se zadanou klientskou službou</value>
+  </data>
+  <data name="FailedToConnectToServer" xml:space="preserve">
+    <value>Nepodařilo se spojit se zadanou službou serveru</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>{0} je nutné zadat</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="LogOnPassword" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="LogOnRememberMe" xml:space="preserve">
+    <value>Pamatovat si mě?</value>
+  </data>
+  <data name="LogOnUsername" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MovieDatabase" xml:space="preserve">
+    <value>Databáze filmů</value>
+  </data>
+  <data name="MusicDatabase" xml:space="preserve">
+    <value>Databáza hudby</value>
+  </data>
+  <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
+    <value>Přes proxy: okamžitě zastaví přehrávání s možností pozastavení, funguje přes internet</value>
+  </data>
+  <data name="ScheduleChannel" xml:space="preserve">
+    <value>Kanál</value>
+  </data>
+  <data name="ScheduleEndTime" xml:space="preserve">
+    <value>Konec</value>
+  </data>
+  <data name="ScheduleSelectValidChannel" xml:space="preserve">
+    <value>Vyberte vhodný kanál</value>
+  </data>
+  <data name="ScheduleSelectValidType" xml:space="preserve">
+    <value>Vyberte vhodný typ plánu nahrávaní</value>
+  </data>
+  <data name="ScheduleStartTime" xml:space="preserve">
+    <value>Začátek</value>
+  </data>
+  <data name="ScheduleTitle" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="ScheduleType" xml:space="preserve">
+    <value>Typ plánu</value>
+  </data>
+  <data name="ScheduleTypeDaily" xml:space="preserve">
+    <value>Denně</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
+    <value>Vždy na všech kanálech</value>
+  </data>
+  <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
+    <value>Vždy na tomto kanále</value>
+  </data>
+  <data name="ScheduleTypeOnce" xml:space="preserve">
+    <value>Jednou</value>
+  </data>
+  <data name="ScheduleTypeWeekends" xml:space="preserve">
+    <value>Přes víkendy</value>
+  </data>
+  <data name="ScheduleTypeWeekly" xml:space="preserve">
+    <value>Týdně</value>
+  </data>
+  <data name="ScheduleTypeWeeklyOnThisChannel" xml:space="preserve">
+    <value>Týdně na tomto kanálu</value>
+  </data>
+  <data name="ScheduleTypeWorkingDays" xml:space="preserve">
+    <value>V pracovní dny</value>
+  </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>{0} (album) od {1}</value>
+  </data>
+  <data name="SearchResultChannelGroup" xml:space="preserve">
+    <value>{0} (skupina kanálů)</value>
+  </data>
+  <data name="SearchResultProgram" xml:space="preserve">
+    <value>{0} ({1} na {2})</value>
+  </data>
+  <data name="SearchResultRecording" xml:space="preserve">
+    <value>{0} (nahrané z {1})</value>
+  </data>
+  <data name="SearchResultSchedule" xml:space="preserve">
+    <value>{0} (plán nahrávání)</value>
+  </data>
+  <data name="SearchResultTrack" xml:space="preserve">
+    <value>{0} od {1}</value>
+  </data>
+  <data name="ServerService" xml:space="preserve">
+    <value>Služba serveru</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="StateIdle" xml:space="preserve">
+    <value>Nečinný</value>
+  </data>
+  <data name="StateRecording" xml:space="preserve">
+    <value>Nahrávám</value>
+  </data>
+  <data name="StateScanning" xml:space="preserve">
+    <value>Skenuji</value>
+  </data>
+  <data name="StateTimeshifting" xml:space="preserve">
+    <value>Přehrávám</value>
+  </data>
+  <data name="StreamType" xml:space="preserve">
+    <value>Typ streamu</value>
+  </data>
+  <data name="TVShowDatabase" xml:space="preserve">
+    <value>Databáze TV seriálů</value>
+  </data>
+  <data name="UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Zadané jméno nebo heslo je nesprávné.</value>
+  </data>
+  <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
+    <value>VLC player: zvolit "deinterlacing"?</value>
+  </data>
+</root>

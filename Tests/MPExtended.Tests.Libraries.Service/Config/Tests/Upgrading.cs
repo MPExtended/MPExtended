@@ -89,7 +89,6 @@ namespace MPExtended.Tests.Libraries.Service.Config.Tests
             Assert.True(Configuration.Services.BonjourEnabled);
             Assert.Equal("PC Name", Configuration.Services.BonjourName);
             Assert.Equal(8888, Configuration.Services.Port);
-            Assert.False(Configuration.Services.EnableIPv6);
         }
 
         [Fact]

@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -44,15 +42,6 @@ namespace MPExtended.Libraries.Service
     /// </summary>
     public class VersionUtil
     {
-        public enum MediaPortalVersion 
-        {
-            NotAvailable = 1,
-            Unknown = 2,
-            MP1_1 = 3,
-            MP1_2 = 4,
-            MP1_3 = 5,
-        }
-
         public static Version GetVersion()
         {
             return GetVersion(Assembly.GetExecutingAssembly());
@@ -124,53 +113,6 @@ namespace MPExtended.Libraries.Service
         public static string GetUserAgent(string component)
         {
             return GetUserAgent(component, GetVersionName());
-        }
-
-        public static MediaPortalVersion GetMediaPortalVersion()
-        {
-            Version v = GetMediaPortalBuildVersion();
-            if (v == null)
-            {
-                return MediaPortalVersion.NotAvailable;
-            }
-            else if ((v.Major == 1 && v.Minor == 3) || (v.Major == 1 && v.Minor == 2 && v.Build >= 100)) // MP1.3 Alpha used 1.2.100.0 as version number
-            {
-                return MediaPortalVersion.MP1_3;
-            }
-            else if (v.Major == 1 && v.Minor == 2) // Not sure about the alpha versions, but those are so ancient...
-            {
-                return MediaPortalVersion.MP1_2;
-            }
-            else if (v.Major == 1 && v.Minor == 1) // We don't even support this anymore, but whatever... 
-            {
-                return MediaPortalVersion.MP1_1;
-            }
-
-            return MediaPortalVersion.Unknown;
-        }
-
-        public static Version GetMediaPortalBuildVersion()
-        {
-            var assemblyPath = GetMediaPortalAssemblyPath();
-            return assemblyPath != null ? AssemblyName.GetAssemblyName(assemblyPath).Version : null;
-        }
-
-        private static string GetMediaPortalAssemblyPath()
-        {
-            string tv = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal TV Server", "TvService.exe");
-            if (File.Exists(tv))
-            {
-                return tv;
-            }
-
-            string mp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal", "MediaPortal.exe");
-            if (File.Exists(mp))
-            {
-                return mp;
-            }
-
-            Log.Error("Cannot find installed TvService.exe or MediaPortal.exe");
-            return null;
         }
     }
 }

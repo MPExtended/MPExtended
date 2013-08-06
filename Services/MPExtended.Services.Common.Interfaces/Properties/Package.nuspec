@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MPExtended.Services.Common.Interfaces</id>
+    <version>$version$</version>
+    <authors>MPExtended Developers</authors>
+    <owners>MPExtended Developers</owners>
+    <projectUrl>http://www.mpextended.com/</projectUrl>
+    <iconUrl>http://www.mpextended.com/logo_200.png</iconUrl>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>$copyright$</copyright>
+    <summary>Common interfaces for the MPExtended services</summary>
+    <description>MPExtended aims at providing access to MediaPortal from all over the world, using WCF services to create an easy-to-use API. This package contains the common interfaces for all services.</description>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

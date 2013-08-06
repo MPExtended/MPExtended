@@ -60,6 +60,21 @@ namespace MPExtended.Libraries.Service
             logger.Flush();
         }
 
+        public static void Write(LogLevel level, String _msg)
+        {
+            logger.LogLine(level, _msg);
+        }
+
+        public static void Write(LogLevel level, String _msg, Exception ex)
+        {
+            logger.LogLine(level, _msg, ex);
+        }
+
+        public static void Write(LogLevel level, String _msg, params object[] args)
+        {
+            logger.LogLine(level, _msg, args);
+        }
+
         public static void Trace(String _msg)
         {
             logger.LogLine(LogLevel.Trace, _msg);

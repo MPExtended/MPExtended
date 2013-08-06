@@ -62,10 +62,10 @@ namespace MPExtended.Services.StreamingService.Transcoders
         public virtual void BuildPipeline()
         {
             // input
-            bool doInputReader = Context.Source.NeedsInputReaderUnit;
+            bool doInputReader = Context.NeedsInputReaderUnit;
             if (doInputReader)
             {
-                Context.Pipeline.AddDataUnit(Context.Source.GetInputReaderUnit(), 1);
+                Context.Pipeline.AddDataUnit(Context.GetInputReaderUnit(), 1);
             }
 
             // then add the encoder (this should happen in position 5)
@@ -103,7 +103,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // input
             string inURL = "";
-            if (Context.Source.NeedsInputReaderUnit)
+            if (Context.NeedsInputReaderUnit)
             {
                 inURL = @"stream://\#IN#";
             }
@@ -131,7 +131,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             }
             else
             {
-                Log.Warn("VLC streaming without audio track is not implemented yet");
+                StreamLog.Warn(Identifier, "VLC streaming without audio track is not implemented yet");
             }
 
             // subtitle selection

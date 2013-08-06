@@ -31,6 +31,7 @@ namespace MPExtended.Libraries.SQLitePlugin
         private FileStream fileStream;
 
         public SQLiteConnection Connection { get; private set; }
+        public string Path { get; private set; }
 
         public bool IsOpen
         {
@@ -44,10 +45,9 @@ namespace MPExtended.Libraries.SQLitePlugin
         {
             string connectionString = "Data Source=" + db.DatabasePath + ";Read Only=True";
             Connection = new SQLiteConnection(connectionString);
+            Path = db.DatabasePath;
             if (holdExclusiveLock)
-            {
                 fileStream = File.Open(db.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            }
 
             Connection.Open();
             shouldClose = true;

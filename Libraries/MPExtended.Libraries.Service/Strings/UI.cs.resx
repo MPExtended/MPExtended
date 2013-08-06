@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionNeedsAdmin" xml:space="preserve">
+    <value>Akce vyžaduje práva administrátora.</value>
+  </data>
+  <data name="ActiveStreams" xml:space="preserve">
+    <value>Aktivní streamy</value>
+  </data>
+  <data name="ConfigureWebMPPort" xml:space="preserve">
+    <value>Zde se nastavuje port, na kterém běží WebMediaPortal. Pokud zadáte jinou hodnotu než 8080, bude nutné ručně nastavit váš firewall.</value>
+  </data>
+  <data name="DefaultAudioLanguage" xml:space="preserve">
+    <value>Výchozí jazyk zvuku:</value>
+  </data>
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Výchozí jazyk</value>
+  </data>
+  <data name="DefaultLanguageExplanation" xml:space="preserve">
+    <value>Někteří klienti nepodporují volbu zvukové stopy a titulků v každém streamu. Zde je možné nastavit výchozí zvukovou stopu a titulky.</value>
+  </data>
+  <data name="DefaultSubtitleLanguage" xml:space="preserve">
+    <value>Výchozí jazyk titulků:</value>
+  </data>
+  <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
+    <value>Vyřazení neplatné změny na sociální kartě.</value>
+  </data>
+  <data name="ExportedLogsAndConfig" xml:space="preserve">
+    <value>Export logů a konfiguračních údajů do {0}</value>
+  </data>
+  <data name="ExportLogsAndConfiguration" xml:space="preserve">
+    <value>Export logů a konfigurace</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Přihlášení se nezdařilo.</value>
+  </data>
+  <data name="LoginSuccessful" xml:space="preserve">
+    <value>Přihlášení bylo úspěšné!</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="ServiceNotInstalled" xml:space="preserve">
+    <value>Není instalováno</value>
+  </data>
+  <data name="ServiceNotInstalledPopup" xml:space="preserve">
+    <value>Služba MPExtended není naistalována. Prosím, ujistěte se, že vaše instalace je správná.</value>
+  </data>
+  <data name="ServiceStarted" xml:space="preserve">
+    <value>Služba byla spuštěná</value>
+  </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Služba se spouští</value>
+  </data>
+  <data name="ServiceStopped" xml:space="preserve">
+    <value>Služba byla zastavená</value>
+  </data>
+  <data name="ServiceUnknown" xml:space="preserve">
+    <value>Neznámý stav služby</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Streaming" xml:space="preserve">
+    <value>Streamování</value>
+  </data>
+  <data name="StreamingClient" xml:space="preserve">
+    <value>Klient</value>
+  </data>
+  <data name="StreamingFile" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="StreamingIPAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="StreamingProfile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="StreamingProgress" xml:space="preserve">
+    <value>Postup</value>
+  </data>
+  <data name="SubtitlesDisabled" xml:space="preserve">
+    <value>Vypnout titulky</value>
+  </data>
+  <data name="SubtitlesExternal" xml:space="preserve">
+    <value>Použít externí .srt soubor</value>
+  </data>
+  <data name="SubtitlesFirstStream" xml:space="preserve">
+    <value>První stream v souboru</value>
+  </data>
+  <data name="TabAuthentication" xml:space="preserve">
+    <value>Autentizace</value>
+  </data>
+  <data name="TabConfiguration" xml:space="preserve">
+    <value>Konfigurace</value>
+  </data>
+  <data name="TabLogs" xml:space="preserve">
+    <value>Logy</value>
+  </data>
+  <data name="TabPlugins" xml:space="preserve">
+    <value>Pluginy</value>
+  </data>
+  <data name="TabProject" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="TabQRCode" xml:space="preserve">
+    <value>QR kód</value>
+  </data>
+  <data name="TabStreaming" xml:space="preserve">
+    <value>Streamování</value>
+  </data>
+  <data name="TabTroubleshooting" xml:space="preserve">
+    <value>Odstraňování problémů</value>
+  </data>
+  <data name="TabWebMediaPortal" xml:space="preserve">
+    <value>WebMediaPortal</value>
+  </data>
+  <data name="TestingCredentials" xml:space="preserve">
+    <value>Testování pověření, čekejte prosím ...</value>
+  </data>
+  <data name="TestLinksFor" xml:space="preserve">
+    <value>Testovací odkazy pro</value>
+  </data>
+  <data name="TrayCloseMediaPortal" xml:space="preserve">
+    <value>Ukončení MediaPortalu</value>
+  </data>
+  <data name="TrayExit" xml:space="preserve">
+    <value>Konec</value>
+  </data>
+  <data name="TrayHibernate" xml:space="preserve">
+    <value>Hibernace</value>
+  </data>
+  <data name="TrayLock" xml:space="preserve">
+    <value>Zámek</value>
+  </data>
+  <data name="TrayLogOff" xml:space="preserve">
+    <value>Odhlásit se</value>
+  </data>
+  <data name="TrayMonitorOff" xml:space="preserve">
+    <value>Monitor off</value>
+  </data>
+  <data name="TrayOpenConfigurator" xml:space="preserve">
+    <value>Otevřít MPExtended konfiguraci</value>
+  </data>
+  <data name="TrayOpenWebMP" xml:space="preserve">
+    <value>Otevřít WebMediaPortal</value>
+  </data>
+  <data name="TrayReboot" xml:space="preserve">
+    <value>Restartovat</value>
+  </data>
+  <data name="TrayScreensaver" xml:space="preserve">
+    <value>Šetřič obrazovky</value>
+  </data>
+  <data name="TrayShutdown" xml:space="preserve">
+    <value>Vypnutí</value>
+  </data>
+  <data name="TrayStartMediaPortal" xml:space="preserve">
+    <value>Start MediaPortalu</value>
+  </data>
+  <data name="TraySuspend" xml:space="preserve">
+    <value>Uspání</value>
+  </data>
+  <data name="TroubleshootingHeaderText" xml:space="preserve">
+    <value>Chcete-li zkontrolovat platnost požadovaného obsahu použijte následující odkazy ... Můžete použít localhost pro otestování služby na stejném počítači. Vyberte jednu z IP adres z rozevíracího seznamu  pro testování adresy URL na jiných počítačích v síti (např. pro vyloučení problémů sz firewallem).</value>
+  </data>
+  <data name="TVServer" xml:space="preserve">
+    <value>TVServer</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Nastala neočekávaná chyba. Prosím vyplňte "bugreport" a přiložte log soubory.</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>MPExtended konfigurace</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Přidat účet</value>
+  </data>
+  <data name="AuthenticationIntroText" xml:space="preserve">
+    <value>Zde nastavte autentizaci uživatelů MPExtended. Doporučujeme autentizaci povolit a změnit heslo uživatele admin (nebo jej vymazat).  Nikdy neprovádějte instalace přístupné z internetu bez použití  autentizace a bezpečných hesel.</value>
+  </data>
+  <data name="Autodetection" xml:space="preserve">
+    <value>Autodetekce</value>
+  </data>
+  <data name="AutodetectionText" xml:space="preserve">
+    <value>Služba podporuje autodetekci přes Bonjour/Zeroconf, což umožňuje klientům v lokální síti automaticky najít poskytované služby a nastavit se.</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>zkontrolovat aktualizace</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>kontroluji aktualizace...</value>
+  </data>
+  <data name="CredentialValidationFailed" xml:space="preserve">
+    <value>Je nám líto, síťové přihlašovací údaje, které jste zadali, jsou neplatné.</value>
+  </data>
+  <data name="CredentialValidationSuccessful" xml:space="preserve">
+    <value>Síťové přihlašovací údaje byly úspěšně ověřeny.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Smazat účet</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Dokumentace:</value>
+  </data>
+  <data name="EnableAuthentication" xml:space="preserve">
+    <value>Povolit ověřování (doporučeno!)</value>
+  </data>
+  <data name="EnableAutodetection" xml:space="preserve">
+    <value>Povolit autodetekci</value>
+  </data>
+  <data name="FailedToRetrieveUpdateInformation" xml:space="preserve">
+    <value>nepodařilo se načíst informace o aktualizaci</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Fórum:</value>
+  </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>Domácí stránka:</value>
+  </data>
+  <data name="IRCText" xml:space="preserve">
+    <value>IRC:⏎
+irc.freenode.net / channel #mp-extended</value>
+  </data>
+  <data name="MPExtendedIntroduction" xml:space="preserve">
+    <value>MPExtended je open source projekt zaměřený na poskytnutí přístupu k MediaPortalu z celého světa použitím klientů pro webové prohlížeče, systémy Android, iOS a jiné.
+
+Jedná se o službu, která poskytuje přístup k databázím a mediálním souborům pro všechny klienty.</value>
+  </data>
+  <data name="NetworkDrives" xml:space="preserve">
+    <value>Síťové disky</value>
+  </data>
+  <data name="NetworkDrivesText" xml:space="preserve">
+    <value>Pokud jsou vaše mediální soubory uložené na jiném systému (např. dedikovaný server nebo NAS), MPExtended potřebuje přihlašovací údaje pro přístup k nim. Obvykle jde o přihlašovací údaje k systému Windows.</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>Žádná aktualizace není dostupná.</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="PortText" xml:space="preserve">
+    <value>Můžete nakonfigurovat port, na kterém služba naslouchá.</value>
+  </data>
+  <data name="QRCodeIntroText" xml:space="preserve">
+    <value>Můžete naskenovat QR kód pro automatickou instalaci MPExtended na podporovaných klientech.</value>
+  </data>
+  <data name="SaveBarcodeAsImageFile" xml:space="preserve">
+    <value>Uložit čárový kód jako obrazový soubor</value>
+  </data>
+  <data name="SavedBarcodeTo" xml:space="preserve">
+    <value>Čárový kód uložen do {0}!</value>
+  </data>
+  <data name="SaveToFile" xml:space="preserve">
+    <value>Uložit do souboru</value>
+  </data>
+  <data name="ServiceName" xml:space="preserve">
+    <value>Název služby</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Služby</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Je k dispozici aktualizace: verze {0}, vydána {1}</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze:</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="LogFile" xml:space="preserve">
+    <value>Log soubor:</value>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>Logy</value>
+  </data>
+  <data name="Plugin" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="ScrollToEnd" xml:space="preserve">
+    <value>Přesun na konec</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Stránka</value>
+  </data>
+  <data name="SocialIntroText" xml:space="preserve">
+    <value>MPExtended podporuje synchornizaci filmů a seriálů, které sledujete se službami Trakt a follw.it. Zde si nakonfigurujte přístup k těmto službám.</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Prohlížet</value>
+  </data>
+  <data name="DonateToMPExtended" xml:space="preserve">
+    <value>Přispějte na MPExtended</value>
+  </data>
+  <data name="CleanCaches" xml:space="preserve">
+    <value>Vyčistit cache</value>
+  </data>
+  <data name="EnableHTTPS" xml:space="preserve">
+    <value>Povolit protokol HTTPS</value>
+  </data>
+  <data name="HTTPSDisclaimer" xml:space="preserve">
+    <value>Omezení Windows a IIS Express způsobuje to, že pro HTTPS je možné použít jen porty od 44300 do 44399. Aby toto připojení fungovalo, je také nutné ručně nastavit firewall.
+
+Také není možné nastavit použití SSL/TLS certifikátu. Při použití HTTPS dostanete hlášení o nedůvěryhodném připojení.</value>
+  </data>
+  <data name="HTTPSInvalidPort" xml:space="preserve">
+    <value>Zadané číslo portu je neplatné. Pro HTTPS je možné použít pouze porty od 44300 do 44399.</value>
+  </data>
+  <data name="HTTPSPort" xml:space="preserve">
+    <value>HTTPS Port:</value>
+  </data>
+  <data name="UserMustHaveNameAndPassword" xml:space="preserve">
+    <value>Zadejte prosím i uživatelské jméno a heslo pro tohoto uživatele.</value>
+  </data>
+  <data name="BonjourChecking" xml:space="preserve">
+    <value>Kontrola Bonjour instalace...</value>
+  </data>
+  <data name="BonjourNotInstalled" xml:space="preserve">
+    <value>Bonjour není nainstalován na vašem počítači. Chcete-li použít tuto funkci,</value>
+  </data>
+  <data name="BonjourNotInstalledDownload" xml:space="preserve">
+    <value>stáhněte si prosím Bonjour.</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Povolit</value>
+  </data>
+  <data name="AccessRequest" xml:space="preserve">
+    <value>Chcete, aby aplikace "{0}" (s IP adresou {1}) měla plný přístup k MPExtended službě?</value>
+  </data>
+  <data name="AccessRequestGrantAccess" xml:space="preserve">
+    <value>Umožnit přístup</value>
+  </data>
+  <data name="AccessRequestSelectUser" xml:space="preserve">
+    <value>Vyberte uživatele:</value>
+  </data>
+  <data name="AccessRequestWifiRemote" xml:space="preserve">
+    <value>Povolit '{0}' přístup? (Pokud ano, přidejte uživatele v nasledujícím kroku)</value>
+  </data>
+  <data name="AccessRequestEnable" xml:space="preserve">
+    <value>Povolit klientům žádosti o přístup</value>
+  </data>
+  <data name="ExternalIpDefault" xml:space="preserve">
+    <value>Automaticky detekovat externí IP adresu</value>
+  </data>
+  <data name="ExternalIpLabel" xml:space="preserve">
+    <value>Externí adresa</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+</root>

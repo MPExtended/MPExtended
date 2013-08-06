@@ -34,7 +34,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             // setup output parsing
             var einfo = new Reference<WebTranscodingInfo>(() => Context.TranscodingInfo, x => { Context.TranscodingInfo = x; });
-            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(einfo, Context.MediaInfo, Context.StartPosition);
+            VLCWrapperParsingUnit logunit = new VLCWrapperParsingUnit(Identifier, einfo, Context.MediaInfo, Context.StartPosition);
             Context.Pipeline.AddLogUnit(logunit, 6);
         }
 

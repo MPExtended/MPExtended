@@ -8,7 +8,19 @@
       d:DesignHeight="500" d:DesignWidth="635"
 	Title="TabWebMediaPortal">
     <Grid>
-        <GroupBox Header="WebMediaPortal" Height="290" HorizontalAlignment="Stretch" Margin="6,6,6,0" Name="gbServices" VerticalAlignment="Top" Width="Auto">
+        <GroupBox Header="{x:Static strings:UI.ServiceStatus}" Height="71" HorizontalAlignment="Stretch" Margin="6,6,6,0" Name="gbService" VerticalAlignment="Top" Width="Auto">
+            <Grid Height="45" Margin="0,0,0,0">
+                <Label Height="28" Name="lblStatusLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,6,0,0">
+                    <TextBlock>
+                        <Run Text="{x:Static strings:UI.ServiceStatus}" />:
+                    </TextBlock>
+                </Label>
+                <Label Content="Running " FontWeight="Bold" Height="28" Name="lblStatusInfo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="106,6,0,0"/>
+                <Button Content="Start" Height="23" HorizontalAlignment="Right" Margin="0,7,6,0" Name="btnStartStop" VerticalAlignment="Top" Width="150" Click="btnStartStop_Click"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="WebMediaPortal" Height="290" HorizontalAlignment="Stretch" Margin="6,82,6,0" Name="gbHosting" VerticalAlignment="Top" Width="Auto">
             <Grid Height="264" Margin="0,0,0,0">
                 <TextBlock Height="72" Margin="11,6,1,0" Name="tbPort" Text="{x:Static strings:UI.ConfigureWebMPPort}" TextWrapping="Wrap" VerticalAlignment="Top" />
                 
@@ -22,6 +34,14 @@
                 <Label HorizontalAlignment="Stretch" Margin="5,148,1,0" Name="lblHTTPSDisclaimer" VerticalAlignment="Top">
                     <TextBlock Text="{x:Static strings:UI.HTTPSDisclaimer}" TextWrapping="WrapWithOverflow" Height="122" Width="Auto" />
                 </Label>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Header="Skin" Height="100" HorizontalAlignment="Stretch" Margin="6,377,6,0" Name="gbSkin" VerticalAlignment="Top" Width="Auto">
+            <Grid Height="74" Margin="0,0,0,0">
+                <TextBlock Height="40" Margin="11,6,11,0" Name="tbResetSkin" TextWrapping="Wrap" Text="{x:Static strings:UI.WebMediaPortalResetSkinText}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                
+                <Button Content="{x:Static strings:UI.WebMediaPortalResetSkinButton}" Height="23" HorizontalAlignment="Right" Margin="0,40,12,0" Name="btnResetSkin" VerticalAlignment="Top" Width="150" Click="btnResetSkin_Click"/>
             </Grid>
         </GroupBox>
     </Grid>

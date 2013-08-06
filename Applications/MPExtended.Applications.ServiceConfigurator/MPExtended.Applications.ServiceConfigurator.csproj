@@ -16,6 +16,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -42,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
-      <HintPath>..\..\Libraries\UI\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <HintPath>..\..\packages\Hardcodet.Wpf.TaskbarNotification.1.0.4.0\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -65,8 +67,12 @@
     <Reference Include="ZeroconfService">
       <HintPath>..\..\Libraries\Misc\ZeroconfService.dll</HintPath>
     </Reference>
-    <Reference Include="zxing">
-      <HintPath>..\..\Libraries\Misc\zxing.dll</HintPath>
+    <Reference Include="zxing, Version=0.11.0.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Packages\ZXing.Net.0.11.0.1\lib\net40\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\..\Packages\ZXing.Net.0.11.0.1\lib\net40\zxing.presentation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\MPExtended.Applications.UacServiceHandler\WindowsServiceHandler.cs">
-      <Link>Code\WindowsServiceHandler.cs</Link>
-    </Compile>
+    <Compile Include="Code\ServiceControlInterface.cs" />
     <Compile Include="Code\WpfScraperConfig.cs" />
     <Compile Include="Code\Zeroconf.cs" />
     <Compile Include="Pages\SelectUserDialog.xaml.cs">
@@ -103,7 +107,6 @@
     <Compile Include="Code\ITabCloseCallback.cs" />
     <Compile Include="Code\LogExporter.cs" />
     <Compile Include="Code\PrivateUserSessionService.cs" />
-    <Compile Include="Code\QRCodeGenerator.cs" />
     <Compile Include="Code\ServerDescription.cs" />
     <Compile Include="Code\StartupArguments.cs" />
     <Compile Include="Code\UacServiceHelper.cs" />
@@ -212,6 +215,7 @@
     </Compile>
     <None Include="app.config" />
     <AppDesigner Include="Properties\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\MPExtended.Libraries.Client\MPExtended.Libraries.Client.csproj">
@@ -280,6 +284,7 @@
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

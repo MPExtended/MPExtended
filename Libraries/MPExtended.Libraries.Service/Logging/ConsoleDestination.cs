@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.Service.Logging
 
         public string LogFormat
         {
-            get { return "{0:HH:mm:ss.fffff} [{1}({2})] "; }
+            get { return "{0:HH:mm:ss.fffff} [{1,15}({2,2})] "; }
         }
 
         public ConsoleDestination(LogLevel level)

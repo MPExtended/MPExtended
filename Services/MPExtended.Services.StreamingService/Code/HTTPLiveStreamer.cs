@@ -74,7 +74,7 @@ namespace MPExtended.Services.StreamingService.Code
                     string segmentPath = Path.Combine(TemporaryDirectory, Path.GetFileName(param));
                     if (!File.Exists(segmentPath))
                     {
-                        Log.Warn("HTTPLiveStreamer: Client requested non-existing segment file {0}", segmentPath);
+                        StreamLog.Warn(Identifier, "HTTPLiveStreamer: Client requested non-existing segment file {0}", segmentPath);
                         return Stream.Null;
                     }
                     return new FileStream(segmentPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
@@ -84,7 +84,7 @@ namespace MPExtended.Services.StreamingService.Code
                     string playlistPath = Path.Combine(TemporaryDirectory, "index.m3u8");
                     if(!File.Exists(playlistPath))
                     {
-                        Log.Warn("HTTPLiveStreamer: Client requested index.m3u8 that doesn't exist for identifier '{0}'", Identifier);
+                        StreamLog.Warn(Identifier, "HTTPLiveStreamer: Client requested index.m3u8 that doesn't exist");
                         return Stream.Null;
                     }
 
@@ -92,7 +92,7 @@ namespace MPExtended.Services.StreamingService.Code
                     return StripCarriageReturn(playlistPath);
 
                 default:
-                    Log.Warn("HTTPLiveStreamer: Request invalid action '{0}' with param '{1}'", action, param);
+                    StreamLog.Warn(Identifier, "HTTPLiveStreamer: Request invalid action '{0}' with param '{1}'", action, param);
                     return Stream.Null;
             }
         }
@@ -135,7 +135,7 @@ namespace MPExtended.Services.StreamingService.Code
             string removeFileName = Path.Combine(TemporaryDirectory, filename);
             if (File.Exists(removeFileName))
             {
-                Log.Trace("HTTPLiveStreamer: Remove old segment {0} during request for {1}", filename, currentRequest);
+                StreamLog.Trace(Identifier, "HTTPLiveStreamer: Remove old segment {0} during request for {1}", filename, currentRequest);
                 File.Delete(removeFileName);
             }
         }

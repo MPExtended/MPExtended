@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Service.Config
         {
             this[ConfigurationFile.Authentication] = new ConfigurationSerializer<Authentication, AuthenticationSerializer, AuthenticationUpgrader>(ConfigurationFile.Authentication, "Authentication.xml", "Services.xml");
 
-            if (product == MPExtendedProduct.Service)
+            if (product == MPExtendedProduct.Service || product == MPExtendedProduct.Configurator)
             {
                 this[ConfigurationFile.MediaAccess] = new ConfigurationSerializer<MediaAccess, MediaAccessSerializer, MediaAccessUpgrader>(ConfigurationFile.MediaAccess, "MediaAccess.xml");
                 this[ConfigurationFile.Services] = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>(ConfigurationFile.Services, "Services.xml");
@@ -42,12 +42,14 @@ namespace MPExtended.Libraries.Service.Config
 
             if (product == MPExtendedProduct.WebMediaPortal)
             {
-                this[ConfigurationFile.WebMediaPortal] = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>(ConfigurationFile.WebMediaPortal, "WebMediaPortal.xml");
                 this[ConfigurationFile.StreamingPlatforms] = new ConfigurationSerializer<StreamingPlatforms, StreamingPlatformsSerializer>(ConfigurationFile.StreamingPlatforms, "StreamingPlatforms.xml");
             }
 
-            // Also load this file for the service, as it is used by the configurator. We might need to add an additional product for that later on, when this becomes problematic. 
-            this[ConfigurationFile.WebMediaPortalHosting] = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>(ConfigurationFile.WebMediaPortalHosting, "WebMediaPortalHosting.xml");
+            if (product == MPExtendedProduct.WebMediaPortal || product == MPExtendedProduct.Configurator)
+            {
+                this[ConfigurationFile.WebMediaPortalHosting] = new ConfigurationSerializer<WebMediaPortalHosting, WebMediaPortalHostingSerializer, WebMediaPortalHostingUpgrader>(ConfigurationFile.WebMediaPortalHosting, "WebMediaPortalHosting.xml");
+                this[ConfigurationFile.WebMediaPortal] = new ConfigurationSerializer<WebMediaPortal, WebMediaPortalSerializer>(ConfigurationFile.WebMediaPortal, "WebMediaPortal.xml");
+            }
         }
 
         public IConfigurationSerializer<TModel> Get<TModel>(ConfigurationFile file) where TModel : class, new()

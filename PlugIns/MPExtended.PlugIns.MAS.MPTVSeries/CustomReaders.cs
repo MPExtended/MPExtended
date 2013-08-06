@@ -111,8 +111,8 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                     Offset = 0,
                     Filetype = Path.GetExtension(path).Substring(1),
                     Rating = String.IsNullOrEmpty(parts[1]) ? 1 :
-                                (int)Math.Round(Single.Parse(parts[1].Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture)),
-                    Id = path.GetHashCode().ToString()
+                                (int)Math.Round(Single.Parse(parts[1].Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture) * 10),
+                    Id = parts[2]
                 };
             }).ToList();
 

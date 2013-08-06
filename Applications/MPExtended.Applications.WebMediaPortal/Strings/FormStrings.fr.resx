@@ -121,7 +121,7 @@
     <value>Client</value>
   </data>
   <data name="DefaultMediaStreamingProfile" xml:space="preserve">
-    <value>Profil des flux média par défaut</value>
+    <value>Profil des flux médias par défaut</value>
   </data>
   <data name="DefaultMusicStreamingProfile" xml:space="preserve">
     <value>Profil des flux musicaux par défaut</value>
@@ -137,7 +137,7 @@
     <value>Profil des flux TV par défaut</value>
   </data>
   <data name="DirectStreamingProfileDescription" xml:space="preserve">
-    <value>Direct: meilleur performance, mais fonctionne seulement avec le réseau local </value>
+    <value>Direct : meilleur performance, mais fonctionne seulement sur le réseau local </value>
   </data>
   <data name="DirectWhenPossibleDescription" xml:space="preserve">
     <value>Utiliser Direct dès que possible</value>
@@ -206,10 +206,10 @@
     <value>Base de données concernant la musique</value>
   </data>
   <data name="ProxiedStreamingProfileDescription" xml:space="preserve">
-    <value>Proxied: arrêt immédiat du timeshifting, session sur internet</value>
+    <value>Proxied : arrêt immédiat du timeshifting, session sur internet</value>
   </data>
   <data name="ScheduleChannel" xml:space="preserve">
-    <value>Canal</value>
+    <value>Chaine</value>
   </data>
   <data name="ScheduleEndTime" xml:space="preserve">
     <value>Heure de fin</value>
@@ -218,7 +218,7 @@
     <value>Sélectionner un chaîne </value>
   </data>
   <data name="ScheduleSelectValidType" xml:space="preserve">
-    <value>Sélectionner un type d'horaire</value>
+    <value>Sélectionner une plage horaire</value>
   </data>
   <data name="ScheduleStartTime" xml:space="preserve">
     <value>Heure de début</value>
@@ -227,13 +227,13 @@
     <value>Titre</value>
   </data>
   <data name="ScheduleType" xml:space="preserve">
-    <value>Type d'horaire</value>
+    <value>Plage horaire</value>
   </data>
   <data name="ScheduleTypeDaily" xml:space="preserve">
     <value>Quotidien</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnEveryChannel" xml:space="preserve">
-    <value>Chaque fois sur chaque chaîne</value>
+    <value>Chaque fois sur toutes les chaînes</value>
   </data>
   <data name="ScheduleTypeEveryTimeOnThisChannel" xml:space="preserve">
     <value>Chaque fois sur cette chaîne</value>
@@ -299,6 +299,6 @@
     <value>Le nom d'utilisateur ou le mot de passe est incorrect</value>
   </data>
   <data name="VLCPlayerEnableDeinterlacing" xml:space="preserve">
-    <value>Lecteur VLC: autoriser le désentrelacement par défaut?</value>
+    <value>Lecteur VLC : autoriser le désentrelacement par défaut?</value>
   </data>
 </root>
