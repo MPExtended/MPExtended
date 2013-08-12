@@ -168,6 +168,9 @@
   <data name="ServiceStarted" xml:space="preserve">
     <value>Storitev pognana</value>
   </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Storitev se zaganja</value>
+  </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Storitev zaustavljena</value>
   </data>

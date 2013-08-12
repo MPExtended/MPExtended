@@ -43,7 +43,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 string playlistPath = Path.Combine(TemporaryDirectory, "index.m3u8");
                 if (!File.Exists(playlistPath))
                 {
-                    Log.Warn("HTTPLiveStreamer: Client requested index.m3u8 that doesn't exist for identifier '{0}'", Identifier);
+                    StreamLog.Warn(Identifier, "HTTPLiveStreamer: Client requested index.m3u8 that doesn't exist for identifier '{0}'", Identifier);
                     return Stream.Null;
                 }
 

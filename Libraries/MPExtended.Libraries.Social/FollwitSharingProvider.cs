@@ -29,7 +29,23 @@ namespace MPExtended.Libraries.Social
 {
     public class FollwitSharingProvider : IWatchSharingService
     {
-        public Dictionary<string, string> Configuration { get; set; }
+        private Dictionary<string, string> _configuration;
+        public Dictionary<string, string> Configuration
+        {
+            get
+            {
+                return _configuration;
+            }
+
+            set
+            {
+                _configuration = value;
+                if (_configuration.ContainsKey("username"))
+                    Log.Info("Follwit: syncing to username '{0}'", _configuration["username"]);
+                if (!_configuration.ContainsKey("username") || !_configuration.ContainsKey("passwordHash"))
+                    Log.Error("Follwit: username and/or password not set in configuration");
+            }
+        }
 
         public int UpdateInterval
         {

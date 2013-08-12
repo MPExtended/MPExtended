@@ -205,7 +205,7 @@ namespace MPExtended.Services.StreamingService
 
                 return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
             }
-            if (fileinfo.Size == 0)
+            if (type != WebMediaType.TV && fileinfo.Size == 0)
             {
                 return new WebItemSupportStatus(false, "This file has a size of 0KB");
             }
@@ -224,6 +224,16 @@ namespace MPExtended.Services.StreamingService
 
             return new WebItemSupportStatus() { Supported = true };
         }
+
+        public WebStreamLogs GetStreamLogs(string identifier)
+        {
+            var slh = StreamLog.GetStreamLogDetails(identifier);
+            return new WebStreamLogs()
+            {
+                LastError = slh.LastError,
+                FullLogs = slh.FullLog.ToString()
+            };
+        }
         #endregion
 
         #region Streaming
@@ -235,59 +245,59 @@ namespace MPExtended.Services.StreamingService
                 int channelId = Int32.Parse(itemId);
                 lock (_timeshiftings)
                 {
-                    Log.Info("Starting timeshifting on channel {0} for client {1} with identifier {2}", channelId, clientDescription, identifier);
+                    StreamLog.Info(identifier, "Starting timeshifting on channel {0} for client {1}", channelId, clientDescription);
                     var card = Connections.TAS.SwitchTVServerToChannelAndGetVirtualCard("mpextended-" + identifier, channelId);
                     if (card == null)
                     {
-                        Log.Error("Failed to start timeshifting for stream with identifier {0}", identifier);
+                        StreamLog.Error(identifier, "Failed to start timeshifting for stream");
                         return false;
                     }
                     else
                     {
-                        Log.Debug("Timeshifting started!");
+                        StreamLog.Debug(identifier, "Timeshifting started!");
                         _timeshiftings[identifier] = card;
                         itemId = card.TimeShiftFileName;
                     }
                 }
             }
 
-            Log.Info("Called InitStream with type={0}; provider={1}; itemId={2}; offset={3}; clientDescription={4}; identifier={5}; idleTimeout={6}", 
-                type, provider, itemId, offset, clientDescription, identifier, idleTimeout);
+            StreamLog.Info(identifier, "Called InitStream with type={0}; provider={1}; itemId={2}; offset={3}; clientDescription={4}; idleTimeout={5}", 
+                type, provider, itemId, offset, clientDescription, idleTimeout);
             return _stream.InitStream(identifier, clientDescription, new MediaSource(type, provider, itemId, offset), idleTimeout.HasValue ? idleTimeout.Value : 5 * 60);
         }
 
         public WebStringResult StartStream(string identifier, string profileName, long startPosition)
         {
-            Log.Debug("Called StartStream with ident={0}; profile={1}; start={2}", identifier, profileName, startPosition);
+            StreamLog.Debug(identifier, "Called StartStream with profile={0}; start={1}", profileName, startPosition);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Configuration.StreamingProfiles.GetTranscoderProfileByName(profileName), startPosition * 1000);
         }
 
         public WebStringResult StartStreamWithStreamSelection(string identifier, string profileName, long startPosition, int audioId, int subtitleId)
         {
-            Log.Debug("Called StartStreamWithStreamSelection with ident={0}; profile={1}; start={2}; audioId={3}; subtitleId={4}",
-                identifier, profileName, startPosition, audioId, subtitleId);
+            StreamLog.Debug(identifier, "Called StartStreamWithStreamSelection with profile={0}; start={1}; audioId={2}; subtitleId={3}",
+                profileName, startPosition, audioId, subtitleId);
             _stream.EndStream(identifier); // first end previous stream, if any available
             return _stream.StartStream(identifier, Configuration.StreamingProfiles.GetTranscoderProfileByName(profileName), startPosition * 1000, audioId, subtitleId);
         }
 
         public WebBoolResult StopStream(string identifier)
         {
-            Log.Debug("Called StopStream with identifier={0}", identifier);
+            StreamLog.Debug(identifier, "Called StopStream");
             _stream.EndStream(identifier);
             return true;
         }
 
         public WebBoolResult FinishStream(string identifier)
         {
-            Log.Debug("Called FinishStream with identifier={0}", identifier);
+            StreamLog.Debug(identifier, "Called FinishStream");
             _stream.KillStream(identifier);
 
             lock(_timeshiftings)
             {
                 if (_timeshiftings.ContainsKey(identifier) && _timeshiftings[identifier] != null)
                 {
-                    Log.Info("Cancel timeshifting with identifier {0}",  identifier);
+                    StreamLog.Info(identifier, "Cancelling timeshifting");
                     Connections.TAS.CancelCurrentTimeShifting("mpextended-" + identifier);
                     _timeshiftings.Remove(identifier);
                 }
@@ -340,7 +350,7 @@ namespace MPExtended.Services.StreamingService
             var profile = Configuration.StreamingProfiles.Transcoders.FirstOrDefault(x => x.Name == profileName);
             if(profile == null)
             {
-                Log.Warn("Tried DoStream with non-existing profile {0}", profileName);
+                Log.Warn("Called DoStream with non-existing profile {0}", profileName);
                 return Stream.Null;
             }
             int timeout = profile.Transcoder == typeof(Transcoders.Direct).FullName ? 5 * 60 : 5;
@@ -349,23 +359,23 @@ namespace MPExtended.Services.StreamingService
 
             // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
             string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
-            Log.Debug("DoStream: using identifier {0} and timeout={1}", identifier, timeout);
+            StreamLog.Debug(identifier, "DoStream: using timeout={0}", timeout);
 
             if (!InitStream(type, provider, itemId, null, clientDescription, identifier, timeout))
             {
-                Log.Info("DoStream: InitStream() failed");
+                StreamLog.Info(identifier, "DoStream: InitStream() failed");
                 FinishStream(identifier);
                 return Stream.Null;
             }
 
             if (String.IsNullOrEmpty(StartStream(identifier, profileName, startPosition)))
             {
-                Log.Info("DoStream: StartStream failed");
+                StreamLog.Info(identifier, "DoStream: StartStream failed");
                 FinishStream(identifier);
                 return Stream.Null;
             }
 
-            Log.Debug("DoStream: succeeded, returning stream");
+            StreamLog.Info(identifier, "DoStream: succeeded, returning stream");
             return RetrieveStream(identifier);
         }
         #endregion

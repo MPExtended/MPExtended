@@ -37,19 +37,19 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
             return p.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static bool StartService()
+        public static bool StartService(string serviceName)
         {
-            return RunUacServiceHandler("/command:service /action:start");
+            return RunUacServiceHandler(String.Format("\"/service:{0}\" /action:start", serviceName));
         }
 
-        public static bool StopService()
+        public static bool StopService(string serviceName)
         {
-            return RunUacServiceHandler("/command:service /action:stop");
+            return RunUacServiceHandler(String.Format("\"/service:{0}\" /action:stop", serviceName));
         }
 
-        public static bool RestartService()
+        public static bool RestartService(string serviceName)
         {
-            return RunUacServiceHandler("/command:service /action:restart");
+            return RunUacServiceHandler(String.Format("\"/service:{0}\" /action:restart", serviceName));
         }
 
         public static bool RunUacServiceHandler(string parameters)

@@ -133,10 +133,10 @@
     <value>Langue par défaut</value>
   </data>
   <data name="DefaultLanguageExplanation" xml:space="preserve">
-    <value>Certains clients ne prennent pas en charge la configuration de l'audio et la langue des sous-titres. Vous pouvez configurer l'audio par défaut et la langue des sous-titres pour ces clients,ici.</value>
+    <value>Certains clients ne prennent pas en charge la configuration de l'audio et de la langue des sous-titres. Vous pouvez configurer, par défaut, l'audio  et la langue des sous-titres pour ces clients,ici.</value>
   </data>
   <data name="DefaultSubtitleLanguage" xml:space="preserve">
-    <value>Langue des sous-titres par défaut:</value>
+    <value>Langue des sous-titres par défaut :</value>
   </data>
   <data name="DiscardingInvalidChangesSocialTab" xml:space="preserve">
     <value>Effacer les changements invalides effectués dans l'onglet Social.</value>
@@ -157,7 +157,7 @@
     <value>Média</value>
   </data>
   <data name="Port" xml:space="preserve">
-    <value>Port:</value>
+    <value>Port :</value>
   </data>
   <data name="ServiceNotInstalled" xml:space="preserve">
     <value>Aucune installation</value>
@@ -167,6 +167,9 @@
   </data>
   <data name="ServiceStarted" xml:space="preserve">
     <value>Service démarré</value>
+  </data>
+  <data name="ServiceStartingFixed" xml:space="preserve">
+    <value>Démarrage du Service </value>
   </data>
   <data name="ServiceStopped" xml:space="preserve">
     <value>Service arrêté</value>
@@ -271,7 +274,7 @@
     <value>Ouvrir WebMediaPortal</value>
   </data>
   <data name="TrayPowermodes" xml:space="preserve">
-    <value>Mode de gestion de l'alimentation</value>
+    <value>Gestion des modes d'alimentation</value>
   </data>
   <data name="TrayReboot" xml:space="preserve">
     <value>Redémarrer</value>
@@ -289,7 +292,7 @@
     <value>Suspendre</value>
   </data>
   <data name="TroubleshootingHeaderText" xml:space="preserve">
-    <value>Pour vérifier la validité du contenu demandé, veuillez utiliser les liens suivants ... Vous pouvez utiliser localhost pour tester le service sur la même machine. Sélectionnez une adresse IP dans la liste déroulante permettant d'obtenir des URL afin de tester d'autres ordinateurs sur le réseau (par exemple, pour écarter toute anomalie avec le pare-feu).</value>
+    <value>Pour vérifier la validité du contenu demandé, veuillez utiliser les liens suivants ... Vous pouvez utiliser un localhost pour tester le service sur la même machine. Sélectionnez une adresse IP, dans la liste déroulante, afin d'obtenir une URL permettant de tester d'autres ordinateurs sur le réseau (par exemple, pour écarter toute anomalie avec le pare-feu).</value>
   </data>
   <data name="TVServer" xml:space="preserve">
     <value>Serveur TV</value>
@@ -328,7 +331,7 @@
     <value>Supprimer un compte</value>
   </data>
   <data name="Documentation" xml:space="preserve">
-    <value>Documentation:</value>
+    <value>Documentation :</value>
   </data>
   <data name="EnableAuthentication" xml:space="preserve">
     <value>Activer l'authentification (recommandé!)</value>
@@ -340,16 +343,16 @@
     <value>Impossible de récupérer les informations concernant les mises à jour</value>
   </data>
   <data name="Forum" xml:space="preserve">
-    <value>Forum:</value>
+    <value>Forum :</value>
   </data>
   <data name="Homepage" xml:space="preserve">
-    <value>Page d'acceuil:</value>
+    <value>Page d’accueil :</value>
   </data>
   <data name="IncludeAuthentication" xml:space="preserve">
-    <value>Inclure l'authentification de l'utilisateur:</value>
+    <value>Inclure l'authentification de l'utilisateur :</value>
   </data>
   <data name="IRCText" xml:space="preserve">
-    <value>IRC: 
+    <value>IRC : 
 irc.freenode.net / channel #mp-extended</value>
   </data>
   <data name="MPExtendedIntroduction" xml:space="preserve">
@@ -394,19 +397,19 @@ C'est ce composant, qui donne accès aux bases de données et aux fichiers multi
     <value>Test</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
-    <value>Mise à jour disponible: version {0}, publiée le {1}</value>
+    <value>Mise à jour disponible : version {0}, publiée le {1}</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version:</value>
+    <value>Version :</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Exporter</value>
   </data>
   <data name="LogFile" xml:space="preserve">
-    <value>Fichier Log:</value>
+    <value>Journal d'événements :</value>
   </data>
   <data name="LogFiles" xml:space="preserve">
     <value>Fichiers Log</value>
@@ -424,7 +427,7 @@ C'est ce composant, qui donne accès aux bases de données et aux fichiers multi
     <value>Site</value>
   </data>
   <data name="SocialIntroText" xml:space="preserve">
-    <value>MPExtended supporte la synchronisation des films et des émissions que vous regardez avec les clients Trakt et follow.it. Vous pouvez configurer votre compte pour ces sites, ici.</value>
+    <value>MPExtended supporte la synchronisation des films et émissions que vous regardez avec les clients Trakt et follow.it. Vous pouvez configurer votre compte pour ces sites, ici.</value>
   </data>
   <data name="LogAndConfigurationArchive" xml:space="preserve">
     <value>Log et configuration de Zip (compression)</value>
@@ -442,7 +445,7 @@ C'est ce composant, qui donne accès aux bases de données et aux fichiers multi
     <value>Autoriser HTTPS</value>
   </data>
   <data name="HTTPSDisclaimer" xml:space="preserve">
-    <value>En raison des limitations de Windows et IIS Express, vous devez utiliser les ports compris entre 44300 et 44399 pour HTTPS. Vous devez également    configurer votre pare-feu manuellement afin de permettre ces connexions.
+    <value>En raison des limitations de Windows et IIS Express, vous devez utiliser les ports compris entre 44300 et 44399 pour HTTPS. Vous devez également  configurer votre pare-feu manuellement afin de permettre ces connexions.
 
 SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. Lorsque vous utilisez le protocole HTTPS,  un avertissement concernant une connexion potentiellement non fiable peut apparaître dans votre navigateur.</value>
   </data>
@@ -450,7 +453,7 @@ SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. 
     <value>Le numéro du port est incorrect. Vous devez utiliser un port compris entre 44300 et 44399 pour le HTTPS.</value>
   </data>
   <data name="HTTPSPort" xml:space="preserve">
-    <value>Port HTTPS:</value>
+    <value>Port HTTPS :</value>
   </data>
   <data name="TabActivity" xml:space="preserve">
     <value>Activité</value>
@@ -471,7 +474,7 @@ SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. 
     <value>Autoriser</value>
   </data>
   <data name="AccessRequest" xml:space="preserve">
-    <value>Voulez vous donner à l'application '{0}' (avec l'adresse IP {1}) l'accès total aux services de MPExtended?</value>
+    <value>Voulez-vous donner à l'application '{0}' (avec l'adresse IP {1}) l'accès total aux services de MPExtended?</value>
   </data>
   <data name="AccessRequestDenyAccess" xml:space="preserve">
     <value>Refuser</value>
@@ -480,10 +483,10 @@ SVP, noter qu'il est impossible de configurer le certificat SSL / TLS utilisé. 
     <value>Accès complet</value>
   </data>
   <data name="AccessRequestSelectUser" xml:space="preserve">
-    <value>Sélectionner l'utilisateur:</value>
+    <value>Sélectionner l'utilisateur :</value>
   </data>
   <data name="AccessRequestWifiRemote" xml:space="preserve">
-    <value>Voulez vous autoriser l'accès de '{0}'? ( si oui, affecter un utilisateur à l'étape suivante)</value>
+    <value>Voulez-vous autoriser l'accès de '{0}'? ( si oui, affecter un utilisateur à l'étape suivante)</value>
   </data>
   <data name="AccessRequestEnable" xml:space="preserve">
     <value>Activer les demandes d'accès provenant des clients</value>

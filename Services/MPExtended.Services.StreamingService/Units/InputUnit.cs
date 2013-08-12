@@ -34,10 +34,12 @@ namespace MPExtended.Services.StreamingService.Units
         public bool IsDataStreamConnected { get; set; }
         public bool IsLogStreamConnected { get; set; }
 
+        private string identifier;
         private string source;
 
-        public InputUnit(string source)
+        public InputUnit(string identifier, string source)
         {
+            this.identifier = identifier;
             this.source = source;
         }
 
@@ -47,18 +49,18 @@ namespace MPExtended.Services.StreamingService.Units
             {
                 if (source.IndexOf(".ts.tsbuffer") != -1)
                 {
-                    Log.Info("Using TsBuffer to read input");
+                    StreamLog.Info(identifier, "Using TsBuffer to read input");
                     DataOutputStream = new TsBuffer(this.source);
                 }
                 else
                 {
-                    Log.Info("Using FileStream to read input");
+                    StreamLog.Info(identifier, "Using FileStream to read input");
                     DataOutputStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
             }
             catch (Exception e)
             {
-                Log.Error("Failed to setup InputProcessingUnit", e);
+                StreamLog.Error(identifier, "Failed to setup InputProcessingUnit", e);
                 return false;
             }
             return true;

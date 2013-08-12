@@ -1,0 +1,3 @@
+# These scripts are automatically installed with NuGet
+Scripts/jquery-*
+Content/[Tt]hemes/

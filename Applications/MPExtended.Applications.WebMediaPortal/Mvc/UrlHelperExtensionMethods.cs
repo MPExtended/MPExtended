@@ -21,6 +21,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
 
@@ -28,6 +30,13 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public static class UrlHelperExtensionMethods
     {
+        public static string AbsoluteAction(this UrlHelper helper, string actionName, string controllerName = null, RouteValueDictionary routeValues = null)
+        {
+            var request = helper.RequestContext.HttpContext.Request;
+            var path = helper.Action(actionName, controllerName, routeValues);
+            return String.Format("{0}://{1}{2}", ExternalUrl.GetScheme(request), ExternalUrl.GetHost(request), path);
+        }
+
         public static string ContentLink(this UrlHelper helper, string contentPath)
         {
             try
@@ -54,33 +63,43 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             }
         }
 
-        public static string Artwork(this UrlHelper helper, WebMediaType mediaType, string id)
+        private static string ArtworkImplementation(this UrlHelper helper, WebMediaType mediaType, string id, Func<string, string, RouteValueDictionary, string> actionMethod)
         {
             switch (mediaType)
             {
                 case WebMediaType.Movie:
-                    return helper.Action("Cover", "MovieLibrary", new { movie = id });
+                    return actionMethod("Cover", "MovieLibrary", new RouteValueDictionary(new { movie = id }));
                 case WebMediaType.MusicAlbum:
-                    return helper.Action("AlbumImage", "MusicLibrary", new { album = id });
+                    return actionMethod("AlbumImage", "MusicLibrary", new RouteValueDictionary(new { album = id }));
                 case WebMediaType.MusicArtist:
-                    return helper.Action("ArtistImage", "MusicLibrary", new { artist = id });
+                    return actionMethod("ArtistImage", "MusicLibrary", new RouteValueDictionary(new { artist = id }));
                 case WebMediaType.MusicTrack:
-                    return helper.Action("TrackImage", "MusicLibrary", new { track = id });
+                    return actionMethod("TrackImage", "MusicLibrary", new RouteValueDictionary(new { track = id }));
                 case WebMediaType.Radio:
                 case WebMediaType.TV:
-                    return helper.Action("ChannelLogo", "Television", new { channelId = id });
+                    return actionMethod("ChannelLogo", "Television", new RouteValueDictionary(new { channelId = id }));
                 case WebMediaType.Recording:
                     // TODO: Make width configurable with a parameter (object attributes or something like it)
-                    return helper.Action("PreviewImage", "Recording", new { id = id, width = 640 });
+                    return actionMethod("PreviewImage", "Recording", new RouteValueDictionary(new { id = id, width = 640 }));
                 case WebMediaType.TVEpisode:
-                    return helper.Action("EpisodeImage", "TVShowsLibrary", new { episode = id });
+                    return actionMethod("EpisodeImage", "TVShowsLibrary", new RouteValueDictionary(new { episode = id }));
                 case WebMediaType.TVSeason:
-                    return helper.Action("SeasonImage", "TVShowsLibrary", new { season = id });
+                    return actionMethod("SeasonImage", "TVShowsLibrary", new RouteValueDictionary(new { season = id }));
                 case WebMediaType.TVShow:
-                    return helper.Action("SeriesPoster", "TVShowsLibrary", new { season = id });
+                    return actionMethod("SeriesPoster", "TVShowsLibrary", new RouteValueDictionary(new { season = id }));
                 default:
                     return String.Empty;
             }
+        }
+
+        public static string Artwork(this UrlHelper helper, WebMediaType mediaType, string id)
+        {
+            return ArtworkImplementation(helper, mediaType, id, helper.Action);
+        }
+
+        public static string AbsoluteArtwork(this UrlHelper helper, WebMediaType mediaType, string id)
+        {
+            return ArtworkImplementation(helper, mediaType, id, helper.AbsoluteAction);
         }
     }
 }

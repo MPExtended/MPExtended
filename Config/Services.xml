@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/Services/1">
-  <AuthenticationEnabled>true</AuthenticationEnabled>
   <AccessRequestEnabled>true</AccessRequestEnabled>
 
   <NetworkImpersonation>
@@ -20,7 +19,6 @@
 
   <SerivceAddress />
   <Port>4322</Port>
-  <EnableIPv6>false</EnableIPv6>
 
   <DefaultLanguage />
 

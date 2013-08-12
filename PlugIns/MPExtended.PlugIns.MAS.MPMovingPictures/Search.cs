@@ -53,8 +53,8 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 // simple score
                 int score = result.Title.Contains(text, false) ? (int)Math.Round(40 + (decimal)text.Length / result.Title.Length * 40) : 0;
                 var validAlternate = reader.ReadPipeList(5).Where(x => x.Contains(text, false));
-                score = Math.Max(score, validAlternate.Count() > 0 ? validAlternate.Max(x => 40 + (int)Math.Round((decimal)text.Length / x.Length * 30)) : 0);
-
+                score = Math.Max(score, validAlternate.Count() > 0 ? validAlternate.Max(x => 30 + (int)Math.Round((decimal)text.Length / x.Length * 25)) : 0);
+                
                 // actors
                 var valid = reader.ReadPipeList(2).Where(x => x.Contains(text, false));
                 score = Math.Max(score, valid.Count() > 0 ? valid.Max(x => 40 + (int)Math.Round((decimal)text.Length / x.Length * 30)) : 0);

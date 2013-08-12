@@ -177,7 +177,6 @@ namespace MPExtended.Libraries.Client
 
         private IMetaService CreateMeta(string rootAddress)
         {
-            Console.WriteLine("Creating meta for {0}", rootAddress);
             try
             {
                 BasicHttpBinding binding = new BasicHttpBinding()

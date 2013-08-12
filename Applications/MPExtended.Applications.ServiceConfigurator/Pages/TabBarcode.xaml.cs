@@ -34,6 +34,8 @@ using MPExtended.Libraries.Service.Config;
 using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.Service.Network;
+using ZXing;
+using ZXing.Common;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -126,8 +128,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     desc.Services.Add(srvdesc);
                 }
 
-                Bitmap bm = QRCodeGenerator.Generate(desc.ToJSON());
-                return bm.ToWpfBitmap();
+                var writer = new BarcodeWriter()
+                {
+                    Format = BarcodeFormat.QR_CODE,
+                    Options = new EncodingOptions()
+                    {
+                        Height = 400,
+                        Width = 400
+                    }
+                };
+
+                var bitmap = writer.Write(desc.ToJSON());
+                return bitmap.ToWpfBitmap();
             }
             catch (Exception ex)
             {

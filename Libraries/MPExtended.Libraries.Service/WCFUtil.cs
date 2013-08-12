@@ -66,7 +66,7 @@ namespace MPExtended.Libraries.Service
             // then try the current IP address
             if (NetworkInformation.GetIPAddresses().Any())
             {
-                return String.Format("http://{0}:{1}/MPExtended/", NetworkInformation.GetIPAddress(), Configuration.Services.Port);
+                return String.Format("http://{0}:{1}/MPExtended/", NetworkInformation.GetIPAddressForUri(), Configuration.Services.Port);
             }
 
             // last resort: localhost
