@@ -432,7 +432,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             }
         }
 
-        public WebScraperInfo GetScraperStatus()
+        public WebScraperInfo GetScraperState()
         {
             return new WebScraperInfo()
             {
@@ -673,7 +673,7 @@ namespace MPExtended.PlugIns.Scrapers.MPTVSeries
             return form;
         }
 
-        public WebConfigResult GetConfig()
+        public WebConfigResult GetConfigSettings()
         {
             FileInfo path = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             return new WebConfigResult()

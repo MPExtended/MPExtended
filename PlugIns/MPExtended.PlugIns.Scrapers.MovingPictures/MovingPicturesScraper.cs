@@ -311,7 +311,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             }
         }
 
-        public WebScraperInfo GetScraperStatus()
+        public WebScraperInfo GetScraperState()
         {
             return new WebScraperInfo()
             {
@@ -415,7 +415,7 @@ namespace MPExtended.PlugIns.Scrapers.MovingPictures
             return config;
         }
 
-        public WebConfigResult GetConfig()
+        public WebConfigResult GetConfigSettings()
         {
             FileInfo path = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             return new WebConfigResult()
