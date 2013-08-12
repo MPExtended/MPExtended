@@ -42,6 +42,9 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// </summary>
         public WebScraperInputRequest InputRequest { get; set; }
 
+        /// <summary>
+        /// Date when this item was last updated
+        /// </summary>
         public DateTime LastUpdated { get; set; }
     }
 }

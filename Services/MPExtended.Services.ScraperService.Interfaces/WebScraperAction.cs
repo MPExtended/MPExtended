@@ -8,7 +8,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
     public class WebScraperAction
     {
         /// <summary>
-        /// Id of the item
+        /// Id of the action
         /// </summary>
         public String ActionId { get; set; }
 

@@ -107,7 +107,7 @@ namespace MPExtended.Services.ScraperService
                 {
                     ScraperId = (int)s.Metadata["Id"],
                     ScraperName = (string)s.Metadata["Name"],
-                    ScraperInfo = s.Value.GetScraperStatus()
+                    ScraperInfo = s.Value.GetScraperState()
                 });
             }
 
@@ -183,7 +183,7 @@ namespace MPExtended.Services.ScraperService
         {
             IScraperPlugin service = GetScraper(scraperId);
 
-            return service.GetScraperStatus();
+            return service.GetScraperState();
         }
 
         public IList<WebScraperInputRequest> GetAllScraperInputRequests(int scraperId)
@@ -246,7 +246,7 @@ namespace MPExtended.Services.ScraperService
         {
             IScraperPlugin service = GetScraper(scraperId);
 
-            return service.GetConfig();
+            return service.GetConfigSettings();
         }
     }
 }
