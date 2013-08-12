@@ -96,7 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
             }
             catch (Exception ex)
             {
-                Log.Warn("Error in WriteEntityRange: " + ex.Message);
+                Log.Warn("Error in WriteEntityRange", ex);
             }
         }
         #endregion

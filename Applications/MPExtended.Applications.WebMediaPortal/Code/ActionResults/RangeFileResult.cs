@@ -135,7 +135,6 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
         /// <param name="context">The context within which the result is executed.</param>
         public override void ExecuteResult(ControllerContext context)
         {
-            Log.Debug("ExecuteResult");
             EntityTag = GenerateEntityTag(context);
             GetRanges(context.HttpContext.Request);
 
@@ -265,18 +264,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
 
         private bool ValidateRanges(HttpResponseBase response)
         {
-            //if (FileLength > Int64.MaxValue)
-            //{
-            //    Log.Info("ValidateRanges: FileLength > Int32.MaxValue");
-            //    response.StatusCode = 413;
-            //    return false;
-            //}
-
             for (int i = 0; i < RangesStartIndexes.Length; i++)
             {
                 if (RangesStartIndexes[i] > FileLength - 1 || RangesEndIndexes[i] > FileLength - 1 || RangesStartIndexes[i] < 0 || RangesEndIndexes[i] < 0 || RangesEndIndexes[i] < RangesStartIndexes[i])
                 {
-                    Log.Info("Couldn't validate ranges");
+                    Log.Warn("Failed to validate ranges");
                     response.StatusCode = 400;
                     return false;
                 }
