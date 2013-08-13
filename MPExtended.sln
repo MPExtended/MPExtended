@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{A564D6
 	ProjectSection(SolutionItems) = preProject
 		Config\Authentication.xml = Config\Authentication.xml
 		Config\MediaAccess.xml = Config\MediaAccess.xml
+		Config\Scraper.xml = Config\Scraper.xml
 		Config\Services.xml = Config\Services.xml
 		Config\Streaming.xml = Config\Streaming.xml
 		Config\StreamingPlatforms.xml = Config\StreamingPlatforms.xml
@@ -753,6 +754,7 @@ Global
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|MPExtended Platform.ActiveCfg = Debug|x86
+		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|MPExtended Platform.Build.0 = Debug|x86
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|x86.ActiveCfg = Debug|x86
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Debug|x86.Build.0 = Debug|x86
 		{7B0BAB36-B28B-4016-AF70-6AED43703458}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -767,6 +769,7 @@ Global
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|MPExtended Platform.ActiveCfg = Debug|x86
+		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|MPExtended Platform.Build.0 = Debug|x86
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|x86.ActiveCfg = Debug|x86
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Debug|x86.Build.0 = Debug|x86
 		{3A8E8E38-5B89-4739-8777-D2D93507DBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU

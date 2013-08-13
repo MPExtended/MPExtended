@@ -57,7 +57,7 @@
               <!-- Services -->
               <Directory Id="Directory_Plugins_Service" Name="Services">
                 <!-- ScraperService -->
-                <Component Id="Component_General_ScraperService" Guid="41e00464-f970-4f69-b565-487d8ae5eb54">
+                <Component Id="Component_Scraper_Binaries" Guid="41e00464-f970-4f69-b565-487d8ae5eb54">
                   <File Source="$(var.MPExtended.Services.ScraperService.TargetDir)\MPExtended.Services.ScraperService.dll" />
                   <File Source="$(var.MPExtended.Services.ScraperService.TargetDir)\MPExtended.Services.ScraperService.pdb" />
                 </Component>
@@ -132,7 +132,6 @@
                     <RegistryValue Type="string" Name="StreamingServiceInstalled" Value="true" />
                   </RegistryKey>
                 </Component>
-
               </Directory>
 
               <!-- MAS plugins -->
@@ -206,6 +205,11 @@
               <Component Id="Component_WSS_Config" Guid="2a5b2ee8-3295-42b5-b1d1-dcabb62ce6de">
                 <File Source="$(var.SolutionDir)\Config\Streaming.xml" />
                 <File Source="$(var.SolutionDir)\Config\StreamingProfiles.xml" />
+              </Component>
+
+              <!-- Scraper config -->
+              <Component Id="Component_Scraper_Config" Guid="c9cbb748-6543-4221-97c3-79f614b31541">
+                <File Source="$(var.SolutionDir)\Config\Scraper.xml" />
               </Component>
             </Directory>
 

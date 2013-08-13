@@ -17,7 +17,6 @@
       <ComponentRef Id="Component_General_Libraries"/>
       <ComponentRef Id="Component_General_Interfaces"/>
       <ComponentRef Id="Component_General_MetaService"/>
-      <ComponentRef Id="Component_General_ScraperService"/>
       <ComponentRef Id="Component_General_Registry"/>
       <ComponentRef Id="Component_General_Config"/>
       <ComponentGroupRef Id="Component_Translations"/>
@@ -50,6 +49,12 @@
     <ComponentGroup Id="Component_USS">
       <ComponentRef Id="Component_USS_Binaries"/>
       <ComponentRef Id="Component_USS_Registry"/>
+    </ComponentGroup>
+
+    <!-- Scraper -->
+    <ComponentGroup Id="Component_Scraper">
+      <ComponentRef Id="Component_Scraper_Binaries"/>
+      <ComponentRef Id="Component_Scraper_Config"/>
     </ComponentGroup>
 
     <!-- Configurator -->
@@ -89,6 +94,7 @@
                Title="!(loc.FeatureClient)"
                Description="!(loc.FeatureClientDescription)">
         <ComponentGroupRef Id="Component_MAS"/>
+        <ComponentGroupRef Id="Component_Scraper"/>
       </Feature>
 
       <Feature Id="Feature_WifiRemote" Level="10" Absent="disallow" InstallDefault="local" AllowAdvertise="no"
