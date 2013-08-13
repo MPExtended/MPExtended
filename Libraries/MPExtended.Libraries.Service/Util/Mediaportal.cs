@@ -71,7 +71,7 @@ namespace MPExtended.Libraries.Service.Util
 
             string client = GetClientInstallationDirectory();
             if (client != null && File.Exists(Path.Combine(client, "MediaPortal.exe")))
-                return Path.Combine(tv, "MediaPortal.exe");
+                return Path.Combine(client, "MediaPortal.exe");
 
             Log.Error("Cannot find installed TvService.exe or MediaPortal.exe");
             return null;
