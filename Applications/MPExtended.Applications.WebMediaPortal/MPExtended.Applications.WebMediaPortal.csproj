@@ -94,9 +94,6 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
-    <Compile Include="Code\ActionResults\RangeFilePathResult.cs" />
-    <Compile Include="Code\ActionResults\RangeFileResult.cs" />
-    <Compile Include="Code\ActionResults\RangeWSSResult.cs" />
     <Compile Include="Code\BaseController.cs" />
     <Compile Include="Code\Composition\ApplicationInitializer.cs" />
     <Compile Include="Code\Composition\Composer.cs" />

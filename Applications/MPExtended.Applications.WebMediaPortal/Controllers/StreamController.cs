@@ -37,9 +37,6 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
-using MPExtended.Applications.WebMediaPortal.Code.ActionResults;
-using MPExtended.Services.TVAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -185,17 +182,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             // If we can access the file without any problems, let IIS stream it; that is a lot faster
             if (NetworkInformation.IsLocalAddress(fullUri.Host) && type != WebMediaType.TV)
             {
-                Log.Debug("Host download directly through IIS");
                 var path = type == WebMediaType.Recording ?
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
                     Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
                 if (System.IO.File.Exists(path))
-                {
-                    return new RangeFilePathResult(MIME.GetFromFilename(path, "application/octet-stream"), new FileInfo(path));
-                }
+                    return File(path, MIME.GetFromFilename(path, "application/octet-stream"), Path.GetFileName(path));
             }
-
-            String clientDescription = "WebMediaPortal download" + userDescription;
 
             // If we connect to the services at localhost, actually give the extern IP address to users
             if (NetworkInformation.IsLocalAddress(fullUri.Host))
@@ -206,17 +198,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 Log.Debug("Proxying download at {0}", fullUri.ToString());
                 GetStreamControl(type).AuthorizeStreaming();
-                if (type == WebMediaType.Recording)
-                {
-                    WebRecordingFileInfo fileInfo = Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item));
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
-                }
-                else
-                {
-                    WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(GetProvider(type), type, WebFileType.Content, item, 0);
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
-
-                }
+                ProxyStream(fullUri.ToString());
             }
             else if (GetStreamMode() == StreamType.Direct)
             {
