@@ -82,14 +82,14 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// Get all available scraper items
         /// </summary>
         /// <returns>List of scraper items</returns>
-        List<WebScraperItem> GetScraperItems();
+        IList<WebScraperItem> GetScraperItems();
 
         /// <summary>
         /// Get all scraper items that have been updated since <paramref name="updated"/>
         /// </summary>
         /// <param name="updated">Updated timeframe for which items should be returned</param>
         /// <returns>List of scraper items</returns>
-        List<WebScraperItem> GetUpdatedScraperItems(DateTime updated);
+        IList<WebScraperItem> GetUpdatedScraperItems(DateTime updated);
 
         /// <summary>
         /// Get a scraper item by id
@@ -102,7 +102,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// Get the available custom actions for this scraper plugin
         /// </summary>
         /// <returns>List of available scraper actions</returns>
-        List<WebScraperAction> GetScraperActions();
+        IList<WebScraperAction> GetScraperActions();
 
         /// <summary>
         /// Invoke a custom scraper action on this plugin

@@ -15,7 +15,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// <summary>
         /// Available actions for this item
         /// </summary>
-        public List<WebScraperAction> ItemActions { get; set; }
+        public IList<WebScraperAction> ItemActions { get; set; }
 
         /// <summary>
         /// Title of the item
