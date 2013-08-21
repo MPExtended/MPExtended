@@ -118,7 +118,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// <returns>List of scraper items</returns>
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperItem> GetScraperItems(int scraperId);
+        IList<WebScraperItem> GetScraperItems(int scraperId);
 
         /// <summary>
         /// Get all scraper items that have been updated since <paramref name="updated"/>
@@ -128,7 +128,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// <returns>List of scraper items</returns>
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated);
+        IList<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated);
 
         /// <summary>
         /// Get a scraper item by id
@@ -147,7 +147,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// <returns>List of available scraper actions</returns>
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<WebScraperAction> GetScraperActions(int scraperId);
+        IList<WebScraperAction> GetScraperActions(int scraperId);
 
 
         /// <summary>
@@ -197,6 +197,6 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// <returns>List of scrapers that are automatically started</returns>
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        List<int> GetAutoStartPlugins();
+        IList<int> GetAutoStartPlugins();
     }
 }

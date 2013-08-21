@@ -35,7 +35,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         private DispatcherTimer _sessionWatcher;
         private ObservableCollection<WpfScraperConfig> _scrapers = new ObservableCollection<WpfScraperConfig>();
         private IScraperService proxyChannel;
-        private List<int> _autostart = new List<int>();
+        private IList<int> _autostart = new List<int>();
 
         private IScraperService Proxy
         {

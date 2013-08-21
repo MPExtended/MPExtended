@@ -28,8 +28,9 @@ namespace MPExtended.Services.ScraperService
         {
             scrapers = new Dictionary<int, Plugin<IScraperPlugin>>();
             var pluginLoader = new PluginLoader();
+            pluginLoader.AddRequiredMetadata("Id");
             pluginLoader.AddRequiredMetadata("Name");
-
+            
             // first argument is directory name in source tree, second one in installed tree
             //pluginLoader.AddFromTree("PlugIns", "Extensions");
             pluginLoader.AddFromTreeMatch(@"PlugIns\MPExtended.PlugIns.Scrapers.*", @"Plugins\Scrapers");
@@ -50,6 +51,7 @@ namespace MPExtended.Services.ScraperService
             }
         }
 
+        #region IScraperService interface
         public WebBoolResult SetAutoStart(int scraperId, bool autoStart)
         {
             if (autoStart && !Configuration.Scraper.AutoStart.Contains(scraperId))
@@ -65,39 +67,21 @@ namespace MPExtended.Services.ScraperService
             return false;
         }
 
-        /// <summary>
-        /// Get 
-        /// </summary>
-        /// <param name="scraperId"></param>
-        /// <returns></returns>
         public WebBoolResult GetIsAutoStart(int scraperId)
         {
             return Configuration.Scraper.AutoStart.Contains(scraperId);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<int> GetAutoStartPlugins()
+        public IList<int> GetAutoStartPlugins()
         {
             return Configuration.Scraper.AutoStart;
         }
 
-        /// <summary>
-        /// Return scraper by id
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>Scraper objects</returns>
         private IScraperPlugin GetScraper(int? scraperId)
         {
             return scrapers[(int)scraperId].Value;
         }
 
-        /// <summary>
-        /// Get all available scraper of this system
-        /// </summary>
-        /// <returns>Available scrapers</returns>
         public IList<WebScraper> GetAvailableScrapers()
         {
             IList<WebScraper> returnList = new List<WebScraper>();
@@ -114,11 +98,6 @@ namespace MPExtended.Services.ScraperService
             return returnList;
         }
 
-        /// <summary>
-        /// Start a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>true if scraper could be started, false otherwise</returns>
         public WebBoolResult StartScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -126,11 +105,6 @@ namespace MPExtended.Services.ScraperService
             return service.StartScraper();
         }
 
-        /// <summary>
-        /// Stop a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>true if scraper could be stopped, false otherwise</returns>
         public WebBoolResult StopScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -138,11 +112,6 @@ namespace MPExtended.Services.ScraperService
             return service.StopScraper();
         }
 
-        /// <summary>
-        /// Pause a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>true if scraper could be paused, false otherwise</returns>
         public WebBoolResult PauseScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -150,11 +119,6 @@ namespace MPExtended.Services.ScraperService
             return service.PauseScraper();
         }
 
-        /// <summary>
-        /// Resume a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>true if scraper could be resumed, false otherwise</returns>
         public WebBoolResult ResumeScraper(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -162,11 +126,6 @@ namespace MPExtended.Services.ScraperService
             return service.ResumeScraper();
         }
 
-        /// <summary>
-        /// Trigger an update on a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>true if scraper update could be triggered, false otherwise</returns>
         public WebBoolResult TriggerUpdate(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -174,11 +133,6 @@ namespace MPExtended.Services.ScraperService
             return service.TriggerUpdate();
         }
 
-        /// <summary>
-        /// Get current state of a scraper
-        /// </summary>
-        /// <param name="scraperId">id of scraper</param>
-        /// <returns>State of scraper</returns>
         public WebScraperInfo GetScraperState(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
@@ -207,7 +161,7 @@ namespace MPExtended.Services.ScraperService
             return service.AddItemToScraper(title, type, provider, itemId, offset);
         }
 
-        public List<WebScraperItem> GetScraperItems(int scraperId)
+        public IList<WebScraperItem> GetScraperItems(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -221,14 +175,14 @@ namespace MPExtended.Services.ScraperService
             return service.GetScraperItem(itemId);
         }
 
-        public List<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated)
+        public IList<WebScraperItem> GetUpdatedScraperItems(int scraperId, DateTime updated)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
             return service.GetUpdatedScraperItems(updated);
         }
 
-        public List<WebScraperAction> GetScraperActions(int scraperId)
+        public IList<WebScraperAction> GetScraperActions(int scraperId)
         {
             IScraperPlugin service = GetScraper(scraperId);
 
@@ -248,5 +202,6 @@ namespace MPExtended.Services.ScraperService
 
             return service.GetConfigSettings();
         }
+        #endregion
     }
 }
