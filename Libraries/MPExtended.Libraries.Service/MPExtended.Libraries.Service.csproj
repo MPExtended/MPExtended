@@ -68,6 +68,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Composition\IndexedPluginLoader.cs" />
+    <Compile Include="Composition\NativeAssemblyLoader.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginLoader.cs" />
     <Compile Include="Composition\SafeDirectoryCatalog.cs" />
@@ -78,16 +79,18 @@
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\ConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\AuthenticationUpgrader.cs" />
+    <Compile Include="Config\Upgrade\ScraperUpgrader.cs" />
     <Compile Include="Config\Upgrade\WebMediaPortalHostingUpgrader.cs" />
     <Compile Include="Config\Upgrade\MediaAccessUpgrader.cs" />
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
+    <Compile Include="Util\ProcessUtils.cs" />
     <Compile Include="Network\ImpersonationContext.cs" />
     <Compile Include="Network\INetworkContext.cs" />
     <Compile Include="Network\LocalMachineContext.cs" />
-    <Compile Include="Network\NetworkContextFactory.cs" />
+    <Compile Include="Network\NetworkContextFactory.cs" />    
     <Compile Include="Extensions\NaturalSorting.cs" />
     <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />

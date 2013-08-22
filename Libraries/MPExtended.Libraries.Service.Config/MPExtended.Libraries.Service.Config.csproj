@@ -41,6 +41,7 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="ConfigDictionary.cs" />
+    <Compile Include="Scraper.cs" />
     <Compile Include="StreamingPlatforms.cs" />
     <Compile Include="StreamingProfiles.cs" />
     <Compile Include="TranscoderConfigDictionary.cs" />
