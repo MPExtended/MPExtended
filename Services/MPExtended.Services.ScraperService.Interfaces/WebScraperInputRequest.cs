@@ -35,6 +35,11 @@ namespace MPExtended.Services.ScraperService.Interfaces
         /// </summary>
         public IList<WebScraperInputMatch> InputOptions { get; set; }
 
+        /// <summary>
+        /// If input type is text, this can be shown as default value
+        /// </summary>
+        public String TextDefault { get; set; }
+
         public override string ToString()
         {
             return Title;
