@@ -27,7 +27,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public class JQueryHelper
     {
-        private const string JQUERY_VERSION = "1.10.1";
+        private const string JQUERY_VERSION = "1.10.2";
         private const string JQUERY_UI_VERSION = "1.10.3";
 
         private HtmlHelper htmlHelper;
