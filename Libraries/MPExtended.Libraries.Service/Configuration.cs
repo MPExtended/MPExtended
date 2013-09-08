@@ -40,6 +40,7 @@ namespace MPExtended.Libraries.Service
         StreamingProfiles,
         StreamingPlatforms, 
         Authentication,
+        Scraper,
         WebMediaPortal,
         WebMediaPortalHosting
     }
@@ -122,6 +123,14 @@ namespace MPExtended.Libraries.Service
             get
             {
                 return config.Get<WebMediaPortal>(ConfigurationFile.WebMediaPortal).Get();
+            }
+        }
+
+        public static Scraper Scraper
+        {
+            get
+            {
+                return config.Get<Scraper>(ConfigurationFile.Scraper).Get();
             }
         }
 
