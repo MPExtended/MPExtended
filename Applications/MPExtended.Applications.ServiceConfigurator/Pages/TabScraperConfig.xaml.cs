@@ -17,30 +17,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Reflection;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MPExtended.Libraries.Client;
-using System.Windows.Threading;
-using MPExtended.Services.ScraperService.Interfaces;
-using System.Collections.ObjectModel;
-using System.ServiceModel;
-using MPExtended.Libraries.Service;
-using MPExtended.Applications.ServiceConfigurator.Code;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Reflection;
 using System.Windows.Forms;
-using MPExtended.Libraries.Service.Config;
+using System.Windows.Threading;
+using MPExtended.Applications.ServiceConfigurator.Code;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Composition;
+using MPExtended.Services.ScraperService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Pages
 {
@@ -303,16 +291,14 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
                     if (File.Exists(scraperDll.DllPath))
                     {
-                        //System.Reflection.Assembly myDllAssembly = System.Reflection.Assembly.LoadFile(formDll);
                         ProxyDomain pd = new ProxyDomain();
                         Assembly assembly = pd.GetAssembly(scraperDll.DllPath);
                         String assemblyName = scraperDll.PluginAssemblyName;
 
                         IScraperPlugin plugin = (IScraperPlugin)assembly.CreateInstance(assemblyName);
-                        NativeAssemblyLoader.SetDllDirectory(new FileInfo(scraperDll.DllPath).Directory.FullName);
+                        NativeAssemblyLoader.SetSearchDirectory(Path.GetFullPath(Path.GetDirectoryName(scraperDll.DllPath)));
 
                         Form config = plugin.CreateConfig();
-
 
                         WebScraperState before = Proxy.GetScraperState(scraper.ScraperId).ScraperState;
                         if (before == WebScraperState.Running)

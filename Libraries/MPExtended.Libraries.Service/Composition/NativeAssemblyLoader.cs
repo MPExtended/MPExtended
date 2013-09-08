@@ -23,45 +23,49 @@ using System.Runtime.InteropServices;
 
 namespace MPExtended.Libraries.Service.Composition
 {
-    /// <summary>
-    /// Helper class for external calls to native calls for dynamic dll loading 
-    /// </summary>
-    public class NativeAssemblyLoader
+    public static class NativeAssemblyLoader
     {
-        /// <summary>
-        /// Adds a directory to the process DLL search path.
-        /// 
-        /// See http://msdn.microsoft.com/en-us/library/windows/desktop/hh310513%28v=vs.85%29.aspx for further information
-        /// </summary>
-        /// <param name="lpPathName">Path to directory</param>
-        /// <returns>Did the function succeed</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AddDllDirectory(string lpPathName);
+        // Don't use AddDllDirectory and RemoveDllDirectory here, because they are only available on
+        // Windows 8 (they require KB2533623, a non-important update, on earlier Windows versions).
 
         /// <summary>
-        /// Adds a directory to the search path used to locate DLLs for the application. Each time the SetDllDirectory function is called, it replaces the directory specified in the previous SetDllDirectory call. To specify more than one directory, use the AddDllDirectory function and call LoadLibraryEx with LOAD_LIBRARY_SEARCH_USER_DIRS
+        /// Adds a directory to the search path used to locate DLLs for the application. Each time the SetDllDirectory 
+        /// function is called, it replaces the directory specified in the previous SetDllDirectory call.
         /// 
-        /// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms686203%28v=vs.85%29.aspx for further information
+        /// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms686203%28v=vs.85%29.aspx.
         /// </summary>
-        /// <param name="lpPathName">Path to directory</param>
-        /// <returns></returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetDllDirectory(string lpPathName);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetDllDirectory(string lpPathName);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern int GetDllDirectory(int bufsize, StringBuilder buf);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern int GetDllDirectory(int bufsize, StringBuilder buf);
 
         /// <summary>
         /// Loads the specified module into the address space of the calling process. The specified module may cause 
         /// other modules to be loaded.
         ///
-        /// For additional load options, use the LoadLibraryEx function.
-        /// 
-        /// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms684175%28v=vs.85%29.aspx for further information
+        /// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms684175%28v=vs.85%29.aspx.
         /// </summary>
-        /// <param name="librayName"></param>
-        /// <returns></returns>
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr LoadLibrary(string librayName);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern IntPtr LoadLibrary(string lpFileName);
+
+        public static void SetSearchDirectory(string directory)
+        {
+            SetDllDirectory(directory);
+        }
+
+        public static string GetSearchDirectory()
+        {
+            var txt = new StringBuilder(1024);
+            GetDllDirectory(txt.Length, txt);
+            return txt.ToString();
+        }
+
+        public static void LoadAssembly(string libraryName)
+        {
+            // TODO: Convert the IntPtr to a handle and return it, if needed
+            LoadLibrary(libraryName);
+        }
     }
 }
