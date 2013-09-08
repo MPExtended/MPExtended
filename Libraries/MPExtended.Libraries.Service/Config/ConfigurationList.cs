@@ -37,7 +37,7 @@ namespace MPExtended.Libraries.Service.Config
                 this[ConfigurationFile.Services] = new ConfigurationSerializer<Services, ServicesSerializer, ServicesUpgrader>(ConfigurationFile.Services, "Services.xml");
                 this[ConfigurationFile.Streaming] = new ConfigurationSerializer<Streaming, StreamingSerializer, StreamingUpgrader>(ConfigurationFile.Streaming, "Streaming.xml");
                 this[ConfigurationFile.StreamingProfiles] = new ProfilesConfigurationSerializer();
-                this[ConfigurationFile.Scraper] = new ConfigurationSerializer<Scraper, ScraperSerializer, ScraperUpgrader>(ConfigurationFile.Scraper, "Scraper.xml");
+                this[ConfigurationFile.Scraper] = new ConfigurationSerializer<Scraper, ScraperSerializer>(ConfigurationFile.Scraper, "Scraper.xml");
             }
 
             if (product == MPExtendedProduct.WebMediaPortal)

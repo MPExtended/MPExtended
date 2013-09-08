@@ -79,7 +79,6 @@
     <Compile Include="Config\Upgrade\AttemptConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\ConfigUpgrader.cs" />
     <Compile Include="Config\Upgrade\AuthenticationUpgrader.cs" />
-    <Compile Include="Config\Upgrade\ScraperUpgrader.cs" />
     <Compile Include="Config\Upgrade\WebMediaPortalHostingUpgrader.cs" />
     <Compile Include="Config\Upgrade\MediaAccessUpgrader.cs" />
     <Compile Include="Config\Upgrade\ServicesUpgrader.cs" />
@@ -90,7 +89,7 @@
     <Compile Include="Network\ImpersonationContext.cs" />
     <Compile Include="Network\INetworkContext.cs" />
     <Compile Include="Network\LocalMachineContext.cs" />
-    <Compile Include="Network\NetworkContextFactory.cs" />    
+    <Compile Include="Network\NetworkContextFactory.cs" />
     <Compile Include="Extensions\NaturalSorting.cs" />
     <Compile Include="Shared\Filters\ListFilter.cs" />
     <Compile Include="Shared\MethodCallFailedException.cs" />
