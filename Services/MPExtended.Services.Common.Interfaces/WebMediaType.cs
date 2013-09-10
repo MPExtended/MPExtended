@@ -38,6 +38,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Recording = 13,
         [EnumMember]
-        Radio = 14
+        Radio = 14,
+        [EnumMember]
+        Url = 15
     }
 }
