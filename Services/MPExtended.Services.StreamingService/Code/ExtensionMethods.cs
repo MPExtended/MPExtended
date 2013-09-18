@@ -25,6 +25,7 @@ using MPExtended.Services.StreamingService.Transcoders;
 using MPExtended.Services.StreamingService.Interfaces;
 using System.IO;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using System.Security.Cryptography;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -84,7 +85,7 @@ namespace MPExtended.Services.StreamingService.Code
 
     }
 
-    internal static class FileInfoExtensionMethods
+    internal static class MediaSourceExtensionMethods
     {
         /// <summary>
         /// Copyright (C) Moving-Pictures, http://code.google.com/p/moving-pictures/
@@ -96,14 +97,13 @@ namespace MPExtended.Services.StreamingService.Code
         /// </summary>
         /// <param name="self"></param>
         /// <returns>a unique hash or null when error</returns>
-        public static string ComputeSmartHash(this WebFileInfo self)
+        public static string ComputeSmartHash(this MediaSource self)
         {
             string hexHash = null;
             byte[] bytes = null;
             try
             {
-
-                using (Stream input = new FileInfo(self.Path).OpenRead())
+                using (Stream input = self.Retrieve())
                 {
                     ulong lhash;
                     long streamsize;
@@ -138,6 +138,17 @@ namespace MPExtended.Services.StreamingService.Code
                 Log.Warn("Error computing smart hash: ", e);
             }
             return hexHash;
+        }
+
+        public static string ComputeFullHash(this MediaSource self)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = self.Retrieve())
+                {
+                    return md5.ComputeHash(stream).ToHexString();
+                }
+            }
         }
     }
 }

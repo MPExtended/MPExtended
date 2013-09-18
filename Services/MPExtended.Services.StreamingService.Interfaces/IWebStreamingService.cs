@@ -84,6 +84,6 @@ namespace MPExtended.Services.StreamingService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebMediaHash GetItemHash(WebMediaType type, int? provider, string itemId, int? offset);
+        WebMediaHash GetItemHash(WebMediaType type, int? provider, string itemId, int? offset, bool smartHash);
     }
 }
