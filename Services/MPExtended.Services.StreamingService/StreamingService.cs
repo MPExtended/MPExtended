@@ -416,6 +416,13 @@ namespace MPExtended.Services.StreamingService
             int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
             return Images.GetResizedImage(new ImageMediaSource(mediatype, provider, id, artworktype, offset), calcMaxWidth, calcMaxHeight, borders, format);
         }
+
+        public WebBoolResult RequestImageResize(WebMediaType mediatype, int? provider, string id, WebFileType imagetype, int offset, int maxWidth, int maxHeight, string borders = null, string format = null)
+        {
+            int? calcMaxWidth = maxWidth == 0 ? null : (int?)maxWidth;
+            int? calcMaxHeight = maxHeight == 0 ? null : (int?)maxHeight;
+            return Images.CacheImage(new ImageMediaSource(mediatype, provider, id, imagetype, offset), calcMaxWidth, calcMaxHeight, borders, format);
+        }
         #endregion
     }
 }
