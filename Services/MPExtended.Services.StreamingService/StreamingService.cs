@@ -186,43 +186,10 @@ namespace MPExtended.Services.StreamingService
         {
             // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId, offset);
-            string path = source.GetPath();
-            if (path == null || path.Length == 0)
-            {
-                return new WebItemSupportStatus(false, "Cannot resolve item to a path");
-            }
-
-            // some checks based upon the file info. apparantly people have broken files in their connections
-            var fileinfo = source.GetFileInfo();
-            if (!fileinfo.Exists)
-            {
-                // add a special warning message for files that are on a network drive, as this often causes problems
-                Uri uri = new Uri(path);
-                if (uri.IsUnc && !NetworkInformation.IsLocalAddress(uri.Host))
-                {
-                    return new WebItemSupportStatus(false, "File is on an inaccessible network share");
-                }
-
-                return new WebItemSupportStatus(false, "File does not exists or is inaccessible");
-            }
-            if (type != WebMediaType.TV && fileinfo.Size == 0)
-            {
-                return new WebItemSupportStatus(false, "This file has a size of 0KB");
-            }
-
-            // we don't support some things yet
-            if (path.EndsWith(".IFO"))
-            {
-                return new WebItemSupportStatus(false, "Streaming DVD files is not supported");
-            }
-
-            // while corrupt files may work, it's probably a better idea to warn early. check for a valid file using mediainfo
-            if (MediaInfo.MediaInfoWrapper.GetMediaInfo(source) == null)
-            {
-                return new WebItemSupportStatus(false, "This file might be corrupt");
-            }
-
-            return new WebItemSupportStatus() { Supported = true };
+            string error = source.CheckAvailability();
+            return error != null ?
+                new WebItemSupportStatus(false, error) :
+                new WebItemSupportStatus(true, null);
         }
 
         public WebStreamLogs GetStreamLogs(string identifier)
@@ -233,6 +200,19 @@ namespace MPExtended.Services.StreamingService
                 LastError = slh.LastError,
                 FullLogs = slh.FullLog.ToString()
             };
+        }
+
+        /// <param name="smartHash">Use smartHash for calculating a quick hash (only uses part of the media item) or a full MD5 hash</param>
+        public WebMediaHash GetItemHash(WebMediaType type, int? provider, string itemId, int? offset, bool smartHash)
+        {
+            MediaSource source = new MediaSource(type, provider, itemId, offset);
+            String error = source.CheckAvailability();
+            if (error != null)
+            {
+                return new WebMediaHash() { Generated = false, Error = error };
+            }
+
+            return new WebMediaHash() { Generated = true, Hash = smartHash ? source.ComputeSmartHash() : source.ComputeFullHash() };
         }
         #endregion
 
