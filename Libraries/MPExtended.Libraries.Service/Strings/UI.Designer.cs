@@ -822,6 +822,60 @@ namespace MPExtended.Libraries.Service.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Streaming DVD files is not supported..
+        /// </summary>
+        public static string StreamErrorDVDsNotSupported {
+            get {
+                return ResourceManager.GetString("StreamErrorDVDsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File does not exists or is inaccessible..
+        /// </summary>
+        public static string StreamErrorFileDoesntExists {
+            get {
+                return ResourceManager.GetString("StreamErrorFileDoesntExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file might be corrupt..
+        /// </summary>
+        public static string StreamErrorFileIsCorrupt {
+            get {
+                return ResourceManager.GetString("StreamErrorFileIsCorrupt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File is empty..
+        /// </summary>
+        public static string StreamErrorFileIsEmpty {
+            get {
+                return ResourceManager.GetString("StreamErrorFileIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File is on an inaccessible network share..
+        /// </summary>
+        public static string StreamErrorInaccessibleNetworkShare {
+            get {
+                return ResourceManager.GetString("StreamErrorInaccessibleNetworkShare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no path known for this media item..
+        /// </summary>
+        public static string StreamErrorUnknownPath {
+            get {
+                return ResourceManager.GetString("StreamErrorUnknownPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Streaming.
         /// </summary>
         public static string Streaming {

@@ -26,6 +26,7 @@ using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
+using MPExtended.Libraries.Service.Strings;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -113,48 +114,35 @@ namespace MPExtended.Services.StreamingService.Code
                     );
         }
 
-        /// <summary>
-        /// Check a MediaSource for availablility
-        /// </summary>
-        /// <param name="source">Source file that needs to be checked</param>
         /// <returns>Error if there is a problem with the MediaSource, null otherwise</returns>
-        public String CheckMediaSourceAvailability(MediaSource source)
+        public string CheckAvailability()
         {
-            string path = source.GetPath();
+            string path = GetPath();
             if (path == null || path.Length == 0)
-            {
-                return "Cannot resolve item to a path";
-            }
+                return UI.StreamErrorUnknownPath;
 
-            // some checks based upon the file info. apparantly people have broken files in their connections
-            var fileinfo = source.GetFileInfo();
+            // some checks based upon the file info. apparantly people have broken files in their collection.
+            var fileinfo = GetFileInfo();
             if (!fileinfo.Exists)
             {
                 // add a special warning message for files that are on a network drive, as this often causes problems
                 Uri uri = new Uri(path);
                 if (uri.IsUnc && !NetworkInformation.IsLocalAddress(uri.Host))
-                {
-                    return "File is on an inaccessible network share";
-                }
+                    return UI.StreamErrorInaccessibleNetworkShare;
 
-                return "File does not exists or is inaccessible";
+                return UI.StreamErrorFileDoesntExists;
             }
-            if (source.MediaType != WebMediaType.TV && fileinfo.Size == 0)
-            {
-                return "This file has a size of 0KB";
-            }
+
+            if (MediaType != WebMediaType.TV && fileinfo.Size == 0)
+                return UI.StreamErrorFileIsEmpty;
 
             // we don't support some things yet
             if (path.EndsWith(".IFO"))
-            {
-                return "Streaming DVD files is not supported";
-            }
+                return UI.StreamErrorDVDsNotSupported;
 
             // while corrupt files may work, it's probably a better idea to warn early. check for a valid file using mediainfo
-            if (MediaInfo.MediaInfoWrapper.GetMediaInfo(source) == null)
-            {
-                return "This file might be corrupt";
-            }
+            if (MediaInfo.MediaInfoWrapper.GetMediaInfo(this) == null)
+                return UI.StreamErrorFileIsCorrupt;
 
             return null;
         }

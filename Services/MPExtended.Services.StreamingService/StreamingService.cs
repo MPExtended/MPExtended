@@ -186,13 +186,10 @@ namespace MPExtended.Services.StreamingService
         {
             // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId, offset);
-            String error = source.CheckMediaSourceAvailability(source);
-            if (error != null)
-            {
-                return new WebItemSupportStatus(false, error);
-            }
-
-            return new WebItemSupportStatus() { Supported = true };
+            string error = source.CheckAvailability();
+            return error != null ?
+                new WebItemSupportStatus(false, error) :
+                new WebItemSupportStatus(true, null);
         }
 
         public WebStreamLogs GetStreamLogs(string identifier)
@@ -205,23 +202,14 @@ namespace MPExtended.Services.StreamingService
             };
         }
 
-        /// <summary>
-        /// Calculates a unique hash for a media item
-        /// </summary>
-        /// <param name="type">Type of item</param>
-        /// <param name="provider">Provider of item</param>
-        /// <param name="itemId">Id of item</param>
-        /// <param name="offset">Offset of item</param>
         /// <param name="smartHash">Use smartHash for calculating a quick hash (only uses part of the media item) or a full MD5 hash</param>
-        /// <returns>Unique hash of the media item</returns>
         public WebMediaHash GetItemHash(WebMediaType type, int? provider, string itemId, int? offset, bool smartHash)
         {
-            // check if we actually now about this file
             MediaSource source = new MediaSource(type, provider, itemId, offset);
-            String error = source.CheckMediaSourceAvailability(source);
+            String error = source.CheckAvailability();
             if (error != null)
             {
-                return new WebMediaHash(false, error);
+                return new WebMediaHash() { Generated = false, Error = error };
             }
 
             return new WebMediaHash() { Generated = true, Hash = smartHash ? source.ComputeSmartHash() : source.ComputeFullHash() };
