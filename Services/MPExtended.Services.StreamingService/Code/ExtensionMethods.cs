@@ -17,15 +17,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Config;
-using MPExtended.Services.StreamingService.Transcoders;
-using MPExtended.Services.StreamingService.Interfaces;
-using System.IO;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.MediaAccessService.Interfaces;
-using System.Security.Cryptography;
+using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.StreamingService.Transcoders;
 
 namespace MPExtended.Services.StreamingService.Code
 {
@@ -59,30 +60,6 @@ namespace MPExtended.Services.StreamingService.Code
                 Transport = profile.Transport
             };
         }
-    }
-
-    internal static class ByteExtensionMethods
-    {
-
-        /// <summary>
-        /// Copyright (C) Moving-Pictures, http://code.google.com/p/moving-pictures/
-        /// 
-        /// Taken from MoPi Code: ByteExtensions.cs
-        /// 
-        /// Converts a byte array to a hexadecimal string (hash)
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns>hexadecimal string</returns>
-        public static string ToHexString(this byte[] self)
-        {
-            StringBuilder hexBuilder = new StringBuilder();
-            for (int i = 0; i < self.Length; i++)
-            {
-                hexBuilder.Append(self[i].ToString("x2"));
-            }
-            return hexBuilder.ToString();
-        }
-
     }
 
     internal static class MediaSourceExtensionMethods

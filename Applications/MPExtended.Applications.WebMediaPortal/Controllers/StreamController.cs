@@ -158,7 +158,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 string expectedData = String.Format("{0}_{1}_{2}", type, item, HttpContext.Application["randomToken"]);
                 byte[] expectedBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(expectedData));
-                string expectedToken = BitConverter.ToString(expectedBytes).Replace("-", "").ToLower();
+                string expectedToken = expectedBytes.ToHexString();
                 if (token == null || expectedToken != token)
                 {
                     Log.Error("Denying download type={0}, item={1}, token={2}, ip={3}: user is not logged in and token is invalid", type, item, token, Request.UserHostAddress);

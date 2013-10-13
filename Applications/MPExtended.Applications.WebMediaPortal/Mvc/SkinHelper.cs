@@ -23,6 +23,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using MPExtended.Applications.WebMediaPortal.Code;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Mvc
@@ -51,7 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
         {
             string tokenData = String.Format("{0}_{1}_{2}", mediaType, itemId, viewContext.HttpContext.Application["randomToken"]);
             byte[] tokenBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(tokenData));
-            return BitConverter.ToString(tokenBytes).Replace("-", "").ToLower();
+            return tokenBytes.ToHexString();
         }
 
         public object GetDownloadArguments(WebMediaType mediaType, string itemId)
