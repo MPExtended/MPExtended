@@ -250,7 +250,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         {
             string sql = "SELECT strArtist, 0 AS hasAlbums FROM tracks GROUP BY strArtist " +
                          "UNION " +
-                         "SELECT strAlbumArtist, 1 AS hasAlbums FROM tracks GROPUP BY strAlbumArtist ";
+                         "SELECT strAlbumArtist, 1 AS hasAlbums FROM tracks GROUP BY strAlbumArtist ";
             return ReadList(sql, delegate(SQLiteDataReader reader)
             {
                 return reader.ReadPipeList(0).Select(x => new { Artist = x, HasAlbums = reader.ReadBoolean(1) });
