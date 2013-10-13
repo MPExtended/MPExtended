@@ -54,7 +54,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
         #region Tracks
         private LazyQuery<T> LoadAllTracks<T>() where T : WebMusicTrackBasic, new()
         {
-            Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
+            Dictionary<string, WebMusicArtistBasic> artists = null;
             Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>> artwork = new Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>>();
 
             string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
@@ -64,6 +64,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "idTrack", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("t", "strArtist", "Artist", DataReaders.ReadPipeList),
                 new SQLFieldMapping("t", "strArtist", "ArtistId", DataReaders.ReadPipeList),
+                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtist", DataReaders.ReadPipeListAsString),
+                new SQLFieldMapping("t", "strAlbumArtist", "AlbumArtistId", DataReaders.ReadPipeListAsString),
                 new SQLFieldMapping("t", "strAlbum", "Album", DataReaders.ReadString),
                 new SQLFieldMapping("t", "strAlbum", "AlbumId", AlbumIdReader),
                 new SQLFieldMapping("t", "strTitle", "Title", DataReaders.ReadString),
@@ -78,8 +80,13 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             {
                 if (item is WebMusicTrackDetailed)
                 {
+                    if (artists == null)
+                        artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
+
                     WebMusicTrackDetailed det = item as WebMusicTrackDetailed;
                     det.Artists = det.ArtistId.Where(x => artists.ContainsKey(x)).Select(x => artists[x]).ToList();
+                    if (artists.ContainsKey(det.AlbumArtist))
+                        det.AlbumArtistObject = artists[det.AlbumArtist];
                 }
 
                 // if there is no artist, we can't load album artwork, so just skip without artwork
@@ -228,7 +235,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             // then load all artists
             string sql = "SELECT DISTINCT strArtist FROM tracks " +
                          "UNION " +
-                         "SELECT DISTINCT stralbumArtist FROM tracks ";
+                         "SELECT DISTINCT strAlbumArtist FROM tracks ";
             return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
             {
                 return reader.ReadPipeList(0);

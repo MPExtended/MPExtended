@@ -14,6 +14,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
             Genres = new List<string>();
         }
 
+        public string AlbumArtist { get; set; }
+        public string AlbumArtistId { get; set; }
         public IList<string> Artist { get; set; }
         public IList<string> ArtistId { get; set; }
         public string Album { get; set; }
