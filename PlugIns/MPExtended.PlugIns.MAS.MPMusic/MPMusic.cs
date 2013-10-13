@@ -217,6 +217,58 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             public string Biography { get; set; }
         }
 
+        private List<WebArtwork> GetArtworkForArtist(string name)
+        {
+            var artwork = new List<WebArtwork>();
+
+            int i = 0;
+            string[] filenames = new string[] {
+                        PathUtil.StripInvalidCharacters(name + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(name + ".jpg", '_')
+                    };
+            foreach (string file in filenames)
+            {
+                string path = Path.Combine(configuration["cover"], "Artists", file);
+                if (File.Exists(path))
+                {
+                    artwork.Add(new WebArtworkDetailed()
+                    {
+                        Type = WebFileType.Cover,
+                        Offset = i++,
+                        Path = path,
+                        Rating = 1,
+                        Id = path.GetHashCode().ToString(),
+                        Filetype = Path.GetExtension(path).Substring(1)
+                    });
+                }
+            }
+
+            return artwork;
+        }
+
+        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
+        {
+            string sql = "SELECT strArtist, 0 AS hasAlbums FROM tracks GROUP BY strArtist " +
+                         "UNION " +
+                         "SELECT strAlbumArtist, 1 AS hasAlbums FROM tracks GROPUP BY strAlbumArtist ";
+            return ReadList(sql, delegate(SQLiteDataReader reader)
+            {
+                return reader.ReadPipeList(0).Select(x => new { Artist = x, HasAlbums = reader.ReadBoolean(1) });
+            })
+                .SelectMany(x => x)
+                .GroupBy(x => x.Artist)
+                .Select(x =>
+                {
+                    return new WebMusicArtistBasic()
+                    {
+                        Id = x.Key,
+                        Title = x.Key,
+                        HasAlbums = x.Any(y => y.HasAlbums),
+                        Artwork = GetArtworkForArtist(x.Key)
+                    };
+                });
+        }
+
         public IEnumerable<WebMusicArtistDetailed> GetAllArtistsDetailed()
         {
             // pre-load advanced info
@@ -233,58 +285,44 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             }).ToDictionary(x => x.Name, x => x);
 
             // then load all artists
-            string sql = "SELECT DISTINCT strArtist FROM tracks " +
+            string sql =    "SELECT strArtist, 0 AS hasAlbums, GROUP_CONCAT(strGenre, '|') AS genres " +
+                            "FROM tracks " +
+                            "GROUP BY strArtist " +
                          "UNION " +
-                         "SELECT DISTINCT strAlbumArtist FROM tracks ";
-            return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
+                            "SELECT strAlbumArtist, 1 AS hasAlbums, GROUP_CONCAT(strGenre, '|') AS genres " +
+                            "FROM tracks " +
+                            "GROUP BY strAlbumArtist";
+            return ReadList(sql, delegate(SQLiteDataReader reader)
             {
-                return reader.ReadPipeList(0);
+                var hasAlbums = reader.ReadBoolean(1);
+                var genres = reader.ReadPipeList(2);
+                return reader.ReadPipeList(0).Select(x => new { 
+                    Artist = x, 
+                    HasAlbums = hasAlbums,
+                    Genres = genres
+                });
             })
                 .SelectMany(x => x)
-                .Distinct()
-                .OrderBy(x => x)
+                .GroupBy(x => x.Artist)
                 .Select(x =>
                 {
                     var artist = new WebMusicArtistDetailed();
-                    artist.Id = x;
-                    artist.Title = x;
+                    artist.Id = x.Key;
+                    artist.HasAlbums = x.Any(y => y.HasAlbums);
+                    artist.Title = x.Key;
 
-                    if (detInfo.ContainsKey(x))
-                    {
-                        artist.Styles = detInfo[x].Styles;
-                        artist.Tones = detInfo[x].Tones;
-                        artist.Biography = detInfo[x].Biography;
-                    }
+                    artist.Genres = x.SelectMany(y => y.Genres).ToList();
+                    artist.Artwork = GetArtworkForArtist(x.Key);
 
-                    int i = 0;
-                    string[] filenames = new string[] {
-                        PathUtil.StripInvalidCharacters(x + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(x + ".jpg", '_')
-                    };
-                    foreach (string file in filenames)
+                    if (detInfo.ContainsKey(x.Key))
                     {
-                        string path = Path.Combine(configuration["cover"], "Artists", file);
-                        if (File.Exists(path))
-                        {
-                            artist.Artwork.Add(new WebArtworkDetailed()
-                            {
-                                Type = WebFileType.Cover,
-                                Offset = i++,
-                                Path = path,
-                                Rating = 1,
-                                Id = path.GetHashCode().ToString(),
-                                Filetype = Path.GetExtension(path).Substring(1)
-                            });
-                        }
+                        artist.Styles = detInfo[x.Key].Styles;
+                        artist.Tones = detInfo[x.Key].Tones;
+                        artist.Biography = detInfo[x.Key].Biography;
                     }
 
                     return artist;
                 });
-        }
-
-        public IEnumerable<WebMusicArtistBasic> GetAllArtists()
-        {
-            return GetAllArtistsDetailed().Select(x => ArtistDetailedToArtistBasic(x));
         }
 
         public WebMusicArtistDetailed GetArtistDetailedById(string artistId)
@@ -294,18 +332,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public WebMusicArtistBasic GetArtistBasicById(string artistId)
         {
-            return ArtistDetailedToArtistBasic(GetAllArtistsDetailed().Where(x => x.Id == artistId).First());
-        }
-
-        private WebMusicArtistBasic ArtistDetailedToArtistBasic(WebMusicArtistDetailed det)
-        {
-            return new WebMusicArtistBasic()
-            {
-                Artwork = det.Artwork,
-                Id = det.Id,
-                PID = det.PID,
-                Title = det.Title
-            };
+            return GetAllArtists().Where(x => x.Id == artistId).First();
         }
         #endregion
 
