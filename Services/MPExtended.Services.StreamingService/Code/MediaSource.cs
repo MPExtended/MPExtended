@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2010 MovingPictures
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2010 MovingPictures, http://code.google.com/p/moving-pictures/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,9 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
@@ -303,6 +306,59 @@ namespace MPExtended.Services.StreamingService.Code
         public override string ToString()
         {
             return GetMediaDisplayName();
+        }
+
+        /// <summary>
+        /// Calculates a unique hash for the contents of the file, in a smart way that avoids
+        /// reading the whole file from disk. Use this method to compute hashes of large files.
+        /// 
+        /// Taken from MovingPictures source: Cornerstone/Extension/IO/FileInfoExtensions.cs.
+        /// </summary>
+        public string ComputeSmartHash()
+        {
+            try
+            {
+                using (Stream input = Retrieve())
+                {
+                    long streamsize = input.Length;
+                    ulong lhash = (ulong)streamsize;
+
+                    long i = 0;
+                    byte[] buffer = new byte[sizeof(long)];
+                    input.Position = 0;
+                    while (i < 65536 / sizeof(long) && (input.Read(buffer, 0, sizeof(long)) > 0))
+                    {
+                        i++;
+                        unchecked { lhash += BitConverter.ToUInt64(buffer, 0); }
+                    }
+
+                    input.Position = Math.Max(0, streamsize - 65536);
+                    i = 0;
+                    while (i < 65536 / sizeof(long) && (input.Read(buffer, 0, sizeof(long)) > 0))
+                    {
+                        i++;
+                        unchecked { lhash += BitConverter.ToUInt64(buffer, 0); }
+                    }
+
+                    return BitConverter.GetBytes(lhash).ToHexString();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Warn("Error computing smart hash", e);
+                return null;
+            }
+        }
+
+        public string ComputeFullHash()
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = Retrieve())
+                {
+                    return md5.ComputeHash(stream).ToHexString();
+                }
+            }
         }
     }
 }
