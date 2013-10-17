@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
-    <StartProgram>$(MSBuildProjectDirectory)\..\..\Packages\xunit.runners.1.9.1\tools\xunit.console.clr4.x86.exe</StartProgram>
+    <StartProgram>$(MSBuildProjectDirectory)\..\..\Packages\xunit.runners.1.9.2\tools\xunit.console.clr4.x86.exe</StartProgram>
     <StartArguments>"$(MSBuildProjectDirectory)\$(OutputPath)$(AssemblyName).dll" /wait</StartArguments>
   </PropertyGroup>
   <ItemGroup>
