@@ -48,9 +48,13 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             AssertTokenizer(tokenizer, expectedTokens);
 
             tokenizer = new Tokenizer(@"SomeField    = Contains A Value, FirstList = [ 'hello',another     , more values ], PipeList*=[xyz|abc def|ghi|'quot|ed']");
-            expectedTokens = new string[] { "SomeField", "=", "Contains A Value", ",", "FirstList", "=", "[", "hello", "another", "more values", "]", ",", 
-                                            "PipeList", "*=", "[", "xyz", "abc def", "ghi", "quot|ed", "]" };
+            expectedTokens = new string[] { "SomeField", "=", "Contains A Value", ",", "FirstList", "=", "[", "hello", ",", "another", ",", "more values", "]", ",",
+                                            "PipeList", "*=", "[", "xyz", "|", "abc def", "|", "ghi", "|", "quot|ed", "]" };
             AssertTokenizer(tokenizer, expectedTokens);
+
+            tokenizer = new Tokenizer(@"Field = [Item1, Item2, Item3] | SecondField = [Item4 | Item5], ThirdField = [Item6]");
+            expectedTokens = new string[] { "Field", "=", "[", "Item1", ",", "Item2", ",", "Item3", "]", "|", "SecondField", "=", "[", "Item4", "|", "Item5", "]",
+                                            ",", "ThirdField", "=", "Item6", "]" };
 
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, NoValue=").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=test, Missing'Operator'").Tokenize());
@@ -60,6 +64,7 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed='test', Invalid='Quoting").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed='test', Invalid='Quoting\'").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"Seed=""test"", Invalid='Quoting""").Tokenize());
+            Assert.Throws<ParseException>(() => new Tokenizer(@"Field=[Invalid|Mixing,Conjunctions]").Tokenize());
             Assert.Throws<ParseException>(() => new Tokenizer(@"WithoutValue=     ").Tokenize());
             Assert.DoesNotThrow(() => new Tokenizer(@"WithoutValue='        '").Tokenize());
         }
@@ -80,7 +85,7 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             IFilter result;
             FilterAndSet filters;
 
-            parser = new FilterParser("FirstField=Value, SecondField=OtherValue | OrSecond = SomethingElse | OrThird ~= Field, Last!=Condition");
+            parser = new FilterParser("FirstField=Value, SecondField=OtherValue | OrSecond = SomethingElse | OrThird ~= Field, Last*=[Hello|Bye]");
             result = parser.Parse();
 
             Assert.True(result is FilterAndSet);
@@ -105,10 +110,13 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.Equal("~=", ((filters[1] as FilterOrSet)[2] as Filter).Operator);
             Assert.Equal("Field", ((filters[1] as FilterOrSet)[2] as Filter).Value);
 
-            Assert.IsType<Filter>(filters[2]);
-            Assert.Equal("Last", (filters[2] as Filter).Field);
-            Assert.Equal("!=", (filters[2] as Filter).Operator);
-            Assert.Equal("Condition", (filters[2] as Filter).Value);
+            Assert.IsType<ListFilter>(filters[2]);
+            Assert.Equal("Last", (filters[2] as ListFilter).Field);
+            Assert.Equal("*=", (filters[2] as ListFilter).Operator);
+            Assert.Equal(2, (filters[2] as ListFilter).Values.Length);
+            Assert.Equal(ListFilter.JoinType.Or, (filters[2] as ListFilter).Type);
+            Assert.Equal("Hello", (filters[2] as ListFilter).Values[0]);
+            Assert.Equal("Bye", (filters[2] as ListFilter).Values[1]);
         }
 
         [Fact]
@@ -145,6 +153,19 @@ namespace MPExtended.Tests.Libraries.Service.Shared
             Assert.False(TestAgainstFilter("Field *= [klm, nop]", new { Field = "hello" }));
             Assert.False(TestAgainstFilter("Field ^= [qrst]", new { Field = "uvw" }));
             Assert.True(TestAgainstFilter("Field $= [uvw, xyz]", new { Field = "abcxyz" }));
+
+            Assert.True(TestAgainstFilter("Field *= [efgh, hijk]", new { Field = new string[] { "abcd", "efgh", "hijk", "lmno" } }));
+            Assert.True(TestAgainstFilter("Field *= [efgh | hijk]", new { Field = new string[] { "abcd", "efgh" } }));
+            Assert.False(TestAgainstFilter("Field *= [abcd, efgh]", new { Field = new string[] { "abcd", "hijk" } }));
+            Assert.False(TestAgainstFilter("Field *= [abcd| efgh]", new { Field = new string[] { "hijk", "lmno", "pqrs" }}));
+
+            Assert.True(TestAgainstFilter("Field == [abcd, efgh]", new { Field = new string[] { "abcd", "efgh" } }));
+            Assert.False(TestAgainstFilter("Field == [abcd, efgh]", new { Field = new string[] { "abcd", "efgh", "ijkl" } }));
+            Assert.False(TestAgainstFilter("Field == [abcd, efgh, ijkl]", new { Field = new string[] { "abcd", "efgh" } }));
+
+            Assert.False(TestAgainstFilter("Field != [abcd, efgh]", new { Field = new string[] { "abcd", "efgh" } }));
+            Assert.True(TestAgainstFilter("Field != [abcd, efgh]", new { Field = new string[] { "abcd", "efgh", "ijkl" } }));
+            Assert.True(TestAgainstFilter("Field != [abcd, efgh, ijkl]", new { Field = new string[] { "abcd", "efgh" } }));
 
             Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != 2", new { Field = true }));
             Assert.Throws<ArgumentException>(() => TestAgainstFilter("Field != abc", new { Field = 3 }));

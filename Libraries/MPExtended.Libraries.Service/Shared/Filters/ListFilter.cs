@@ -28,9 +28,17 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 {
     internal class ListFilter : IFilter
     {
+        public enum JoinType
+        {
+            And,
+            Or
+        }
+
         public string Field { get; private set; }
         public string Operator { get; private set; }
         public string[] Values { get; private set; }
+
+        public JoinType Type { get; private set; }
 
         private delegate bool MatchDelegate(object x);
 
@@ -40,11 +48,12 @@ namespace MPExtended.Libraries.Service.Shared.Filters
         private IEnumerable<int> intValues;
         private IEnumerable<long> longValues;
 
-        public ListFilter(string field, string oper, IEnumerable<string> values)
+        public ListFilter(string field, string oper, IEnumerable<string> values, JoinType type)
         {
             Values = values.ToArray();
             Field = field;
             Operator = oper;
+            Type = type;
         }
 
         public void ExpectType(Type type)
@@ -66,6 +75,8 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 return GetIntMatchDelegate();
             if (property.PropertyType == typeof(long))
                 return GetLongMatchDelegate();
+            if (property.PropertyType.GetInterfaces().Any(x => x == typeof(IEnumerable)))
+                return GetListMatchDelegate();
 
             Log.Error("ListFilter: Cannot load match delegate for field of type '{0}' (property name {1})", property.PropertyType, property.Name);
             throw new ArgumentException("ListFilter: Cannot filter on field of type '{0}'", property.PropertyType.ToString());
@@ -150,6 +161,42 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                     return x => !longValues.Contains((long)property.GetValue(x, null));
                 default:
                     throw new ArgumentException("ListFilter: Invalid list operator '{0}' for integer field", Operator);
+            }
+        }
+
+        private MatchDelegate GetListMatchDelegate()
+        {
+            switch (Operator)
+            {
+                case "*=":
+                    return delegate(object x)
+                    {
+                        var source = ((IEnumerable)property.GetValue(x, null)).Cast<object>().Select(item => item.ToString());
+                        foreach (var toMatch in Values)
+                        {
+                            bool matches = source.Any(item => item == toMatch);
+                            if (Type == JoinType.And && !matches)
+                                return false;
+                            if (Type == JoinType.Or && matches)
+                                return true;
+                        }
+
+                        return Type == JoinType.And;
+                    };
+                case "==":
+                    return delegate(object x)
+                    {
+                        var source = ((IEnumerable)property.GetValue(x, null)).Cast<object>().Select(item => item.ToString());
+                        return source.SequenceEqual(Values);
+                    };
+                case "!=":
+                    return delegate(object x)
+                    {
+                        var source = ((IEnumerable)property.GetValue(x, null)).Cast<object>().Select(item => item.ToString());
+                        return !source.SequenceEqual(Values);
+                    };
+                default:
+                    throw new ArgumentException("Filter: Invalid operator '{0}' for list field", Operator);
             }
         }
     }
