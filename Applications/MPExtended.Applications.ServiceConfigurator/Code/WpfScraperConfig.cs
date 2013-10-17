@@ -26,8 +26,6 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
 {
     public class WpfScraperConfig : WebScraper, INotifyPropertyChanged
     {
-        private WebScraper _scraper;
-
         public WpfScraperConfig() { }
 
         public WpfScraperConfig(WebScraper old)

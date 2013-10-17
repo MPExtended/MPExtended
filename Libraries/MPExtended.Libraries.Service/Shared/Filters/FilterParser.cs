@@ -45,7 +45,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             tokens = tokenizer.Tokenize();
             pos = -2;
 
-            string conjunction, listConjunction;
+            string conjunction;
             ListFilter.JoinType joinType;
             FilterSet filter = new FilterAndSet();
             IFilter thisFilter;

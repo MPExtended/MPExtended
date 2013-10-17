@@ -44,8 +44,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             try
             {
                 Show = Connections.Current.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, showId);
-                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, sort: WebSortField.TVSeasonNumber, order: WebSortOrder.Asc)
-                    .Where(x => x.SeasonNumber != null);
+                Seasons = Connections.Current.MAS.GetTVSeasonsDetailedForTVShow(Show.PID, Show.Id, sort: WebSortField.TVSeasonNumber, order: WebSortOrder.Asc);
             }
             catch (Exception ex)
             {

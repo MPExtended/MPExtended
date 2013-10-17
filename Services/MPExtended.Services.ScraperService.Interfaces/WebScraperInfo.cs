@@ -31,20 +31,5 @@ namespace MPExtended.Services.ScraperService.Interfaces
         {
             return ScraperState.ToString();
         }
-
-        public override bool Equals(System.Object obj)
-        {
-            // If parameter is null return false.
-            if (obj == null || obj.GetType() != typeof(WebScraperInfo))
-            {
-                return false;
-            }
-
-            WebScraperInfo info = obj as WebScraperInfo;
-            return CurrentAction == info.CurrentAction && 
-                CurrentProgress == info.CurrentProgress && 
-                InputNeeded == info.InputNeeded && 
-                ScraperState == info.ScraperState;
-        }
     }
 }

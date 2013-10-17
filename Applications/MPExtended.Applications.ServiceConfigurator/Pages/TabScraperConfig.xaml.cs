@@ -134,7 +134,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
                     _scrapers.UpdateScraperList(tmp);
                 }
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException)
             {
                 _scrapers.Clear();
                 Log.Warn("No connection to service");
