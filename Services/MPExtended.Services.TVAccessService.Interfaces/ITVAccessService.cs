@@ -108,6 +108,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult EditSchedule(int scheduleId, WebScheduleType scheduleType);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult DeleteSchedule(int scheduleId);
 
         [OperationContract]

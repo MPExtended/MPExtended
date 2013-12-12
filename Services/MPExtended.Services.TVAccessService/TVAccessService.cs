@@ -438,6 +438,28 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public WebBoolResult EditSchedule(int scheduleId, WebScheduleType scheduleType)
+        {
+            try
+            {
+                Log.Debug("Editing schedule with id {0} schedule type {1}", scheduleId, scheduleType);
+                Schedule schedule = Schedule.Retrieve(scheduleId);
+
+                ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
+                schedule.ScheduleType = (int)scheduleRecType;
+
+                schedule.Persist();
+
+                _tvControl.OnNewSchedule(); // I don't think this is needed, but doesn't hurt either
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to edit schedule {0}", scheduleId), ex);
+                return false;
+            }
+        }
+
         public WebBoolResult DeleteSchedule(int scheduleId)
         {
             try
