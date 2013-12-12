@@ -72,6 +72,8 @@
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginLoader.cs" />
     <Compile Include="Composition\SafeDirectoryCatalog.cs" />
+    <Compile Include="Compression\GZipMessageEncoderFactory.cs" />
+    <Compile Include="Compression\GZipMessageEncodingBindingElement.cs" />
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\ProfilesConfigurationSerializer.cs" />
@@ -140,6 +142,9 @@
     <Compile Include="MpConnection\Messages\MessageShowDialog.cs" />
     <Compile Include="MpConnection\Messages\MessageWelcome.cs" />
     <Compile Include="WCF\ClientFactory.cs" />
+    <Compile Include="WCF\CustomWebHttpBinding.cs" />
+    <Compile Include="WCF\CustomWebHttpBindingElement.cs" />
+    <Compile Include="WCF\GZipBehavior.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
