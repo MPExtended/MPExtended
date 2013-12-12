@@ -31,6 +31,7 @@ namespace MPExtended.Libraries.Service
     public static class WCFUtil
     {
         internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
+        internal const string ORIGINAL_URL_HEADER = "X-Original-URL";
 
         private static bool IsRestEnabled
         {
@@ -51,6 +52,36 @@ namespace MPExtended.Libraries.Service
             // then try the HTTP host header
             try
             {
+                if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(ORIGINAL_URL_HEADER))
+                {
+                    /*
+                     * If MPExtended is behind a web proxy which alters the scheme and port e.g. https://mediaportal.external.com to http://mpserver:4332
+                     * then the Host header won't contain enough information for absolute locations such as those in WebStringResult to be set correctly.
+                     *
+                     * This header allows the proxy to supply the original URL in full to fix this problem.
+                     */
+                    string val = WebOperationContext.Current.IncomingRequest.Headers[ORIGINAL_URL_HEADER];
+                    Log.Trace("Original URL {0}", val);
+                    if (val != null)
+                    {
+                        try
+                        {
+                            Uri uri = new Uri(val);
+                            string portStr = "";
+							// URL tidy up if the default ports are being used
+                            if (!(uri.Scheme == "http" && uri.Port == 80) || (uri.Scheme == "https" && uri.Port == 443))
+                            {
+                                portStr = ":" + uri.Port;
+                            }
+                            return String.Format("{0}://{1}{2}/MPExtended/", uri.Scheme, uri.Host, portStr);
+                        }
+                        catch (UriFormatException)
+                        {
+                            // some problem with the proxy setup?
+                        }
+                    }
+                }
+
                 if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(HttpRequestHeader.Host.ToString()))
                 {
                     string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
