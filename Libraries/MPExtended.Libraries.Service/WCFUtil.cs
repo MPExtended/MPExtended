@@ -69,7 +69,7 @@ namespace MPExtended.Libraries.Service
                             Uri uri = new Uri(val);
                             string portStr = "";
 							// URL tidy up if the default ports are being used
-                            if (!(uri.Scheme == "http" && uri.Port == 80) || (uri.Scheme == "https" && uri.Port == 443))
+                            if (!((uri.Scheme == "http" && uri.Port == 80) || (uri.Scheme == "https" && uri.Port == 443)))
                             {
                                 portStr = ":" + uri.Port;
                             }
