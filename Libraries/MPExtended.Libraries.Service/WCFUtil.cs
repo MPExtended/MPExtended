@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Service
     public static class WCFUtil
     {
         internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
-        internal const string ORIGINAL_URL_HEADER = "X-Original-URL";
+        internal const string ORIGINAL_URL_HEADER = "X-Original-Host";
 
         private static bool IsRestEnabled
         {
@@ -61,7 +61,7 @@ namespace MPExtended.Libraries.Service
                      * This header allows the proxy to supply the original URL in full to fix this problem.
                      */
                     string val = WebOperationContext.Current.IncomingRequest.Headers[ORIGINAL_URL_HEADER];
-                    Log.Trace("Original URL {0}", val);
+                    Log.Debug("Original URL {0}", val);
                     if (val != null)
                     {
                         try
@@ -75,9 +75,9 @@ namespace MPExtended.Libraries.Service
                             }
                             return String.Format("{0}://{1}{2}/MPExtended/", uri.Scheme, uri.Host, portStr);
                         }
-                        catch (UriFormatException)
+                        catch (UriFormatException e)
                         {
-                            // some problem with the proxy setup?
+                            Log.Error("Cannot format current root from " + ORIGINAL_URL_HEADER, e);
                         }
                     }
                 }
