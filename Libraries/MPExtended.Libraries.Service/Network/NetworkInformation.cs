@@ -38,34 +38,38 @@ namespace MPExtended.Libraries.Service.Network
         private static string[] _localhostNames = new string[] { "127.0.0.1", "::1", "localhost" };
         private static IPAddress _ipAddress;
         private static IList<NetworkInterfaceData> _interfaces;
+        private static readonly object _interfacesLock = new object();
 
         public static IList<NetworkInterfaceData> GetNetworkInterfaces()
         {
-            if (_interfaces != null)
-                return _interfaces;
-
-            _interfaces = new List<NetworkInterfaceData>();
-            foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
+            lock(_interfacesLock)
             {
-                var data = new NetworkInterfaceData()
-                {
-                    Name = iface.Name,
-                    Type = iface.NetworkInterfaceType,
-                    PhysicalAddress = iface.GetPhysicalAddress(),
-                    Addresses = new List<IPAddress>()
-                };
+                if (_interfaces != null)
+                    return _interfaces;
 
-                foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
+                _interfaces = new List<NetworkInterfaceData>();
+                foreach (var iface in NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up))
                 {
-                    if ((unicast.Address.AddressFamily == AddressFamily.InterNetwork || unicast.Address.AddressFamily == AddressFamily.InterNetworkV6) &&
-                        !unicast.Address.IsIPv6LinkLocal && !unicast.Address.IsIPv6Multicast)
-                        data.Addresses.Add(unicast.Address);
+                    var data = new NetworkInterfaceData()
+                    {
+                        Name = iface.Name,
+                        Type = iface.NetworkInterfaceType,
+                        PhysicalAddress = iface.GetPhysicalAddress(),
+                        Addresses = new List<IPAddress>()
+                    };
+
+                    foreach (IPAddressInformation unicast in iface.GetIPProperties().UnicastAddresses)
+                    {
+                        if ((unicast.Address.AddressFamily == AddressFamily.InterNetwork || unicast.Address.AddressFamily == AddressFamily.InterNetworkV6) &&
+                            !unicast.Address.IsIPv6LinkLocal && !unicast.Address.IsIPv6Multicast)
+                            data.Addresses.Add(unicast.Address);
+                    }
+
+                    _interfaces.Add(data);
                 }
 
-                _interfaces.Add(data);
+                return _interfaces;
             }
-
-            return _interfaces;
         }
 
         public static string GetIPAddressForUri()
