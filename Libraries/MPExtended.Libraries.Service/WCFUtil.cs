@@ -31,7 +31,7 @@ namespace MPExtended.Libraries.Service
     public static class WCFUtil
     {
         internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
-        internal const string ORIGINAL_URL_HEADER = "X-Original-Host";
+        internal const string ORIGINAL_URL_HEADER = "X-Root-URL";
 
         private static bool IsRestEnabled
         {
@@ -61,7 +61,7 @@ namespace MPExtended.Libraries.Service
                      * This header allows the proxy to supply the original URL in full to fix this problem.
                      */
                     string val = WebOperationContext.Current.IncomingRequest.Headers[ORIGINAL_URL_HEADER];
-                    Log.Debug("Original URL {0}", val);
+                    Log.Trace("Original URL {0}", val);
                     if (val != null)
                     {
                         try
