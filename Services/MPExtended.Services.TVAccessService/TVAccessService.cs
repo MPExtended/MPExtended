@@ -438,15 +438,53 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public WebBoolResult EditSchedule(int scheduleId, WebScheduleType scheduleType)
+        public WebBoolResult EditSchedule(int scheduleId, int channelId = int.MinValue, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int preRecordInterval = int.MinValue, int postRecordInterval = int.MinValue, string directory = null, int priority = int.MinValue)
         {
             try
             {
-                Log.Debug("Editing schedule with id {0} schedule type {1}", scheduleId, scheduleType);
+                Log.Debug("Editing schedule {0} on channel {1} for {2}, {3} till {4}, type {5}", scheduleId, channelId, title, startTime, endTime, scheduleType);
                 Schedule schedule = Schedule.Retrieve(scheduleId);
 
-                ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType;
-                schedule.ScheduleType = (int)scheduleRecType;
+                if (channelId > int.MinValue)
+                {
+                    schedule.IdChannel = channelId;
+                }
+                if (title != null)
+                {
+                    schedule.ProgramName = title;
+                }
+                if (startTime != null && startTime.HasValue)
+                {
+                    schedule.StartTime = startTime.Value;
+                }
+                if (endTime != null && endTime.HasValue)
+                {
+                    schedule.EndTime = endTime.Value;
+                }
+
+                if (scheduleType != null && scheduleType.HasValue)
+                {
+                    ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType.Value;
+                    schedule.ScheduleType = (int)scheduleRecType;
+                }
+
+                if (preRecordInterval > int.MinValue)
+                {
+                    schedule.PreRecordInterval = preRecordInterval;
+                }
+                if (postRecordInterval > int.MinValue)
+                {
+                    schedule.PostRecordInterval = postRecordInterval;
+                }
+
+                if (directory != null)
+                {
+                    schedule.Directory = directory;
+                }
+                if (priority > int.MinValue)
+                {
+                    schedule.Priority = priority;
+                }
 
                 schedule.Persist();
 

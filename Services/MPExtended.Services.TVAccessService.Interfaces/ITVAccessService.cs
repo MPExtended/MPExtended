@@ -108,7 +108,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult EditSchedule(int scheduleId, WebScheduleType scheduleType);
+        WebBoolResult EditSchedule(int scheduleId, int channelId = int.MinValue, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int preRecordInterval = int.MinValue, int postRecordInterval = int.MinValue, string directory = null, int priority = int.MinValue);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
