@@ -23,33 +23,27 @@ using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Channels;
 using System.Collections.ObjectModel;
-using Microsoft.ServiceModel.Samples;
 using System.Configuration;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using System.Runtime;
+using MPExtended.Libraries.Service.Compression;
 
 namespace MPExtended.Libraries.Service.WCF
 {
     public class CustomWebHttpBinding : WebHttpBinding
     {
-        public CustomWebHttpBinding()
-            : base()
+        public CustomWebHttpBinding() : base()
         {
-            //Log.Debug(GetType().FullName + "::ctor");
         }
 
-        public CustomWebHttpBinding(string configurationName)
-            : base(configurationName)
+        public CustomWebHttpBinding(string configurationName) : base(configurationName)
         {
-            //Log.Debug(GetType().FullName + "::ctor with " + configurationName);
         }
 
-        public CustomWebHttpBinding(WebHttpSecurityMode securityMode)
-            : base(securityMode)
+        public CustomWebHttpBinding(WebHttpSecurityMode securityMode) : base(securityMode)
         {
-            //Log.Debug(GetType().FullName + "::ctor with " + securityMode);
         }
 
         private void ShowMessageEncodingDetails(MessageEncodingBindingElement element)
@@ -68,7 +62,6 @@ namespace MPExtended.Libraries.Service.WCF
                     encodingInfoStr += ",readerQuotas=" + webElement.ReaderQuotas.GetType().FullName;
                 }
             }
-            Log.Debug(GetType().FullName + "::ShowMessageEncodingDetails message encoding binding element " + element.GetType().FullName + " (" + encodingInfoStr + ")");
         }
 
         public override BindingElementCollection CreateBindingElements()
@@ -82,20 +75,8 @@ namespace MPExtended.Libraries.Service.WCF
                 if (element is MessageEncodingBindingElement)
                 {
                     MessageEncodingBindingElement encodingElement = (MessageEncodingBindingElement)element;
-                    //ShowMessageEncodingDetails(encodingElement);
 
-                    //Log.Debug(GetType().FullName + "::CreateBindingElements wrapping message encoding binding element in gzip");
-                    customElement = new GZipMessageEncodingBindingElement(encodingElement);
-
-                    /*
-                    if (element is WebMessageEncodingBindingElement)
-                    {
-                        WebMessageEncodingBindingElement webElement = (WebMessageEncodingBindingElement)element;
-                        ReaderQuotas.CopyTo(webElement.ReaderQuotas);
-
-                        ShowMessageEncodingDetails(encodingElement);
-                    }
-                    */
+                    customElement = new CompressionMessageEncodingBindingElement(encodingElement);
                 }
 
                 customElements.Add(customElement);

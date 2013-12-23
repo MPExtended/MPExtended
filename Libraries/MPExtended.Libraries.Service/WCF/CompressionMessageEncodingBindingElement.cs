@@ -1,6 +1,7 @@
 //-----------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
+// Original code taken from Microsoft.ServiceModel.Samples
 // Additional fixes from http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
 
 using System;
@@ -10,14 +11,13 @@ using System.Configuration;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
-//using MPExtended.Libraries.Service;
 
 
-namespace Microsoft.ServiceModel.Samples
+namespace MPExtended.Libraries.Service.Compression
 {
-    //This is the binding element that, when plugged into a custom binding, will enable the GZip encoder
+    //This is the binding element that, when plugged into a custom binding, will enable the compression encoder
     // Removed IPolicyExportExtension as it's not used directly by app.config
-    public sealed class GZipMessageEncodingBindingElement 
+    public sealed class CompressionMessageEncodingBindingElement 
                         : MessageEncodingBindingElement //BindingElement
     {
 
@@ -25,68 +25,40 @@ namespace Microsoft.ServiceModel.Samples
         MessageEncodingBindingElement innerBindingElement;
 
         //By default, use the default text encoder as the inner encoder
-        public GZipMessageEncodingBindingElement()
+        public CompressionMessageEncodingBindingElement()
             : this(new TextMessageEncodingBindingElement()) { }
 
-        public GZipMessageEncodingBindingElement(MessageEncodingBindingElement messageEncoderBindingElement)
+        public CompressionMessageEncodingBindingElement(MessageEncodingBindingElement messageEncoderBindingElement)
         {
-            //Log.Debug(GetType().FullName + "::ctor with " + messageEncoderBindingElement.GetType().FullName);
             this.innerBindingElement = messageEncoderBindingElement;
         }
 
         public MessageEncodingBindingElement InnerMessageEncodingBindingElement
         {
-            get {
-				//Log.Debug(GetType().FullName + "::InnerMessageEncodingBindingElement");
-				return innerBindingElement;
-			}
-            set {
-				//Log.Debug(GetType().FullName + "::InnerMessageEncodingBindingElement, " + value.GetType().FullName);
-				innerBindingElement = value;
-			}
+            get { return innerBindingElement; }
+            set { innerBindingElement = value; }
         }
 
         //Main entry point into the encoder binding element. Called by WCF to get the factory that will create the
         //message encoder
         public override MessageEncoderFactory CreateMessageEncoderFactory()
         {
-            //Log.Debug(GetType().FullName + "::CreateMessageEncoderFactory, " + innerBindingElement.CreateMessageEncoderFactory().GetType().FullName);
-            return new GZipMessageEncoderFactory(innerBindingElement.CreateMessageEncoderFactory());
+            return new CompressionMessageEncoderFactory(innerBindingElement.CreateMessageEncoderFactory());
         }
        
         public override MessageVersion MessageVersion
         {
-            get {
-				//Log.Debug(GetType().FullName + "::MessageVersion " + innerBindingElement.MessageVersion);
-				return innerBindingElement.MessageVersion;
-			}
-            set {
-				//Log.Debug(GetType().FullName + "::MessageVersion, " + value);
-				innerBindingElement.MessageVersion = value;
-			}
+            get { return innerBindingElement.MessageVersion; }
+            set { innerBindingElement.MessageVersion = value; }
         }
 
         public override BindingElement Clone()
         {
-            return new GZipMessageEncodingBindingElement(this.innerBindingElement);
-        }
-
-        public override T GetProperty<T>(BindingContext context)
-        {
-            //Log.Debug(GetType().FullName + "::GetProperty<" + (typeof(T) != null ? typeof(T).GetType().FullName : null) + ">");
-            if (typeof(T) == typeof(XmlDictionaryReaderQuotas))
-            {
-                return innerBindingElement.GetProperty<T>(context);
-            }
-            else 
-            {
-                return base.GetProperty<T>(context);
-            }
+            return new CompressionMessageEncodingBindingElement(this.innerBindingElement);
         }
 
         public override IChannelFactory<TChannel> BuildChannelFactory<TChannel>(BindingContext context)
         {
-            //Log.Debug(GetType().FullName + "::BuildChannelFactory");
             if (context == null)
                 throw new ArgumentNullException("context");
 
@@ -96,7 +68,6 @@ namespace Microsoft.ServiceModel.Samples
 
         public override IChannelListener<TChannel> BuildChannelListener<TChannel>(BindingContext context)
         {
-            //Log.Debug(GetType().FullName + "::BuildChannelListener");
             if (context == null)
                 throw new ArgumentNullException("context");
 
@@ -106,7 +77,6 @@ namespace Microsoft.ServiceModel.Samples
 
         public override bool CanBuildChannelListener<TChannel>(BindingContext context)
         {
-            //Log.Debug(GetType().FullName + "::CanBuildChannelListener");
             if (context == null)
                 throw new ArgumentNullException("context");
 

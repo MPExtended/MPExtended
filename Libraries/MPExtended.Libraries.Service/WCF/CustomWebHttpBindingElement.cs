@@ -23,7 +23,6 @@ using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Channels;
 using System.Collections.ObjectModel;
-using Microsoft.ServiceModel.Samples;
 using System.Configuration;
 using System.Runtime;
 
@@ -35,13 +34,10 @@ namespace MPExtended.Libraries.Service.WCF
 
         public CustomWebHttpBindingElement() : base()
         {
-            //Log.Debug(GetType().FullName + "::ctor");
         }
 
-        public CustomWebHttpBindingElement(string name)
-            : base(name)
+        public CustomWebHttpBindingElement(string name) : base(name)
         {
-            //Log.Debug(GetType().FullName + "::ctor with " + name);
         }
 
         protected override Type BindingElementType
@@ -54,7 +50,6 @@ namespace MPExtended.Libraries.Service.WCF
             base.OnApplyConfiguration(binding);
 
             CustomWebHttpBinding customWebHttpBinding = (CustomWebHttpBinding)binding;
-            //Log.Debug(GetType().FullName + "OnApplyConfiguration");
         }
 
         protected override ConfigurationPropertyCollection Properties
@@ -64,9 +59,6 @@ namespace MPExtended.Libraries.Service.WCF
                 if (this.properties == null)
                 {
                     ConfigurationPropertyCollection configurationPropertyCollection = base.Properties;
-
-                    //Log.Debug(GetType().FullName + "::Properties get");
-
                     this.properties = configurationPropertyCollection;
                 }
                 return this.properties;

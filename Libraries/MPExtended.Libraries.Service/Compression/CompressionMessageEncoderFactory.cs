@@ -1,5 +1,7 @@
 //  Copyright (c) Microsoft Corporation.  All Rights Reserved.
+// Original code taken from Microsoft.ServiceModel.Samples
 // Additional fixes from http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
+// Deflate support added for MPExtended
 
 using System;
 using System.Collections.Generic;
@@ -17,60 +19,66 @@ using System.Xml;
 using System.ServiceModel.Security;
 using System.ServiceModel.Description;
 using MPExtended.Libraries.Service;
+using System.Net;
 
-namespace Microsoft.ServiceModel.Samples
+namespace MPExtended.Libraries.Service.Compression
 {
-    /*
-     * Carries the gzip context around a request / response
-     */
-    public class GzipContext : IExtension<OperationContext>
+    public enum CompressionType
     {
-        public void Attach(OperationContext owner)
-        {
-            //Log.Debug(GetType().FullName + "::Attach " + owner.GetType().FullName);
-        }
-
-        public void Detach(OperationContext owner)
-        {
-            //Log.Debug(GetType().FullName + "::Detach " + owner.GetType().FullName);
-        }
+        GZIP,
+        DEFLATE,
     }
 
-    //This class is used to create the custom encoder (GZipMessageEncoder)
-    internal class GZipMessageEncoderFactory : MessageEncoderFactory
+    /*
+     * Carries the compression context around a request / response
+     * 
+     * This extension is added to the current OperationContext by a message interceptor
+     * as part of compression behaviour. It needs to be on a per request basis
+     * because each client making the request will be different
+     * (some will accept gzip and / or deflate encoding, others nothing)
+     */
+    public class CompressionContext : IExtension<OperationContext>
+    {
+        public CompressionType Type { get; set; }
+
+        public CompressionContext(CompressionType type)
+        {
+            Type = type;
+        }
+
+        public void Attach(OperationContext owner) { }
+
+        public void Detach(OperationContext owner) { }
+    }
+
+    //This class is used to create the custom encoder
+    internal class CompressionMessageEncoderFactory : MessageEncoderFactory
     {
         MessageEncoder encoder;
 
-        //The GZip encoder wraps an inner encoder
+        //The compression encoder wraps an inner encoder
         //We require a factory to be passed in that will create this inner encoder
-        public GZipMessageEncoderFactory(MessageEncoderFactory messageEncoderFactory)
+        public CompressionMessageEncoderFactory(MessageEncoderFactory messageEncoderFactory)
         {
             if (messageEncoderFactory == null)
-                throw new ArgumentNullException("messageEncoderFactory", "A valid message encoder factory must be passed to the GZipEncoder");
-            //Log.Debug(GetType().FullName + "::ctor with " + messageEncoderFactory.GetType().FullName);
+                throw new ArgumentNullException("messageEncoderFactory", "A valid message encoder factory must be passed to the CompressionEncoder");
 
-            encoder = new GZipMessageEncoder(messageEncoderFactory.Encoder);
+            encoder = new CompressionMessageEncoder(messageEncoderFactory.Encoder);
         }
 
         //The service framework uses this property to obtain an encoder from this encoder factory
         public override MessageEncoder Encoder
         {
-            get {
-				//Log.Debug(GetType().FullName + "::Encoder, " + encoder.GetType().FullName);
-				return encoder;
-			}
+            get { return encoder; }
         }
 
         public override MessageVersion MessageVersion
         {
-            get {
-				//Log.Debug(GetType().FullName + "::MessageVersion, " + encoder.MessageVersion);
-				return encoder.MessageVersion;
-			}
+            get { return encoder.MessageVersion; }
         }
 
-        //This is the actual GZip encoder
-        class GZipMessageEncoder : MessageEncoder
+        //This is the actual encoder
+        class CompressionMessageEncoder : MessageEncoder
         {
             //This implementation wraps an inner encoder that actually converts a WCF Message
             //into textual XML, binary XML or some other format. This implementation then compresses the results.
@@ -79,70 +87,58 @@ namespace Microsoft.ServiceModel.Samples
             MessageEncoder innerEncoder;
 
             //We require an inner encoder to be supplied (see comment above)
-            internal GZipMessageEncoder(MessageEncoder messageEncoder)
+            internal CompressionMessageEncoder(MessageEncoder messageEncoder)
                 : base()
             {
                 if (messageEncoder == null)
-                    throw new ArgumentNullException("messageEncoder", "A valid message encoder must be passed to the GZipEncoder");
-                //Log.Debug(GetType().FullName + "::ctor with " + messageEncoder.GetType().FullName);
+                    throw new ArgumentNullException("messageEncoder", "A valid message encoder must be passed to the CompressionEncoder");
                 innerEncoder = messageEncoder;
             }
-
-            //public override string CharSet
-            //{
-            //    get { return ""; }
-            //}
 
             public override string ContentType
             {
                 get {
-					//Log.Debug(GetType().FullName + "::ContentType, " + innerEncoder.ContentType);
 					return innerEncoder.ContentType;
 				}
             }
 
             public override string MediaType
             {
-                get {
-					//Log.Debug(GetType().FullName + "::MediaType, " + innerEncoder.MediaType);
-					return innerEncoder.MediaType;
-				}
+                get { return innerEncoder.MediaType; }
             }
 
             //SOAP version to use - we delegate to the inner encoder for this
             public override MessageVersion MessageVersion
             {
-                get {
-					//Log.Debug(GetType().FullName + "::MessageVersion, " + innerEncoder.MessageVersion);
-					return innerEncoder.MessageVersion;
-				}
+                get { return innerEncoder.MessageVersion; }
             }
 
             public override T GetProperty<T>()
             {
-                //Log.Debug(GetType().FullName + "::GetProperty<" + (typeof(T) != null ? typeof(T).GetType().FullName : null) + ">");
                 return innerEncoder.GetProperty<T>();
             }
 
             public override bool IsContentTypeSupported(string contentType)
             {
-                //Log.Debug(GetType().FullName + "::IsContentTypeSupported with " + contentType);
                 return innerEncoder.IsContentTypeSupported(contentType);
             }
 
             //Helper method to compress an array of bytes
-            static ArraySegment<byte> CompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager, int messageOffset)
+            static ArraySegment<byte> CompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager, int messageOffset, CompressionType type)
             {
-                //Log.Debug("CompressBuffer with " + buffer);
-
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(buffer.Array, 0, messageOffset);
 
-                using (GZipStream gzStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+                Stream stream = null;
+                if (type == CompressionType.GZIP)
                 {
-                    gzStream.Write(buffer.Array, messageOffset, buffer.Count);
+                    stream = new GZipStream(memoryStream, CompressionMode.Compress, true);
                 }
-
+                else if (type == CompressionType.DEFLATE)
+                {
+                    stream = new DeflateStream(memoryStream, CompressionMode.Compress, true);
+                }
+                stream.Write(buffer.Array, messageOffset, buffer.Count);
 
                 byte[] compressedBytes = memoryStream.ToArray();
                 byte[] bufferedBytes = bufferManager.TakeBuffer(compressedBytes.Length);
@@ -152,32 +148,36 @@ namespace Microsoft.ServiceModel.Samples
                 bufferManager.ReturnBuffer(buffer.Array);
                 ArraySegment<byte> byteArray = new ArraySegment<byte>(bufferedBytes, messageOffset, compressedBytes.Length);
 
-                //Log.Debug("Compressed " + buffer.Array.Length + " bytes to " + byteArray.Array.Length);
-
                 return byteArray;
             }
 
             //Helper method to decompress an array of bytes
-            static ArraySegment<byte> DecompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager)
+            static ArraySegment<byte> DecompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager, CompressionType type)
             {
-                //Log.Debug("DecompressBuffer with " + buffer); 
-
                 MemoryStream memoryStream = new MemoryStream(buffer.Array, buffer.Offset, buffer.Count - buffer.Offset);
                 MemoryStream decompressedStream = new MemoryStream();
                 int totalRead = 0;
                 int blockSize = 1024;
                 byte[] tempBuffer = bufferManager.TakeBuffer(blockSize);
-                using (GZipStream gzStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+
+                Stream stream = null;
+                if (type == CompressionType.GZIP)
                 {
-                    while (true)
-                    {
-                        int bytesRead = gzStream.Read(tempBuffer, 0, blockSize);
-                        if (bytesRead == 0)
-                            break;
-                        decompressedStream.Write(tempBuffer, 0, bytesRead);
-                        totalRead += bytesRead;
-                    }
+                    stream = new GZipStream(memoryStream, CompressionMode.Decompress);
                 }
+                else if (type == CompressionType.DEFLATE)
+                {
+                    stream = new DeflateStream(memoryStream, CompressionMode.Decompress);
+                }
+                while (true)
+                {
+                    int bytesRead = stream.Read(tempBuffer, 0, blockSize);
+                    if (bytesRead == 0)
+                        break;
+                    decompressedStream.Write(tempBuffer, 0, bytesRead);
+                    totalRead += bytesRead;
+                }
+
                 bufferManager.ReturnBuffer(tempBuffer);
 
                 byte[] decompressedBytes = decompressedStream.ToArray();
@@ -188,29 +188,26 @@ namespace Microsoft.ServiceModel.Samples
                 ArraySegment<byte> byteArray = new ArraySegment<byte>(bufferManagerBuffer, buffer.Offset, decompressedBytes.Length);
                 bufferManager.ReturnBuffer(buffer.Array);
 
-                //Log.Debug("Decompressed " + buffer.Array.Length + " bytes to " + byteArray.Array.Length);
-
                 return byteArray;
             }
 
             //One of the two main entry points into the encoder. Called by WCF to decode a buffered byte array into a Message.
             public override Message ReadMessage(ArraySegment<byte> buffer, BufferManager bufferManager, string contentType)
             {
-                //Log.Debug(GetType().FullName + "::ReadMessage with " + buffer + " " + contentType);
                 return innerEncoder.ReadMessage(buffer, bufferManager, contentType);
             }
 
             //One of the two main entry points into the encoder. Called by WCF to encode a Message into a buffered byte array.
             public override ArraySegment<byte> WriteMessage(Message message, int maxMessageSize, BufferManager bufferManager, int messageOffset)
             {
-                //Log.Debug(GetType().FullName + "::WriteMessage with " + message.GetType().FullName);
-                if (OperationContext.Current.Extensions.Find<GzipContext>() != null)
+                CompressionContext context = OperationContext.Current.Extensions.Find<CompressionContext>();
+                if (context != null)
                 {
 					//Use the inner encoder to encode a Message into a buffered byte array
                     ArraySegment<byte> buffer = innerEncoder.WriteMessage(message, maxMessageSize, bufferManager, messageOffset);
                 	//Compress the resulting byte array
-                    ArraySegment<byte> compressedBuffer = CompressBuffer(buffer, bufferManager, messageOffset);
-                    Log.Debug(GetType().FullName + "::WriteMessage compressed " + buffer.Array.Length + " bytes to " + compressedBuffer.Array.Length);
+                    ArraySegment<byte> compressedBuffer = CompressBuffer(buffer, bufferManager, messageOffset, context.Type);
+                    Log.Trace(GetType().FullName + "::WriteMessage " + context.Type + " compressed " + buffer.Array.Length + " bytes to " + compressedBuffer.Array.Length);
 
                     return compressedBuffer;
                 }
@@ -222,23 +219,28 @@ namespace Microsoft.ServiceModel.Samples
 
             public override Message ReadMessage(System.IO.Stream stream, int maxSizeOfHeaders, string contentType)
             {
-                //Log.Debug(GetType().FullName + "::ReadMessage with " + stream.GetType().FullName + " " + contentType);
                 return innerEncoder.ReadMessage(stream, maxSizeOfHeaders, contentType);
             }
 
             public override void WriteMessage(Message message, System.IO.Stream stream)
             {
-                //Log.Debug(GetType().FullName + "::WriteMessage with " + message.GetType().FullName + " " + stream.GetType().FullName);
-                if (OperationContext.Current.Extensions.Find<GzipContext>() != null)
+                CompressionContext context = OperationContext.Current.Extensions.Find<CompressionContext>();
+                if (context != null)
                 {
-                    using (GZipStream gzStream = new GZipStream(stream, CompressionMode.Compress, true))
+                    Stream outerStream = null;
+                    if (context.Type == CompressionType.GZIP)
                     {
-                        innerEncoder.WriteMessage(message, gzStream);
+                        outerStream = new GZipStream(stream, CompressionMode.Compress, true);
                     }
+                    else if (context.Type == CompressionType.DEFLATE)
+                    {
+                        outerStream = new DeflateStream(stream, CompressionMode.Compress, true);
+                    }
+                    innerEncoder.WriteMessage(message, outerStream);
 
 	                // innerEncoder.WriteMessage(message, gzStream) depends on that it can flush data by flushing 
-	                // the stream passed in, but the implementation of GZipStream.Flush will not flush underlying
-	                // stream, so we need to flush here.
+	                // the stream passed in, but the implementation of the compression stream's Flush will not
+                    // flush underlying stream, so we need to flush here.
                     stream.Flush();
                 }
                 else
