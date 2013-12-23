@@ -25,18 +25,23 @@ namespace MPExtended.Libraries.Service.WCF
                 var accept = prop.Headers[HttpRequestHeader.AcceptEncoding];
                 if (!string.IsNullOrEmpty(accept))
                 {
+                    CompressionType type = CompressionType.None;
+
                     foreach (string encoding in accept.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         if (encoding.Trim().Equals("gzip"))
                         {
-                            Log.Trace(GetType().FullName + "::AfterReceiveRequest enable gzip for this request");
-                            OperationContext.Current.Extensions.Add(new CompressionContext(CompressionType.GZIP));
-                            break;
+                            type = CompressionType.GZIP;
                         }
                         else if (encoding.Trim().Equals("deflate"))
                         {
-                            Log.Trace(GetType().FullName + "::AfterReceiveRequest enable deflate for this request");
-                            OperationContext.Current.Extensions.Add(new CompressionContext(CompressionType.DEFLATE));
+                            type = CompressionType.DEFLATE;
+                        }
+
+                        if (type != CompressionType.None)
+                        {
+                            Log.Trace("CompressionMessageInspector::AfterReceiveRequest enable {0} for this request", type);
+                            OperationContext.Current.Extensions.Add(new CompressionContext(type));
                             break;
                         }
                     }
@@ -59,12 +64,12 @@ namespace MPExtended.Libraries.Service.WCF
                     var prop = reply.Properties[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
                     if (context.Type == CompressionType.GZIP)
                     {
-                        Log.Trace(GetType().FullName + "::BeforeSendReply set gzip for this response");
+                        Log.Trace("CompressionMessageInspector::BeforeSendReply set gzip for this response");
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "gzip";
                     }
                     else if (context.Type == CompressionType.DEFLATE)
                     {
-                        Log.Trace(GetType().FullName + "::BeforeSendReply set deflate for this response");
+                        Log.Trace("CompressionMessageInspector::BeforeSendReply set deflate for this response");
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "deflate";
                     }
                 }

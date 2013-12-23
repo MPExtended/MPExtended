@@ -25,6 +25,7 @@ namespace MPExtended.Libraries.Service.Compression
 {
     public enum CompressionType
     {
+        None,
         GZIP,
         DEFLATE,
     }
@@ -39,7 +40,7 @@ namespace MPExtended.Libraries.Service.Compression
      */
     public class CompressionContext : IExtension<OperationContext>
     {
-        public CompressionType Type { get; set; }
+        public CompressionType Type { get; set;  }
 
         public CompressionContext(CompressionType type)
         {
@@ -129,6 +130,7 @@ namespace MPExtended.Libraries.Service.Compression
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(buffer.Array, 0, messageOffset);
 
+				/*
                 Stream stream = null;
                 if (type == CompressionType.GZIP)
                 {
@@ -139,6 +141,22 @@ namespace MPExtended.Libraries.Service.Compression
                     stream = new DeflateStream(memoryStream, CompressionMode.Compress, true);
                 }
                 stream.Write(buffer.Array, messageOffset, buffer.Count);
+				*/
+
+                if (type == CompressionType.GZIP)
+                {
+	                using (GZipStream outerStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+	                {
+	                    outerStream.Write(buffer.Array, messageOffset, buffer.Count);
+	                }
+                }
+                else if (type == CompressionType.DEFLATE)
+                {
+	                using (DeflateStream outerStream = new DeflateStream(memoryStream, CompressionMode.Compress, true))
+	                {
+	                    outerStream.Write(buffer.Array, messageOffset, buffer.Count);
+	                }
+                }
 
                 byte[] compressedBytes = memoryStream.ToArray();
                 byte[] bufferedBytes = bufferManager.TakeBuffer(compressedBytes.Length);
@@ -150,7 +168,7 @@ namespace MPExtended.Libraries.Service.Compression
 
                 return byteArray;
             }
-
+			
             //Helper method to decompress an array of bytes
             static ArraySegment<byte> DecompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager, CompressionType type)
             {
@@ -160,6 +178,7 @@ namespace MPExtended.Libraries.Service.Compression
                 int blockSize = 1024;
                 byte[] tempBuffer = bufferManager.TakeBuffer(blockSize);
 
+				/*
                 Stream stream = null;
                 if (type == CompressionType.GZIP)
                 {
@@ -176,6 +195,35 @@ namespace MPExtended.Libraries.Service.Compression
                         break;
                     decompressedStream.Write(tempBuffer, 0, bytesRead);
                     totalRead += bytesRead;
+                }
+				*/
+                if (type == CompressionType.GZIP)
+                {
+					using (GZipStream outerStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+					{
+	                    while (true)
+	                    {
+	                        int bytesRead = outerStream.Read(tempBuffer, 0, blockSize);
+	                        if (bytesRead == 0)
+	                            break;
+	                        decompressedStream.Write(tempBuffer, 0, bytesRead);
+	                        totalRead += bytesRead;
+	                    }
+					}
+                }
+                else if (type == CompressionType.DEFLATE)
+                {
+					using (DeflateStream outerStream = new DeflateStream(memoryStream, CompressionMode.Decompress))
+					{
+	                    while (true)
+	                    {
+	                        int bytesRead = outerStream.Read(tempBuffer, 0, blockSize);
+	                        if (bytesRead == 0)
+	                            break;
+	                        decompressedStream.Write(tempBuffer, 0, bytesRead);
+	                        totalRead += bytesRead;
+	                    }
+					}
                 }
 
                 bufferManager.ReturnBuffer(tempBuffer);
@@ -207,7 +255,7 @@ namespace MPExtended.Libraries.Service.Compression
                     ArraySegment<byte> buffer = innerEncoder.WriteMessage(message, maxMessageSize, bufferManager, messageOffset);
                 	//Compress the resulting byte array
                     ArraySegment<byte> compressedBuffer = CompressBuffer(buffer, bufferManager, messageOffset, context.Type);
-                    Log.Trace(GetType().FullName + "::WriteMessage " + context.Type + " compressed " + buffer.Array.Length + " bytes to " + compressedBuffer.Array.Length);
+                    Log.Trace("CompressionMessageEncoder::WriteMessage {0} compressed {1} bytes to {2}", context.Type, buffer.Array.Length, compressedBuffer.Array.Length);
 
                     return compressedBuffer;
                 }
@@ -227,6 +275,7 @@ namespace MPExtended.Libraries.Service.Compression
                 CompressionContext context = OperationContext.Current.Extensions.Find<CompressionContext>();
                 if (context != null)
                 {
+					/*
                     Stream outerStream = null;
                     if (context.Type == CompressionType.GZIP)
                     {
@@ -237,7 +286,23 @@ namespace MPExtended.Libraries.Service.Compression
                         outerStream = new DeflateStream(stream, CompressionMode.Compress, true);
                     }
                     innerEncoder.WriteMessage(message, outerStream);
+					*/
 
+                    if (context.Type == CompressionType.GZIP)
+                    {
+	                    using (GZipStream outerStream = new GZipStream(stream, CompressionMode.Compress, true))
+	                    {
+	                        innerEncoder.WriteMessage(message, outerStream);
+	                    }
+					}
+                    else if (context.Type == CompressionType.DEFLATE)
+                    {
+	                    using (DeflateStream outerStream = new DeflateStream(stream, CompressionMode.Compress, true))
+	                    {
+	                        innerEncoder.WriteMessage(message, outerStream);
+	                    }
+                    }
+					
 	                // innerEncoder.WriteMessage(message, gzStream) depends on that it can flush data by flushing 
 	                // the stream passed in, but the implementation of the compression stream's Flush will not
                     // flush underlying stream, so we need to flush here.
