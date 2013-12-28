@@ -438,16 +438,16 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
-        public WebBoolResult EditSchedule(int scheduleId, int channelId = int.MinValue, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int preRecordInterval = int.MinValue, int postRecordInterval = int.MinValue, string directory = null, int priority = int.MinValue)
+        public WebBoolResult EditSchedule(int scheduleId, int? channelId = null, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int? preRecordInterval = null, int? postRecordInterval = null, string directory = null, int? priority = null)
         {
             try
             {
                 Log.Debug("Editing schedule {0} on channel {1} for {2}, {3} till {4}, type {5}", scheduleId, channelId, title, startTime, endTime, scheduleType);
                 Schedule schedule = Schedule.Retrieve(scheduleId);
 
-                if (channelId > int.MinValue)
+                if (channelId != null && channelId.HasValue)
                 {
-                    schedule.IdChannel = channelId;
+                    schedule.IdChannel = channelId.Value;
                 }
                 if (title != null)
                 {
@@ -468,22 +468,22 @@ namespace MPExtended.Services.TVAccessService
                     schedule.ScheduleType = (int)scheduleRecType;
                 }
 
-                if (preRecordInterval > int.MinValue)
+                if (preRecordInterval != null && preRecordInterval.HasValue)
                 {
-                    schedule.PreRecordInterval = preRecordInterval;
+                    schedule.PreRecordInterval = preRecordInterval.Value;
                 }
-                if (postRecordInterval > int.MinValue)
+                if (postRecordInterval != null && postRecordInterval.HasValue)
                 {
-                    schedule.PostRecordInterval = postRecordInterval;
+                    schedule.PostRecordInterval = postRecordInterval.Value;
                 }
 
                 if (directory != null)
                 {
                     schedule.Directory = directory;
                 }
-                if (priority > int.MinValue)
+                if (priority != null && priority.HasValue)
                 {
-                    schedule.Priority = priority;
+                    schedule.Priority = priority.Value;
                 }
 
                 schedule.Persist();
