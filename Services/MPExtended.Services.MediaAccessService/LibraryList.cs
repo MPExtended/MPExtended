@@ -68,8 +68,8 @@ namespace MPExtended.Services.MediaAccessService
 
                 if (!items.ContainsKey(realKey) || !items[realKey].Value.Supported)
                 {
-                    Log.Error("Tried to get library for unknown id {0}", key);
-                    throw new MethodCallFailedException(String.Format("Tried to get library for unknown id {0}", key));
+                    Log.Error("Tried to get library for unknown id {0} of type {1}", key, type);
+                    throw new MethodCallFailedException(String.Format("Tried to get library for unknown id {0} of type {1}", key, type));
                 }
 
                 return items[realKey].Value;
