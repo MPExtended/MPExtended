@@ -62,14 +62,13 @@ namespace MPExtended.Libraries.Service.WCF
                 if (context != null)
                 {
                     var prop = reply.Properties[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
+                    Log.Trace("CompressionMessageInspector::BeforeSendReply set {0} encoding for this response", context.Type);
                     if (context.Type == CompressionType.GZIP)
                     {
-                        Log.Trace("CompressionMessageInspector::BeforeSendReply set gzip for this response");
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "gzip";
                     }
                     else if (context.Type == CompressionType.DEFLATE)
                     {
-                        Log.Trace("CompressionMessageInspector::BeforeSendReply set deflate for this response");
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "deflate";
                     }
                 }

@@ -130,19 +130,6 @@ namespace MPExtended.Libraries.Service.Compression
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(buffer.Array, 0, messageOffset);
 
-				/*
-                Stream stream = null;
-                if (type == CompressionType.GZIP)
-                {
-                    stream = new GZipStream(memoryStream, CompressionMode.Compress, true);
-                }
-                else if (type == CompressionType.DEFLATE)
-                {
-                    stream = new DeflateStream(memoryStream, CompressionMode.Compress, true);
-                }
-                stream.Write(buffer.Array, messageOffset, buffer.Count);
-				*/
-
                 if (type == CompressionType.GZIP)
                 {
 	                using (GZipStream outerStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
@@ -169,76 +156,6 @@ namespace MPExtended.Libraries.Service.Compression
                 return byteArray;
             }
 			
-            //Helper method to decompress an array of bytes
-            static ArraySegment<byte> DecompressBuffer(ArraySegment<byte> buffer, BufferManager bufferManager, CompressionType type)
-            {
-                MemoryStream memoryStream = new MemoryStream(buffer.Array, buffer.Offset, buffer.Count - buffer.Offset);
-                MemoryStream decompressedStream = new MemoryStream();
-                int totalRead = 0;
-                int blockSize = 1024;
-                byte[] tempBuffer = bufferManager.TakeBuffer(blockSize);
-
-				/*
-                Stream stream = null;
-                if (type == CompressionType.GZIP)
-                {
-                    stream = new GZipStream(memoryStream, CompressionMode.Decompress);
-                }
-                else if (type == CompressionType.DEFLATE)
-                {
-                    stream = new DeflateStream(memoryStream, CompressionMode.Decompress);
-                }
-                while (true)
-                {
-                    int bytesRead = stream.Read(tempBuffer, 0, blockSize);
-                    if (bytesRead == 0)
-                        break;
-                    decompressedStream.Write(tempBuffer, 0, bytesRead);
-                    totalRead += bytesRead;
-                }
-				*/
-                if (type == CompressionType.GZIP)
-                {
-					using (GZipStream outerStream = new GZipStream(memoryStream, CompressionMode.Decompress))
-					{
-	                    while (true)
-	                    {
-	                        int bytesRead = outerStream.Read(tempBuffer, 0, blockSize);
-	                        if (bytesRead == 0)
-	                            break;
-	                        decompressedStream.Write(tempBuffer, 0, bytesRead);
-	                        totalRead += bytesRead;
-	                    }
-					}
-                }
-                else if (type == CompressionType.DEFLATE)
-                {
-					using (DeflateStream outerStream = new DeflateStream(memoryStream, CompressionMode.Decompress))
-					{
-	                    while (true)
-	                    {
-	                        int bytesRead = outerStream.Read(tempBuffer, 0, blockSize);
-	                        if (bytesRead == 0)
-	                            break;
-	                        decompressedStream.Write(tempBuffer, 0, bytesRead);
-	                        totalRead += bytesRead;
-	                    }
-					}
-                }
-
-                bufferManager.ReturnBuffer(tempBuffer);
-
-                byte[] decompressedBytes = decompressedStream.ToArray();
-                byte[] bufferManagerBuffer = bufferManager.TakeBuffer(decompressedBytes.Length + buffer.Offset);
-                Array.Copy(buffer.Array, 0, bufferManagerBuffer, 0, buffer.Offset);
-                Array.Copy(decompressedBytes, 0, bufferManagerBuffer, buffer.Offset, decompressedBytes.Length);
-
-                ArraySegment<byte> byteArray = new ArraySegment<byte>(bufferManagerBuffer, buffer.Offset, decompressedBytes.Length);
-                bufferManager.ReturnBuffer(buffer.Array);
-
-                return byteArray;
-            }
-
             //One of the two main entry points into the encoder. Called by WCF to decode a buffered byte array into a Message.
             public override Message ReadMessage(ArraySegment<byte> buffer, BufferManager bufferManager, string contentType)
             {
@@ -275,19 +192,6 @@ namespace MPExtended.Libraries.Service.Compression
                 CompressionContext context = OperationContext.Current.Extensions.Find<CompressionContext>();
                 if (context != null)
                 {
-					/*
-                    Stream outerStream = null;
-                    if (context.Type == CompressionType.GZIP)
-                    {
-                        outerStream = new GZipStream(stream, CompressionMode.Compress, true);
-                    }
-                    else if (context.Type == CompressionType.DEFLATE)
-                    {
-                        outerStream = new DeflateStream(stream, CompressionMode.Compress, true);
-                    }
-                    innerEncoder.WriteMessage(message, outerStream);
-					*/
-
                     if (context.Type == CompressionType.GZIP)
                     {
 	                    using (GZipStream outerStream = new GZipStream(stream, CompressionMode.Compress, true))
