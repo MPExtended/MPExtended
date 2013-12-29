@@ -62,7 +62,7 @@ namespace MPExtended.Libraries.Service.WCF
                 if (context != null)
                 {
                     var prop = reply.Properties[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
-                    Log.Trace("CompressionMessageInspector::BeforeSendReply set {0} encoding for this response", context.Type);
+                    Log.Trace("CompressionMessageInspector::BeforeSendReply set {0} encoding for {1} response", context.Type, prop.Headers[HttpResponseHeader.ContentType]);
                     if (context.Type == CompressionType.GZIP)
                     {
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "gzip";
