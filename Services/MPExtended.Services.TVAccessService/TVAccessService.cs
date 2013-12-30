@@ -438,6 +438,66 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public WebBoolResult EditSchedule(int scheduleId, int? channelId = null, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int? preRecordInterval = null, int? postRecordInterval = null, string directory = null, int? priority = null)
+        {
+            try
+            {
+                Log.Debug("Editing schedule {0} on channel {1} for {2}, {3} till {4}, type {5}", scheduleId, channelId, title, startTime, endTime, scheduleType);
+                Schedule schedule = Schedule.Retrieve(scheduleId);
+
+                if (channelId != null && channelId.HasValue)
+                {
+                    schedule.IdChannel = channelId.Value;
+                }
+                if (title != null)
+                {
+                    schedule.ProgramName = title;
+                }
+                if (startTime != null && startTime.HasValue)
+                {
+                    schedule.StartTime = startTime.Value;
+                }
+                if (endTime != null && endTime.HasValue)
+                {
+                    schedule.EndTime = endTime.Value;
+                }
+
+                if (scheduleType != null && scheduleType.HasValue)
+                {
+                    ScheduleRecordingType scheduleRecType = (ScheduleRecordingType)scheduleType.Value;
+                    schedule.ScheduleType = (int)scheduleRecType;
+                }
+
+                if (preRecordInterval != null && preRecordInterval.HasValue)
+                {
+                    schedule.PreRecordInterval = preRecordInterval.Value;
+                }
+                if (postRecordInterval != null && postRecordInterval.HasValue)
+                {
+                    schedule.PostRecordInterval = postRecordInterval.Value;
+                }
+
+                if (directory != null)
+                {
+                    schedule.Directory = directory;
+                }
+                if (priority != null && priority.HasValue)
+                {
+                    schedule.Priority = priority.Value;
+                }
+
+                schedule.Persist();
+
+                _tvControl.OnNewSchedule(); // I don't think this is needed, but doesn't hurt either
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to edit schedule {0}", scheduleId), ex);
+                return false;
+            }
+        }
+
         public WebBoolResult DeleteSchedule(int scheduleId)
         {
             try

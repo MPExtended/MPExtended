@@ -31,6 +31,7 @@ namespace MPExtended.Libraries.Service
     public static class WCFUtil
     {
         internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
+        internal const string ORIGINAL_URL_HEADER = "X-Root-URL";
 
         private static bool IsRestEnabled
         {
@@ -48,9 +49,34 @@ namespace MPExtended.Libraries.Service
                 return Configuration.Services.ServiceAddress + "MPExtended/";
             }
 
-            // then try the HTTP host header
             try
             {
+                // then try the X-Root-URL header
+                if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(ORIGINAL_URL_HEADER))
+                {
+                    /*
+                     * If MPExtended is behind a web proxy which alters the scheme and port e.g. https://mediaportal.external.com to http://mpserver:4332
+                     * then the Host header won't contain enough information for absolute locations such as those in WebStringResult to be set correctly.
+                     *
+                     * This header allows the proxy to supply the original URL in full to fix this problem.
+                     */
+                    string val = WebOperationContext.Current.IncomingRequest.Headers[ORIGINAL_URL_HEADER];
+                    if (val != null)
+                    {
+                        try
+                        {
+                            Uri uri = new Uri(val);
+                            string portStr = uri.IsDefaultPort ? String.Empty : ":" + uri.Port;
+                            return String.Format("{0}://{1}{2}/MPExtended/", uri.Scheme, uri.Host, portStr);
+                        }
+                        catch (UriFormatException e)
+                        {
+                            Log.Error(String.Format("Cannot format current root from {0}", ORIGINAL_URL_HEADER), e);
+                        }
+                    }
+                }
+
+                // try the HTTP host header
                 if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(HttpRequestHeader.Host.ToString()))
                 {
                     string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];
