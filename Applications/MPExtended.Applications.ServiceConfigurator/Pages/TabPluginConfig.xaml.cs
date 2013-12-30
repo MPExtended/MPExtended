@@ -31,21 +31,13 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
     /// </summary>
     public partial class TabPluginConfig : Page, ITabCloseCallback
     {
-        private Dictionary<string, List<PluginConfigItem>> pluginConfigurations;
-
         public TabPluginConfig()
         {
             InitializeComponent();
 
-            pluginConfigurations = Configuration.Media.PluginConfiguration;
-
-            cbPluginConfigs.DataContext = pluginConfigurations;
-            cbPluginConfigs.DisplayMemberPath = "Key";
-
-            if (pluginConfigurations.Count > 0)
-            {
+            cbPluginConfigs.DataContext = Configuration.Media.PluginConfiguration.Keys;
+            if (Configuration.Media.PluginConfiguration.Count > 0)
                 cbPluginConfigs.SelectedIndex = 0;
-            }
         }
 
         public void TabClosed()
@@ -55,9 +47,9 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
         private void cbPluginConfigs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            KeyValuePair<string, List<PluginConfigItem>> item = (KeyValuePair<string, List<PluginConfigItem>>)cbPluginConfigs.SelectedValue;
+            string key = (string)cbPluginConfigs.SelectedValue;
             sectionPluginSettings.Save();
-            sectionPluginSettings.SetPluginConfig(item.Key, item.Value);
+            sectionPluginSettings.SetPluginConfig(key, Configuration.Media.PluginConfiguration[key]);
         }
     }
 }
