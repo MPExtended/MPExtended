@@ -149,29 +149,33 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image data
-            try
+            Uri uri = new Uri(path);
+            if (!PathUtil.MightBeOnNetworkDrive(path))
             {
-                BitmapSource img = BitmapFrame.Create(new Uri(path));
-                pic.Mpixel = (img.PixelHeight * img.PixelWidth) / (double)1000000;
-                pic.Width = Convert.ToString(img.PixelWidth);
-                pic.Height = Convert.ToString(img.PixelHeight);
-                pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
+                try
+                {
+                    BitmapSource img = BitmapFrame.Create(uri);
+                    pic.Mpixel = (img.PixelHeight * img.PixelWidth * 1.0) / (1000 * 1000);
+                    pic.Width = Convert.ToString(img.PixelWidth);
+                    pic.Height = Convert.ToString(img.PixelHeight);
+                    pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
 
-                // Image metadata
-                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
-                if (!String.IsNullOrWhiteSpace(meta.Title))
-                    pic.Title = meta.Title.Trim();
-                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
-                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
-                pic.Comment = meta.Comment;
-                pic.CameraManufacturer = meta.CameraManufacturer;
-                pic.CameraModel = meta.CameraModel;
-                pic.Copyright = meta.Copyright;
-                pic.Rating = (float)meta.Rating;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+                    // Image metadata
+                    BitmapMetadata meta = (BitmapMetadata)img.Metadata;
+                    if (!String.IsNullOrWhiteSpace(meta.Title))
+                        pic.Title = meta.Title.Trim();
+                    if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                        pic.DateTaken = DateTime.Parse(meta.DateTaken);
+                    pic.Comment = meta.Comment;
+                    pic.CameraManufacturer = meta.CameraManufacturer;
+                    pic.CameraModel = meta.CameraModel;
+                    pic.Copyright = meta.Copyright;
+                    pic.Rating = (float)meta.Rating;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+                }
             }
 
             // Set title to file name if non-existant
@@ -189,19 +193,23 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Categories.Add(GetCategoryFromPath(path));
 
             // Image metadata
-            try
+            Uri uri = new Uri(path);
+            if (!PathUtil.MightBeOnNetworkDrive(uri))
             {
-                BitmapSource img = BitmapFrame.Create(new Uri(path));
-                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
+                try
+                {
+                    BitmapSource img = BitmapFrame.Create(uri);
+                    BitmapMetadata meta = (BitmapMetadata)img.Metadata;
 
-                if (!String.IsNullOrWhiteSpace(meta.Title))
-                    pic.Title = meta.Title.Trim();
-                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
-                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(String.Format("Error reading picture metadata for {0}", path), ex);
+                    if (!String.IsNullOrWhiteSpace(meta.Title))
+                        pic.Title = meta.Title.Trim();
+                    if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                        pic.DateTaken = DateTime.Parse(meta.DateTaken);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+                }
             }
 
             // Set title to file name if non-existant
