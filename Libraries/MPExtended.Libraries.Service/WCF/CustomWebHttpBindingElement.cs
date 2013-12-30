@@ -32,11 +32,13 @@ namespace MPExtended.Libraries.Service.WCF
     {
         private ConfigurationPropertyCollection properties;
 
-        public CustomWebHttpBindingElement() : base()
+        public CustomWebHttpBindingElement()
+            : base()
         {
         }
 
-        public CustomWebHttpBindingElement(string name) : base(name)
+        public CustomWebHttpBindingElement(string name)
+            : base(name)
         {
         }
 
@@ -69,13 +71,13 @@ namespace MPExtended.Libraries.Service.WCF
     public class CustomWebHttpBindingCollectionElement : StandardBindingCollectionElement<CustomWebHttpBinding, CustomWebHttpBindingElement>
     {
         protected override Binding GetDefault()
-		{
+        {
             return new CustomWebHttpBinding();
-		}
+        }
 
         [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
         public CustomWebHttpBindingCollectionElement()
-		{
-		}
+        {
+        }
     }
 }

@@ -1,8 +1,26 @@
-//-----------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//-----------------------------------------------------------------------------
-// Original code taken from Microsoft.ServiceModel.Samples
-// Additional fixes from http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
+#region Copyright (C) 2013 MPExtended, Microsoft Corporation
+// Copyright (C) 2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) Microsoft Corporation, http://www.microsoft.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+//
+// Based upon original assumed Public Domain (since a license declaration
+// is missing) code from Microsoft Corporation, obtained from
+// http://go.microsoft.com/fwlink/?LinkId=150780.
+// Additional fixes based on code from Francesco De Vittori, 
+// http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
+#endregion
 
 using System;
 using System.Xml;
@@ -17,7 +35,7 @@ namespace MPExtended.Libraries.Service.Compression
 {
     //This is the binding element that, when plugged into a custom binding, will enable the compression encoder
     // Removed IPolicyExportExtension as it's not used directly by app.config
-    public sealed class CompressionMessageEncodingBindingElement 
+    public sealed class CompressionMessageEncodingBindingElement
                         : MessageEncodingBindingElement //BindingElement
     {
 
@@ -45,7 +63,7 @@ namespace MPExtended.Libraries.Service.Compression
         {
             return new CompressionMessageEncoderFactory(innerBindingElement.CreateMessageEncoderFactory());
         }
-       
+
         public override MessageVersion MessageVersion
         {
             get { return innerBindingElement.MessageVersion; }

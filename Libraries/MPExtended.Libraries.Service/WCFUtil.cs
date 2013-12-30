@@ -49,9 +49,9 @@ namespace MPExtended.Libraries.Service
                 return Configuration.Services.ServiceAddress + "MPExtended/";
             }
 
-            // then try the HTTP host header
             try
             {
+                // then try the X-Root-URL header
                 if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(ORIGINAL_URL_HEADER))
                 {
                     /*
@@ -61,27 +61,22 @@ namespace MPExtended.Libraries.Service
                      * This header allows the proxy to supply the original URL in full to fix this problem.
                      */
                     string val = WebOperationContext.Current.IncomingRequest.Headers[ORIGINAL_URL_HEADER];
-                    Log.Trace("Original URL {0}", val);
                     if (val != null)
                     {
                         try
                         {
                             Uri uri = new Uri(val);
-                            string portStr = "";
-							// URL tidy up if the default ports are being used
-                            if (!((uri.Scheme == "http" && uri.Port == 80) || (uri.Scheme == "https" && uri.Port == 443)))
-                            {
-                                portStr = ":" + uri.Port;
-                            }
+                            string portStr = uri.IsDefaultPort ? String.Empty : ":" + uri.Port;
                             return String.Format("{0}://{1}{2}/MPExtended/", uri.Scheme, uri.Host, portStr);
                         }
                         catch (UriFormatException e)
                         {
-                            Log.Error("Cannot format current root from " + ORIGINAL_URL_HEADER, e);
+                            Log.Error(String.Format("Cannot format current root from {0}", ORIGINAL_URL_HEADER), e);
                         }
                     }
                 }
 
+                // try the HTTP host header
                 if (WebOperationContext.Current != null && WebOperationContext.Current.IncomingRequest.Headers.AllKeys.Contains(HttpRequestHeader.Host.ToString()))
                 {
                     string val = WebOperationContext.Current.IncomingRequest.Headers[HttpRequestHeader.Host];

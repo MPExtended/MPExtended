@@ -1,4 +1,22 @@
-﻿// Based on http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
+﻿#region Copyright (C) 2013 MPExtended
+// Copyright (C) 2013 MPExtended Developers, http://www.mpextended.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+//
+// Based on code from Francesco De Vittori, 
+// http://www.frenk.com/2009/12/gzip-compression-wcfsilverlight/
+#endregion
 
 using System;
 using System.Collections.ObjectModel;
@@ -17,25 +35,26 @@ using MPExtended.Libraries.Service.Compression;
 namespace MPExtended.Libraries.Service.WCF
 {
     internal class CompressionMessageInspector : IDispatchMessageInspector
-	{
-        public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext) {
+    {
+        public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
+        {
             try
             {
                 var prop = request.Properties[HttpRequestMessageProperty.Name] as HttpRequestMessageProperty;
                 var accept = prop.Headers[HttpRequestHeader.AcceptEncoding];
-                if (!string.IsNullOrEmpty(accept))
+                if (!String.IsNullOrEmpty(accept))
                 {
                     CompressionType type = CompressionType.None;
 
                     foreach (string encoding in accept.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        if (encoding.Trim().Equals("gzip"))
+                        if (encoding.Trim() == "gzip")
                         {
-                            type = CompressionType.GZIP;
+                            type = CompressionType.GZip;
                         }
-                        else if (encoding.Trim().Equals("deflate"))
+                        else if (encoding.Trim() == "deflate")
                         {
-                            type = CompressionType.DEFLATE;
+                            type = CompressionType.Deflate;
                         }
 
                         if (type != CompressionType.None)
@@ -55,7 +74,8 @@ namespace MPExtended.Libraries.Service.WCF
             return null;
         }
 
-        public void BeforeSendReply(ref Message reply, object correlationState) {
+        public void BeforeSendReply(ref Message reply, object correlationState)
+        {
             try
             {
                 CompressionContext context = OperationContext.Current.Extensions.Find<CompressionContext>();
@@ -63,11 +83,11 @@ namespace MPExtended.Libraries.Service.WCF
                 {
                     var prop = reply.Properties[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
                     Log.Trace("CompressionMessageInspector::BeforeSendReply set {0} encoding for {1} response", context.Type, prop.Headers[HttpResponseHeader.ContentType]);
-                    if (context.Type == CompressionType.GZIP)
+                    if (context.Type == CompressionType.GZip)
                     {
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "gzip";
                     }
-                    else if (context.Type == CompressionType.DEFLATE)
+                    else if (context.Type == CompressionType.Deflate)
                     {
                         prop.Headers[HttpResponseHeader.ContentEncoding] = "deflate";
                     }
@@ -81,7 +101,7 @@ namespace MPExtended.Libraries.Service.WCF
     }
 
     internal class CompressionEndpointBehavior : IEndpointBehavior
-	{
+    {
         public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
         {
         }
@@ -102,7 +122,7 @@ namespace MPExtended.Libraries.Service.WCF
     }
 
     public class CompressionBehavior : BehaviorExtensionElement
-	{
+    {
         public override Type BehaviorType { get { return typeof(CompressionEndpointBehavior); } }
         protected override object CreateBehavior() { return new CompressionEndpointBehavior(); }
     }

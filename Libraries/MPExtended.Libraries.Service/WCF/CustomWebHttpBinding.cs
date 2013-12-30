@@ -34,15 +34,18 @@ namespace MPExtended.Libraries.Service.WCF
 {
     public class CustomWebHttpBinding : WebHttpBinding
     {
-        public CustomWebHttpBinding() : base()
+        public CustomWebHttpBinding()
+            : base()
         {
         }
 
-        public CustomWebHttpBinding(string configurationName) : base(configurationName)
+        public CustomWebHttpBinding(string configurationName)
+            : base(configurationName)
         {
         }
 
-        public CustomWebHttpBinding(WebHttpSecurityMode securityMode) : base(securityMode)
+        public CustomWebHttpBinding(WebHttpSecurityMode securityMode)
+            : base(securityMode)
         {
         }
 
