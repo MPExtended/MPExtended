@@ -620,11 +620,15 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
         public string CreatePlaylist(string playlistName)
         {
-            string path = configuration["playlist"];
             try
             {
                 string fileName = playlistName + ".m3u";
-                File.Create(Path.Combine(path, fileName));
+                string path = Path.Combine(configuration["playlist"], fileName);
+
+                PlayList mpPlaylist = new PlayList();
+                IPlayListIO factory = PlayListFactory.CreateIO(path);
+                factory.Save(mpPlaylist, path);
+
                 return EncodeTo64(fileName);
             }
             catch (Exception ex)
