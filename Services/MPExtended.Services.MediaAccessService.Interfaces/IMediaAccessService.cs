@@ -521,6 +521,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult AddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids);
 
+        WebBoolResult ClearAndAddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids);
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult RemovePlaylistItem(int? provider, string playlistId, int position);
