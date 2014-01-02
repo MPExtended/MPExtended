@@ -871,13 +871,13 @@ namespace MPExtended.Services.MediaAccessService
             WebMusicTrackBasic track = MusicLibraries[provider].GetTrackBasicById(id);
             if (position != null)
             {
-                if (position >= 0 && position < playlist.Count)
+                if (position >= 0 && position <= playlist.Count)
                 {
                     playlist.Insert((int)position, new WebPlaylistItem(track));
                 }
                 else
                 {
-                    Log.Warn("Index out of bound for removing playlist item: " + position);
+                    Log.Warn("Index out of bound for adding playlist item: " + position);
                     return false;
                 }
             }
@@ -896,6 +896,18 @@ namespace MPExtended.Services.MediaAccessService
             for (int i = 0; i < splitIds.Length; i++)
             {
                 AddPlaylistItemToPlaylist(provider, splitIds[i], pos + i, playlist);
+            }
+            return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
+        }
+
+        public WebBoolResult ClearAndAddPlaylistItems(int? provider, string playlistId, WebMediaType type, int? position, string ids)
+        {
+            IList<WebPlaylistItem> playlist = GetAllPlaylistItems(provider, playlistId).Finalize(provider, type);
+            playlist.Clear();
+            string[] splitIds = ids.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < splitIds.Length; i++)
+            {
+                AddPlaylistItemToPlaylist(provider, splitIds[i], i, playlist);
             }
             return PlaylistLibraries[provider].SavePlaylist(playlistId, playlist);
         }
