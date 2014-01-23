@@ -109,7 +109,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                         "SUM(c.episodes) AS episodes, SUM(c.unwatched) AS unwatched, COUNT(c.SeasonIndex) AS seasons " + 
                     "FROM online_series AS s " +
                     "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 AND l.DuplicateLocalName = 0 " +
-                    "INNER JOIN (" +
+                    "LEFT JOIN (" +
                             // this subquery is so ugly, that every time it's executed a kitten dies.
                             "SELECT seriesID, GROUP_CONCAT(LocalPath || '?' || Rating || '?' || id, '|') AS fanart_list " + // the question mark is used because it's forbidden in paths
                             "FROM Fanart " +
