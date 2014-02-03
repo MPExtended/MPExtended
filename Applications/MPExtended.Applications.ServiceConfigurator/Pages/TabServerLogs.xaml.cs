@@ -62,6 +62,7 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         public TabServerLogs()
         {
             InitializeComponent();
+            cbLogScrollToEnd.IsChecked = Settings.Default.LogScrollToEnd;
 
             mLogUpdater = new DispatcherTimer();
             mLogUpdater.Interval = TimeSpan.FromSeconds(2);
@@ -74,13 +75,15 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
 
             if (cbLogFiles.Items.Count > 0)
             {
-                cbLogFiles.SelectedIndex = 0;
+                cbLogFiles.SelectedIndex = Settings.Default.SelectedLogIndex;
                 LoadFile((string)cbLogFiles.SelectedItem);
             }
         }
 
         private void cbLogFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Settings.Default.SelectedLogIndex = cbLogFiles.SelectedIndex;
+            Settings.Default.Save();
             LoadFile((string)cbLogFiles.SelectedItem);
         }
 
@@ -180,6 +183,18 @@ namespace MPExtended.Applications.ServiceConfigurator.Pages
         public void ScrollToLastItem(ListView lv)
         {
             lv.ScrollIntoView(lv.Items.GetItemAt(lv.Items.Count - 1));
+        }
+
+        private void cbLogScrollToEnd_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.LogScrollToEnd = true;
+            Settings.Default.Save();
+        }
+
+        private void cbLogScrollToEnd_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.LogScrollToEnd = false;
+            Settings.Default.Save();
         }
     }
 }
