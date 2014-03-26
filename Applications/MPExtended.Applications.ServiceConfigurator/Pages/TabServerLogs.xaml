@@ -16,7 +16,7 @@
         
         <ListView Name="lvLogViewer" Margin="6,63,6,35" />
         
-        <CheckBox Content="{x:Static strings:UI.ScrollToEnd}" HorizontalAlignment="Left" Margin="6,0,0,9" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" />
+        <CheckBox Content="{x:Static strings:UI.ScrollToEnd}" HorizontalAlignment="Left" Margin="6,0,0,9" Name="cbLogScrollToEnd" Height="16" VerticalAlignment="Bottom" Checked="cbLogScrollToEnd_Checked" Unchecked="cbLogScrollToEnd_Unchecked" />
         <Button Content="{x:Static strings:UI.Export}" Margin="0,0,6,6" Name="btnSaveLog" HorizontalAlignment="Right" Width="221" Height="23" VerticalAlignment="Bottom" Click="btnSaveLog_Click" />
     </Grid>
 </Page>

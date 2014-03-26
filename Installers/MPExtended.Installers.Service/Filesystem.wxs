@@ -92,6 +92,7 @@
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvBusinessLayer.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvControl.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TVDatabase.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Common.Utils.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\TvLibrary.Interfaces.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MPExtended.Services.TVAccessService.pdb" />
