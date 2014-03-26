@@ -152,11 +152,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\..\Packages\ffmpeg.1.2.0\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.1.2.0\build\ffmpeg.targets')" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\ffmpeg.exe" DestinationFolder="$(SolutionDir)\Libraries\Streaming" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="..\..\Packages\MediaInfo.0.7.64\build\MediaInfo.targets" Condition="Exists('..\..\Packages\MediaInfo.0.7.64\build\MediaInfo.targets')" />
+  <Import Project="..\..\Packages\ffmpeg.2.0.1\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.2.0.1\build\ffmpeg.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

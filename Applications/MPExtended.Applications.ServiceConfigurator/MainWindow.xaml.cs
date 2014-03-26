@@ -44,7 +44,6 @@ namespace MPExtended.Applications.ServiceConfigurator
     {
         private bool mIsAppExiting = false;
         private ServiceControlInterface sci;
-        private DispatcherTimer mServiceWatcher;
         private int lastTabIndex = -1;
 
         public MainWindow()

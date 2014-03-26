@@ -34,7 +34,7 @@ Installers/MPExtended.Installers.WebMediaPortalIIS/Translations.wxs
 Tests/output
 
 # nuget
-.nuget/nuget.exe
+.nuget/[Nn]u[Gg]et.exe
 *.nupkg
 [Pp]ackages/*
 Tools/restore-packages.log

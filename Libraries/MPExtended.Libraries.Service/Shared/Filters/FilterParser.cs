@@ -46,6 +46,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             pos = -2;
 
             string conjunction;
+            ListFilter.JoinType joinType;
             FilterSet filter = new FilterAndSet();
             IFilter thisFilter;
             IFilter last;
@@ -61,10 +62,15 @@ namespace MPExtended.Libraries.Service.Shared.Filters
 
                 if (Tokens.IsListStart(value))
                 {
+                    joinType = ListFilter.JoinType.And;
                     var values = new List<string>();
-                    while (!Tokens.IsListEnd(GetNextToken("value")))
+                    while (!Tokens.IsListEnd(tokens[pos]) && !Tokens.IsListEnd(GetNextToken("value")))
+                    {
                         values.Add(tokens[pos]);
-                    thisFilter = new ListFilter(name, oper, values);
+                        if (GetNextToken("conjunction or list end") == "|")
+                            joinType = ListFilter.JoinType.Or;
+                    }
+                    thisFilter = new ListFilter(name, oper, values, joinType);
                 }
                 else
                     thisFilter = new Filter(name, oper, value);

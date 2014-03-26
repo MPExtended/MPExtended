@@ -50,6 +50,7 @@
     <Compile Include="IWebStreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebItemSupportStatus.cs" />
+    <Compile Include="WebMediaHash.cs" />
     <Compile Include="WebMediaInfo.cs" />
     <Compile Include="WebResolution.cs" />
     <Compile Include="WebStreamLogs.cs" />

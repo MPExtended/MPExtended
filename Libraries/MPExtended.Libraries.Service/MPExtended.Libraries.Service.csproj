@@ -68,9 +68,11 @@
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
     <Compile Include="Composition\IndexedPluginLoader.cs" />
+    <Compile Include="Composition\NativeAssemblyLoader.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginLoader.cs" />
     <Compile Include="Composition\SafeDirectoryCatalog.cs" />
+    <Compile Include="Compression\CompressionMessageEncoderFactory.cs" />
     <Compile Include="Config\ConfigurationList.cs" />
     <Compile Include="Config\ConfigurationSerializer.cs" />
     <Compile Include="Config\ProfilesConfigurationSerializer.cs" />
@@ -84,6 +86,8 @@
     <Compile Include="Config\Upgrade\StreamingUpgrader.cs" />
     <Compile Include="Config\InstallationProperties.cs" />
     <Compile Include="Composition\AssemblyLoader.cs" />
+    <Compile Include="Extensions\ByteArrayExtensionMethods.cs" />
+    <Compile Include="Util\ProcessUtils.cs" />
     <Compile Include="Network\ImpersonationContext.cs" />
     <Compile Include="Network\INetworkContext.cs" />
     <Compile Include="Network\LocalMachineContext.cs" />
@@ -137,6 +141,10 @@
     <Compile Include="MpConnection\Messages\MessageShowDialog.cs" />
     <Compile Include="MpConnection\Messages\MessageWelcome.cs" />
     <Compile Include="WCF\ClientFactory.cs" />
+    <Compile Include="WCF\CustomWebHttpBindingElement.cs" />
+    <Compile Include="WCF\CustomWebHttpBinding.cs" />
+    <Compile Include="WCF\CompressionBehavior.cs" />
+    <Compile Include="WCF\CompressionMessageEncodingBindingElement.cs" />
     <Compile Include="WCF\MessageInspector.cs" />
     <Compile Include="Internal\AssemblyGitVersionAttribute.cs" />
     <Compile Include="Configuration.cs" />
@@ -178,7 +186,9 @@
     <Compile Include="MpConnection\WifiRemoteClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Hosting\App.config" />
+    <None Include="Hosting\App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

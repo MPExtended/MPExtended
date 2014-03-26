@@ -46,6 +46,9 @@ namespace MPExtended.Libraries.Service.Util
             MP1_2 = 4,
             MP1_3 = 5,
             MP1_4 = 6,
+            MP1_5 = 7,
+            MP1_6 = 8,
+            MP1_7 = 9
         }
 
         private static bool? hasValidConfig = null;
@@ -71,7 +74,7 @@ namespace MPExtended.Libraries.Service.Util
 
             string client = GetClientInstallationDirectory();
             if (client != null && File.Exists(Path.Combine(client, "MediaPortal.exe")))
-                return Path.Combine(tv, "MediaPortal.exe");
+                return Path.Combine(client, "MediaPortal.exe");
 
             Log.Error("Cannot find installed TvService.exe or MediaPortal.exe");
             return null;
@@ -219,6 +222,9 @@ namespace MPExtended.Libraries.Service.Util
         {
             var minimumVersions = new Dictionary<MediaPortalVersion, Version>()
             {
+                { MediaPortalVersion.MP1_7, new Version(1, 6, 100) },   // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_6, new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
+                { MediaPortalVersion.MP1_5, new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
                 { MediaPortalVersion.MP1_4, new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
                 { MediaPortalVersion.MP1_3, new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
                 { MediaPortalVersion.MP1_2, new Version(1, 2) },        // not sure about alpha versions, but those are ancient

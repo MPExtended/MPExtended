@@ -40,6 +40,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
             tokens = new List<string>();
             value = String.Empty;
             char valueQuoteCharacter = '\0';
+            char listConjunction = '\0';
             bool valueIsQuoted = false;
             bool inList = false;
 
@@ -68,6 +69,7 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                 else if (!inList && Tokens.IsListStart(data[pos]))
                 {
                     inList = true;
+                    listConjunction = '\0';
                     tokens.Add(data[pos].ToString());
                     goto startParsingValue;
                 }
@@ -97,10 +99,16 @@ namespace MPExtended.Libraries.Service.Shared.Filters
                         tokens.Add(data[pos].ToString());
                         inList = false;
                     }
-                    else if (!Tokens.IsConjunction(data[pos]))
-                        ParseError("conjunction");
-                    else
+                    else if (Tokens.IsConjunction(data[pos]))
+                    {
+                        if (listConjunction != '\0' && listConjunction != data[pos])
+                            ParseError("consistent conjunction");
+                        listConjunction = data[pos];
+                        tokens.Add(listConjunction.ToString());
                         goto startParsingValue;
+                    }
+                    else
+                        ParseError("conjunction");
                 }
 
                 if (++pos < data.Length)

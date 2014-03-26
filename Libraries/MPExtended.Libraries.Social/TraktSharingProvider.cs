@@ -21,6 +21,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MPExtended.Libraries.Service;
+using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Social.Trakt;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
@@ -60,7 +61,7 @@ namespace MPExtended.Libraries.Social
         {
             byte[] data = Encoding.ASCII.GetBytes(password);
             byte[] hash = SHA1Managed.Create().ComputeHash(data);
-            return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            return hash.ToHexString();
         }
 
         public bool TestCredentials(string username, string password)

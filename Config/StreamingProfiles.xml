@@ -7,7 +7,7 @@
   -->
   <Customized>false</Customized>
   
-  <ProfilesVersion>1</ProfilesVersion>
+  <ProfilesVersion>2</ProfilesVersion>
   <FFMpegPath>%mpextended-streaming%\ffmpeg.exe</FFMpegPath>
 
   <Transcoders>
@@ -446,6 +446,8 @@
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
+    
+    <!-- FFmpeg HTTP Live Streaming -->
     <TranscoderProfile>
       <Name>FFmpeg HTTP Live Streaming HD</Name>
       <Description>HD-quality HTTP Live Streaming profile based on ffmpeg</Description>
@@ -463,7 +465,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -484,7 +486,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -505,7 +507,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -526,7 +528,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -548,7 +550,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 64k -ac 1 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 64k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -569,7 +571,7 @@
 
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 48k -ac 1 -strict experimental -async 1 -sn -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 48k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>

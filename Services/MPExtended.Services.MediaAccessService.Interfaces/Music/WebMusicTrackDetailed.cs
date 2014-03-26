@@ -10,8 +10,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public WebMusicTrackDetailed()
         {
             Artists = new List<WebMusicArtistBasic>();
+            AlbumArtistObject = new WebMusicArtistBasic();
         }
 
         public IList<WebMusicArtistBasic> Artists { get; set; }
+        public WebMusicArtistBasic AlbumArtistObject { get; set; }
     }
 }

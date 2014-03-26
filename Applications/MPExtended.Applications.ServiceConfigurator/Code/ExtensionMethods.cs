@@ -27,6 +27,7 @@ using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MPExtended.Services.StreamingService.Interfaces;
+using MPExtended.Services.ScraperService.Interfaces;
 
 namespace MPExtended.Applications.ServiceConfigurator.Code
 {
@@ -97,6 +98,48 @@ namespace MPExtended.Applications.ServiceConfigurator.Code
                 foreach (WebStreamingSession s in newList)
                 {
                     if (oldList[i].Identifier.Equals(s.Identifier))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    oldList.RemoveAt(i);
+                }
+            }
+        }
+
+        public static void UpdateScraperList(this ObservableCollection<WpfScraperConfig> oldList, IList<WebScraper> newList)
+        {
+            //update/add entries
+            foreach (WebScraper sNew in newList)
+            {
+                bool updated = false;
+                foreach (WpfScraperConfig sOld in oldList)
+                {
+                    if (sOld.ScraperId.Equals(sNew.ScraperId))
+                    {
+                        sOld.UpdateScraper(sNew);
+                        updated = true;
+                        break;
+                    }
+                }
+
+                if (!updated)
+                {
+                    oldList.Add(new WpfScraperConfig(sNew));
+                }
+            }
+
+            //remove all entries that are no longer in the list (newList)
+            for (int i = oldList.Count - 1; i >= 0; i--)
+            {
+                bool found = false;
+                foreach (WebScraper s in newList)
+                {
+                    if (oldList[i].ScraperId.Equals(s.ScraperId))
                     {
                         found = true;
                         break;

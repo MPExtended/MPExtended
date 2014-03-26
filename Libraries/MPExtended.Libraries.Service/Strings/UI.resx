@@ -527,4 +527,22 @@ Please note that it isn't possible to configure the SSL/TLS certificate used. Wh
   <data name="WebMediaPortalResetSkinText" xml:space="preserve">
     <value>If you've installed and configured a broken skin in WebMediaPortal which has rendered the application useless, you can reset it to the default skin here.</value>
   </data>
+  <data name="StreamErrorDVDsNotSupported" xml:space="preserve">
+    <value>Streaming DVD files is not supported.</value>
+  </data>
+  <data name="StreamErrorFileDoesntExists" xml:space="preserve">
+    <value>File does not exists or is inaccessible.</value>
+  </data>
+  <data name="StreamErrorFileIsCorrupt" xml:space="preserve">
+    <value>This file might be corrupt.</value>
+  </data>
+  <data name="StreamErrorFileIsEmpty" xml:space="preserve">
+    <value>File is empty.</value>
+  </data>
+  <data name="StreamErrorInaccessibleNetworkShare" xml:space="preserve">
+    <value>File is on an inaccessible network share.</value>
+  </data>
+  <data name="StreamErrorUnknownPath" xml:space="preserve">
+    <value>There is no path known for this media item.</value>
+  </data>
 </root>
