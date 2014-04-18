@@ -156,7 +156,7 @@
     <Copy SourceFiles="$(TargetDir)\ffmpeg.exe" DestinationFolder="$(SolutionDir)\Libraries\Streaming" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="..\..\Packages\MediaInfo.0.7.64\build\MediaInfo.targets" Condition="Exists('..\..\Packages\MediaInfo.0.7.64\build\MediaInfo.targets')" />
-  <Import Project="..\..\Packages\ffmpeg.2.0.1\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.2.0.1\build\ffmpeg.targets')" />
+  <Import Project="..\..\Packages\ffmpeg.2.2.1\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.2.2.1\build\ffmpeg.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
