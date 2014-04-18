@@ -25,7 +25,7 @@ namespace MPExtended.Installers.CustomActions
 {
     internal static class WifiRemote
     {
-        private const string UPDATE_FILE = @"http://wifiremote.googlecode.com/svn/trunk/Installer/update.xml";
+        private const string UPDATE_FILE = @"https://raw.githubusercontent.com/MPExtended/WifiRemote/master/Installer/update.xml";
 
         private static Version installedVersion;
         private static Version onlineVersion;
@@ -120,18 +120,26 @@ namespace MPExtended.Installers.CustomActions
             {
                 XElement updateFile = XElement.Parse(xmlData);
 
-                // set uri
-                string uri = updateFile.Element("Items").Element("PackageClass").Element("GeneralInfo").Element("OnlineLocation").Value.ToString();
-                downloadUri = new Uri(uri);
+                Version latest = null;
+                foreach (XElement e in updateFile.Element("Items").Elements("PackageClass"))
+                {
+                    // get wifiremote version
+                    XElement versionNode = e.Element("GeneralInfo").Element("Version");
 
-                // get wifiremote version
-                XElement versionNode = updateFile.Element("Items").Element("PackageClass").Element("GeneralInfo").Element("Version");
-                return new Version(
-                    Int32.Parse(versionNode.Element("Major").Value),
-                    Int32.Parse(versionNode.Element("Minor").Value),
-                    Int32.Parse(versionNode.Element("Build").Value),
-                    Int32.Parse(versionNode.Element("Revision").Value)
-                );
+                    Version v = new Version(
+                                Int32.Parse(versionNode.Element("Major").Value),
+                                Int32.Parse(versionNode.Element("Minor").Value),
+                                Int32.Parse(versionNode.Element("Build").Value),
+                                Int32.Parse(versionNode.Element("Revision").Value)
+                             );
+
+                    if (latest == null || v > latest)
+                    {
+                        downloadUri = new Uri(e.Element("GeneralInfo").Element("OnlineLocation").Value.ToString());
+                        latest = v;
+                    }
+                }
+                return latest;
             }
             catch (Exception ex)
             {
