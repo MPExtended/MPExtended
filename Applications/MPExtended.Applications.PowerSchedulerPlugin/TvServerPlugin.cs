@@ -71,7 +71,7 @@ namespace MPExtended.Applications.PowerSchedulerPlugin
             {
                 Log.Debug("Starting and registering MPExtended powerhandler");
                 handler = new PowerHandler();
-                PowerScheduler.Instance.Register(handler);
+                TvEngine.PowerScheduler.PowerScheduler.Instance.Register(handler);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace MPExtended.Applications.PowerSchedulerPlugin
             try
             {
                 Log.Debug("Removing MPExtended powerhandler");
-                PowerScheduler.Instance.Unregister(handler);
+                TvEngine.PowerScheduler.PowerScheduler.Instance.Unregister(handler);
             }
             catch (Exception ex)
             {
