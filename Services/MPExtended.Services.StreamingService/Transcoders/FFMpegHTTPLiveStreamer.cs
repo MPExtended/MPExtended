@@ -76,11 +76,21 @@ namespace MPExtended.Services.StreamingService.Transcoders
                     if (line != string.Empty && !line.StartsWith("#"))
                     {
                         // Ensure that segment path has been completely written so it is correctly replaced and we don't expose system paths to web
-                        if (!line.StartsWith(TemporaryDirectory))
+                        if (!line.EndsWith(".ts"))
                             break;
                         
-                        // Replace local path with url
-                        line = indexUrl + line.Replace(TemporaryDirectory, "").Replace("\\", "");
+                        //Older versions of ffmpeg write the absolute path, newer versions (beginning from 2.2) only the relative path to the playist file
+                        if(line.StartsWith(TemporaryDirectory))
+                        {
+                            // Replace local path with url
+                            line = indexUrl + line.Replace(TemporaryDirectory, "").Replace("\\", "");
+                        }
+                        else
+                        {
+                            line = indexUrl + line;
+                        }
+                        
+                        
                     }
                     playlist += line + "\n";
                 }
