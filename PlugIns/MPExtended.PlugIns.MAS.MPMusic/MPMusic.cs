@@ -57,7 +57,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             Dictionary<string, WebMusicArtistBasic> artists = null;
             Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>> artwork = new Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>>();
 
-            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
+            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iDisc, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
                          "FROM tracks t " +
                          "WHERE %where";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -69,6 +69,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "strAlbum", "Album", DataReaders.ReadString),
                 new SQLFieldMapping("t", "strAlbum", "AlbumId", AlbumIdReader),
                 new SQLFieldMapping("t", "strTitle", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("t", "iDisc", "DiscNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "iTrack", "TrackNumber", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "strPath", "Path", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("t", "strGenre", "Genres", DataReaders.ReadPipeList),
