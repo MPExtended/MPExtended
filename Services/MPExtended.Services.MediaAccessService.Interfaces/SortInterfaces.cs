@@ -39,6 +39,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface IMusicTrackNumberSortable 
     {
         int TrackNumber { get; set; }
+        int DiscNumber { get; set; }
     }
 
     public interface IMusicComposerSortable
