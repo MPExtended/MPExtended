@@ -108,7 +108,8 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
-                         "LEFT JOIN user_movie_settings u ON u.id = m.id " + 
+                         "LEFT JOIN movie_info__user_movie_settings mu ON mu.movie_info_id = m.id " +
+                         "LEFT JOIN user_movie_settings u ON u.id = mu.user_movie_settings_id " + 
                          "LEFT JOIN " +
                                 "(SELECT smi.identifier AS identifier, smi.movie AS movie " +
                                 " FROM " +
