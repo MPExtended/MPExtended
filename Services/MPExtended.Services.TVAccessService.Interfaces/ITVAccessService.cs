@@ -350,6 +350,15 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult GetProgramIsScheduled(int programId);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebProgramDetailed> GetNotify();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetNotify(int programId, bool status);
+
         #endregion
     }
 }

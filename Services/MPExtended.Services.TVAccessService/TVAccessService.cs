@@ -1080,6 +1080,31 @@ namespace MPExtended.Services.TVAccessService
             Program p = Program.Retrieve(programId);
             return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0;
         }
+
+        public IList<WebProgramDetailed> GetNotify()
+        {
+          return Program.ListAll().Select(prog => prog.ToWebProgramDetailed()).Where(p => p.Notify == true).ToList();
+        }
+
+        public WebBoolResult SetNotify(int programId, bool status)
+        {
+          bool result = false;
+          try
+          {
+            Program p = Program.Retrieve(programId);
+
+            p.Notify = status;
+            p.Persist();
+
+            result = true;
+          }
+          catch (Exception e)
+          {
+            Log.Error("SetNotify id {0}", programId);
+            Log.Error(e.Message);
+          }
+          return result;
+        }
         #endregion
     }
 }
