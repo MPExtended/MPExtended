@@ -1083,7 +1083,7 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebProgramDetailed> GetNotify()
         {
-          return Program.ListAll().Select(prog => prog.ToWebProgramDetailed()).Where(p => p.Notify == true).ToList();
+          return Program.ListAll().Select(prog => prog.ToWebProgramDetailed()).Where(p => p.Notify == true).OrderBy(pr => pr.StartTime).ToList();
         }
 
         public WebBoolResult SetNotify(int programId, bool status)
