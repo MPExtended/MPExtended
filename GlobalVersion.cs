@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 
 // This reflects the API version, only update this if the API changes, as dependent applications need to be rebuild when
 // the assembly is replaced with an assembly with a different AssemblyVersion attribute. 
-[assembly: AssemblyVersion("0.6.0.0")]
+[assembly: AssemblyVersion("0.6.0.1")]
 
 // This reflects the version of this unique build, and should be changed with each build. Sadly it's not easily possible
 // to let this change with each build in Visual Studio, so we don't have that in our version numbers now and hope people
@@ -45,4 +45,4 @@ using System.Runtime.InteropServices;
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.
-[assembly: AssemblyInformationalVersion("0.6.0-beta")]
+[assembly: AssemblyInformationalVersion("0.6.0-beta2")]
