@@ -1028,12 +1028,12 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm, string filter = null)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).OrderBy(p => p.StartTime, WebSortOrder.Asc).ToList();
         }
 
         public IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end, string filter = null)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).TakeRange(start, end).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).TakeRange(start, end).OrderBy(p => p.StartTime, WebSortOrder.Asc).ToList();
         }
 
         public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm, string filter = null)
