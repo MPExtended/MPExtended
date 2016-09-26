@@ -363,6 +363,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult SetNotify(int programId, bool status);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetStopTime(int programId, int stopTime);
+
         #endregion
     }
 }
