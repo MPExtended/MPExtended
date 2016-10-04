@@ -1128,6 +1128,7 @@ namespace MPExtended.Services.TVAccessService
             Recording p = Recording.Retrieve(programId);
 
             p.StopTime = stopTime;
+            p.TimesWatched = p.TimesWatched + 1;
             p.Persist();
 
             result = true;
