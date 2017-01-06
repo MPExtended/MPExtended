@@ -26,6 +26,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 
         public bool Watched { get; set; }
 
+        public string Stoptime { get; set; }
+
         public override WebMediaType Type 
         {
             get

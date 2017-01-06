@@ -60,7 +60,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
             string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
             string sql =
-                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, " + mp13Fields +
+                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres " +
@@ -68,6 +68,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
                 "LEFT JOIN path p ON f.idPath = p.idPath " +
+                "LEFT JOIN resume r ON f.idFile = r.idFile " +
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
                 "LEFT JOIN actors a ON alm.idActor = a.idActor " +
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
@@ -78,6 +79,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             {
                 new SQLFieldMapping("m", "idMovie", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("fullpath", "Path", DataReaders.ReadPipeList),
+                new SQLFieldMapping("r", "stoptime", "Stoptime", DataReaders.ReadString),
                 new SQLFieldMapping("actors", "Actors", ActorReader),
                 new SQLFieldMapping("genres", "Genres", DataReaders.ReadPipeList),
                 new SQLFieldMapping("i", "strPictureURL", "Artwork", ArtworkRetriever.ArtworkReader),
