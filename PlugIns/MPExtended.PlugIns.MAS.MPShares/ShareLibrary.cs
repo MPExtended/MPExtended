@@ -81,16 +81,18 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     {
                         Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
                         Path = path,
+                        Pincode = list.Where(x => x.Key == "pincode" + i).Select(x => x.Value).First(),
                         Extensions = extensions.ToList(),
                     });
                 }
             }
-
+            
             // make shares unique
             shares = localsharelist.GroupBy(x => x.Path, (path, gshares) => new Share()
             {
                 Name = gshares.First().Name,
                 Path = path,
+                Pincode = gshares.First().Pincode,
                 Extensions = gshares.SelectMany(x => x.Extensions).ToList()
             }).ToList();
             int shareNr = 0;

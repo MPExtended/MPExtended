@@ -170,7 +170,8 @@ namespace MPExtended.Services.MediaAccessService
                 DateAdded = item.DateAdded,
                 Path = item.Path,
                 PID = item.PID,
-                Type = item.Type
+                Type = item.Type,
+                Pincode = item.Pincode
             };
             return x;
         }
