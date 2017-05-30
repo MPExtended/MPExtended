@@ -1120,26 +1120,34 @@ namespace MPExtended.Services.TVAccessService
           return result;
         }
 
-        public WebBoolResult SetStopTime(int programId, int stopTime)
+    public WebBoolResult SetStopTime(int programId, int stopTime)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+
+        if (stopTime == 0)
         {
-          bool result = false;
-          try
-          {
-            Recording p = Recording.Retrieve(programId);
-
-            p.StopTime = stopTime;
-            p.TimesWatched = p.TimesWatched + 1;
-            p.Persist();
-
-            result = true;
-          }
-          catch (Exception e)
-          {
-            Log.Error("SetStopTime id {0}", programId);
-            Log.Error(e.Message);
-          }
-          return result;
+          p.StopTime = stopTime;
+          p.Persist();
         }
+        else
+        {
+          p.StopTime = stopTime;
+          p.TimesWatched = p.TimesWatched + 1;
+          p.Persist();
+        }
+
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("SetStopTime id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
 
         #endregion
     }
