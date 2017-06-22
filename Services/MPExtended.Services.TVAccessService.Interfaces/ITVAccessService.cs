@@ -45,10 +45,27 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null);
-        #endregion
 
-        #region Cards
         [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult RebootTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SuspendTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult HibernateTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult PowerOffTVServer();
+
+    #endregion
+
+    #region Cards
+    [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCard> GetCards(string filter = null);
 

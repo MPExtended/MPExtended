@@ -20,8 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.ServiceModel;
+using System.Threading;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
@@ -39,9 +40,12 @@ namespace MPExtended.Services.TVAccessService
     public class TVAccessService : ITVAccessService
     {
         private const int API_VERSION = 5;
+        [System.Runtime.InteropServices.DllImport("Powrprof.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
+        public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
 
-        #region Service
-        public static ITVAccessService Instance { get; internal set; }
+
+    #region Service
+    public static ITVAccessService Instance { get; internal set; }
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
@@ -183,7 +187,105 @@ namespace MPExtended.Services.TVAccessService
             return null;
         }
 
-        public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
+    public WebBoolResult PowerOffTVServer()
+    {
+      using (Process p = new Process())
+      {
+        ProcessStartInfo psi = new ProcessStartInfo();
+        psi.FileName = "shutdown";
+        psi.UseShellExecute = true;
+        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        psi.Arguments = " /s /t 0";
+        psi.ErrorDialog = false;
+        psi.CreateNoWindow = true;
+        psi.Verb = "runas";
+
+        p.StartInfo = psi;
+
+        try
+        {
+          p.Start();
+          p.WaitForExit();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("PowerOffTVServer: Exception in RunExternalCommand: {0}", ex.Message);
+
+          return false;
+        }
+        Log.Debug("PowerOffTVServer: External command finished");
+
+        return true;
+      }
+    }
+
+    public WebBoolResult RebootTVServer()
+    {
+      using (Process p = new Process())
+      {
+        ProcessStartInfo psi = new ProcessStartInfo();
+        psi.FileName = "shutdown";
+        psi.UseShellExecute = true;
+        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        psi.Arguments = " /r /t 0";
+        psi.ErrorDialog = false;
+        psi.CreateNoWindow = true;
+        psi.Verb = "runas";
+
+        p.StartInfo = psi;
+
+        try
+        {
+          p.Start();
+          p.WaitForExit();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("RebootTVServer: Exception in RunExternalCommand: {0}", ex.Message);
+
+          return false;
+        }
+        Log.Debug("RebootTVServer: External command finished");
+
+        return true;
+      }
+    }
+
+    public WebBoolResult SuspendTVServer()
+    {
+      Thread SuspendTVServer;
+      SuspendTVServer = new Thread(SuspendTVServerThread);
+      SuspendTVServer.Priority = ThreadPriority.Lowest;
+      SuspendTVServer.IsBackground = true;
+      SuspendTVServer.Start();
+
+      return true;
+    }
+
+    public void SuspendTVServerThread()
+    {
+      SetSuspendState(false, true, true);
+      Log.Debug("SuspendTVServerThread: External command finished");
+    }
+
+    public WebBoolResult HibernateTVServer()
+    {
+      Thread StandByTvServer;
+      StandByTvServer = new Thread(HibernateTVServerThread);
+      StandByTvServer.Priority = ThreadPriority.Lowest;
+      StandByTvServer.IsBackground = true;
+      StandByTvServer.Start();
+
+      return true;
+    }
+
+    public void HibernateTVServerThread()
+    {
+      SetSuspendState(true, true, true);
+      Log.Debug("HibernateTVServerThread: External command finished");
+    }
+
+    public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
             if (String.IsNullOrWhiteSpace(text))
             {
