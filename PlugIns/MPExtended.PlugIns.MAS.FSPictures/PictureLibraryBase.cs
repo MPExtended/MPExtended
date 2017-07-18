@@ -150,8 +150,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
             // Image data
             Uri uri = new Uri(path);
-            if (!PathUtil.MightBeOnNetworkDrive(path))
-            {
+
                 try
                 {
                     BitmapSource img = BitmapFrame.Create(uri);
@@ -176,7 +175,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
                 }
-            }
+            
 
             // Set title to file name if non-existant
             if (String.IsNullOrEmpty(pic.Title))
