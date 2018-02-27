@@ -524,7 +524,7 @@ namespace MPExtended.Services.TVAccessService
                             _tvControl.OnNewSchedule();
                             break;
                         default:
-                            CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, schedule.StartTime);
+                            CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, program.StartTime);
                             canceledSchedule.Persist();
                             _tvControl.OnNewSchedule();
                             break;
