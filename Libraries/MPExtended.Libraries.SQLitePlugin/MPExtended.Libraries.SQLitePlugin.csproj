@@ -72,6 +72,7 @@
     <Compile Include="MergeListReaderAttribute.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Exec.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="QueryException.cs" />

@@ -109,10 +109,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebIntResult GetMovieActorCount(int? provider, string filter = null);
-        #endregion
 
-        #region Music
         [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetMovieStoptime(int? provider, string id, int stopTime, Boolean isWatched, int watchedPercent);
+
+    #endregion
+
+    #region Music
+    [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebIntResult GetMusicAlbumCount(int? provider, string filter = null);
 
@@ -494,10 +499,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare)]
         Stream RetrieveFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset);
-        #endregion
+    #endregion
 
-        #region Playlist
-        [OperationContract]
+    #region Playlist
+    [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPlaylist> GetPlaylists(int? provider, string filter = null);
 

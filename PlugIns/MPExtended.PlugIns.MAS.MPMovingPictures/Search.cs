@@ -64,5 +64,12 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 return result;
             }, new SQLiteParameter("@search", "%" + text + "%"));
         }
+
+    public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
+    {
+      // dummy
+      return null;
+    }
+
     }
 }

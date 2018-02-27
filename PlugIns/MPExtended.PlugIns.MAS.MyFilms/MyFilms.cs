@@ -351,5 +351,11 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                 { "Id", id }
             };
         }
+
+    public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
+    {
+      // dummy
+      return null;
     }
+  }
 }

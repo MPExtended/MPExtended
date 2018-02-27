@@ -49,7 +49,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicArtistDetailed GetArtistDetailedById(string artistId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-    }
+  }
 
     public interface IMovieLibrary : ILibrary
     {
@@ -59,6 +59,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
+        WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
     }
 
     public interface ITVShowLibrary : ILibrary

@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
@@ -96,7 +97,55 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             });
         }
 
-        public IEnumerable<WebMovieBasic> GetAllMovies()
+    public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
+    {
+      Log.Info("SetMovieStoptime idmovie = {0}", id);
+      try
+      {
+        string strSQL = String.Format("select stoptime from resume WHERE idFile = (select idFile from files where idMovie = {0})", id);
+        Boolean ret;
+
+        using (DatabaseConnection connection = OpenConnection())
+        {
+          using (Query query = new Query(connection, strSQL))
+          {
+            ret = query.Reader.Read();
+          }
+        }
+
+        strSQL = String.Format("update movie set watched = '{1}', iwatchedPercent = {2} where idMovie = {0}", id, isWatched, watchedPercent);
+        Execute(strSQL);
+
+        int intWatched = 0;
+        if (isWatched)
+        {
+          intWatched = 1;
+        }
+
+        strSQL = String.Format("update movieinfo set iswatched = {1} where idMovie = {0}", id, intWatched);
+        Execute(strSQL);
+
+        if (ret)
+        {
+          strSQL = String.Format("update resume set stoptime = {1} WHERE idFile=(select idFile from files where idMovie = {0})", id, stopTime);
+        }
+        else
+        {
+          strSQL = String.Format("insert into resume (idFile, stopTime, resumeData, bdtitle) values ((select idFile from files where idMovie={0}), {1}, '-', 1000)", id, stopTime);
+        }
+
+        Execute(strSQL);
+
+        return true;
+      }
+      catch (SQLiteException ex)
+      {
+        Log.Error("SetMovieStoptime id = {0} exception {1}", id, ex.Message);
+        return false;
+      }
+    }
+
+    public IEnumerable<WebMovieBasic> GetAllMovies()
         {
             return LoadMovies<WebMovieBasic>();
         }
