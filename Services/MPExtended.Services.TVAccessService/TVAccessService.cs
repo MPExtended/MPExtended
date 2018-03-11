@@ -1222,6 +1222,26 @@ namespace MPExtended.Services.TVAccessService
           return result;
         }
 
+    public WebBoolResult ResetWatched(int programId)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+        p.StopTime = 0;
+        p.TimesWatched = 0;
+        p.Persist();
+
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("ResetWatched id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
+
     public WebBoolResult SetStopTime(int programId, int stopTime)
     {
       bool result = false;

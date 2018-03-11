@@ -384,6 +384,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult SetStopTime(int programId, int stopTime);
 
-        #endregion
-    }
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult ResetWatched(int programId);
+
+    #endregion
+  }
 }
