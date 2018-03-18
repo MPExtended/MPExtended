@@ -114,6 +114,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult SetMovieStoptime(int? provider, string id, int stopTime, Boolean isWatched, int watchedPercent);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetWathcedStatus(int? provider, string id, Boolean isWatched);
+
     #endregion
 
     #region Music

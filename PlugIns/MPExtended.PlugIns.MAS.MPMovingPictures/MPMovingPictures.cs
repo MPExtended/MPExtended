@@ -21,6 +21,7 @@ using System.ComponentModel.Composition;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
@@ -106,7 +107,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                             "GROUP_CONCAT(l.fullpath, '|') AS path, " +
                             "m.directors, m.writers, m.actors, m.summary, m.language, m.tagline, m.imdb_id, m.tagline, s.identifier, " +
                             "m.backdropfullpath, m.alternatecovers, m.coverfullpath," +
-                            "u.watched " +
+                            "u.watched, u.resume_time, u.watched " + 
                          "FROM movie_info m " +
                          "INNER JOIN local_media__movie_info AS i ON i.movie_info_id = m.id " +
                          "INNER JOIN local_media AS l ON l.id = i.local_media_id AND l.ignored = 0 " +
@@ -146,10 +147,12 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 new SQLFieldMapping("m", "imdb_id", "ExternalId", ExternalIdReader, "IMDB"),
                 new SQLFieldMapping("s", "identifier", "ExternalId", ExternalIdReader, "TMDB"),
                 new SQLFieldMapping("u", "watched", "Watched", DataReaders.ReadBoolean),
+                new SQLFieldMapping("u", "watched", "TimesWatched", DataReaders.ReadInt32),
+                new SQLFieldMapping("u", "resume_time", "Stoptime", DataReaders.ReadString),
             });
         }
 
-        public IEnumerable<WebMovieBasic> GetAllMovies()
+    public IEnumerable<WebMovieBasic> GetAllMovies()
         {
             return GetAllMovies<WebMovieBasic>();
         }
@@ -182,7 +185,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 .Select(x => new WebGenre() { Title = x });
         }
 
-        public IEnumerable<WebCategory> GetAllCategories()
+    public IEnumerable<WebCategory> GetAllCategories()
         {
             return new List<WebCategory>();
         }
@@ -205,5 +208,89 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 { "Id", id }
             };
         }
+
+    public WebBoolResult SetWathcedStatus(string id, Boolean isWatched)
+    {
+      Log.Info("SetWathcedStatus provider = 3 idmovie = {0} isWatched = {1}", id, isWatched);
+      try
+      {
+        string strSQL = String.Format("select watched from user_movie_settings WHERE id = {0} and user = 1", id);
+        Boolean ret;
+
+        using (DatabaseConnection connection = OpenConnection())
+        {
+          using (Query query = new Query(connection, strSQL))
+          {
+            ret = query.Reader.Read();
+          }
+        }
+
+        if (!ret)
+        {
+          Log.Error("SetWathcedStatus missing info in user_movie_settings");
+          return false;
+        }
+
+        if (isWatched)
+        {
+          strSQL = String.Format("update user_movie_settings set watched = 1 WHERE id = {0} and user = 1", id);
+        }
+        else
+        {
+          strSQL = String.Format("update user_movie_settings set watched = 0 WHERE id = {0} and user = 1", id);
+        }
+
+        Execute(strSQL);
+
+        return true;
+      }
+      catch (SQLiteException ex)
+      {
+        Log.Error("SetWathcedStatus id = {0} exception {1}", id, ex.Message);
+        return false;
+      }
     }
+
+    public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
+    {
+      Log.Info("SetMovieStoptime provider = 3 idmovie = {0} stopTime = {1} isWatched = {2}", id, stopTime, isWatched);
+      try
+      {
+        string strSQL = String.Format("select watched from user_movie_settings WHERE id = {0} and user = 1", id);
+        Boolean ret;
+
+        using (DatabaseConnection connection = OpenConnection())
+        {
+          using (Query query = new Query(connection, strSQL))
+          {
+            ret = query.Reader.Read();
+          }
+        }
+
+        if (!ret)
+        {
+          Log.Error("SetMovieStoptime missing info in user_movie_settings");
+          return false;
+        }
+
+        if (isWatched)
+        {
+          strSQL = String.Format("update user_movie_settings set watched = (select watched+1 from user_movie_settings  WHERE id = {0} and user = 1), resume_time = {1} WHERE id = {0} and user = 1", id, stopTime);
+        }
+        else
+        {
+          strSQL = String.Format("update user_movie_settings set resume_time = {1} WHERE id = {0} and user = 1", id, stopTime);
+        }
+
+        Execute(strSQL);
+
+        return true;
+      }
+      catch (SQLiteException ex)
+      {
+        Log.Error("SetMovieStoptime id = {0} exception {1}", id, ex.Message);
+        return false;
+      }
+    }
+  }
 }

@@ -64,7 +64,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
-                    "GROUP_CONCAT(g.strGenre, '|') AS genres " +
+                    "GROUP_CONCAT(g.strGenre, '|') AS genres, m.timeswatched " +
                 "FROM movie m " +
                 "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
                 "LEFT JOIN files f ON m.idMovie = f.idMovie " +
@@ -93,13 +93,40 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "strCredits", "Writers", CreditsReader),
                 new SQLFieldMapping("i", "iswatched", "Watched", DataReaders.ReadBoolean),
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
-                new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+                new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32)
             });
         }
 
+    public WebBoolResult SetWathcedStatus(string id, Boolean isWatched)
+    {
+      Log.Info("SetWathcedStatus provider = 7 idmovie = {0} isWatched = {1}", id, isWatched);
+      try
+      {
+        String strSQL = String.Format("update movie set watched = '{1}' where idMovie = {0}", id, isWatched);
+
+        Execute(strSQL);
+
+        int intWatched = 0;
+        if (isWatched)
+        {
+          intWatched = 1;
+        }
+
+        strSQL = String.Format("update movieinfo set iswatched = {1} where idMovie = {0}", id, intWatched);
+        Execute(strSQL);
+      }
+      catch (SQLiteException ex)
+      {
+        Log.Error("SetWathcedStatus id = {0} exception {1}", id, ex.Message);
+        return false;
+      }
+      return true;
+    }
+
     public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
     {
-      Log.Info("SetMovieStoptime idmovie = {0}", id);
+      Log.Info("SetMovieStoptime provider = 7 idmovie = {0} stopTime = {1} isWatched = {2}", id, stopTime, isWatched);
       try
       {
         string strSQL = String.Format("select stoptime from resume WHERE idFile = (select idFile from files where idMovie = {0})", id);
@@ -113,7 +140,15 @@ namespace MPExtended.PlugIns.MAS.MPVideos
           }
         }
 
-        strSQL = String.Format("update movie set watched = '{1}', iwatchedPercent = {2} where idMovie = {0}", id, isWatched, watchedPercent);
+        if (isWatched)
+        {
+          strSQL = String.Format("update movie set watched = '{1}', iwatchedPercent = {2}, timeswatched = (select timeswatched+1 from movie where idMovie = {0}) where idMovie = {0}", id, isWatched, watchedPercent);
+        }
+        else
+        {
+          strSQL = String.Format("update movie set iwatchedPercent = {1} where idMovie = {0}", id, watchedPercent);
+        }
+
         Execute(strSQL);
 
         int intWatched = 0;

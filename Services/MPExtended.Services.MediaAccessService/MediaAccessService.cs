@@ -235,6 +235,10 @@ namespace MPExtended.Services.MediaAccessService
       return MovieLibraries[provider].SetMovieStoptime(id, stopTime, isWatched, watchedPercent);
     }
 
+    public WebBoolResult SetWathcedStatus(int? provider, string id, Boolean isWatched)
+    {
+      return MovieLibraries[provider].SetWathcedStatus(id, isWatched);
+    }
     #endregion
 
     #region Music

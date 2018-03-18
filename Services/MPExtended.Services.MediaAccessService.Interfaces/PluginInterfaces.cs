@@ -60,7 +60,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
         WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
-    }
+        WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
+  }
 
     public interface ITVShowLibrary : ILibrary
     {
@@ -81,7 +82,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-    }
+  }
 
     public interface IPictureLibrary : ILibrary
     {
