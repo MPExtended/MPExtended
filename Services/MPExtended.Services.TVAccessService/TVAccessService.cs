@@ -40,6 +40,7 @@ namespace MPExtended.Services.TVAccessService
     public class TVAccessService : ITVAccessService
     {
         private const int API_VERSION = 5;
+        private const string MP_VERSION = "MP1";
         [System.Runtime.InteropServices.DllImport("Powrprof.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
         public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
 
@@ -104,15 +105,16 @@ namespace MPExtended.Services.TVAccessService
                 .FirstOrDefault();
         }
 
-        public WebTVServiceDescription GetServiceDescription()
-        {
-            return new WebTVServiceDescription()
-            {
-                HasConnectionToTVServer = TestConnectionToTVService(),
-                ApiVersion = API_VERSION,
-                ServiceVersion = VersionUtil.GetVersionName(),
-            };
-        }
+    public WebTVServiceDescription GetServiceDescription()
+    {
+      return new WebTVServiceDescription()
+      {
+        HasConnectionToTVServer = TestConnectionToTVService(),
+        ApiVersion = API_VERSION,
+        ServiceVersion = VersionUtil.GetVersionName(),
+        MPVersion = MP_VERSION
+      };
+    }
         #endregion
 
         #region TV Server

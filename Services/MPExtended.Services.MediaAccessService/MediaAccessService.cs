@@ -47,6 +47,7 @@ namespace MPExtended.Services.MediaAccessService
   {
     #region General
     private const int API_VERSION = 5;
+    private const string MP_VERSION = "MP1";
 
     private ILibrary GetLibrary(int? provider, WebMediaType type)
     {
@@ -80,6 +81,7 @@ namespace MPExtended.Services.MediaAccessService
       {
         ApiVersion = API_VERSION,
         ServiceVersion = VersionUtil.GetVersionName(),
+        MPVersion = MP_VERSION,
 
         AvailableFileSystemLibraries = FileSystemLibraries.GetAllAsBackendProvider(),
         AvailableMovieLibraries = MovieLibraries.GetAllAsBackendProvider(),

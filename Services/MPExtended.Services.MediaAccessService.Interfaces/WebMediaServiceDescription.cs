@@ -9,6 +9,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         public int ApiVersion { get; set; }
         public string ServiceVersion { get; set; }
+        public string MPVersion { get; set; }
 
         public List<WebBackendProvider> AvailableMovieLibraries { get; set; }
         public List<WebBackendProvider> AvailableMusicLibraries { get; set; }
