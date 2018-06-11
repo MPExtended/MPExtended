@@ -386,6 +386,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetStopTimeWithPercent(int programId, int stopTime, bool isWatched);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult ResetWatched(int programId);
 
     #endregion

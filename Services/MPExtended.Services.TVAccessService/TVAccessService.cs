@@ -1244,6 +1244,31 @@ namespace MPExtended.Services.TVAccessService
       return result;
     }
 
+    public WebBoolResult SetStopTimeWithPercent(int programId, int stopTime, bool isWatched)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+
+        p.StopTime = stopTime;
+
+        if (isWatched)
+        {
+          p.TimesWatched = p.TimesWatched + 1;
+        }
+
+        p.Persist();
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("SetStopTime id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
+
     public WebBoolResult SetStopTime(int programId, int stopTime)
     {
       bool result = false;
