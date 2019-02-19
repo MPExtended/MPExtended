@@ -1,12 +1,7 @@
 MPExtended
 ==========
 
-This is the main code repository of MPExtended. Source code of all our projects can be found here. See 
-[our homepage][1] for more information.
-
-Users
------
-If you want to try MPExtended, please see [our homepage][1] for downloads and documentation.
+This is the main code repository of MPExtended. Source code of all our projects can be found here.
 
 Developers
 ----------
@@ -28,7 +23,6 @@ These are some quick instructions on getting started with MPExtended:
 6. Start the MPExtended.Applications.WebMediaPortal project to start WebMediaPortal
 7. There is some [documentation][6] for developers available in the MediaPortal wiki.
 
-   [1]: http://www.mpextended.com/
    [2]: http://wixtoolset.org/
    [3]: http://www.asp.net/downloads
    [4]: http://www.microsoft.com/en-us/download/details.aspx?id=1038
