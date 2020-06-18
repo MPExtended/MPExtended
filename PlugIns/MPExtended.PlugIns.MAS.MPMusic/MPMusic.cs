@@ -100,8 +100,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     artwork[tuple] = new List<WebArtworkDetailed>();
                     int i = 0;
                     var files = new string[] {
-                        PathUtil.StripInvalidCharacters(item.Artist.Distinct().First() + "-" + item.Album + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(item.Artist.Distinct().First() + "-" + item.Album + ".jpg", '_')
+                        PathUtil.StripInvalidCharacters(string.Join(" _ ", item.Artist) + "-" + item.Album + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(string.Join(" _ ", item.Artist) + "-" + item.Album + ".jpg", '_')
                     }
                         .Select(x => Path.Combine(configuration["cover"], "Albums", x))
                         .Where(x => File.Exists(x))
@@ -178,8 +178,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 {
                     int i = 0;
                     string[] filenames = new string[] {
-                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(album.Artists.Distinct().First() + "-" + album.Title + ".jpg", '_')
+                        PathUtil.StripInvalidCharacters(string.Join(" _ ", album.Artists) + "-" + album.Title + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(string.Join(" _ ", album.Artists) + "-" + album.Title + ".jpg", '_')
                     };
                     foreach (string file in filenames)
                     {
