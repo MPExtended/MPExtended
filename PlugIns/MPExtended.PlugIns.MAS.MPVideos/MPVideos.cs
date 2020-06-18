@@ -35,12 +35,14 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [ExportMetadata("Id", 7)]
     public class MPVideos : Database, IMovieLibrary
     {
+        private Dictionary<string, string> configuration;
         public bool Supported { get; set; }
 
         [ImportingConstructor]
         public MPVideos(IPluginData data)
         {
-            DatabasePath = data.GetConfiguration("MP MyVideo")["database"];
+            configuration = data.GetConfiguration("MP MyVideo");
+            DatabasePath = configuration["database"];
             Supported = File.Exists(DatabasePath);
         }
 
@@ -95,6 +97,32 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32)
+            }, delegate (T item)
+            {
+              if (item is WebMovieBasic)
+              {
+                int i = 0;
+                var files = new string[] {
+                        PathUtil.StripInvalidCharacters(string.Format("{0}{{{1}}}{2}", item.Title, item.Id, "L.jpg"), '_'),
+                        PathUtil.StripInvalidCharacters(string.Format("{0}{{{1}}}{2}", item.Title, item.Id, ".jpg"), '_')
+                }
+                  .Select(x => Path.Combine(configuration["cover"], "Title", x))
+                  .Where(x => File.Exists(x))
+                  .Distinct();
+                foreach (string file in files)
+                {
+                  item.Artwork.Insert(0, new WebArtworkDetailed()
+                  {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                  });
+                }
+              }
+              return item;
             });
         }
 
