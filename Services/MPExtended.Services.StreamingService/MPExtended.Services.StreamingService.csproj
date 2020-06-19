@@ -167,18 +167,18 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\ffmpeg.exe" DestinationFolder="$(SolutionDir)\Libraries\Streaming" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)\ffmpeg\ffmpeg.exe" DestinationFolder="$(SolutionDir)\Libraries\Streaming" SkipUnchangedFiles="true" />
   </Target>
-  <Import Project="..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets'))" />
+    <Error Condition="!Exists('..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy $(SolutionDir)\Packages\MediaInfo.1.0.1\lib\net472\MediaInfo.dll $(TargetDir) /Y</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets" Condition="Exists('..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
