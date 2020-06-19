@@ -62,6 +62,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
             string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
+            string mp117Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ? "i.strCollection, i.strGroup, " : String.Empty;
             string sql =
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
@@ -230,7 +231,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public IEnumerable<WebGenre> GetAllGenres()
         {
-            string sql = "SELECT strGenre FROM genre";
+            string sql = "SELECT strGenre FROM genre WHERE idGenre in (SELECT idGenre FROM genrelinkmovie)";
             return new LazyQuery<WebGenre>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString)
