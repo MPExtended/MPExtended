@@ -167,6 +167,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="AfterBuild">
+    <!-- ffmpeg build error workaround -->
+    <Copy SourceFiles="..\..\Packages\ffmpeg.2.7.1\ffmpeg.exe" DestinationFolder="$(TargetDir)\ffmpeg.exe" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(TargetDir)\ffmpeg.exe" DestinationFolder="$(SolutionDir)\Libraries\Streaming" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="..\..\Packages\ffmpeg.3.4.2\build\ffmpeg.targets" Condition="Exists('..\..\Packages\ffmpeg.3.4.2\build\ffmpeg.targets')" />
