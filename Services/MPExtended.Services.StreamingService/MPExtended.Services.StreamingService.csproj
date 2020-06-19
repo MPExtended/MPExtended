@@ -176,6 +176,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\ffmpeg.2.7.1\build\ffmpeg.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)\Packages\MediaInfo.1.0.1\lib\net472\MediaInfo.dll $(TargetDir) /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
