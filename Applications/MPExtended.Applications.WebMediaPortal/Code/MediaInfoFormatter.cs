@@ -41,7 +41,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 return UIStrings.Unknown;
 
             WebVideoStream vidStream = info.VideoStreams.First();
-
+            if (vidStream.Width >= 7680 || vidStream.Height >= 4320)
+              return "8K Ultra HD";
+            if (vidStream.Width >= 3840 || vidStream.Height >= 2160)
+              return "4K Ultra HD";
             if (vidStream.Width >= 1920 || vidStream.Height >= 1080)
                 return vidStream.Interlaced ? "1080i" : "1080p";
             if (vidStream.Width >= 1280 || vidStream.Height >= 720)
