@@ -45,4 +45,4 @@ using System.Runtime.InteropServices;
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.
-[assembly: AssemblyInformationalVersion("0.6.0-beta10")]
+[assembly: AssemblyInformationalVersion("0.6.0-beta13-ajs")]
