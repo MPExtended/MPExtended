@@ -227,7 +227,6 @@ namespace MPExtended.Libraries.Service.Util
                 { MediaPortalVersion.MP1_25, new Version(1, 24, 100) },  // Let's assume the pattern continues
                 { MediaPortalVersion.MP1_17, new Version(1, 16, 100) },  // Let's assume the pattern continues
                 { MediaPortalVersion.MP1_7,  new Version(1, 6, 100) },   // Let's assume the pattern continues
-                { MediaPortalVersion.MP1_7,  new Version(1, 6, 100) },   // Let's assume the pattern continues
                 { MediaPortalVersion.MP1_6,  new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
                 { MediaPortalVersion.MP1_5,  new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
                 { MediaPortalVersion.MP1_4,  new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
@@ -238,8 +237,9 @@ namespace MPExtended.Libraries.Service.Util
 
             Version build = GetBuildVersion();
             if (build == null)
+            {
                 return MediaPortalVersion.NotAvailable;
-
+            }
             foreach (var mpVersion in minimumVersions)
             {
                 if (build >= mpVersion.Value)
