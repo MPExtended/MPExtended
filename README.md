@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/787i5qsk6l56xqtl/branch/Release-0.7?svg=true)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7)
+
 MPExtended
 ==========
 
