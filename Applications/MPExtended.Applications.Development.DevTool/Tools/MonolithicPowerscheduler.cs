@@ -64,6 +64,12 @@ namespace MPExtended.Applications.Development.DevTool.Tools
             if (File.Exists(prog))
                 return prog;
 
+            string progNuget = Path.Combine(Installation.GetSourceRootDirectory(), "Packages", "ILMerge.3.0.40", "tools", "net452",  "ILMerge.exe");
+           // Console.WriteLine(progNuget);
+            if (File.Exists(progNuget))
+                return progNuget;
+
+
             Console.WriteLine("Couldn't find ILMerge - aborting");
             return null;
         }
