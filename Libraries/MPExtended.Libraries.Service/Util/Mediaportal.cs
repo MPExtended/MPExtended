@@ -48,10 +48,12 @@ namespace MPExtended.Libraries.Service.Util
             MP1_4 = 6,
             MP1_5 = 7,
             MP1_6 = 8,
-            MP1_7 = 9
-        }
+            MP1_7 = 9,
+            MP1_17 = 10,
+            MP1_25 = 11
+    }
 
-        private static bool? hasValidConfig = null;
+    private static bool? hasValidConfig = null;
         private static bool? hasMpDirs = null;
 
         public static string GetClientInstallationDirectory()
@@ -222,13 +224,16 @@ namespace MPExtended.Libraries.Service.Util
         {
             var minimumVersions = new Dictionary<MediaPortalVersion, Version>()
             {
-                { MediaPortalVersion.MP1_7, new Version(1, 6, 100) },   // Let's assume the pattern continues
-                { MediaPortalVersion.MP1_6, new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
-                { MediaPortalVersion.MP1_5, new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
-                { MediaPortalVersion.MP1_4, new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
-                { MediaPortalVersion.MP1_3, new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
-                { MediaPortalVersion.MP1_2, new Version(1, 2) },        // not sure about alpha versions, but those are ancient
-                { MediaPortalVersion.MP1_1, new Version(1, 1) }         // unsupported, so whatever
+                { MediaPortalVersion.MP1_25, new Version(1, 24, 100) },  // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_17, new Version(1, 16, 100) },  // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_7,  new Version(1, 6, 100) },   // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_7,  new Version(1, 6, 100) },   // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_6,  new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
+                { MediaPortalVersion.MP1_5,  new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
+                { MediaPortalVersion.MP1_4,  new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
+                { MediaPortalVersion.MP1_3,  new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
+                { MediaPortalVersion.MP1_2,  new Version(1, 2) },        // not sure about alpha versions, but those are ancient
+                { MediaPortalVersion.MP1_1,  new Version(1, 1) }         // unsupported, so whatever
             };
 
             Version build = GetBuildVersion();
