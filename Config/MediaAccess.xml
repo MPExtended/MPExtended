@@ -16,6 +16,7 @@
     </Plugin>
     <Plugin name="MP MyVideo">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+     <cover type="Folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs\Videos</cover>
     </Plugin>
     <Plugin name="Moving Pictures">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
