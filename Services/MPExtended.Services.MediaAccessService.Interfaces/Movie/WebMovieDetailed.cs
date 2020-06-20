@@ -20,5 +20,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
     
         // use ISO short name (en, nl, de, etc)
         public string Language { get; set; }
-    }
+
+        public IList<string> Collections { get; set; }
+        public IList<string> Groups { get; set; }
+
+  }
 }

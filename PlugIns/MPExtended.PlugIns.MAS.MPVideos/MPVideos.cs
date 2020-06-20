@@ -61,12 +61,15 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
-            string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.strDirector, i.dateAdded, " : String.Empty;
-            string mp117Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ? "i.strCollection, i.strGroup, " : String.Empty;
+            string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.language, i.strDirector, i.dateAdded, " : String.Empty;
             string sql =
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + mp13Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
+                    (Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ?
+                    "GROUP_CONCAT(u.strGroup, '|') AS groups,  " +
+                    "GROUP_CONCAT(c.strCollection, '|') AS collections, " : string.Empty
+                    ) +
                     "GROUP_CONCAT(g.strGenre, '|') AS genres, m.timeswatched " +
                 "FROM movie m " +
                 "INNER JOIN movieinfo i ON m.idMovie = i.idMovie " +
@@ -75,6 +78,12 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "LEFT JOIN resume r ON f.idFile = r.idFile " +
                 "LEFT JOIN actorlinkmovie alm ON m.idMovie = alm.idMovie " +
                 "LEFT JOIN actors a ON alm.idActor = a.idActor " +
+                (Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ?
+                "LEFT JOIN moviecollectionlinkmovie clm ON m.idMovie = clm.idMovie " +
+                "LEFT JOIN moviecollection c ON clm.idCollection = c.idCollection " +
+                "LEFT JOIN usergrouplinkmovie ulm ON m.idMovie = ulm.idMovie " +
+                "LEFT JOIN usergroup u ON ulm.idGroup = u.idGroup " : string.Empty
+                ) +
                 "LEFT JOIN genrelinkmovie glm ON m.idMovie = glm.idMovie " +
                 "LEFT JOIN genre g ON glm.idGenre = g.idGenre " +
                 "WHERE %where " +
@@ -95,7 +104,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "strPlot", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strCredits", "Writers", CreditsReader),
                 new SQLFieldMapping("i", "iswatched", "Watched", DataReaders.ReadBoolean),
+                new SQLFieldMapping("i", "language", "Language", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
+                new SQLFieldMapping("groups", "Groups", DataReaders.ReadPipeList),
+                new SQLFieldMapping("collections", "Collections", DataReaders.ReadPipeList),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32)
             }, delegate (T item)
