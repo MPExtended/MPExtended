@@ -32,5 +32,8 @@
     <Plugin name="mvCentral">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
     </Plugin>
+    <Plugin name="FanartHandler">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\FanartHandler.db3</database>
+    </Plugin>
   </PluginConfiguration>
 </MediaAccess>
