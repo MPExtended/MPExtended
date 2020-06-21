@@ -122,9 +122,14 @@
                 <Component Id="Component_WSS_Binaries" Guid="3a0d3e40-c061-40b7-bd78-195c35d702c8">
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Services.StreamingService.pdb" />
-                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.pdb" />
+                  <!-- MediaInfo -->
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcrypto-1_1.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcurl.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libssl-1_1.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.Wrapper.dll" />
                 </Component>
 
                 <!-- WSS registry -->
