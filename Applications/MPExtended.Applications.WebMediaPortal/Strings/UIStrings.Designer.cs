@@ -883,6 +883,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         /// <summary>
         ///   Looks up a localized string similar to Today&apos;s schedules.
         /// </summary>
+        public static string Tagline {
+            get {
+                return ResourceManager.GetString("Tagline", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Today&apos;s schedules.
+        /// </summary>
         public static string TodaysSchedules {
             get {
                 return ResourceManager.GetString("TodaysSchedules", resourceCulture);
