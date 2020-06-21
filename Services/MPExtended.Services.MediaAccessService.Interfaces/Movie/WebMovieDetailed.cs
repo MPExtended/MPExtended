@@ -11,6 +11,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         {
             Directors = new List<string>();
             Writers = new List<string>();
+            Collections = new List<string>();
+            Groups = new List<string>();
+            Studios = new List<string>();
         }
 
         public IList<string> Directors { get; set; }
@@ -24,5 +27,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public IList<string> Collections { get; set; }
         public IList<string> Groups { get; set; }
 
+        public string MPAARating { get; set; }
+        public string MPAAText { get; set; }
+        public string Awards { get; set; }
+
+        public IList<string> Studios { get; set; }
   }
 }

@@ -36,12 +36,14 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     public class MPVideos : Database, IMovieLibrary
     {
         private Dictionary<string, string> configuration;
+        private Dictionary<string, string> fanartconfiguration;
         public bool Supported { get; set; }
 
         [ImportingConstructor]
         public MPVideos(IPluginData data)
         {
             configuration = data.GetConfiguration("MP MyVideo");
+            fanartconfiguration = data.GetConfiguration("FanartHandler");
             DatabasePath = configuration["database"];
             Supported = File.Exists(DatabasePath);
         }
@@ -59,11 +61,29 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 .ToList();
         }
 
+        [MergeListReader]
+        private List<WebExternalId> ExternalIdReader(SQLiteDataReader reader, int idx, object site)
+        {
+            List<WebExternalId> list = new List<WebExternalId>();
+            string val = (string)DataReaders.ReadString(reader, idx);
+            if(!String.IsNullOrEmpty(val))
+            {
+                list.Add(new WebExternalId()
+                {
+                    Site = (string)site,
+                    Id = val
+                });
+            }
+            return list;
+        }
+
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
         {
-            string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.language, i.strDirector, i.dateAdded, " : String.Empty;
+            string mp13Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_3 ? "i.language, i.strDirector, i.dateAdded, i.strTagLine, " : String.Empty;
+            string mp117Fields = Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ? "i.TMDBNumber, i.mpaa, i.MPAAText, i.Awards, REPLACE(i.studios,' / ','|') as studios, " : String.Empty;
             string sql =
-                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + mp13Fields +
+                "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + 
+                    mp13Fields + mp117Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
                     "GROUP_CONCAT(a.strActor, '|') AS actors, " +
                     (Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ?
@@ -100,7 +120,6 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "iYear", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("i", "fRating", "Rating", DataReaders.ReadStringAsFloat),
                 new SQLFieldMapping("i", "runtime", "Runtime", DataReaders.ReadInt32),
-                new SQLFieldMapping("i", "IMDBID", "IMDBId", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strPlot", "Summary", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strCredits", "Writers", CreditsReader),
                 new SQLFieldMapping("i", "iswatched", "Watched", DataReaders.ReadBoolean),
@@ -109,11 +128,19 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("groups", "Groups", DataReaders.ReadPipeList),
                 new SQLFieldMapping("collections", "Collections", DataReaders.ReadPipeList),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
-                new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32)
+                new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32),
+                new SQLFieldMapping("i", "IMDBID", "ExternalId", ExternalIdReader, "IMDB"),
+                new SQLFieldMapping("i", "TMDBNumber", "ExternalId", ExternalIdReader, "TMDB"),
+                new SQLFieldMapping("i", "mpaa", "MPAARating", DataReaders.ReadString),
+                new SQLFieldMapping("i", "MPAAText", "MPAAText", DataReaders.ReadString),
+                new SQLFieldMapping("i", "Awards", "Awards", DataReaders.ReadString),
+                new SQLFieldMapping("studios", "Studios", DataReaders.ReadPipeList),
+                new SQLFieldMapping("i", "strTagLine", "Tagline", DataReaders.ReadString),
             }, delegate (T item)
             {
               if (item is WebMovieBasic)
               {
+                // Poster
                 int i = 0;
                 var files = new string[] {
                         PathUtil.StripInvalidCharacters(string.Format("{0}{{{1}}}{2}", item.Title, item.Id, "L.jpg"), '_'),
@@ -122,9 +149,13 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                   .Select(x => Path.Combine(configuration["cover"], "Title", x))
                   .Where(x => File.Exists(x))
                   .Distinct();
+                if (files != null && files.Count() > 0)
+                {
+                  item.Artwork.Clear();
+                }
                 foreach (string file in files)
                 {
-                  item.Artwork.Insert(0, new WebArtworkDetailed()
+                  item.Artwork.Add(new WebArtworkDetailed()
                   {
                     Type = WebFileType.Cover,
                     Offset = i++,
@@ -133,6 +164,27 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                     Id = file.GetHashCode().ToString(),
                     Filetype = Path.GetExtension(file).Substring(1)
                   });
+                }
+                // Backdrops
+                i = 0;
+                string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Skin Fanart", "Scraper", "Movies");
+                if (Directory.Exists(thumbfolder))
+                {
+                  files = Directory.GetFiles(thumbfolder, string.Format("{0}{{*}}.jpg", item.Id))
+                    .Where(x => File.Exists(x))
+                    .Distinct();
+                  foreach (string file in files)
+                  {
+                    item.Artwork.Add(new WebArtworkDetailed()
+                    {
+                      Type = WebFileType.Backdrop,
+                      Offset = i++,
+                      Path = file,
+                      Rating = 1,
+                      Id = file.GetHashCode().ToString(),
+                      Filetype = Path.GetExtension(file).Substring(1)
+                    });
+                  }
                 }
               }
               return item;
