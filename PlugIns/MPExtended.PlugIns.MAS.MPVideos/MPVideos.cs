@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -186,6 +187,29 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                     });
                   }
                 }
+                // ClearArt
+                string logofolder = Path.Combine(fanartconfiguration["thumb"], "ClearArt", "Movies");
+                if (Directory.Exists(thumbfolder))
+                {
+                  string imdbid = item.ExternalId.Where(x => x.Site == "IMDB").FirstOrDefault()?.Id ?? string.Empty;
+                  if (!string.IsNullOrEmpty(imdbid))
+                  {
+                    string file = Path.Combine(logofolder, string.Format("{0}.png", imdbid));
+                    if (File.Exists(file))
+                    {
+                      item.Artwork.Add(new WebArtworkDetailed()
+                      {
+                        Type = WebFileType.Logo,
+                        Offset = 0,
+                        Path = file,
+                        Rating = 1,
+                        Id = file.GetHashCode().ToString(),
+                        Filetype = Path.GetExtension(file).Substring(1)
+                      });
+                    }
+                  }
+                }
+
               }
               return item;
             });

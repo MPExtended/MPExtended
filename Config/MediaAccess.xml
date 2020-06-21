@@ -34,6 +34,7 @@
     </Plugin>
     <Plugin name="FanartHandler">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\FanartHandler.db3</database>
+      <thumb type="Folder" displayname="Thumb Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs</thumb>
     </Plugin>
   </PluginConfiguration>
 </MediaAccess>

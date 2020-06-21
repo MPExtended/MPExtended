@@ -1,6 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended, 2005-2011 Team MediaPortal
+﻿#region Copyright (C) 2011-2013 MPExtended, 2005-2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// Copyright (C) 2005-2011 Team MediaPortal, http://www.team-mediaportal.com/
+// Copyright (C) 2005-2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     retinfo.VideoStreams.Add(new WebVideoStream()
                     {
                         Codec = info.VideoStreams[i].Codec.ToCodecString(),
+                        Resolution = info.VideoStreams[i].Resolution,
                         DisplayAspectRatio = (int)info.VideoStreams[i].AspectRatio.ToAspectRatioValue(),
                         DisplayAspectRatioString = info.VideoStreams[i].AspectRatio.ToAspectRatioString(),
                         Interlaced = info.VideoStreams[i].Interlaced,
