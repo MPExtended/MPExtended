@@ -121,7 +121,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     {
                         Codec = info.VideoStreams[i].Codec.ToCodecString(),
                         Resolution = info.VideoStreams[i].Resolution,
-                        DisplayAspectRatio = (int)info.VideoStreams[i].AspectRatio.ToAspectRatioValue(),
+                        DisplayAspectRatio = (info.VideoStreams[i].Height != 0 ? (decimal)info.VideoStreams[i].Width / (decimal)info.VideoStreams[i].Height : (decimal)info.VideoStreams[i].AspectRatio.ToAspectRatioValue()),
                         DisplayAspectRatioString = info.VideoStreams[i].AspectRatio.ToAspectRatioString(),
                         Interlaced = info.VideoStreams[i].Interlaced,
                         Width = info.VideoStreams[i].Width,
