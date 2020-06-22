@@ -561,4 +561,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)Packages\jQuery.1.10.2\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.10.3\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.10.3\Content\Content\*.* $(ProjectDir)Content\ /Y /E
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
