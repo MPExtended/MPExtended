@@ -52,8 +52,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
         {
-            // return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(s => Regex.Match(s, @"(?<title>.+?)(?<id>nm\d{3,})?$")).Where (m => m.Success).Select(m => new WebActor() { Title = m.Groups["title"].Value, Id = m.Groups["id"].Value}).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx))
+                     .Select(s => Regex.Match(s, @"(?<title>.+?)(?<id>nm\d{3,})?$"))
+                     .Where (m => m.Success)
+                       .Select(m => new WebActor() { Title = m.Groups["title"].Value, Id = m.Groups["id"].Value})
+                       .ToList();
         }
 
         private List<string> CreditsReader(SQLiteDataReader reader, int idx)
