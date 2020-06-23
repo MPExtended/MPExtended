@@ -8,6 +8,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public class WebActor : WebObject, ITitleSortable
     {
         public string Title { get; set; }
+        public string Id { get; set; }
 
         public WebActor()
         {
