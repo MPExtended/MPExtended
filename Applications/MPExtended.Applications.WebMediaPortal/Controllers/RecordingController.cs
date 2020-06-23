@@ -47,6 +47,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var fileInfo = Connections.Current.TAS.GetRecordingFileInfo(rec.Id);
             var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString(), 0);
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
+            ViewBag.Resolution = MediaInfoFormatter.GetShortQualityName(mediaInfo);
             return View(rec);
         }
 
