@@ -22,6 +22,7 @@ using System.ComponentModel.Composition;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
@@ -51,7 +52,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
+            // return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(s => Regex.Match(s, @"(?<title>.+?)(?<id>nm\d{3,})?$")).Where (m => m.Success).Select(m => new WebActor() { Title = m.Groups["title"].Value, Id = m.Groups["id"].Value}).ToList()
         }
 
         private List<string> CreditsReader(SQLiteDataReader reader, int idx)
@@ -86,7 +88,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 "SELECT m.idMovie, i.strTitle, i.iYear, i.fRating, i.runtime, i.IMDBID, i.strPlot, i.strPictureURL, i.strCredits, i.iswatched, r.stoptime, " + 
                     mp13Fields + mp117Fields +
                     "GROUP_CONCAT(p.strPath || f.strFilename, '|') AS fullpath, " +
-                    "GROUP_CONCAT(a.strActor, '|') AS actors, " +
+                    "GROUP_CONCAT(a.strActor || a.IMDBActorID, '|') AS actors, " +
                     (Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ?
                     "GROUP_CONCAT(u.strGroup, '|') AS groups,  " +
                     "GROUP_CONCAT(c.strCollection, '|') AS collections, " : string.Empty
