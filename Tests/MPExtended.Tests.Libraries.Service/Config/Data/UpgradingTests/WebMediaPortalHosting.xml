@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WebMediaPortalHosting>
+<hosting>
   <Port>8080</Port>
   
   <EnableTLS>false</EnableTLS>
   <PortTLS>44300</PortTLS>
-</WebMediaPortalHosting>
+</hosting>
