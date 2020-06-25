@@ -31,6 +31,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         private static IEnumerable<string> tvShowGenresCache;
 
         private static IEnumerable<string> movieCategoriesCache;
+        private static IEnumerable<string> movieCollectionsCache;
 
         private RouteData routeData;
 
@@ -83,6 +84,28 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 catch (Exception ex)
                 {
                     Log.Warn("Failed to load movie categories", ex);
+                    return new List<string>();
+                }
+            }
+        }
+
+        public IEnumerable<string> MovieCollections
+        {
+            get
+            {
+                if (movieCollectionsCache != null)
+                    return movieCollectionsCache;
+
+                try
+                {
+                    movieCollectionsCache = Connections.Current.MAS.GetMovieCollections(Settings.ActiveSettings.MovieProvider)
+                        .Select(x => x.Title)
+                        .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                    return movieCollectionsCache;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to load movie collections", ex);
                     return new List<string>();
                 }
             }

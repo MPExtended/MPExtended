@@ -22,13 +22,55 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebCollection: WebCategory, IArtwork
-    {
-        public IList<WebArtwork> Artwork { get; set; }
+  public class WebCollection : WebCategory, ITitleSortable, IArtwork
+  {
+    public IList<WebArtwork> Artwork { get; set; }
 
-        public WebCollection()
-        {
-            Artwork = new List<WebArtwork>();
-        }
+    public WebCollection()
+    {
+      Artwork = new List<WebArtwork>();
     }
+
+    public WebCollection(string title) : this()
+    {
+      Title = title;
+    }
+
+    public override string ToString()
+    {
+      return Title;
+    }
+
+    public override bool Equals(object obj)
+    {
+      WebCollection r = obj is string ? new WebCollection((string)obj) : obj as WebCollection;
+      return (object)r != null && this.Title == r.Title;
+    }
+
+    public override int GetHashCode()
+    {
+      return Title.GetHashCode();
+    }
+
+    public static bool operator ==(WebCollection a, WebCollection b)
+    {
+      return Object.ReferenceEquals(a, b) || (((object)a) != null && ((object)b) != null && a.Title == b.Title);
+    }
+
+    public static bool operator !=(WebCollection a, WebCollection b)
+    {
+      return !(a == b);
+    }
+
+    public static implicit operator WebCollection(string value)
+    {
+      return new WebCollection(value);
+    }
+
+    public static implicit operator string(WebCollection value)
+    {
+      return value.Title;
+    }
+
+  }
 }
