@@ -340,7 +340,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             });
         }
 
-        public IEnumerable<WebCategory> GetAllCollections()
+        public IEnumerable<WebCollection> GetAllCollections()
         {
             string sql = "SELECT strCollection FROM moviecollection WHERE idCollection in (SELECT idCollection FROM moviecollectionlinkmovie)";
             return new LazyQuery<WebCollection>(this, sql, new List<SQLFieldMapping>()
