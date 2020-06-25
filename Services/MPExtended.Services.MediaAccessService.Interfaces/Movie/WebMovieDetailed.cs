@@ -29,8 +29,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         {
             Directors = new List<string>();
             Writers = new List<string>();
-            Collections = new List<string>();
-            Groups = new List<string>();
             Studios = new List<string>();
         }
 
@@ -42,10 +40,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         // use ISO short name (en, nl, de, etc)
         public string Language { get; set; }
 
-        public IList<string> Collections { get; set; }
-        public IList<string> Groups { get; set; }
-
-        public string MPAARating { get; set; }
         public string MPAAText { get; set; }
         public string Awards { get; set; }
 
