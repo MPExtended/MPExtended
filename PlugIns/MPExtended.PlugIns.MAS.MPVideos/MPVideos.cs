@@ -303,24 +303,24 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     }
 
     public IEnumerable<WebMovieBasic> GetAllMovies()
-        {
-            return LoadMovies<WebMovieBasic>();
-        }
+    {
+        return LoadMovies<WebMovieBasic>();
+    }
 
-        public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
-        {
-            return LoadMovies<WebMovieDetailed>();
-        }
+    public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
+    {
+        return LoadMovies<WebMovieDetailed>();
+    }
 
-        public WebMovieBasic GetMovieBasicById(string movieId)
-        {
-            return LoadMovies<WebMovieBasic>().Where(x => x.Id == movieId).First();
-        }
+    public WebMovieBasic GetMovieBasicById(string movieId)
+    {
+       return LoadMovies<WebMovieBasic>().Where(x => x.Id == movieId).First();
+    }
 
-        public WebMovieDetailed GetMovieDetailedById(string movieId)
-        {
-            return LoadMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
-        }
+    public WebMovieDetailed GetMovieDetailedById(string movieId)
+    {
+       return LoadMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
+    }
 
         public IEnumerable<WebGenre> GetAllGenres()
         {
@@ -333,12 +333,17 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public IEnumerable<WebCategory> GetAllCategories()
         {
-            return new List<WebCategory>();
+            string sql = "SELECT strGroup, strGroupDescription  FROM usergroup WHERE idGroup in (SELECT idGroup FROM usergrouplinkmovie)";
+            return new LazyQuery<WebCategory>(this, sql, new List<SQLFieldMapping>()
+            {
+                new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString)
+                new SQLFieldMapping("strGroupDescription", "Description", DataReaders.ReadString)
+            });
         }
 
         public WebFileInfo GetFileInfo(string path)
         {
-            if (path.StartsWith("http://"))
+            if (path.StartsWith("http://") || path.StartsWith("https://"))
             {
                 return ArtworkRetriever.GetFileInfo(path);
             }
@@ -348,7 +353,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public Stream GetFile(string path)
         {
-            if (path.StartsWith("http://"))
+            if (path.StartsWith("http://") || path.StartsWith("https://"))
             {
                 return ArtworkRetriever.GetStream(path);
             }
