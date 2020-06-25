@@ -30,6 +30,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         private static IEnumerable<string> movieGenresCache;
         private static IEnumerable<string> tvShowGenresCache;
 
+        private static IEnumerable<string> movieCategoriesCache;
+
         private RouteData routeData;
 
         public MenuModel(RouteData routeData)
@@ -41,7 +43,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             get { return Configuration.WebMediaPortal.MusicLayout.ToString(); }
         }
-
+        
         public IEnumerable<string> MovieGenres
         {
             get
@@ -63,7 +65,29 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 }
             }
         }
+        
+        public IEnumerable<string> MovieCategories
+        {
+            get
+            {
+                if (movieCategoriesCache != null)
+                    return movieCategoriesCache;
 
+                try
+                {
+                    movieCategoriesCache = Connections.Current.MAS.GetMovieCategories(Settings.ActiveSettings.MovieProvider)
+                        .Select(x => x.Title)
+                        .ToList(); // Needed to force execution here, instead of outside the try/catch later on
+                    return movieCategoriesCache;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Failed to load movie categories", ex);
+                    return new List<string>();
+                }
+            }
+        }
+        
         public IEnumerable<string> TVShowGenres
         {
             get
@@ -85,7 +109,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 }
             }
         }
-
+        
         public bool IsActive(string controller)
         {
             return routeData.Values["controller"].ToString() == controller;
