@@ -167,6 +167,11 @@ namespace MPExtended.Services.MediaAccessService
       return MovieLibraries[provider].GetAllCategories().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
     }
 
+    public IList<WebCollection> GetMovieCollections(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    {
+      return MovieLibraries[provider].GetAllCollections().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie);
+    }
+
     public WebIntResult GetMovieCount(int? provider, string filter = null)
     {
       return MovieLibraries[provider].GetAllMovies().AsQueryable().Filter(filter).Count();

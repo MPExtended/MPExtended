@@ -24,28 +24,32 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors
+    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors, ICollectionSortable
     {
         public WebMovieBasic()
         {
             Genres = new List<string>();
             ExternalId = new List<WebExternalId>();
             Actors = new List<WebActor>();
+            Groups = new List<string>();
+            Collections = new List<WebCollection>();
         }
 
         public bool IsProtected { get; set; }
         public IList<string> Genres { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
         public IList<WebActor> Actors { get; set; }
+        public IList<string> Groups { get; set; }
+        public IList<WebCollection> Collections { get; set; }
 
         public int Year { get; set; }
         public float Rating { get; set; }
         public int Runtime { get; set; }
 
-        public bool Watched { get; set; }
+        public string MPAARating { get; set; }
 
+        public bool Watched { get; set; }
         public int TimesWatched { get; set; }
-  
         public string Stoptime { get; set; }
 
         public override WebMediaType Type 

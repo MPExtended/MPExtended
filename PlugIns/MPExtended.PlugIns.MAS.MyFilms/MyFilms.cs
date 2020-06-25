@@ -323,6 +323,11 @@ namespace MPExtended.PlugIns.MAS.MyFilms
       return new List<WebCategory>();
     }
 
+    public IEnumerable<WebCollection> GetAllCollections()
+    {
+      return new List<WebCollection>();
+    }
+
     public WebFileInfo GetFileInfo(string path)
     {
       if (path.StartsWith("http://"))

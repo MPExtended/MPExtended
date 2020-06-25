@@ -140,6 +140,16 @@ namespace MPExtended.Services.MediaAccessService
                 }).ToList();
             }
 
+            if (item is ICollectionSortable)
+            {
+                (item as ICollectionSortable).Collections = (item as ICollectionSortable).Collections.Select(x => new WebCollection()
+                {
+                    Id = x.Id,
+                    PID = item.PID,
+                    Title = x.Title
+                }).ToList();
+            }
+
             return item;
         }
     }
