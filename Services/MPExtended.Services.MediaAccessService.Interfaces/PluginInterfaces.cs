@@ -59,6 +59,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
+        IEnumerable<WebCollection> GetAllCollections();
         WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
         WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
   }
