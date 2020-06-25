@@ -31,6 +31,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
             Genres = new List<string>();
             ExternalId = new List<WebExternalId>();
             Actors = new List<WebActor>();
+            Groups = new List<string>();
             Collections = new List<WebCollection>();
         }
 
@@ -38,16 +39,17 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public IList<string> Genres { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
         public IList<WebActor> Actors { get; set; }
+        public IList<string> Groups { get; set; }
         public IList<WebCollection> Collections { get; set; }
 
         public int Year { get; set; }
         public float Rating { get; set; }
         public int Runtime { get; set; }
 
-        public bool Watched { get; set; }
+        public string MPAARating { get; set; }
 
+        public bool Watched { get; set; }
         public int TimesWatched { get; set; }
-  
         public string Stoptime { get; set; }
 
         public override WebMediaType Type 
