@@ -35,6 +35,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     {
         IList<WebCategory> Categories { get; set; }
     }
+    
+    public interface ICollectionSortable
+    {
+        IList<WebCollection> Collections { get; set; }
+    }
 
     public interface IMusicTrackNumberSortable 
     {
