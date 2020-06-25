@@ -86,10 +86,12 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         [MergeListReader]
         private List<WebCollection> CollectionReader(SQLiteDataReader reader, int idx, object site)
         {
-            return (DataReaders.ReadStringAsList(reader, idx) as List<string>).Select(x => new WebCollection()
+            List<WebCollection> collections = DataReaders.ReadStringAsList(reader, idx) as List<string>).Select(x => new WebCollection()
             {
                 Title = x,
-            }, delegate (WebCollection item)
+            }).ToList();
+            
+            foreach (WebCollection item in collections)
             {
                 // Poster
                 int i = 0;
@@ -155,8 +157,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                       });
                     }
                 }
-                return item;
-            }).ToList();        
+            }
+           return collections;
         }
         
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
@@ -208,7 +210,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "language", "Language", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("groups", "Groups", DataReaders.ReadPipeList),
-                new SQLFieldMapping("", "collections", "Collections", CollectionReader),
+                new SQLFieldMapping("collections", "Collections", CollectionReader),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32),
                 new SQLFieldMapping("i", "IMDBID", "ExternalId", ExternalIdReader, "IMDB"),
