@@ -31,7 +31,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
             Genres = new List<string>();
             ExternalId = new List<WebExternalId>();
             Actors = new List<WebActor>();
-            Categories = new List<WebCategory>();
             Collections = new List<WebCollection>();
         }
 
@@ -39,7 +38,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public IList<string> Genres { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
         public IList<WebActor> Actors { get; set; }
-        public IList<WebCategory> Categories { get; set; }
         public IList<WebCollection> Collections { get; set; }
 
         public int Year { get; set; }
