@@ -152,7 +152,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             });
         }
 
-    public IEnumerable<WebMovieBasic> GetAllMovies()
+        public IEnumerable<WebMovieBasic> GetAllMovies()
         {
             return GetAllMovies<WebMovieBasic>();
         }
@@ -185,11 +185,16 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 .Select(x => new WebGenre() { Title = x });
         }
 
-    public IEnumerable<WebCategory> GetAllCategories()
+        public IEnumerable<WebCategory> GetAllCategories()
         {
             return new List<WebCategory>();
         }
-
+        
+        public IEnumerable<WebCollection> GetAllCollections()
+        {
+            return new List<WebCollection>();
+        }
+            
         public WebFileInfo GetFileInfo(string path)
         {
             return new WebFileInfo(PathUtil.StripFileProtocolPrefix(path));
