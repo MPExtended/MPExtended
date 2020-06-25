@@ -24,7 +24,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors, ICategorySortable, ICollectionSortable
+    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors, ICollectionSortable
     {
         public WebMovieBasic()
         {
