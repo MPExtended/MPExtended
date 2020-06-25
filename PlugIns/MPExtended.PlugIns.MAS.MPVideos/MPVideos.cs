@@ -336,7 +336,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             string sql = "SELECT strGroup, strGroupDescription  FROM usergroup WHERE idGroup in (SELECT idGroup FROM usergrouplinkmovie)";
             return new LazyQuery<WebCategory>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString)
+                new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("strGroupDescription", "Description", DataReaders.ReadString)
             });
         }
