@@ -346,7 +346,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             return new LazyQuery<WebCollection>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString)
-            }, delegate (T item)
+            }, delegate (WebCollection item)
             {
               if (item is WebCollection)
               {
