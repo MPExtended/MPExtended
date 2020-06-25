@@ -24,19 +24,23 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors
+    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors, ICategorySortable, ICollectionSortable
     {
         public WebMovieBasic()
         {
             Genres = new List<string>();
             ExternalId = new List<WebExternalId>();
             Actors = new List<WebActor>();
+            Categories = new List<WebCategory>();
+            Collections = new List<WebCollection>();
         }
 
         public bool IsProtected { get; set; }
         public IList<string> Genres { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
         public IList<WebActor> Actors { get; set; }
+        public IList<WebCategory> Categories { get; set; }
+        public IList<WebCollection> Collections { get; set; }
 
         public int Year { get; set; }
         public float Rating { get; set; }
