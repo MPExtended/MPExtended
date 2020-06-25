@@ -208,7 +208,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("i", "language", "Language", DataReaders.ReadString),
                 new SQLFieldMapping("i", "strDirector", "Directors", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("groups", "Groups", DataReaders.ReadPipeList),
-                new SQLFieldMapping("collections", "Collections", CollectionReader),
+                new SQLFieldMapping("", "collections", "Collections", CollectionReader),
                 new SQLFieldMapping("i", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("u", "timeswatched", "TimesWatched", DataReaders.ReadInt32),
                 new SQLFieldMapping("i", "IMDBID", "ExternalId", ExternalIdReader, "IMDB"),
