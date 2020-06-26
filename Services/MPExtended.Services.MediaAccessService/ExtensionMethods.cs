@@ -206,6 +206,7 @@ namespace MPExtended.Services.MediaAccessService
                 case WebMediaType.File:
                     return ProviderType.Filesystem;
                 case WebMediaType.Movie:
+                case WebMediaType.Collection:
                     return ProviderType.Movie;
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicArtist:
