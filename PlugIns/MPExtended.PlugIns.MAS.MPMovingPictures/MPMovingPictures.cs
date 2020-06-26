@@ -171,6 +171,11 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
         {
             return GetAllMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
         }
+        
+        public WebCollection GetCollectionById(string title)
+        {
+          return new WebCollection();
+        }
 
         public IEnumerable<WebGenre> GetAllGenres()
         {
@@ -207,6 +212,15 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
 
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
+            if (type == WebMediaType.Collection)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "myvideos collection" },
+                    { "Id", GetCollectionById(id).Id }
+                };            
+            }        
+        
             return new WebDictionary<string>()
             {
                 { "Type", "moving pictures" },
