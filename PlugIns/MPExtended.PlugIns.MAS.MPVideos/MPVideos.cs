@@ -440,7 +440,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString)
             }, delegate (WebCollection item)
             {
-                return item.Artwork = GetArtworkForCollection(item.Title);
+                item.Artwork = GetArtworkForCollection(item.Title);
+                return item;
             });
         }
 
