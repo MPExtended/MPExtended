@@ -40,6 +40,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Radio = 14,
         [EnumMember]
-        Url = 15
+        Url = 15,
+        [EnumMember]
+        Collection = 16
     }
 }
