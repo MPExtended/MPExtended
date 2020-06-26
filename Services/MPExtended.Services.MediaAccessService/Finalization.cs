@@ -117,7 +117,8 @@ namespace MPExtended.Services.MediaAccessService
                 (item as IActors).Actors = (item as IActors).Actors.Select(x => new WebActor()
                 {
                     PID = item.PID,
-                    Title = x.Title
+                    Title = x.Title,
+                    IMDBId = x.IMBDId
                 }).ToList();
             }
 
