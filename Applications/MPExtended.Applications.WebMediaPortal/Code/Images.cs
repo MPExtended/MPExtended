@@ -104,6 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.FileSystemProvider;
                     break;
                 case WebMediaType.Movie:
+                case WebMediaType.Collection:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.MovieProvider;
                     break;
