@@ -239,7 +239,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         [MergeListReader]
         private List<WebCollection> CollectionReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<WebCollection>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebCollection() { Title = x, Artwork = GetArtworkForCollection(x) }).ToList();
+            return ((IList<WebCollection>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebCollection() { Id = x, Title = x, Artwork = GetArtworkForCollection(x) }).ToList();
         }
         
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
@@ -412,7 +412,12 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     {
        return LoadMovies<WebMovieDetailed>().Where(x => x.Id == movieId).First();
     }
-
+    
+    public WebCollection GetCollectionById(string title)
+    {
+       return GetAllCollections().Where(x => x.Id == title).First();
+    }
+        
         public IEnumerable<WebGenre> GetAllGenres()
         {
             string sql = "SELECT strGenre FROM genre WHERE idGenre in (SELECT idGenre FROM genrelinkmovie)";
@@ -440,6 +445,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString)
             }, delegate (WebCollection item)
             {
+                item.Id = item.Title;
                 item.Artwork = GetArtworkForCollection(item.Title);
                 return item;
             });
@@ -517,6 +523,15 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
+            if (type == WebMediaType.Collection)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "myvideos collection" },
+                    { "Id", GetCollectionById(id).Id }
+                };            
+            }
+            
             return new WebDictionary<string>()
             {
                 { "Type", "myvideos" },
