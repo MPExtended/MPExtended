@@ -143,7 +143,12 @@ namespace MPExtended.PlugIns.MAS.MyFilms
           .Where(x => x != null)
           .First();
     }
-
+    
+    public WebCollection GetCollectionById(string title)
+    {
+       return new WebCollection();
+    }
+    
     private WebMovieBasic NodeToMovieBasic(XElement item)
     {
       return NodeToMovie<WebMovieBasic>(item);
@@ -350,7 +355,16 @@ namespace MPExtended.PlugIns.MAS.MyFilms
 
     public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
     {
-      return new WebDictionary<string>()
+         if (type == WebMediaType.Collection)
+         {
+             return new WebDictionary<string>()
+             {
+                 { "Type", "my films collection" },
+                 { "Id", GetCollectionById(id).Id }
+              };            
+         }
+         
+         return new WebDictionary<string>()
             {
                 { "Type", "my films" },
                 { "Id", id }
