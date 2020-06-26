@@ -57,6 +57,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
       WebCollection webCollection = new WebCollection();
       webCollection.Title = title;
+      webCollection.Type = WebMediaType.Collection;
 
       // Poster
       int i = 0;
@@ -431,71 +432,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString)
             }, delegate (WebCollection item)
             {
-                // Poster
-                int i = 0;
-                var files = new string[] {
-                        PathUtil.StripInvalidCharacters(string.Format("{0}{1}", item.Title, "L.jpg"), '_'),
-                        PathUtil.StripInvalidCharacters(string.Format("{0}{1}", item.Title, ".jpg"), '_')
-                }
-                  .Select(x => Path.Combine(configuration["cover"], "Collection", x))
-                  .Where(x => File.Exists(x))
-                  .Distinct();
-                if (files != null && files.Count() > 0)
-                {
-                  item.Artwork.Clear();
-                }
-                foreach (string file in files)
-                {
-                  item.Artwork.Add(new WebArtworkDetailed()
-                  {
-                    Type = WebFileType.Cover,
-                    Offset = i++,
-                    Path = file,
-                    Rating = 1,
-                    Id = file.GetHashCode().ToString(),
-                    Filetype = Path.GetExtension(file).Substring(1)
-                  });
-                }
-                // Backdrops
-                i = 0;
-                string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Skin Fanart", "Scraper", "Movies");
-                if (Directory.Exists(thumbfolder))
-                {
-                  files = Directory.GetFiles(thumbfolder, string.Format("{0}{{*}}.jpg", item.Title))
-                    .Where(x => File.Exists(x))
-                    .Distinct();
-                  foreach (string file in files)
-                  {
-                    item.Artwork.Add(new WebArtworkDetailed()
-                    {
-                      Type = WebFileType.Backdrop,
-                      Offset = i++,
-                      Path = file,
-                      Rating = 1,
-                      Id = file.GetHashCode().ToString(),
-                      Filetype = Path.GetExtension(file).Substring(1)
-                    });
-                  }
-                }
-                // ClearArt
-                string logofolder = Path.Combine(fanartconfiguration["thumb"], "ClearArt", "MoviesCollections");
-                if (Directory.Exists(thumbfolder))
-                {
-                    string file = Path.Combine(logofolder, string.Format("{0}.png", item.Title));
-                    if (File.Exists(file))
-                    {
-                      item.Artwork.Add(new WebArtworkDetailed()
-                      {
-                        Type = WebFileType.Logo,
-                        Offset = 0,
-                        Path = file,
-                        Rating = 1,
-                        Id = file.GetHashCode().ToString(),
-                        Filetype = Path.GetExtension(file).Substring(1)
-                      });
-                    }
-                }
-                return item;
+                return NewCollection(item.Title);
             });
         }
 
