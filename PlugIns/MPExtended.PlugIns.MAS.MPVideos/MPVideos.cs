@@ -59,8 +59,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
           // Poster
           int i = 0;
           var files = new string[] {
-                            PathUtil.StripInvalidCharacters(string.Format("{0}{1}", webCollection.Title, "L.jpg"), '_'),
-                            PathUtil.StripInvalidCharacters(string.Format("{0}{1}", webCollection.Title, ".jpg"), '_')
+                            PathUtil.StripInvalidCharacters(string.Format("{0}{1}", title, "L.jpg"), '_'),
+                            PathUtil.StripInvalidCharacters(string.Format("{0}{1}", title, ".jpg"), '_')
                     }
             .Select(x => Path.Combine(configuration["cover"], "Collection", x))
             .Where(x => File.Exists(x))
@@ -83,7 +83,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
           string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Skin Fanart", "Scraper", "Movies");
           if (Directory.Exists(thumbfolder))
           {
-            files = Directory.GetFiles(thumbfolder, PathUtil.StripInvalidCharacters(string.Format("{0}{{*}}.jpg", webCollection.Title), '_'))
+            files = Directory.GetFiles(thumbfolder, PathUtil.StripInvalidCharacters(string.Format("{0}{{*}}.jpg", title), '_'))
               .Where(x => File.Exists(x))
               .Distinct();
             foreach (string file in files)
@@ -104,7 +104,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
           string logofolder = Path.Combine(fanartconfiguration["thumb"], "ClearArt", "MoviesCollections");
           if (Directory.Exists(thumbfolder))
           {
-            string file = Path.Combine(logofolder, PathUtil.StripInvalidCharacters(string.Format("{0}.png", webCollection.Title), '_'));
+            string file = Path.Combine(logofolder, PathUtil.StripInvalidCharacters(string.Format("{0}.png", title), '_'));
             if (File.Exists(file))
             {
               artwork.Add(new WebArtworkDetailed()
