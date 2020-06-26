@@ -54,6 +54,7 @@ namespace MPExtended.Services.MediaAccessService
       switch (type)
       {
         case WebMediaType.Movie:
+        case WebMediaType.Collection:
           return MovieLibraries[provider];
         case WebMediaType.MusicTrack:
         case WebMediaType.MusicAlbum:
