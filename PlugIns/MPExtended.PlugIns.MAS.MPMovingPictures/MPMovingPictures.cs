@@ -216,7 +216,7 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             {
                 return new WebDictionary<string>()
                 {
-                    { "Type", "myvideos collection" },
+                    { "Type", "moving pictures collection" },
                     { "Id", GetCollectionById(id).Id }
                 };            
             }        
