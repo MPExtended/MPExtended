@@ -126,11 +126,6 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         {
           var artwork = new List<WebArtwork>();
 
-          foreach(KeyValuePair<string, string> entry in configuration)
-          {
-            Log.Debug("*** {0} - {1} - {2}", item.Title, entry.Key, entry.Value);
-          }
-
           // Poster
           int i = 0;
           var files = new string[] {
