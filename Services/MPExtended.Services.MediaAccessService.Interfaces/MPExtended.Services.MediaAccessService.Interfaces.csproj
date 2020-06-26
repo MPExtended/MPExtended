@@ -59,6 +59,7 @@
     <Compile Include="PluginInterfaces.cs" />
     <Compile Include="Movie\WebMovieBasic.cs" />
     <Compile Include="Movie\WebMovieDetailed.cs" />
+    <Compile Include="Movie\WebCollection.cs" />
     <Compile Include="Music\WebMusicAlbumBasic.cs" />
     <Compile Include="Music\WebMusicArtistBasic.cs" />
     <Compile Include="Music\WebMusicTrackBasic.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />
-    <Compile Include="WebCollection.cs" />
     <Compile Include="Picture\WebPictureDetailed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebExternalId.cs" />

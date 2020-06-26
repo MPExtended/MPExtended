@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPExtended.Services.MediaAccessService.Interfaces
+namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
   public class WebCollection : WebObject, ITitleSortable, IArtwork
   {
