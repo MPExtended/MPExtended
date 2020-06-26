@@ -69,6 +69,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             {
                 case WebMediaType.Movie:
                     return Url.Action("Details", "MovieLibrary", new { movie = result.Id });
+                case WebMediaType.Collection:
+                    return Url.Action("Collection", "MovieLibrary", new { collection = result.Id });
                 case WebMediaType.MusicAlbum:
                     return Url.Action("Album", "MusicLibrary", new { album = result.Id });
                 case WebMediaType.MusicArtist:
