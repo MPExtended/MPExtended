@@ -42,6 +42,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         StartTime = 17,
         [EnumMember]
-        NaturalTitle = 18
+        NaturalTitle = 18,
+        [EnumMember]
+        Collection = 19
     }
 }
