@@ -122,6 +122,9 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult SetWathcedStatus(int? provider, string id, Boolean isWatched);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebCollection GetCollectionById(int? provider, string id);
     #endregion
 
     #region Music
