@@ -247,6 +247,11 @@ namespace MPExtended.Services.MediaAccessService
     {
       return MovieLibraries[provider].SetWathcedStatus(id, isWatched);
     }
+    
+    public WebCollection GetCollectionById(int? provider, string id)
+    {
+      return MovieLibraries[provider].GetCollectionById(id).Finalize(provider, ProviderType.Movie);
+    }
     #endregion
 
     #region Music
