@@ -24,6 +24,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 {
   public class WebCollection : WebObject, ITitleSortable, IArtwork
   {
+    public string Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public IList<WebArtwork> Artwork { get; set; }
