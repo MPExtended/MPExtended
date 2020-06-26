@@ -239,7 +239,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         [MergeListReader]
         private List<WebCollection> CollectionReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<WebCollection>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebCollection() { Id = x, Title = x, Artwork = GetArtworkForCollection(x) }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebCollection() { Id = x, Title = x, Artwork = GetArtworkForCollection(x) }).ToList();
         }
         
         private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
