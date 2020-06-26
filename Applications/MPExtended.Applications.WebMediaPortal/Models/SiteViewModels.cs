@@ -98,7 +98,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
                 try
                 {
-                    movieCollectionsCache = Connections.Current.MAS.GetMovieCollections(Settings.ActiveSettings.MovieProvider)
+                    movieCollectionsCache = Connections.Current.MAS.GetCollections(Settings.ActiveSettings.MovieProvider)
                         .Select(x => x.Title)
                         .ToList(); // Needed to force execution here, instead of outside the try/catch later on
                     return movieCollectionsCache;

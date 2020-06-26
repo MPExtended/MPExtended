@@ -17,8 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
@@ -75,5 +74,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
       return value.Title;
     }
 
+    public WebMediaType Type
+    {
+      get
+      {
+        return WebMediaType.Collection;
+      }
+    }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MPExtended.Services.Common.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public int Year { get; set; }
         public float Rating { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
+
+        public WebMediaType Type 
+        {
+            get
+            {
+                return WebMediaType.MusicAlbum;
+            }
+        }
 
         public override string ToString()
         {

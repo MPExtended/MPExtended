@@ -59,10 +59,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMovieDetailed GetMovieDetailedById(string movieId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
+        WebCollection GetCollectionById(string title);
         IEnumerable<WebCollection> GetAllCollections();
         WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
         WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
-        WebCollection GetCollectionById(string title);
   }
 
     public interface ITVShowLibrary : ILibrary

@@ -100,10 +100,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        IList<WebCollection> GetMovieCollections(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
-
-        [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebActor> GetMovieActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
 
         [OperationContract]
@@ -125,9 +121,17 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebCollection GetCollectionById(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebCollection> GetCollections(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebCollection> GetCollectionsByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
     #endregion
 
-    #region Music
+        #region Music
     [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebIntResult GetMusicAlbumCount(int? provider, string filter = null);
@@ -512,7 +516,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         Stream RetrieveFile(int? provider, WebMediaType mediatype, WebFileType filetype, string id, int offset);
     #endregion
 
-    #region Playlist
+        #region Playlist
     [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPlaylist> GetPlaylists(int? provider, string filter = null);
