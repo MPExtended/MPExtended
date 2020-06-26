@@ -22,8 +22,10 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-  public class WebCollection : WebCategory, ITitleSortable, IArtwork
+  public class WebCollection : WebObject, ITitleSortable, IArtwork
   {
+    public string Title { get; set; }
+    public string Description { get; set; }
     public IList<WebArtwork> Artwork { get; set; }
 
     public WebCollection()
