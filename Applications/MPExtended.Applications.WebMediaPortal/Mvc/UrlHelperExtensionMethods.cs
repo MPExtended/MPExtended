@@ -69,6 +69,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             {
                 case WebMediaType.Movie:
                     return actionMethod("Cover", "MovieLibrary", new RouteValueDictionary(new { movie = id }));
+                case WebMediaType.Collection:
+                    return actionMethod("Collection", "MovieLibrary", new RouteValueDictionary(new { collection = id }));
                 case WebMediaType.MusicAlbum:
                     return actionMethod("AlbumImage", "MusicLibrary", new RouteValueDictionary(new { album = id }));
                 case WebMediaType.MusicArtist:
