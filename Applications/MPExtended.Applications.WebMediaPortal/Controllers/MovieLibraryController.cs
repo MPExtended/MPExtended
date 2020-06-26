@@ -80,5 +80,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         {
           return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Logo, width, height, "Images/default/movie-logo.png");
         }
+        
+        public ActionResult CollectionCover(string collection, int width = 0, int height = 0)
+        {
+          return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Cover, width, height, "Images/default/collection-logo.png");
+        }
   }
 }
