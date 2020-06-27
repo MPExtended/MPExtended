@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,13 +16,12 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using MPExtended.Libraries.Service;
-using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
+using MPExtended.Services.MediaAccessService.Interfaces.Music;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -43,6 +43,9 @@ namespace MPExtended.Services.MediaAccessService
             bool isArtwork = operList.First() is IArtwork;
             bool isActors = operList.First() is IActors;
             bool isGuestStars = operList.First() is IGuestStars;
+            bool isCollections = operList.First() is ICollections;
+            bool isArtists = operList.First() is IArtists;
+            bool isAlbumArtist = operList.First() is IAlbumArtist;
 
             List<T> retlist = new List<T>();
             foreach (T item in operList)
@@ -80,6 +83,68 @@ namespace MPExtended.Services.MediaAccessService
                         PID = realProvider,
                         Title = x.Title
                     }).ToList();
+                }
+
+                if (isCollections)
+                {
+                    (item as ICollections).Collections = (item as ICollections).Collections.Select(x => new WebCollection()
+                    {
+                        PID = realProvider,
+                        Id = x.Id,
+                        Title = x.Title,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList()
+                    }).ToList();
+                }
+
+                if (isArtists)
+                {
+                    (item as IArtists).Artists = (item as IArtists).Artists.Select(x => new WebMusicArtistBasic()
+                    {
+                        PID = realProvider,
+                        Id = x.Id,
+                        Title = x.Title,
+                        HasAlbums = x.HasAlbums,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList()
+                    }).ToList();
+                }
+
+                if (isAlbumArtist)
+                {
+                    (item as IAlbumArtist).AlbumArtistObject = new WebMusicArtistBasic()
+                    {
+                        PID = item.PID,
+                        Id = (item as IAlbumArtist).AlbumArtistObject.Id,
+                        Title = (item as IAlbumArtist).AlbumArtistObject.Title,
+                        HasAlbums = (item as IAlbumArtist).AlbumArtistObject.HasAlbums,
+                        Artwork = (item as IAlbumArtist).AlbumArtistObject.Artwork.Select(x => new WebArtwork()
+                        {
+                          Offset = x.Offset,
+                          Type = x.Type,
+                          Filetype = x.Filetype,
+                          Id = x.Id,
+                          Rating = x.Rating
+                        })
+                          .OrderByDescending(x => x.Rating)
+                          .ToList()
+                    };
                 }
 
                 retlist.Add(item);
@@ -136,10 +201,72 @@ namespace MPExtended.Services.MediaAccessService
             {
                 (item as ICategorySortable).Categories = (item as ICategorySortable).Categories.Select(x => new WebCategory()
                 {
-                    Id = x.Id,
                     PID = item.PID,
+                    Id = x.Id,
                     Title = x.Title
                 }).ToList();
+            }
+
+            if (item is ICollections)
+            {
+                (item as ICollections).Collections = (item as ICollections).Collections.Select(x => new WebCollection()
+                {
+                    PID = item.PID,
+                    Id = x.Id,
+                    Title = x.Title,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                      Offset = y.Offset,
+                      Type = y.Type,
+                      Filetype = y.Filetype,
+                      Id = y.Id,
+                      Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList()
+                }).ToList();
+            }
+
+            if (item is IArtists)
+            {
+                (item as IArtists).Artists = (item as IArtists).Artists.Select(x => new WebMusicArtistBasic()
+                {
+                    PID = item.PID,
+                    Id = x.Id,
+                    Title = x.Title,
+                    HasAlbums = x.HasAlbums,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                      Offset = y.Offset,
+                      Type = y.Type,
+                      Filetype = y.Filetype,
+                      Id = y.Id,
+                      Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList()
+                }).ToList();
+            }
+
+            if (item is IAlbumArtist)
+            {
+                (item as IAlbumArtist).AlbumArtistObject = new WebMusicArtistBasic()
+                {
+                    PID = item.PID,
+                    Id = (item as IAlbumArtist).AlbumArtistObject.Id,
+                    Title = (item as IAlbumArtist).AlbumArtistObject.Title,
+                    HasAlbums = (item as IAlbumArtist).AlbumArtistObject.HasAlbums,
+                    Artwork = (item as IAlbumArtist).AlbumArtistObject.Artwork.Select(x => new WebArtwork()
+                    {
+                      Offset = x.Offset,
+                      Type = x.Type,
+                      Filetype = x.Filetype,
+                      Id = x.Id,
+                      Rating = x.Rating
+                    })
+                    .OrderByDescending(x => x.Rating)
+                    .ToList()
+                };
             }
 
             return item;
