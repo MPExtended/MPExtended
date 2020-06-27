@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 HttpContext.Current.Response.Cache.SetETag(String.Format("\"{0}\"", etag));
         }
 
-        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null, int offset = -1)
         {
             IStreamingService service;
             int? provider = null;
@@ -134,7 +134,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
             }
 
             string etag = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", mediaType, provider, id, artworkType, maxWidth, maxHeight);
-            return ReturnFromService(service, () => service.GetArtworkResized(mediaType, provider, id, artworkType, -1, maxWidth, maxHeight), defaultFile, etag);
+            return ReturnFromService(service, () => service.GetArtworkResized(mediaType, provider, id, artworkType, offset, maxWidth, maxHeight), defaultFile, etag);
         }
 
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)

@@ -44,5 +44,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public string Awards { get; set; }
 
         public IList<string> Studios { get; set; }
+
+        public int FanartCount { get; set; }
   }
 }

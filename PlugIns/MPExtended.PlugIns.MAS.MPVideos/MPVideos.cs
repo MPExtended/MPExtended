@@ -307,6 +307,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
               {
                 item.Artwork = GetArtworkForMovie(item);
               }
+              if (item is WebMovieDetailed)
+              {
+                (item as WebMovieDetailed).FanartCount = item.Artwork.Where(x => x.Type == WebFileType.Backdrop).Count();
+              }
               return item;
             });
         }
