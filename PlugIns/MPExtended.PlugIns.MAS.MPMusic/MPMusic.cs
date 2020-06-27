@@ -57,7 +57,8 @@ namespace MPExtended.PlugIns.MAS.MPMusic
             Dictionary<string, WebMusicArtistBasic> artists = null;
             Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>> artwork = new Dictionary<Tuple<string, string>, IList<WebArtworkDetailed>>();
 
-            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating " +
+            string sql = "SELECT idTrack, strAlbumArtist, strAlbum, strArtist, iTrack, strTitle, strPath, iDuration, iYear, strGenre, iRating, iDisc, " +
+                         "CASE WHEN TRIM(strFullCodec) = '' THEN strFileType ELSE strFullCodec END AS Codec " +
                          "FROM tracks t " +
                          "WHERE %where";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
@@ -75,7 +76,9 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("t", "iYear", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "iDuration", "Duration", DataReaders.ReadInt32),
                 new SQLFieldMapping("t", "iRating", "Rating", DataReaders.ReadInt32),
-                new SQLFieldMapping("t", "dateAdded", "DateAdded", DataReaders.ReadDateTime)
+                new SQLFieldMapping("t", "dateAdded", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("t", "iDisc", "DiscNumber", DataReaders.ReadInt32),
+                new SQLFieldMapping("t", "Codec", "Codec", DataReaders.ReadString)
             }, delegate(T item)
             {
                 if (item is WebMusicTrackDetailed)
@@ -154,10 +157,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                             "GROUP_CONCAT(t.strArtist, '|') AS artists, GROUP_CONCAT(t.strGenre, '|') AS genre, GROUP_CONCAT(t.strComposer, '|') AS composer, " +
                             "MIN(t.dateAdded) AS date, " +
                             "CASE WHEN i.iYear ISNULL THEN MIN(t.iYear) ELSE i.iYear END AS year, " +
-                            "MAX(i.iRating) AS rating " +
+                            "MAX(i.iRating) AS rating, " +
+                            "CASE WHEN TRIM(strFullCodec) = '' THEN strFileType ELSE strFullCodec END AS Codec " +
                          "FROM tracks t " +
                          "LEFT JOIN albuminfo i ON t.strAlbum = i.strAlbum AND t.strArtist LIKE '%' || i.strArtist || '%' " +
-                         "GROUP BY t.strAlbum, t.strAlbumArtist " +
+                         "GROUP BY t.strAlbum, t.strAlbumArtist, t.strFileType " +
                          "HAVING %where ";
             return new LazyQuery<WebMusicAlbumBasic>(this, sql, new List<SQLFieldMapping>()
             {
@@ -172,8 +176,35 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("", "date", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("", "year", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "rating", "Rating", DataReaders.ReadInt32),
+                new SQLFieldMapping("", "Codec", "Codec", DataReaders.ReadString),
             }, delegate(WebMusicAlbumBasic album)
             {
+                if (!string.IsNullOrEmpty(album.AlbumArtist))
+                {
+                    string albumArtist = album.AlbumArtist.Trim('|').Trim();
+                    int i = 0;
+                    string[] filenames = new string[] {
+                        PathUtil.StripInvalidCharacters(albumArtist + "-" + album.Title + "L.jpg", '_'),
+                        PathUtil.StripInvalidCharacters(albumArtist + "-" + album.Title + ".jpg", '_')
+                    };
+                    foreach (string file in filenames)
+                    {
+                        string path = Path.Combine(configuration["cover"], "Albums", file);
+                        if (File.Exists(path))
+                        {
+                            album.Artwork.Add(new WebArtworkDetailed()
+                            {
+                                Type = WebFileType.Cover,
+                                Offset = i++,
+                                Path = path,
+                                Rating = 1,
+                                Id = path.GetHashCode().ToString(),
+                                Filetype = Path.GetExtension(path).Substring(1)
+                            });
+                        }
+                    }
+                }
+
                 if (album.Artists.Count() > 0)
                 {
                     int i = 0;

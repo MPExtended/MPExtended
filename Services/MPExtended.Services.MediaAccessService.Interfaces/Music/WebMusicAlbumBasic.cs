@@ -48,6 +48,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public int Year { get; set; }
         public float Rating { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
+        public string Codec { get; set; }
 
         public WebMediaType Type 
         {

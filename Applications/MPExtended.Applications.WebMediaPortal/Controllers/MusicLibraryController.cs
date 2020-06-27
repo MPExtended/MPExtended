@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -67,7 +68,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             });
         }
 
-        public ActionResult Album(string album)
+        public ActionResult Album(string album, string codec = null)
         {
             var albumObj = Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
             if (albumObj == null)
@@ -76,7 +77,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var model = new AlbumViewModel()
             {
                 Album = albumObj,
-                Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title))
+                Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title) && string.IsNullOrEmpty(codec) ? true : x.Codec == codec)
             };
 
             return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
