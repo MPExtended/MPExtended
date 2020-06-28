@@ -503,4 +503,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Tagline" xml:space="preserve">
     <value>Tagline</value>
   </data>
+  <data name="Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
 </root>

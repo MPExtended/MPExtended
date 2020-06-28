@@ -38,7 +38,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Availability = availabilityModel;
         }
 
-        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count)
+        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count, bool unwatched = false)
         {
             try
             {
@@ -80,8 +80,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<TVEpisodeViewModel> GetLastAddedTVEpisodes(int count)
-        {
+        public IEnumerable<TVEpisodeViewModel> GetLastAddedTVEpisodes(int count, bool unwatched = false)
+    {
             try
             {
                 return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
@@ -94,8 +94,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<TVEpisodeViewModel> GetLastAiredTVEpisodes(int count)
-        {
+        public IEnumerable<TVEpisodeViewModel> GetLastAiredTVEpisodes(int count, bool unwatched = false)
+    {
             try
             {
                 return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.TVDateAired, order: WebSortOrder.Desc)
