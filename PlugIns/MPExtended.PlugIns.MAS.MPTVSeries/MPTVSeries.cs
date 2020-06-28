@@ -1,6 +1,7 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// 
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+//  
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 2 of the License, or
@@ -73,64 +74,64 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return GetAllTVShows<WebTVShowBasic>().Where(x => x.Id == seriesId).First();
         }
 
-        private LazyQuery<T> GetAllTVShows<T>() where T : WebTVShowBasic, new()
-        {
-            /* In the beginning, this code was written and it was simple, and everything was good. Then, someone deleted their local files, and the code
-             * broke. It was fixed by ignoring all episodes that don't have local files (INNER JOIN local_episodes), and requiring all shows to have 
-             * local files (s.HasLocalFiles = 1), and everything was good again (commit 76191b6).
-             * 
-             * Then, people started having more exotic databases, and this proved broken too. There were two apparant problems:
-             * - The HasLocalFiles flag doesn't work the way we expected it to work. There were episodes for shows with HasLocalFiles = 0 is returned from
-             *   the GetAllEpisodes() method below, even though that one still has the INNER JOIN on local_episodes. This caused problems with clients who
-             *   rightfully expected the show for an episode to exist. 
-             * - Some users wanted to have shows without any local files showing up in their WebMediaPortal. Don't ask wny.
-             * So, the requirement for s.HasLocalFiles = 1 was dropped (commit 926841b), and everything was good again.
-             * 
-             * But it wasn't good enough. People deleted shows from their databases, and people started complaining again: their deleted shows were being
-             * shown in WebMediaPortal. The obvious solution would be to require s.HasLocalFiles = 1 again, but the world isn't simple anymore.
-             * 
-             * So, what we're doing is:
-             * - We completely ignore all flags we encounter in the online_series table. They may be right, they may be wrong, they may be misnamed or they
-             *   may be obsolete, I've no idea. We'll ignore them so that we don't turn insane. 
-             * - For loading the number of (unwatched) episodes, we always use a subquery that queries the online_episodes table with an INNER JOIN on the
-             *   local_episodes table. This was actually added somewhere in the middle of the story above, because MP-TVSeries counted episodes without an
-             *   entry in local_episodes as an unwatched episode too. That isn't directly problematic, but since we ignore those episodes, the episode count
-             *   was bigger than the number of episodes returned from GetAllEpisodes(). That confused some clients, and it didn't make any sense at all.
-             * - We don't return any shows or seasons that don't have any episodes using that method. That implies that we don't support seasons or shows 
-             *   without any local episodes.
-             * - We hope and pray that SQLite is smart enough to optimize the subquery and doesn't execute it for each show. 
-             * 
-             * And everything is good again. For now.
-             */
-            string sql = 
-                    "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, STRFTIME('%Y', s.FirstAired) AS year, s.Actors, s.Rating, s.ContentRating, " +
-                        "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
-                        "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, f.fanart_list, " +
-                        "SUM(c.episodes) AS episodes, SUM(c.unwatched) AS unwatched, COUNT(c.SeasonIndex) AS seasons " + 
-                    "FROM online_series AS s " +
-                    "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 AND l.DuplicateLocalName = 0 " +
-                    "LEFT JOIN (" +
-                            // this subquery is so ugly, that every time it's executed a kitten dies.
-                            "SELECT seriesID, GROUP_CONCAT(LocalPath || '?' || Rating || '?' || id, '|') AS fanart_list " + // the question mark is used because it's forbidden in paths
-                            "FROM Fanart " +
-                            "WHERE LocalPath != '' " + // there used to be "AND f.SeriesName = 'false'" appended here, but that doesn't seem to make any sense
-                            "GROUP BY seriesID " +
-                        ") AS f ON s.ID = f.seriesID " + 
-                    "LEFT JOIN (" +
-                            "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS episodes, COUNT(NULLIF(e.Watched, 1)) AS unwatched " +
-                            "FROM online_episodes e " +
-                            "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID OR e.CompositeID = l.CompositeID2 " +
-                            "WHERE e.Hidden = 0 " +
-                            "GROUP BY e.SeriesID, e.SeasonIndex " +
-                        ") AS c ON s.ID = c.SeriesID " +
-                    "WHERE s.ID != 0 AND %where " +
-                    "GROUP BY " +
-                        "s.ID, s.Pretty_Name, s.Genre, s.FirstAired, s.Actors, s.Rating, s.ContentRating, " +
-                        "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
-                        "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, f.fanart_list " + 
-                    "HAVING c.episodes > 0 " + 
-                    "%order";
-            return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
+    private LazyQuery<T> GetAllTVShows<T>() where T : WebTVShowBasic, new()
+    {
+      /* In the beginning, this code was written and it was simple, and everything was good. Then, someone deleted their local files, and the code
+       * broke. It was fixed by ignoring all episodes that don't have local files (INNER JOIN local_episodes), and requiring all shows to have 
+       * local files (s.HasLocalFiles = 1), and everything was good again (commit 76191b6).
+       * 
+       * Then, people started having more exotic databases, and this proved broken too. There were two apparant problems:
+       * - The HasLocalFiles flag doesn't work the way we expected it to work. There were episodes for shows with HasLocalFiles = 0 is returned from
+       *   the GetAllEpisodes() method below, even though that one still has the INNER JOIN on local_episodes. This caused problems with clients who
+       *   rightfully expected the show for an episode to exist. 
+       * - Some users wanted to have shows without any local files showing up in their WebMediaPortal. Don't ask wny.
+       * So, the requirement for s.HasLocalFiles = 1 was dropped (commit 926841b), and everything was good again.
+       * 
+       * But it wasn't good enough. People deleted shows from their databases, and people started complaining again: their deleted shows were being
+       * shown in WebMediaPortal. The obvious solution would be to require s.HasLocalFiles = 1 again, but the world isn't simple anymore.
+       * 
+       * So, what we're doing is:
+       * - We completely ignore all flags we encounter in the online_series table. They may be right, they may be wrong, they may be misnamed or they
+       *   may be obsolete, I've no idea. We'll ignore them so that we don't turn insane. 
+       * - For loading the number of (unwatched) episodes, we always use a subquery that queries the online_episodes table with an INNER JOIN on the
+       *   local_episodes table. This was actually added somewhere in the middle of the story above, because MP-TVSeries counted episodes without an
+       *   entry in local_episodes as an unwatched episode too. That isn't directly problematic, but since we ignore those episodes, the episode count
+       *   was bigger than the number of episodes returned from GetAllEpisodes(). That confused some clients, and it didn't make any sense at all.
+       * - We don't return any shows or seasons that don't have any episodes using that method. That implies that we don't support seasons or shows 
+       *   without any local episodes.
+       * - We hope and pray that SQLite is smart enough to optimize the subquery and doesn't execute it for each show. 
+       * 
+       * And everything is good again. For now.
+       */
+       string sql =
+              "SELECT DISTINCT s.ID, MIN(l.Parsed_Name) AS parsed_name, s.Pretty_Name, s.Genre, STRFTIME('%Y', s.FirstAired) AS year, s.Actors, s.Rating, s.ContentRating, " +
+                  "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
+                  "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, f.fanart_list, " +
+                  "SUM(c.episodes) AS episodes, SUM(c.unwatched) AS unwatched, COUNT(c.SeasonIndex) AS seasons " +
+              "FROM online_series AS s " +
+              "INNER JOIN local_series AS l ON s.ID = l.ID AND l.Hidden = 0 AND l.DuplicateLocalName = 0 " +
+              "LEFT JOIN (" +
+                      // this subquery is so ugly, that every time it's executed a kitten dies.
+                      "SELECT seriesID, GROUP_CONCAT(LocalPath || '?' || Rating || '?' || id, '|') AS fanart_list " + // the question mark is used because it's forbidden in paths
+                      "FROM Fanart " +
+                      "WHERE LocalPath != '' " + // there used to be "AND f.SeriesName = 'false'" appended here, but that doesn't seem to make any sense
+                      "GROUP BY seriesID " +
+                  ") AS f ON s.ID = f.seriesID " +
+              "LEFT JOIN (" +
+                      "SELECT e.SeriesID, e.SeasonIndex, COUNT(*) AS episodes, COUNT(NULLIF(e.Watched, 1)) AS unwatched " +
+                      "FROM online_episodes e " +
+                      "INNER JOIN local_episodes l ON e.CompositeID = l.CompositeID OR e.CompositeID = l.CompositeID2 " +
+                      "WHERE e.Hidden = 0 " +
+                      "GROUP BY e.SeriesID, e.SeasonIndex " +
+                  ") AS c ON s.ID = c.SeriesID " +
+              "WHERE s.ID != 0 AND %where " +
+              "GROUP BY " +
+                  "s.ID, s.Pretty_Name, s.Genre, s.FirstAired, s.Actors, s.Rating, s.ContentRating, " +
+                  "s.Summary, s.Status, s.Network, s.AirsDay, s.AirsTime, s.Runtime, s.IMDB_ID, s.added, " +
+                  "s.BannerFileNames, s.CurrentBannerFileName, s.PosterFileNames, s.PosterBannerFileName, f.fanart_list " +
+              "HAVING c.episodes > 0 " +
+              "%order";
+        return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>() {
                 new SQLFieldMapping("s", "ID", "Id", DataReaders.ReadIntAsString),
                 new SQLFieldMapping("s", "ID", "ExternalId", CustomReaders.ExternalIdReader, new ExternalSiteReaderParameters(DataReaders.ReadIntAsString, "TVDB")),
                 new SQLFieldMapping("s", "Pretty_Name", "Title", CustomReaders.FixNameReader),
@@ -153,9 +154,15 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                 new SQLFieldMapping("", "unwatched", "UnwatchedEpisodeCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "seasons", "SeasonCount", DataReaders.ReadInt32),
                 new SQLFieldMapping("", "fanart_list", "Artwork", CustomReaders.FanartArtworkReader, new ArtworkReaderParameters(WebFileType.Backdrop, configuration["fanart"])),
-            });
-        }
-
+        }, delegate (T item)
+        { 
+              if (item is WebTVShowBasic)
+              {
+                (item as WebTVShowBasic).FanartCount = item.Artwork.Where(x => x.Type == WebFileType.Backdrop).Count();
+              }
+              return item;
+        });
+    }
 
         public IEnumerable<WebTVSeasonBasic> GetAllSeasonsBasic()
         {

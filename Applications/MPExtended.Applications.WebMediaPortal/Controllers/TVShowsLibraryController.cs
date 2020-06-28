@@ -49,9 +49,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SeriesFanart(string show, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Backdrop, width, height, "Images/default/tvshow-fanart.png");
+        public ActionResult SeriesFanart(string show, int width = 0, int height = 0, int num = -1)
+    {
+            return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Backdrop, width, height, "Images/default/tvshow-fanart.png", num);
         }
 
         public ActionResult SeriesPoster(string show, int width = 0, int height = 0)

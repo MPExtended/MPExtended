@@ -114,7 +114,7 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
                                 (int)Math.Round(Single.Parse(parts[1].Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture) * 10),
                     Id = parts[2]
                 };
-            }).ToList();
+            }).Where(y => File.Exists(y.Path)).ToList();
 
             list.Sort(AnonymousComparer.FromLambda<WebArtworkDetailed>((x, y) => y.Rating - x.Rating));
             for (int i = 0; i < list.Count; i++)

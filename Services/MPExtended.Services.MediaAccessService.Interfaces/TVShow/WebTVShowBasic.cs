@@ -31,6 +31,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
         public float Rating { get; set; }
         public string ContentRating { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
+        public int FanartCount { get; set; }
 
         public override string ToString()
         {
