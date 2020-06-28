@@ -32,78 +32,89 @@ using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [ServiceAuthorize]
-    public class MusicLibraryController : BaseController
+  [ServiceAuthorize]
+  public class MusicLibraryController : BaseController
+  {
+    public ActionResult Index()
     {
-        public ActionResult Index()
-        {
-            return Artist();
-        }
-
-        public ActionResult Artist()
-        {
-            var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
-            if (artistList == null)
-                return new HttpNotFoundResult();
-            return View("Index", artistList.Where(x => !String.IsNullOrEmpty(x.Title)));        
-        }
-
-        public ActionResult Albums(string artist)
-        {
-            WebMusicArtistDetailed artistObj = new WebMusicArtistDetailed(); 
-            IList<WebMusicAlbumBasic> albumList;
-
-            if (string.IsNullOrEmpty(artist))
-                albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider);
-            else
-            {
-                artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
-                albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
-            }
-
-            return View(new ArtistViewModel()
-            {
-                Artist = artistObj,
-                Albums = albumList.Where(x => !String.IsNullOrEmpty(x.Title))
-            });
-        }
-
-        public ActionResult Album(string album, string codec = null)
-        {
-            var albumObj = Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
-            if (albumObj == null)
-                return new HttpNotFoundResult();
-            var trackList = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, null, WebSortField.Title, WebSortOrder.Asc);
-            var model = new AlbumViewModel()
-            {
-                Album = albumObj,
-                Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title) && string.IsNullOrEmpty(codec) ? true : x.Codec == codec)
-            };
-
-            return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
-        }
-
-        public ActionResult AlbumImage(string album, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, width, height, "Images/default/album.png");
-        }
-
-        public ActionResult ArtistImage(string artist, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Cover, width, height, "Images/default/artist.png");
-        }
-
-        public ActionResult TrackImage(string track, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, width, height, "Images/default/track.png");
-        }
-
-        public ActionResult Track(string track)
-        {
-            var trackObj = Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
-            if (trackObj == null)
-                return new HttpNotFoundResult();
-            return View(trackObj);
-        }
+      return Artist();
     }
+
+    public ActionResult Artist()
+    {
+      var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
+      if (artistList == null)
+        return new HttpNotFoundResult();
+      return View("Index", artistList.Where(x => !String.IsNullOrEmpty(x.Title)));
+    }
+
+    public ActionResult Albums(string artist)
+    {
+      WebMusicArtistDetailed artistObj = new WebMusicArtistDetailed();
+      IList<WebMusicAlbumBasic> albumList;
+
+      if (string.IsNullOrEmpty(artist))
+        albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider);
+      else
+      {
+        artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
+        albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
+      }
+
+      return View(new ArtistViewModel()
+      {
+        Artist = artistObj,
+        Albums = albumList.Where(x => !String.IsNullOrEmpty(x.Title))
+      });
+    }
+
+    public ActionResult Album(string album, string codec = null)
+    {
+      var albumObj = Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, album);
+      if (albumObj == null)
+        return new HttpNotFoundResult();
+      var trackList = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, album, null, WebSortField.Title, WebSortOrder.Asc);
+      var model = new AlbumViewModel()
+      {
+        Album = albumObj,
+        Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title) && string.IsNullOrEmpty(codec) ? true : x.Codec == codec)
+      };
+
+      return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
+    }
+
+    public ActionResult AlbumImage(string album, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, width, height, "Images/default/album.png");
+    }
+
+    public ActionResult ArtistImage(string artist, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Cover, width, height, "Images/default/artist.png");
+    }
+
+    public ActionResult TrackImage(string track, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, width, height, "Images/default/track.png");
+    }
+
+    public ActionResult Track(string track)
+    {
+      var trackObj = Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
+      if (trackObj == null)
+        return new HttpNotFoundResult();
+      return View(trackObj);
+    }
+
+    public ActionResult ArtistFanart(string artist, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Backdrop, width, height, "Images/default/artist-fanart.png", num);
+    }
+
+    public ActionResult ArtistLogo(string artist, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MusicArtist, artist, WebFileType.Logo, width, height, "Images/default/artist-logo.png");
+    }
+
+  }
 }

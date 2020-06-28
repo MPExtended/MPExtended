@@ -115,6 +115,7 @@ namespace MPExtended.Services.MediaAccessService
                         Id = x.Id,
                         Title = x.Title,
                         HasAlbums = x.HasAlbums,
+                        FanartCount = x.FanartCount,
                         Artwork = x.Artwork.Select(y => new WebArtwork()
                                   {
                                     Offset = y.Offset,
@@ -136,6 +137,7 @@ namespace MPExtended.Services.MediaAccessService
                         Id = (item as IAlbumArtist).AlbumArtistObject.Id,
                         Title = (item as IAlbumArtist).AlbumArtistObject.Title,
                         HasAlbums = (item as IAlbumArtist).AlbumArtistObject.HasAlbums,
+                        FanartCount = (item as IAlbumArtist).AlbumArtistObject.FanartCount,
                         Artwork = (item as IAlbumArtist).AlbumArtistObject.Artwork.Select(x => new WebArtwork()
                         {
                           Offset = x.Offset,
@@ -250,6 +252,7 @@ namespace MPExtended.Services.MediaAccessService
                     Id = x.Id,
                     Title = x.Title,
                     HasAlbums = x.HasAlbums,
+                    FanartCount = x.FanartCount,
                     Artwork = x.Artwork.Select(y => new WebArtwork()
                     {
                       Offset = y.Offset,
@@ -271,6 +274,7 @@ namespace MPExtended.Services.MediaAccessService
                     Id = (item as IAlbumArtist).AlbumArtistObject.Id,
                     Title = (item as IAlbumArtist).AlbumArtistObject.Title,
                     HasAlbums = (item as IAlbumArtist).AlbumArtistObject.HasAlbums,
+                    FanartCount = (item as IAlbumArtist).AlbumArtistObject.FanartCount,
                     Artwork = (item as IAlbumArtist).AlbumArtistObject.Artwork.Select(x => new WebArtwork()
                     {
                       Offset = x.Offset,

@@ -41,12 +41,14 @@ namespace MPExtended.PlugIns.MAS.MPMusic
   public class MPMusic : Database, IMusicLibrary, IPlaylistLibrary
   {
     private Dictionary<string, string> configuration;
+    private Dictionary<string, string> fanartconfiguration;
     public bool Supported { get; set; }
 
     [ImportingConstructor]
     public MPMusic(IPluginData data)
     {
       configuration = data.GetConfiguration("MP MyMusic");
+      fanartconfiguration = data.GetConfiguration("FanartHandler");
       DatabasePath = configuration["database"];
       Supported = File.Exists(DatabasePath);
     }
@@ -121,10 +123,11 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     Filetype = Path.GetExtension(path).Substring(1)
                   });
                 }
+                (item.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(string.Join(" _ ", item.Artist), false));
               }
 
-                // why isn't there an IList<T>.AddRange() method?
-                (item.Artwork as List<WebArtwork>).AddRange(artwork[tuple]);
+              // why isn't there an IList<T>.AddRange() method?
+              (item.Artwork as List<WebArtwork>).AddRange(artwork[tuple]);
               return item;
             });
     }
@@ -203,6 +206,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     });
                   }
                 }
+                (album.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(albumArtist, false));
               }
 
               if (album.Artists.Count() > 0)
@@ -228,6 +232,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                     });
                   }
                 }
+                (album.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(string.Join(" _ ", album.Artists), false));
               }
               return album;
             });
@@ -248,28 +253,71 @@ namespace MPExtended.PlugIns.MAS.MPMusic
       public string Biography { get; set; }
     }
 
-    private List<WebArtwork> GetArtworkForArtist(string name)
+    private List<WebArtwork> GetArtworkForArtist(string name, bool withCover = true)
     {
       var artwork = new List<WebArtwork>();
-
+      string title = PathUtil.StripInvalidCharacters(name, '_');
       int i = 0;
-      string[] filenames = new string[] {
-                        PathUtil.StripInvalidCharacters(name + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(name + ".jpg", '_')
-                    };
-      foreach (string file in filenames)
+
+      if (withCover)
       {
-        string path = Path.Combine(configuration["cover"], "Artists", file);
-        if (File.Exists(path))
+        // Cover
+        string[] filenames = new string[] { title + "L.jpg", title + ".jpg" };
+        foreach (string file in filenames)
+        {
+          string path = Path.Combine(configuration["cover"], "Artists", file);
+          if (File.Exists(path))
+          {
+            artwork.Add(new WebArtworkDetailed()
+            {
+              Type = WebFileType.Cover,
+              Offset = i++,
+              Path = path,
+              Rating = 1,
+              Id = path.GetHashCode().ToString(),
+              Filetype = Path.GetExtension(path).Substring(1)
+            });
+          }
+        }
+      }
+
+      // Backdrops
+      i = 0;
+      string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Skin Fanart", "Scraper", "Music");
+      if (Directory.Exists(thumbfolder))
+      {
+        var files = Directory.GetFiles(thumbfolder, string.Format("{0} (*).jpg", title))
+          .Where(x => File.Exists(x))
+          .Distinct();
+        foreach (string file in files)
         {
           artwork.Add(new WebArtworkDetailed()
           {
-            Type = WebFileType.Cover,
+            Type = WebFileType.Backdrop,
             Offset = i++,
-            Path = path,
+            Path = file,
             Rating = 1,
-            Id = path.GetHashCode().ToString(),
-            Filetype = Path.GetExtension(path).Substring(1)
+            Id = file.GetHashCode().ToString(),
+            Filetype = Path.GetExtension(file).Substring(1)
+          });
+        }
+      }
+
+      // ClearArt
+      string logofolder = Path.Combine(fanartconfiguration["thumb"], "ClearArt", "Music");
+      if (Directory.Exists(thumbfolder))
+      {
+        string file = Path.Combine(logofolder, string.Format("{0}.png", title));
+        if (File.Exists(file))
+        {
+          artwork.Add(new WebArtworkDetailed()
+          {
+            Type = WebFileType.Logo,
+            Offset = 0,
+            Path = file,
+            Rating = 1,
+            Id = file.GetHashCode().ToString(),
+            Filetype = Path.GetExtension(file).Substring(1)
           });
         }
       }
@@ -290,13 +338,15 @@ namespace MPExtended.PlugIns.MAS.MPMusic
           .GroupBy(x => x.Artist)
           .Select(x =>
           {
-            return new WebMusicArtistBasic()
+            var item = new WebMusicArtistBasic()
             {
               Id = x.Key,
               Title = x.Key,
               HasAlbums = x.Any(y => y.HasAlbums),
-              Artwork = GetArtworkForArtist(x.Key)
+              Artwork = GetArtworkForArtist(x.Key),
             };
+            item.FanartCount = item.Artwork.Where(z => z.Type == WebFileType.Backdrop).Count();
+            return item;
           });
     }
 
@@ -345,6 +395,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
 
             artist.Genres = x.SelectMany(y => y.Genres).ToList();
             artist.Artwork = GetArtworkForArtist(x.Key);
+            artist.FanartCount = artist.Artwork.Where(z => z.Type == WebFileType.Backdrop).Count();
 
             if (detInfo.ContainsKey(x.Key))
             {

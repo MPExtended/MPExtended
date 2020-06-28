@@ -36,6 +36,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public string Title { get; set; }
         public bool HasAlbums { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
+        public int FanartCount { get; set; }
 
         public WebMediaType Type 
         {
