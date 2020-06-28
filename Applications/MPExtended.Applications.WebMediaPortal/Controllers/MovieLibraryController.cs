@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,74 +17,68 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Libraries.Service;
-using MPExtended.Services.Common.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces;
-using MPExtended.Services.MediaAccessService.Interfaces.Movie;
-using MPExtended.Services.StreamingService.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
-    [ServiceAuthorize]
-    public class MovieLibraryController : BaseController
+  [ServiceAuthorize]
+  public class MovieLibraryController : BaseController
+  {
+    //
+    // GET: /MovieLibrary/
+    public ActionResult Index(string filter = null)
     {
-        //
-        // GET: /MovieLibrary/
-        public ActionResult Index(string filter = null)
-        {
-            var movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc);
-            return View(movieList.Where(x => !String.IsNullOrEmpty(x.Title)).Select(x => new MovieViewModel(x)));
-        }
+      var movieList = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc);
+      return View(movieList.Where(x => !String.IsNullOrEmpty(x.Title)).Select(x => new MovieViewModel(x)));
+    }
 
-        public ActionResult Details(string movie)
-        {
-            var model = new MovieViewModel(movie);
-            if (model.Movie == null)
-                return HttpNotFound();
-            return View(model);
-        }
+    public ActionResult Details(string movie)
+    {
+      var model = new MovieViewModel(movie);
+      if (model.Movie == null)
+        return HttpNotFound();
+      return View(model);
+    }
 
-        [HttpGet]
-        public ActionResult MovieInfo(string movie)
-        {
-            var model = new MovieViewModel(movie);
-            if (model.Movie == null)
-                return HttpNotFound();
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+    [HttpGet]
+    public ActionResult MovieInfo(string movie)
+    {
+      var model = new MovieViewModel(movie);
+      if (model.Movie == null)
+        return HttpNotFound();
+      return Json(model, JsonRequestBehavior.AllowGet);
+    }
 
-        public ActionResult Play(string movie)
-        {
-            var model = new MovieViewModel(movie);
-            if (model.Movie == null)
-                return HttpNotFound();
-            return View(model);
-        }
+    public ActionResult Play(string movie)
+    {
+      var model = new MovieViewModel(movie);
+      if (model.Movie == null)
+        return HttpNotFound();
+      return View(model);
+    }
 
-        public ActionResult Cover(string movie, int width = 0, int height = 0)
-        {
-            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Cover, width, height, "Images/default/movie-cover.png");
-        }
+    public ActionResult Cover(string movie, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Cover, width, height, "Images/default/movie-cover.png");
+    }
 
-        public ActionResult Fanart(string movie, int width = 0, int height = 0, int num = -1)
-        {
-            return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Backdrop, width, height, "Images/default/movie-fanart.png", num);
-        }
+    public ActionResult Fanart(string movie, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Backdrop, width, height, "Images/default/movie-fanart.png", num);
+    }
 
-        public ActionResult Logo(string movie, int width = 0, int height = 0)
-        {
-          return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Logo, width, height, "Images/default/movie-logo.png");
-        }
-        
-        public ActionResult CollectionCover(string collection, int width = 0, int height = 0)
-        {
-          return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Cover, width, height, "Images/default/collection-logo.png");
-        }
+    public ActionResult Logo(string movie, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Logo, width, height, "Images/default/movie-logo.png");
+    }
+
+    public ActionResult CollectionCover(string collection, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Cover, width, height, "Images/default/collection-logo.png");
+    }
   }
 }
