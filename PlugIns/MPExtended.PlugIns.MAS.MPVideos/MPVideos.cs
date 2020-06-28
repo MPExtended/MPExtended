@@ -436,17 +436,18 @@ namespace MPExtended.PlugIns.MAS.MPVideos
             string sql = "SELECT strGroup, strGroupDescription FROM usergroup WHERE idGroup in (SELECT idGroup FROM usergrouplinkmovie WHERE idMovie IN (SELECT idMovie from movieinfo))";
             return new LazyQuery<WebCategory>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("strGenre", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("strGroup", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("strGroupDescription", "Description", DataReaders.ReadString)
             });
         }
 
         public IEnumerable<WebCollection> GetAllCollections()
         {
-            string sql = "SELECT strCollection FROM moviecollection WHERE idCollection in (SELECT idCollection FROM moviecollectionlinkmovie WHERE idMovie IN (SELECT idMovie from movieinfo))";
+            string sql = "SELECT strCollection, strCollectionDescription FROM moviecollection WHERE idCollection in (SELECT idCollection FROM moviecollectionlinkmovie WHERE idMovie IN (SELECT idMovie from movieinfo))";
             return new LazyQuery<WebCollection>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString)
+                new SQLFieldMapping("strCollection", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("strCollectionDescription", "Description", DataReaders.ReadString)
             }, delegate (WebCollection item)
             {
                 item.Id = item.Title;

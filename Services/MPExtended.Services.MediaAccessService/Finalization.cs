@@ -46,6 +46,7 @@ namespace MPExtended.Services.MediaAccessService
             bool isCollections = operList.First() is ICollections;
             bool isArtists = operList.First() is IArtists;
             bool isAlbumArtist = operList.First() is IAlbumArtist;
+            bool isCategory = operList.First() is ICategorySortable;
 
             List<T> retlist = new List<T>();
             foreach (T item in operList)
@@ -92,6 +93,7 @@ namespace MPExtended.Services.MediaAccessService
                         PID = realProvider,
                         Id = x.Id,
                         Title = x.Title,
+                        Description = x.Description,
                         Artwork = x.Artwork.Select(y => new WebArtwork()
                                   {
                                     Offset = y.Offset,
@@ -145,6 +147,17 @@ namespace MPExtended.Services.MediaAccessService
                           .OrderByDescending(x => x.Rating)
                           .ToList()
                     };
+                }
+
+                if (isCategory)
+                {
+                    (item as ICategorySortable).Categories = (item as ICategorySortable).Categories.Select(x => new WebCategory()
+                    {
+                        PID = realProvider,
+                        Id = x.Id,
+                        Title = x.Title,
+                        Description = x.Description
+                    }).ToList();
                 }
 
                 retlist.Add(item);
@@ -203,7 +216,8 @@ namespace MPExtended.Services.MediaAccessService
                 {
                     PID = item.PID,
                     Id = x.Id,
-                    Title = x.Title
+                    Title = x.Title,
+                    Description = x.Description
                 }).ToList();
             }
 
@@ -214,6 +228,7 @@ namespace MPExtended.Services.MediaAccessService
                     PID = item.PID,
                     Id = x.Id,
                     Title = x.Title,
+                    Description = x.Description,
                     Artwork = x.Artwork.Select(y => new WebArtwork()
                     {
                       Offset = y.Offset,
