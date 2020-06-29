@@ -506,4 +506,10 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Watched" xml:space="preserve">
     <value>Watched</value>
   </data>
+  <data name="Collection" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
 </root>

@@ -50,7 +50,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         public ActionResult SeriesFanart(string show, int width = 0, int height = 0, int num = -1)
-    {
+        {
             return Images.ReturnFromService(WebMediaType.TVShow, show, WebFileType.Backdrop, width, height, "Images/default/tvshow-fanart.png", num);
         }
 

@@ -76,9 +76,31 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Logo, width, height, "Images/default/movie-logo.png");
     }
 
+    // Collection
+    public ActionResult Collections(string filter = null)
+    {
+      var collection = Connections.Current.MAS.GetCollections(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc)
+          .Where(x => !String.IsNullOrEmpty(x.Title));
+      return View(collection);
+    }
+
+    public ActionResult Collection(string collection)
+    {
+      var model = new CollectionViewModel(collection);
+      if (model.Collection == null)
+        return HttpNotFound();
+
+      return View(model);
+    }
+
     public ActionResult CollectionCover(string collection, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Cover, width, height, "Images/default/collection-logo.png");
+      return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Cover, width, height, "Images/default/collection-cover.png");
+    }
+
+    public ActionResult CollectionFanart(string collection, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Backdrop, width, height, "Images/default/collection-fanart.png", num);
     }
   }
 }

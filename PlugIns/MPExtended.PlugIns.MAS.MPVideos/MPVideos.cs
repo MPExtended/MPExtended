@@ -83,7 +83,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
       string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Skin Fanart", "Scraper", "Movies");
       if (Directory.Exists(thumbfolder))
       {
-        files = Directory.GetFiles(thumbfolder, PathUtil.StripInvalidCharacters(string.Format("{0}{{*}}.jpg", title), '_'))
+        files = Directory.GetFiles(thumbfolder, string.Format("{0}{{*}}.jpg", PathUtil.StripInvalidCharacters(title), '_'))
           .Where(x => File.Exists(x))
           .Distinct();
         foreach (string file in files)
