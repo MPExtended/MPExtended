@@ -239,7 +239,15 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     [MergeListReader]
     private List<WebCollection> CollectionReader(SQLiteDataReader reader, int idx)
     {
-      return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebCollection() { Id = x, Title = x, Artwork = GetArtworkForCollection(x) }).ToList();
+      return ((IList<string>)DataReaders.ReadPipeList(reader, idx))
+               .Select(s => Regex.Match(s, @"(?<title>.+?)#separator#(?<description>.+)?$"))
+               .Where(m => m.Success)
+                 .Select(m => new WebCollection() { 
+                   Id = m.Groups["title"].Value, 
+                   Title = m.Groups["title"].Value, 
+                   Description = m.Groups["description"].Value,
+                   Artwork = GetArtworkForCollection(m.Groups["title"].Value) 
+                 }).ToList();      
     }
 
     private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
@@ -253,7 +261,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
               "GROUP_CONCAT(a.strActor || a.IMDBActorID, '|') AS actors, " +
               (Mediaportal.GetVersion() >= Mediaportal.MediaPortalVersion.MP1_17 ?
               "GROUP_CONCAT(u.strGroup, '|') AS groups,  " +
-              "GROUP_CONCAT(c.strCollection, '|') AS collections, " : string.Empty
+              "GROUP_CONCAT(c.strCollection || '#separator#' || strCollectionDescription, '|') AS collections, " : string.Empty
               ) +
               "GROUP_CONCAT(g.strGenre, '|') AS genres, m.timeswatched " +
           "FROM movie m " +
