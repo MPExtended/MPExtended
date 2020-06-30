@@ -512,4 +512,10 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
   </data>
+  <data name="Picture" xml:space="preserve">
+    <value>Picture</value>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Pictures</value>
+  </data>
 </root>
