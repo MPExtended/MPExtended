@@ -28,33 +28,41 @@ using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-  public class PictureRootFolderViewModel
-  {
-    public WebCategory Root { get; set; }
-    public IEnumerable<WebCategory> Folders { get; set; }
-
-    public PictureRootFolderViewModel(IEnumerable<WebCategory> folders)
-    {
-      Root = folders.Where(x => x.Id == "_root").First();
-      Folders = folders;
-    }
-  }
-
   public class PictureFolderViewModel
   {
-    public WebCategory Parent { get; set; }
-    public WebCategory Current { get; set; }
+    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
     public IEnumerable<WebCategory> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
 
-    public PictureFolderViewModel(string parent, string folder)
+    public PictureFolderViewModel(string id = null, string folder = null)
     {
       try
       {
-        // Parent = parent;
-        // Current = folder;
-        Parent = new WebCategory() { Title = "parent" };
-        Current = new WebCategory() { Title = "folder" };
+        if (string.IsNullOrEmpty(id))
+        {
+          Breadcrumbs = Enumerable.Empty<WebCategory>();
+          var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
+          var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
+                                 .Select(x => new WebCategory()
+                                 {
+                                   Id = x.Id,
+                                   Title = x.Title,
+                                   PID = x.PID,
+                                   Description = x.Description
+                                 }).First();
+          folder = root.Id;
+        }
+        else
+        {
+          if (!Breadcrumbs.Any(x => x.Id == id))
+          {
+            Breadcrumbs.Add(new WebCategory()
+                                {
+                                  Id = id,
+                                  Title = folder,
+                                });
+          }
+        }
         Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, folder);
         Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folder);
       }
@@ -62,7 +70,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       {
         Log.Warn(String.Format("Failed to load folder {0}", folder), ex);
       }
-
     }
   }
 
