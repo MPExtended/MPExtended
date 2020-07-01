@@ -21,11 +21,8 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-  public class WebCollection : WebObject, ITitleSortable, IArtwork
+  public class WebCollection : WebCategory, ITitleSortable, IArtwork
   {
-    public string Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
     public IList<WebArtwork> Artwork { get; set; }
 
     public WebCollection()
