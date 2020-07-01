@@ -32,20 +32,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     // GET: /PictureLibrary/
     public ActionResult Index(string filter = null)
     {
-      var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
-      return View(new PictureRootFolderViewModel(categoryList.Where(x => !string.IsNullOrEmpty(x.Title))
-                                                             .Select(x => new WebCategory()
-                                                             {
-                                                               Id = x.Id,
-                                                               Title = x.Title,
-                                                               PID = x.PID,
-                                                               Description = x.Description
-                                                             })));
+      var model = new PictureFolderViewModel();
+      if (model.Folders == null && model.Pictures == null)
+      {
+        return HttpNotFound();
+      }
+      return View(model);
     }
 
-    public ActionResult Folder(string parent, string folder)
+    public ActionResult Folder(string id, string folder)
     {
-      var model = new PictureFolderViewModel(parent, folder);
+      var model = new PictureFolderViewModel(id, folder);
       if (model.Folders == null && model.Pictures == null)
       {
         return HttpNotFound();
@@ -87,10 +84,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Backdrop, width, height, "Images/default/picture-fanart.png", num);
     }
-
-    public ActionResult Logo(string picture, int width = 0, int height = 0)
+    
+    /*
+    public ActionResult Folder(string folder, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Logo, width, height, "Images/default/picture-logo.png");
+      return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Cover, width, height, "Images/default/picture-folder.png");
     }
+
+    public ActionResult FolderFanart(string folder, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Backdrop, width, height, "Images/default/picture-folder-fanart.png", num);
+    }
+    */
+
   }
 }

@@ -28,41 +28,55 @@ using MPExtended.Services.MediaAccessService.Interfaces.Picture;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-  public class PictureRootFolderViewModel
-  {
-    public WebCategory Root { get; set; }
-    public IEnumerable<WebCategory> Folders { get; set; }
-
-    public PictureRootFolderViewModel(IEnumerable<WebCategory> folders)
-    {
-      Root = folders.Where(x => x.Id == "_root").First();
-      Folders = folders;
-    }
-  }
-
   public class PictureFolderViewModel
   {
-    public WebCategory Parent { get; set; }
-    public WebCategory Current { get; set; }
+    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
     public IEnumerable<WebCategory> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
+    
+    private List<WebCategory> Paths = new List<WebCategory>();
 
-    public PictureFolderViewModel(string parent, string folder)
+    public PictureFolderViewModel(string id = null, string folder = null, string filter = null)
     {
       try
       {
-        // Parent = parent;
-        // Current = folder;
-        Parent = new WebCategory() { Title = "parent" };
-        Current = new WebCategory() { Title = "folder" };
-        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, folder);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folder);
+        if (string.IsNullOrEmpty(id))
+        {
+          Paths = new List<WebCategory>();
+          var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
+          var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
+                                 .Select(x => new WebCategory()
+                                 {
+                                   Id = x.Id,
+                                   Title = x.Title,
+                                   PID = x.PID,
+                                   Description = x.Description
+                                 }).First();
+          id = root.Id;
+          Paths.Add(root);
+        }
+        else
+        {
+          if (!Paths.Any(x => x.Id == id))
+          {
+            Paths.Add(new WebCategory()
+                          {
+                            Id = id,
+                            Title = folder,
+                          });
+          }
+        }
+        
+        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, id);
+        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
+        
+        int idx = Paths.Select(x => x.Id).ToList().IndexOf(id);
+        Breadcrumbs = idx < 0 ? Paths : Paths.Take(idx + 1).ToList();
       }
       catch (Exception ex)
       {
         Log.Warn(String.Format("Failed to load folder {0}", folder), ex);
       }
-
     }
   }
 
