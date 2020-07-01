@@ -33,6 +33,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public IEnumerable<WebCategory> Breadcrumbs { get; set; }
     public IEnumerable<WebCategory> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
+    
+    private List<WebCategory> Paths = new List<WebCategory>();
 
     public PictureFolderViewModel(string id = null, string folder = null, string filter = null)
     {
@@ -40,7 +42,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       {
         if (string.IsNullOrEmpty(id))
         {
-          Breadcrumbs = Enumerable.Empty<WebCategory>();
+          Paths = new List<WebCategory>();
           var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
           var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
                                  .Select(x => new WebCategory()
@@ -50,21 +52,26 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                                    PID = x.PID,
                                    Description = x.Description
                                  }).First();
-          folder = root.Id;
+          id = root.Id;
+          Paths.Add(root);
         }
         else
         {
-          if (!Breadcrumbs.Any(x => x.Id == id))
+          if (!Paths.Where(x => x.Id == id))
           {
-            Breadcrumbs.Add(new WebCategory()
-                                {
-                                  Id = id,
-                                  Title = folder,
-                                });
+            Paths.Add(new WebCategory()
+                          {
+                            Id = id,
+                            Title = folder,
+                          });
           }
         }
-        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, folder);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folder);
+        
+        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, id);
+        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
+        
+        int idx = Paths.Select(x => x.Id).ToList().IndexOf(id);
+        Breadcrumbs = idx < 0 ? Paths : Paths.Take(idx + 1).ToList();
       }
       catch (Exception ex)
       {
