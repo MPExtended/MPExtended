@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -99,9 +100,23 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             return new List<WebSearchResult>();
         }
+        
+        public WebPictureFolder GetPictureFolderById(string id)
+        {
+            return GetWebPictureFolder(IdToPath(id));
+        }
 
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
+            if (type == WebMediaType.PictureFolder)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "folder" },
+                    { "Id", GetPictureFolderById(id).Id }
+                };
+            }
+            
             return new WebDictionary<string>()
             {
                 { "Type", "file" },
@@ -218,6 +233,41 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return pic;
         }
 
+        private List<WebArtwork> GetArtworkForFolder(string path)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(path) || Directory.Exists(path))
+                return artwork;
+
+            // Poster
+            int i = 0;
+            var files = new string[] { ".jpg", ".png" }
+                        .Select(x => string.Format("{0}{1}", Path.Combine(path, "folder"), x))
+                        .Where(x => File.Exists(x))
+                        .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+
+        private WebPictureFolder GetWebPictureFolder(string path)
+        {
+            WebPictureFolder folder = GetCategoryFromPath(path);
+            folder.Artwork = GetArtworkForFolder(path);
+            return folder;
+        }
+        
         private WebCategory GetCategoryFromPath(string path)
         {
             string dir = Path.GetDirectoryName(path);
