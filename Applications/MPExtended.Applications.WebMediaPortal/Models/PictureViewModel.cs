@@ -34,7 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public IEnumerable<WebCategory> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
 
-    public PictureFolderViewModel(string id = null, string folder = null)
+    public PictureFolderViewModel(string id = null, string folder = null, string filter = null)
     {
       try
       {
