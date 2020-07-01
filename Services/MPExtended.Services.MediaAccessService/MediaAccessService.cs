@@ -62,6 +62,7 @@ namespace MPExtended.Services.MediaAccessService
         case WebMediaType.MusicArtist:
           return MusicLibraries[provider];
         case WebMediaType.Picture:
+        case WebMediaType.PictureFolder:
           return PictureLibraries[provider];
         case WebMediaType.TVShow:
         case WebMediaType.TVSeason:
@@ -452,6 +453,11 @@ namespace MPExtended.Services.MediaAccessService
     {
       return PictureLibraries[provider].GetPictureDetailed(id).Finalize(provider, ProviderType.Picture);
     }
+
+    public WebPictureFolder GetPictureFolderById(int? provider, string id)
+    {
+      return PictureLibraries[provider].GetPictureFolderById(id).Finalize(provider, ProviderType.Picture);
+    }
     #endregion
 
     #region TVShows
@@ -731,6 +737,10 @@ namespace MPExtended.Services.MediaAccessService
           return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork;
         case WebMediaType.TVShow:
           return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork;
+        case WebMediaType.Picture:
+          return PictureLibraries[provider].GetPictureDetailed(id).Artwork;
+        case WebMediaType.PictureFolder:
+          return PictureLibraries[provider].GetPictureFolderById(id).Artwork;
         default:
           Log.Warn("Requested artwork for mediatype {0} which does not have artwork", type);
           throw new ArgumentException("No artwork available for this mediatype", "type");

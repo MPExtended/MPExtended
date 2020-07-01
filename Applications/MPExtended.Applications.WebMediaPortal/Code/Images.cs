@@ -115,6 +115,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.MusicProvider;
                     break;
                 case WebMediaType.Picture:
+                case WebMediaType.PictureFolder:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.PicturesProvider;
                     break;

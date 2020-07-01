@@ -36,35 +36,43 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     
     private List<WebCategory> Paths = new List<WebCategory>();
 
-    public PictureFolderViewModel(string id = null, string folder = null, string filter = null)
+    public PictureFolderViewModel(string filter = null)
     {
       try
       {
-        if (string.IsNullOrEmpty(id))
+        Paths = new List<WebCategory>();
+        var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
+        var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
+                               .Select(x => new WebCategory()
+                               {
+                                 Id = x.Id,
+                                 Title = x.Title,
+                                 PID = x.PID,
+                                 Description = x.Description
+                               }).First();
+        Paths.Add(root);
+        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, root.Id);
+        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, root.Id);
+
+        int idx = Paths.Select(x => x.Id).ToList().IndexOf(root.Id);
+        Breadcrumbs = idx < 0 ? Paths : Paths.Take(idx + 1).ToList();
+      }
+      catch (Exception ex)
+      {
+        Log.Warn(String.Format("Failed to load Picture root folder"), ex);
+      }
+    }
+
+    public PictureFolderViewModel(string id, string folder, string filter = null)
+    {
+      try
+      {
+        if (!Paths.Any(x => x.Id == id))
         {
-          Paths = new List<WebCategory>();
-          var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
-          var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
-                                 .Select(x => new WebCategory()
-                                 {
-                                   Id = x.Id,
-                                   Title = x.Title,
-                                   PID = x.PID,
-                                   Description = x.Description
-                                 }).First();
-          id = root.Id;
-          Paths.Add(root);
-        }
-        else
-        {
-          if (!Paths.Any(x => x.Id == id))
-          {
-            Paths.Add(new WebCategory()
-                          {
-                            Id = id,
-                            Title = folder,
-                          });
-          }
+          Paths.Add(new WebCategory() {
+                          Id = id,
+                          Title = folder,
+          });
         }
         
         Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, id);
@@ -75,7 +83,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       }
       catch (Exception ex)
       {
-        Log.Warn(String.Format("Failed to load folder {0}", folder), ex);
+        Log.Warn(String.Format("Failed to load Picture folder {0}", folder), ex);
       }
     }
   }

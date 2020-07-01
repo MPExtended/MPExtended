@@ -165,36 +165,37 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
             // Image data
             Uri uri = new Uri(path);
+            try
+            {
+                BitmapSource img = BitmapFrame.Create(uri);
+                pic.Mpixel = (img.PixelHeight * img.PixelWidth * 1.0) / (1000 * 1000);
+                pic.Width = Convert.ToString(img.PixelWidth);
+                pic.Height = Convert.ToString(img.PixelHeight);
+                pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
 
-                try
-                {
-                    BitmapSource img = BitmapFrame.Create(uri);
-                    pic.Mpixel = (img.PixelHeight * img.PixelWidth * 1.0) / (1000 * 1000);
-                    pic.Width = Convert.ToString(img.PixelWidth);
-                    pic.Height = Convert.ToString(img.PixelHeight);
-                    pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
-
-                    // Image metadata
-                    BitmapMetadata meta = (BitmapMetadata)img.Metadata;
-                    if (!String.IsNullOrWhiteSpace(meta.Title))
-                        pic.Title = meta.Title.Trim();
-                    if (!String.IsNullOrWhiteSpace(meta.DateTaken))
-                        pic.DateTaken = DateTime.Parse(meta.DateTaken);
-                    pic.Comment = meta.Comment;
-                    pic.CameraManufacturer = meta.CameraManufacturer;
-                    pic.CameraModel = meta.CameraModel;
-                    pic.Copyright = meta.Copyright;
-                    pic.Rating = (float)meta.Rating;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
-                }
+                // Image metadata
+                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
+                if (!String.IsNullOrWhiteSpace(meta.Title))
+                    pic.Title = meta.Title.Trim();
+                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
+                pic.Comment = meta.Comment;
+                pic.CameraManufacturer = meta.CameraManufacturer;
+                pic.CameraModel = meta.CameraModel;
+                pic.Copyright = meta.Copyright;
+                pic.Rating = (float)meta.Rating;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+            }
             
 
             // Set title to file name if non-existant
             if (String.IsNullOrEmpty(pic.Title))
                 pic.Title = Path.GetFileName(path);
+
+            pic.Artwork = GetArtworkForPicture(path);
 
             return pic;
         }
@@ -230,21 +231,65 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             if (String.IsNullOrEmpty(pic.Title))
                 pic.Title = Path.GetFileName(path);
 
+            pic.Artwork = GetArtworkForPicture(path);
+
             return pic;
+        }
+
+        private List<WebArtwork> GetArtworkForPicture(string picture)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(picture) || !File.Exists(picture))
+                return artwork;
+
+            artwork.Add(new WebArtworkDetailed()
+            {
+              Type = WebFileType.Cover,
+              Offset = 0,
+              Path = picture,
+              Rating = 1,
+              Id = picture.GetHashCode().ToString(),
+              Filetype = Path.GetExtension(picture).Substring(1)
+            });
+            artwork.Add(new WebArtworkDetailed()
+            {
+              Type = WebFileType.Poster,
+              Offset = 0,
+              Path = picture,
+              Rating = 1,
+              Id = picture.GetHashCode().ToString(),
+              Filetype = Path.GetExtension(picture).Substring(1)
+            });
+            artwork.Add(new WebArtworkDetailed()
+            {
+              Type = WebFileType.Backdrop,
+              Offset = 0,
+              Path = picture,
+              Rating = 1,
+              Id = picture.GetHashCode().ToString(),
+              Filetype = Path.GetExtension(picture).Substring(1)
+            });
+
+            return artwork;
         }
 
         private List<WebArtwork> GetArtworkForFolder(string path)
         {
             var artwork = new List<WebArtwork>();
-            if (string.IsNullOrEmpty(path) || Directory.Exists(path))
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
                 return artwork;
 
             // Poster
             int i = 0;
+            string folder = Path.Combine(path, "folder{0}");
             var files = new string[] { ".jpg", ".png" }
-                        .Select(x => string.Format("{0}{1}", Path.Combine(path, "folder"), x))
+                        .Select(x => string.Format(folder, x))
                         .Where(x => File.Exists(x))
                         .Distinct();
+            foreach (string file in files)
+            {
+        Log.Debug("***" + file);
+            }
             foreach (string file in files)
             {
                 artwork.Add(new WebArtworkDetailed()

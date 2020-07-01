@@ -40,7 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return View(model);
     }
 
-    public ActionResult Folder(string id, string folder)
+    public ActionResult Folder(string id, string folder, string filter = null)
     {
       var model = new PictureFolderViewModel(id, folder);
       if (model.Folders == null && model.Pictures == null)
@@ -85,17 +85,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Backdrop, width, height, "Images/default/picture-fanart.png", num);
     }
     
-    /*
-    public ActionResult Folder(string folder, int width = 0, int height = 0)
+    public ActionResult FolderCover(string folder, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Cover, width, height, "Images/default/picture-folder.png");
+      return Images.ReturnFromService(WebMediaType.PictureFolder, folder, WebFileType.Cover, width, height, "Images/default/picture-folder.png");
     }
 
     public ActionResult FolderFanart(string folder, int width = 0, int height = 0, int num = -1)
     {
-      return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Backdrop, width, height, "Images/default/picture-folder-fanart.png", num);
+      return Images.ReturnFromService(WebMediaType.PictureFolder, folder, WebFileType.Backdrop, width, height, "Images/default/picture-folder-fanart.png", num);
     }
-    */
 
   }
 }
