@@ -42,6 +42,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Url = 15,
         [EnumMember]
-        Collection = 16
+        Collection = 16,
+        [EnumMember]
+        PictureFolder = 17
     }
 }
