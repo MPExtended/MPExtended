@@ -263,7 +263,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         private WebPictureFolder GetWebPictureFolder(string path)
         {
-            WebCategory category = GetCategoryFromPath(path)
+            WebCategory category = GetCategoryFromPath(path);
             return new WebPictureFolder() {
                 Id = category.Id,
                 Title = category.Title,
