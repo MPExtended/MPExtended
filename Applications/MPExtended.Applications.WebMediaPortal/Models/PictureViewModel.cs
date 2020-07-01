@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
         else
         {
-          if (!Paths.Where(x => x.Id == id))
+          if (!Paths.Any(x => x.Id == id))
           {
             Paths.Add(new WebCategory()
                           {
