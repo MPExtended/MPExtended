@@ -84,7 +84,8 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Backdrop, width, height, "Images/default/picture-fanart.png", num);
     }
-
+    
+    /*
     public ActionResult Folder(string folder, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Cover, width, height, "Images/default/picture-folder.png");
@@ -94,6 +95,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
       return Images.ReturnFromService(WebMediaType.WebCategory, folder, WebFileType.Backdrop, width, height, "Images/default/picture-folder-fanart.png", num);
     }
+    */
 
   }
 }
