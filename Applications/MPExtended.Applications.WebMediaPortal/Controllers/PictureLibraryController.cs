@@ -40,7 +40,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return View(model);
     }
 
-    public ActionResult Folder(string id, string folder, string filter = null)
+    public ActionResult Folder(string folder, string id, string filter = null)
     {
       var model = new PictureFolderViewModel(id, folder);
       if (model.Folders == null && model.Pictures == null)
@@ -67,7 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Json(model, JsonRequestBehavior.AllowGet);
     }
 
-    public ActionResult Cover(string picture, int width = 0, int height = 0)
+    public ActionResult Image(string picture, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Cover, width, height, "Images/default/picture-cover.png");
     }
