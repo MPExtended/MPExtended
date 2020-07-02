@@ -67,14 +67,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Json(model, JsonRequestBehavior.AllowGet);
     }
 
-    public ActionResult Play(string picture)
-    {
-      var model = new PictureViewModel(picture);
-      if (model.Picture == null)
-        return HttpNotFound();
-      return View(model);
-    }
-
     public ActionResult Cover(string picture, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Cover, width, height, "Images/default/picture-cover.png");
