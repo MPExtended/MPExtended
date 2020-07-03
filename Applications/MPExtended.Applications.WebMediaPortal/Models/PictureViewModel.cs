@@ -31,7 +31,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
   public class PictureFolderViewModel
   {
     public WebPictureFolder Folder { get; set; }
-    public IEnumerable<WebPictureFolder> Breadcrumbs { get; set; }
+    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
     public IEnumerable<WebPictureFolder> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
     
@@ -48,7 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       catch (Exception ex)
       {
         Folder = new WebPictureFolder();
-        Breadcrumbs = new List<WebPictureFolder>();
+        Breadcrumbs = new List<WebCategory>();
         
         Log.Warn(String.Format("Failed to load Picture root folder"), ex);
       }
@@ -67,7 +67,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       catch (Exception ex)
       {
         Folder = new WebPictureFolder();
-        Breadcrumbs = new List<WebPictureFolder>();
+        Breadcrumbs = new List<WebCategory>();
         
         Log.Warn(String.Format("Failed to load Picture folder {0}", folder), ex);
       }
@@ -77,7 +77,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
   public class PictureViewModel : MediaItemModel
   {
     public WebPictureDetailed Picture { get; set; }
-    public IEnumerable<WebPictureFolder> Breadcrumbs { get; set; }
+    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
 
     protected override WebMediaItem Item { get { return Picture; } }
 
@@ -96,7 +96,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       }
       catch (Exception ex)
       {
-        Breadcrumbs = new List<WebPictureFolder>();
+        Breadcrumbs = new List<WebCategory>();
         Log.Warn(String.Format("Failed to load picture {0}", id), ex);
       }
     }
