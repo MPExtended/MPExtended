@@ -310,6 +310,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebPictureFolder GetPictureFolderById(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebPictureFolder> GetAllPictureFolders(int? provider, string filter = null);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebPictureFolder> GetSubFoldersById(int? provider, string id, string filter = null);
         #endregion
 
         #region TVShows

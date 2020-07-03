@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -82,6 +83,27 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             byte[] encodedDataAsBytes = Convert.FromBase64String(id);
             string path = Encoding.UTF8.GetString(encodedDataAsBytes);
             return Path.Combine(root, path);
+        }
+
+        protected override List<WebCategory> GetHistory(string fullpath)
+        {
+			List<WebCategory> history = new List<WebCategory>();
+			if (string.IsNullOrEmpty(fullpath))
+			{
+            	return history;
+			}
+
+            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
+            while (dir != null)
+            {
+                history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
+                if (dir.FullName == root)
+                {
+                    break;
+                }
+                dir = dir.Parent;
+            }
+          	return history;
         }
     }
 }

@@ -45,6 +45,41 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             Supported = true;
         }
 
+        public IEnumerable<WebPictureFolder> GetAllPictureFolders()
+        {
+            return GetAllPictureCategories().Select(x => new WebPictureFolder()
+                   {
+                       Id = x.Id,
+                       Title = x.Title,
+                       Description = x.Description,
+                       Artwork = GetArtworkForFolder(IdToPath(x.Id)),
+                       Categories = GetHistory(IdToPath(x.Id))
+                   });
+        }
+
+        public IEnumerable<WebPictureFolder> GetSubFoldersById(string folderId)
+        {
+            return GetSubCategoriesById(folderId).Select(x => new WebPictureFolder()
+                   {
+                       Id = x.Id,
+                       Title = x.Title,
+                       Description = x.Description,
+                       Artwork = GetArtworkForFolder(IdToPath(x.Id)),
+                       Categories = GetHistory(IdToPath(x.Id))
+                   });
+        }
+
+        public IEnumerable<WebCategory> GetSubCategoriesById(string categoryId)
+        {
+            var list = new List<WebCategory>();
+            var root = new DirectoryInfo(IdToPath(categoryId));
+            foreach (var folder in root.EnumerateDirectories())
+            {
+                list.Add(new WebCategory() { Title = folder.Name, Id = PathToId(folder.FullName) });
+            }
+            return list;
+        }
+
         public virtual IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
             return GetAllPictureCategories().Select(x => SearchPictures(IdToPath(x.Id), true, GetWebPictureBasic)).SelectMany(x => x);
@@ -63,17 +98,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public WebPictureDetailed GetPictureDetailed(string pictureId)
         {
             return GetWebPictureDetailed(IdToPath(pictureId));
-        }
-
-        public IEnumerable<WebCategory> GetSubCategoriesById(string categoryId)
-        {
-            var list = new List<WebCategory>();
-            var root = new DirectoryInfo(IdToPath(categoryId));
-            foreach (var folder in root.EnumerateDirectories())
-            {
-                list.Add(new WebCategory() { Title = folder.Name, Id = PathToId(folder.FullName) });
-            }
-            return list;
         }
 
         public IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id)
@@ -156,56 +180,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
         }
 
-        private WebPictureDetailed GetWebPictureDetailed(string path)
-        {
-            WebPictureDetailed pic = new WebPictureDetailed();
-            pic.Id = PathToId(path);
-            pic.Path.Add(path);
-            pic.Categories.Add(GetCategoryFromPath(path));
-
-            // Image data
-            Uri uri = new Uri(path);
-            try
-            {
-                BitmapSource img = BitmapFrame.Create(uri);
-                pic.Mpixel = (img.PixelHeight * img.PixelWidth * 1.0) / (1000 * 1000);
-                pic.Width = Convert.ToString(img.PixelWidth);
-                pic.Height = Convert.ToString(img.PixelHeight);
-                pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
-
-                // Image metadata
-                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
-                if (!String.IsNullOrWhiteSpace(meta.Title))
-                    pic.Title = meta.Title.Trim();
-                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
-                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
-                pic.Comment = meta.Comment;
-                pic.CameraManufacturer = meta.CameraManufacturer;
-                pic.CameraModel = meta.CameraModel;
-                pic.Copyright = meta.Copyright;
-                pic.Rating = (float)meta.Rating;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
-            }
-            
-
-            // Set title to file name if non-existant
-            if (String.IsNullOrEmpty(pic.Title))
-                pic.Title = Path.GetFileName(path);
-
-            pic.Artwork = GetArtworkForPicture(path);
-
-            return pic;
-        }
-
         private WebPictureBasic GetWebPictureBasic(string path)
         {
             WebPictureBasic pic = new WebPictureBasic();
             pic.Id = PathToId(path);
             pic.Path.Add(path);
-            pic.Categories.Add(GetCategoryFromPath(path));
+            // pic.Categories.Add(GetCategoryFromPath(path));
+            pic.Categories = GetHistory(path);
 
             // Image metadata
             Uri uri = new Uri(path);
@@ -235,6 +216,52 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
             return pic;
         }
+
+        private WebPictureDetailed GetWebPictureDetailed(string path)
+        {
+            WebPictureDetailed pic = new WebPictureDetailed();
+            pic.Id = PathToId(path);
+            pic.Path.Add(path);
+            // pic.Categories.Add(GetCategoryFromPath(path));
+            pic.Categories = GetHistory(path);
+
+            // Image data
+            Uri uri = new Uri(path);
+            try
+            {
+                BitmapSource img = BitmapFrame.Create(uri);
+                pic.Mpixel = (img.PixelHeight * img.PixelWidth * 1.0) / (1000 * 1000);
+                pic.Width = Convert.ToString(img.PixelWidth);
+                pic.Height = Convert.ToString(img.PixelHeight);
+                pic.Dpi = Convert.ToString(img.DpiX * img.DpiY);
+
+                // Image metadata
+                BitmapMetadata meta = (BitmapMetadata)img.Metadata;
+                if (!String.IsNullOrWhiteSpace(meta.Title))
+                    pic.Title = meta.Title.Trim();
+                if (!String.IsNullOrWhiteSpace(meta.DateTaken))
+                    pic.DateTaken = DateTime.Parse(meta.DateTaken);
+                pic.Comment = meta.Comment;
+                pic.CameraManufacturer = meta.CameraManufacturer;
+                pic.CameraModel = meta.CameraModel;
+                pic.Copyright = meta.Copyright;
+                pic.Rating = (float)meta.Rating;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+            }
+            
+            // Set title to file name if non-existant
+            if (String.IsNullOrEmpty(pic.Title))
+                pic.Title = Path.GetFileName(path);
+
+            pic.Artwork = GetArtworkForPicture(path);
+
+            return pic;
+        }
+
+        #region Artworks
 
         private List<WebArtwork> GetArtworkForPicture(string picture)
         {
@@ -282,14 +309,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             // Poster
             int i = 0;
             string folder = Path.Combine(path, "folder{0}");
-            var files = new string[] { ".jpg", ".png" }
+            var files = new string[] { ".png", ".jpg", ".bmp"}
                         .Select(x => string.Format(folder, x))
                         .Where(x => File.Exists(x))
                         .Distinct();
-            foreach (string file in files)
-            {
-        Log.Debug("***" + file);
-            }
             foreach (string file in files)
             {
                 artwork.Add(new WebArtworkDetailed()
@@ -297,7 +320,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                     Type = WebFileType.Cover,
                     Offset = i++,
                     Path = file,
-                    Rating = 1,
+                    Rating = 1 + i,
                     Id = file.GetHashCode().ToString(),
                     Filetype = Path.GetExtension(file).Substring(1)
                 });
@@ -306,14 +329,18 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return artwork;
         }
 
+        #endregion
+
         private WebPictureFolder GetWebPictureFolder(string path)
         {
             WebCategory category = GetCategoryFromPath(path);
-            return new WebPictureFolder() {
+            return new WebPictureFolder()
+            {
                 Id = category.Id,
                 Title = category.Title,
                 Description = category.Description,
-                Artwork = GetArtworkForFolder(path)
+                Artwork = GetArtworkForFolder(path),
+                Categories = GetHistory(path)
             };
         }
         
@@ -331,5 +358,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public abstract IEnumerable<WebCategory> GetAllPictureCategories();
         protected abstract string PathToId(string fullpath);
         protected abstract string IdToPath(string id);
+        protected abstract List<WebCategory> GetHistory(string fullpath);
     }
 }

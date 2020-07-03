@@ -30,60 +30,23 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 {
   public class PictureFolderViewModel
   {
-    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
-    public IEnumerable<WebCategory> Folders { get; set; }
+    public WebPictureFolder Folder { get; set; }
+    public IEnumerable<WebPictureFolder> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
     
-    private List<WebCategory> Paths = new List<WebCategory>();
-
-    public PictureFolderViewModel(string filter = null)
+    public PictureFolderViewModel(string id = null, string filter = null)
     {
       try
       {
-        Paths = new List<WebCategory>();
-        var categoryList = Connections.Current.MAS.GetPictureCategories(Settings.ActiveSettings.PicturesProvider, filter);
-        var root = categoryList.Where(x => !string.IsNullOrEmpty(x.Title) && x.Id == "_root")
-                               .Select(x => new WebCategory()
-                               {
-                                 Id = x.Id,
-                                 Title = x.Title,
-                                 PID = x.PID,
-                                 Description = x.Description
-                               }).First();
-        Paths.Add(root);
-        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, root.Id);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, root.Id);
-
-        int idx = Paths.Select(x => x.Id).ToList().IndexOf(root.Id);
-        Breadcrumbs = idx < 0 ? Paths : Paths.Take(idx + 1).ToList();
+        string folderId = string.IsNullOrEmpty(id) ? "_root" : id;
+        Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, folderId);
+        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
+        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
       }
       catch (Exception ex)
       {
+        Folder = new WebPictureFolder();
         Log.Warn(String.Format("Failed to load Picture root folder"), ex);
-      }
-    }
-
-    public PictureFolderViewModel(string id, string folder, string filter = null)
-    {
-      try
-      {
-        if (!Paths.Any(x => x.Id == id))
-        {
-          Paths.Add(new WebCategory() {
-                          Id = id,
-                          Title = folder,
-          });
-        }
-        
-        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, id);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
-        
-        int idx = Paths.Select(x => x.Id).ToList().IndexOf(id);
-        Breadcrumbs = idx < 0 ? Paths : Paths.Take(idx + 1).ToList();
-      }
-      catch (Exception ex)
-      {
-        Log.Warn(String.Format("Failed to load Picture folder {0}", folder), ex);
       }
     }
   }
