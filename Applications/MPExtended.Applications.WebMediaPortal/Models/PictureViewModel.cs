@@ -31,45 +31,22 @@ namespace MPExtended.Applications.WebMediaPortal.Models
   public class PictureFolderViewModel
   {
     public WebPictureFolder Folder { get; set; }
-    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
     public IEnumerable<WebPictureFolder> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
     
-    public PictureFolderViewModel(string filter = null)
+    public PictureFolderViewModel(string id = null, string filter = null)
     {
       try
       {
-        string id = "_root";
-        Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, id);
-
-        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, id);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
+        string folderId = string.IsNullOrEmpty(id) ? "_root" : id;
+        Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, folderId);
+        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
+        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
       }
       catch (Exception ex)
       {
         Folder = new WebPictureFolder();
-        Breadcrumbs = new List<WebCategory>();
-        
         Log.Warn(String.Format("Failed to load Picture root folder"), ex);
-      }
-    }
-
-    public PictureFolderViewModel(string id, string folder, string filter = null)
-    {
-      try
-      {
-        Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, id);
-        Breadcrumbs = Folder.Categories;
-        
-        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, id);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
-      }
-      catch (Exception ex)
-      {
-        Folder = new WebPictureFolder();
-        Breadcrumbs = new List<WebCategory>();
-        
-        Log.Warn(String.Format("Failed to load Picture folder {0}", folder), ex);
       }
     }
   }
@@ -77,14 +54,12 @@ namespace MPExtended.Applications.WebMediaPortal.Models
   public class PictureViewModel : MediaItemModel
   {
     public WebPictureDetailed Picture { get; set; }
-    public IEnumerable<WebCategory> Breadcrumbs { get; set; }
 
     protected override WebMediaItem Item { get { return Picture; } }
 
     public PictureViewModel(WebPictureDetailed picture)
     {
       Picture = picture;
-      Breadcrumbs = Picture.Categories;
     }
 
     public PictureViewModel(string id)
@@ -92,11 +67,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       try
       {
         Picture = Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id);
-        Breadcrumbs = Picture.Categories;
       }
       catch (Exception ex)
       {
-        Breadcrumbs = new List<WebCategory>();
         Log.Warn(String.Format("Failed to load picture {0}", id), ex);
       }
     }
