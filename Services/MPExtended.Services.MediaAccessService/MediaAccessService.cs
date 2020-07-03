@@ -459,12 +459,12 @@ namespace MPExtended.Services.MediaAccessService
       return PictureLibraries[provider].GetPictureFolderById(id).Finalize(provider, ProviderType.Picture);
     }
     
-    public IList<WebPictureFolder> GetAllPictureFolders()
+    public IList<WebPictureFolder> GetAllPictureFolders(int? provider, string filter = null)
     {
       return PictureLibraries[provider].GetAllPictureFolders().AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
     }
     
-    public IList<WebPictureFolder> GetSubFoldersById(string id)
+    public IList<WebPictureFolder> GetSubFoldersById(int? provider, string id, string filter = null)
     {
       return PictureLibraries[provider].GetSubFoldersById(id).AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
     }
