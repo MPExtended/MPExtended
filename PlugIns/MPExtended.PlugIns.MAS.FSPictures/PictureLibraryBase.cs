@@ -47,7 +47,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public IEnumerable<WebPictureFolder> GetAllPictureFolders()
         {
-			return GetAllPictureCategories().Select(x => new WebPictureFolder()
+            return GetAllPictureCategories().Select(x => new WebPictureFolder()
                    {
                        Id = x.Id,
                        Title = x.Title,
@@ -59,7 +59,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public IEnumerable<WebPictureFolder> GetSubFoldersById(string folderId)
         {
-			return GetSubCategoriesById(folderId).Select(x => new WebPictureFolder()
+            return GetSubCategoriesById(folderId).Select(x => new WebPictureFolder()
                    {
                        Id = x.Id,
                        Title = x.Title,
