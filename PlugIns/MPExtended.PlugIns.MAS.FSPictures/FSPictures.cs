@@ -83,5 +83,26 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             string path = Encoding.UTF8.GetString(encodedDataAsBytes);
             return Path.Combine(root, path);
         }
+
+        protected override List<WebCategory> GetHistory(string fullpath)
+        {
+			List<WebCategory>() history = new List<WebCategory>();
+			if (string.IsNullOrEmty(fullpath))
+			{
+            	return history;
+			}
+
+            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
+            while (dir != null)
+            {
+                history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
+                if (dir.FullName == root)
+                {
+                    break;
+                }
+                currentDir = currentDir.Parent;
+            }
+          	return history;
+        }
     }
 }

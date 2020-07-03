@@ -138,5 +138,27 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
             return false;
         }
+
+        protected override List<WebCategory> GetHistory(string fullpath)
+        {
+			List<WebCategory>() history = new List<WebCategory>();
+			if (string.IsNullOrEmty(fullpath))
+			{
+            	return history;
+			}
+
+            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
+            while (dir != null)
+            {
+                history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
+                
+                if (shares.Any(x => dir = x.Path))
+                {
+                    break;
+                }
+                currentDir = currentDir.Parent;
+            }
+          	return history;
+        }
     }
 }
