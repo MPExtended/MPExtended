@@ -153,7 +153,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             {
                 history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
                 
-                if (shares.Any(x => dir == x.Path))
+                if (shares.Any(x => dir.FullName == x.Path))
                 {
                     break;
                 }
