@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, id);
         Breadcrumbs = Folder.Categories;
         
-        Folders = Connections.Current.MAS.GetPictureSubCategories(Settings.ActiveSettings.PicturesProvider, id);
+        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, id);
         Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, id);
       }
       catch (Exception ex)
