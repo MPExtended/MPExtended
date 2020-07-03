@@ -333,6 +333,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public abstract IEnumerable<WebCategory> GetAllPictureCategories();
         protected abstract string PathToId(string fullpath);
         protected abstract string IdToPath(string id);
-        protected override List<WebCategory> GetHistory(string fullpath)
+        protected override List<WebCategory> GetHistory(string fullpath);
     }
 }

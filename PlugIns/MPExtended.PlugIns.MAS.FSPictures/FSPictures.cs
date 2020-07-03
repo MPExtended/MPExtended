@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -86,7 +87,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         protected override List<WebCategory> GetHistory(string fullpath)
         {
-			List<WebCategory>() history = new List<WebCategory>();
+			List<WebCategory> history = new List<WebCategory>();
 			if (string.IsNullOrEmty(fullpath))
 			{
             	return history;
