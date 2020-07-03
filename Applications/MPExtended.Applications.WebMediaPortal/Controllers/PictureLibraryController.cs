@@ -30,20 +30,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
   {
     //
     // GET: /PictureLibrary/
-    public ActionResult Index(string filter = null)
+    public ActionResult Index(string id = null, string filter = null)
     {
-      var model = new PictureFolderViewModel();
-      if (model.Folders == null && model.Pictures == null)
-      {
-        return HttpNotFound();
-      }
-      return View(model);
-    }
-
-    public ActionResult Folder(string folder, string id, string filter = null)
-    {
-      var model = new PictureFolderViewModel(id, folder);
-      if (model.Folders == null && model.Pictures == null)
+      var model = new PictureFolderViewModel(id, filter);
+      if (model.Folder == null)
       {
         return HttpNotFound();
       }
