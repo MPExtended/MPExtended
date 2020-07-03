@@ -21,8 +21,11 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-  public class WebPictureFolder : WebCategory, ITitleSortable, IArtwork
+  public class WebPictureFolder : WebObject, ITitleSortable, IArtwork
   {
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }  
     public IList<WebArtwork> Artwork { get; set; }
 
     public WebPictureFolder()
