@@ -40,6 +40,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       {
         string folderId = string.IsNullOrEmpty(id) ? "_root" : id;
         Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, folderId);
+        Folder.Categories = Folder.Categories.Reverse().ToList();
+
         Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
         Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
       }
@@ -67,6 +69,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       try
       {
         Picture = Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id);
+        Picture.Categories = Picture.Categories.Reverse().ToList();
       }
       catch (Exception ex)
       {

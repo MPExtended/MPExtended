@@ -142,11 +142,11 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         protected override List<WebCategory> GetHistory(string fullpath)
         {
-			List<WebCategory> history = new List<WebCategory>();
-			if (string.IsNullOrEmpty(fullpath))
-			{
-            	return history;
-			}
+			      List<WebCategory> history = new List<WebCategory>();
+			      if (string.IsNullOrEmpty(fullpath))
+			      {
+            	  return history;
+			      }
 
             DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
             while (dir != null)
