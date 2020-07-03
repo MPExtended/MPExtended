@@ -45,6 +45,41 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             Supported = true;
         }
 
+        public IEnumerable<WebPictureFolder> GetAllPictureFolders()
+        {
+			return GetAllPictureCategories().Select(x => new WebPictureFolder()
+                   {
+                       Id = x.Id,
+                       Title = x.Title,
+                       Description = x.Description,
+                       Artwork = GetArtworkForFolder(IdToPath(x.Id)),
+                       Categories = GetHistory(IdToPath(x.Id))
+                   });
+        }
+
+        public IEnumerable<WebPictureFolder> GetSubFoldersById(string folderId)
+        {
+			return GetSubCategoriesById(folderId).Select(x => new WebPictureFolder()
+                   {
+                       Id = x.Id,
+                       Title = x.Title,
+                       Description = x.Description,
+                       Artwork = GetArtworkForFolder(IdToPath(x.Id)),
+                       Categories = GetHistory(IdToPath(x.Id))
+                   });
+        }
+
+        public IEnumerable<WebCategory> GetSubCategoriesById(string categoryId)
+        {
+            var list = new List<WebCategory>();
+            var root = new DirectoryInfo(IdToPath(categoryId));
+            foreach (var folder in root.EnumerateDirectories())
+            {
+                list.Add(new WebCategory() { Title = folder.Name, Id = PathToId(folder.FullName) });
+            }
+            return list;
+        }
+
         public virtual IEnumerable<WebPictureBasic> GetAllPicturesBasic()
         {
             return GetAllPictureCategories().Select(x => SearchPictures(IdToPath(x.Id), true, GetWebPictureBasic)).SelectMany(x => x);
@@ -63,17 +98,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         public WebPictureDetailed GetPictureDetailed(string pictureId)
         {
             return GetWebPictureDetailed(IdToPath(pictureId));
-        }
-
-        public IEnumerable<WebCategory> GetSubCategoriesById(string categoryId)
-        {
-            var list = new List<WebCategory>();
-            var root = new DirectoryInfo(IdToPath(categoryId));
-            foreach (var folder in root.EnumerateDirectories())
-            {
-                list.Add(new WebCategory() { Title = folder.Name, Id = PathToId(folder.FullName) });
-            }
-            return list;
         }
 
         public IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id)
@@ -162,7 +186,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Id = PathToId(path);
             pic.Path.Add(path);
             // pic.Categories.Add(GetCategoryFromPath(path));
-            pic.Categories.AddRange(GetHistory(path));
+            pic.Categories = GetHistory(path);
 
             // Image metadata
             Uri uri = new Uri(path);
@@ -199,7 +223,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             pic.Id = PathToId(path);
             pic.Path.Add(path);
             // pic.Categories.Add(GetCategoryFromPath(path));
-            pic.Categories.AddRange(GetHistory(path));
+            pic.Categories = GetHistory(path);
 
             // Image data
             Uri uri = new Uri(path);
@@ -228,7 +252,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
             }
             
-
             // Set title to file name if non-existant
             if (String.IsNullOrEmpty(pic.Title))
                 pic.Title = Path.GetFileName(path);
@@ -311,11 +334,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         private WebPictureFolder GetWebPictureFolder(string path)
         {
             WebCategory category = GetCategoryFromPath(path);
-            return new WebPictureFolder() {
+            return new WebPictureFolder()
+            {
                 Id = category.Id,
                 Title = category.Title,
                 Description = category.Description,
-                Artwork = GetArtworkForFolder(path)
+                Artwork = GetArtworkForFolder(path),
+                Categories = GetHistory(path)
             };
         }
         

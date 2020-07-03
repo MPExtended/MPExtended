@@ -143,7 +143,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         protected override List<WebCategory> GetHistory(string fullpath)
         {
 			List<WebCategory> history = new List<WebCategory>();
-			if (string.IsNullOrEmty(fullpath))
+			if (string.IsNullOrEmpty(fullpath))
 			{
             	return history;
 			}
@@ -153,11 +153,11 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             {
                 history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
                 
-                if (shares.Any(x => dir = x.Path))
+                if (shares.Any(x => dir == x.Path))
                 {
                     break;
                 }
-                currentDir = currentDir.Parent;
+                dir = dir.Parent;
             }
           	return history;
         }
