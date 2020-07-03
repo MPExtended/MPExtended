@@ -458,6 +458,16 @@ namespace MPExtended.Services.MediaAccessService
     {
       return PictureLibraries[provider].GetPictureFolderById(id).Finalize(provider, ProviderType.Picture);
     }
+    
+    public IList<WebPictureFolder> GetAllPictureFolders()
+    {
+      return PictureLibraries[provider].GetAllPictureFolders().AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
+    }
+    
+    public IList<WebPictureFolder> GetSubFoldersById(string id)
+    {
+      return PictureLibraries[provider].GetSubFoldersById(id).AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
+    }
     #endregion
 
     #region TVShows
@@ -530,7 +540,6 @@ namespace MPExtended.Services.MediaAccessService
     {
       return TVShowLibraries[provider].GetSeasonBasic(id).Finalize(provider, ProviderType.TVShow);
     }
-
 
     public IList<WebTVEpisodeBasic> GetTVEpisodesBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.TVEpisodeNumber, WebSortOrder? order = WebSortOrder.Asc)
     {
