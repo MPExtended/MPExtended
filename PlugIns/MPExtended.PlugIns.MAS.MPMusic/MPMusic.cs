@@ -86,12 +86,16 @@ namespace MPExtended.PlugIns.MAS.MPMusic
               if (item is WebMusicTrackDetailed)
               {
                 if (artists == null)
+                {
                   artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
+                }
 
                 WebMusicTrackDetailed det = item as WebMusicTrackDetailed;
                 det.Artists = det.ArtistId.Where(x => artists.ContainsKey(x)).Select(x => artists[x]).ToList();
                 if (artists.ContainsKey(det.AlbumArtist))
+                {
                   det.AlbumArtistObject = artists[det.AlbumArtist];
+                }
               }
 
               // if there is no artist, we can't load album artwork, so just skip without artwork
@@ -99,35 +103,7 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 return item;
 
               // for now, use album artwork also for songs
-              var tuple = new Tuple<string, string>(item.Artist.Distinct().First(), item.Album);
-              if (!artwork.ContainsKey(tuple))
-              {
-                artwork[tuple] = new List<WebArtworkDetailed>();
-                int i = 0;
-                var files = new string[] {
-                        PathUtil.StripInvalidCharacters(string.Join(" _ ", item.Artist) + "-" + item.Album + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(string.Join(" _ ", item.Artist) + "-" + item.Album + ".jpg", '_')
-                    }
-                    .Select(x => Path.Combine(configuration["cover"], "Albums", x))
-                    .Where(x => File.Exists(x))
-                    .Distinct();
-                foreach (var path in files)
-                {
-                  artwork[tuple].Add(new WebArtworkDetailed()
-                  {
-                    Type = WebFileType.Cover,
-                    Offset = i++,
-                    Path = path,
-                    Rating = 1,
-                    Id = path.GetHashCode().ToString(),
-                    Filetype = Path.GetExtension(path).Substring(1)
-                  });
-                }
-                (item.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(string.Join(" _ ", item.Artist), false));
-              }
-
-              // why isn't there an IList<T>.AddRange() method?
-              (item.Artwork as List<WebArtwork>).AddRange(artwork[tuple]);
+              item.Artwork = GetArtworkForAlbum(item.Artist.ToList(), item.Album);
               return item;
             });
     }
@@ -154,6 +130,45 @@ namespace MPExtended.PlugIns.MAS.MPMusic
     #endregion
 
     #region Albums
+    private List<WebArtwork> GetArtworkForAlbum(List<string> artists, string album)
+    {
+      var artwork = new List<WebArtwork>();
+      if (artists.Count == 0 || string.IsNullOrEmpty(album))
+      {
+        return artwork;
+      }
+
+      string title = PathUtil.StripInvalidCharacters(album, '_');
+      int i = 0;
+
+      foreach (string artist in artists.Distinct())
+      {
+        string filename = PathUtil.StripInvalidCharacters(artist, '_') + "-" + title;
+        
+        // Cover
+        string[] filenames = new string[] { filename + "L.jpg", filename + ".jpg" };
+        foreach (string file in filenames)
+        {
+          string path = Path.Combine(configuration["cover"], "Albums", file);
+          if (File.Exists(path))
+          {
+            artwork.Add(new WebArtworkDetailed()
+            {
+              Type = WebFileType.Cover,
+              Offset = i++,
+              Path = path,
+              Rating = 1,
+              Id = path.GetHashCode().ToString(),
+              Filetype = Path.GetExtension(path).Substring(1)
+            });
+          }
+        }
+        artwork.AddRange(GetArtworkForArtist(artist, false));
+      }
+
+      return artwork;
+    }
+
     public IEnumerable<WebMusicAlbumBasic> GetAllAlbums()
     {
       string sql = "SELECT DISTINCT t.strAlbumArtist, t.strAlbum, " +
@@ -182,58 +197,18 @@ namespace MPExtended.PlugIns.MAS.MPMusic
                 new SQLFieldMapping("", "Codec", "Codec", DataReaders.ReadString),
             }, delegate (WebMusicAlbumBasic album)
             {
+              List<string> artists = new List<string>();
               if (!string.IsNullOrEmpty(album.AlbumArtist))
               {
-                string albumArtist = album.AlbumArtist.Trim('|').Trim();
-                int i = 0;
-                string[] filenames = new string[] {
-                        PathUtil.StripInvalidCharacters(albumArtist + "-" + album.Title + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(albumArtist + "-" + album.Title + ".jpg", '_')
-                    };
-                foreach (string file in filenames)
-                {
-                  string path = Path.Combine(configuration["cover"], "Albums", file);
-                  if (File.Exists(path))
-                  {
-                    album.Artwork.Add(new WebArtworkDetailed()
-                    {
-                      Type = WebFileType.Cover,
-                      Offset = i++,
-                      Path = path,
-                      Rating = 1,
-                      Id = path.GetHashCode().ToString(),
-                      Filetype = Path.GetExtension(path).Substring(1)
-                    });
-                  }
-                }
-                (album.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(albumArtist, false));
+                artists.Add(album.AlbumArtist.Trim('|').Trim());
               }
 
               if (album.Artists.Count() > 0)
               {
-                int i = 0;
-                string[] filenames = new string[] {
-                        PathUtil.StripInvalidCharacters(string.Join(" _ ", album.Artists) + "-" + album.Title + "L.jpg", '_'),
-                        PathUtil.StripInvalidCharacters(string.Join(" _ ", album.Artists) + "-" + album.Title + ".jpg", '_')
-                    };
-                foreach (string file in filenames)
-                {
-                  string path = Path.Combine(configuration["cover"], "Albums", file);
-                  if (File.Exists(path))
-                  {
-                    album.Artwork.Add(new WebArtworkDetailed()
-                    {
-                      Type = WebFileType.Cover,
-                      Offset = i++,
-                      Path = path,
-                      Rating = 1,
-                      Id = path.GetHashCode().ToString(),
-                      Filetype = Path.GetExtension(path).Substring(1)
-                    });
-                  }
-                }
-                (album.Artwork as List<WebArtwork>).AddRange(GetArtworkForArtist(string.Join(" _ ", album.Artists), false));
+                artists.AddRange(album.Artists);
               }
+
+              album.Artwork = GetArtworkForAlbum(artists, album.Title);
               return album;
             });
     }

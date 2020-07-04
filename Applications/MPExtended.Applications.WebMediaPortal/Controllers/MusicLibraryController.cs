@@ -37,7 +37,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
   {
     public ActionResult Index()
     {
-      return Artist();
+      if (Settings.ActiveSettings.MusicLayout == Libraries.Service.Config.MusicLayoutType.Artist)
+      {
+        return Artist();
+      }
+      else
+      {
+        return RedirectToAction("Albums", "MusicLibrary", new { });
+      }
     }
 
     public ActionResult Artist()
