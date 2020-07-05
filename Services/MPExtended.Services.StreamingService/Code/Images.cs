@@ -234,6 +234,7 @@ namespace MPExtended.Services.StreamingService.Code
         using (var stream = src.Retrieve())
         {
           var image = hasToResize ? ResizeImage(stream, maxWidth, maxHeight, borders) : Image.FromStream(stream);
+          image.NormalizeOrientation();
           SaveImageToFile(image, cache.GetPath(filename), format);
           image.Dispose();
         }
@@ -265,6 +266,8 @@ namespace MPExtended.Services.StreamingService.Code
     {
       using (var origImage = Image.FromStream(stream))
       {
+        origImage.NormalizeOrientation();
+
         // newImageSize is the size of the actual graphic, which might not be the size of the canvas (bitmap). Unless
         // we're instructed to stretch the image, it's a proportional resize of the source graphic. Borders will be
         // added when we're instructed to and the aspect ratio of the image isn't equal to the aspect ratio of the 
@@ -328,5 +331,43 @@ namespace MPExtended.Services.StreamingService.Code
       }
     }
 
+    private static void NormalizeOrientation(this Image image)
+    {
+      int ExifOrientationTagId = 274;
+
+      if (Array.IndexOf(image.PropertyIdList, ExifOrientationTagId) > -1)
+      {
+        int orientation = image.GetPropertyItem(ExifOrientationTagId).Value[0];
+        if (orientation >= 1 && orientation <= 8)
+        {
+          switch (orientation)
+          {
+            case 2:
+              image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+              break;
+            case 3:
+              image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+              break;
+            case 4:
+              image.RotateFlip(RotateFlipType.Rotate180FlipX);
+              break;
+            case 5:
+              image.RotateFlip(RotateFlipType.Rotate90FlipX);
+              break;
+            case 6:
+              image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+              break;
+            case 7:
+              image.RotateFlip(RotateFlipType.Rotate270FlipX);
+              break;
+            case 8:
+              image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+              break;
+          }
+
+          image.RemovePropertyItem(ExifOrientationTagId);
+        }
+      }
+    }
   }
 }
