@@ -214,6 +214,16 @@ namespace MPExtended.Services.StreamingService
 
       return new WebMediaHash() { Generated = true, Hash = smartHash ? source.ComputeSmartHash() : source.ComputeFullHash() };
     }
+
+    public WebEXIFInfo GetExifInfo(WebMediaType type, int? provider, string itemId, int? offset)
+    {
+      if (type != WebMediaType.Picture)
+      {
+        return null;
+      }
+
+      return EXIFInfoHelper.LoadEXIFInfoOrSurrogate(new MediaSource(type, provider, itemId, offset));
+    }
     #endregion
 
     #region Streaming

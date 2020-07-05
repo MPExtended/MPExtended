@@ -72,6 +72,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="Code\EXIFInfoHelper.cs" />
     <Compile Include="Code\ImageMediaSource.cs" />
     <Compile Include="Code\ImageCache.cs" />
     <Compile Include="Code\Downloads.cs" />
@@ -88,6 +89,8 @@
     <Compile Include="Code\WatchSharingDebug.cs" />
     <Compile Include="Code\MediaInfoHelper.cs" />
     <Compile Include="Connections.cs" />
+    <Compile Include="EXIF\ExifExtensions.cs" />
+    <Compile Include="EXIF\ExifExtractor.cs" />
     <Compile Include="MediaInfo\MediaInfoExtenstions.cs" />
     <Compile Include="MediaInfo\IMediaInfoCache.cs" />
     <Compile Include="MediaInfo\XmlCache.cs" />

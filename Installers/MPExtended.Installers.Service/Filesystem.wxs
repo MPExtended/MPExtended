@@ -130,6 +130,9 @@
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcurl.dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libssl-1_1.dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.Wrapper.dll" />
+                  <!-- EXIF -->
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MetadataExtractor.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\XmpCore.dll" />
                 </Component>
 
                 <!-- WSS registry -->

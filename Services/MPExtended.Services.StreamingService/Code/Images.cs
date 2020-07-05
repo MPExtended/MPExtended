@@ -369,5 +369,24 @@ namespace MPExtended.Services.StreamingService.Code
         }
       }
     }
+
+    public static void GetImageSizes(string strFile, out Size resolution, out Size dimensions)
+    {
+      resolution = Size.Empty;
+      dimensions = Size.Empty;
+
+      if (!File.Exists(strFile))
+      {
+        return;
+      }
+
+      using (Image MyImage = Image.FromFile(strFile))
+      {
+        resolution.Width = Convert.ToInt32(MyImage.HorizontalResolution);
+        resolution.Height = Convert.ToInt32(MyImage.VerticalResolution);
+        dimensions = MyImage.Size;
+      }
+    }
+
   }
 }
