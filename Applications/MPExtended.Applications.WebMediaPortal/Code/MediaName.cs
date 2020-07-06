@@ -39,6 +39,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                         return Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebMediaType.MusicTrack:
                         return Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id).Title;
+                    case WebMediaType.Picture:
+                        return Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id).Title;
                     case WebMediaType.Recording:
                         return Connections.Current.TAS.GetRecordingById(Int32.Parse(id)).Title;
                     case WebMediaType.TV:
