@@ -76,14 +76,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAddedMovies(count), partial);
     }
 
+    public ActionResult NewUnWatchedMovies(int count, bool partial = false)
+    {
+      return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAddedMovies(count, true), partial);
+    }
+
     public ActionResult NewEpisodes(int count, bool partial = false)
     {
       return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAddedTVEpisodes(count), partial);
     }
 
+    public ActionResult NewUnwatchedEpisodes(int count, bool partial = false)
+    {
+      return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAddedTVEpisodes(count, true), partial);
+    }
+
     public ActionResult AiredEpisodes(int count, bool partial = false)
     {
       return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAiredTVEpisodes(count), partial);
+    }
+
+    public ActionResult AiredUnwatchedEpisodes(int count, bool partial = false)
+    {
+      return CreateResult(new HomeViewModel(ServiceAvailability).GetLastAiredTVEpisodes(count, true), partial);
     }
 
     public ActionResult NewAlbums(int count, bool partial = false)
