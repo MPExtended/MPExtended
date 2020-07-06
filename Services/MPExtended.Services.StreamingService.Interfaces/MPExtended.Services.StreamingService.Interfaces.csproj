@@ -46,6 +46,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="WebGeoLocation.cs" />
     <Compile Include="IStreamingService.cs" />
     <Compile Include="IWebStreamingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

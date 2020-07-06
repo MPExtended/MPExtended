@@ -15,15 +15,13 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace MPExtended.Services.StreamingService.Interfaces
 {
-    public class WebEXIFInfo
-    {
-        public Dictionary<string, string> Metadata { get; set; }
-    }
+  public class WebEXIFInfo
+  {
+    public Dictionary<string, string> Metadata { get; set; }
+    public WebGeoLocation GeoLocation { get; set; }
+  }
 }

@@ -71,6 +71,15 @@ namespace MPExtended.Services.StreamingService.EXIF
           if (!exif.IsEmpty())
           {
             info.Metadata = exif.GetExifList();
+            if (exif.Location != null)
+            {
+              info.GeoLocation = new WebGeoLocation
+              {
+                Latitude = exif.Location.Latitude,
+                Longitude = exif.Location.Longitude,
+                Altitude = exif.Altitude
+              };
+            }
           }
         }
 
