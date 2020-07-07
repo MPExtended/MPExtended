@@ -110,13 +110,43 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         {
             var defaultProfile = Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, userAgent);
             var profile = Connections.Current.MASStreamControl.GetTranscoderProfileByName(defaultProfile);
-            return Configuration.WebMediaPortal.EnableAlbumPlayer &&
-                StreamTarget.GetAudioTargets().Any(audioTarget => profile.Targets.Contains(audioTarget.Name));
+            return Configuration.WebMediaPortal.EnableAlbumPlayer && 
+                   StreamTarget.GetAudioTargets().Any(audioTarget => profile.Targets.Contains(audioTarget.Name));
         }
 
         public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
 
         public AlbumPlayerViewModel()
+        {
+            MediaType = WebMediaType.MusicAlbum;
+        }
+
+        public string GetTranscoderForTrack(WebMusicTrackDetailed track)
+        {
+            if (track.Path.First().EndsWith(".mp3") && TranscoderProfile.MIME == "audio/mpeg" && false)
+            {
+                return "Direct";
+            }
+            else
+            {
+                return Transcoder;
+            }
+        }
+    }
+
+    public class ArtistTracksPlayerViewModel : PlayerViewModel
+    {
+        public static bool EnableAlbumPlayerForUserAgent(string userAgent)
+        {
+            var defaultProfile = Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, userAgent);
+            var profile = Connections.Current.MASStreamControl.GetTranscoderProfileByName(defaultProfile);
+            return Configuration.WebMediaPortal.EnableAlbumPlayer && 
+                   StreamTarget.GetAudioTargets().Any(audioTarget => profile.Targets.Contains(audioTarget.Name));
+        }
+
+        public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
+
+        public ArtistTracksPlayerViewModel()
         {
             MediaType = WebMediaType.MusicAlbum;
         }

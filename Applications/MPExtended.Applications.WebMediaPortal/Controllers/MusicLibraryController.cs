@@ -61,7 +61,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       IList<WebMusicAlbumBasic> albumList;
 
       if (string.IsNullOrEmpty(artist))
+      {
         albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider);
+      }
       else
       {
         artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
@@ -102,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title))
       };
 
-      return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "ArtistTracks", model);
+      return View(ArtistTracksPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "ArtistTracksPlayer" : "ArtistTracks", model);
     }
 
     public ActionResult Track(string track)
