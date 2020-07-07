@@ -79,7 +79,12 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             });
 
             var disableAlbumSupportList = settings.Where(s => s.Key == "disable_album_support").ToList();
+            var disableAlbumSupportGUIList = settings.Where(s => s.Key == "disable_gui_album_support").ToList();
             hasAlbums = disableAlbumSupportList.Any() ? disableAlbumSupportList.First().Value != "True" : true;
+            if (hasAlbum)
+            {
+                hasAlbums = disableAlbumSupportGUIList.Any() ? disableAlbumSupportGUIList.First().Value != "True" : true;
+            }
         }
 
         [MergeListReader]
@@ -95,7 +100,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             if (configuration.ContainsKey("cover"))
             {
                 string cover = configuration["cover"];
-                if (!artwork.StartsWith(optAlpha.SelectedItem.Value, StringComparison.InvariantCultureIgnoreCase))
+                if (!artwork.StartsWith(cover, StringComparison.InvariantCultureIgnoreCase))
                 {
                     int i = artwork.IndexOf(@"\mvCentral\");
                     if (i > 0)
