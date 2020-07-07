@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -622,6 +623,18 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
                 Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
+        }
+
+        [ServiceAuthorize]
+        public ActionResult ArtistMusicPlayer(string artistId)
+        {
+            ArtistTracksPlayerViewModel model = new ArtistTracksPlayerViewModel();
+            model.MediaId = artistId;
+            model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
+            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
+                Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
+            model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artistId);
             return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
         }
 

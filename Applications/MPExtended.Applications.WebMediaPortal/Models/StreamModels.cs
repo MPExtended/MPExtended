@@ -148,7 +148,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         public ArtistTracksPlayerViewModel()
         {
-            MediaType = WebMediaType.MusicAlbum;
+            MediaType = WebMediaType.MusicArtist;
         }
 
         public string GetTranscoderForTrack(WebMusicTrackDetailed track)
