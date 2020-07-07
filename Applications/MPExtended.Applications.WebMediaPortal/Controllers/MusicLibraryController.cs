@@ -90,6 +90,29 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
     }
 
+    public ActionResult ArtistTracks(string artist)
+    {
+      var artistObj = Connections.Current.MAS.GetMusicArtistBasicById(Settings.ActiveSettings.MusicProvider, artist);
+      if (artistObj == null)
+        return new HttpNotFoundResult();
+      var trackList = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artist, null, WebSortField.Title, WebSortOrder.Asc);
+      var model = new ArtistTracksViewModel()
+      {
+        Artist = artistObj,
+        Tracks = trackList.Where(x => !String.IsNullOrEmpty(x.Title))
+      };
+
+      return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "ArtistTracks", model);
+    }
+
+    public ActionResult Track(string track)
+    {
+      var trackObj = Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
+      if (trackObj == null)
+        return new HttpNotFoundResult();
+      return View(trackObj);
+    }
+
     public ActionResult AlbumImage(string album, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.MusicAlbum, album, WebFileType.Cover, width, height, "Images/default/album.png");
@@ -103,14 +126,6 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     public ActionResult TrackImage(string track, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.MusicTrack, track, WebFileType.Cover, width, height, "Images/default/track.png");
-    }
-
-    public ActionResult Track(string track)
-    {
-      var trackObj = Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, track);
-      if (trackObj == null)
-        return new HttpNotFoundResult();
-      return View(trackObj);
     }
 
     public ActionResult ArtistFanart(string artist, int width = 0, int height = 0, int num = -1)
