@@ -44,16 +44,19 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             public string Type { get; set; }
         }
 
+        private Dictionary<string, string> configuration;
+        private Dictionary<string, string> fanartconfiguration;
         public bool Supported { get; private set; }
         private bool hasAlbums = true;
 
         [ImportingConstructor]
         public MVCentral(IPluginData data)
         {
-            var config = data.GetConfiguration("mvCentral");
-            if (config.ContainsKey("database") && File.Exists(config["database"]))
+            configuration = data.GetConfiguration("mvCentral");
+            fanartconfiguration = data.GetConfiguration("FanartHandler");
+            if (configuration.ContainsKey("database") && File.Exists(configuration["database"]))
             {
-                DatabasePath = config["database"];
+                DatabasePath = configuration["database"];
                 Supported = true;
                 ReadSettings();
             }
@@ -87,14 +90,29 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             {
                 return null;
             }
+            
+            string artwork = path;
+            if (configuration.ContainsKey("cover"))
+            {
+                string cover = configuration["cover"];
+                if (!artwork.StartsWith(optAlpha.SelectedItem.Value, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int i = artwork.IndexOf(@"\mvCentral\");
+                    if (i > 0)
+                    {
+                        artwork = Path.Combine(cover, artwork.Substring(i + 10));
+                    }
+                }
+            }
+            
             return new WebArtworkDetailed()
             {
                 Type = (WebFileType)param,
-                Path = path,
+                Path = artwork,
                 Offset = 0,
-                Filetype = Path.GetExtension(path).Substring(1),
+                Filetype = Path.GetExtension(artwork).Substring(1),
                 Rating = 1,
-                Id = path.GetHashCode().ToString()
+                Id = artwork.GetHashCode().ToString()
             };
         }
 
