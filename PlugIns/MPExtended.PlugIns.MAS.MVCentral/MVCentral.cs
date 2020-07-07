@@ -81,7 +81,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             var disableAlbumSupportList = settings.Where(s => s.Key == "disable_album_support").ToList();
             var disableAlbumSupportGUIList = settings.Where(s => s.Key == "disable_gui_album_support").ToList();
             hasAlbums = disableAlbumSupportList.Any() ? disableAlbumSupportList.First().Value != "True" : true;
-            if (hasAlbum)
+            if (hasAlbums)
             {
                 hasAlbums = disableAlbumSupportGUIList.Any() ? disableAlbumSupportGUIList.First().Value != "True" : true;
             }
