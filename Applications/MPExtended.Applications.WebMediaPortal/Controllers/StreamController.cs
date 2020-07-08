@@ -62,7 +62,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         private static Random randomGenerator = new Random();
         
 	// Player type
-        private enum PlayerType
+        protected enum PlayerType
         {
             Common,
             Album,
