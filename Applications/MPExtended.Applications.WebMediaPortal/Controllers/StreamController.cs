@@ -71,6 +71,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     return Settings.ActiveSettings.FileSystemProvider;
                 case WebMediaType.Movie:
                     return Settings.ActiveSettings.MovieProvider;
+		case WebMediaType.MusicArtist:
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicTrack:
                     return Settings.ActiveSettings.MusicProvider;
