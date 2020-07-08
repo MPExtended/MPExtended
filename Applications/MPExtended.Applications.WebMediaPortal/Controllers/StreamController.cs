@@ -92,9 +92,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected bool IsUserAuthenticated()
         {
-            if (!Configuration.Authentication.Enabled || Configuration.Authentication.UnauthorizedStreams ||
-				PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
-                return true;
+            if (!Configuration.Authentication.Enabled || 
+                Configuration.Authentication.UnauthorizedStreams ||
+                PlayerOpenedBy.Contains(Request.UserHostAddress) || 
+		User.Identity.IsAuthenticated)
+              return true;
 
             // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
             // for people to authenticate from scripts etc. 
@@ -124,15 +126,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.TASStreamControl : Connections.Current.MASStreamControl;
         }
 
-
         protected StreamType GetStreamMode()
         {
             if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
+            {
                 return Settings.ActiveSettings.StreamType;
+            }
 
-            return NetworkInformation.IsLocalAddress(ExternalUrl.GetOnlyHostname(Request)) 
-                    && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
-                ? StreamType.Direct : StreamType.Proxied;
+            return NetworkInformation.IsLocalAddress(ExternalUrl.GetOnlyHostname(Request)) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
+                   ? StreamType.Direct : StreamType.Proxied;
         }
 
         private string GetDefaultProfile(WebMediaType type)
