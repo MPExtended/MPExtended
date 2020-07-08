@@ -60,7 +60,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
         private static Random randomGenerator = new Random();
-
+        
+	// Player type
+        private enum PlayerType
+        {
+            Common,
+            Album,
+            ArtistTracks
+        }
+	
         //
         // Util
         protected int? GetProvider(WebMediaType type)
@@ -553,7 +561,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Player		
-        protected ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, bool album)
+        protected ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, PlayerType type)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -563,7 +571,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // get view properties
             VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
-            string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
+            string viewName = Enum.GetName(typeof(VideoPlayer), player) + (type == PlayerType.Album ? "Album" : (type == PlayerType.ArtistTracks ? "ArtistTracks" : "")) + "Player";
 
             // generate view
             var supportedTargets = Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent).Intersect(targets.Select(x => x.Name));
@@ -614,7 +622,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // generic part
             var targets = type == WebMediaType.MusicTrack ? StreamTarget.GetAllTargets() : StreamTarget.GetVideoTargets();
-            return CreatePlayer(GetStreamControl(type), model, targets, profile, false);
+            return CreatePlayer(GetStreamControl(type), model, targets, profile, PlayerType.Common);
         }
 
         [ServiceAuthorize]
@@ -626,7 +634,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
                 Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
-            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, PlayerType.Album);
         }
 
         [ServiceAuthorize]
@@ -638,7 +646,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
                 Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
             model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artistId);
-            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, PlayerType.ArtistTracks);
         }
 
         [ServiceAuthorize]
