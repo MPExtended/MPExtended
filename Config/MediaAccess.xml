@@ -31,6 +31,7 @@
     </Plugin>
     <Plugin name="mvCentral">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
+      <cover type="Folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs\mvCentral</cover>
     </Plugin>
     <Plugin name="FanartHandler">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\FanartHandler.db3</database>

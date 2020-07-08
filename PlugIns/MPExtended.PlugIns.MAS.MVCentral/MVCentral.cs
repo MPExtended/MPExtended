@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.IO;
-using System.Text;
 using System.ComponentModel.Composition;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
@@ -105,7 +105,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                     int i = artwork.IndexOf(@"\mvCentral\");
                     if (i > 0)
                     {
-                        artwork = Path.Combine(cover, artwork.Substring(i + 10));
+                        artwork = Path.Combine(cover, artwork.Substring(i + 11));
                     }
                 }
             }
