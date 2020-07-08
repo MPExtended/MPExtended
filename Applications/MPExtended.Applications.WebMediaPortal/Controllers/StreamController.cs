@@ -560,7 +560,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         //
-        // Player		
+	// Player
+        protected string GetPlayerName(PlayerType type)
+        {
+            if (type == PlayerType.Common)
+            {
+                return string.Empty;
+            }
+            return type.ToString();
+        }
+	
         protected ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, PlayerType type)
         {
             // save stream request
@@ -571,7 +580,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // get view properties
             VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
-            string viewName = Enum.GetName(typeof(VideoPlayer), player) + (type == PlayerType.Album ? "Album" : (type == PlayerType.ArtistTracks ? "ArtistTracks" : "")) + "Player";
+            string viewName = Enum.GetName(typeof(VideoPlayer), player) + GetPlayerName(type) + "Player";
 
             // generate view
             var supportedTargets = Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent).Intersect(targets.Select(x => x.Name));
