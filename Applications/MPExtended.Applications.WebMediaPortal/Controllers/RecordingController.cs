@@ -65,7 +65,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return View(rec);
         }
         
-        public ActionResult DeleteRecording(int programId)
+        public ActionResult DeleteRecording(int id)
         {
             var rec = Connections.Current.TAS.GetRecordingById(id);
             if (rec == null)
