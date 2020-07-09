@@ -144,7 +144,6 @@ namespace MPExtended.Services.StreamingService.Transcoders
 
             using (RegistryKey database = Registry.ClassesRoot.OpenSubKey("MIME\\Database\\Content Type"))
             {
-                WCFUtil.SetContentType(mime.ToString());
                 if (database != null)
                 {
                     foreach (string mimeType in database.GetSubKeyNames().Where(mt => usedTypes.Count(ut => mt.StartsWith(ut)) > 0))
