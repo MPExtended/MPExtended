@@ -57,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
                 try
                 {
-                    musicGenresCache = Connections.Current.MAS.GetMusicGenres(Settings.ActiveSettings.MovieProvider)
+                    musicGenresCache = Connections.Current.MAS.GetMusicGenres(Settings.ActiveSettings.MusicProvider)
                         .Select(x => x.Title)
                         .ToList(); // Needed to force execution here, instead of outside the try/catch later on
                     return musicGenresCache;
