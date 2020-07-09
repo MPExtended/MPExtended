@@ -36,11 +36,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
   [ServiceAuthorize]
   public class MusicLibraryController : BaseController
   {
-    public ActionResult Index()
+    public ActionResult Index(string filter = null)
     {
       if (Settings.ActiveSettings.MusicLayout == Libraries.Service.Config.MusicLayoutType.Artist)
       {
-        return Artist();
+        return Artist(filter);
       }
       else
       {
@@ -48,27 +48,27 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       }
     }
 
-    public ActionResult Artist()
+    public ActionResult Artist(string filter = null)
     {
-      var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider);
+      var artistList = Connections.Current.MAS.GetMusicArtistsDetailed(Settings.ActiveSettings.MusicProvider, filter, WebSortField.Title, WebSortOrder.Asc);
       if (artistList == null)
         return new HttpNotFoundResult();
       return View("Index", artistList.Where(x => !String.IsNullOrEmpty(x.Title)));
     }
 
-    public ActionResult Albums(string artist)
+    public ActionResult Albums(string artist, string filter = null)
     {
       WebMusicArtistDetailed artistObj = new WebMusicArtistDetailed();
       IList<WebMusicAlbumBasic> albumList;
 
       if (string.IsNullOrEmpty(artist))
       {
-        albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider);
+        albumList = Connections.Current.MAS.GetMusicAlbumsBasic(Settings.ActiveSettings.MusicProvider, filter, WebSortField.Title, WebSortOrder.Asc);
       }
       else
       {
         artistObj = Connections.Current.MAS.GetMusicArtistDetailedById(Settings.ActiveSettings.MusicProvider, artist);
-        albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist);
+        albumList = Connections.Current.MAS.GetMusicAlbumsBasicForArtist(Settings.ActiveSettings.MusicProvider, artist, filter, WebSortField.Title, WebSortOrder.Asc);
       }
 
       return View(new ArtistViewModel()
@@ -92,12 +92,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return View(AlbumPlayerViewModel.EnableAlbumPlayerForUserAgent(Request.UserAgent) ? "AlbumPlayer" : "Album", model);
     }
 
-    public ActionResult ArtistTracks(string artist)
+    public ActionResult ArtistTracks(string artist, string filter = null)
     {
       var artistObj = Connections.Current.MAS.GetMusicArtistBasicById(Settings.ActiveSettings.MusicProvider, artist);
       if (artistObj == null)
         return new HttpNotFoundResult();
-      var trackList = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artist, null, WebSortField.Title, WebSortOrder.Asc);
+      var trackList = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artist, filter, WebSortField.Title, WebSortOrder.Asc);
       var model = new ArtistTracksViewModel()
       {
         Artist = artistObj,
