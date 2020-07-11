@@ -104,7 +104,7 @@ namespace MPExtended.Services.MediaAccessService
 
                     // music
                     case WebSortField.MusicTrackNumber:
-                        return list.OrderBy(x => ((IMusicTrackNumberSortable)x).TrackNumber, order);
+                        return list.OrderBy(x => ((IMusicTrackNumberSortable)x).DiscNumber, order).ThenBy(x => ((IMusicTrackNumberSortable)x).TrackNumber, order);
                     case WebSortField.MusicComposer:
                         return list.OrderBy(x => ((IMusicComposerSortable)x).Composer.First(), order);
 
