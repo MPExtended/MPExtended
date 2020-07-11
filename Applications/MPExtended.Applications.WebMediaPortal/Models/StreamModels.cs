@@ -58,6 +58,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                 new StreamTarget(VideoPlayer.VLC, true, "pc-vlc-video"),
                 new StreamTarget(VideoPlayer.FlashVideo, true, "pc-flash-video"),
                 new StreamTarget(VideoPlayer.HLS, true, "mobile-hls-video"),
+                new StreamTarget(VideoPlayer.HLS, true, "pc-hls-video"),
             };
         }
 
