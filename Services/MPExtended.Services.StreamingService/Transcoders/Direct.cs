@@ -73,6 +73,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
                 mime = "application/octet-stream";
             }
             WCFUtil.SetContentType(mime);
+            WCFUtil.AddHeader("Access-Control-Allow-Origin","*");
             WCFUtil.AddHeader("Last-Modified", Context.Source.GetFileInfo().LastModifiedTime.ToString("r", System.Globalization.CultureInfo.InvariantCulture));
             StreamLog.Info(Identifier, "*RetrieveStream Source={0}, MediaType={1}, ContenType={2}", Context.Source.GetFileInfo().Name, Context.Source.MediaType, mime);
 
