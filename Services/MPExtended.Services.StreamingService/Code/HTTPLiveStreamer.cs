@@ -71,6 +71,7 @@ namespace MPExtended.Services.StreamingService.Code
                     if (keepSegments > 0)
                         RemoveOldSegments(param);
                     WCFUtil.SetContentType("video/MP2T");
+                    WCFUtil.AddHeader("Access-Control-Allow-Origin","*");
                     string segmentPath = Path.Combine(TemporaryDirectory, Path.GetFileName(param));
                     if (!File.Exists(segmentPath))
                     {
@@ -81,6 +82,7 @@ namespace MPExtended.Services.StreamingService.Code
 
                 case "playlist":
                     WCFUtil.SetContentType("application/vnd.apple.mpegurl");
+                    WCFUtil.AddHeader("Access-Control-Allow-Origin","*");
                     string playlistPath = Path.Combine(TemporaryDirectory, "index.m3u8");
                     if(!File.Exists(playlistPath))
                     {
