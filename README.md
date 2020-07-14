@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/787i5qsk6l56xqtl/branch/Release-0.7?svg=true)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7) [![AppVeyor tests](https://img.shields.io/appveyor/tests/andrewjswan79536/mediaportal-mpextended)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7/tests)
+[![Build status](https://ci.appveyor.com/api/projects/status/787i5qsk6l56xqtl/branch/Release-0.7?svg=true)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7) [![AppVeyor tests](https://img.shields.io/appveyor/tests/andrewjswan79536/mediaportal-mpextended)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7/tests) ![visitors](https://visitor-badge.glitch.me/badge?page_id=mpextended.visitor-badge)
 
 MPExtended
 ==========
