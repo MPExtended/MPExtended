@@ -395,7 +395,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (raw)
 		{
                     Log.Debug("HLS: Replying to RAW HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
-		    return url;
+		    return Redirect(url);
 		}
                 // iOS does not display poster images with relative paths
                 string posterUrl = Url.AbsoluteArtwork(type, itemId);
