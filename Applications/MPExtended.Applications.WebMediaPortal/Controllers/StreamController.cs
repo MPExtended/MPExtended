@@ -393,10 +393,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     });
 		    
                 if (raw)
-		{
+		            {
                     Log.Debug("HLS: Replying to RAW HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
-		    return Redirect(url);
-		}
+		                return Redirect(url);
+		            }
                 // iOS does not display poster images with relative paths
                 string posterUrl = Url.AbsoluteArtwork(type, itemId);
                 Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
@@ -405,10 +405,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             else
             {
                 Log.Debug("HLS: Start HTTP LiveStream failed.");
-	        if (raw)
-		{
-		    return new HttpStatusCodeResult((int)HttpStatusCode.NotFound);
-		}
+	              if (raw)
+		            {
+		                return new HttpStatusCodeResult((int)HttpStatusCode.NotFound);
+		            }
                 return Json(new { Succes = false }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -570,7 +570,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         }
 
         //
-	// Player
+	      // Player
         protected string GetPlayerName(PlayerType type)
         {
             if (type == PlayerType.Common)
