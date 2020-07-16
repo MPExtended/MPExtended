@@ -44,13 +44,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\vlc-2.2.8\sdk\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vlc-2.2.8\sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\vlc-3.0.11\sdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\vlc-3.0.11\sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\vlc-2.2.8\sdk\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vlc-2.2.8\sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\vlc-3.0.11\sdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\vlc-3.0.11\sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
