@@ -309,10 +309,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             // Poster
             int i = 0;
             string folder = Path.Combine(path, "folder{0}");
-            var files = new string[] { ".png", ".jpg", ".bmp"}
-                        .Select(x => string.Format(folder, x))
-                        .Where(x => File.Exists(x))
-                        .Distinct();
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
             foreach (string file in files)
             {
                 artwork.Add(new WebArtworkDetailed()
