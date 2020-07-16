@@ -35,6 +35,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
     {
         protected IPluginData data;
         protected string[] Extensions { get; set; }
+        protected string[] VideoExtensions { get; set; }
 
         public bool Supported { get; set; }
 
@@ -42,6 +43,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         {
             this.data = data;
             Extensions = new string[] { ".jpg", ".png", ".bmp" };
+            VideoExtensions = new string[] { ".mp4", ".3gp", ".avi", ".mkv" };
             Supported = true;
         }
 
