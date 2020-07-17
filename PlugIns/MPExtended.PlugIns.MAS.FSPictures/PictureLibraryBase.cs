@@ -92,6 +92,11 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetAllPictureCategories().Select(x => SearchPictures(IdToPath(x.Id), true, GetWebPictureDetailed)).SelectMany(x => x);
         }
 
+        public virtual IEnumerable<WebPictureBasic> GetAllMobileVideosBasic()
+        {
+            return GetAllPictureCategories().Select(x => SearchMobileVideos(IdToPath(x.Id), true, GetWebMobileVideoBasic)).SelectMany(x => x);
+        }
+        
         public WebPictureBasic GetPictureBasic(string pictureId)
         {
             return GetWebPictureBasic(IdToPath(pictureId));
@@ -132,6 +137,16 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetWebPictureFolder(IdToPath(id));
         }
 
+        public WebPictureBasic GetMobileVideoBasic(string videoId)
+        {
+            return GetWebMobileVideoBasic(IdToPath(videoId));
+        }
+        
+        public IEnumerable<WebPictureBasic> GetMobileVideosBasicByCategory(string id)
+        {
+            return SearchMobileVideos(IdToPath(id), false, GetWebMobileVideoBasic);
+        }
+        
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.PictureFolder)
@@ -140,6 +155,15 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     { "Type", "folder" },
                     { "Id", GetPictureFolderById(id).Id }
+                };
+            }
+            
+            if (type == WebMediaType.MobileVideo)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mobile video" },
+                    { "Id", GetMobileVideoBasic(id).Id }
                 };
             }
             
@@ -263,6 +287,57 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return pic;
         }
 
+        private delegate T CreateMobileVideo<T>(string path);
+        private List<T> SearchMobileVideos<T>(string strDir, bool recursive, CreateMobileVideo<T> creator)
+        {
+            try
+            {
+                List<T> output = new List<T>();
+                foreach (string strFile in Directory.GetFiles(strDir))
+                {
+                    var file = new FileInfo(PathUtil.StripFileProtocolPrefix(strFile));
+                    if (VideoExtensions.Contains(file.Extension.ToLowerInvariant()))
+                    {
+                        output.Add(creator.Invoke(file.FullName));
+                    }
+                }
+
+                if (recursive)
+                {
+                    foreach (string strDirectory in Directory.GetDirectories(strDir))
+                    {
+                        output.AddRange(SearchPictures(strDirectory, true, creator));
+                    }
+                }
+
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed in recursive mobile video search", ex);
+                return new List<T>();
+            }
+        }
+
+        private WebPictureBasic GetWebMobileVideoBasic(string path)
+        {
+            WebPictureBasic vid = new WebMobileVideoBasic();
+            vid.Id = PathToId(path);
+            vid.Path.Add(path);
+            vid.Categories = GetHistory(path);
+
+            // MobileVideo metadata
+            // TODO Add ...
+
+            // Set title to file name if non-existant
+            if (String.IsNullOrEmpty(vid.Title))
+                vid.Title = Path.GetFileName(path);
+
+            vid.Artwork = GetArtworkForMobileVideo(path);
+
+            return vid;
+        }
+
         #region Artworks
 
         private List<WebArtwork> GetArtworkForPicture(string picture)
@@ -299,6 +374,17 @@ namespace MPExtended.PlugIns.MAS.FSPictures
               Filetype = Path.GetExtension(picture).Substring(1)
             });
 
+            return artwork;
+        }
+        
+        private List<WebArtwork> GetArtworkForMobileVideo(string picture)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(picture) || !File.Exists(picture))
+                return artwork;
+                
+            // TODO
+            
             return artwork;
         }
 
