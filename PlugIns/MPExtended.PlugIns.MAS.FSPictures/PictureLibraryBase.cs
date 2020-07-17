@@ -92,7 +92,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetAllPictureCategories().Select(x => SearchPictures(IdToPath(x.Id), true, GetWebPictureDetailed)).SelectMany(x => x);
         }
 
-        public virtual IEnumerable<WebPictureBasic> GetAllMobileVideosBasic()
+        public virtual IEnumerable<WebMobileVideoBasic> GetAllMobileVideosBasic()
         {
             return GetAllPictureCategories().Select(x => SearchMobileVideos(IdToPath(x.Id), true, GetWebMobileVideoBasic)).SelectMany(x => x);
         }
@@ -137,12 +137,12 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetWebPictureFolder(IdToPath(id));
         }
 
-        public WebPictureBasic GetMobileVideoBasic(string videoId)
+        public WebMobileVideoBasic GetMobileVideoBasic(string videoId)
         {
             return GetWebMobileVideoBasic(IdToPath(videoId));
         }
         
-        public IEnumerable<WebPictureBasic> GetMobileVideosBasicByCategory(string id)
+        public IEnumerable<WebMobileVideoBasic> GetMobileVideosBasicByCategory(string id)
         {
             return SearchMobileVideos(IdToPath(id), false, GetWebMobileVideoBasic);
         }
@@ -319,7 +319,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
         }
 
-        private WebPictureBasic GetWebMobileVideoBasic(string path)
+        private WebMobileVideoBasic GetWebMobileVideoBasic(string path)
         {
             WebPictureBasic vid = new WebMobileVideoBasic();
             vid.Id = PathToId(path);
