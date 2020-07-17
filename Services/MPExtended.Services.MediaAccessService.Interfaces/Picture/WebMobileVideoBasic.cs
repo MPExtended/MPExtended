@@ -6,7 +6,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
-    public class WebPictureBasic : WebMediaItem, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
+    public class WebMobileVideoBasic : WebMediaItem, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
     {
         public WebPictureBasic()
         {
