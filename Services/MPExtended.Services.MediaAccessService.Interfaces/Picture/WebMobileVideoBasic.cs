@@ -8,7 +8,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 {
     public class WebMobileVideoBasic : WebMediaItem, IDateAddedSortable, IPictureDateTakenSortable, ICategorySortable
     {
-        public WebPictureBasic()
+        public WebMobileVideoBasic()
         {
             DateTaken = new DateTime(1970, 1, 1);
             Categories = new List<WebCategory>();
