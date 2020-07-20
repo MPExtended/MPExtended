@@ -306,7 +306,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     foreach (string strDirectory in Directory.GetDirectories(strDir))
                     {
-                        output.AddRange(SearchPictures(strDirectory, true, creator));
+                        output.AddRange(SearchMobileVideos(strDirectory, true, creator));
                     }
                 }
 
@@ -321,13 +321,14 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         private WebMobileVideoBasic GetWebMobileVideoBasic(string path)
         {
-            WebPictureBasic vid = new WebMobileVideoBasic();
+            WebMobileVideoBasic vid = new WebMobileVideoBasic();
             vid.Id = PathToId(path);
             vid.Path.Add(path);
             vid.Categories = GetHistory(path);
 
             // MobileVideo metadata
             // TODO Add ...
+            vid.DateTaken = File.GetCreationTime(path);
 
             // Set title to file name if non-existant
             if (String.IsNullOrEmpty(vid.Title))

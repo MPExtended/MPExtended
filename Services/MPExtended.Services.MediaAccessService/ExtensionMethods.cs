@@ -212,6 +212,7 @@ namespace MPExtended.Services.MediaAccessService
                     return ProviderType.Music;
                 case WebMediaType.Picture:
                 case WebMediaType.PictureFolder:
+                case WebMediaType.MobileVideo:
                     return ProviderType.Picture;
                 case WebMediaType.TVEpisode:
                 case WebMediaType.TVSeason:

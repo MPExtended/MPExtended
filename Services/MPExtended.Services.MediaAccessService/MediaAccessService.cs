@@ -63,6 +63,7 @@ namespace MPExtended.Services.MediaAccessService
           return MusicLibraries[provider];
         case WebMediaType.Picture:
         case WebMediaType.PictureFolder:
+        case WebMediaType.MobileVideo:
           return PictureLibraries[provider];
         case WebMediaType.TVShow:
         case WebMediaType.TVSeason:
@@ -115,6 +116,8 @@ namespace MPExtended.Services.MediaAccessService
           return GetMusicTrackDetailedById(provider, id).Finalize(provider, ProviderType.Music).ToWebMediaItem();
         case WebMediaType.Picture:
           return GetPictureDetailedById(provider, id).Finalize(provider, ProviderType.Picture).ToWebMediaItem();
+        case WebMediaType.MobileVideo:
+          return GetMobileVideoBasicById(provider, id).Finalize(provider, ProviderType.Picture).ToWebMediaItem();
         case WebMediaType.TVEpisode:
           return GetTVEpisodeDetailedById(provider, id).Finalize(provider, ProviderType.TVShow).ToWebMediaItem();
         case WebMediaType.Drive:
@@ -468,10 +471,35 @@ namespace MPExtended.Services.MediaAccessService
     {
       return PictureLibraries[provider].GetSubFoldersById(id).AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
     }
+
+    public WebIntResult GetMobileVideoCount(int? provider, string filter = null)
+    {
+      return PictureLibraries[provider].GetAllMobileVideosBasic().AsQueryable().Filter(filter).Count();
+    }
+
+    public IList<WebMobileVideoBasic> GetMobileVideosBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    {
+      return PictureLibraries[provider].GetAllMobileVideosBasic().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Picture);
+    }
+
+    public IList<WebMobileVideoBasic> GetMobileVideosBasicByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    {
+      return PictureLibraries[provider].GetAllMobileVideosBasic().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Picture);
+    }
+
+    public IList<WebMobileVideoBasic> GetMobileVideosBasicByCategory(int? provider, string id, string filter = null)
+    {
+      return PictureLibraries[provider].GetMobileVideosBasicByCategory(id).AsQueryable().Filter(filter).Finalize(provider, ProviderType.Picture);
+    }
+
+    public WebMobileVideoBasic GetMobileVideoBasicById(int? provider, string id)
+    {
+      return PictureLibraries[provider].GetMobileVideoBasic(id).Finalize(provider, ProviderType.Picture);
+    }
     #endregion
 
     #region TVShows
-    public IList<WebCategory> GetTVShowCategories(int? provider, string filter = null)
+      public IList<WebCategory> GetTVShowCategories(int? provider, string filter = null)
     {
       return TVShowLibraries[provider].GetAllCategories().AsQueryable().Filter(filter).Finalize(provider, ProviderType.TVShow);
     }
@@ -748,6 +776,8 @@ namespace MPExtended.Services.MediaAccessService
           return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork;
         case WebMediaType.Picture:
           return PictureLibraries[provider].GetPictureDetailed(id).Artwork;
+        case WebMediaType.MobileVideo:
+          return PictureLibraries[provider].GetMobileVideoBasic(id).Artwork;
         case WebMediaType.PictureFolder:
           return PictureLibraries[provider].GetPictureFolderById(id).Artwork;
         default:
@@ -1047,6 +1077,10 @@ namespace MPExtended.Services.MediaAccessService
         case WebMediaType.MusicTrack:
           return AutoSuggestion.GetValuesForField(filterField, GetMusicTracksDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
         case WebMediaType.Picture:
+          return AutoSuggestion.GetValuesForField(filterField, GetPicturesDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.MobileVideo:
+          return AutoSuggestion.GetValuesForField(filterField, GetPicturesDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.PictureFolder:
           return AutoSuggestion.GetValuesForField(filterField, GetPicturesDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
         case WebMediaType.Playlist:
           return AutoSuggestion.GetValuesForField(filterField, GetPlaylists(provider), op, limit).OrderBy(x => x, order).ToList();

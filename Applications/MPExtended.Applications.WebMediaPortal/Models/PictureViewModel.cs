@@ -33,7 +33,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     public WebPictureFolder Folder { get; set; }
     public IEnumerable<WebPictureFolder> Folders { get; set; }
     public IEnumerable<WebPictureBasic> Pictures { get; set; }
-    
+    public IEnumerable<WebMobileVideoBasic> Videos { get; set; }
+
     public PictureFolderViewModel(string id = null, string filter = null)
     {
       try
@@ -44,6 +45,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
 
         Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
         Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
+        Videos = Connections.Current.MAS.GetMobileVideosBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
       }
       catch (Exception ex)
       {
@@ -77,4 +79,30 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       }
     }
   }
+
+  public class VideoViewModel : MediaItemModel
+  {
+    public WebMobileVideoBasic Video { get; set; }
+
+    protected override WebMediaItem Item { get { return Video; } }
+
+    public VideoViewModel(WebMobileVideoBasic video)
+    {
+      Video = video;
+    }
+
+    public VideoViewModel(string id)
+    {
+      try
+      {
+        Video = Connections.Current.MAS.GetMobileVideoBasicById(Settings.ActiveSettings.PicturesProvider, id);
+        Video.Categories = Video.Categories.Reverse().ToList();
+      }
+      catch (Exception ex)
+      {
+        Log.Warn(String.Format("Failed to load video {0}", id), ex);
+      }
+    }
+  }
+
 }

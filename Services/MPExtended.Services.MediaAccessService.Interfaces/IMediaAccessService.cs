@@ -170,7 +170,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicAlbumBasic GetMusicAlbumBasicById(int? provider, string id);
 
-
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebIntResult GetMusicArtistCount(int? provider, string filter = null);
@@ -198,7 +197,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicArtistDetailed GetMusicArtistDetailedById(int? provider, string id);
-
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -243,7 +241,6 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMusicTrackDetailed GetMusicTrackDetailedById(int? provider, string id);
-
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
@@ -318,6 +315,26 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebPictureFolder> GetSubFoldersById(int? provider, string id, string filter = null);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebIntResult GetMobileVideoCount(int? provider, string filter = null);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMobileVideoBasic> GetMobileVideosBasic(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMobileVideoBasic> GetMobileVideosBasicByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebMobileVideoBasic> GetMobileVideosBasicByCategory(int? provider, string id, string filter = null);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebMobileVideoBasic GetMobileVideoBasicById(int? provider, string id);
         #endregion
 
         #region TVShows
