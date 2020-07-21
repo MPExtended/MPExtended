@@ -37,6 +37,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         protected string[] Extensions { get; set; }
         protected string[] VideoExtensions { get; set; }
 
+        private Dictionary<string, string> fanartconfiguration;
+        private static CRCTool crc = null;
+
         public bool Supported { get; set; }
 
         public PictureLibraryBase(IPluginData data)
@@ -44,6 +47,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             this.data = data;
             Extensions = new string[] { ".jpg", ".png", ".bmp" };
             VideoExtensions = new string[] { ".mp4", ".3gp", ".avi", ".mkv" };
+            fanartconfiguration = data.GetConfiguration("FanartHandler");
             Supported = true;
         }
 
@@ -332,7 +336,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
             // Set title to file name if non-existant
             if (String.IsNullOrEmpty(vid.Title))
-                vid.Title = Path.GetFileName(path);
+                vid.Title = Path.GetFileNameWithoutExtension(path);
 
             vid.Artwork = GetArtworkForMobileVideo(path);
 
@@ -378,14 +382,34 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return artwork;
         }
         
-        private List<WebArtwork> GetArtworkForMobileVideo(string picture)
+        private List<WebArtwork> GetArtworkForMobileVideo(string video)
         {
             var artwork = new List<WebArtwork>();
-            if (string.IsNullOrEmpty(picture) || !File.Exists(picture))
+            if (string.IsNullOrEmpty(video) || !File.Exists(video))
                 return artwork;
                 
-            // TODO
-            
+            string filename = GetPicturesLargeThumbPathname(video);
+            if (File.Exists(filename))
+            {
+              artwork.Add(new WebArtworkDetailed()
+              {
+                Type = WebFileType.Cover,
+                Offset = 0,
+                Path = filename,
+                Rating = 1,
+                Id = filename.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(filename).Substring(1)
+              });
+              artwork.Add(new WebArtworkDetailed()
+              {
+                Type = WebFileType.Poster,
+                Offset = 0,
+                Path = filename,
+                Rating = 1,
+                Id = filename.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(filename).Substring(1)
+              });
+            }
             return artwork;
         }
 
@@ -442,6 +466,51 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 Id = PathToId(dir)
             };
         }
+
+        #region Mediaportal - Core - Util - Util.cs
+
+        private string GetPicturesLargeThumbPathname(string file)
+        {
+            string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Pictures");
+            return GetThumbnailPathname(thumbfolder, file, "{0}L.jpg");
+        }
+
+        private string GetThumbnailPathname(string basePath, string file, string formatString)
+        {
+            file = EncryptLine(file);
+            // TODO: define dept/step in constants or make it configurable
+            var path = Path.Combine(basePath, GetTreePath(file,  1, 2));
+            return Path.Combine(path, string.Format(formatString, file));
+        }
+
+        private string GetTreePath(string filename, int depth, int step)
+        {
+            string basename = Path.GetFileNameWithoutExtension(filename) ?? string.Empty;
+            string tree = string.Empty;
+            int i = basename.Length;
+
+            while ((i-=step)>=0 && depth-->0)
+            {
+                tree += basename.Substring(i, step) + @"\";
+            }
+            return tree;
+        }
+
+        public string EncryptLine(string strLine)
+        {
+            if (strLine == null) return string.Empty;
+            if (strLine.Length == 0) return string.Empty;
+            if (String.Compare(Strings.Unknown, strLine, true) == 0) return string.Empty;
+            if (crc == null)
+            {
+                crc = new CRCTool();
+                crc.Init(CRCTool.CRCCode.CRC32);
+            }
+            ulong dwcrc = crc.calc(strLine);
+            return dwcrc.ToString();
+        }
+
+        #endregion
 
         public abstract IEnumerable<WebCategory> GetAllPictureCategories();
         protected abstract string PathToId(string fullpath);
