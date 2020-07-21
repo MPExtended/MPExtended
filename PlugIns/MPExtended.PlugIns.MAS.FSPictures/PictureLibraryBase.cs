@@ -498,9 +498,10 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public string EncryptLine(string strLine)
         {
-            if (strLine == null) return string.Empty;
-            if (strLine.Length == 0) return string.Empty;
-            if (String.Compare(Strings.Unknown, strLine, true) == 0) return string.Empty;
+            if (string.IsNullOrEmpty(strLine)) 
+            {
+              return string.Empty;
+            }
             if (crc == null)
             {
                 crc = new CRCTool();

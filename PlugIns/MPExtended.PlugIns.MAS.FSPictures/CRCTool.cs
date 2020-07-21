@@ -21,6 +21,8 @@
 using System;
 using System.IO;
 
+using MPExtended.Libraries.Service;
+
 namespace MPExtended.PlugIns.MAS.FSPictures
 {
   /// <summary>
@@ -185,7 +187,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
       }
       catch (Exception ex)
       {
-        MediaPortal.GUI.Library.Log.Error("CRCTools: excepting for string - {0} {1}", strline, ex);
+        Log.Warn("CRCTools: excepting for string - {0} {1}", strline, ex);
         return 0;
       }
     }
