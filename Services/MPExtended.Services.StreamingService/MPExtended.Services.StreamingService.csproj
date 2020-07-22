@@ -39,11 +39,11 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MediaInfo.Wrapper, Version=19.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\MediaInfo.Wrapper.19.9.3\lib\net40\MediaInfo.Wrapper.dll</HintPath>
+    <Reference Include="MediaInfo.Wrapper, Version=19.9.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\MediaInfo.Wrapper.19.9.4\lib\net40\MediaInfo.Wrapper.dll</HintPath>
     </Reference>
-    <Reference Include="MetadataExtractor, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\MetadataExtractor.2.4.2\lib\net35\MetadataExtractor.dll</HintPath>
+    <Reference Include="MetadataExtractor, Version=2.4.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\MetadataExtractor.2.4.3\lib\net35\MetadataExtractor.dll</HintPath>
     </Reference>
     <Reference Include="MPExtended.Libraries.VLCManaged">
       <HintPath>..\..\Libraries\Streaming\vlc-3.0.11\MPExtended.Libraries.VLCManaged.dll</HintPath>
@@ -184,7 +184,7 @@
 xcopy $(SolutionDir)\Packages\MediaInfo.Native.19.9.0\build\native\x86\libcrypto-1_1.dll $(TargetDir) /Y
 xcopy $(SolutionDir)\Packages\MediaInfo.Native.19.9.0\build\native\x86\libcurl.dll $(TargetDir) /Y
 xcopy $(SolutionDir)\Packages\MediaInfo.Native.19.9.0\build\native\x86\libssl-1_1.dll $(TargetDir) /Y
-xcopy $(SolutionDir)\Packages\MediaInfo.Wrapper.19.9.3\lib\net40\MediaInfo.Wrapper.dll $(TargetDir) /Y
+xcopy $(SolutionDir)\Packages\MediaInfo.Wrapper.19.9.4\lib\net40\MediaInfo.Wrapper.dll $(TargetDir) /Y
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets" Condition="Exists('..\..\Packages\FFmpeg.Win32.Static.4.1.1.1\build\FFmpeg.Win32.Static.targets')" />
