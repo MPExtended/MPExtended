@@ -47,6 +47,7 @@
     <Compile Include="..\..\GlobalVersion.cs">
       <Link>Properties\GlobalVersion.cs</Link>
     </Compile>
+    <Compile Include="CRCTool.cs" />
     <Compile Include="FSPictures.cs" />
     <Compile Include="MPPictureShares.cs" />
     <Compile Include="PictureLibraryBase.cs" />

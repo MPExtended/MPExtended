@@ -37,6 +37,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         protected string[] Extensions { get; set; }
         protected string[] VideoExtensions { get; set; }
 
+        private Dictionary<string, string> fanartconfiguration;
+        private static CRCTool crc = null;
+
         public bool Supported { get; set; }
 
         public PictureLibraryBase(IPluginData data)
@@ -44,6 +47,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             this.data = data;
             Extensions = new string[] { ".jpg", ".png", ".bmp" };
             VideoExtensions = new string[] { ".mp4", ".3gp", ".avi", ".mkv" };
+            fanartconfiguration = data.GetConfiguration("FanartHandler");
             Supported = true;
         }
 
@@ -92,6 +96,11 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetAllPictureCategories().Select(x => SearchPictures(IdToPath(x.Id), true, GetWebPictureDetailed)).SelectMany(x => x);
         }
 
+        public virtual IEnumerable<WebMobileVideoBasic> GetAllMobileVideosBasic()
+        {
+            return GetAllPictureCategories().Select(x => SearchMobileVideos(IdToPath(x.Id), true, GetWebMobileVideoBasic)).SelectMany(x => x);
+        }
+        
         public WebPictureBasic GetPictureBasic(string pictureId)
         {
             return GetWebPictureBasic(IdToPath(pictureId));
@@ -132,6 +141,16 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return GetWebPictureFolder(IdToPath(id));
         }
 
+        public WebMobileVideoBasic GetMobileVideoBasic(string videoId)
+        {
+            return GetWebMobileVideoBasic(IdToPath(videoId));
+        }
+        
+        public IEnumerable<WebMobileVideoBasic> GetMobileVideosBasicByCategory(string id)
+        {
+            return SearchMobileVideos(IdToPath(id), false, GetWebMobileVideoBasic);
+        }
+        
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             if (type == WebMediaType.PictureFolder)
@@ -140,6 +159,15 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     { "Type", "folder" },
                     { "Id", GetPictureFolderById(id).Id }
+                };
+            }
+            
+            if (type == WebMediaType.MobileVideo)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "mobile video" },
+                    { "Id", GetMobileVideoBasic(id).Id }
                 };
             }
             
@@ -263,6 +291,58 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             return pic;
         }
 
+        private delegate T CreateMobileVideo<T>(string path);
+        private List<T> SearchMobileVideos<T>(string strDir, bool recursive, CreateMobileVideo<T> creator)
+        {
+            try
+            {
+                List<T> output = new List<T>();
+                foreach (string strFile in Directory.GetFiles(strDir))
+                {
+                    var file = new FileInfo(PathUtil.StripFileProtocolPrefix(strFile));
+                    if (VideoExtensions.Contains(file.Extension.ToLowerInvariant()))
+                    {
+                        output.Add(creator.Invoke(file.FullName));
+                    }
+                }
+
+                if (recursive)
+                {
+                    foreach (string strDirectory in Directory.GetDirectories(strDir))
+                    {
+                        output.AddRange(SearchMobileVideos(strDirectory, true, creator));
+                    }
+                }
+
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Failed in recursive mobile video search", ex);
+                return new List<T>();
+            }
+        }
+
+        private WebMobileVideoBasic GetWebMobileVideoBasic(string path)
+        {
+            WebMobileVideoBasic vid = new WebMobileVideoBasic();
+            vid.Id = PathToId(path);
+            vid.Path.Add(path);
+            vid.Categories = GetHistory(path);
+
+            // MobileVideo metadata
+            // TODO Add ...
+            vid.DateTaken = File.GetCreationTime(path);
+
+            // Set title to file name if non-existant
+            if (String.IsNullOrEmpty(vid.Title))
+                vid.Title = Path.GetFileNameWithoutExtension(path);
+
+            vid.Artwork = GetArtworkForMobileVideo(path);
+
+            return vid;
+        }
+
         #region Artworks
 
         private List<WebArtwork> GetArtworkForPicture(string picture)
@@ -299,6 +379,37 @@ namespace MPExtended.PlugIns.MAS.FSPictures
               Filetype = Path.GetExtension(picture).Substring(1)
             });
 
+            return artwork;
+        }
+        
+        private List<WebArtwork> GetArtworkForMobileVideo(string video)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(video) || !File.Exists(video))
+                return artwork;
+                
+            string filename = GetPicturesLargeThumbPathname(video);
+            if (File.Exists(filename))
+            {
+              artwork.Add(new WebArtworkDetailed()
+              {
+                Type = WebFileType.Cover,
+                Offset = 0,
+                Path = filename,
+                Rating = 1,
+                Id = filename.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(filename).Substring(1)
+              });
+              artwork.Add(new WebArtworkDetailed()
+              {
+                Type = WebFileType.Poster,
+                Offset = 0,
+                Path = filename,
+                Rating = 1,
+                Id = filename.GetHashCode().ToString(),
+                Filetype = Path.GetExtension(filename).Substring(1)
+              });
+            }
             return artwork;
         }
 
@@ -355,6 +466,52 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 Id = PathToId(dir)
             };
         }
+
+        #region Mediaportal - Core - Util - Util.cs
+
+        private string GetPicturesLargeThumbPathname(string file)
+        {
+            string thumbfolder = Path.Combine(fanartconfiguration["thumb"], "Pictures");
+            return GetThumbnailPathname(thumbfolder, file, "{0}L.jpg");
+        }
+
+        private string GetThumbnailPathname(string basePath, string file, string formatString)
+        {
+            file = EncryptLine(file);
+            // TODO: define dept/step in constants or make it configurable
+            var path = Path.Combine(basePath, GetTreePath(file,  1, 2));
+            return Path.Combine(path, string.Format(formatString, file));
+        }
+
+        private string GetTreePath(string filename, int depth, int step)
+        {
+            string basename = Path.GetFileNameWithoutExtension(filename) ?? string.Empty;
+            string tree = string.Empty;
+            int i = basename.Length;
+
+            while ((i-=step)>=0 && depth-->0)
+            {
+                tree += basename.Substring(i, step) + @"\";
+            }
+            return tree;
+        }
+
+        public string EncryptLine(string strLine)
+        {
+            if (string.IsNullOrEmpty(strLine)) 
+            {
+              return string.Empty;
+            }
+            if (crc == null)
+            {
+                crc = new CRCTool();
+                crc.Init(CRCTool.CRCCode.CRC32);
+            }
+            ulong dwcrc = crc.calc(strLine);
+            return dwcrc.ToString();
+        }
+
+        #endregion
 
         public abstract IEnumerable<WebCategory> GetAllPictureCategories();
         protected abstract string PathToId(string fullpath);

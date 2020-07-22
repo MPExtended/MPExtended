@@ -44,6 +44,8 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Collection = 16,
         [EnumMember]
-        PictureFolder = 17
+        PictureFolder = 17,
+        [EnumMember]
+        MobileVideo = 18
     }
 }

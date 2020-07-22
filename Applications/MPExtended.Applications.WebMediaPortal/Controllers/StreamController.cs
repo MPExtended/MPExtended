@@ -61,7 +61,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
         private static Random randomGenerator = new Random();
         
-	// Player type
+	      // Player type
         protected enum PlayerType
         {
             Common,
@@ -79,11 +79,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     return Settings.ActiveSettings.FileSystemProvider;
                 case WebMediaType.Movie:
                     return Settings.ActiveSettings.MovieProvider;
-		case WebMediaType.MusicArtist:
+		            case WebMediaType.MusicArtist:
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicTrack:
                     return Settings.ActiveSettings.MusicProvider;
                 case WebMediaType.Picture:
+                case WebMediaType.MobileVideo:
                     return Settings.ActiveSettings.PicturesProvider;
                 case WebMediaType.Recording:
                 case WebMediaType.TV:
@@ -103,7 +104,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             if (!Configuration.Authentication.Enabled || 
                 Configuration.Authentication.UnauthorizedStreams ||
                 PlayerOpenedBy.Contains(Request.UserHostAddress) || 
-		User.Identity.IsAuthenticated)
+		            User.Identity.IsAuthenticated)
               return true;
 
             // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
@@ -569,6 +570,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return GenerateStream(WebMediaType.MusicTrack, item, fileindex, transcoder, starttime, continuationId);
         }
 
+        public ActionResult MobileVideo(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
+        {
+            return GenerateStream(WebMediaType.MobileVideo, item, fileindex, transcoder, starttime, continuationId);
+        }
+
         //
 	      // Player
         protected string GetPlayerName(PlayerType type)
@@ -702,6 +708,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 case WebMediaType.MusicTrack:
                 case WebMediaType.TVEpisode:
                 case WebMediaType.Movie:
+                case WebMediaType.MobileVideo:
                     var mediaItem = Connections.Current.MAS.GetMediaItem(GetProvider(type), type, itemId);
                     filecount = mediaItem.Path.Count;
                     goto case WebMediaType.Recording; // really, Microsoft? Fall-through cases are useful. 

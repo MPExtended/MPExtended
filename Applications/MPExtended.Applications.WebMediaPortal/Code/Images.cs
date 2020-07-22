@@ -116,6 +116,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     break;
                 case WebMediaType.Picture:
                 case WebMediaType.PictureFolder:
+                case WebMediaType.MobileVideo:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.PicturesProvider;
                     break;

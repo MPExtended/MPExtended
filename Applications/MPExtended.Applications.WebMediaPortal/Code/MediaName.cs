@@ -35,12 +35,18 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 {
                     case WebMediaType.Movie:
                         return Connections.Current.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id).Title;
+                    case WebMediaType.Collection:
+                        return Connections.Current.MAS.GetCollectionById(Settings.ActiveSettings.MovieProvider, id).Title;
                     case WebMediaType.MusicAlbum:
                         return Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebMediaType.MusicTrack:
                         return Connections.Current.MAS.GetMusicTrackDetailedById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebMediaType.Picture:
                         return Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id).Title;
+                    case WebMediaType.MobileVideo:
+                        return Connections.Current.MAS.GetMobileVideoBasicById(Settings.ActiveSettings.PicturesProvider, id).Title;
+                    case WebMediaType.PictureFolder:
+                        return Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, id).Title;
                     case WebMediaType.Recording:
                         return Connections.Current.TAS.GetRecordingById(Int32.Parse(id)).Title;
                     case WebMediaType.TV:

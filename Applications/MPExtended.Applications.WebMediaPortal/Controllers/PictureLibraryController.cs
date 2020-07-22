@@ -57,9 +57,39 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Json(model, JsonRequestBehavior.AllowGet);
     }
 
+    public ActionResult Video(string video)
+    {
+      var model = new VideoViewModel(video);
+      if (model.Video == null)
+        return HttpNotFound();
+      return View(model);
+    }
+
+    [HttpGet]
+    public ActionResult VideoInfo(string video)
+    {
+      var model = new VideoViewModel(video);
+      if (model.Video == null)
+        return HttpNotFound();
+      return Json(model, JsonRequestBehavior.AllowGet);
+    }
+
+    public ActionResult Play(string video)
+    {
+      var model = new VideoViewModel(video);
+      if (model.Video == null)
+        return HttpNotFound();
+      return View(model);
+    }
+
     public ActionResult Image(string picture, int width = 0, int height = 0)
     {
       return Images.ReturnFromService(WebMediaType.Picture, picture, WebFileType.Cover, width, height, "Images/default/picture-cover.png");
+    }
+
+    public ActionResult MobileVideo(string video, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MobileVideo, video, WebFileType.Cover, width, height, "Images/default/mobilevideo-cover.png");
     }
 
     public ActionResult Fanart(string picture, int width = 0, int height = 0, int num = -1)
