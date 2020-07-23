@@ -39,6 +39,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             public string Name { get; set; }
             public string Path { get; set; }
             public int Index { get; set; }
+	    public string Pincode { get; set; }
         }
         private List<Share> shares;
         private Dictionary<string, Share> shareCache;
@@ -75,6 +76,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
                     Path = Path.GetFullPath(list.Where(x => x.Key == "sharepath" + i).Select(x => x.Value).First()),
+		    Pincode = list.Where(x => x.Key == "pincode" + i).Select(x => x.Value).First(),
                     Index = i
                 });
             }
@@ -136,17 +138,16 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
                 currentDir = currentDir.Parent;
             }
-
             return false;
         }
 
         protected override List<WebCategory> GetHistory(string fullpath)
         {
-			      List<WebCategory> history = new List<WebCategory>();
-			      if (string.IsNullOrEmpty(fullpath))
-			      {
-            	  return history;
-			      }
+            List<WebCategory> history = new List<WebCategory>();
+            if (string.IsNullOrEmpty(fullpath))
+            {
+                return history;
+            }
 
             DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
             while (dir != null)
@@ -159,7 +160,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 }
                 dir = dir.Parent;
             }
-          	return history;
+            return history;
         }
     }
 }
