@@ -28,7 +28,7 @@ These are some quick instructions on getting started with MPExtended:
 6. Start the MPExtended.Applications.WebMediaPortal project to start WebMediaPortal
 7. There is some [documentation][6] for developers available in the MediaPortal wiki.
 
-   [1]: http://www.mpextended.com/
+   [1]: https://forum.team-mediaportal.com/forums/mpextended.555/
    [2]: http://wixtoolset.org/
    [3]: http://www.asp.net/downloads
    [4]: http://www.microsoft.com/en-us/download/details.aspx?id=1038
