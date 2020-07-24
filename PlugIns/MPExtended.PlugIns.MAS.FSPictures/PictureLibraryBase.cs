@@ -108,6 +108,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public WebPictureDetailed GetPictureDetailed(string pictureId)
         {
+      Log.Debug("*** *** " + pictureId + " - " + IdToPath(pictureId));
             return GetWebPictureDetailed(IdToPath(pictureId));
         }
 
@@ -234,7 +235,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+                    Log.Warn(String.Format("Error reading picture (meta-)data for {0}", path), ex);
                 }
             }
 
@@ -279,7 +280,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Error reading picture (meta-)data for {0}", path), ex);
+                Log.Warn(String.Format("Error reading picture (meta-)data for {0}", path), ex);
             }
             
             // Set title to file name if non-existant
@@ -458,7 +459,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
         
         private WebCategory GetCategoryFromPath(string path)
         {
-            string dir = Path.GetDirectoryName(path);
+            string dir = File.Exists(path) ? Path.GetDirectoryName(path) : path;
 
             return new WebCategory()
             {

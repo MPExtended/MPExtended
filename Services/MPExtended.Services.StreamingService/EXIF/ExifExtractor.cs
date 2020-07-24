@@ -36,6 +36,9 @@ using MetadataExtractor.Formats.Exif;
 using MetadataExtractor.Formats.Exif.Makernotes;
 using MetadataExtractor.Formats.Iptc;
 using MetadataExtractor.Formats.Xmp;
+using MetadataExtractor.Formats.FileType;
+using MetadataExtractor.Formats.QuickTime;
+
 using static MPExtended.Services.StreamingService.EXIF.ExifMetadata;
 
 namespace MPExtended.Services.StreamingService.EXIF
@@ -145,9 +148,11 @@ namespace MPExtended.Services.StreamingService.EXIF
       public MetadataItem Comment;
       public MetadataItem ViewerComments;
       public MetadataItem ByLine;
+      public MetadataItem Android;
       public Size Resolution;
       public MetadataItem Keywords;
       public bool HDR;
+      public string MimeType;
 
       public bool IsEmpty()
       {
@@ -158,7 +163,7 @@ namespace MPExtended.Services.StreamingService.EXIF
         {
           if (prop.Name == nameof(DatePictureTaken) || prop.Name == nameof(Orientation) ||
               prop.Name == nameof(ImageDimensions) || prop.Name == nameof(Resolution) ||
-              prop.Name == nameof(Altitude) || prop.Name == nameof(HDR))
+              prop.Name == nameof(Altitude) || prop.Name == nameof(HDR) || prop.Name == nameof(MimeType))
           {
             continue;
           }
@@ -441,6 +446,7 @@ namespace MPExtended.Services.StreamingService.EXIF
         }
 
         GetMakerNoteData(ref MyMetadata, directories);
+        GetMobileVideoData(ref MyMetadata, directories);
 
         var iptcDirectory = directories.OfType<IptcDirectory>().FirstOrDefault();
         if (iptcDirectory != null)
@@ -537,6 +543,13 @@ namespace MPExtended.Services.StreamingService.EXIF
             // [Exif IFD0] Windows XP Keywords: Keywords
             SetStuff(ref MyMetadata.Keywords, exifDirectory, ExifDirectoryBase.TagWinKeywords);
           }
+        }
+
+        var fileDirectory = directories.OfType<FileTypeDirectory>().FirstOrDefault();
+        if (fileDirectory != null)
+        {
+          // [File Type] Detected MIME Type: image/jpeg
+          MyMetadata.MimeType = fileDirectory.GetDescription(FileTypeDirectory.TagDetectedFileMimeType);
         }
 
         if (MyMetadata.Resolution.IsEmpty || MyMetadata.ImageDimensions.IsEmpty)
@@ -739,7 +752,20 @@ namespace MPExtended.Services.StreamingService.EXIF
       }
     }
 
-  }
+    private void GetMobileVideoData(ref Metadata item, IEnumerable<Directory> directory)
+    {
+      // Quick Time Metadata Header
+      var qtHeaderDirectory = directory.OfType<QuickTimeMetadataHeaderDirectory>().FirstOrDefault();
+      if (qtHeaderDirectory != null)
+      {
+        // [QuickTime Metadata Header] Android Version: 10
+        item.Android.DisplayValue = qtHeaderDirectory.GetDescription(QuickTimeMetadataHeaderDirectory.TagAndroidVersion);
 
+        // [QuickTime Metadata Header] GPS Location: +50.4574+030.3597/
+        // ISO 6709
+      }
+    }
+
+  }
   #endregion
 }

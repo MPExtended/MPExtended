@@ -120,6 +120,16 @@ namespace MPExtended.Services.StreamingService.EXIF
             }
             break;
           case nameof(ExifMetadata.Metadata.HDR):
+            if (metadata.HDR)
+            {
+              value = "Yes";
+              break;
+            }
+            else
+            {
+              continue;
+            }
+          case nameof(ExifMetadata.Metadata.MimeType):
             continue;
           default:
             value = ((ExifMetadata.MetadataItem)prop.GetValue(metadata)).DisplayValue ?? string.Empty;
@@ -177,6 +187,16 @@ namespace MPExtended.Services.StreamingService.EXIF
             }
             break;
           case nameof(ExifMetadata.Metadata.HDR):
+            if (metadata.HDR)
+            {
+              value = "Yes";
+              break;
+            }
+            else
+            {
+              continue;
+            }
+          case nameof(ExifMetadata.Metadata.MimeType):
             continue;
           default:
             value = ((ExifMetadata.MetadataItem)prop.GetValue(metadata)).DisplayValue ?? string.Empty;

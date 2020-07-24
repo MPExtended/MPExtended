@@ -87,21 +87,29 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         protected override List<WebCategory> GetHistory(string fullpath)
         {
-			      List<WebCategory> history = new List<WebCategory>();
-			      if (string.IsNullOrEmpty(fullpath))
-			      {
+            List<WebCategory> history = new List<WebCategory>();
+            if (string.IsNullOrEmpty(fullpath))
+            {
                 return history;
-			      }
+            }
+
+            fullpath = Path.GetFullPath(fullpath);
+            /*
+            if (fullpath == root)
+            {
+                return history;
+            }
+            */
 
             FileAttributes attr = File.GetAttributes(fullpath);
             DirectoryInfo dir;
             if (attr.HasFlag(FileAttributes.Directory))
             {
-              dir = new DirectoryInfo(Path.GetFullPath(fullpath));
+              dir = new DirectoryInfo(fullpath);
             }
             else
             {
-              dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
+              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
             }
 
             while (dir != null)
@@ -113,7 +121,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 }
                 dir = dir.Parent;
             }
-          	return history;
+            return history;
         }
     }
 }

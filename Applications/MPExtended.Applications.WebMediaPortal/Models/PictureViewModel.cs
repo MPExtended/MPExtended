@@ -39,18 +39,39 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
       try
       {
-        string folderId = string.IsNullOrEmpty(id) ? "_root" : id;
-        Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, folderId);
-        Folder.Categories = Folder.Categories.Reverse().ToList();
+        string folderId = id;
+        if(string.IsNullOrEmpty(folderId))
+        {
+          {
+            Folders = Connections.Current.MAS.GetAllPictureFolders(Settings.ActiveSettings.PicturesProvider).Where(x => x.Id != "_root");
 
-        Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
-        Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
-        Videos = Connections.Current.MAS.GetMobileVideosBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
+            if (Folders.Count() == 1)
+            {
+              folderId = Folders.ElementAt(0).Id;
+            }
+          }
+        }
+
+        if(!string.IsNullOrEmpty(folderId))
+        {
+          Folder = Connections.Current.MAS.GetPictureFolderById(Settings.ActiveSettings.PicturesProvider, folderId);
+          Folder.Categories = Folder.Categories.Reverse().ToList();
+
+          Folders = Connections.Current.MAS.GetSubFoldersById(Settings.ActiveSettings.PicturesProvider, folderId);
+          Pictures = Connections.Current.MAS.GetPicturesBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
+          Videos = Connections.Current.MAS.GetMobileVideosBasicByCategory(Settings.ActiveSettings.PicturesProvider, folderId);
+        }
+        else
+        {
+          Folder = new WebPictureFolder();
+          Pictures = new List<WebPictureBasic>();
+          Videos = new List<WebMobileVideoBasic>();
+        }
       }
       catch (Exception ex)
       {
         Folder = new WebPictureFolder();
-        Log.Warn(String.Format("Failed to load Picture root folder"), ex);
+        Log.Warn(String.Format("Failed to load Picture folder"), ex);
       }
     }
   }
@@ -70,6 +91,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
       try
       {
+        Log.Debug("*** ### " + id);
         Picture = Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id);
         Picture.Categories = Picture.Categories.Reverse().ToList();
       }

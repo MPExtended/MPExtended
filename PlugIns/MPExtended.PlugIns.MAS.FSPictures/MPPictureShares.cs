@@ -39,8 +39,9 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             public string Name { get; set; }
             public string Path { get; set; }
             public int Index { get; set; }
-	    public string Pincode { get; set; }
+            public string Pincode { get; set; }
         }
+
         private List<Share> shares;
         private Dictionary<string, Share> shareCache;
 
@@ -76,7 +77,7 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 {
                     Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
                     Path = Path.GetFullPath(list.Where(x => x.Key == "sharepath" + i).Select(x => x.Value).First()),
-		    Pincode = list.Where(x => x.Key == "pincode" + i).Select(x => x.Value).First(),
+                    Pincode = list.Where(x => x.Key == "pincode" + i).Select(x => x.Value).First(),
                     Index = i
                 });
             }
@@ -92,7 +93,13 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         protected override string PathToId(string fullpath)
         {
-            string dir = Path.GetDirectoryName(Path.GetFullPath(fullpath));
+            string dir = Path.GetFullPath(fullpath);
+ 
+            if (shares.Any(x => x.Path == dir))
+            {
+                return shares.Where(x => x.Path == dir).First().Index.ToString();
+            }
+
             Share share;
             if (!shareCache.ContainsKey(dir))
             {
@@ -104,25 +111,25 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 share = shareCache[dir];
             }
 
-            string dircomponent = Path.GetFullPath(fullpath).Substring(share.Path.Length + 1);
+            string dircomponent = dir.Substring(share.Path.Length + 1);
             byte[] toEncodeAsBytes = Encoding.UTF8.GetBytes(dircomponent);
             string base64dir = Convert.ToBase64String(toEncodeAsBytes);
-            return String.Format("{0}|{1}", share.Index, base64dir);
+            return String.Format("{0}#{1}", share.Index, base64dir);
         }
 
         protected override string IdToPath(string id)
         {
-            if (!id.Contains("|"))
+            if (!id.Contains("#"))
             {
                 int i = Int32.Parse(id);
                 return shares.Where(x => x.Index == i).First().Path;
             }
 
-            int shareIndex = Int32.Parse(id.Substring(0, id.IndexOf("|")));
-            string path64 = id.Substring(id.IndexOf("|") + 1);
+            int shareIndex = Int32.Parse(id.Substring(0, id.IndexOf("#")));
+            string path64 = id.Substring(id.IndexOf("#") + 1);
             byte[] encodedDataAsBytes = Convert.FromBase64String(path64);
             string path = Encoding.UTF8.GetString(encodedDataAsBytes);
-
+      Log.Debug("*** " + id + " -> " + path + " -> " + Path.GetFullPath(Path.Combine(shares.Where(x => x.Index == shareIndex).First().Path, path)));
             return Path.GetFullPath(Path.Combine(shares.Where(x => x.Index == shareIndex).First().Path, path));
         }
 
@@ -149,11 +156,35 @@ namespace MPExtended.PlugIns.MAS.FSPictures
                 return history;
             }
 
-            DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(fullpath)));
+            fullpath = Path.GetFullPath(fullpath);
+            /*
+            if (shares.Any(x => fullpath == x.Path))
+            {
+                return history;
+            }
+            */
+
+            FileAttributes attr = File.GetAttributes(fullpath);
+            DirectoryInfo dir;
+            if (attr.HasFlag(FileAttributes.Directory))
+            {
+              dir = new DirectoryInfo(fullpath);
+            }
+            else
+            {
+              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
+            }
+
             while (dir != null)
             {
-                history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
-                
+                if (shares.Any(x => dir.FullName == x.Path))
+                {
+                   history.Add(new WebCategory() { Title = shares.Where(x => x.Path == dir.FullName).First().Name, Id = PathToId(dir.FullName) });
+                }
+                else
+                { 
+                    history.Add(new WebCategory() { Title = dir.Name, Id = PathToId(dir.FullName) });
+                }
                 if (shares.Any(x => dir.FullName == x.Path))
                 {
                     break;

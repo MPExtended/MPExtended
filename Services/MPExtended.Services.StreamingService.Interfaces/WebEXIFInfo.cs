@@ -23,5 +23,11 @@ namespace MPExtended.Services.StreamingService.Interfaces
   {
     public Dictionary<string, string> Metadata { get; set; }
     public WebGeoLocation GeoLocation { get; set; }
+
+    public WebEXIFInfo()
+    {
+      Metadata = new Dictionary<string, string>();
+      GeoLocation = new WebGeoLocation();
+    }
   }
 }
