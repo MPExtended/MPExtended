@@ -91,7 +91,6 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
       try
       {
-        Log.Debug("*** ### " + id);
         Picture = Connections.Current.MAS.GetPictureDetailedById(Settings.ActiveSettings.PicturesProvider, id);
         Picture.Categories = Picture.Categories.Reverse().ToList();
       }

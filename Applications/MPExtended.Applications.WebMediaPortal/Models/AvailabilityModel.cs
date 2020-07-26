@@ -34,6 +34,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public bool TVShows { get; set; }
         public bool Music { get; set; }
         public bool Picture { get; set; }
+        public bool Shares { get; set; }
 
         public bool Authentication { get; set; }
 
@@ -62,6 +63,9 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Picture = MAS && (Settings.ActiveSettings.PicturesProvider == null ?
                               msd.DefaultPictureLibrary != 0 :
                               msd.AvailablePictureLibraries.Any(x => x.Id == Settings.ActiveSettings.PicturesProvider));
+            Shares = MAS && (Settings.ActiveSettings.FileSystemProvider == null ?
+                              msd.DefaultFileSystemLibrary != 0 :
+                              msd.AvailableFileSystemLibraries.Any(x => x.Id == Settings.ActiveSettings.FileSystemProvider));
         }
     }
 }

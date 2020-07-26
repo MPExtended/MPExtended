@@ -108,7 +108,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
 
         public WebPictureDetailed GetPictureDetailed(string pictureId)
         {
-      Log.Debug("*** *** " + pictureId + " - " + IdToPath(pictureId));
             return GetWebPictureDetailed(IdToPath(pictureId));
         }
 

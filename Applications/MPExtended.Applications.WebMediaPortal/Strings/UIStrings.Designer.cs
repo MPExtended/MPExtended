@@ -836,6 +836,15 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shares.
+        /// </summary>
+        public static string Shares {
+            get {
+                return ResourceManager.GetString("Shares", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} season {1}.
         /// </summary>
         public static string ShowSeason {

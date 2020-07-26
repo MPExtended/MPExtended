@@ -129,7 +129,6 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             string path64 = id.Substring(id.IndexOf("#") + 1);
             byte[] encodedDataAsBytes = Convert.FromBase64String(path64);
             string path = Encoding.UTF8.GetString(encodedDataAsBytes);
-      Log.Debug("*** " + id + " -> " + path + " -> " + Path.GetFullPath(Path.Combine(shares.Where(x => x.Index == shareIndex).First().Path, path)));
             return Path.GetFullPath(Path.Combine(shares.Where(x => x.Index == shareIndex).First().Path, path));
         }
 

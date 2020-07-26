@@ -518,4 +518,7 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="Pictures" xml:space="preserve">
     <value>Pictures</value>
   </data>
+  <data name="Shares" xml:space="preserve">
+    <value>Shares</value>
+  </data>
 </root>
