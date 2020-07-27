@@ -146,7 +146,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            return shares.First(x => x.Path == path).ToWebDriveBasic().Artwork = GetArtworkForDrive(x.Path);
+            return shares.First(x => x.Path == path).ToWebDriveBasic().Artwork = GetArtworkForDrive(path);
         }
 
         public WebFolderBasic GetFolderBasic(string id)
