@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,6 +38,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
         private string[] sections;
         private List<Share> shares = null;
 
+        protected string[] Extensions { get; set; }
+
         public bool Supported { get; set; }
 
         public ShareLibrary(IPluginData data, string[] sections)
@@ -44,6 +47,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
             this.data = data;
             this.configuration = data.GetConfiguration("MP Shares");
             this.sections = sections;
+
+            Extensions = new string[] { ".jpg", ".png", ".bmp" };
 
             Supported = Mediaportal.HasValidConfigFile();
             if (Supported)
@@ -109,7 +114,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public IEnumerable<WebDriveBasic> GetDriveListing()
         {
-            return shares.Select(x => x.ToWebDriveBasic());
+            return shares.Select(x => x.ToWebDriveBasic().Artwork = GetArtworkForDrive(x.Path));
         }
 
         public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
@@ -141,7 +146,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            return shares.First(x => x.Path == path).ToWebDriveBasic();
+            return shares.First(x => x.Path == path).ToWebDriveBasic().Artwork = GetArtworkForDrive(x.Path);
         }
 
         public WebFolderBasic GetFolderBasic(string id)
@@ -198,7 +203,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Id = PathToIdentifier(file, share),
                 LastAccessTime = file.LastAccessTime,
                 LastModifiedTime = file.LastWriteTime,
-                Size = file.Length
+                Size = file.Length,
+                Artwork = GetArtworkForFile(file.FullName)
             };
         }
 
@@ -211,7 +217,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 DateAdded = dir.CreationTime,
                 Id = PathToIdentifier(dir, share),
                 LastAccessTime = dir.LastAccessTime,
-                LastModifiedTime = dir.LastWriteTime
+                LastModifiedTime = dir.LastWriteTime,
+                Artwork = GetArtworkForFolder(dir.FullName)
             };
         }
 
@@ -324,5 +331,96 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 return String.Empty;
             }
         }
+
+        #region Artworks
+
+        private List<WebArtwork> GetArtworkForDrive(string drive)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(drive) || !Directory.Exists(drive))
+                return artwork;
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(drive, "folder{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+        
+        private List<WebArtwork> GetArtworkForFolder(string path)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+                return artwork;
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(path, "folder{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+
+        private List<WebArtwork> GetArtworkForFile(string filename)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
+                return artwork;
+                
+            string name = Path.GetFileNameWithoutExtension(filename);
+            string path = Path.GetDirectoryName(filename);
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(path, name + "{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+
+        #endregion
     }
 }
