@@ -224,6 +224,7 @@ namespace MPExtended.Services.StreamingService.EXIF
             }
           case ExifDirectoryBase.TagDateTime:
           case ExifDirectoryBase.TagDateTimeOriginal:
+          case QuickTimeMetadataHeaderDirectory.TagCreationDate:
             {
               DateTime dateTime;
               if (directory.TryGetDateTime(tag, out dateTime))
@@ -758,11 +759,23 @@ namespace MPExtended.Services.StreamingService.EXIF
       var qtHeaderDirectory = directory.OfType<QuickTimeMetadataHeaderDirectory>().FirstOrDefault();
       if (qtHeaderDirectory != null)
       {
+        // [QuickTime Metadata Header] Creation Date = 2019-07-24T11:25:40+0300
+        SetStuff(ref item.DatePictureTaken, qtHeaderDirectory, QuickTimeMetadataHeaderDirectory.TagCreationDate);
+
+        // [QuickTime Metadata Header] Make = Apple
+        SetStuff(ref item.EquipmentMake, qtHeaderDirectory, QuickTimeMetadataHeaderDirectory.TagMake);
+
+        // [QuickTime Metadata Header] Model = iPhone 6
+        SetStuff(ref item.CameraModel, qtHeaderDirectory, QuickTimeMetadataHeaderDirectory.TagModel);
+
+        // [QuickTime Metadata Header] Software = 12.3
+        SetStuff(ref item.ViewerComments, qtHeaderDirectory, QuickTimeMetadataHeaderDirectory.TagSoftware);
+
         // [QuickTime Metadata Header] Android Version: 10
-        item.Android.DisplayValue = qtHeaderDirectory.GetDescription(QuickTimeMetadataHeaderDirectory.TagAndroidVersion);
+        SetStuff(ref item.Android, qtHeaderDirectory, QuickTimeMetadataHeaderDirectory.TagAndroidVersion);
 
         // [QuickTime Metadata Header] GPS Location: +50.4574+030.3597/
-        // ISO 6709
+        // TagGpsLocation - ISO 6709
       }
     }
 
