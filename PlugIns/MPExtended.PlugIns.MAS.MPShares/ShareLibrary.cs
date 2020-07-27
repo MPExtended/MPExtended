@@ -114,7 +114,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public IEnumerable<WebDriveBasic> GetDriveListing()
         {
-            return shares.Select(x => x.ToWebDriveBasic()).ToList().ForEach(d => d.Artwork = GetArtworkForDrive(d.Path));
+            return shares.Select(x => x.ToWebDriveBasic()).Select(d => { d.Artwork = GetArtworkForDrive(d.Path); return d; });
         }
 
         public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
@@ -146,7 +146,9 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            return WebDriveBasic(shares.First(x => x.Path == path).ToWebDriveBasic()).Artwork = GetArtworkForDrive(path);
+            WebDriveBasic drive = shares.First(x => x.Path == path).ToWebDriveBasic();
+            drive.Artwork = GetArtworkForDrive(path);
+            return drive;
         }
 
         public WebFolderBasic GetFolderBasic(string id)
