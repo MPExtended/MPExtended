@@ -542,7 +542,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
-        WebBoolResult DeleteFile(string id);
+        WebBoolResult DeleteFile(int? provider, string id);
         #endregion
 
         #region Files
