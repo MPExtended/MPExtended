@@ -128,9 +128,14 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       {
         return HttpNotFound();
       }
-      int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
+      int? provider = id.HasValue ? id : Settings.ActiveSettings.FileSystemProvider;
+      WebFileBasic file = Connections.Current.MAS.GetFileSystemFileBasicById(provider, fileId);
+      if (file == null)
+      {
+        return HttpNotFound();
+      }
       Connections.Current.MAS.DeleteFile(provider, fileId);
-      return RedirectToAction("Index", "ShareLibrary", provider.ToString());
+      return RedirectToAction("Index", "ShareLibrary", new { id = id, folderId = file.Categories.Last() });
     }  
 
     public ActionResult DriveCover(int? id, string itemId, int width = 0, int height = 0)
