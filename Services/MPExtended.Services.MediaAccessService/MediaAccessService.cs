@@ -751,6 +751,11 @@ namespace MPExtended.Services.MediaAccessService
     {
       return FileSystemLibraries[provider].GetFileBasic(id).Finalize(provider, ProviderType.Filesystem);
     }
+
+    public WebBoolResult DeleteFile(int? provider, string id)
+    {
+      return FileSystemLibraries[provider].DeleteFile(id);
+    }
     #endregion
 
     #region Files
