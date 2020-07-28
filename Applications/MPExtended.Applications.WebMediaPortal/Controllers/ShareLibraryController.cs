@@ -121,6 +121,17 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         return HttpNotFound();
       return Json(model, JsonRequestBehavior.AllowGet);
     }
+    
+    public ActionResult DeleteFile(int? id, string fileId)
+    {
+      if (!id.HasValue && !Settings.ActiveSettings.FileSystemProvider.HasValue)
+      {
+        return HttpNotFound();
+      }
+      int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
+      Connections.Current.MAS.DeleteFile(provider, fileId);
+      return RedirectToAction("Index", "ShareLibrary", provider.ToString());
+    }  
 
     public ActionResult DriveCover(int? id, string itemId, int width = 0, int height = 0)
     {
