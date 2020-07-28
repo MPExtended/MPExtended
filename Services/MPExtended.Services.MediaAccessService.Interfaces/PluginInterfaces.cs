@@ -67,7 +67,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebMusicArtistDetailed GetArtistDetailedById(string artistId);
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-  }
+    }
 
     public interface IMovieLibrary : ILibrary
     {
@@ -81,7 +81,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebCollection> GetAllCollections();
         WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
         WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
-  }
+    }
 
     public interface ITVShowLibrary : ILibrary
     {
@@ -102,7 +102,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
 
         IEnumerable<WebGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
-  }
+    }
 
     public interface IPictureLibrary : ILibrary
     {
@@ -120,7 +120,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebPictureFolder> GetSubFoldersById(string folderId);
         WebMobileVideoBasic GetMobileVideoBasic(string id);
         IEnumerable<WebMobileVideoBasic> GetMobileVideosBasicByCategory(string categoryId);
-  }
+    }
 
     public interface IFileSystemLibrary : ILibrary
     {
@@ -130,6 +130,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileBasic GetFileBasic(string id);
         WebFolderBasic GetFolderBasic(string id);
         WebDriveBasic GetDriveBasic(string id);
+        WebBoolResult DeleteFile(string id);
     }
 
     public interface IPluginData

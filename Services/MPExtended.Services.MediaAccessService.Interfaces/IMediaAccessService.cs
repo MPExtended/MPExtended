@@ -539,6 +539,10 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebFileBasic GetFileSystemFileBasicById(int? provider, string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult DeleteFile(int? provider, string id);
         #endregion
 
         #region Files
