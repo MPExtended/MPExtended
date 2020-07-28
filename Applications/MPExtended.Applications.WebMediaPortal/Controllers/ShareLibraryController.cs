@@ -129,13 +129,13 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
         return HttpNotFound();
       }
       int? provider = id.HasValue ? id : Settings.ActiveSettings.FileSystemProvider;
-      WebFileBasic file = Connections.Current.MAS.GetFileSystemFileBasicById(provider, fileId);
+      var file = Connections.Current.MAS.GetFileSystemFileBasicById(provider, fileId);
       if (file == null)
       {
         return HttpNotFound();
       }
       Connections.Current.MAS.DeleteFile(provider, fileId);
-      return RedirectToAction("Index", "ShareLibrary", new { id = id, folderId = file.Categories.Last() });
+      return RedirectToAction("Index", "ShareLibrary", new { id = provider, folderId = file.Categories.Last().Id });
     }  
 
     public ActionResult DriveCover(int? id, string itemId, int width = 0, int height = 0)
