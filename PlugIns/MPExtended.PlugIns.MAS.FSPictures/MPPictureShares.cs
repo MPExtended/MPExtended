@@ -163,15 +163,18 @@ namespace MPExtended.PlugIns.MAS.FSPictures
             }
             */
 
-            FileAttributes attr = File.GetAttributes(fullpath);
             DirectoryInfo dir;
-            if (attr.HasFlag(FileAttributes.Directory))
+            if (File.Exists(fullpath))
+            {
+              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
+            }
+            else if (Directory.Exists(fullpath))
             {
               dir = new DirectoryInfo(fullpath);
             }
             else
             {
-              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
+              return history;
             }
 
             while (dir != null)

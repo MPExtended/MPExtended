@@ -217,7 +217,7 @@ namespace MPExtended.Services.StreamingService
 
     public WebEXIFInfo GetExifInfo(WebMediaType type, int? provider, string itemId, int? offset)
     {
-      if (type != WebMediaType.Picture && type != WebMediaType.MobileVideo)
+      if (type != WebMediaType.Picture && type != WebMediaType.MobileVideo && type != WebMediaType.File)
       {
         return null;
       }

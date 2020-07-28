@@ -114,7 +114,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public IEnumerable<WebDriveBasic> GetDriveListing()
         {
-            return shares.Select(x => x.ToWebDriveBasic()).Select(d => { d.Artwork = GetArtworkForDrive(d.Path.First()); return d; });
+            return shares.Select(x => ConvertShareToDriveBasic(x));
         }
 
         public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
@@ -146,9 +146,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            WebDriveBasic drive = shares.First(x => x.Path == path).ToWebDriveBasic();
-            drive.Artwork = GetArtworkForDrive(path);
-            return drive;
+            return ConvertShareToDriveBasic(shares.First(x => x.Path == path));
         }
 
         public WebFolderBasic GetFolderBasic(string id)
@@ -195,18 +193,18 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
-        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file, Share share = null)
+        private WebDriveBasic ConvertShareToDriveBasic(Share share)
         {
-            return new WebFileBasic()
+            return new WebDriveBasic()
             {
-                Title = file.Name,
-                Path = new List<string>() { file.FullName },
-                DateAdded = file.CreationTime,
-                Id = PathToIdentifier(file, share),
-                LastAccessTime = file.LastAccessTime,
-                LastModifiedTime = file.LastWriteTime,
-                Size = file.Length,
-                Artwork = GetArtworkForFile(file.FullName)
+                Title = share.Name,
+                Path = new List<string>() { share.Path },
+                Categories = GetHistory(share.Path),
+                Id = share.Id,
+                Pincode = share.Pincode,
+                LastModifiedTime = DateTime.Now,
+                LastAccessTime = DateTime.Now,
+                Artwork = GetArtworkForDrive(share.Path)
             };
         }
 
@@ -216,11 +214,28 @@ namespace MPExtended.PlugIns.MAS.MPShares
             {
                 Title = dir.Name,
                 Path = new List<string>() { dir.FullName },
+                Categories = GetHistory(dir.FullName),
                 DateAdded = dir.CreationTime,
                 Id = PathToIdentifier(dir, share),
                 LastAccessTime = dir.LastAccessTime,
                 LastModifiedTime = dir.LastWriteTime,
                 Artwork = GetArtworkForFolder(dir.FullName)
+            };
+        }
+
+        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file, Share share = null)
+        {
+            return new WebFileBasic()
+            {
+                Title = file.Name,
+                Path = new List<string>() { file.FullName },
+                Categories = GetHistory(file.FullName),
+                DateAdded = file.CreationTime,
+                Id = PathToIdentifier(file, share),
+                LastAccessTime = file.LastAccessTime,
+                LastModifiedTime = file.LastWriteTime,
+                Size = file.Length,
+                Artwork = GetArtworkForFile(file.FullName)
             };
         }
 
@@ -424,5 +439,49 @@ namespace MPExtended.PlugIns.MAS.MPShares
         }
 
         #endregion
+
+        protected List<WebCategory> GetHistory(string fullpath)
+        {
+            List<WebCategory> history = new List<WebCategory>();
+            if (string.IsNullOrEmpty(fullpath))
+            {
+                return history;
+            }
+
+            fullpath = Path.GetFullPath(fullpath);
+            DirectoryInfo dir;
+            if (File.Exists(fullpath))
+            {
+              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
+            }
+            else if (Directory.Exists(fullpath))
+            {
+              dir = new DirectoryInfo(fullpath);
+            }
+            else
+            {
+              return history;
+            }
+
+            while (dir != null)
+            {
+                if (shares.Any(x => dir.FullName == x.Path))
+                {
+                   history.Add(new WebCategory() { Title = shares.Where(x => x.Path == dir.FullName).First().Name, Id = PathToIdentifier(dir.FullName) });
+                }
+                else
+                { 
+                    history.Add(new WebCategory() { Title = dir.Name, Id = PathToIdentifier(dir.FullName) });
+                }
+                if (shares.Any(x => dir.FullName == x.Path))
+                {
+                    break;
+                }
+                dir = dir.Parent;
+            }
+            history.Reverse();
+            return history;
+        }
+
     }
 }

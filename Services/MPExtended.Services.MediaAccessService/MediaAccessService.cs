@@ -758,28 +758,39 @@ namespace MPExtended.Services.MediaAccessService
     {
       switch (type)
       {
+        // Movie
         case WebMediaType.Movie:
           return MovieLibraries[provider].GetMovieDetailedById(id).Artwork;
         case WebMediaType.Collection:
           return MovieLibraries[provider].GetCollectionById(id).Artwork;
+        // Mudic
         case WebMediaType.MusicAlbum:
           return MusicLibraries[provider].GetAlbumBasicById(id).Artwork;
         case WebMediaType.MusicArtist:
           return MusicLibraries[provider].GetArtistDetailedById(id).Artwork;
         case WebMediaType.MusicTrack:
           return MusicLibraries[provider].GetTrackDetailedById(id).Artwork;
+        // TV Series
         case WebMediaType.TVEpisode:
           return TVShowLibraries[provider].GetEpisodeDetailed(id).Artwork;
         case WebMediaType.TVSeason:
           return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork;
         case WebMediaType.TVShow:
           return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork;
+        // Picture
         case WebMediaType.Picture:
           return PictureLibraries[provider].GetPictureDetailed(id).Artwork;
         case WebMediaType.MobileVideo:
           return PictureLibraries[provider].GetMobileVideoBasic(id).Artwork;
         case WebMediaType.PictureFolder:
           return PictureLibraries[provider].GetPictureFolderById(id).Artwork;
+        // File System
+        case WebMediaType.Drive:
+          return FileSystemLibraries[provider].GetDriveBasic(id).Artwork;
+        case WebMediaType.Folder:
+          return FileSystemLibraries[provider].GetFolderBasic(id).Artwork;
+        case WebMediaType.File:
+          return FileSystemLibraries[provider].GetFileBasic(id).Artwork;
         default:
           Log.Warn("Requested artwork for mediatype {0} which does not have artwork", type);
           throw new ArgumentException("No artwork available for this mediatype", "type");

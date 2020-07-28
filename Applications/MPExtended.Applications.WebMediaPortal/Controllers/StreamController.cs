@@ -167,7 +167,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        public ActionResult Download(WebMediaType type, string item, string token = null)
+        public ActionResult Download(WebMediaType type, string item, string token = null, int? forProvider = null)
         {
             // Check authentication
             if (!IsUserAuthenticated())
@@ -182,6 +182,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
             }
 
+            // Get provider
+            int? provider = forProvider.HasValue ? forProvider : GetProvider(type);
+
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
@@ -193,6 +196,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["itemId"] = item;
             string address = type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.Addresses.TAS : Connections.Current.Addresses.MAS;
             string fullUrl = String.Format("http://{0}/MPExtended/StreamingService/stream/GetMediaItem?{1}", address, queryString.ToString());
+            if (forProvider.HasValue)
+            {
+              fullUrl = fullUrl + "&provider=" + forProvider.Value.ToString();
+            }
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we can access the file without any problems, let IIS stream it; that is a lot faster
@@ -201,7 +208,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Debug("Host download directly through IIS");
                 var path = type == WebMediaType.Recording ?
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
-                    Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
+                    Connections.Current.MAS.GetMediaItem(provider, type, item).Path[0];
                 if (System.IO.File.Exists(path))
                 {
                     return new RangeFilePathResult(MIME.GetFromFilename(path, "application/octet-stream"), new FileInfo(path));
@@ -222,12 +229,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (type == WebMediaType.Recording)
                 {
                     WebRecordingFileInfo fileInfo = Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item));
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, provider, item);
                 }
                 else
                 {
-                    WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(GetProvider(type), type, WebFileType.Content, item, 0);
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(provider, type, WebFileType.Content, item, 0);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, provider, item);
 
                 }
             }

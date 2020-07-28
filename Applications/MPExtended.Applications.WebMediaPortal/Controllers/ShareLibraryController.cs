@@ -122,19 +122,22 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Json(model, JsonRequestBehavior.AllowGet);
     }
 
-    public ActionResult DriveCover(string id, int width = 0, int height = 0)
+    public ActionResult DriveCover(int? id, string itemId, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.Drive, id, WebFileType.Cover, width, height, "Images/default/drive-cover.png");
+      int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
+      return Images.ReturnFromService(WebMediaType.Drive, itemId, WebFileType.Cover, width, height, "Images/default/drive-cover.png", forProvider: provider);
     }
 
-    public ActionResult FolderCover(string id, int width = 0, int height = 0)
+    public ActionResult FolderCover(int? id, string itemId, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.Folder, id, WebFileType.Cover, width, height, "Images/default/folder-cover.png");
+      int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
+      return Images.ReturnFromService(WebMediaType.Folder, itemId, WebFileType.Cover, width, height, "Images/default/folder-cover.png", forProvider: provider);
     }
 
-    public ActionResult FileCover(string id, int width = 0, int height = 0)
+    public ActionResult FileCover(int? id, string itemId, int width = 0, int height = 0)
     {
-      return Images.ReturnFromService(WebMediaType.File, id, WebFileType.Cover, width, height, "Images/default/file-cover.png");
+      int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
+      return Images.ReturnFromService(WebMediaType.File, itemId, WebFileType.Cover, width, height, "Images/default/file-cover.png", forProvider: provider);
     }
 
   }

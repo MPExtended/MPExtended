@@ -31,6 +31,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
   public class ShareFoldersViewModel
   {
     public int Provider { get; set; }
+    public WebFolderBasic Folder { get; set; }
     public IEnumerable<WebDriveBasic> Drives { get; set; }
     public IEnumerable<WebFolderBasic> Folders { get; set; }
     public IEnumerable<WebFileBasic> Files{ get; set; }
@@ -43,6 +44,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         if(string.IsNullOrEmpty(folderId))
         {
           {
+            Folder = new WebFolderBasic();
             Drives = Connections.Current.MAS.GetFileSystemDrives(Provider);
             Folders = new List<WebFolderBasic>();
             Files = new List<WebFileBasic>();
@@ -50,6 +52,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
         else
         {
+          Folder = Connections.Current.MAS.GetFileSystemFolderBasicById(Provider, folderId);
           Drives = new List<WebDriveBasic>();
           Folders = Connections.Current.MAS.GetFileSystemFolders(Provider, folderId);
           Files = Connections.Current.MAS.GetFileSystemFiles(Provider, folderId);

@@ -48,7 +48,7 @@ namespace MPExtended.Services.StreamingService.EXIF
   {
     public static WebEXIFInfo GetExifInfo(MediaSource source)
     {
-      if (source.MediaType != WebMediaType.Picture && source.MediaType != WebMediaType.MobileVideo)
+      if (source.MediaType != WebMediaType.Picture && source.MediaType != WebMediaType.MobileVideo && source.MediaType != WebMediaType.File)
       {
         return null;
       }

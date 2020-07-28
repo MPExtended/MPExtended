@@ -201,6 +201,8 @@ namespace MPExtended.Services.MediaAccessService
         {
             switch (mediatype)
             {
+                case WebMediaType.Drive:
+                case WebMediaType.Folder:
                 case WebMediaType.File:
                     return ProviderType.Filesystem;
                 case WebMediaType.Movie:

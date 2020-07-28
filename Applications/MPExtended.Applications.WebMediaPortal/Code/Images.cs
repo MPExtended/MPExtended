@@ -90,7 +90,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 HttpContext.Current.Response.Cache.SetETag(String.Format("\"{0}\"", etag));
         }
 
-        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null, int offset = -1)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null, int offset = -1, int? forProvider = null)
         {
             IStreamingService service;
             int? provider = null;
@@ -133,6 +133,11 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     return ExtractRecordingImage(id, maxWidth, maxHeight, defaultFile);
                 default:
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
+            }
+
+            if (forProvider.HasValue)
+            {
+              provider = forProvider;
             }
 
             string etag = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", mediaType, provider, id, artworkType, maxWidth, maxHeight);
