@@ -182,6 +182,16 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebSearchResult>();
         }
 
+        public WebBoolResult DeleteFile(string id)
+        {
+            string path = GetPath(id);
+            if (!File.Exists(path))
+                return false;
+            FileInfo fi = new FileInfo(PathUtil.StripFileProtocolPrefix(path));
+            fi.Delete();
+            return true;
+        }
+
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             string path = GetPath(id);
