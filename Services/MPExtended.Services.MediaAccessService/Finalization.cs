@@ -73,7 +73,17 @@ namespace MPExtended.Services.MediaAccessService
                     {
                         PID = realProvider,
                         Title = x.Title,
-                        IMDBId = x.IMDBId
+                        IMDBId = x.IMDBId,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList()
                     }).ToList();
                 }
 
@@ -188,9 +198,8 @@ namespace MPExtended.Services.MediaAccessService
                     Filetype = x.Filetype,
                     Id = x.Id,
                     Rating = x.Rating
-                })
-                    .OrderByDescending(x => x.Rating)
-                    .ToList();
+                }).OrderByDescending(x => x.Rating)
+                  .ToList();
             }
 
             if (item is IActors)
@@ -199,7 +208,17 @@ namespace MPExtended.Services.MediaAccessService
                 {
                     PID = item.PID,
                     Title = x.Title,
-                    IMDBId = x.IMDBId
+                    IMDBId = x.IMDBId,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                      Offset = y.Offset,
+                      Type = y.Type,
+                      Filetype = y.Filetype,
+                      Id = y.Id,
+                      Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList()
                 }).ToList();
             }
 
