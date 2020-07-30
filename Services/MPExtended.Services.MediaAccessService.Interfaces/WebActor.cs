@@ -23,7 +23,7 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
-    public class WebActor : WebObject, ITitleSortable
+    public class WebActor : WebObject, ITitleSortable, IArtwork
     {
         public string Title { get; set; }
         public string IMDBId { get; set; }
