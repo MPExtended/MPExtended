@@ -65,13 +65,15 @@
       <RegistrySearch Id="IISExpress8InstalledSearch" Type="raw" Win64="no"
                       Root="HKLM" Key="SOFTWARE\Microsoft\IISExpress\8.0" Name="InstallPath" />
     </Property>
+    <!--
     <Condition Message="The installer has detected that the requirement IIS Express 7.5 is not installed. Please install IIS Express 7.5 and run the installer again.">
       <![CDATA[Installed OR IISEXPRESS75INSTALLED OR IISEXPRESS8INSTALLED]]>
     </Condition>
     <Condition Message="The installer has detected that IIS Express 8 is installed. Unfortunately, IIS Express 8 isn't supported at this time. Please install IIS Express 7.5 and run the installer again.">
       <![CDATA[Installed OR IISEXPRESS75INSTALLED OR NOT IISEXPRESS8INSTALLED]]>
     </Condition>
-    
+    -->
+       
     <!-- Service -->
     <DirectoryRef Id="InstallDirectory">
       <Component Id="Component_Hosting" Guid="72a08c6b-5611-4d41-ab8e-abb1a7315641">
