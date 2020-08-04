@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -27,14 +28,29 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IList<WebActor> Actors { get; set; }
     }
 
+    public interface IMovieActors
+    {
+        IList<WebMovieActor> Actors { get; set; }
+    }
+
+    public interface ITVShowActors
+    {
+        IList<WebTVShowActor> Actors { get; set; }
+    }
+
     public interface IGuestStars
     {
-        IList<WebActor> GuestStars { get; set; }
+        IList<WebTVShowActor> GuestStars { get; set; }
     }
 
     public interface IArtwork
     {
         IList<WebArtwork> Artwork { get; set; }
+    }
+
+    public interface IExternalId
+    {
+        IList<WebExternalId> ExternalIds { get; set; }
     }
 
     public interface ICollections

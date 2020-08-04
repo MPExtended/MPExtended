@@ -79,6 +79,24 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actor.
+        /// </summary>
+        public static string Actor {
+            get {
+                return ResourceManager.GetString("Actor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actors.
+        /// </summary>
+        public static string Actors {
+            get {
+                return ResourceManager.GetString("Actors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add schedule.
         /// </summary>
         public static string AddSchedule {
@@ -120,6 +138,24 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string AllAlbums {
             get {
                 return ResourceManager.GetString("AllAlbums", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All genres.
+        /// </summary>
+        public static string AllGenres {
+            get {
+                return ResourceManager.GetString("AllGenres", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All movies.
+        /// </summary>
+        public static string AllMovies {
+            get {
+                return ResourceManager.GetString("AllMovies", resourceCulture);
             }
         }
         
@@ -453,6 +489,42 @@ namespace MPExtended.Applications.WebMediaPortal.Strings {
         public static string FileInaccessible {
             get {
                 return ResourceManager.GetString("FileInaccessible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Genre.
+        /// </summary>
+        public static string Genre {
+            get {
+                return ResourceManager.GetString("Genre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Genres.
+        /// </summary>
+        public static string Genres {
+            get {
+                return ResourceManager.GetString("Genres", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        public static string Group {
+            get {
+                return ResourceManager.GetString("Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gruops.
+        /// </summary>
+        public static string Groups {
+            get {
+                return ResourceManager.GetString("Groups", resourceCulture);
             }
         }
         

@@ -26,12 +26,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public class WebActor : WebObject, ITitleSortable, IArtwork
     {
         public string Title { get; set; }
-        public string IMDBId { get; set; }
+        public string Birth { get; set; }
+        public string Death { get; set; }
+        public string Biography { get; set; }
+        public IList<WebExternalId> ExternalId { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
         
         public WebActor()
         {
-          Artwork = new List<WebArtwork>();
+            ExternalId = new List<WebExternalId>();
+            Artwork = new List<WebArtwork>();
         }
 
         public WebActor(string name) : this()

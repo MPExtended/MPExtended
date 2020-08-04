@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,11 +17,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+
 using MPExtended.Libraries.Service;
-using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Code
@@ -37,6 +35,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                         return Connections.Current.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id).Title;
                     case WebMediaType.Collection:
                         return Connections.Current.MAS.GetCollectionById(Settings.ActiveSettings.MovieProvider, id).Title;
+                    case WebMediaType.MovieActor:
+                        return Connections.Current.MAS.GetMovieActorById(Settings.ActiveSettings.MovieProvider, id).Title;
+                    case WebMediaType.MovieGenre:
+                        return Connections.Current.MAS.GetMovieGenreById(Settings.ActiveSettings.MovieProvider, id).Title;
                     case WebMediaType.MusicAlbum:
                         return Connections.Current.MAS.GetMusicAlbumBasicById(Settings.ActiveSettings.MusicProvider, id).Title;
                     case WebMediaType.MusicTrack:
@@ -55,6 +57,10 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                         return Connections.Current.MAS.GetTVEpisodeDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
                     case WebMediaType.TVShow:
                         return Connections.Current.MAS.GetTVShowDetailedById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                    case WebMediaType.TVShowActor:
+                        return Connections.Current.MAS.GetTVShowActorById(Settings.ActiveSettings.TVShowProvider, id).Title;
+                    case WebMediaType.TVShowGenre:
+                        return Connections.Current.MAS.GetTVShowGenreById(Settings.ActiveSettings.TVShowProvider, id).Title;
                     case WebMediaType.TVSeason:
                     default:
                         return "";

@@ -46,6 +46,14 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         PictureFolder = 17,
         [EnumMember]
-        MobileVideo = 18
-    }
+        MobileVideo = 18,
+        [EnumMember]
+        MovieActor = 19,
+        [EnumMember]
+        TVShowActor = 20,
+        [EnumMember]
+        MovieGenre = 21,
+        [EnumMember]
+        TVShowGenre = 22
+  }
 }

@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@ using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.PlugIns.MAS.MPTVSeries
 {
@@ -162,9 +164,14 @@ namespace MPExtended.PlugIns.MAS.MPTVSeries
             return DataReaders.ReadIntAsString(reader, offset - 1) + "_s" + DataReaders.ReadIntAsString(reader, offset);
         }
 
-        public static List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
+        public static List<WebTVShowGenre> GenreReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebTVShowGenre() { Title = x }).ToList();
+        }
+
+        public static List<WebTVShowActor> ActorReader(SQLiteDataReader reader, int idx)
+        {
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebTVShowActor() { Title = x }).ToList();
         }
 
         public static string FixNameReader(SQLiteDataReader reader, int index)

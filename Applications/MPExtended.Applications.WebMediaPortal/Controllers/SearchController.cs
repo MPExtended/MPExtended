@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -71,6 +72,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     return Url.Action("Details", "MovieLibrary", new { movie = result.Id });
                 case WebMediaType.Collection:
                     return Url.Action("Collection", "MovieLibrary", new { collection = result.Id });
+                case WebMediaType.MovieActor:
+                    return Url.Action("Actor", "MovieLibrary", new { actor = result.Id });
+                case WebMediaType.MovieGenre:
+                    return Url.Action("Genre", "MovieLibrary", new { genre = result.Id });
                 case WebMediaType.MusicAlbum:
                     return Url.Action("Album", "MusicLibrary", new { album = result.Id });
                 case WebMediaType.MusicArtist:
@@ -83,6 +88,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     return Url.Action("Episodes", "TVShowsLibrary", new { season = result.Id });
                 case WebMediaType.TVShow:
                     return Url.Action("Seasons", "TVShowsLibrary", new { show = result.Id });
+                case WebMediaType.TVShowActor:
+                    return Url.Action("Actor", "TVShowsLibrary", new { actor = result.Id });
+                case WebMediaType.TVShowGenre:
+                    return Url.Action("Genre", "TVShowsLibrary", new { genre = result.Id });
                 default:
                     return null;
             }

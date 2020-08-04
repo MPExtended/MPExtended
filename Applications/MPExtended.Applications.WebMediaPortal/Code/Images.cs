@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +17,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.IO;
-using MPExtended.Applications.WebMediaPortal.Code;
+
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
@@ -104,6 +103,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.FileSystemProvider;
                     break;
                 case WebMediaType.Movie:
+                case WebMediaType.MovieActor:
+                case WebMediaType.MovieGenre:
                 case WebMediaType.Collection:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.MovieProvider;
@@ -123,6 +124,8 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 case WebMediaType.TVShow:
                 case WebMediaType.TVSeason:
                 case WebMediaType.TVEpisode:
+                case WebMediaType.TVShowActor:
+                case WebMediaType.TVShowGenre:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.TVShowProvider;
                     break;

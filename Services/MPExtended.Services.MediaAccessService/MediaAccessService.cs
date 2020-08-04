@@ -21,13 +21,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
+
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Network;
 using MPExtended.Libraries.Service.Shared;
 using MPExtended.Libraries.Service.Shared.Filters;
 using MPExtended.Libraries.Service.Util;
+
 using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
@@ -55,6 +56,8 @@ namespace MPExtended.Services.MediaAccessService
       switch (type)
       {
         case WebMediaType.Movie:
+        case WebMediaType.MovieActor:
+        case WebMediaType.MovieGenre:
         case WebMediaType.Collection:
           return MovieLibraries[provider];
         case WebMediaType.MusicTrack:
@@ -68,6 +71,8 @@ namespace MPExtended.Services.MediaAccessService
         case WebMediaType.TVShow:
         case WebMediaType.TVSeason:
         case WebMediaType.TVEpisode:
+        case WebMediaType.TVShowActor:
+        case WebMediaType.TVShowGenre:
           return TVShowLibraries[provider];
         case WebMediaType.File:
         case WebMediaType.Folder:
@@ -198,12 +203,17 @@ namespace MPExtended.Services.MediaAccessService
       return MovieLibraries[provider].GetAllMoviesDetailed().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
     }
 
-    public IList<WebGenre> GetMovieGenres(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public WebMovieGenre GetMovieGenreById(int? provider, string id)
+    {
+      return MovieLibraries[provider].GetGenreById(id);
+    }
+
+    public IList<WebMovieGenre> GetMovieGenres(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return MovieLibraries[provider].GetAllGenres().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.Movie).ToList();
     }
 
-    public IList<WebGenre> GetMovieGenresByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public IList<WebMovieGenre> GetMovieGenresByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return MovieLibraries[provider].GetAllGenres().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
     }
@@ -223,12 +233,17 @@ namespace MPExtended.Services.MediaAccessService
       return MovieLibraries[provider].GetMovieDetailedById(id).Finalize(provider, ProviderType.Movie);
     }
 
-    public IList<WebActor> GetMovieActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public WebMovieActor GetMovieActorById(int? provider, string id)
+    {
+      return MovieLibraries[provider].GetActorById(id);
+    }
+
+    public IList<WebMovieActor> GetMovieActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return MovieLibraries[provider].GetAllMovies().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).Finalize(provider, ProviderType.Movie);
     }
 
-    public IList<WebActor> GetMovieActorsByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public IList<WebMovieActor> GetMovieActorsByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return MovieLibraries[provider].GetAllMovies().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).TakeRange(start, end).Finalize(provider, ProviderType.Movie);
     }
@@ -504,12 +519,17 @@ namespace MPExtended.Services.MediaAccessService
       return TVShowLibraries[provider].GetAllCategories().AsQueryable().Filter(filter).Finalize(provider, ProviderType.TVShow);
     }
 
-    public IList<WebGenre> GetTVShowGenres(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public WebTVShowGenre GetTVShowGenreById(int? provider, string id)
+    {
+      return TVShowLibraries[provider].GetGenreById(id).Finalize(provider, ProviderType.TVShow);
+    }
+
+    public IList<WebTVShowGenre> GetTVShowGenres(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return TVShowLibraries[provider].GetAllGenres().AsQueryable().Filter(filter).SortMediaItemList(sort, order).Finalize(provider, ProviderType.TVShow);
     }
 
-    public IList<WebGenre> GetTVShowGenresByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public IList<WebTVShowGenre> GetTVShowGenresByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return TVShowLibraries[provider].GetAllGenres().AsQueryable().Filter(filter).SortMediaItemList(sort, order).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
     }
@@ -654,12 +674,17 @@ namespace MPExtended.Services.MediaAccessService
       return TVShowLibraries[provider].GetAllSeasonsBasic().AsQueryable().Where(x => x.ShowId == id).Filter(filter).Count();
     }
 
-    public IList<WebActor> GetTVShowActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public WebTVShowActor GetTVShowActorById(int? provider, string id)
+    {
+      return TVShowLibraries[provider].GetActorById(id).Finalize(provider, ProviderType.TVShow);
+    }
+
+    public IList<WebTVShowActor> GetTVShowActors(int? provider, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).Finalize(provider, ProviderType.TVShow);
     }
 
-    public IList<WebActor> GetTVShowActorsByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
+    public IList<WebTVShowActor> GetTVShowActorsByRange(int? provider, int start, int end, string filter = null, WebSortField? sort = WebSortField.Title, WebSortOrder? order = WebSortOrder.Asc)
     {
       return TVShowLibraries[provider].GetAllTVShowsBasic().AsQueryable().SelectMany(x => x.Actors).Distinct().Filter(filter).SortMediaItemList(sort, order, WebSortField.Title).TakeRange(start, end).Finalize(provider, ProviderType.TVShow);
     }
@@ -768,6 +793,10 @@ namespace MPExtended.Services.MediaAccessService
           return MovieLibraries[provider].GetMovieDetailedById(id).Artwork;
         case WebMediaType.Collection:
           return MovieLibraries[provider].GetCollectionById(id).Artwork;
+        case WebMediaType.MovieActor:
+          return MovieLibraries[provider].GetActorById(id).Artwork;
+        case WebMediaType.MovieGenre:
+          return MovieLibraries[provider].GetGenreById(id).Artwork;
         // Mudic
         case WebMediaType.MusicAlbum:
           return MusicLibraries[provider].GetAlbumBasicById(id).Artwork;
@@ -782,6 +811,10 @@ namespace MPExtended.Services.MediaAccessService
           return TVShowLibraries[provider].GetSeasonDetailed(id).Artwork;
         case WebMediaType.TVShow:
           return TVShowLibraries[provider].GetTVShowDetailed(id).Artwork;
+        case WebMediaType.TVShowActor:
+          return TVShowLibraries[provider].GetActorById(id).Artwork;
+        case WebMediaType.TVShowGenre:
+          return TVShowLibraries[provider].GetGenreById(id).Artwork;
         // Picture
         case WebMediaType.Picture:
           return PictureLibraries[provider].GetPictureDetailed(id).Artwork;
@@ -1085,6 +1118,10 @@ namespace MPExtended.Services.MediaAccessService
         case WebMediaType.Movie:
           return AutoSuggestion.GetValuesForField(filterField, GetMoviesDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
         case WebMediaType.Collection:
+          return AutoSuggestion.GetValuesForField(filterField, GetMovieActors(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.MovieActor:
+          return AutoSuggestion.GetValuesForField(filterField, GetMovieGenres(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.MovieGenre:
           return AutoSuggestion.GetValuesForField(filterField, GetCollections(provider), op, limit).OrderBy(x => x, order).ToList();
         case WebMediaType.MusicAlbum:
           return AutoSuggestion.GetValuesForField(filterField, GetMusicAlbumsBasic(provider), op, limit).OrderBy(x => x, order).ToList();
@@ -1104,6 +1141,10 @@ namespace MPExtended.Services.MediaAccessService
           return AutoSuggestion.GetValuesForField(filterField, GetTVEpisodesDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
         case WebMediaType.TVShow:
           return AutoSuggestion.GetValuesForField(filterField, GetTVShowsDetailed(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.TVShowActor:
+          return AutoSuggestion.GetValuesForField(filterField, GetTVShowActors(provider), op, limit).OrderBy(x => x, order).ToList();
+        case WebMediaType.TVShowGenre:
+          return AutoSuggestion.GetValuesForField(filterField, GetTVShowGenres(provider), op, limit).OrderBy(x => x, order).ToList();
         default:
           Log.Info("GetFilterValues() called with unsupported mediaType='{0}' filterField='{1}' op='{2}' limit='{3}'", mediaType, filterField, op, limit);
           throw new ArgumentException("Unsupported MediaType for GetFilterValues()");

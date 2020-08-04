@@ -22,6 +22,7 @@ using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 using MPExtended.Services.MediaAccessService.Interfaces.Music;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService
 {
@@ -42,6 +43,8 @@ namespace MPExtended.Services.MediaAccessService
             int realProvider = ProviderHandler.GetProviderId(providerType, provider);
             bool isArtwork = operList.First() is IArtwork;
             bool isActors = operList.First() is IActors;
+            bool isMovieActors = operList.First() is IMovieActors;
+            bool isTVShowActors = operList.First() is ITVShowActors;
             bool isGuestStars = operList.First() is IGuestStars;
             bool isCollections = operList.First() is ICollections;
             bool isArtists = operList.First() is IArtists;
@@ -73,7 +76,9 @@ namespace MPExtended.Services.MediaAccessService
                     {
                         PID = realProvider,
                         Title = x.Title,
-                        IMDBId = x.IMDBId,
+                        Birth = x.Birth,
+                        Death = x.Death,
+                        Biography = x.Biography,
                         Artwork = x.Artwork.Select(y => new WebArtwork()
                                   {
                                     Offset = y.Offset,
@@ -83,16 +88,97 @@ namespace MPExtended.Services.MediaAccessService
                                     Rating = y.Rating
                                   })
                                   .OrderByDescending(y => y.Rating)
+                                  .ToList(),
+                        ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                                  {
+                                    Id = y.Id,
+                                    Site = y.Site
+                                  })
+                                  .ToList()
+                    }).ToList();
+                }
+
+                if (isMovieActors)
+                {
+                    (item as IMovieActors).Actors = (item as IMovieActors).Actors.Select(x => new WebMovieActor()
+                    {
+                        PID = realProvider,
+                        Title = x.Title,
+                        Birth = x.Birth,
+                        Death = x.Death,
+                        Biography = x.Biography,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList(),
+                        ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                                  {
+                                    Id = y.Id,
+                                    Site = y.Site
+                                  })
+                                  .ToList()
+                    }).ToList();
+                }
+
+                if (isTVShowActors)
+                {
+                    (item as ITVShowActors).Actors = (item as ITVShowActors).Actors.Select(x => new WebTVShowActor()
+                    {
+                        PID = realProvider,
+                        Title = x.Title,
+                        Birth = x.Birth,
+                        Death = x.Death,
+                        Biography = x.Biography,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList(),
+                        ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                                  {
+                                    Id = y.Id,
+                                    Site = y.Site
+                                  })
                                   .ToList()
                     }).ToList();
                 }
 
                 if (isGuestStars)
                 {
-                    (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebActor()
+                    (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebTVShowActor()
                     {
                         PID = realProvider,
-                        Title = x.Title
+                        Title = x.Title,
+                        Birth = x.Birth,
+                        Death = x.Death,
+                        Biography = x.Biography,
+                        Artwork = x.Artwork.Select(y => new WebArtwork()
+                                  {
+                                    Offset = y.Offset,
+                                    Type = y.Type,
+                                    Filetype = y.Filetype,
+                                    Id = y.Id,
+                                    Rating = y.Rating
+                                  })
+                                  .OrderByDescending(y => y.Rating)
+                                  .ToList(),
+                        ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                                  {
+                                    Id = y.Id,
+                                    Site = y.Site
+                                  })
+                                  .ToList()
                     }).ToList();
                 }
 
@@ -208,26 +294,109 @@ namespace MPExtended.Services.MediaAccessService
                 {
                     PID = item.PID,
                     Title = x.Title,
-                    IMDBId = x.IMDBId,
+                    Birth = x.Birth,
+                    Death = x.Death,
+                    Biography = x.Biography,
                     Artwork = x.Artwork.Select(y => new WebArtwork()
                     {
-                      Offset = y.Offset,
-                      Type = y.Type,
-                      Filetype = y.Filetype,
-                      Id = y.Id,
-                      Rating = y.Rating
+                        Offset = y.Offset,
+                        Type = y.Type,
+                        Filetype = y.Filetype,
+                        Id = y.Id,
+                        Rating = y.Rating
                     })
                     .OrderByDescending(y => y.Rating)
+                    .ToList(),
+                    ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                    {
+                        Id = y.Id,
+                        Site = y.Site
+                    })
+                    .ToList()
+                }).ToList();
+            }
+
+            if (item is IMovieActors)
+            {
+                (item as IMovieActors).Actors = (item as IMovieActors).Actors.Select(x => new WebMovieActor()
+                {
+                    PID = item.PID,
+                    Title = x.Title,
+                    Birth = x.Birth,
+                    Death = x.Death,
+                    Biography = x.Biography,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                        Offset = y.Offset,
+                        Type = y.Type,
+                        Filetype = y.Filetype,
+                        Id = y.Id,
+                        Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList(),
+                    ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                    {
+                        Id = y.Id,
+                        Site = y.Site
+                    })
+                    .ToList()
+                }).ToList();
+            }
+
+            if (item is ITVShowActors)
+            {
+                (item as ITVShowActors).Actors = (item as ITVShowActors).Actors.Select(x => new WebTVShowActor()
+                {
+                    PID = item.PID,
+                    Title = x.Title,
+                    Birth = x.Birth,
+                    Death = x.Death,
+                    Biography = x.Biography,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                        Offset = y.Offset,
+                        Type = y.Type,
+                        Filetype = y.Filetype,
+                        Id = y.Id,
+                        Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList(),
+                    ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                    {
+                        Id = y.Id,
+                        Site = y.Site
+                    })
                     .ToList()
                 }).ToList();
             }
 
             if (item is IGuestStars)
             {
-                (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebActor()
+                (item as IGuestStars).GuestStars = (item as IGuestStars).GuestStars.Select(x => new WebTVShowActor()
                 {
                     PID = item.PID,
-                    Title = x.Title
+                    Title = x.Title,
+                    Birth = x.Birth,
+                    Death = x.Death,
+                    Biography = x.Biography,
+                    Artwork = x.Artwork.Select(y => new WebArtwork()
+                    {
+                        Offset = y.Offset,
+                        Type = y.Type,
+                        Filetype = y.Filetype,
+                        Id = y.Id,
+                        Rating = y.Rating
+                    })
+                    .OrderByDescending(y => y.Rating)
+                    .ToList(),
+                    ExternalId = x.ExternalId.Select(y => new WebExternalId()
+                    {
+                        Id = y.Id,
+                        Site = y.Site
+                    })
+                    .ToList()
                 }).ToList();
             }
 

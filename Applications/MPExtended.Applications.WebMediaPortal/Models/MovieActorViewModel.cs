@@ -1,5 +1,4 @@
-﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
-// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2020 Team MediaPortal
 // Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
@@ -17,35 +16,41 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
-using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.Applications.WebMediaPortal.Models
 {
-    public class MovieViewModel : MediaItemModel
+  public class MovieActorViewModel
+  {
+
+    public WebMovieActor Actor { get; set; }
+    public IEnumerable<WebMovieDetailed> Movies { get; set; }
+
+    public MovieActorViewModel(WebMovieActor actor, IEnumerable<WebMovieDetailed> movies)
     {
-        public WebMovieDetailed Movie { get; set; }
-
-        protected override WebMediaItem Item { get { return Movie; } }
-
-        public MovieViewModel(WebMovieDetailed movie)
-        {
-            Movie = movie;
-        }
-
-        public MovieViewModel(string id)
-        {
-            try
-            {
-                Movie = Connections.Current.MAS.GetMovieDetailedById(Settings.ActiveSettings.MovieProvider, id);
-            }
-            catch (Exception ex)
-            {
-                Log.Warn(String.Format("Failed to load movie {0}", id), ex);
-            }
-        }
+      Actor = actor;
+      Movies = movies;
     }
+
+    public MovieActorViewModel(string Id)
+    {
+      try
+      {
+        Actor = Connections.Current.MAS.GetMovieActorById(Settings.ActiveSettings.MovieProvider, Id);
+        Movies = Connections.Current.MAS.GetMoviesDetailed(Settings.ActiveSettings.MovieProvider, null, WebSortField.Title, WebSortOrder.Asc)
+                 .Where(x => x.Actors.Contains(Id));
+      }
+      catch (Exception ex)
+      {
+        Log.Warn(String.Format("Failed to load Actor {0}", Id), ex);
+      }
+    }
+
+  }
 }

@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,10 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
+
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Services.MediaAccessService.Interfaces;
@@ -94,7 +92,12 @@ namespace MPExtended.Services.MediaAccessService
                     case WebSortField.Year:
                         return list.OrderBy(x => ((IYearSortable)x).Year, order);
                     case WebSortField.Genre:
-                        return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
+                        if (list.First() is IGenreSortable)
+                            return list.OrderBy(x => ((IGenreSortable)x).Genres.First(), order);
+                        else if (list.First() is IMovieGenreSortable)
+                            return list.OrderBy(x => ((IMovieGenreSortable)x).Genres.First(), order);
+                        else // if(list.First() is ITVGenreSortable)
+                            return list.OrderBy(x => ((ITVGenreSortable)x).Genres.First(), order);
                     case WebSortField.Rating:
                         return list.OrderBy(x => ((IRatingSortable)x).Rating, order);
                     case WebSortField.Categories:
@@ -207,6 +210,8 @@ namespace MPExtended.Services.MediaAccessService
                     return ProviderType.Filesystem;
                 case WebMediaType.Movie:
                 case WebMediaType.Collection:
+                case WebMediaType.MovieActor:
+                case WebMediaType.MovieGenre:
                     return ProviderType.Movie;
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicArtist:
@@ -219,6 +224,8 @@ namespace MPExtended.Services.MediaAccessService
                 case WebMediaType.TVEpisode:
                 case WebMediaType.TVSeason:
                 case WebMediaType.TVShow:
+                case WebMediaType.TVShowActor:
+                case WebMediaType.TVShowGenre:
                     return ProviderType.TVShow;
                 default:
                     throw new ArgumentException();

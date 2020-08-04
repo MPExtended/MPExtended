@@ -76,6 +76,33 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
       return Images.ReturnFromService(WebMediaType.Movie, movie, WebFileType.Logo, width, height, "Images/default/movie-logo.png");
     }
 
+    // Actors
+    public ActionResult Actors(string filter = null)
+    {
+      var actors = Connections.Current.MAS.GetMovieActors(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc)
+          .Where(x => !String.IsNullOrEmpty(x.Title));
+      return View(actors);
+    }
+
+    public ActionResult Actor(string actor)
+    {
+      var model = new MovieActorViewModel(actor);
+      if (model.Actor == null)
+        return HttpNotFound();
+
+      return View(model);
+    }
+
+    public ActionResult ActorCover(string actor, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MovieActor, actor, WebFileType.Cover, width, height, "Images/default/actor-cover.png");
+    }
+
+    public ActionResult ActorFanart(string actor, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.MovieActor, actor, WebFileType.Backdrop, width, height, "Images/default/actor-fanart.png", num);
+    }
+
     // Collection
     public ActionResult Collections(string filter = null)
     {
@@ -101,6 +128,33 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     public ActionResult CollectionFanart(string collection, int width = 0, int height = 0, int num = -1)
     {
       return Images.ReturnFromService(WebMediaType.Collection, collection, WebFileType.Backdrop, width, height, "Images/default/collection-fanart.png", num);
+    }
+
+    // Genres
+    public ActionResult Genres(string filter = null)
+    {
+      var genres = Connections.Current.MAS.GetMovieGenres(Settings.ActiveSettings.MovieProvider, filter, WebSortField.Title, WebSortOrder.Asc)
+          .Where(x => !String.IsNullOrEmpty(x.Title));
+      return View(genres);
+    }
+
+    public ActionResult Genre(string genre)
+    {
+      var model = new MovieGenreViewModel(genre);
+      if (model.Genre == null)
+        return HttpNotFound();
+
+      return View(model);
+    }
+
+    public ActionResult GenreCover(string genre, int width = 0, int height = 0)
+    {
+      return Images.ReturnFromService(WebMediaType.MovieGenre, genre, WebFileType.Cover, width, height, "Images/default/genre-cover.png");
+    }
+
+    public ActionResult GenreFanart(string genre, int width = 0, int height = 0, int num = -1)
+    {
+      return Images.ReturnFromService(WebMediaType.MovieGenre, genre, WebFileType.Backdrop, width, height, "Images/default/genre-fanart.png", num);
     }
   }
 }

@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using MPExtended.Services.Common.Interfaces;
+using MPExtended.Services.MediaAccessService.Interfaces.Movie;
+using MPExtended.Services.MediaAccessService.Interfaces.TVShow;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces
 {
@@ -40,6 +42,16 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
     public interface IGenreSortable
     {
         IList<string> Genres { get; set; }
+    }
+
+    public interface IMovieGenreSortable
+    {
+        IList<WebMovieGenre> Genres { get; set; }
+    }
+
+    public interface ITVGenreSortable
+    {
+        IList<WebTVShowGenre> Genres { get; set; }
     }
 
     public interface IRatingSortable

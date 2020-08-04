@@ -24,13 +24,13 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
 {
-    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IActors, ICollections
+    public class WebMovieBasic : WebMediaItem, IYearSortable, IGenreSortable, IRatingSortable, IMovieActors, ICollections
     {
         public WebMovieBasic()
         {
             Genres = new List<string>();
             ExternalId = new List<WebExternalId>();
-            Actors = new List<WebActor>();
+            Actors = new List<WebMovieActor>();
             Groups = new List<string>();
             Collections = new List<WebCollection>();
         }
@@ -38,7 +38,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public bool IsProtected { get; set; }
         public IList<string> Genres { get; set; }
         public IList<WebExternalId> ExternalId { get; set; }
-        public IList<WebActor> Actors { get; set; }
+        public IList<WebMovieActor> Actors { get; set; }
         public IList<string> Groups { get; set; }
         public IList<WebCollection> Collections { get; set; }
 
@@ -51,6 +51,14 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Movie
         public bool Watched { get; set; }
         public int TimesWatched { get; set; }
         public string Stoptime { get; set; }
+
+        public string IMDBId
+        {
+            get
+            {
+                return ExternalId.Where(x => x.Site == "IMDB").FirstOrDefault()?.Id ?? string.Empty;
+            }
+        }
 
         public override WebMediaType Type 
         {

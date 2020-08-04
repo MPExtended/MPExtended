@@ -53,6 +53,8 @@
     <Compile Include="FileSystem\WebFolderBasic.cs" />
     <Compile Include="IMediaAccessService.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="Movie\WebMovieActor.cs" />
+    <Compile Include="Movie\WebMovieGenre.cs" />
     <Compile Include="Music\WebMusicArtistDetailed.cs" />
     <Compile Include="Playlist\WebPlaylist.cs" />
     <Compile Include="Playlist\WebPlaylistItem.cs" />
@@ -66,6 +68,8 @@
     <Compile Include="Music\WebMusicTrackDetailed.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TVShow\WebTVShowActor.cs" />
+    <Compile Include="TVShow\WebTVShowGenre.cs" />
     <Compile Include="WebActor.cs" />
     <Compile Include="WebBackendProvider.cs" />
     <Compile Include="WebCategory.cs" />

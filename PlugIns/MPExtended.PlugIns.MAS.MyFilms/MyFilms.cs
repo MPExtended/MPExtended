@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -143,7 +144,17 @@ namespace MPExtended.PlugIns.MAS.MyFilms
           .Where(x => x != null)
           .First();
     }
-    
+
+    public WebMovieGenre GetGenreById(string title)
+    {
+      return GetAllGenres().Where(x => x.Title == title).First();
+    }
+
+    public WebMovieActor GetActorById(string title)
+    {
+      return GetAllActors().Where(x => x.Title == title).First();
+    }
+
     public WebCollection GetCollectionById(string title)
     {
        return new WebCollection();
@@ -230,7 +241,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
       if (item.Attribute("Actors") != null)
         movie.Actors = item.Attribute("Actors").Value
             .Split(',', '|')
-            .Select(x => new WebActor() { Title = stripActorName.Replace(x, "$1").Trim() })
+            .Select(x => new WebMovieActor() { Title = stripActorName.Replace(x, "$1").Trim() })
             .ToList();
 
       /* I've seen two (there are probably more...) ways the IMDB ID is saved:
@@ -292,7 +303,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
       return movie;
     }
 
-    public IEnumerable<WebGenre> GetAllGenres()
+    public IEnumerable<WebMovieGenre> GetAllGenres()
     {
       return XElement.Load(DatabasePath)
           .Element("Catalog").Element("Contents").Elements("Movie")
@@ -301,7 +312,7 @@ namespace MPExtended.PlugIns.MAS.MyFilms
           .SelectMany(x => x.Value.Split(',', '|', '/'))
           .Select(x => x.Trim())
           .Distinct()
-          .Select(x => new WebGenre() { Title = x });
+          .Select(x => new WebMovieGenre() { Title = x });
     }
 
     public IEnumerable<WebSearchResult> Search(string text)
@@ -331,6 +342,11 @@ namespace MPExtended.PlugIns.MAS.MyFilms
     public IEnumerable<WebCollection> GetAllCollections()
     {
       return new List<WebCollection>();
+    }
+
+    public IEnumerable<WebMovieActor> GetAllActors()
+    {
+      return new List<WebMovieActor>();
     }
 
     public WebFileInfo GetFileInfo(string path)
@@ -363,8 +379,26 @@ namespace MPExtended.PlugIns.MAS.MyFilms
                  { "Id", GetCollectionById(id).Id }
               };            
          }
-         
-         return new WebDictionary<string>()
+
+      if (type == WebMediaType.MovieActor)
+      {
+        return new WebDictionary<string>()
+                {
+                    { "Type", "my films actor" },
+                    { "Id", GetActorById(id).Title }
+                };
+      }
+
+      if (type == WebMediaType.MovieGenre)
+      {
+        return new WebDictionary<string>()
+                {
+                    { "Type", "my films genre" },
+                    { "Id", GetGenreById(id).Title }
+                };
+      }
+
+      return new WebDictionary<string>()
             {
                 { "Type", "my films" },
                 { "Id", id }

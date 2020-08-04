@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -96,9 +97,14 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
             return list;
         }
 
-        private List<WebActor> ActorReader(SQLiteDataReader reader, int idx)
+        private List<WebMovieGenre> GenreReader(SQLiteDataReader reader, int idx)
         {
-            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebActor() { Title = x }).ToList();
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Select(x => new WebMovieGenre() { Title = x }).ToList();
+        }
+
+        private List<WebMovieActor> ActorReader(SQLiteDataReader reader, int idx)
+        {
+            return ((IList<string>)DataReaders.ReadPipeList(reader, idx)).Distinct().Select(x => new WebMovieActor() { Title = x }).ToList();
         }
 
         private LazyQuery<T> GetAllMovies<T>() where T : WebMovieBasic, new()
@@ -177,7 +183,17 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
           return new WebCollection();
         }
 
-        public IEnumerable<WebGenre> GetAllGenres()
+        public WebMovieGenre GetGenreById(string title)
+        {
+          return GetAllGenres().Where(x => x.Title == title).First();
+        }
+
+        public WebMovieActor GetActorById(string title)
+        {
+            return GetAllActors().Where(x => x.Title == title).First();
+        }
+
+        public IEnumerable<WebMovieGenre> GetAllGenres()
         {
             string sql = "SELECT DISTINCT genres FROM movie_info";
             return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
@@ -187,7 +203,20 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                 .SelectMany(x => x)
                 .Distinct()
                 .OrderBy(x => x)
-                .Select(x => new WebGenre() { Title = x });
+                .Select(x => new WebMovieGenre() { Title = x });
+        }
+
+        public IEnumerable<WebMovieActor> GetAllActors()
+        {
+            string sql = "SELECT DISTINCT actors FROM movie_info";
+            return ReadList<IEnumerable<string>>(sql, delegate(SQLiteDataReader reader)
+            {
+                return reader.ReadPipeList(0);
+            })
+                .SelectMany(x => x)
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new WebMovieActor() { Title = x });
         }
 
         public IEnumerable<WebCategory> GetAllCategories()
@@ -219,8 +248,26 @@ namespace MPExtended.PlugIns.MAS.MovingPictures
                     { "Type", "moving pictures collection" },
                     { "Id", GetCollectionById(id).Id }
                 };            
-            }        
+            }
         
+            if (type == WebMediaType.MovieActor)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "moving pictures actor" },
+                    { "Id", GetActorById(id).Title }
+                };            
+            }
+
+            if (type == WebMediaType.MovieGenre)
+            {
+                return new WebDictionary<string>()
+                {
+                    { "Type", "moving pictures genre" },
+                    { "Id", GetGenreById(id).Title }
+                };            
+            }
+
             return new WebDictionary<string>()
             {
                 { "Type", "moving pictures" },

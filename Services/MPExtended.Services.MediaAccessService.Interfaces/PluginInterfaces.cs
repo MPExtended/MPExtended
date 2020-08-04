@@ -75,10 +75,13 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        IEnumerable<WebGenre> GetAllGenres();
+        WebMovieGenre GetGenreById(string title);
+        IEnumerable<WebMovieGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
         WebCollection GetCollectionById(string title);
         IEnumerable<WebCollection> GetAllCollections();
+        WebMovieActor GetActorById(string title);
+        IEnumerable<WebMovieActor> GetAllActors();
         WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
         WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
     }
@@ -100,7 +103,11 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebTVEpisodeBasic GetEpisodeBasic(string episodeId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
 
-        IEnumerable<WebGenre> GetAllGenres();
+        WebTVShowGenre GetGenreById(string id);
+        IEnumerable<WebTVShowGenre> GetAllGenres();
+
+        WebTVShowActor GetActorById(string id);
+
         IEnumerable<WebCategory> GetAllCategories();
     }
 
