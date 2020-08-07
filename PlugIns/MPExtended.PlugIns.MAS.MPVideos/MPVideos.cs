@@ -41,6 +41,9 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     private Dictionary<string, string> fanartconfiguration;
     public bool Supported { get; set; }
 
+    private IEnumerable<WebMovieActor> actorCache;
+    private DateTime actorCacheTime = DateTime.MinValue;
+
     [ImportingConstructor]
     public MPVideos(IPluginData data)
     {
@@ -49,6 +52,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
       DatabasePath = configuration["database"];
       Supported = File.Exists(DatabasePath);
     }
+
+    #region Readers
 
     private List<WebMovieGenre> GenreReader(SQLiteDataReader reader, int idx)
     {
@@ -63,7 +68,7 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                  .Select(m => new WebMovieActor()
                  {
                    Title = m.Groups["title"].Value,
-                   ExternalId = new List<WebExternalId>() { new WebExternalId() { Id = m.Groups["id"].Value, Site = "IMDB" } }
+                   ExternalId = !string.IsNullOrEmpty(m.Groups["id"].Value) ? new List<WebExternalId>() { new WebExternalId() { Id = m.Groups["id"].Value, Site = "IMDB" } } : new List<WebExternalId>()
                  }).ToList();
     }
 
@@ -104,6 +109,8 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                    Artwork = GetArtworkForCollection(m.Groups["title"].Value) 
                  }).ToList();      
     }
+
+    #endregion
 
     private LazyQuery<T> LoadMovies<T>() where T : WebMovieBasic, new()
     {
@@ -335,13 +342,19 @@ namespace MPExtended.PlugIns.MAS.MPVideos
 
     public IEnumerable<WebMovieActor> GetAllActors()
     {
+      if (actorCache != null && !NeedUpdateCache(actorCacheTime))
+      {
+        return actorCache;
+      }
+
       string sql = "SELECT DISTINCT a.idActor, a.strActor, a.IMDBActorID as IMDBId, " +
                            "TRIM(CASE i.dateofbirth WHEN 'unknown' THEN '' ELSE i.dateofbirth END || ' ' || CASE i.placeofbirth WHEN 'unknown' THEN '' ELSE i.placeofbirth END) as Birth, " +
                            "TRIM(CASE i.dateofdeath WHEN 'unknown' THEN '' ELSE i.dateofdeath END || ' ' || CASE i.placeofdeath WHEN 'unknown' THEN '' ELSE i.placeofdeath END) as Death, " +
                            "i.biography as Bio " +
                    "FROM actors a " +
                    "LEFT JOIN actorinfo i ON a.idActor = i.idActor;";
-      return new LazyQuery<WebMovieActor>(this, sql, new List<SQLFieldMapping>()
+
+      actorCache = new LazyQuery<WebMovieActor>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("a", "strActor", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("", "Birth", "Birth", DataReaders.ReadString),
@@ -354,6 +367,9 @@ namespace MPExtended.PlugIns.MAS.MPVideos
               item.Artwork = GetArtworkForActor(item.ExternalId.Where(x => x.Site == "Mediaportal").FirstOrDefault()?.Id ?? string.Empty);
               return item;
             });
+
+      actorCacheTime = DateTime.Now;
+      return actorCache;
     }
 
     public WebFileInfo GetFileInfo(string path)
@@ -643,6 +659,11 @@ namespace MPExtended.PlugIns.MAS.MPVideos
     }
 
     #endregion
+
+    private bool NeedUpdateCache(DateTime dt)
+    {
+      return ((TimeSpan)(DateTime.Now - dt)).TotalMinutes > 1;
+    }
 
     public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
     {
