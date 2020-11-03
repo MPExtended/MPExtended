@@ -298,7 +298,7 @@ namespace MPExtended.Libraries.Service.Util
         public static string GetMediaPortalLocation()
         {
             string mpdir = GetMediaPortalPath();
-            return Path.Combine(mpdir, "MediaPortal.exe");
+            return mpdir == null ? null : Path.Combine(mpdir, "MediaPortal.exe");
         }
 
         public static string GetServerInstallationDirectory()
