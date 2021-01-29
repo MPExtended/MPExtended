@@ -31,6 +31,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebMediaInfo GetMediaInfo(WebMediaType type, int? provider, string itemId, int? offset);
 
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebEXIFInfo GetExifInfo(WebMediaType type, int? provider, string itemId, int? offset);
+
         // playerPosition is in seconds
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]

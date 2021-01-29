@@ -43,11 +43,11 @@ namespace MPExtended.Libraries.SQLitePlugin
 
         public DatabaseConnection(Database db, bool holdExclusiveLock)
         {
-            string connectionString = "Data Source=" + db.DatabasePath + ";Read Only=True";
+            string connectionString = "Data Source=" + db.DatabasePath + ";Read Only=False";
             Connection = new SQLiteConnection(connectionString);
             Path = db.DatabasePath;
             if (holdExclusiveLock)
-                fileStream = File.Open(db.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                fileStream = File.Open(db.DatabasePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
 
             Connection.Open();
             shouldClose = true;

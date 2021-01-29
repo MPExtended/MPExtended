@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,6 +39,18 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         }
 
         public WebMusicAlbumBasic Album { get; set; }
+        public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
+    }
+
+    public class ArtistTracksViewModel
+    {
+        public ArtistTracksViewModel() { }
+        public ArtistTracksViewModel(WebMusicArtistBasic artist)
+        {
+            Artist = artist;
+        }
+
+        public WebMusicArtistBasic Artist { get; set; }
         public IEnumerable<WebMusicTrackDetailed> Tracks { get; set; }
     }
 

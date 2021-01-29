@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,12 +17,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
 using MPExtended.Services.Common.Interfaces;
@@ -69,6 +68,12 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
             {
                 case WebMediaType.Movie:
                     return actionMethod("Cover", "MovieLibrary", new RouteValueDictionary(new { movie = id }));
+                case WebMediaType.Collection:
+                    return actionMethod("CollectionCover", "MovieLibrary", new RouteValueDictionary(new { collection = id }));
+                case WebMediaType.MovieActor:
+                    return actionMethod("ActorCover", "MovieLibrary", new RouteValueDictionary(new { actor = id }));
+                case WebMediaType.MovieGenre:
+                    return actionMethod("GenreCover", "MovieLibrary", new RouteValueDictionary(new { genre = id }));
                 case WebMediaType.MusicAlbum:
                     return actionMethod("AlbumImage", "MusicLibrary", new RouteValueDictionary(new { album = id }));
                 case WebMediaType.MusicArtist:
@@ -87,6 +92,10 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
                     return actionMethod("SeasonImage", "TVShowsLibrary", new RouteValueDictionary(new { season = id }));
                 case WebMediaType.TVShow:
                     return actionMethod("SeriesPoster", "TVShowsLibrary", new RouteValueDictionary(new { season = id }));
+                case WebMediaType.TVShowActor:
+                    return actionMethod("ActorPoster", "TVShowsLibrary", new RouteValueDictionary(new { actor = id }));
+                case WebMediaType.TVShowGenre:
+                    return actionMethod("GenrePoster", "TVShowsLibrary", new RouteValueDictionary(new { genre = id }));
                 default:
                     return String.Empty;
             }

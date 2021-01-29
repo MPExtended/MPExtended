@@ -14,12 +14,18 @@
         <li>@Model.Movie.Year</li>
         <li>@String.Join(", ", Model.Movie.Genres)</li>
         <li>@UIStrings.Rating: @Model.Movie.Rating.ToString("##.0")</li>
-        <li>@Model.Quality</li>
+        <li>@Model.Quality, @Model.Movie.Runtime min.<br /></li>
+    </ul>
+    <br />
+    <ul>
         <li>@Html.ActionLink(UIStrings.Download, "Download", "Stream", Skin.GetDownloadArguments(Model.Movie.Type, Model.Movie.Id), new { })</li>
         <li>@Html.ActionLink(UIStrings.Play, "Play", new { movie = Model.Id })</li>
     </ul>
 </div>
 
 <div class="textColumn">
+    @UIStrings.Tagline: @Model.Movie.Tagline
+    <br />
+    <br />
     @Model.Movie.Summary
 </div>

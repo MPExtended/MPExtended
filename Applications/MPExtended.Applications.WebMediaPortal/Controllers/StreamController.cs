@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -59,7 +60,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         // Make this a static property to avoid seeding it with the same time for CreatePlayer() and GenerateStream()
         private static Random randomGenerator = new Random();
-
+        
+	      // Player type
+        protected enum PlayerType
+        {
+            Common,
+            Album,
+            ArtistTracks
+        }
+	
         //
         // Util
         protected int? GetProvider(WebMediaType type)
@@ -70,10 +79,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                     return Settings.ActiveSettings.FileSystemProvider;
                 case WebMediaType.Movie:
                     return Settings.ActiveSettings.MovieProvider;
+		            case WebMediaType.MusicArtist:
                 case WebMediaType.MusicAlbum:
                 case WebMediaType.MusicTrack:
                     return Settings.ActiveSettings.MusicProvider;
                 case WebMediaType.Picture:
+                case WebMediaType.MobileVideo:
                     return Settings.ActiveSettings.PicturesProvider;
                 case WebMediaType.Recording:
                 case WebMediaType.TV:
@@ -90,9 +101,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         protected bool IsUserAuthenticated()
         {
-            if (!Configuration.Authentication.Enabled || Configuration.Authentication.UnauthorizedStreams ||
-				PlayerOpenedBy.Contains(Request.UserHostAddress) || User.Identity.IsAuthenticated)
-                return true;
+            if (!Configuration.Authentication.Enabled || 
+                Configuration.Authentication.UnauthorizedStreams ||
+                PlayerOpenedBy.Contains(Request.UserHostAddress) || 
+		            User.Identity.IsAuthenticated)
+              return true;
 
             // Also allow the user to authenticate through HTTP headers. This is a bit of an ugly hack, but it's a nice way
             // for people to authenticate from scripts etc. 
@@ -122,15 +135,15 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.TASStreamControl : Connections.Current.MASStreamControl;
         }
 
-
         protected StreamType GetStreamMode()
         {
             if (Settings.ActiveSettings.StreamType != StreamType.DirectWhenPossible)
+            {
                 return Settings.ActiveSettings.StreamType;
+            }
 
-            return NetworkInformation.IsLocalAddress(ExternalUrl.GetOnlyHostname(Request)) 
-                    && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
-                ? StreamType.Direct : StreamType.Proxied;
+            return NetworkInformation.IsLocalAddress(ExternalUrl.GetOnlyHostname(Request)) && NetworkInformation.IsOnLAN(HttpContext.Request.UserHostAddress)
+                   ? StreamType.Direct : StreamType.Proxied;
         }
 
         private string GetDefaultProfile(WebMediaType type)
@@ -154,7 +167,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // Streaming
-        public ActionResult Download(WebMediaType type, string item, string token = null)
+        public ActionResult Download(WebMediaType type, string item, string token = null, int? forProvider = null)
         {
             // Check authentication
             if (!IsUserAuthenticated())
@@ -169,6 +182,9 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 }
             }
 
+            // Get provider
+            int? provider = forProvider.HasValue ? forProvider : GetProvider(type);
+
             // Create URL to GetMediaItem
             Log.Debug("User wants to download type={0}; item={1}", type, item);
             var queryString = HttpUtility.ParseQueryString(String.Empty); // you can't instantiate that class manually for some reason
@@ -180,6 +196,10 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             queryString["itemId"] = item;
             string address = type == WebMediaType.TV || type == WebMediaType.Recording ? Connections.Current.Addresses.TAS : Connections.Current.Addresses.MAS;
             string fullUrl = String.Format("http://{0}/MPExtended/StreamingService/stream/GetMediaItem?{1}", address, queryString.ToString());
+            if (forProvider.HasValue)
+            {
+              fullUrl = fullUrl + "&provider=" + forProvider.Value.ToString();
+            }
             UriBuilder fullUri = new UriBuilder(fullUrl);
 
             // If we can access the file without any problems, let IIS stream it; that is a lot faster
@@ -188,7 +208,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 Log.Debug("Host download directly through IIS");
                 var path = type == WebMediaType.Recording ?
                     Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item)).Path :
-                    Connections.Current.MAS.GetMediaItem(GetProvider(type), type, item).Path[0];
+                    Connections.Current.MAS.GetMediaItem(provider, type, item).Path[0];
                 if (System.IO.File.Exists(path))
                 {
                     return new RangeFilePathResult(MIME.GetFromFilename(path, "application/octet-stream"), new FileInfo(path));
@@ -209,12 +229,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 if (type == WebMediaType.Recording)
                 {
                     WebRecordingFileInfo fileInfo = Connections.Current.TAS.GetRecordingFileInfo(Int32.Parse(item));
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, provider, item);
                 }
                 else
                 {
-                    WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(GetProvider(type), type, WebFileType.Content, item, 0);
-                    return new RangeWSSResult(fileInfo, clientDescription, type, GetProvider(type), item);
+                    WebFileInfo fileInfo = Connections.Current.MAS.GetFileInfo(provider, type, WebFileType.Content, item, 0);
+                    return new RangeWSSResult(fileInfo, clientDescription, type, provider, item);
 
                 }
             }
@@ -360,7 +380,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
         //
         // HTTP Live Streaming
-        public ActionResult StartHttpLiveStream(WebMediaType type, string itemId, int fileindex, string transcoder, string continuationId)
+        public ActionResult StartHttpLiveStream(WebMediaType type, string itemId, int fileindex, string transcoder, string continuationId, bool raw = false)
         {
             if (!IsUserAuthenticated())
             {
@@ -379,7 +399,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                         { "transcoder", transcoder },
                         { "continuationId", continuationId }
                     });
-
+		    
+                if (raw)
+		            {
+                    Log.Debug("HLS: Replying to RAW HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
+		                return Redirect(url);
+		            }
                 // iOS does not display poster images with relative paths
                 string posterUrl = Url.AbsoluteArtwork(type, itemId);
                 Log.Debug("HLS: Replying to explicit AJAX HLS start request for continuationId={0} with mode={1}; url={2}", continuationId, GetStreamMode(), url);
@@ -387,6 +412,11 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             }
             else
             {
+                Log.Debug("HLS: Start HTTP LiveStream failed.");
+	              if (raw)
+		            {
+		                return new HttpStatusCodeResult((int)HttpStatusCode.NotFound);
+		            }
                 return Json(new { Succes = false }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -547,9 +577,23 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return GenerateStream(WebMediaType.MusicTrack, item, fileindex, transcoder, starttime, continuationId);
         }
 
+        public ActionResult MobileVideo(string item, string transcoder, int starttime = 0, int fileindex = 0, string continuationId = null)
+        {
+            return GenerateStream(WebMediaType.MobileVideo, item, fileindex, transcoder, starttime, continuationId);
+        }
+
         //
-        // Player		
-        protected ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, bool album)
+	      // Player
+        protected string GetPlayerName(PlayerType type)
+        {
+            if (type == PlayerType.Common)
+            {
+                return string.Empty;
+            }
+            return type.ToString();
+        }
+	
+        protected ActionResult CreatePlayer(IWebStreamingService streamControl, PlayerViewModel model, List<StreamTarget> targets, WebTranscoderProfile profile, PlayerType type)
         {
             // save stream request
             if (!PlayerOpenedBy.Contains(Request.UserHostAddress))
@@ -559,7 +603,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // get view properties
             VideoPlayer player = targets.First(x => profile.Targets.Contains(x.Name)).Player;
-            string viewName = Enum.GetName(typeof(VideoPlayer), player) + (album ? "Album" : "") + "Player";
+            string viewName = Enum.GetName(typeof(VideoPlayer), player) + GetPlayerName(type) + "Player";
 
             // generate view
             var supportedTargets = Configuration.StreamingPlatforms.GetValidTargetsForUserAgent(Request.UserAgent).Intersect(targets.Select(x => x.Name));
@@ -610,19 +654,32 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
 
             // generic part
             var targets = type == WebMediaType.MusicTrack ? StreamTarget.GetAllTargets() : StreamTarget.GetVideoTargets();
-            return CreatePlayer(GetStreamControl(type), model, targets, profile, false);
+            return CreatePlayer(GetStreamControl(type), model, targets, profile, PlayerType.Common);
         }
 
         [ServiceAuthorize]
-        public ActionResult MusicPlayer(string albumId)
+        public ActionResult MusicPlayer(string albumId, string codec = null)
         {
             AlbumPlayerViewModel model = new AlbumPlayerViewModel();
             model.MediaId = albumId;
             model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
             WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
                 Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
-            model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId);
-            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, true);
+            model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForAlbum(Settings.ActiveSettings.MusicProvider, albumId)
+                           .Where(x => !String.IsNullOrEmpty(x.Title) && string.IsNullOrEmpty(codec) ? true : x.Codec == codec);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, PlayerType.Album);
+        }
+
+        [ServiceAuthorize]
+        public ActionResult ArtistMusicPlayer(string artistId)
+        {
+            ArtistTracksPlayerViewModel model = new ArtistTracksPlayerViewModel();
+            model.MediaId = artistId;
+            model.ContinuationId = "playlist-" + randomGenerator.Next(100000, 999999).ToString();
+            WebTranscoderProfile profile = GetProfile(Connections.Current.MASStreamControl, 
+                Configuration.StreamingPlatforms.GetDefaultProfileForUserAgent(StreamingProfileType.Audio, Request.UserAgent));
+            model.Tracks = Connections.Current.MAS.GetMusicTracksDetailedForArtist(Settings.ActiveSettings.MusicProvider, artistId);
+            return CreatePlayer(Connections.Current.MASStreamControl, model, StreamTarget.GetAudioTargets(), profile, PlayerType.ArtistTracks);
         }
 
         [ServiceAuthorize]
@@ -658,6 +715,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
                 case WebMediaType.MusicTrack:
                 case WebMediaType.TVEpisode:
                 case WebMediaType.Movie:
+                case WebMediaType.MobileVideo:
                     var mediaItem = Connections.Current.MAS.GetMediaItem(GetProvider(type), type, itemId);
                     filecount = mediaItem.Path.Count;
                     goto case WebMediaType.Recording; // really, Microsoft? Fall-through cases are useful. 

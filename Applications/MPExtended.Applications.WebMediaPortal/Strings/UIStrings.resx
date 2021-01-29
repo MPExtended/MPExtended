@@ -500,4 +500,49 @@ sure to install the MPExtended Services on all computers referenced here, and th
   <data name="AllAlbums" xml:space="preserve">
     <value>All albums</value>
   </data>
+  <data name="Tagline" xml:space="preserve">
+    <value>Tagline</value>
+  </data>
+  <data name="Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="Collection" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="Picture" xml:space="preserve">
+    <value>Picture</value>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Pictures</value>
+  </data>
+  <data name="Shares" xml:space="preserve">
+    <value>Shares</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Actor</value>
+  </data>
+  <data name="Actors" xml:space="preserve">
+    <value>Actors</value>
+  </data>
+  <data name="AllGenres" xml:space="preserve">
+    <value>All genres</value>
+  </data>
+  <data name="AllMovies" xml:space="preserve">
+    <value>All movies</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="Genres" xml:space="preserve">
+    <value>Genres</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Gruops</value>
+  </data>
 </root>

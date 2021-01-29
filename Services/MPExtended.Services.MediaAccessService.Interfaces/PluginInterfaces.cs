@@ -1,4 +1,22 @@
-﻿using System;
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+// 
+// MPExtended is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+// 
+// MPExtended is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,8 +75,15 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         IEnumerable<WebMovieDetailed> GetAllMoviesDetailed();
         WebMovieBasic GetMovieBasicById(string movieId);
         WebMovieDetailed GetMovieDetailedById(string movieId);
-        IEnumerable<WebGenre> GetAllGenres();
+        WebMovieGenre GetGenreById(string title);
+        IEnumerable<WebMovieGenre> GetAllGenres();
         IEnumerable<WebCategory> GetAllCategories();
+        WebCollection GetCollectionById(string title);
+        IEnumerable<WebCollection> GetAllCollections();
+        WebMovieActor GetActorById(string title);
+        IEnumerable<WebMovieActor> GetAllActors();
+        WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent);
+        WebBoolResult SetWathcedStatus(string id, Boolean isWatched);
     }
 
     public interface ITVShowLibrary : ILibrary
@@ -78,20 +103,30 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebTVEpisodeBasic GetEpisodeBasic(string episodeId);
         WebTVEpisodeDetailed GetEpisodeDetailed(string episodeId);
 
-        IEnumerable<WebGenre> GetAllGenres();
+        WebTVShowGenre GetGenreById(string id);
+        IEnumerable<WebTVShowGenre> GetAllGenres();
+
+        WebTVShowActor GetActorById(string id);
+
         IEnumerable<WebCategory> GetAllCategories();
     }
 
     public interface IPictureLibrary : ILibrary
     {
+        IEnumerable<WebCategory> GetAllPictureCategories();
         IEnumerable<WebPictureBasic> GetAllPicturesBasic();
         IEnumerable<WebPictureDetailed> GetAllPicturesDetailed();
+        IEnumerable<WebMobileVideoBasic> GetAllMobileVideosBasic();
+        IEnumerable<WebPictureFolder> GetAllPictureFolders();
         IEnumerable<WebPictureBasic> GetPicturesBasicByCategory(string id);
         IEnumerable<WebPictureDetailed> GetPicturesDetailedByCategory(string id);
         WebPictureBasic GetPictureBasic(string pictureId);
         WebPictureDetailed GetPictureDetailed(string pictureId);
-        IEnumerable<WebCategory> GetAllPictureCategories();
         IEnumerable<WebCategory> GetSubCategoriesById(string categoryId);
+        WebPictureFolder GetPictureFolderById(string folderId);
+        IEnumerable<WebPictureFolder> GetSubFoldersById(string folderId);
+        WebMobileVideoBasic GetMobileVideoBasic(string id);
+        IEnumerable<WebMobileVideoBasic> GetMobileVideosBasicByCategory(string categoryId);
     }
 
     public interface IFileSystemLibrary : ILibrary
@@ -102,6 +137,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         WebFileBasic GetFileBasic(string id);
         WebFolderBasic GetFolderBasic(string id);
         WebDriveBasic GetDriveBasic(string id);
+        WebBoolResult DeleteFile(string id);
     }
 
     public interface IPluginData

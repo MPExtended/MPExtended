@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -64,7 +65,7 @@ namespace MPExtended.Services.UserSessionService
 
         public UserSessionService()
         {
-            MPPath = Mediaportal.GetMediaPortalPath();
+            MPPath = Mediaportal.GetMediaPortalLocation();
         }
 
         public WebBoolResult TestConnection()

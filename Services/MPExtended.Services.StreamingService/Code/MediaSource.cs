@@ -242,6 +242,8 @@ namespace MPExtended.Services.StreamingService.Code
                         return Connections.MAS.GetMusicTrackBasicById(Provider, Id).Title;
                     case WebMediaType.Picture:
                         return Connections.MAS.GetPictureBasicById(Provider, Id).Title;
+                    case WebMediaType.MobileVideo:
+                        return Connections.MAS.GetMobileVideoBasicById(Provider, Id).Title;
                     case WebMediaType.Recording:
                         return Connections.TAS.GetRecordingById(Int32.Parse(Id)).Title;
                     case WebMediaType.TV:

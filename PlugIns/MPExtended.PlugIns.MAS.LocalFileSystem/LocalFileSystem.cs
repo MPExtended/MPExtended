@@ -1,6 +1,7 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// 
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+//
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 2 of the License, or
@@ -96,6 +97,16 @@ namespace MPExtended.PlugIns.MAS.LocalFileSystem
             if (!File.Exists(path))
                 return null;
             return ConvertFileInfoToFileBasic(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
+        }
+
+        public WebBoolResult DeleteFile(string id)
+        {
+            string path = DecodeFrom64(id);
+            if (!File.Exists(path))
+                return false;
+            FileInfo fi = new FileInfo(PathUtil.StripFileProtocolPrefix(path));
+            fi.Delete();
+            return true;
         }
 
         public IEnumerable<WebSearchResult> Search(string text)

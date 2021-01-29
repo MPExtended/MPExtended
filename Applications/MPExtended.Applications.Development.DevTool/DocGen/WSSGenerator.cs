@@ -44,6 +44,7 @@ namespace MPExtended.Applications.Development.DevTool.DocGen
             if (methodName.Contains("Artwork")) return 5;
             if (methodName.Contains("Image")) return 5;
             if (methodName.Contains("Stream")) return 2;
+            if (methodName.Contains("EXIF")) return 5;
 
             return 1;
         }

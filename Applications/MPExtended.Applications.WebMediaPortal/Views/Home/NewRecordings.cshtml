@@ -11,12 +11,12 @@
         {
             <div class="column">
                 <div class="row">
-                    <a href="@Url.Action("Recording", "Television", new { id = recording.Id })">
-                        <img class="img" width="150" src="@Url.Action("RecordingPreview", "Television", new { id = recording.Id, width = 150 })" alt="No image" />
+                    <a href="@Url.Action("Details", "Recording", new { id = recording.Id })">
+                        <img class="img" width="150" src="@Url.Action("PreviewImage", "Recording", new { id = recording.Id, width = 150 })" alt="No image" />
                     </a>
                 </div>
                 <div class="row">
-                    @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Recording", "Television", new { id = recording.Id }, new { })
+                    @Html.ActionLink(recording.Title + " (" + recording.StartTime.ToShortDateString() + ")", "Details", "Recording", new { id = recording.Id }, new { })
                 </div>
             </div>
         }

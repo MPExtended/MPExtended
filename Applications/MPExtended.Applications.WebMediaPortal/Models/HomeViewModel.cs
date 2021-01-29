@@ -38,11 +38,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Availability = availabilityModel;
         }
 
-        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count)
+        public IEnumerable<MovieViewModel> GetLastAddedMovies(int count, bool unwatched = false)
         {
             try
             {
-                return Connections.Current.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                return Connections.Current.MAS.GetMoviesDetailedByRange(Settings.ActiveSettings.MovieProvider, 0, count - 1, unwatched ? "Watched=0" : null, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
                     .Where(movie => !String.IsNullOrEmpty(movie.Title))
                     .Select(movie => new MovieViewModel(movie));
             }
@@ -80,11 +80,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<TVEpisodeViewModel> GetLastAddedTVEpisodes(int count)
-        {
+        public IEnumerable<TVEpisodeViewModel> GetLastAddedTVEpisodes(int count, bool unwatched = false)
+    {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, unwatched ? "Watched=0" : null, sort: WebSortField.DateAdded, order: WebSortOrder.Desc)
                     .Select(ep => new TVEpisodeViewModel(ep))
                     .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title));
             }
@@ -94,11 +94,11 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             }
         }
 
-        public IEnumerable<TVEpisodeViewModel> GetLastAiredTVEpisodes(int count)
-        {
+        public IEnumerable<TVEpisodeViewModel> GetLastAiredTVEpisodes(int count, bool unwatched = false)
+    {
             try
             {
-                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, sort: WebSortField.TVDateAired, order: WebSortOrder.Desc)
+                return Connections.Current.MAS.GetTVEpisodesDetailedByRange(Settings.ActiveSettings.TVShowProvider, 0, count - 1, unwatched ? "Watched=0" : null, sort: WebSortField.TVDateAired, order: WebSortOrder.Desc)
                     .Select(ep => new TVEpisodeViewModel(ep))
                     .Where(ep => !String.IsNullOrEmpty(ep.Episode.Title));
             }

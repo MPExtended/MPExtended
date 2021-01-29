@@ -15,9 +15,10 @@ namespace MPExtended.Services.StreamingService.Interfaces
         public int Height { get; set; }
         public int ID { get; set; }
         public int Index { get; set; }
+        public string Resolution { get; set; }
     }
 
-    public class WebAudioStream 
+  public class WebAudioStream 
     {
         public string Language { get; set; }
         public string LanguageFull { get; set; }

@@ -39,9 +39,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
                 return new List<WebArtworkDetailed>();
 
             Uri uri = new Uri(url);
+            string ext = Path.GetExtension(uri.LocalPath);
             var item = new WebArtworkDetailed()
             {
-                Filetype = Path.GetExtension(uri.LocalPath).Substring(1),
+                Filetype = (string.IsNullOrWhiteSpace(ext) ? "jpg" : ext.Substring(1)),
                 Id = url.GetHashCode().ToString(),
                 Offset = 0,
                 Rating = 1,
@@ -85,6 +86,10 @@ namespace MPExtended.PlugIns.MAS.MPVideos
         private static string DownloadFile(Uri url)
         {
             string extension = Path.GetExtension(url.LocalPath);
+            if (string.IsNullOrWhiteSpace(extension))
+            {
+              extension = ".jpg";
+            }
             string tmpPath = Path.Combine(Installation.GetCacheDirectory(), "imagecache", String.Format("mpvideos_{0:X8}{1}", url.ToString().GetHashCode(), extension));
             if (File.Exists(tmpPath))
             {

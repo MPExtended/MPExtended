@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MPExtended.Services.MediaAccessService.Interfaces.Music
 {
-    public class WebMusicTrackDetailed : WebMusicTrackBasic
-    {
+    public class WebMusicTrackDetailed : WebMusicTrackBasic, IArtists, IAlbumArtist
+  {
         public WebMusicTrackDetailed()
         {
             Artists = new List<WebMusicArtistBasic>();

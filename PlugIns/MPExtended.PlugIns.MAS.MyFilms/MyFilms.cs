@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,323 +34,387 @@ using MPExtended.Services.MediaAccessService.Interfaces.Movie;
 
 namespace MPExtended.PlugIns.MAS.MyFilms
 {
-    [Export(typeof(IMovieLibrary))]
-    [ExportMetadata("Name", "My Films (Ant Movie Catalog only)")]
-    [ExportMetadata("Id", 13)]
-    public partial class MyFilms : IMovieLibrary
+  [Export(typeof(IMovieLibrary))]
+  [ExportMetadata("Name", "My Films (Ant Movie Catalog only)")]
+  [ExportMetadata("Id", 13)]
+  public partial class MyFilms : IMovieLibrary
+  {
+    public bool Supported { get; set; }
+    private string DatabasePath { get; set; }
+    private string PicturePath { get; set; }
+
+    private string sourcePrefix;
+    private Regex stripActorName;
+    private Regex imdbId;
+
+    [ImportingConstructor]
+    public MyFilms(IPluginData data)
     {
-        public bool Supported { get; set; }
-        private string DatabasePath { get; set; }
-        private string PicturePath { get; set; }
+      Supported = false;
 
-        private string sourcePrefix;
-        private Regex stripActorName;
-        private Regex imdbId;
+      try
+      {
+        // load MyFilms.xml path
+        if (!Mediaportal.HasValidConfigFile())
+          return;
 
-        [ImportingConstructor]
-        public MyFilms(IPluginData data)
+        string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
+        if (!File.Exists(configPath))
+          return;
+
+        // load current config section
+        XElement configFile;
+        using (var handle = File.Open(configPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+          configFile = XElement.Load(handle);
+        var entries = configFile.Elements("section").First(x => x.Attribute("name").Value == "MyFilms").Elements("entry");
+        if (!entries.Any(x => x.Attribute("name").Value == "Default_Config") && !entries.Any(x => x.Attribute("name").Value == "Current_Config"))
         {
-            Supported = false;
+          Log.Info("MyFilms: couldn't find Current_Config or Default_Config value in MyFilms.xml");
+          return;
+        }
+        var configSectionName = entries.Any(x => x.Attribute("name").Value == "Current_Config") ?
+                                entries.First(x => x.Attribute("name").Value == "Current_Config").Value :
+                                entries.First(x => x.Attribute("name").Value == "Default_Config").Value;
 
-            try
-            {
-                // load MyFilms.xml path
-                if (!Mediaportal.HasValidConfigFile())
-                    return;
-
-                string configPath = Path.Combine(Mediaportal.GetLocation(MediaportalDirectory.Config), "MyFilms.xml");
-                if (!File.Exists(configPath))
-                    return;
-
-                // load current config section
-                XElement configFile;
-                using (var handle = File.Open(configPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    configFile = XElement.Load(handle);
-                var entries = configFile.Elements("section").First(x => x.Attribute("name").Value == "MyFilms").Elements("entry");
-                if (!entries.Any(x => x.Attribute("name").Value == "Default_Config") && !entries.Any(x => x.Attribute("name").Value == "Current_Config"))
-                {
-                    Log.Info("MyFilms: couldn't find Current_Config or Default_Config value in MyFilms.xml");
-                    return;
-                }
-                var configSectionName = entries.Any(x => x.Attribute("name").Value == "Current_Config") ? 
-                                        entries.First(x => x.Attribute("name").Value == "Current_Config").Value :
-                                        entries.First(x => x.Attribute("name").Value == "Default_Config").Value;
-
-                // look for database path
-                var thisSection = configFile.Elements("section").First(x => x.Attribute("name").Value == configSectionName);
-                if(!thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntCatalog"))
-                {
-                    Log.Info("MyFilms: couldn't find AntCatalog entry in current section ({0})", configSectionName);
-                    return;
-                }
-
-                // load database
-                DatabasePath = thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntCatalog").Value;
-                if (!File.Exists(DatabasePath))
-                {
-                    Log.Info("MyFilms: cannot find database {0}", DatabasePath);
-                    return;
-                }
-
-                PicturePath = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntPicture") ?
-                    thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntPicture").Value : String.Empty;
-                sourcePrefix = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "PathStorage") ?
-                    thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "PathStorage").Value : String.Empty;
-                Supported = true;
-            }
-            catch (Exception ex)
-            {
-                Log.Warn("MyFilms: failed to load database path", ex);
-                return;
-            }
-
-            // initialize some regular expressions
-            stripActorName = new Regex(@"^([^(]*)(\(.*\))*", RegexOptions.Compiled);
-            imdbId = new Regex(@"^.*imdb.[a-z]+/title/(tt[0-9]+)/*$", RegexOptions.Compiled);
+        // look for database path
+        var thisSection = configFile.Elements("section").First(x => x.Attribute("name").Value == configSectionName);
+        if (!thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntCatalog"))
+        {
+          Log.Info("MyFilms: couldn't find AntCatalog entry in current section ({0})", configSectionName);
+          return;
         }
 
-        public IEnumerable<WebMovieBasic> GetAllMovies()
+        // load database
+        DatabasePath = thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntCatalog").Value;
+        if (!File.Exists(DatabasePath))
         {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Select(x => NodeToMovieBasic(x))
-                .Where(x => x != null);
+          Log.Info("MyFilms: cannot find database {0}", DatabasePath);
+          return;
         }
 
-        public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
+        PicturePath = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "AntPicture") ?
+            thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "AntPicture").Value : String.Empty;
+        sourcePrefix = thisSection.Elements("entry").Any(x => x.Attribute("name").Value == "PathStorage") ?
+            thisSection.Elements("entry").FirstOrDefault(x => x.Attribute("name").Value == "PathStorage").Value : String.Empty;
+        Supported = true;
+      }
+      catch (Exception ex)
+      {
+        Log.Warn("MyFilms: failed to load database path", ex);
+        return;
+      }
+
+      // initialize some regular expressions
+      stripActorName = new Regex(@"^([^(]*)(\(.*\))*", RegexOptions.Compiled);
+      imdbId = new Regex(@"^.*imdb.[a-z]+/title/(tt[0-9]+)/*$", RegexOptions.Compiled);
+    }
+
+    public IEnumerable<WebMovieBasic> GetAllMovies()
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Select(x => NodeToMovieBasic(x))
+          .Where(x => x != null);
+    }
+
+    public IEnumerable<WebMovieDetailed> GetAllMoviesDetailed()
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Select(x => NodeToMovieDetailed(x))
+          .Where(x => x != null);
+    }
+
+    public WebMovieBasic GetMovieBasicById(string movieId)
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Where(x => x.Attribute("Number").Value == movieId)
+          .Select(x => NodeToMovieBasic(x))
+          .Where(x => x != null)
+          .First();
+    }
+
+    public WebMovieDetailed GetMovieDetailedById(string movieId)
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Where(x => x.Attribute("Number").Value == movieId)
+          .Select(x => NodeToMovieDetailed(x))
+          .Where(x => x != null)
+          .First();
+    }
+
+    public WebMovieGenre GetGenreById(string title)
+    {
+      return GetAllGenres().Where(x => x.Title == title).First();
+    }
+
+    public WebMovieActor GetActorById(string title)
+    {
+      return GetAllActors().Where(x => x.Title == title).First();
+    }
+
+    public WebCollection GetCollectionById(string title)
+    {
+       return new WebCollection();
+    }
+    
+    private WebMovieBasic NodeToMovieBasic(XElement item)
+    {
+      return NodeToMovie<WebMovieBasic>(item);
+    }
+
+    private WebMovieDetailed NodeToMovieDetailed(XElement item)
+    {
+      WebMovieDetailed movie = NodeToMovie<WebMovieDetailed>(item);
+      if (movie == null)
+        return null;
+
+      if (item.Attribute("Description") != null)
+        movie.Summary = item.Attribute("Description").Value;
+
+      // director
+      if (item.Attribute("Director") != null)
+        movie.Directors.Add(item.Attribute("Director").Value);
+
+      // tagline
+      if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("TagLine") != null)
+        movie.Tagline = item.Element("CustomFields").Attribute("TagLine").Value.Trim();
+
+      // writers
+      if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Writer") != null)
+      {
+        // I've no clue what the things in parentheses mean here, but let's remove them
+        string writer = item.Element("CustomFields").Attribute("Writer").Value;
+        movie.Writers = item.Element("CustomFields")
+            .Attribute("Writer").Value
+            .Split(',', '|')
+            .Select(x => stripActorName.Replace(x, "$1").Trim())
+            .ToList();
+      }
+
+      return movie;
+    }
+
+    private T NodeToMovie<T>(XElement item) where T : WebMovieBasic, new()
+    {
+      if (item.Attribute("Source") == null)
+        // we ignore movies without a source
+        return null;
+
+      var movie = new T()
+      {
+        Id = item.Attribute("Number").Value,
+        Path = new List<string>() { sourcePrefix == String.Empty ? item.Attribute("Source").Value : Path.Combine(sourcePrefix, item.Attribute("Source").Value) },
+
+        Title = item.Attribute("OriginalTitle").Value,
+        Year = item.Attribute("Year") != null ? Int32.Parse(item.Attribute("Year").Value) : 0,
+        Runtime = item.Attribute("Length") != null ? Int32.Parse(item.Attribute("Length").Value) : 0,
+        Rating = item.Attribute("Rating") != null ? Single.Parse(item.Attribute("Rating").Value, CultureInfo.InvariantCulture) : 0,
+      };
+
+      /* I've seen two ways in which the date is saved:
+       * - A DateAdded childnode in a standard YYYY-MM-DDTHH:MM:SS+HH:MM format, which we can just give to DateTime.Parse
+       * - A Date attribute in YYYY-MM-DD format or dd/MM/yyyy format, which we've to try with DateTime.TryParseExact()
+       * If neither of these two works, just don't set a date
+       */
+      DateTime tmp;
+      if (item.Element("DateAdded") != null)
+      {
+        movie.DateAdded = DateTime.Parse(item.Element("DateAdded").Value);
+      }
+      else if (item.Attribute("Date") != null && (
+                DateTime.TryParseExact(item.Attribute("Date").Value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out tmp) ||
+                DateTime.TryParseExact(item.Attribute("Date").Value, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out tmp)))
+      {
+        movie.DateAdded = tmp;
+      }
+
+      if (item.Attribute("Category") != null)
+        movie.Genres = item.Attribute("Category").Value
+            .Split(',', '|')
+            .Select(x => x.Trim())
+            .Distinct()
+            .ToList();
+
+      if (item.Attribute("Actors") != null)
+        movie.Actors = item.Attribute("Actors").Value
+            .Split(',', '|')
+            .Select(x => new WebMovieActor() { Title = stripActorName.Replace(x, "$1").Trim() })
+            .ToList();
+
+      /* I've seen two (there are probably more...) ways the IMDB ID is saved:
+       * - An IMDB_Id childnode, with just the id
+       * - An URL attribute where we should extract the id from
+       */
+      Match match;
+      if (item.Element("IMDB_Id") != null)
+      {
+        movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = item.Element("IMDB_Id").Value });
+      }
+      else if (item.Attribute("URL") != null && (match = imdbId.Match(item.Attribute("URL").Value)).Success)
+      {
+        movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = match.Groups[1].Value });
+      }
+
+      // Picture path
+      if (item.Attribute("Picture") != null)
+      {
+        string name = item.Attribute("Picture").Value;
+        if (!Path.IsPathRooted(name))
         {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Select(x => NodeToMovieDetailed(x))
-                .Where(x => x != null);
+          name = Path.Combine(PicturePath, name);
         }
-
-        public WebMovieBasic GetMovieBasicById(string movieId)
+        movie.Artwork.Add(new WebArtworkDetailed()
         {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Where(x => x.Attribute("Number").Value == movieId)
-                .Select(x => NodeToMovieBasic(x))
-                .Where(x => x != null)
-                .First();
-        }
+          Path = name,
+          Type = WebFileType.Cover,
+          Filetype = Path.GetExtension(name).Substring(1),
+          Id = name.GetHashCode().ToString("X8"),
+          Offset = 0,
+          Rating = 1,
+        });
+      }
 
-        public WebMovieDetailed GetMovieDetailedById(string movieId)
+      // Some movies point to an URL for fanart
+      if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Fanart") != null)
+      {
+        string path = item.Element("CustomFields").Attribute("Fanart").Value;
+        Uri uri = new Uri(path);
+        movie.Artwork.Add(new WebArtworkDetailed()
         {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Where(x => x.Attribute("Number").Value == movieId)
-                .Select(x => NodeToMovieDetailed(x))
-                .Where(x => x != null)
-                .First();
-        }
+          Path = path,
+          Type = WebFileType.Backdrop,
+          Filetype = Path.GetExtension(uri.LocalPath).Substring(1),
+          Id = path.GetHashCode().ToString("X8"),
+          Offset = 0,
+          Rating = 1
+        });
+      }
 
-        private WebMovieBasic NodeToMovieBasic(XElement item)
-        {
-            return NodeToMovie<WebMovieBasic>(item);
-        }
+      // Never actually seen this, but let's assume it works this way
+      if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Watched") != null)
+      {
+        movie.Watched = item.Element("CustomFields").Attribute("Watched").Value == "1" ||
+            item.Element("CustomFields").Attribute("Watched").Value.Equals("true", StringComparison.CurrentCultureIgnoreCase);
+      }
 
-        private WebMovieDetailed NodeToMovieDetailed(XElement item)
-        {
-            WebMovieDetailed movie = NodeToMovie<WebMovieDetailed>(item);
-            if (movie == null)
-                return null;
+      return movie;
+    }
 
-            if (item.Attribute("Description") != null)
-                movie.Summary = item.Attribute("Description").Value;
+    public IEnumerable<WebMovieGenre> GetAllGenres()
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Select(x => x.Attribute("Category"))
+          .Where(x => x != null)
+          .SelectMany(x => x.Value.Split(',', '|', '/'))
+          .Select(x => x.Trim())
+          .Distinct()
+          .Select(x => new WebMovieGenre() { Title = x });
+    }
 
-            // director
-            if (item.Attribute("Director") != null)
-                movie.Directors.Add(item.Attribute("Director").Value);
-
-            // tagline
-            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("TagLine") != null)
-                movie.Tagline = item.Element("CustomFields").Attribute("TagLine").Value.Trim();
-
-            // writers
-            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Writer") != null)
-            {
-                // I've no clue what the things in parentheses mean here, but let's remove them
-                string writer = item.Element("CustomFields").Attribute("Writer").Value;
-                movie.Writers = item.Element("CustomFields")
-                    .Attribute("Writer").Value
-                    .Split(',', '|')
-                    .Select(x => stripActorName.Replace(x, "$1").Trim())
-                    .ToList();
-            }
-
-            return movie;
-        }
-
-        private T NodeToMovie<T>(XElement item) where T : WebMovieBasic, new()
-        {
-            if (item.Attribute("Source") == null)
-                // we ignore movies without a source
-                return null;
-
-            var movie = new T()
-            {
-                Id = item.Attribute("Number").Value,
-                Path = new List<string>() { sourcePrefix == String.Empty ? item.Attribute("Source").Value : Path.Combine(sourcePrefix, item.Attribute("Source").Value) },
-
-                Title = item.Attribute("OriginalTitle").Value,
-                Year = item.Attribute("Year") != null ? Int32.Parse(item.Attribute("Year").Value) : 0,
-                Runtime = item.Attribute("Length") != null ? Int32.Parse(item.Attribute("Length").Value) : 0,
-                Rating = item.Attribute("Rating") != null ? Single.Parse(item.Attribute("Rating").Value, CultureInfo.InvariantCulture) : 0,
-            };
-
-            /* I've seen two ways in which the date is saved:
-             * - A DateAdded childnode in a standard YYYY-MM-DDTHH:MM:SS+HH:MM format, which we can just give to DateTime.Parse
-             * - A Date attribute in YYYY-MM-DD format or dd/MM/yyyy format, which we've to try with DateTime.TryParseExact()
-             * If neither of these two works, just don't set a date
-             */
-            DateTime tmp;
-            if (item.Element("DateAdded") != null)
-            {
-                movie.DateAdded = DateTime.Parse(item.Element("DateAdded").Value);
-            }
-            else if (item.Attribute("Date") != null && (
-                      DateTime.TryParseExact(item.Attribute("Date").Value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out tmp) ||
-                      DateTime.TryParseExact(item.Attribute("Date").Value, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out tmp)))
-            {
-                movie.DateAdded = tmp;
-            }
-
-            if (item.Attribute("Category") != null)
-                movie.Genres = item.Attribute("Category").Value
-                    .Split(',', '|')
-                    .Select(x => x.Trim())
-                    .Distinct()
-                    .ToList();
-
-            if (item.Attribute("Actors") != null)
-                movie.Actors = item.Attribute("Actors").Value
-                    .Split(',', '|')
-                    .Select(x => new WebActor() { Title = stripActorName.Replace(x, "$1").Trim() })
-                    .ToList();
-
-            /* I've seen two (there are probably more...) ways the IMDB ID is saved:
-             * - An IMDB_Id childnode, with just the id
-             * - An URL attribute where we should extract the id from
-             */
-            Match match;
-            if (item.Element("IMDB_Id") != null)
-            {
-                movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = item.Element("IMDB_Id").Value });
-            }
-            else if (item.Attribute("URL") != null && (match = imdbId.Match(item.Attribute("URL").Value)).Success)
-            {
-                movie.ExternalId.Add(new WebExternalId() { Site = "IMDB", Id = match.Groups[1].Value });
-            }
-
-            // Picture path
-            if (item.Attribute("Picture") != null)
-            {
-                string name = item.Attribute("Picture").Value;
-                if (!Path.IsPathRooted(name))
-                {
-                    name = Path.Combine(PicturePath, name);
-                }
-                movie.Artwork.Add(new WebArtworkDetailed()
-                {
-                    Path = name,
-                    Type = WebFileType.Cover,
-                    Filetype = Path.GetExtension(name).Substring(1),
-                    Id = name.GetHashCode().ToString("X8"),
-                    Offset = 0,
-                    Rating = 1,
-                });
-            }
-
-            // Some movies point to an URL for fanart
-            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Fanart") != null)
-            {
-                string path = item.Element("CustomFields").Attribute("Fanart").Value;
-                Uri uri = new Uri(path);
-                movie.Artwork.Add(new WebArtworkDetailed()
-                {
-                    Path = path,
-                    Type = WebFileType.Backdrop,
-                    Filetype = Path.GetExtension(uri.LocalPath).Substring(1),
-                    Id = path.GetHashCode().ToString("X8"),
-                    Offset = 0,
-                    Rating = 1
-                });
-            }
-
-            // Never actually seen this, but let's assume it works this way
-            if (item.Element("CustomFields") != null && item.Element("CustomFields").Attribute("Watched") != null)
-            {
-                movie.Watched = item.Element("CustomFields").Attribute("Watched").Value == "1" || 
-                    item.Element("CustomFields").Attribute("Watched").Value.Equals("true", StringComparison.CurrentCultureIgnoreCase);
-            }
-
-            return movie;
-        }
-
-        public IEnumerable<WebGenre> GetAllGenres()
-        {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Select(x => x.Attribute("Category"))
-                .Where(x => x != null)
-                .SelectMany(x => x.Value.Split(',', '|', '/'))
-                .Select(x => x.Trim())
-                .Distinct()
-                .Select(x => new WebGenre() { Title = x });
-        }
-
-        public IEnumerable<WebSearchResult> Search(string text)
-        {
-            return XElement.Load(DatabasePath)
-                .Element("Catalog").Element("Contents").Elements("Movie")
-                .Where(x => x.Attribute("OriginalTitle").Value.Contains(text, false))
-                .Select(x => new WebSearchResult()
-                {
-                    Type = WebMediaType.Movie,
-                    Id = x.Attribute("Number").Value,
-                    Title = x.Attribute("OriginalTitle").Value,
-                    Score = (int)Math.Round(40 + (decimal)text.Length / x.Attribute("OriginalTitle").Value.Length * 40),
-                    Details = new WebDictionary<string>()
-                    {
+    public IEnumerable<WebSearchResult> Search(string text)
+    {
+      return XElement.Load(DatabasePath)
+          .Element("Catalog").Element("Contents").Elements("Movie")
+          .Where(x => x.Attribute("OriginalTitle").Value.Contains(text, false))
+          .Select(x => new WebSearchResult()
+          {
+            Type = WebMediaType.Movie,
+            Id = x.Attribute("Number").Value,
+            Title = x.Attribute("OriginalTitle").Value,
+            Score = (int)Math.Round(40 + (decimal)text.Length / x.Attribute("OriginalTitle").Value.Length * 40),
+            Details = new WebDictionary<string>()
+              {
                         { "Year", x.Attribute("Year").Value },
                         { "Genres", String.Join(", ", x.Attribute("Category").Value.Split(',', '|').Select(g => g.Trim()).Distinct()) }
-                    }
-                });
-        }
+              }
+          });
+    }
 
-        public IEnumerable<WebCategory> GetAllCategories()
-        {
-            return new List<WebCategory>();
-        }
+    public IEnumerable<WebCategory> GetAllCategories()
+    {
+      return new List<WebCategory>();
+    }
 
-        public WebFileInfo GetFileInfo(string path)
-        {
-            if (path.StartsWith("http://"))
-            {
-                return ArtworkRetriever.GetFileInfo(path);
-            }
+    public IEnumerable<WebCollection> GetAllCollections()
+    {
+      return new List<WebCollection>();
+    }
 
-            return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
-        }
+    public IEnumerable<WebMovieActor> GetAllActors()
+    {
+      return new List<WebMovieActor>();
+    }
 
-        public Stream GetFile(string path)
-        {
-            if (path.StartsWith("http://"))
-            {
-                return ArtworkRetriever.GetStream(path);
-            }
+    public WebFileInfo GetFileInfo(string path)
+    {
+      if (path.StartsWith("http://"))
+      {
+        return ArtworkRetriever.GetFileInfo(path);
+      }
 
-            return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
-        }
+      return new WebFileInfo(new FileInfo(PathUtil.StripFileProtocolPrefix(path)));
+    }
 
-        public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
-        {
-            return new WebDictionary<string>()
+    public Stream GetFile(string path)
+    {
+      if (path.StartsWith("http://"))
+      {
+        return ArtworkRetriever.GetStream(path);
+      }
+
+      return new FileStream(PathUtil.StripFileProtocolPrefix(path), FileMode.Open, FileAccess.Read);
+    }
+
+    public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
+    {
+         if (type == WebMediaType.Collection)
+         {
+             return new WebDictionary<string>()
+             {
+                 { "Type", "my films collection" },
+                 { "Id", GetCollectionById(id).Id }
+              };            
+         }
+
+      if (type == WebMediaType.MovieActor)
+      {
+        return new WebDictionary<string>()
+                {
+                    { "Type", "my films actor" },
+                    { "Id", GetActorById(id).Title }
+                };
+      }
+
+      if (type == WebMediaType.MovieGenre)
+      {
+        return new WebDictionary<string>()
+                {
+                    { "Type", "my films genre" },
+                    { "Id", GetGenreById(id).Title }
+                };
+      }
+
+      return new WebDictionary<string>()
             {
                 { "Type", "my films" },
                 { "Id", id }
             };
-        }
     }
+
+    public WebBoolResult SetMovieStoptime(string id, int stopTime, Boolean isWatched, int watchedPercent)
+    {
+      // dummy
+      return null;
+    }
+
+    public WebBoolResult SetWathcedStatus(string id, Boolean isWatched)
+    {
+      // dummy
+      return null;
+    }
+  }
 }

@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2011-2020 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2011-2020 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -63,10 +64,19 @@ namespace MPExtended.Libraries.Service.WCF
                         string input = parameter.Substring(6, parameter.Length - 8);
                         int offset = input.IndexOf("+") != -1 ? input.IndexOf("+") : input.IndexOf("-");
                         string msecs = offset == -1 ? input : input.Substring(0, offset);
+                        string tz = offset == -1 ? "0000" : input.Substring(offset + 1, input.Length - offset - 1);
+                        double h = 0;
+                        double m = 0;
                         DateTime date = new DateTime(1970, 1, 1, 0, 0, 0);
                         try
                         {
-                            return date.AddMilliseconds(Double.Parse(msecs));
+                            if (!string.IsNullOrEmpty(tz) && tz.Length == 4)
+                            {
+                              h = Double.Parse(tz.Substring(0,2)) * 3600000;
+                              m = Double.Parse(tz.Substring(2,2)) * 60000;
+                              h = (input.IndexOf("+") != -1 ? 1 : -1) * h;
+                            }
+                            return date.AddMilliseconds(Double.Parse(msecs)).AddMilliseconds(h).AddMilliseconds(m);
                         }
                         catch (Exception ex)
                         {

@@ -20,8 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.ServiceModel;
+using System.Threading;
 using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Extensions;
 using MPExtended.Libraries.Service.Hosting;
@@ -39,9 +40,13 @@ namespace MPExtended.Services.TVAccessService
     public class TVAccessService : ITVAccessService
     {
         private const int API_VERSION = 5;
+        private const string MP_VERSION = "MP1";
+        [System.Runtime.InteropServices.DllImport("Powrprof.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
+        public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
 
-        #region Service
-        public static ITVAccessService Instance { get; internal set; }
+
+    #region Service
+    public static ITVAccessService Instance { get; internal set; }
 
         private TvBusinessLayer _tvBusiness;
         private IController _tvControl;
@@ -100,15 +105,16 @@ namespace MPExtended.Services.TVAccessService
                 .FirstOrDefault();
         }
 
-        public WebTVServiceDescription GetServiceDescription()
-        {
-            return new WebTVServiceDescription()
-            {
-                HasConnectionToTVServer = TestConnectionToTVService(),
-                ApiVersion = API_VERSION,
-                ServiceVersion = VersionUtil.GetVersionName(),
-            };
-        }
+    public WebTVServiceDescription GetServiceDescription()
+    {
+      return new WebTVServiceDescription()
+      {
+        HasConnectionToTVServer = TestConnectionToTVService(),
+        ApiVersion = API_VERSION,
+        ServiceVersion = VersionUtil.GetVersionName(),
+        MPVersion = MP_VERSION
+      };
+    }
         #endregion
 
         #region TV Server
@@ -183,7 +189,105 @@ namespace MPExtended.Services.TVAccessService
             return null;
         }
 
-        public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
+    public WebBoolResult PowerOffTVServer()
+    {
+      using (Process p = new Process())
+      {
+        ProcessStartInfo psi = new ProcessStartInfo();
+        psi.FileName = "shutdown";
+        psi.UseShellExecute = true;
+        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        psi.Arguments = " /s /t 0";
+        psi.ErrorDialog = false;
+        psi.CreateNoWindow = true;
+        psi.Verb = "runas";
+
+        p.StartInfo = psi;
+
+        try
+        {
+          p.Start();
+          p.WaitForExit();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("PowerOffTVServer: Exception in RunExternalCommand: {0}", ex.Message);
+
+          return false;
+        }
+        Log.Debug("PowerOffTVServer: External command finished");
+
+        return true;
+      }
+    }
+
+    public WebBoolResult RebootTVServer()
+    {
+      using (Process p = new Process())
+      {
+        ProcessStartInfo psi = new ProcessStartInfo();
+        psi.FileName = "shutdown";
+        psi.UseShellExecute = true;
+        psi.WindowStyle = ProcessWindowStyle.Minimized;
+        psi.Arguments = " /r /t 0";
+        psi.ErrorDialog = false;
+        psi.CreateNoWindow = true;
+        psi.Verb = "runas";
+
+        p.StartInfo = psi;
+
+        try
+        {
+          p.Start();
+          p.WaitForExit();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("RebootTVServer: Exception in RunExternalCommand: {0}", ex.Message);
+
+          return false;
+        }
+        Log.Debug("RebootTVServer: External command finished");
+
+        return true;
+      }
+    }
+
+    public WebBoolResult SuspendTVServer()
+    {
+      Thread SuspendTVServer;
+      SuspendTVServer = new Thread(SuspendTVServerThread);
+      SuspendTVServer.Priority = ThreadPriority.Lowest;
+      SuspendTVServer.IsBackground = true;
+      SuspendTVServer.Start();
+
+      return true;
+    }
+
+    public void SuspendTVServerThread()
+    {
+      SetSuspendState(false, true, true);
+      Log.Debug("SuspendTVServerThread: External command finished");
+    }
+
+    public WebBoolResult HibernateTVServer()
+    {
+      Thread StandByTvServer;
+      StandByTvServer = new Thread(HibernateTVServerThread);
+      StandByTvServer.Priority = ThreadPriority.Lowest;
+      StandByTvServer.IsBackground = true;
+      StandByTvServer.Start();
+
+      return true;
+    }
+
+    public void HibernateTVServerThread()
+    {
+      SetSuspendState(true, true, true);
+      Log.Debug("HibernateTVServerThread: External command finished");
+    }
+
+    public IList<WebTVSearchResult> Search(string text, WebTVSearchResultType? type = null)
         {
             if (String.IsNullOrWhiteSpace(text))
             {
@@ -422,7 +526,7 @@ namespace MPExtended.Services.TVAccessService
                             _tvControl.OnNewSchedule();
                             break;
                         default:
-                            CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, schedule.StartTime);
+                            CanceledSchedule canceledSchedule = new CanceledSchedule(schedule.IdSchedule, schedule.IdChannel, program.StartTime);
                             canceledSchedule.Persist();
                             _tvControl.OnNewSchedule();
                             break;
@@ -1011,6 +1115,20 @@ namespace MPExtended.Services.TVAccessService
             }
         }
 
+        public IList<WebChannelPrograms<WebProgramDetailed>> GetRadioProgramsDetailedForGroup(int groupId, DateTime startTime, DateTime endTime, string filter = null)
+        {
+          using (var cache = WebProgramExtensionMethods.CacheSchedules())
+          {
+            return _tvBusiness.GetRadioGuideChannelsForGroup(groupId)
+                .Select(ch => new WebChannelPrograms<WebProgramDetailed>()
+                {
+                  ChannelId = ch.IdChannel,
+                  Programs = _tvBusiness.GetPrograms(ch, startTime, endTime).Select(p => p.ToWebProgramDetailed()).Filter(filter).ToList()
+                })
+                .ToList();
+          }
+        }
+
         public WebProgramDetailed GetCurrentProgramOnChannel(int channelId)
         {
             return Channel.Retrieve(channelId).CurrentProgram.ToWebProgramDetailed();
@@ -1028,12 +1146,12 @@ namespace MPExtended.Services.TVAccessService
 
         public IList<WebProgramDetailed> SearchProgramsDetailed(string searchTerm, string filter = null)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).OrderBy(p => p.StartTime, WebSortOrder.Asc).ToList();
         }
 
         public IList<WebProgramDetailed> SearchProgramsDetailedByRange(string searchTerm, int start, int end, string filter = null)
         {
-            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).TakeRange(start, end).ToList();
+            return _tvBusiness.SearchPrograms(searchTerm).Select(p => p.ToWebProgramDetailed()).Filter(filter).TakeRange(start, end).OrderBy(p => p.StartTime, WebSortOrder.Asc).ToList();
         }
 
         public IList<WebProgramBasic> SearchProgramsBasic(string searchTerm, string filter = null)
@@ -1080,6 +1198,106 @@ namespace MPExtended.Services.TVAccessService
             Program p = Program.Retrieve(programId);
             return Schedule.ListAll().Where(schedule => schedule.IsRecordingProgram(p, true)).Count() > 0;
         }
+
+        public IList<WebProgramDetailed> GetNotify()
+        {
+          return Program.ListAll().Select(prog => prog.ToWebProgramDetailed()).Where(p => p.Notify == true).OrderBy(pr => pr.StartTime).ToList();
+        }
+
+        public WebBoolResult SetNotify(int programId, bool status)
+        {
+          bool result = false;
+          try
+          {
+            Program p = Program.Retrieve(programId);
+
+            p.Notify = status;
+            p.Persist();
+
+            result = true;
+          }
+          catch (Exception e)
+          {
+            Log.Error("SetNotify id {0}", programId);
+            Log.Error(e.Message);
+          }
+          return result;
+        }
+
+    public WebBoolResult ResetWatched(int programId)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+        p.StopTime = 0;
+        p.TimesWatched = 0;
+        p.Persist();
+
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("ResetWatched id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
+
+    public WebBoolResult SetStopTimeWithPercent(int programId, int stopTime, bool isWatched)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+
+        p.StopTime = stopTime;
+
+        if (isWatched)
+        {
+          p.TimesWatched = p.TimesWatched + 1;
+        }
+
+        p.Persist();
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("SetStopTime id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
+
+    public WebBoolResult SetStopTime(int programId, int stopTime)
+    {
+      bool result = false;
+      try
+      {
+        Recording p = Recording.Retrieve(programId);
+
+        if (stopTime == 0)
+        {
+          p.StopTime = stopTime;
+          p.Persist();
+        }
+        else
+        {
+          p.StopTime = stopTime;
+          p.TimesWatched = p.TimesWatched + 1;
+          p.Persist();
+        }
+
+        result = true;
+      }
+      catch (Exception e)
+      {
+        Log.Error("SetStopTime id {0}", programId);
+        Log.Error(e.Message);
+      }
+      return result;
+    }
+
         #endregion
     }
 }

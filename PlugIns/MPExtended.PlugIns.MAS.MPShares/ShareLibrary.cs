@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,6 +38,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
         private string[] sections;
         private List<Share> shares = null;
 
+        protected string[] Extensions { get; set; }
+
         public bool Supported { get; set; }
 
         public ShareLibrary(IPluginData data, string[] sections)
@@ -44,6 +47,8 @@ namespace MPExtended.PlugIns.MAS.MPShares
             this.data = data;
             this.configuration = data.GetConfiguration("MP Shares");
             this.sections = sections;
+
+            Extensions = new string[] { ".jpg", ".png", ".bmp" };
 
             Supported = Mediaportal.HasValidConfigFile();
             if (Supported)
@@ -81,16 +86,18 @@ namespace MPExtended.PlugIns.MAS.MPShares
                     {
                         Name = list.Where(x => x.Key == "sharename" + i).Select(x => x.Value).First(),
                         Path = path,
+                        Pincode = list.Where(x => x.Key == "pincode" + i).Select(x => x.Value).First(),
                         Extensions = extensions.ToList(),
                     });
                 }
             }
-
+            
             // make shares unique
             shares = localsharelist.GroupBy(x => x.Path, (path, gshares) => new Share()
             {
                 Name = gshares.First().Name,
                 Path = path,
+                Pincode = gshares.First().Pincode,
                 Extensions = gshares.SelectMany(x => x.Extensions).ToList()
             }).ToList();
             int shareNr = 0;
@@ -107,7 +114,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
         public IEnumerable<WebDriveBasic> GetDriveListing()
         {
-            return shares.Select(x => x.ToWebDriveBasic());
+            return shares.Select(x => ConvertShareToDriveBasic(x));
         }
 
         public IEnumerable<WebFolderBasic> GetFoldersListing(string id)
@@ -139,7 +146,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public WebDriveBasic GetDriveBasic(string id)
         {
             string path = GetPath(id);
-            return shares.First(x => x.Path == path).ToWebDriveBasic();
+            return ConvertShareToDriveBasic(shares.First(x => x.Path == path));
         }
 
         public WebFolderBasic GetFolderBasic(string id)
@@ -175,6 +182,16 @@ namespace MPExtended.PlugIns.MAS.MPShares
             return new List<WebSearchResult>();
         }
 
+        public WebBoolResult DeleteFile(string id)
+        {
+            string path = GetPath(id);
+            if (!File.Exists(path))
+                return false;
+            FileInfo fi = new FileInfo(PathUtil.StripFileProtocolPrefix(path));
+            fi.Delete();
+            return true;
+        }
+
         public WebDictionary<string> GetExternalMediaInfo(WebMediaType type, string id)
         {
             string path = GetPath(id);
@@ -186,17 +203,18 @@ namespace MPExtended.PlugIns.MAS.MPShares
             };
         }
 
-        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file, Share share = null)
+        private WebDriveBasic ConvertShareToDriveBasic(Share share)
         {
-            return new WebFileBasic()
+            return new WebDriveBasic()
             {
-                Title = file.Name,
-                Path = new List<string>() { file.FullName },
-                DateAdded = file.CreationTime,
-                Id = PathToIdentifier(file, share),
-                LastAccessTime = file.LastAccessTime,
-                LastModifiedTime = file.LastWriteTime,
-                Size = file.Length
+                Title = share.Name,
+                Path = new List<string>() { share.Path },
+                Categories = GetHistory(share.Path),
+                Id = share.Id,
+                Pincode = share.Pincode,
+                LastModifiedTime = DateTime.Now,
+                LastAccessTime = DateTime.Now,
+                Artwork = GetArtworkForDrive(share.Path)
             };
         }
 
@@ -206,10 +224,28 @@ namespace MPExtended.PlugIns.MAS.MPShares
             {
                 Title = dir.Name,
                 Path = new List<string>() { dir.FullName },
+                Categories = GetHistory(dir.FullName),
                 DateAdded = dir.CreationTime,
                 Id = PathToIdentifier(dir, share),
                 LastAccessTime = dir.LastAccessTime,
-                LastModifiedTime = dir.LastWriteTime
+                LastModifiedTime = dir.LastWriteTime,
+                Artwork = GetArtworkForFolder(dir.FullName)
+            };
+        }
+
+        private WebFileBasic ConvertFileInfoToFileBasic(FileInfo file, Share share = null)
+        {
+            return new WebFileBasic()
+            {
+                Title = file.Name,
+                Path = new List<string>() { file.FullName },
+                Categories = GetHistory(file.FullName),
+                DateAdded = file.CreationTime,
+                Id = PathToIdentifier(file, share),
+                LastAccessTime = file.LastAccessTime,
+                LastModifiedTime = file.LastWriteTime,
+                Size = file.Length,
+                Artwork = GetArtworkForFile(file.FullName)
             };
         }
 
@@ -322,5 +358,140 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 return String.Empty;
             }
         }
+
+        #region Artworks
+
+        private List<WebArtwork> GetArtworkForDrive(string drive)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(drive) || !Directory.Exists(drive))
+                return artwork;
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(drive, "folder{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+        
+        private List<WebArtwork> GetArtworkForFolder(string path)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+                return artwork;
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(path, "folder{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+
+        private List<WebArtwork> GetArtworkForFile(string filename)
+        {
+            var artwork = new List<WebArtwork>();
+            if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
+                return artwork;
+                
+            string name = Path.GetFileNameWithoutExtension(filename);
+            string path = Path.GetDirectoryName(filename);
+
+            // Poster
+            int i = 0;
+            string folder = Path.Combine(path, name + "{0}");
+            var files = Extensions.Select(x => string.Format(folder, x))
+                                  .Where(x => File.Exists(x))
+                                  .Distinct();
+            foreach (string file in files)
+            {
+                artwork.Add(new WebArtworkDetailed()
+                {
+                    Type = WebFileType.Cover,
+                    Offset = i++,
+                    Path = file,
+                    Rating = 1 + i,
+                    Id = file.GetHashCode().ToString(),
+                    Filetype = Path.GetExtension(file).Substring(1)
+                });
+            }
+
+            return artwork;
+        }
+
+        #endregion
+
+        protected List<WebCategory> GetHistory(string fullpath)
+        {
+            List<WebCategory> history = new List<WebCategory>();
+            if (string.IsNullOrEmpty(fullpath))
+            {
+                return history;
+            }
+
+            fullpath = Path.GetFullPath(fullpath);
+            DirectoryInfo dir;
+            if (File.Exists(fullpath))
+            {
+              dir = new DirectoryInfo(Path.GetDirectoryName(fullpath));
+            }
+            else if (Directory.Exists(fullpath))
+            {
+              dir = new DirectoryInfo(fullpath);
+            }
+            else
+            {
+              return history;
+            }
+
+            while (dir != null)
+            {
+                if (shares.Any(x => dir.FullName == x.Path))
+                {
+                   history.Add(new WebCategory() { Title = shares.Where(x => x.Path == dir.FullName).First().Name, Id = PathToIdentifier(dir.FullName) });
+                }
+                else
+                { 
+                    history.Add(new WebCategory() { Title = dir.Name, Id = PathToIdentifier(dir.FullName) });
+                }
+                if (shares.Any(x => dir.FullName == x.Path))
+                {
+                    break;
+                }
+                dir = dir.Parent;
+            }
+            history.Reverse();
+            return history;
+        }
+
     }
 }

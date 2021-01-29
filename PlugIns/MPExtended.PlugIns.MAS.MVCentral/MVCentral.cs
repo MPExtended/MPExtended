@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +21,8 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.IO;
-using System.Text;
 using System.ComponentModel.Composition;
+using MPExtended.Libraries.Service;
 using MPExtended.Libraries.Service.Util;
 using MPExtended.Libraries.SQLitePlugin;
 using MPExtended.Services.Common.Interfaces;
@@ -43,16 +44,19 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             public string Type { get; set; }
         }
 
+        private Dictionary<string, string> configuration;
+        private Dictionary<string, string> fanartconfiguration;
         public bool Supported { get; private set; }
         private bool hasAlbums = true;
 
         [ImportingConstructor]
         public MVCentral(IPluginData data)
         {
-            var config = data.GetConfiguration("mvCentral");
-            if (config.ContainsKey("database") && File.Exists(config["database"]))
+            configuration = data.GetConfiguration("mvCentral");
+            fanartconfiguration = data.GetConfiguration("FanartHandler");
+            if (configuration.ContainsKey("database") && File.Exists(configuration["database"]))
             {
-                DatabasePath = config["database"];
+                DatabasePath = configuration["database"];
                 Supported = true;
                 ReadSettings();
             }
@@ -75,7 +79,12 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             });
 
             var disableAlbumSupportList = settings.Where(s => s.Key == "disable_album_support").ToList();
+            var disableAlbumSupportGUIList = settings.Where(s => s.Key == "disable_gui_album_support").ToList();
             hasAlbums = disableAlbumSupportList.Any() ? disableAlbumSupportList.First().Value != "True" : true;
+            if (hasAlbums)
+            {
+                hasAlbums = disableAlbumSupportGUIList.Any() ? disableAlbumSupportGUIList.First().Value != "True" : true;
+            }
         }
 
         [MergeListReader]
@@ -86,14 +95,29 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             {
                 return null;
             }
+            
+            string artwork = path;
+            if (configuration.ContainsKey("cover"))
+            {
+                string cover = configuration["cover"];
+                if (!artwork.StartsWith(cover, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int i = artwork.IndexOf(@"\mvCentral\");
+                    if (i > 0)
+                    {
+                        artwork = Path.Combine(cover, artwork.Substring(i + 11));
+                    }
+                }
+            }
+            
             return new WebArtworkDetailed()
             {
                 Type = (WebFileType)param,
-                Path = path,
+                Path = artwork,
                 Offset = 0,
-                Filetype = Path.GetExtension(path).Substring(1),
+                Filetype = Path.GetExtension(artwork).Substring(1),
                 Rating = 1,
-                Id = path.GetHashCode().ToString()
+                Id = artwork.GetHashCode().ToString()
             };
         }
 
@@ -123,17 +147,20 @@ namespace MPExtended.PlugIns.MAS.MVCentral
             Dictionary<string, WebMusicArtistBasic> artists = GetAllArtists().ToDictionary(x => x.Id, x => x);
 
             // Unavailable fields: TrackNumber, Year, Genres, 
-            string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, t.artfullpath, a.id AS album_id, a.album, p.id AS artist_id, p.artist, " +
-                            "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " +
-                         "FROM track_info t " +
-                         "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
-                         "LEFT JOIN local_media l ON l.id = lt.local_media_id " +
-                         "LEFT JOIN album_info__track_info at ON at.track_info_id = t.id " +
-                         "LEFT JOIN album_info a ON at.album_info_id = a.id " +
-                         "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = t.id " +
-                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
-                         "WHERE %where " +
-                         "GROUP BY t.id, t.date_added, t.track, t.rating, a.id, a.album, p.id, p.artist ";
+            string sql = "SELECT t.id AS track_id, t.date_added, t.track, t.rating, t.artfullpath, " +
+                                "CASE WHEN a.id IS NULL THEN 'D' || MIN(p.id) ELSE a.id END AS album_id, " +
+                                "CASE WHEN a.album IS NULL THEN 'WA-DUMMY' ELSE a.album END AS album, " +
+                                "p.id AS artist_id, p.artist, " +
+                                "GROUP_CONCAT(l.fullpath, '|') AS path, MIN(l.duration) AS duration " +
+                           "FROM track_info t " +
+                                "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
+                                "LEFT JOIN local_media l ON l.id = lt.local_media_id " +
+                                "LEFT JOIN album_info__track_info at ON at.track_info_id = t.id " +
+                                "LEFT JOIN album_info a ON at.album_info_id = a.id " +
+                                "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = t.id " +
+                                "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
+                           "WHERE %where " +
+                           "GROUP BY t.id, t.date_added, t.track, t.rating, a.id, a.album, p.id, p.artist ";
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
                 new SQLFieldMapping("", "track_id", "Id", DataReaders.ReadString),
@@ -142,7 +169,7 @@ namespace MPExtended.PlugIns.MAS.MVCentral
                 new SQLFieldMapping("", "artist_id", "ArtistId", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("p", "artist", "Artist", DataReaders.ReadStringAsList),
                 new SQLFieldMapping("", "album_id", "AlbumId", DataReaders.ReadString),
-                new SQLFieldMapping("a", "album", "Album", DataReaders.ReadString),
+                new SQLFieldMapping("", "album", "Album", DataReaders.ReadString),
                 new SQLFieldMapping("t", "track", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("l", "duration", "Duration", PlayTimeReader),
                 new SQLFieldMapping("t", "rating", "Rating", DataReaders.ReadFloat),
@@ -178,25 +205,30 @@ namespace MPExtended.PlugIns.MAS.MVCentral
         protected LazyQuery<T> LoadAllAlbums<T>() where T : WebMusicAlbumBasic, new()
         {
             // Unavailable fields: Genres, Composer
-
-            string sql = "SELECT a.id, a.album, a.date_added, a.yearreleased, a.rating, a.artfullpath, " +
-                            "MIN(p.id) AS albumartist_id, MIN(p.artist) AS albumartist_name, " +  // FIXME: this is incorrect
-                            "GROUP_CONCAT(p.id, '|') AS artist_id, GROUP_CONCAT(p.artist, '|') AS artist_name " +
-                         "FROM album_info a " +
-                         "LEFT JOIN album_info__track_info at ON at.album_info_id = a.id " +
-                         "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = at.track_info_id " +
-                         "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
-                         "GROUP BY a.id, a.album, a.date_added, a.yearreleased, a.rating, a.artfullpath " +
-                         "HAVING COUNT(p.id) > 0 AND %where "; // We abuse SQL a bit here due to the inavailability of a album_info__artist_info table
+            string sql = "SELECT CASE WHEN a.id IS NULL THEN 'D' || MIN(p.id) ELSE a.id END AS album_id, " +
+                                "CASE WHEN a.album IS NULL THEN 'WA-DUMMY' ELSE a.album END AS album, " +
+                                "CASE WHEN a.date_added IS NULL THEN t.date_added ELSE a.date_added END AS date_added, " +
+                                "a.yearreleased, a.rating, a.artfullpath, " +
+                                "MIN(p.id) AS albumartist_id, MIN(p.artist) AS albumartist_name, " +  // FIXME: this is incorrect
+                                "GROUP_CONCAT(p.id, '|') AS artist_id, GROUP_CONCAT(p.artist, '|') AS artist_name " +
+                           "FROM track_info t " +
+                                "LEFT JOIN local_media__track_info lt ON lt.track_info_id = t.id " +
+                                "LEFT JOIN local_media l ON l.id = lt.local_media_id " +
+                                "LEFT JOIN album_info__track_info at ON at.track_info_id = t.id " +
+                                "LEFT JOIN album_info a ON at.album_info_id = a.id " +
+                                "LEFT JOIN artist_info__track_info pt ON pt.track_info_id = t.id " +
+                                "LEFT JOIN artist_info p ON pt.artist_info_id = p.id " +
+                           "GROUP BY a.id, a.album, p.id, p.artist, a.date_added, a.yearreleased, a.rating, a.artfullpath " +
+                           "HAVING COUNT(p.id) > 0 AND %where "; // We abuse SQL a bit here due to the inavailability of a album_info__artist_info table
             return new LazyQuery<T>(this, sql, new List<SQLFieldMapping>()
             {
-                new SQLFieldMapping("a", "id", "Id", DataReaders.ReadString),
-                new SQLFieldMapping("a", "album", "Title", DataReaders.ReadString),
+                new SQLFieldMapping("", "album_id", "Id", DataReaders.ReadString),
+                new SQLFieldMapping("", "album", "Title", DataReaders.ReadString),
                 new SQLFieldMapping("", "albumartist_id", "AlbumArtistId", AlbumArtistReader),
                 new SQLFieldMapping("", "albumartist_name", "AlbumArtist", AlbumArtistReader),
                 new SQLFieldMapping("", "artist_id", "ArtistsId", DataReaders.ReadPipeList),
                 new SQLFieldMapping("", "artist_name", "Artists", DataReaders.ReadPipeList),
-                new SQLFieldMapping("a", "date_added", "DateAdded", DataReaders.ReadDateTime),
+                new SQLFieldMapping("", "date_added", "DateAdded", DataReaders.ReadDateTime),
                 new SQLFieldMapping("a", "yearreleased", "Year", DataReaders.ReadInt32),
                 new SQLFieldMapping("a", "rating", "Rating", DataReaders.ReadFloat),
                 new SQLFieldMapping("a", "artfullpath", "Artwork", ArtworkReader, WebFileType.Cover),

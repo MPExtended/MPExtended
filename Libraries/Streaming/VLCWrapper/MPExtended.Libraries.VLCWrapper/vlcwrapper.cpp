@@ -23,10 +23,15 @@
 // - Create .lib file (http://wiki.videolan.org/GenerateLibFromDll)
 // - Change include and library directories
 
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
-#include <vlc/libvlc_media_player.h>
 #include <vlc/libvlc_events.h>
+#include <vlc/libvlc_media_player.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

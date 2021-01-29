@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,6 +33,8 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         public bool Movies { get; set; }
         public bool TVShows { get; set; }
         public bool Music { get; set; }
+        public bool Picture { get; set; }
+        public bool Shares { get; set; }
 
         public bool Authentication { get; set; }
 
@@ -57,6 +60,12 @@ namespace MPExtended.Applications.WebMediaPortal.Models
             Music = MAS &&   (Settings.ActiveSettings.MusicProvider == null ?
                               msd.DefaultMusicLibrary != 0 :
                               msd.AvailableMusicLibraries.Any(x => x.Id == Settings.ActiveSettings.MusicProvider));
+            Picture = MAS && (Settings.ActiveSettings.PicturesProvider == null ?
+                              msd.DefaultPictureLibrary != 0 :
+                              msd.AvailablePictureLibraries.Any(x => x.Id == Settings.ActiveSettings.PicturesProvider));
+            Shares = MAS && (Settings.ActiveSettings.FileSystemProvider == null ?
+                              msd.DefaultFileSystemLibrary != 0 :
+                              msd.AvailableFileSystemLibraries.Any(x => x.Id == Settings.ActiveSettings.FileSystemProvider));
         }
     }
 }

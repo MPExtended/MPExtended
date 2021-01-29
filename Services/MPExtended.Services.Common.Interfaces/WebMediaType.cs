@@ -40,6 +40,20 @@ namespace MPExtended.Services.Common.Interfaces
         [EnumMember]
         Radio = 14,
         [EnumMember]
-        Url = 15
-    }
+        Url = 15,
+        [EnumMember]
+        Collection = 16,
+        [EnumMember]
+        PictureFolder = 17,
+        [EnumMember]
+        MobileVideo = 18,
+        [EnumMember]
+        MovieActor = 19,
+        [EnumMember]
+        TVShowActor = 20,
+        [EnumMember]
+        MovieGenre = 21,
+        [EnumMember]
+        TVShowGenre = 22
+  }
 }
