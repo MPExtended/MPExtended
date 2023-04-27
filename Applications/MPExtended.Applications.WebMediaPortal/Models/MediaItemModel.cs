@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,6 +32,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
     {
         private WebFileInfo fileInfo;
         private WebMediaInfo mediaInfo;
+        private WebEXIFInfo exifInfo;
 
         [ScriptIgnore]
         protected abstract WebMediaItem Item { get; }
@@ -61,6 +63,17 @@ namespace MPExtended.Applications.WebMediaPortal.Models
                     mediaInfo = Connections.Current.MASStreamControl.GetMediaInfo(Item.Type, Item.PID, Item.Id, 0);
 
                 return mediaInfo;
+            }
+        }
+
+        public WebEXIFInfo EXIFInfo
+        {
+            get
+            {
+                if (exifInfo == null)
+                    exifInfo = Connections.Current.MASStreamControl.GetExifInfo(Item.Type, Item.PID, Item.Id, 0);
+
+                return exifInfo;
             }
         }
 

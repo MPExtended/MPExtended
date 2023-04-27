@@ -11,5 +11,7 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         public string ServiceVersion { get; set; }
 
         public bool HasConnectionToTVServer { get; set; }
-    }
+
+        public string MPVersion { get; set; }
+  }
 }

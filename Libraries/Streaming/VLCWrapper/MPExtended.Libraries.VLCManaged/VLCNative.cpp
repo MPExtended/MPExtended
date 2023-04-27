@@ -50,8 +50,8 @@ void VLCNative::startTranscoding() {
 	libvlc_set_user_agent(vlc, USER_AGENT, HTTP_USER_AGENT);
 
 	// open log
-   libvlc_set_log_verbosity(vlc, 3);
-   log = libvlc_log_open(vlc);
+  // libvlc_set_log_verbosity(vlc, 3);
+  // log = libvlc_log_open(vlc);
 
 	// register for events
 	eventManager = libvlc_vlm_get_event_manager(vlc);

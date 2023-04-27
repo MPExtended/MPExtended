@@ -302,6 +302,7 @@ namespace MPExtended.Services.StreamingService.Code
                 }
 
                 WCFUtil.SetContentType(Streams[identifier].Context.Profile.MIME);
+                WCFUtil.AddHeader("Access-Control-Allow-Origin","*");
 
                 Streams[identifier].LastActivity = DateTime.Now;
                 if (Streams[identifier].Transcoder is IRetrieveHookTranscoder)

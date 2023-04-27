@@ -45,10 +45,27 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebTVSearchResult> SearchResultsByRange(string text, int start, int end, WebTVSearchResultType? type = null);
-        #endregion
 
-        #region Cards
         [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult RebootTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SuspendTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult HibernateTVServer();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult PowerOffTVServer();
+
+    #endregion
+
+    #region Cards
+    [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         IList<WebCard> GetCards(string filter = null);
 
@@ -299,6 +316,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebChannelPrograms<WebProgramDetailed>> GetRadioProgramsDetailedForGroup(int groupId, DateTime startTime, DateTime endTime, string filter = null);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebProgramDetailed GetCurrentProgramOnChannel(int channelId);
 
         [OperationContract]
@@ -350,6 +371,27 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult GetProgramIsScheduled(int programId);
-        #endregion
-    }
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        IList<WebProgramDetailed> GetNotify();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetNotify(int programId, bool status);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetStopTime(int programId, int stopTime);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult SetStopTimeWithPercent(int programId, int stopTime, bool isWatched);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult ResetWatched(int programId);
+
+    #endregion
+  }
 }

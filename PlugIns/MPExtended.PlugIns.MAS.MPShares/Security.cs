@@ -35,7 +35,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
 
             while (currentDir != null)
             {
-                if (currentDir.FullName == shareDir.FullName)
+                if (currentDir.FullName.Equals(shareDir.FullName, StringComparison.InvariantCultureIgnoreCase))
                     return true;
 
                 currentDir = currentDir.Parent;

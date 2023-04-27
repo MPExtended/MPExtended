@@ -25,6 +25,8 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Music
         public int Duration { get; set; }
         public float Rating { get; set; }
         public IList<string> Genres { get; set; }
+        public int DiscNumber { get; set; }
+        public string Codec { get; set; }
 
         public override WebMediaType Type
         {

@@ -44,6 +44,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
         Folder = 9,
         Drive = 10,
         Playlist = 11,
+        Collection = 12,
         // Leaving out items from TAS, as those can't be returned
 
         // From WebTVSearchResult

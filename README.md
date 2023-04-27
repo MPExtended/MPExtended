@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/787i5qsk6l56xqtl/branch/Release-0.7?svg=true)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7) [![AppVeyor tests](https://img.shields.io/appveyor/tests/andrewjswan79536/mediaportal-mpextended)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7/tests) ![visitors](https://visitor-badge.glitch.me/badge?page_id=mpextended.visitor-badge)
+
 MPExtended
 ==========
 
@@ -13,11 +15,10 @@ Developers
 These are some quick instructions on getting started with MPExtended:
 
 1. Requirements:
-   * Visual Studio 2010 or 2012
-   * [Wix][2] plugin (if you want to build the installers)
+   * Visual Studio 2010 or 2012 or 2017 or 2019
+   * [Wix][2] plugin and tools (if you want to build the installers)
    * [ASP.NET MVC][3] plugin (if you want to build WebMediaPortal)
    * [IIS Express][4] (if you want to test WebMediaPortal, IIS Express 8.0 might not work)
-   * Optional: [ILMerge][5] (to build a single-binary PowerScheduler plugin)
 2. Before you open the solution for the first time, run the ``Tools\restore-packages.bat`` script. This downloads the
    NuGet packages used by MPExtended. (You can leave this step out, but then Visual Studio will give an error on your
    first build).

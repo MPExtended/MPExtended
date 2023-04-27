@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -48,33 +49,27 @@ namespace MPExtended.Libraries.Service.Util
             MP1_4 = 6,
             MP1_5 = 7,
             MP1_6 = 8,
-            MP1_7 = 9
+            MP1_7 = 9,
+            MP1_17 = 10,
+            MP1_25 = 11
         }
 
         private static bool? hasValidConfig = null;
         private static bool? hasMpDirs = null;
 
-        public static string GetClientInstallationDirectory()
-        {
-            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
-            return res != null ? res.ToString() : null;
-        }
-
-        public static string GetServerInstallationDirectory()
-        {
-            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server", "InstallPath");
-            return res != null ? res.ToString() : null;
-        }
-
         private static string GetAssemblyPath()
         {
-            string tv = GetServerInstallationDirectory();
-            if (tv != null && File.Exists(Path.Combine(tv, "TvService.exe")))
-                return Path.Combine(tv, "TvService.exe");
+            string tv = GetServerLocation();
+            if (tv != null && File.Exists(tv))
+            {
+                return tv;
+            }
 
-            string client = GetClientInstallationDirectory();
-            if (client != null && File.Exists(Path.Combine(client, "MediaPortal.exe")))
-                return Path.Combine(client, "MediaPortal.exe");
+            string client = GetMediaPortalLocation();
+            if (client != null && File.Exists(client))
+            {
+                return client;
+            }
 
             Log.Error("Cannot find installed TvService.exe or MediaPortal.exe");
             return null;
@@ -90,8 +85,8 @@ namespace MPExtended.Libraries.Service.Util
             try
             {
                 // read from MediaPortalDirs.xml
-                string clientInstallDir = GetClientInstallationDirectory();
-                string mpDirs = clientInstallDir == null ? null : Path.Combine(clientInstallDir, "MediaPortalDirs.xml");
+                string location = GetMediaPortalPath();
+                string mpDirs = location == null ? null : Path.Combine(location, "MediaPortalDirs.xml");
                 if (mpDirs == null || !File.Exists(mpDirs))
                 {
                     Log.Debug("Could not find MediaPortalDirs.xml");
@@ -139,7 +134,9 @@ namespace MPExtended.Libraries.Service.Util
         public static bool IsSectionInConfigFile(string sectionName)
         {
             if (!HasValidConfigFile())
+            {
                 return false;
+            }
 
             XElement file = LoadConfigurationFile();
             return file.Elements("section").Any(x => x.Attribute("name").Value == sectionName);
@@ -150,7 +147,9 @@ namespace MPExtended.Libraries.Service.Util
             try
             {
                 if (!HasValidConfigFile())
+                {
                     return new Dictionary<string, string>();
+                }
 
                 // open the file with FileShare.ReadWrite to allow MP to 
                 XElement file = LoadConfigurationFile();
@@ -189,7 +188,9 @@ namespace MPExtended.Libraries.Service.Util
         public static bool HasValidConfigFile()
         {
             if (hasValidConfig.HasValue)
+            {
                 return hasValidConfig.Value;
+            }
 
             hasValidConfig = false;
             try
@@ -222,23 +223,29 @@ namespace MPExtended.Libraries.Service.Util
         {
             var minimumVersions = new Dictionary<MediaPortalVersion, Version>()
             {
-                { MediaPortalVersion.MP1_7, new Version(1, 6, 100) },   // Let's assume the pattern continues
-                { MediaPortalVersion.MP1_6, new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
-                { MediaPortalVersion.MP1_5, new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
-                { MediaPortalVersion.MP1_4, new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
-                { MediaPortalVersion.MP1_3, new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
-                { MediaPortalVersion.MP1_2, new Version(1, 2) },        // not sure about alpha versions, but those are ancient
-                { MediaPortalVersion.MP1_1, new Version(1, 1) }         // unsupported, so whatever
+                { MediaPortalVersion.MP1_25, new Version(1, 24, 100) },  // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_17, new Version(1, 16, 100) },  // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_7,  new Version(1, 6, 100) },   // Let's assume the pattern continues
+                { MediaPortalVersion.MP1_6,  new Version(1, 5, 100) },   // 1.5.100 used by pre-release, see http://git.io/A0ZQ-A
+                { MediaPortalVersion.MP1_5,  new Version(1, 4, 100) },   // 1.4.100 used by pre-release, see http://git.io/g3UWFA
+                { MediaPortalVersion.MP1_4,  new Version(1, 3, 100) },   // 1.3.100 used by pre-release, see http://git.io/akz_PQ
+                { MediaPortalVersion.MP1_3,  new Version(1, 2, 100) },   // 1.2.100 used by the alpha release
+                { MediaPortalVersion.MP1_2,  new Version(1, 2) },        // not sure about alpha versions, but those are ancient
+                { MediaPortalVersion.MP1_1,  new Version(1, 1) }         // unsupported, so whatever
             };
 
             Version build = GetBuildVersion();
             if (build == null)
+            {
                 return MediaPortalVersion.NotAvailable;
+            }
 
             foreach (var mpVersion in minimumVersions)
             {
                 if (build >= mpVersion.Value)
+                {
                     return mpVersion.Key;
+                }
             }
 
             return MediaPortalVersion.Unknown;
@@ -268,19 +275,66 @@ namespace MPExtended.Libraries.Service.Util
             }
         }
 
+        public static string GetClientInstallationDirectory()
+        {
+            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath");
+            return res != null ? res.ToString() : null;
+        }
+
         public static string GetMediaPortalPath()
         {
-            string mpdir = Mediaportal.GetClientInstallationDirectory();
+            string mpdir = GetClientInstallationDirectory();
             if (mpdir == null)
             {
                 mpdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal");
+                if (!Directory.Exists(mpdir))
+                {
+                    mpdir = null;
+                }
             }
-            return Path.Combine(mpdir, "MediaPortal.exe");
+            return mpdir;
+        }
+
+        public static string GetMediaPortalLocation()
+        {
+            string mpdir = GetMediaPortalPath();
+            return mpdir == null ? null : Path.Combine(mpdir, "MediaPortal.exe");
+        }
+
+        public static string GetServerInstallationDirectory()
+        {
+            object res = RegistryReader.ReadKeyAllViews(RegistryHive.LocalMachine, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server", "InstallPath");
+            return res != null ? res.ToString() : null;
+        }
+
+        public static string GetServerPath()
+        {
+            string mpdir = GetServerInstallationDirectory();
+            if (mpdir == null)
+            {
+                mpdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Team MediaPortal", "MediaPortal TV Server");
+                if (!Directory.Exists(mpdir))
+                {
+                    mpdir = null;
+                }
+            }
+            return mpdir;
+        }
+
+        public static string GetServerLocation()
+        {
+            string mpdir = GetServerPath();
+            return Path.Combine(mpdir, "TvService.exe");
         }
 
         public static bool IsMediaPortalRunning()
         {
-            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GetMediaPortalPath())).Length > 0;
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GetMediaPortalLocation())).Length > 0;
+        }
+
+        public static bool IsServerRunning()
+        {
+            return Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GetServerLocation())).Length > 0;
         }
     }
 }

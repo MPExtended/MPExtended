@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,13 +17,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.IO;
-using MPExtended.Applications.WebMediaPortal.Code;
+
 using MPExtended.Applications.WebMediaPortal.Mvc;
 using MPExtended.Libraries.Client;
 using MPExtended.Libraries.Service;
@@ -90,7 +89,7 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                 HttpContext.Current.Response.Cache.SetETag(String.Format("\"{0}\"", etag));
         }
 
-        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null)
+        public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, int maxWidth, int maxHeight, string defaultFile = null, int offset = -1, int? forProvider = null)
         {
             IStreamingService service;
             int? provider = null;
@@ -104,6 +103,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.FileSystemProvider;
                     break;
                 case WebMediaType.Movie:
+                case WebMediaType.MovieActor:
+                case WebMediaType.MovieGenre:
+                case WebMediaType.Collection:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.MovieProvider;
                     break;
@@ -114,12 +116,16 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     provider = Settings.ActiveSettings.MusicProvider;
                     break;
                 case WebMediaType.Picture:
+                case WebMediaType.PictureFolder:
+                case WebMediaType.MobileVideo:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.PicturesProvider;
                     break;
                 case WebMediaType.TVShow:
                 case WebMediaType.TVSeason:
                 case WebMediaType.TVEpisode:
+                case WebMediaType.TVShowActor:
+                case WebMediaType.TVShowGenre:
                     service = Connections.Current.MASStream;
                     provider = Settings.ActiveSettings.TVShowProvider;
                     break;
@@ -132,8 +138,13 @@ namespace MPExtended.Applications.WebMediaPortal.Code
                     throw new ArgumentException("Tried to load image for unknown mediatype " + mediaType);
             }
 
+            if (forProvider.HasValue)
+            {
+              provider = forProvider;
+            }
+
             string etag = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", mediaType, provider, id, artworkType, maxWidth, maxHeight);
-            return ReturnFromService(service, () => service.GetArtworkResized(mediaType, provider, id, artworkType, -1, maxWidth, maxHeight), defaultFile, etag);
+            return ReturnFromService(service, () => service.GetArtworkResized(mediaType, provider, id, artworkType, offset, maxWidth, maxHeight), defaultFile, etag);
         }
 
         public static ActionResult ReturnFromService(WebMediaType mediaType, string id, WebFileType artworkType, string defaultFile = null)

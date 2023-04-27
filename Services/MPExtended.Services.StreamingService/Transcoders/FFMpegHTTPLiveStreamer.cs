@@ -40,6 +40,7 @@ namespace MPExtended.Services.StreamingService.Transcoders
             if (action == "playlist")
             {
                 WCFUtil.SetContentType("application/vnd.apple.mpegurl");
+                WCFUtil.AddHeader("Access-Control-Allow-Origin","*");
                 string playlistPath = Path.Combine(TemporaryDirectory, "index.m3u8");
                 if (!File.Exists(playlistPath))
                 {
