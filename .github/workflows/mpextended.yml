@@ -27,7 +27,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.1
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -45,7 +45,7 @@ jobs:
       with:
         name:  MPExtended service
         path: |
-          ${{ github.workspace }}Installers\MPExtended.Installers.Service\bin\Release\en-us\MPExtended.Installers.Service.msi
+          ${{ github.workspace }}\Installers\MPExtended.Installers.Service\bin\Release\en-us\MPExtended.Installers.Service.msi
         retention-days: 30
 
     - name: Upload Artifact / WebMediaPortal
@@ -54,7 +54,7 @@ jobs:
       with:
         name:  WebMediaPortal
         path: |
-          ${{ github.workspace }}Installers\MPExtended.Installers.WebMediaPortal\bin\Release\en-us\MPExtended.Installers.WebMediaPortal.msi
+          ${{ github.workspace }}\Installers\MPExtended.Installers.WebMediaPortal\bin\Release\en-us\MPExtended.Installers.WebMediaPortal.msi
         retention-days: 30
         
     - name: Upload Artifact / WebMediaPortal IIS
@@ -63,5 +63,5 @@ jobs:
       with:
         name:  WebMediaPortal IIS
         path: |
-          ${{ github.workspace }}Installers\MPExtended.Installers.WebMediaPortalIIS\bin\Release\en-us\MPExtended.Installers.WebMediaPortalIIS.msi
+          ${{ github.workspace }}\Installers\MPExtended.Installers.WebMediaPortalIIS\bin\Release\en-us\MPExtended.Installers.WebMediaPortalIIS.msi
         retention-days: 30
