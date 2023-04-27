@@ -1,6 +1,7 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
-// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// 
+﻿#region Copyright (C) 2012-2013 MPExtended, 2020 Team MediaPortal
+// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+//
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 2 of the License, or
@@ -47,6 +48,7 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             var fileInfo = Connections.Current.TAS.GetRecordingFileInfo(rec.Id);
             var mediaInfo = Connections.Current.TASStreamControl.GetMediaInfo(WebMediaType.Recording, null, rec.Id.ToString(), 0);
             ViewBag.Quality = MediaInfoFormatter.GetFullInfoString(mediaInfo, fileInfo);
+            ViewBag.Resolution = MediaInfoFormatter.GetShortQualityName(mediaInfo);
             return View(rec);
         }
 
@@ -55,11 +57,21 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
             return Images.ReturnFromService(WebMediaType.Recording, id.ToString(), WebFileType.Content, width, height, "Images/default/recording.png");
         }
 
-
         public ActionResult Watch(int id)
         {
             var rec = Connections.Current.TAS.GetRecordingById(id);
+            if (rec == null)
+                return HttpNotFound();
             return View(rec);
         }
+        
+        public ActionResult DeleteRecording(int id)
+        {
+            var rec = Connections.Current.TAS.GetRecordingById(id);
+            if (rec == null)
+                return HttpNotFound();
+            Connections.Current.TAS.DeleteRecording(rec.Id);
+            return RedirectToAction("Index", "Recording");
+        }        
     }
 }

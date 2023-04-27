@@ -29,6 +29,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
         public string Name { get; set; }
         public string Path { get; set; }
         public string Id { get; set; }
+        public string Pincode { get; set; }
         public List<string> Extensions { get; set; }
 
         public WebDriveBasic ToWebDriveBasic()
@@ -38,6 +39,7 @@ namespace MPExtended.PlugIns.MAS.MPShares
                 Title = this.Name,
                 Path = new List<string>() { this.Path },
                 Id = this.Id,
+                Pincode = this.Pincode,
                 LastModifiedTime = DateTime.Now,
                 LastAccessTime = DateTime.Now
             };

@@ -16,6 +16,7 @@
     </Plugin>
     <Plugin name="MP MyVideo">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\VideoDatabaseV5.db3</database>
+     <cover type="Folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs\Videos</cover>
     </Plugin>
     <Plugin name="Moving Pictures">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\movingpictures.db3</database>
@@ -30,6 +31,11 @@
     </Plugin>
     <Plugin name="mvCentral">
       <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\mvCentral.db3</database>
+      <cover type="Folder" displayname="Cover Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs\mvCentral</cover>
+    </Plugin>
+    <Plugin name="FanartHandler">
+      <database type="File" displayname="Database Location">%ProgramData%\Team MediaPortal\MediaPortal\database\FanartHandler.db3</database>
+      <thumb type="Folder" displayname="Thumb Folder">%ProgramData%\Team MediaPortal\MediaPortal\Thumbs</thumb>
     </Plugin>
   </PluginConfiguration>
 </MediaAccess>

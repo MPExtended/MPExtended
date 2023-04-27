@@ -1,6 +1,7 @@
-﻿#region Copyright (C) 2011-2013 MPExtended
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// 
+// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+//
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 2 of the License, or
@@ -21,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // Author information
 [assembly: AssemblyCompany("http://www.mpextended.com/")]
-[assembly: AssemblyCopyright("Copyright © 2011 - 2014 MPExtended")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2018 MPExtended, 2020 Team MediaPortal")]
 [assembly: AssemblyTrademark("")]
 
 // BUild type
@@ -33,7 +34,7 @@ using System.Runtime.InteropServices;
 
 // This reflects the API version, only update this if the API changes, as dependent applications need to be rebuild when
 // the assembly is replaced with an assembly with a different AssemblyVersion attribute. 
-[assembly: AssemblyVersion("0.6.0.0")]
+[assembly: AssemblyVersion("0.6.0.1")]
 
 // This reflects the version of this unique build, and should be changed with each build. Sadly it's not easily possible
 // to let this change with each build in Visual Studio, so we don't have that in our version numbers now and hope people
@@ -41,8 +42,8 @@ using System.Runtime.InteropServices;
 // minor versions we use major.prev-minor.99.x, with x incrementing with each alpha/beta/RC release. For test versions of
 // bugfix releases this is major.minor.prev-bugfix.x, with x incrementing with each alpha/beta/RC release. This number
 // is also used to check for new versions in the configurator, so please follow this scheme strictly. 
-[assembly: AssemblyFileVersion("0.5.99.1")]
+[assembly: AssemblyFileVersion("0.5.99.13")]
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.
-[assembly: AssemblyInformationalVersion("0.6.0-beta")]
+[assembly: AssemblyInformationalVersion("0.7.0-beta13-ajs")]

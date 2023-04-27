@@ -19,6 +19,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces
         public IList<string> Path { get; set; }
         public DateTime DateAdded { get; set; }
         public string Title { get; set; }
+        public string Pincode { get; set; }
         public IList<WebArtwork> Artwork { get; set; }
         public virtual WebMediaType Type { get; set; }
     }
