@@ -1,4 +1,8 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/787i5qsk6l56xqtl/branch/Release-0.7?svg=true)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7) [![AppVeyor tests](https://img.shields.io/appveyor/tests/andrewjswan79536/mediaportal-mpextended)](https://ci.appveyor.com/project/andrewjswan79536/mediaportal-mpextended/branch/Release-0.7/tests) ![visitors](https://visitor-badge.glitch.me/badge?page_id=mpextended.visitor-badge)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MPExtended/MPExtended/mpextended.yml?logo=github)](https://github.com/MPExtended/MPExtended/actions)
+[![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/MPExtended/MPExtended?include_prereleases)](https://github.com/MPExtended/MPExtended/releases)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/MPExtended/MPExtended/latest/total?label=release@downloads)](https://github.com/MPExtended/MPExtended/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
+[![GitHub forks](https://img.shields.io/github/forks/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
 
 MPExtended
 ==========
