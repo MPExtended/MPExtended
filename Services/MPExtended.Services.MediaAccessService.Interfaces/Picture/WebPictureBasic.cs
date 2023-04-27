@@ -16,6 +16,7 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.Picture
 
         public IList<WebCategory> Categories { get; set; }
         public DateTime DateTaken { get; set; }
+        public string Description { get; set; }
 
         public override WebMediaType Type
         {

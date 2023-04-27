@@ -54,7 +54,15 @@ namespace MPExtended.Libraries.SQLitePlugin
            }
         }
 
-        protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
+        public void Execute(string query)
+        {
+          using (DatabaseConnection connection = OpenConnection())
+          {
+           Exec cmd = new Exec(connection, query);
+        }
+    }
+
+    protected T ReadRow<T>(string queryString, Delegates<T>.CreateMethod builder, T defaultValue, params SQLiteParameter[] parameters)
         {
             using (DatabaseConnection connection = OpenConnection())
             {

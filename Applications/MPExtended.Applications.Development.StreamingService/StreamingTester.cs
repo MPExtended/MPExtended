@@ -69,6 +69,8 @@ namespace MPExtended.Applications.Development.StreamingService
             cbItemType.Items.Add(WebMediaType.MusicAlbum);
             cbItemType.Items.Add(WebMediaType.MusicTrack);
             cbItemType.Items.Add(WebMediaType.Picture);
+            cbItemType.Items.Add(WebMediaType.MobileVideo);
+            cbItemType.Items.Add(WebMediaType.PictureFolder);
             cbItemType.Items.Add(WebMediaType.Recording);
             cbItemType.Items.Add(WebMediaType.TV);
             cbItemType.Items.Add(WebMediaType.TVEpisode);

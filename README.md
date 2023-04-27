@@ -1,3 +1,9 @@
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MPExtended/MPExtended/mpextended.yml?logo=github)](https://github.com/MPExtended/MPExtended/actions)
+[![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/MPExtended/MPExtended?include_prereleases)](https://github.com/MPExtended/MPExtended/releases)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/MPExtended/MPExtended/latest/total?label=release@downloads)](https://github.com/MPExtended/MPExtended/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
+[![GitHub forks](https://img.shields.io/github/forks/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
+
 MPExtended
 ==========
 
@@ -13,11 +19,10 @@ Developers
 These are some quick instructions on getting started with MPExtended:
 
 1. Requirements:
-   * Visual Studio 2010 or 2012
-   * [Wix][2] plugin (if you want to build the installers)
+   * Visual Studio 2010 or 2012 or 2017 or 2019
+   * [Wix][2] plugin and tools (if you want to build the installers)
    * [ASP.NET MVC][3] plugin (if you want to build WebMediaPortal)
    * [IIS Express][4] (if you want to test WebMediaPortal, IIS Express 8.0 might not work)
-   * Optional: [ILMerge][5] (to build a single-binary PowerScheduler plugin)
 2. Before you open the solution for the first time, run the ``Tools\restore-packages.bat`` script. This downloads the
    NuGet packages used by MPExtended. (You can leave this step out, but then Visual Studio will give an error on your
    first build).

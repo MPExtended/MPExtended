@@ -1,6 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended, 2005-2011 Team MediaPortal
+﻿#region Copyright (C) 2011-2013 MPExtended, 2005-2020 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// Copyright (C) 2005-2011 Team MediaPortal, http://www.team-mediaportal.com/
+// Copyright (C) 2005-2020 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,9 +28,17 @@ using MPExtended.Libraries.Service.Util;
 using MPExtended.Services.StreamingService.Code;
 using MPExtended.Services.StreamingService.Interfaces;
 using MPExtended.Services.Common.Interfaces;
+using MediaInfo;
 
 namespace MPExtended.Services.StreamingService.MediaInfo
 {
+    internal class MediaportalMediaInfoWrapper : global::MediaInfo.MediaInfoWrapper
+    {
+        public MediaportalMediaInfoWrapper(string filePath, string pathToDll, ILogger logger) : base(filePath, pathToDll, logger)
+        {
+        }
+  }
+
     internal static class MediaInfoWrapper
     {
         private static IMediaInfoCache persistentCache;
@@ -98,71 +106,75 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     return null;
                 }
 
-                /* Loosely based upon MediaInfoWrapper.cs (mediaportal/Core/Player) from MediaPortal trunk r27491 as of 15 June 2011
-                 * 
-                 * Using the whole wrapper from MediaPortal is quite much porting work as it's cluttered with calls to other MP code. Referencing
-                 * MediaPortal.Core.dll also isn't an option as that pulls in a big tree of dependencies. 
-                 * 
-                 * TODO: Needs error handling
-                 * TODO: No support for DVDs yet
-                 * TODO: Aspect ratio doesn't work properly yet
-                 */
-                MediaInfo info = new MediaInfo();
-                info.Option("ParseSpeed", "0.3");
-                info.Open(source);
+                MediaportalMediaInfoWrapper info = new MediaportalMediaInfoWrapper(source, Path.Combine(Installation.GetInstallDirectory(), "Plugins", "Services"), null);
                 WebMediaInfo retinfo = new WebMediaInfo();
-                retinfo.Container = info.Get(StreamKind.General, 0, "Format");
+                retinfo.Container = info.Format;
+                retinfo.Duration = info.Duration;
 
-                // video
+                // video streams
                 retinfo.VideoStreams = new List<WebVideoStream>();
-                int videoStreams = info.Count_Get(StreamKind.Video);
+                int videoStreams = info.VideoStreams.Count();
                 for (int i = 0; i < videoStreams; i++)
                 {
-                    retinfo.Duration = retinfo.Duration == 0 ? (long)StringToInt(info.Get(StreamKind.Video, i, "Duration")) : retinfo.Duration;
-
-                    string val = info.Get(StreamKind.Video, i, "DisplayAspectRatio");
+                    retinfo.Duration = retinfo.Duration == 0 ? info.VideoStreams[i].Duration.Milliseconds : retinfo.Duration;
                     retinfo.VideoStreams.Add(new WebVideoStream()
                     {
-                        Codec = info.Get(StreamKind.Video, i, "Codec/String"),
-                        DisplayAspectRatio = StringToDecimal(info.Get(StreamKind.Video, i, "DisplayAspectRatio")),
-                        DisplayAspectRatioString = info.Get(StreamKind.Video, i, "DisplayAspectRatio/String"),
-                        Interlaced = info.Get(StreamKind.Video, i, "ScanType") == "Interlaced",
-                        Width = StringToInt(info.Get(StreamKind.Video, i, "Width")),
-                        Height = StringToInt(info.Get(StreamKind.Video, i, "Height")),
-                        ID = StringToInt(info.Get(StreamKind.Video, i, "ID")),
+                        Codec = info.VideoStreams[i].Codec.ToCodecString(),
+                        Resolution = info.VideoStreams[i].Resolution,
+                        DisplayAspectRatio = (info.VideoStreams[i].Height != 0 ? (decimal)info.VideoStreams[i].Width / (decimal)info.VideoStreams[i].Height : (decimal)info.VideoStreams[i].AspectRatio.ToAspectRatioValue()),
+                        DisplayAspectRatioString = info.VideoStreams[i].AspectRatio.ToAspectRatioString(),
+                        Interlaced = info.VideoStreams[i].Interlaced,
+                        Width = info.VideoStreams[i].Width,
+                        Height = info.VideoStreams[i].Height,
+                        ID = info.VideoStreams[i].Id,
                         Index = i
                     });
+
+                    /*
+                    Log.Debug("Source: " + source);
+                    Log.Debug("Duration: " + retinfo.Duration);
+                    Log.Debug("Codec: " + info.VideoStreams[i].Codec.ToCodecString());
+                    Log.Debug("Resolution: " + info.VideoStreams[i].Resolution);
+                    Log.Debug("DisplayAspectRatio: " + info.VideoStreams[i].AspectRatio);
+                    Log.Debug("DisplayAspectRatio: " + (int)info.VideoStreams[i].AspectRatio.ToAspectRatioValue());
+                    Log.Debug("DisplayAspectRatioString: " + info.VideoStreams[i].AspectRatio.ToAspectRatioString());
+                    Log.Debug("Interlaced: " + info.VideoStreams[i].Interlaced);
+                    Log.Debug("Width: " + info.VideoStreams[i].Width);
+                    Log.Debug("Height: " + info.VideoStreams[i].Height);
+                    Log.Debug("ID: " + info.VideoStreams[i].Id);
+                    Log.Debug("Index: " + i);
+                    */
                 }
 
-                // audio codecs
+                // audio streams
                 retinfo.AudioStreams = new List<WebAudioStream>();
-                int audioStreams = info.Count_Get(StreamKind.Audio);
+                int audioStreams = info.AudioStreams.Count();
                 for (int i = 0; i < audioStreams; i++)
                 {
-                    retinfo.Duration = retinfo.Duration == 0 ? (long)StringToInt(info.Get(StreamKind.Audio, i, "Duration")) : retinfo.Duration;
+                    retinfo.Duration = retinfo.Duration == 0 ? info.AudioStreams[i].Duration.Milliseconds : retinfo.Duration;
                     retinfo.AudioStreams.Add(new WebAudioStream()
                     {
-                        Channels = StringToInt(info.Get(StreamKind.Audio, i, "Channels")),
-                        Codec = info.Get(StreamKind.Audio, i, "Codec/String"),
-                        ID = StringToInt(info.Get(StreamKind.Audio, i, "ID")),
-                        Language = info.Get(StreamKind.Audio, i, "Language"),
-                        LanguageFull = info.Get(StreamKind.Audio, i, "Language/String"),
-                        Title = info.Get(StreamKind.Audio, i, "Title"),
+                        Channels = info.AudioStreams[i].Channel,
+                        Codec = info.AudioStreams[i].Codec.ToCodecString(),
+                        ID = info.AudioStreams[i].Id,
+                        Language = info.AudioStreams[i].Language, // info.Get(StreamKind.Audio, i, "Language/String"),
+                        LanguageFull = info.AudioStreams[i].Language, // info.Get(StreamKind.Audio, i, "Language/String"),
+                        Title = info.AudioStreams[i].Name, // info.Get(StreamKind.Audio, i, "Title"),
                         Index = i
                     });
                 }
 
-                // subtitle codecs
+                // subtitle streams
                 retinfo.SubtitleStreams = new List<WebSubtitleStream>();
-                int subtitleStreams = info.Count_Get(StreamKind.Text);
+                int subtitleStreams = info.Subtitles.Count();
                 int scodecnr = 0;
                 for (scodecnr = 0; scodecnr < subtitleStreams; scodecnr++)
                 {
                     retinfo.SubtitleStreams.Add(new WebSubtitleStream()
                     {
-                        Language = info.Get(StreamKind.Text, scodecnr, "Language"),
-                        LanguageFull = info.Get(StreamKind.Text, scodecnr, "Language/String"),
-                        ID = StringToInt(info.Get(StreamKind.Text, scodecnr, "ID")),
+                        Language = info.Subtitles[scodecnr].Language, // info.Get(StreamKind.Text, scodecnr, "Language"),
+                        LanguageFull = info.Subtitles[scodecnr].Language, // info.Get(StreamKind.Text, scodecnr, "Language/String"),
+                        ID = info.Subtitles[scodecnr].Id,
                         Index = scodecnr,
                         Filename = null
                     });
@@ -209,8 +221,6 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                     Log.Debug(String.Format("Failed to enumerate files in {0}", Path.GetDirectoryName(source)), ex);
                 }
 
-                // return
-                info.Close();
                 return retinfo;
             }
             catch (Exception ex)

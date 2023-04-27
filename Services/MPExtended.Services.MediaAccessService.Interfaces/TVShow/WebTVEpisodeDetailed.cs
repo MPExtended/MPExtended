@@ -9,12 +9,12 @@ namespace MPExtended.Services.MediaAccessService.Interfaces.TVShow
     {
         public WebTVEpisodeDetailed() : base()
         {
-            GuestStars = new List<WebActor>();
+            GuestStars = new List<WebTVShowActor>();
             Directors = new List<string>();
             Writers = new List<string>();
         }
 
-        public IList<WebActor> GuestStars { get; set; }
+        public IList<WebTVShowActor> GuestStars { get; set; }
         public IList<string> Directors { get; set; }
         public IList<string> Writers { get; set; }
 

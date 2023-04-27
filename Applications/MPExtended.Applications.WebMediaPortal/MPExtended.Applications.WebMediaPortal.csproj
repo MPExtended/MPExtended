@@ -24,6 +24,12 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -106,12 +112,21 @@
     <Compile Include="Code\Composition\PluginFinder.cs" />
     <Compile Include="Code\Connections.cs" />
     <Compile Include="Code\ExternalUrl.cs" />
+    <Compile Include="Controllers\PictureLibraryController.cs" />
     <Compile Include="Controllers\RecordingController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ShareLibraryController.cs" />
     <Compile Include="Controllers\SiteController.cs" />
+    <Compile Include="Models\CollectionViewModel.cs" />
     <Compile Include="Models\MediaItemModel.cs" />
+    <Compile Include="Models\MovieActorViewModel.cs" />
+    <Compile Include="Models\MovieGenreViewModel.cs" />
+    <Compile Include="Models\PictureViewModel.cs" />
     <Compile Include="Models\ServiceSetModel.cs" />
+    <Compile Include="Models\ShareViewModel.cs" />
     <Compile Include="Models\SiteViewModels.cs" />
+    <Compile Include="Models\TVShowActorViewModel.cs" />
+    <Compile Include="Models\TVShowGenreViewModel.cs" />
     <Compile Include="Mvc\ContentLocator.cs" />
     <Compile Include="Code\Images.cs" />
     <Compile Include="Code\MediaInfoFormatter.cs" />
@@ -241,11 +256,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Scripts\jquery-1.10.2-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-ui-1.10.3.js" />
-    <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\jquery-1.12.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.12.4.js" />
+    <Content Include="Scripts\jquery-1.12.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Views\Settings\Index.js" />
     <Content Include="Views\Settings\Services.css" />
     <Content Include="Views\Settings\Services.js" />
@@ -517,7 +532,8 @@
     <Content Include="Views\Home\AiredEpisodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="libman.json" />
+    <None Include="Scripts\jquery-1.12.4.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -554,4 +570,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)Packages\jQuery.1.12.4\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.12.1\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.12.1\Content\Content\*.* $(ProjectDir)Content\ /Y /E
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

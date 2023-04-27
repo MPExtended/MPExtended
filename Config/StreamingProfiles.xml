@@ -24,12 +24,65 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>1280</MaxOutputWidth>
       <MaxOutputHeight>720</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.Direct</Transcoder>
       <TranscoderParameters />
     </TranscoderProfile>
 
     <!-- Android FFMpeg profiles -->
+	      <TranscoderProfile>
+      <Name>Android FFmpeg fHD with deinterlace</Name>
+      <Description>fHD-quality Android profile based on ffmpeg 1920*1080 5Mb/s with deinterlace</Description>
+      <HasVideoStream>true</HasVideoStream>
+      <MIME>video/MP2T</MIME>
+      <MaxOutputWidth>1920</MaxOutputWidth>
+      <MaxOutputHeight>1080</MaxOutputHeight>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Bandwidth>5248</Bandwidth>
+      <Transport>http</Transport>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 5120k -profile:v baseline -preset:v superfast -coder 1 -codec:a aac -b:a 128k -ac 2 -strict experimental -vf yadif=0:-1:1 -async 1 -sn -f mpegts</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
+    <TranscoderProfile>
+      <Name>Android FFmpeg HD with deinterlace</Name>
+      <Description>HD-quality Android profile based on ffmpeg 1280x720 3Mb/s with deinterlace</Description>
+      <HasVideoStream>true</HasVideoStream>
+      <MIME>video/MP2T</MIME>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Bandwidth>3200</Bandwidth>
+      <Transport>http</Transport>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 3072k -profile:v baseline -preset:v superfast -coder 1 -codec:a aac -b:a 128k -ac 2 -strict experimental -vf yadif=0:-1:1 -async 1 -sn -f mpegts</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
+    <TranscoderProfile>
+      <Name>Android FFmpeg SD with deinterlace</Name>
+      <Description>SD-quality Android profile based on ffmpeg 720x576 2 Mb/s with deinterlace</Description>
+      <HasVideoStream>true</HasVideoStream>
+      <MIME>video/MP2T</MIME>
+      <MaxOutputWidth>720</MaxOutputWidth>
+      <MaxOutputHeight>576</MaxOutputHeight>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Bandwidth>2176</Bandwidth>
+      <Transport>http</Transport>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
+      <TranscoderParameters>
+        <codecParameters>-codec:v libx264 -b:v 2048k -profile:v baseline -preset:v superfast -coder 1 -codec:a aac -b:a 128k -ac 2 -strict experimental -vf yadif=0:-1:1 -async 1 -sn -f mpegts</codecParameters>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android FFmpeg HD</Name>
       <Description>HD-quality Android profile based on ffmpeg</Description>
@@ -42,12 +95,12 @@
       <MaxOutputHeight>720</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder rle -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder 1 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android FFmpeg ultra HQ</Name>
       <Description>Ultra high-quality Android profile based on ffmpeg</Description>
@@ -60,12 +113,12 @@
       <MaxOutputHeight>600</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder rle -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder 1 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android FFmpeg HQ</Name>
       <Description>High-quality Android profile based on ffmpeg</Description>
@@ -78,12 +131,12 @@
       <MaxOutputHeight>600</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder rle -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder 1 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android FFmpeg medium</Name>
       <Description>Medium-quality Android profile based on ffmpeg</Description>
@@ -96,12 +149,12 @@
       <MaxOutputHeight>400</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder rle -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder 1 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android FFmpeg LQ</Name>
       <Description>Low-quality Android profile based on ffmpeg</Description>
@@ -114,10 +167,9 @@
       <MaxOutputHeight>300</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder rle -codec:a aac -b:a 64k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder 1 -codec:a aac -b:a 64k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
     <TranscoderProfile>
@@ -132,10 +184,9 @@
       <MaxOutputHeight>300</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder rle -codec:a aac -b:a 48k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder 1 -codec:a aac -b:a 48k -ac 2 -strict experimental -async 1 -sn -f mpegts</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
 
@@ -152,10 +203,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>0</MaxOutputWidth>
       <MaxOutputHeight>0</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder></encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -163,6 +213,69 @@
     </TranscoderProfile>
 
     <!-- Android VLC profiles -->
+    <TranscoderProfile>
+      <Name>Android VLC fHD with deinterlace</Name>
+      <Description>fHD-quality Android profile based on VLC 1920x1080 5Mb/s with deinterlace</Description>
+      <Bandwidth>5376</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MaxOutputWidth>1920</MaxOutputWidth>
+      <MaxOutputHeight>1080</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <encoder>vcodec=h264,vb=5120,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
+    <TranscoderProfile>
+      <Name>Android VLC HD with deinterlace</Name>
+      <Description>HD-quality Android profile based on VLC 1280x720 3Mb/s with deinterlace</Description>
+      <Bandwidth>3328</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <encoder>vcodec=h264,vb=3072,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </TranscoderParameters>
+    </TranscoderProfile>
+	
+    <TranscoderProfile>
+      <Name>Android VLC SD with deinterlace</Name>
+      <Description>SD-quality Android profile based on VLC 720x576 2Mb/s with deinterlace</Description>
+      <Bandwidth>2304</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+      </Targets>
+      <Transport>http</Transport>
+      <MaxOutputWidth>720</MaxOutputWidth>
+      <MaxOutputHeight>576</MaxOutputHeight>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <encoder>vcodec=h264,vb=2048,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
+        <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>Android VLC HD</Name>
       <Description>HD-quality Android profile based on VLC</Description>
@@ -175,10 +288,9 @@
       <MaxOutputHeight>720</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1768,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -196,10 +308,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>600</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1024,venc=x264{profile=baseline,preset=veryfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=256,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -217,10 +328,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>640</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,preset=superfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -238,10 +348,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>640</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,preset=superfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -259,10 +368,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>400</MaxOutputWidth>
       <MaxOutputHeight>300</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=256,venc=x264{profile=baseline,preset=ultrafast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=64,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -282,7 +390,7 @@
       <Transport>http</Transport>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=128,venc=x264{profile=baseline,preset=ultrafast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=48,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -290,6 +398,87 @@
     </TranscoderProfile>
 
     <!-- HTTP Live Streaming -->
+	<TranscoderProfile>
+      <Name>HTTP Live Streaming fHD with deinterlace</Name>
+      <Description>fHD-quality HTTP Live Streaming profile 1920x1080 5Mb/s with deinterlace</Description>
+      <Bandwidth>5376</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>1920</MaxOutputWidth>
+      <MaxOutputHeight>1080</MaxOutputHeight>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=5120,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveKeepOld>5</httpLiveKeepOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+	
+    <TranscoderProfile>
+      <Name>HTTP Live Streaming HD with deinterlace</Name>
+      <Description>HD-quality HTTP Live Streaming profile 1280x720 3Mb/s with deinterlace</Description>
+      <Bandwidth>3328</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>1280</MaxOutputWidth>
+      <MaxOutputHeight>720</MaxOutputHeight>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=3072,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveKeepOld>5</httpLiveKeepOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
+    <TranscoderProfile>
+      <Name>HTTP Live Streaming SD with deinterlace</Name>
+      <Description>HD-quality HTTP Live Streaming profile 720x576 2Mb/s with deinterlace</Description>
+      <Bandwidth>2304</Bandwidth>
+      <Targets>
+        <Target>android</Target>
+        <Target>ios</Target>
+        <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
+      </Targets>
+      <Transport>httplive</Transport>>
+      <MIME>video/MP2T</MIME>
+      <HasVideoStream>true</HasVideoStream>
+      <MaxOutputWidth>720</MaxOutputWidth>
+      <MaxOutputHeight>576</MaxOutputHeight>
+      <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
+      <TranscoderParameters>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
+        <tsOptions>--sout-mux-caching=5000</tsOptions>
+        <encoder>vcodec=h264,vb=2048,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
+        <muxer>ts{use-key-frames}</muxer>
+        <httpLiveOptions>seglen=7,delsegs=false,numsegs=0</httpLiveOptions>
+        <httpLiveKeepOld>5</httpLiveKeepOld>
+      </TranscoderParameters>
+    </TranscoderProfile>
+
     <TranscoderProfile>
       <Name>HTTP Live Streaming HD</Name>
       <Description>HD-quality HTTP Live Streaming profile</Description>
@@ -298,16 +487,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>1280</MaxOutputWidth>
       <MaxOutputHeight>720</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=1768,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -324,16 +513,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>960</MaxOutputWidth>
       <MaxOutputHeight>640</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=1024,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=veryfast},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -350,16 +539,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=768,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -376,16 +565,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>600</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -402,16 +591,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>480</MaxOutputWidth>
       <MaxOutputHeight>320</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
@@ -428,16 +617,16 @@
         <Target>android</Target>
         <Target>ios</Target>
         <Target>mobile-hls-video</Target>
+        <Target>pc-hls-video</Target>
       </Targets>
       <Transport>httplive</Transport>>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>480</MaxOutputWidth>
       <MaxOutputHeight>320</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=128,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=48,channels=2,samplerate=48000,audio-sync</encoder>
@@ -462,10 +651,9 @@
       <MaxOutputHeight>720</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1768k -profile:v baseline -preset:v faster -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 512k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -483,10 +671,9 @@
       <MaxOutputHeight>600</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 1024k -profile:v baseline -preset:v veryfast -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 256k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -504,10 +691,9 @@
       <MaxOutputHeight>600</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 768k -profile:v baseline -preset:v superfast -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -525,10 +711,9 @@
       <MaxOutputHeight>400</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 512k -profile:v baseline -preset:v superfast -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 128k -ac 2 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -547,10 +732,9 @@
       <MaxOutputHeight>300</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 64k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 256k -profile:v baseline -preset:v ultrafast -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 64k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -568,10 +752,9 @@
       <MaxOutputHeight>300</MaxOutputHeight>
       <MIME>video/MP2T</MIME>
       <HasVideoStream>true</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpegWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder rle -keyint_min 25 -g 25 -codec:a aac -b:a 48k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
+        <codecParameters>-codec:v libx264 -b:v 128k -profile:v baseline -preset:v ultrafast -coder 1 -keyint_min 25 -g 25 -codec:a aac -b:a 48k -ac 1 -strict experimental -async 1 -sn -bsf h264_mp4toannexb -flags -global_header -f segment -segment_list_flags +live -segment_time 5</codecParameters>
         <httpLiveRemoveOld>5</httpLiveRemoveOld>
       </TranscoderParameters>
     </TranscoderProfile>
@@ -589,11 +772,10 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>1280</MaxOutputWidth>
       <MaxOutputHeight>720</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=2048,venc=x264{profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -611,11 +793,10 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>854</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1280,venc=x264{profile=baseline,preset=veryfast},deinterlace=-1,acodec=mp4a,ab=192,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -633,11 +814,10 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>854</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -656,11 +836,10 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>640</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=96,channels=2,samplerate=48000,audio-sync</encoder>
@@ -679,11 +858,10 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>500</MaxOutputWidth>
       <MaxOutputHeight>300</MaxOutputHeight>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=384,venc=x264{profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
@@ -702,10 +880,9 @@
       <Transport>http</Transport>
       <MIME>audio/mpeg</MIME>
       <HasVideoStream>false</HasVideoStream>
-
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-2.0.2\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>
@@ -724,10 +901,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>800</MaxOutputWidth>
       <MaxOutputHeight>480</MaxOutputHeight>
-      
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder 1 -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
     <TranscoderProfile>
@@ -742,10 +918,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>1280</MaxOutputWidth>
       <MaxOutputHeight>768</MaxOutputHeight>
-      
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder 1 -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
     <TranscoderProfile>
@@ -760,10 +935,9 @@
       <HasVideoStream>true</HasVideoStream>
       <MaxOutputWidth>1280</MaxOutputWidth>
       <MaxOutputHeight>720</MaxOutputHeight>
-      
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.FFMpeg</Transcoder>
       <TranscoderParameters>
-        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder rle -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
+        <codecParameters>-x264opts no-cabac:trellis=0:keyint=50 -codec:v libx264 -b:v 1768k -r 25 -profile:v baseline -preset:v faster -coder 1 -codec:a libmp3lame -b:a 128k -ac 2 -strict experimental -sn -f mpegts -async 1000</codecParameters>
       </TranscoderParameters>
     </TranscoderProfile>
   </Transcoders>
