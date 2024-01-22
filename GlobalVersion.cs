@@ -1,4 +1,4 @@
-﻿#region Copyright (C) 2011-2013 MPExtended, 2020 Team MediaPortal
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020-2024 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
 // Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
 //
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // Author information
 [assembly: AssemblyCompany("http://www.mpextended.com/")]
-[assembly: AssemblyCopyright("Copyright © 2011 - 2018 MPExtended, 2020 Team MediaPortal")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2018 MPExtended, 2020-2024 Team MediaPortal")]
 [assembly: AssemblyTrademark("")]
 
 // BUild type
@@ -46,4 +46,4 @@ using System.Runtime.InteropServices;
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.
-[assembly: AssemblyInformationalVersion("0.7.0-beta13-ajs")]
+[assembly: AssemblyInformationalVersion("0.7.5")]
