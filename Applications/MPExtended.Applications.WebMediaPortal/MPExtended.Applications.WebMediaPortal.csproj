@@ -571,9 +571,9 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(SolutionDir)Packages\jQuery.1.12.4\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
-xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.12.1\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
-xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.12.1\Content\Content\*.* $(ProjectDir)Content\ /Y /E
+    <PostBuildEvent>xcopy $(SolutionDir)Packages\jQuery.3.5.0\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.13.2\Content\Scripts\*.* $(ProjectDir)Scripts\ /Y
+xcopy $(SolutionDir)Packages\jQuery.UI.Combined.1.13.2\Content\Content\*.* $(ProjectDir)Content\ /Y /E
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
