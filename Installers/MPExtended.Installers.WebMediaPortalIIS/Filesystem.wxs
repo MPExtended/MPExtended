@@ -11,11 +11,20 @@
     
     You must not remove this notice, or any other, from this software.
   -->
+
+  <?if $(var.Platform) = x64 ?>
+      <?define Win64 = "yes" ?>
+      <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?else ?>
+      <?define Win64 = "no" ?>
+      <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?endif ?>
+
   <Fragment>
     <!-- Directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Program files -->
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="PlatformProgramFilesFolder">
         <Directory Id="MPEXTENDEDDIRECTORY" Name="MPExtended">
           <Directory Id="InstallDirectory" Name="WebMediaPortal">
             <!-- General registry (installation path) -->
