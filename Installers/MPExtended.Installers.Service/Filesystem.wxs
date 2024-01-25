@@ -15,9 +15,11 @@
 
   <?if $(var.Platform) = x64 ?>
       <?define Win64 = "yes" ?>
+      <?define MIEnding = "-x64" ?>
       <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
   <?else ?>
       <?define Win64 = "no" ?>
+      <?define MIEnding = "" ?>
       <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
   <?endif ?>
 
@@ -135,9 +137,9 @@
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MPExtended.Libraries.Social.pdb" />
                   <!-- MediaInfo -->
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.dll" />
-                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcrypto-1_1.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcrypto-3$(var.MIEnding).dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libcurl.dll" />
-                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libssl-1_1.dll" />
+                  <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\libssl-3$(var.MIEnding).dll" />
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MediaInfo.Wrapper.dll" />
                   <!-- EXIF -->
                   <File Source="$(var.MPExtended.Services.StreamingService.TargetDir)\MetadataExtractor.dll" />
