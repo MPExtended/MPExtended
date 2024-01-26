@@ -11,7 +11,11 @@ jobs:
     uses: ./.github/workflows/mpextended.yml
   
   release:
-    name: Release MP Extended
+    strategy:
+      matrix:
+        architecture: [x86, x64]
+
+    name: Release MP Extended ${{ matrix.architecture }}
     needs: build
     permissions:
       contents: write
@@ -19,25 +23,31 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Download Artifacts
+      - name: Download Artifacts / MPExtended service
         uses: actions/download-artifact@v4
         with:
-          name: MPExtended service
+          name: MPExtended service ${{ matrix.architecture }}
           path: release-files
 
-      - name: Download Artifacts
+      - name: Download Artifacts / WebMediaPortal
         uses: actions/download-artifact@v4
         with:
-          name: WebMediaPortal
+          name: WebMediaPortal ${{ matrix.architecture }}
           path: release-files
 
-      - name: Download Artifacts
+      - name: Download Artifacts / WebMediaPortal IIS
         uses: actions/download-artifact@v4
         with:
-          name: WebMediaPortal IIS
+          name: WebMediaPortal IIS ${{ matrix.architecture }}
           path: release-files
 
-      - name: Release
+      - name: x64 Artifacts
+        if: ${{ matrix.architecture == 'x64' }}
+        run: |
+          for file in *.msi; do mv -- "$file" "${file%.msi}.x64.msi";done
+        working-directory: release-files
+
+      - name: Release ${{ matrix.architecture }}
         uses: softprops/action-gh-release@v1
         with:
           files: |
