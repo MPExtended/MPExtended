@@ -39,9 +39,9 @@ namespace MPExtended.Applications.WebMediaPortal.Code.ActionResults
     public abstract class RangeFileResult : ActionResult
     {
         #region Fields
-        private static char[] _commaSplitArray = new char[] { ',' };
-        private static char[] _dashSplitArray = new char[] { '-' };
-        private static string[] _httpDateFormats = new string[] { "r", "dddd, dd-MMM-yy HH':'mm':'ss 'GMT'", "ddd MMM d HH':'mm':'ss yyyy" };
+        private static readonly char[] _commaSplitArray = new char[] { ',' };
+        private static readonly char[] _dashSplitArray = new char[] { '-' };
+        private static readonly string[] _httpDateFormats = new string[] { "r", "dddd, dd-MMM-yy HH':'mm':'ss 'GMT'", "ddd MMM d HH':'mm':'ss yyyy" };
         #endregion
 
         #region Properties
