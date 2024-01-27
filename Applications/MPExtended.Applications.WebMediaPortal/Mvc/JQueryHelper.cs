@@ -1,5 +1,6 @@
-﻿#region Copyright (C) 2012-2013 MPExtended
-// Copyright (C) 2012-2013 MPExtended Developers, http://www.mpextended.com/
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020-2024 Team MediaPortal
+// Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
+// Copyright (C) 2020-2024 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,8 +28,8 @@ namespace MPExtended.Applications.WebMediaPortal.Mvc
 {
     public class JQueryHelper
     {
-        private const string JQUERY_VERSION = "1.12.4";
-        private const string JQUERY_UI_VERSION = "1.12.1";
+        private const string JQUERY_VERSION = "3.7.1";
+        private const string JQUERY_UI_VERSION = "1.13.2";
 
         private HtmlHelper htmlHelper;
         private bool datePickerDefaultOptionsAdded = false;
