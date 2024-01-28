@@ -161,6 +161,7 @@
                   <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.dll" />
                   <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\MPExtended.Libraries.SQLitePlugin.pdb" />
                   <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\System.Data.SQLite.dll" />
+                  <File Source="$(var.MPExtended.Libraries.SQLitePlugin.TargetDir)\$(var.Platform)\SQLite.Interop.dll" />
 
                   <!-- All plugins that we release -->
                   <File Source="$(var.MPExtended.PlugIns.MAS.MPVideos.TargetDir)\MPExtended.PlugIns.MAS.MPVideos.dll" />
