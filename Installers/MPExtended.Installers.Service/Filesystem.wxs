@@ -97,6 +97,7 @@
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Common.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Framework.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.MySQL.dll" />
+                  <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.SQLite.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\Gentle.Provider.SQLServer.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\log4net.dll" />
                   <File Source="$(var.MPExtended.Services.TVAccessService.TargetDir)\MySql.Data.dll" />
