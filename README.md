@@ -1,6 +1,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MPExtended/MPExtended/mpextended.yml?logo=github)](https://github.com/MPExtended/MPExtended/actions)
 [![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/MPExtended/MPExtended?include_prereleases)](https://github.com/MPExtended/MPExtended/releases)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/MPExtended/MPExtended/latest/total?label=release@downloads)](https://github.com/MPExtended/MPExtended/releases)
+[![MPE x86](https://img.shields.io/badge/MPE-x86-orange?logo=windows&logoColor=white)](https://github.com/MPExtended/MPExtended/releases)[![MPE x64](https://img.shields.io/badge/x64-blue?logoColor=white)](https://github.com/MPExtended/MPExtended/releases)
 [![GitHub Repo stars](https://img.shields.io/github/stars/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
 [![GitHub forks](https://img.shields.io/github/forks/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
 
