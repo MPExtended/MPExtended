@@ -205,7 +205,7 @@
       <MaxOutputHeight>0</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder></encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -227,7 +227,7 @@
       <HasVideoStream>true</HasVideoStream>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=5120,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -248,7 +248,7 @@
       <HasVideoStream>true</HasVideoStream>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=3072,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -269,7 +269,7 @@
       <HasVideoStream>true</HasVideoStream>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=2048,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -290,7 +290,7 @@
       <HasVideoStream>true</HasVideoStream>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1768,venc=x264{profile=baseline,preset=faster,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=512,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -310,7 +310,7 @@
       <MaxOutputHeight>600</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1024,venc=x264{profile=baseline,preset=veryfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=256,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -330,7 +330,7 @@
       <MaxOutputHeight>480</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,preset=superfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -350,7 +350,7 @@
       <MaxOutputHeight>480</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,preset=superfast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=128,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -370,7 +370,7 @@
       <MaxOutputHeight>300</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=256,venc=x264{profile=baseline,preset=ultrafast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=64,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -390,7 +390,7 @@
       <Transport>http</Transport>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=128,venc=x264{profile=baseline,preset=ultrafast,no-cabac,trellis=0,keyint=50},deinterlace=-1,aenc=ffmpeg{aac-profile=low},acodec=mp4a,ab=48,samplerate=48000,channels=2,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ts,dst=#OUT#}</muxer>
@@ -415,7 +415,7 @@
       <MaxOutputHeight>1080</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=5120,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -442,7 +442,7 @@
       <MaxOutputHeight>720</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=3072,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -469,7 +469,7 @@
       <MaxOutputHeight>576</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=2048,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -496,7 +496,7 @@
       <MaxOutputHeight>720</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=1768,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -522,7 +522,7 @@
       <MaxOutputHeight>640</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=1024,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=veryfast},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
@@ -548,7 +548,7 @@
       <MaxOutputHeight>480</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=768,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -574,7 +574,7 @@
       <MaxOutputHeight>480</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=512,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -600,7 +600,7 @@
       <MaxOutputHeight>320</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=256,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
@@ -626,7 +626,7 @@
       <MaxOutputHeight>320</MaxOutputHeight>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapperHTTPLiveStreaming</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=128,venc=x264{aud,level=30,keyint=50,bframes=0,profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=48,channels=2,samplerate=48000,audio-sync</encoder>
@@ -775,7 +775,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=2048,venc=x264{profile=baseline,preset=faster},deinterlace=-1,acodec=mp4a,ab=256,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -796,7 +796,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <encoder>vcodec=h264,vb=1280,venc=x264{profile=baseline,preset=veryfast},deinterlace=-1,acodec=mp4a,ab=192,channels=2,samplerate=48000,audio-sync</encoder>
         <muxer>:standard{access=file,mux=ffmpeg{mux=flv},dst=#OUT#}</muxer>
@@ -817,7 +817,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=768,venc=x264{profile=baseline,preset=superfast},deinterlace=-1,acodec=mp4a,ab=128,channels=2,samplerate=48000,audio-sync</encoder>
@@ -839,7 +839,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=512,venc=x264{profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=96,channels=2,samplerate=48000,audio-sync</encoder>
@@ -861,7 +861,7 @@
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
         <flvMetadataInjection>yes</flvMetadataInjection>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <options>--ffmpeg-hw --sout-ffmpeg-strict=-2</options>
         <tsOptions>--sout-mux-caching=5000</tsOptions>
         <encoder>vcodec=h264,vb=384,venc=x264{profile=baseline,preset=ultrafast},deinterlace=-1,acodec=mp4a,ab=64,channels=2,samplerate=48000,audio-sync</encoder>
@@ -882,7 +882,7 @@
       <HasVideoStream>false</HasVideoStream>
       <Transcoder>MPExtended.Services.StreamingService.Transcoders.VLCWrapper</Transcoder>
       <TranscoderParameters>
-        <path>%mpextended-streaming%\vlc-3.0.11\MPExtended.Libraries.VLCWrapper.exe</path>
+        <path>%mpextended-streaming%\vlc-3.0.20\MPExtended.Libraries.VLCWrapper.exe</path>
         <encoder>vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000</encoder>
         <muxer>:standard{access=file,mux=dummy,dst=#OUT#}</muxer>
       </TranscoderParameters>

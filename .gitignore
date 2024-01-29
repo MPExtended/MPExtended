@@ -15,6 +15,7 @@
 _ReSharper*
 *~
 *.vssscc
+.vs/
 
 # executables (this should be just *.exe when we got rid of all them)
 Libraries/Streaming/ffmpeg.exe

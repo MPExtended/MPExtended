@@ -68,7 +68,7 @@
       <HintPath>..\..\Packages\MetadataExtractor.2.8.1\lib\net35\MetadataExtractor.dll</HintPath>
     </Reference>
     <Reference Include="MPExtended.Libraries.VLCManaged">
-      <HintPath>..\..\Libraries\Streaming\vlc-3.0.11\MPExtended.Libraries.VLCManaged.dll</HintPath>
+      <HintPath>..\..\Libraries\Streaming\vlc-3.0.20.$(Platform)\MPExtended.Libraries.VLCManaged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
