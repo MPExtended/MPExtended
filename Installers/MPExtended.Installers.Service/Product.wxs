@@ -65,9 +65,11 @@
     <!-- Set TVE installation directory -->
     <Property Id="MPTVEINSTALLDIRECTORY">
       <RegistrySearch Id="TveInstallationDirectorySearch" Root="HKLM" Type="directory" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server" Name="InstallPath" Win64="no" />
+      <RegistrySearch Id="TveInstallationDirectorySearchx64" Root="HKLM" Type="directory" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server (x64" Name="InstallPath" Win64="no" />
     </Property>
     <Property Id="HAS_TVE">
       <RegistrySearch Id="HasTveSearch" Root="HKLM" Type="raw" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server" Name="InstallPath" Win64="no" />
+      <RegistrySearch Id="HasTveSearchx64" Root="HKLM" Type="raw" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal TV Server (x64)" Name="InstallPath" Win64="no" />
     </Property>
 
     <!-- Generic wix configuration -->
