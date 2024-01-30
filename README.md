@@ -2,6 +2,7 @@
 [![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/MPExtended/MPExtended?include_prereleases)](https://github.com/MPExtended/MPExtended/releases)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/MPExtended/MPExtended/latest/total?label=release@downloads)](https://github.com/MPExtended/MPExtended/releases)
 [![MPE x86](https://img.shields.io/badge/MPE-x86-orange?logo=windows&logoColor=white)](https://github.com/MPExtended/MPExtended/releases)[![MPE x64](https://img.shields.io/badge/x64-blue?logoColor=white)](https://github.com/MPExtended/MPExtended/releases)
+[![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 [![GitHub Repo stars](https://img.shields.io/github/stars/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
 [![GitHub forks](https://img.shields.io/github/forks/MPExtended/MPExtended)](https://github.com/MPExtended/MPExtended)
 
