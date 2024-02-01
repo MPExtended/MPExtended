@@ -8,7 +8,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.MetaService.Interfaces
 {
-    [ServiceContract(Namespace = "http://mpextended.github.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.io")]
     public interface IMetaService
     {
         [OperationContract]

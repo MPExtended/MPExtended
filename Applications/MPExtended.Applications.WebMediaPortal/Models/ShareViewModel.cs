@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2020 Team MediaPortal
-// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+﻿#region Copyright (C) 2020-2024 Team MediaPortal
+// Copyright (C) 2020-2024 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,12 +17,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Script.Serialization;
+
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Libraries.Service;
-using MPExtended.Services.Common.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces;
 using MPExtended.Services.MediaAccessService.Interfaces.FileSystem;
 
@@ -60,7 +57,7 @@ namespace MPExtended.Applications.WebMediaPortal.Models
       }
       catch (Exception ex)
       {
-        Log.Warn(String.Format("Failed to load Picture folder"), ex);
+        Log.Warn(String.Format("Failed to load Share folder"), ex);
       }
     }
   }

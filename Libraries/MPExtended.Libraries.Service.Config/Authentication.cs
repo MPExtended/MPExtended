@@ -23,7 +23,7 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Users/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/Users/1")]
     public class User
     {
         public string Username { get; set; }
@@ -52,13 +52,13 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/Users/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/Users/1")]
     public class Authentication
     {
         public bool Enabled { get; set; }
         public bool UnauthorizedStreams { get; set; }
 
-        [XmlArray(Namespace = "http://mpextended.github.com/schema/config/Users/1", ElementName = "Users")]
+        [XmlArray(Namespace = "http://mpextended.github.io/schema/config/Users/1", ElementName = "Users")]
         [XmlArrayItem(ElementName = "User")]
         public List<User> Users { get; set; }
 

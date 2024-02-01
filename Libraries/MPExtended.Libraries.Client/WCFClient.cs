@@ -38,7 +38,7 @@ namespace MPExtended.Libraries.Client
         }
 
         public WCFHeader(string name, TContent content)
-            : this ("http://mpextended.github.com/", name, content)
+            : this ("http://mpextended.github.io/", name, content)
         {
         }
 

@@ -10,7 +10,7 @@ using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Services.TVAccessService.Interfaces
 {
-    [ServiceContract(Namespace = "http://mpextended.github.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.io")]
     public interface ITVAccessService
     {
         [OperationContract]

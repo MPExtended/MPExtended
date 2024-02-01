@@ -8,7 +8,7 @@ using MPExtended.Services.MetaService.Interfaces;
 
 namespace MPExtended.Services.UserSessionService.Interfaces
 {
-    [ServiceContract(Namespace = "http://mpextended.github.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.io")]
     public interface IPrivateUserSessionService
     {
         [OperationContract]

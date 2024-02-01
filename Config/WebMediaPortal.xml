@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WebMediaPortal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.com/schema/config/WebMediaPortal/1">
+<WebMediaPortal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://mpextended.github.io/schema/config/WebMediaPortal/1">
   <StreamType>DirectWhenPossible</StreamType>
   
   <DefaultGroup xsi:nil="true" />

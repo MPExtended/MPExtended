@@ -12,7 +12,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
     /// <summary>
     /// Interface for a scraper plugin
     /// </summary>
-    [ServiceContract(Namespace = "http://mpextended.github.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.io")]
     public interface IScraperPlugin
     {
         /// <summary>

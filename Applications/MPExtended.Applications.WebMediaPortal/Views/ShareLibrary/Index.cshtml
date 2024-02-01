@@ -1,0 +1,110 @@
+@model MPExtended.Applications.WebMediaPortal.Models.ShareFoldersViewModel
+@{
+  ViewBag.Title = UIStrings.Shares;
+  ViewBag.showTitle = Model.Folder.Categories.Count() == 0;
+}
+
+<script type="text/javascript">
+  $(function () {
+    facade(localStorage['facade_picturelibary'], 'picturelibary');
+  });
+</script>
+
+<div class="form-inline add-margin">
+  @if (Model.Folder.Categories.Count() > 0)
+  {
+  <ul class="breadcrumb">
+    <li><a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider })'>@UIStrings.Shares</a><span class="divider">/</span></li>
+    @{
+      int i = 0;
+      foreach (var item in Model.Folder.Categories)
+      {
+        if (i++ == Model.Folder.Categories.Count() - 1)
+        {
+          <li class="active">@item.Title</li>
+        }
+        else
+        {
+          <li><a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider, folderId = item.Id })'>@item.Title</a><span class="divider">/</span></li>
+        }
+      }
+    }
+  </ul>
+  }
+
+  <input type="text" id="filter" placeholder="Filter" class="input-small" />
+</div>
+
+@{
+  if (Model.Drives.Count() > 0)
+  {
+    <ul class="list drive covers" id="facade">
+      @{
+        char lastLetter = '~';
+
+        foreach (var item in Model.Drives)
+        {
+          <li class="info" data-title="@item.Title.ToLower()" @if (!lastLetter.Equals(item.Title[0]) && !Char.IsNumber(item.Title[0])) { <text> id="@(item.Title[0])" class="shortcut" </text> }>
+            <a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider, folderId = item.Id })'>
+              <img class="lazy" width="214" src='@Url.ContentLink("Images/default/drive-cover.png")' data-original='@Url.Action("DriveCover", "ShareLibrary", new { id = Model.Provider, itemId = item.Id, width = 214 })' alt="@item.Title" />
+              <h4>@item.Title</h4>
+            </a>
+          </li>
+          lastLetter = ((Char.IsNumber(item.Title[0])) ? '#' : item.Title[0]);
+        }
+      }
+    </ul>
+  }
+}
+
+@{
+  if (Model.Folders.Count() > 0)
+  {
+    <ul class="list folder covers" id="facade">
+      @{
+        char lastLetter = '~';
+
+        foreach (var item in Model.Folders)
+        {
+          <li class="info" data-title="@item.Title.ToLower()" @if (!lastLetter.Equals(item.Title[0]) && !Char.IsNumber(item.Title[0])) { <text> id="@(item.Title[0])" class="shortcut" </text> }>
+            <a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider, folderId = item.Id })'>
+              <img class="lazy" width="214" src='@Url.ContentLink("Images/default/folder-cover.png")' data-original='@Url.Action("FolderCover", "ShareLibrary", new { id = Model.Provider, itemId = item.Id, width = 214 })' alt="@item.Title" />
+              <h4>@item.Title</h4>
+            </a>
+          </li>
+          lastLetter = ((Char.IsNumber(item.Title[0])) ? '#' : item.Title[0]);
+        }
+      }
+    </ul>
+  }
+}
+
+@{
+  if (Model.Files.Count() > 0)
+  {
+    <ul class="list file covers" id="facade">
+      @{
+        char lastLetter = '~';
+
+        foreach (var item in Model.Files)
+        {
+          <li class="info" data-title="@item.Title.ToLower()" @if (!lastLetter.Equals(item.Title[0]) && !Char.IsNumber(item.Title[0])) { <text> id="@(item.Title[0])" class="shortcut" </text> }>
+            <a href='@Url.Action("File", "ShareLibrary", new { id = Model.Provider, fileId = item.Id })'>
+              <img class="lazy" width="214" src='@Url.ContentLink("Images/default/file-cover.png")' data-original='@Url.Action("FileCover", "ShareLibrary", new { id = Model.Provider, itemId = item.Id, width = 214 })' alt="@item.Title" />
+              <h4>@item.Title</h4>
+            </a>
+          </li>
+          lastLetter = ((Char.IsNumber(item.Title[0])) ? '#' : item.Title[0]);
+        }
+      }
+    </ul>
+  }
+}
+
+<script type="text/javascript">
+  var letters = [];
+
+  $('.shortcut').each(function () {
+    letters.push($(this).attr('id'));
+  });
+</script>

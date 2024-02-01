@@ -22,7 +22,7 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/Streaming/1")]
     public class WatchSharingConfiguration
     {
         public bool DebugEnabled { get; set; }
@@ -41,7 +41,7 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/Streaming/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/Streaming/1")]
     public class Streaming
     {
         public const string STREAM_NONE = "none";

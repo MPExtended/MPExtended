@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2007 Ian Griffiths, 2013 MPExtended (MIT-licensed)
-// Copyright (C) 2013 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2013 MPExtended Developers, http://mpextended.github.io/
 // Copyright (C) 2007 Ian Griffiths, http://www.interact-sw.co.uk/iangblog/2007/12/13/natural-sorting
 //
 // Permission is hereby granted, free of charge, to any person obtaining a 

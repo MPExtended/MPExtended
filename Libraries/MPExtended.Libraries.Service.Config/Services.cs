@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlType(Namespace="http://mpextended.github.com/schema/config/Services/1")]
+    [XmlType(Namespace="http://mpextended.github.io/schema/config/Services/1")]
     public class NetworkImpersonation
     {
         public string Domain { get; set; }
@@ -50,20 +50,20 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/Services/1")]
     public class ExternalAddressConfiguration
     {
         public bool Autodetect { get; set; }
         public string Custom { get; set; }
     }
 
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/Services/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/Services/1")]
     public class DiagnosticConfiguration
     {
         public bool EnableTraceLogging { get; set; }
     }
 
-    [XmlRoot(Namespace="http://mpextended.github.com/schema/config/Services/1")]
+    [XmlRoot(Namespace="http://mpextended.github.io/schema/config/Services/1")]
     public class Services
     {
         public bool AccessRequestEnabled { get; set; }

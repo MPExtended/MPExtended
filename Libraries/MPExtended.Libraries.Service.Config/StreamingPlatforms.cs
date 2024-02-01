@@ -34,7 +34,7 @@ namespace MPExtended.Libraries.Service.Config
         Tv
     }
 
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/StreamingPlatforms/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/StreamingPlatforms/1")]
     public class StreamingPlatform
     {
         public string Name { get; set; }
@@ -66,7 +66,7 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlRoot(ElementName = "StreamingPlatforms", Namespace = "http://mpextended.github.com/schema/config/StreamingPlatforms/1")]
+    [XmlRoot(ElementName = "StreamingPlatforms", Namespace = "http://mpextended.github.io/schema/config/StreamingPlatforms/1")]
     public class StreamingPlatforms : List<StreamingPlatform>
     {
         public StreamingPlatforms()

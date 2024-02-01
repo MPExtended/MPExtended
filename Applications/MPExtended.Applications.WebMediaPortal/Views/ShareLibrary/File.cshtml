@@ -1,0 +1,107 @@
+﻿@using System.Text.RegularExpressions
+@using MPExtended.Services.MediaAccessService.Interfaces
+@model ShareFileViewModel
+@{
+  ViewBag.Title = Model.File.Title;
+}
+
+<div id="confirmModal" class="modal hide fade">
+    
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Delete Record</h3>
+    </div>
+    
+    <div class="modal-body"> 
+      <p>Do you wish to delete the file: @Model.File.Title?</p>
+    </div>
+    
+    <div class="modal-footer">
+        <a href="@Url.Action("DeleteFile", new { id = Model.Provider, fileId = Model.File.Id })" class="btn btn-danger">Yes</a>
+        <a href="#" class="btn btn-primary" data-dismiss="modal">No</a>
+    </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span8">
+    <ul class="breadcrumb">
+      <li><a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider })'>@UIStrings.Shares</a> <span class="divider">/</span></li>
+      @{
+        foreach (var item in Model.File.Categories)
+        {
+          <li><a href='@Url.Action("Index", "ShareLibrary", new { id = Model.Provider, folderId = item.Id })'>@item.Title</a><span class="divider">/</span></li>
+        }
+      }
+      <li class="active">@Model.File.Title</li>
+    </ul>
+
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
+        <li><a href="#fileinfo" data-toggle="tab">File information</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade active in" id="details">
+          <dl class="dl-horizontal">
+            <dt>Date:</dt>
+            <dd>@Model.File.DateAdded</dd>
+            @if (Model.EXIFInfo != null && Model.EXIFInfo.Metadata != null)
+            {
+              foreach (var metadata in Model.EXIFInfo.Metadata)
+              {
+                <dt>@metadata.Key:</dt>
+                <dd>@metadata.Value</dd>
+              }
+            }
+          </dl>
+        </div>
+
+        <div class="tab-pane fade" id="fileinfo">
+          <dl class="dl-horizontal">
+            <dt>Filesize:</dt>
+            <dd>@(((float)Model.FileInfo.Size / 1073741824).ToString("0.00")) GB</dd>
+            <dt>Video:</dt>
+            <dd>
+              @foreach (var videoStream in Model.MediaInfo.VideoStreams)
+              {
+                <text>@videoStream.Width x @videoStream.Height, @Model.Quality</text>
+              }
+            </dd>
+            <dt>Audio:</dt>
+            <dd>
+              @foreach (var audioStream in Model.MediaInfo.AudioStreams)
+              {
+                <text>@audioStream.LanguageFull (@audioStream.Codec)</text>
+              }
+            </dd>
+            <dt>Directory:</dt>
+            <dd>@Model.FileInfo</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="span4">
+    <div class="span12 row center">
+      <img class="img-polaroid img-rounded" src='@Url.Action("FileCover", new { id = Model.Provider, itemId = @Model.Id, width = 250 })' width="250" alt="No image" />
+    </div>
+
+    <div class="btn-toolbar center">
+      <div class="btn-group">
+        <a class="btn" href='@Url.Action("Download", "Stream", new { item = Model.Id, type = Model.File.Type, forProvider = Model.Provider })'><i class="icon-download-alt"></i> @UIStrings.Download</a>
+        <a href="#confirmModal" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-trash icon-white"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$('.confirm-delete').on('click', function(e) {
+    e.preventDefault();
+
+    var id = $(this).data('id');
+    $('#modal-from-dom').data('id', id).modal('show');
+});
+</script>

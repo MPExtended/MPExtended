@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortalHosting/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/WebMediaPortalHosting/1")]
     public class WebMediaPortalHosting
     {
         public WebMediaPortalHosting()

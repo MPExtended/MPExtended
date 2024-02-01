@@ -16,7 +16,7 @@
             <LineBreak />
             
             <Run Text="{x:Static strings:UI.Homepage}" /><LineBreak />
-            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://mpextended.github.com/">http://mpextended.github.com/</Hyperlink><LineBreak />
+            &#160;&#160;&#160;<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="http://mpextended.github.io/">http://mpextended.github.io/</Hyperlink><LineBreak />
             <LineBreak />
             
             <Run Text="{x:Static strings:UI.Documentation}" /><LineBreak />

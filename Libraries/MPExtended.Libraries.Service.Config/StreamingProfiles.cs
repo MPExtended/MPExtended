@@ -22,7 +22,7 @@ using System.Xml.Serialization;
 
 namespace MPExtended.Libraries.Service.Config
 {
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/StreamingProfiles/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/StreamingProfiles/1")]
     public class TranscoderProfile
     {
         public string Name { get; set; }
@@ -45,7 +45,7 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/StreamingProfiles/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/StreamingProfiles/1")]
     public class StreamingProfiles
     {
         [XmlIgnore]

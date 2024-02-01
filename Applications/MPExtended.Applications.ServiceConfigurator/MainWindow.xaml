@@ -58,7 +58,7 @@
         <Separator Height="1" Name="separator" Width="165" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,47"/>
 
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,0,0,8" Name="tbDonate" VerticalAlignment="Bottom">
-            <Hyperlink NavigateUri="http://mpextended.github.com/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
+            <Hyperlink NavigateUri="http://mpextended.github.io/donate.html" RequestNavigate="Hyperlink_RequestNavigate">
                 <Run Text="{x:Static strings:UI.DonateToMPExtended}" />
             </Hyperlink>
         </TextBlock>

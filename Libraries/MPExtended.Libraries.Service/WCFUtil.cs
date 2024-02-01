@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.Service
 {
     public static class WCFUtil
     {
-        internal const string HEADER_NAMESPACE = "http://mpextended.github.com/";
+        internal const string HEADER_NAMESPACE = "http://mpextended.github.io/";
         internal const string ORIGINAL_URL_HEADER = "X-Root-URL";
 
         private static bool IsRestEnabled

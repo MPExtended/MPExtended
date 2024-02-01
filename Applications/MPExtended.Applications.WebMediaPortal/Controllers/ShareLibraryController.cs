@@ -1,5 +1,5 @@
-﻿#region Copyright (C) 2020 Team MediaPortal
-// Copyright (C) 2020 Team MediaPortal, http://www.team-mediaportal.com/
+﻿#region Copyright (C) 2020-2024 Team MediaPortal
+// Copyright (C) 2020-2024 Team MediaPortal, http://www.team-mediaportal.com/
 // 
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,13 +15,13 @@
 // along with MPExtended. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
-using System;
 using System.Linq;
 using System.Web.Mvc;
-using MPExtended.Services.Common.Interfaces;
+
 using MPExtended.Applications.WebMediaPortal.Code;
 using MPExtended.Applications.WebMediaPortal.Models;
-using MPExtended.Services.MediaAccessService.Interfaces;
+using MPExtended.Libraries.Service;
+using MPExtended.Services.Common.Interfaces;
 
 namespace MPExtended.Applications.WebMediaPortal.Controllers
 {
@@ -32,14 +32,16 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     // GET: /ShareLibrary/
     public ActionResult Index(int? id = null, string folderId = null, string filter = null)
     {
-      if (!id.HasValue &&  !Settings.ActiveSettings.FileSystemProvider.HasValue)
+      if (!id.HasValue && !Settings.ActiveSettings.FileSystemProvider.HasValue)
       {
+        Log.Debug("*** ShareLibrary: Id {0} Provider {1}", !id.HasValue, !Settings.ActiveSettings.FileSystemProvider.HasValue);
         return HttpNotFound();
       }
       int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
       var model = new ShareFoldersViewModel(provider, folderId, filter);
       if (model.Drives == null && model.Folders == null && model.Files == null)
       {
+        Log.Debug("*** ShareLibrary: FolderId {0} Provider {1}", folderId, provider);
         return HttpNotFound();
       }
       return View(model);

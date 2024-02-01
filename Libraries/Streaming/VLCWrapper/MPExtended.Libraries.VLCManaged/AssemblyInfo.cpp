@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
-[assembly:AssemblyCompanyAttribute("mpextended.github.com")];
+[assembly:AssemblyCompanyAttribute("mpextended.github.io")];
 [assembly:AssemblyCopyrightAttribute("Copyright (c) 2011 MPExtended")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyConfigurationAttribute("Release")];

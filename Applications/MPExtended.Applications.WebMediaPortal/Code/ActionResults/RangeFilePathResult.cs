@@ -1,5 +1,5 @@
 ﻿#region Copyright (C) 2013 TPeczek, 2013 MPExtended (Ms-PL)
-// Copyright (C) 2013 MPExtended Developers, http://mpextended.github.com/
+// Copyright (C) 2013 MPExtended Developers, http://mpextended.github.io/
 // Copyright (C) 2013 TPeczek, http://tpeczek.codeplex.com/
 //
 // Permission is hereby granted, free of charge, to any person obtaining a

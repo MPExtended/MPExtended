@@ -13,7 +13,7 @@ namespace MPExtended.Services.ScraperService.Interfaces
     /// Service that runs scraper plugins that do small tasks on the
     /// server (like updating meta data)
     /// </summary>
-    [ServiceContract(Namespace = "http://mpextended.github.com")]
+    [ServiceContract(Namespace = "http://mpextended.github.io")]
     public interface IScraperService
     {
         /// <summary>

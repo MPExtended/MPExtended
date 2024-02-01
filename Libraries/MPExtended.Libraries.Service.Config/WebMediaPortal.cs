@@ -41,7 +41,7 @@ namespace MPExtended.Libraries.Service.Config
         Https
     }
 
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/WebMediaPortal/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/WebMediaPortal/1")]
     public class WebMediaPortal
     {
         public StreamType StreamType { get; set; }

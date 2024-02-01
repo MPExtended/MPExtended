@@ -30,7 +30,7 @@ namespace MPExtended.Libraries.Service.Config
         Boolean 
     }
 
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/MediaAccess/1")]
     public class PluginConfigItem
     {
         public string Value { get; set; }
@@ -51,7 +51,7 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlType(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlType(Namespace = "http://mpextended.github.io/schema/config/MediaAccess/1")]
     public class DefaultPlugins
     {
         public string TVShow { get; set; }
@@ -65,7 +65,7 @@ namespace MPExtended.Libraries.Service.Config
         }
     }
 
-    [XmlRoot(Namespace = "http://mpextended.github.com/schema/config/MediaAccess/1")]
+    [XmlRoot(Namespace = "http://mpextended.github.io/schema/config/MediaAccess/1")]
     public class MediaAccess
     {
         public DefaultPlugins DefaultPlugins { get; set; }
