@@ -34,14 +34,12 @@ namespace MPExtended.Applications.WebMediaPortal.Controllers
     {
       if (!id.HasValue && !Settings.ActiveSettings.FileSystemProvider.HasValue)
       {
-        Log.Debug("*** ShareLibrary: Id {0} Provider {1}", !id.HasValue, !Settings.ActiveSettings.FileSystemProvider.HasValue);
         return HttpNotFound();
       }
       int provider = id.HasValue ? id.Value : Settings.ActiveSettings.FileSystemProvider.Value;
       var model = new ShareFoldersViewModel(provider, folderId, filter);
       if (model.Drives == null && model.Folders == null && model.Files == null)
       {
-        Log.Debug("*** ShareLibrary: FolderId {0} Provider {1}", folderId, provider);
         return HttpNotFound();
       }
       return View(model);
