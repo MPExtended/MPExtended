@@ -48,7 +48,7 @@ jobs:
         working-directory: release-files
 
       - name: Release ${{ matrix.architecture }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             release-files/MPExtended.*.msi
