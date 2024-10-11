@@ -108,6 +108,7 @@ namespace MPExtended.Services.StreamingService.Code
                 .Select(context => {
                     double percentage = context.Source.MediaType == WebMediaType.TV ? 0.0 :                         
                         1.0 * context.Stream.ReadBytes / context.Source.GetFileInfo().Size;
+                    if (percentage < 0) percentage = 0.0;
                     return new WebStreamingSession()
                     {
                         ClientDescription = String.IsNullOrEmpty(context.ClientDescription) ? "Download" : context.ClientDescription,
