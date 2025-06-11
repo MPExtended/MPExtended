@@ -16,5 +16,5 @@ jobs:
           issue-message: >
             Hello @${{ github.actor }}, thank you for submitting an issue! 🚀
           pr-message: >
-            Hello @${{ github.actor }}, thank you for submitting a PR! 
+            Hello @${{ github.actor }}, thank you for submitting a PR!
             We will respond as soon as possible.

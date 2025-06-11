@@ -21,7 +21,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Author information
-[assembly: AssemblyCompany("http://www.mpextended.com/")]
+[assembly: AssemblyCompany("http://mpextended.github.io/")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2018 MPExtended, 2020-2024 Team MediaPortal")]
 [assembly: AssemblyTrademark("")]
 
