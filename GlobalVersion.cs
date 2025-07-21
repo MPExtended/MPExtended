@@ -1,6 +1,6 @@
-﻿#region Copyright (C) 2011-2013 MPExtended, 2020-2024 Team MediaPortal
+﻿#region Copyright (C) 2011-2013 MPExtended, 2020-2025 Team MediaPortal
 // Copyright (C) 2011-2013 MPExtended Developers, http://www.mpextended.com/
-// Copyright (C) 2020-2024 Team MediaPortal, http://www.team-mediaportal.com/
+// Copyright (C) 2020-2025 Team MediaPortal, http://www.team-mediaportal.com/
 //
 // MPExtended is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // Author information
 [assembly: AssemblyCompany("http://mpextended.github.io/")]
-[assembly: AssemblyCopyright("Copyright © 2011 - 2018 MPExtended, 2020-2024 Team MediaPortal")]
+[assembly: AssemblyCopyright("Copyright © 2011-2018 MPExtended, 2020-2025 Team MediaPortal")]
 [assembly: AssemblyTrademark("")]
 
 // BUild type
@@ -42,8 +42,8 @@ using System.Runtime.InteropServices;
 // minor versions we use major.prev-minor.99.x, with x incrementing with each alpha/beta/RC release. For test versions of
 // bugfix releases this is major.minor.prev-bugfix.x, with x incrementing with each alpha/beta/RC release. This number
 // is also used to check for new versions in the configurator, so please follow this scheme strictly. 
-[assembly: AssemblyFileVersion("0.7.13.13")]
+[assembly: AssemblyFileVersion("0.7.15.0")]
 
 // This is just an informational string, which has no technical meaning. We use it to show our version information in 
 // the logs and communicate it to the client.
-[assembly: AssemblyInformationalVersion("0.7.13")]
+[assembly: AssemblyInformationalVersion("0.7.15")]
