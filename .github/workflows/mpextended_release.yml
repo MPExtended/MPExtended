@@ -24,19 +24,19 @@ jobs:
     
     steps:
       - name: Download Artifacts / MPExtended service
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: MPExtended service ${{ matrix.architecture }}
           path: release-files
 
       - name: Download Artifacts / WebMediaPortal
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: WebMediaPortal ${{ matrix.architecture }}
           path: release-files
 
       - name: Download Artifacts / WebMediaPortal IIS
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: WebMediaPortal IIS ${{ matrix.architecture }}
           path: release-files
