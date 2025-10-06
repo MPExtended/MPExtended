@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: >
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: >
             Hello @${{ github.actor }}, thank you for submitting an issue! 🚀
-          pr-message: >
+          pr_message: >
             Hello @${{ github.actor }}, thank you for submitting a PR!
             We will respond as soon as possible.
